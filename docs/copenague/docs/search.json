@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "slides_1.html#course-structure-day-1",
+    "href": "slides_1.html#course-structure-day-1",
+    "title": "inlabru workshop",
+    "section": "Course Structure: Day 1",
+    "text": "Course Structure: Day 1\n\n\n\n\n\n\n\n\n\nTime\nTopic\nContent\nExcercises\n\n\n\n\nXXXX am\nCore concepts\n\nLGM and INLA\ninlabru workflow\nModel selection\n\n\n\n\nXXXX am\nTemporal Models\n\nDiscrete time models\nContinuous time models"
+  },
+  {
+    "objectID": "slides_1.html#course-structure-day-2",
+    "href": "slides_1.html#course-structure-day-2",
+    "title": "inlabru workshop",
+    "section": "Course Structure: Day 2",
+    "text": "Course Structure: Day 2\n\n\n\n\n\n\n\n\n\nTime\nTopic\nContent\nExcercises\n\n\n\n\nXXXX am\nIntroduction to Spatial Modelling\n\nTypes of spatial data\nSpatial data wrangling and manipulation in R (e.g, terra & sf)\nAreal processes\n\n\n\n\nXXXX am\nModelling geostatistical data\n\nSPDE & the mesh\nGeostatistical Data\nSpatial predictions"
+  },
+  {
+    "objectID": "slides_1.html#course-structure-day-3",
+    "href": "slides_1.html#course-structure-day-3",
+    "title": "inlabru workshop",
+    "section": "Course Structure: Day 3",
+    "text": "Course Structure: Day 3\n\n\n\n\n\n\n\n\n\nTime\nTopic\nContent\nExcercises\n\n\n\n\nXXXX am\nSpatial Point processes\n\nSpatial point process\nDistance sampling\n\n\n\n\nXXXX am\nSpatiotemporal Models\n\nSeparable time-space models\nnon-separable space-time models"
+  },
+  {
+    "objectID": "slides_1.html#course-structure-day-4",
+    "href": "slides_1.html#course-structure-day-4",
+    "title": "inlabru workshop",
+    "section": "Course Structure: Day 4",
+    "text": "Course Structure: Day 4\n\n\n\n\n\n\n\n\n\nTime\nTopic\nContent\nExcercises\n\n\n\n\nXXXX am\nMultilikelihood and Non-linear models\n\niterated inla\nlogistic growth\nCorregionalization models"
+  }
+]
