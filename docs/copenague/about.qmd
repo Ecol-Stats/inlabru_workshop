@@ -4,14 +4,25 @@
 #| echo: false
 #| message: false
 #| warning: false
-#| eval: false
+#| layout-ncol: 2
+#| column: page
+#| 
 library(downloadthis)
-## One file example
+
 download_file(
-  path = system.file("C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\test.html", package = "downloadthis"),
+  path = "https://github.com/Ecol-Stats/inlabru_workshop/raw/main/docs/practicals/test.html",
+  button_label = "Download Practical 1 (html version)",
   output_name = "practical_1",
-  button_label = "Download Practical 1",
   button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = TRUE
+)
+
+download_link(
+  link = "https://github.com/Ecol-Stats/inlabru_workshop/raw/main/docs/practicals/test.pdf",
+  button_label = "Download Practical 1 (pdf version)",
+  button_type = "warning",
   has_icon = TRUE,
   icon = "fa fa-save",
   self_contained = FALSE
