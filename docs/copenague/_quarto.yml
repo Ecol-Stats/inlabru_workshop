@@ -9,7 +9,7 @@ website:
       - href: index.qmd
         text: Slides
       - href: about.qmd
-        text: exercise
+        text: Practicals
 
 format:
   html:

@@ -10,5 +10,9 @@
   },
   "slides_2.qmd": {
     "slides_2.html": "4affe699"
+  },
+  "practicals/test.qmd": {
+    "test.html": "05061134",
+    "test.tex": "e2c8707b"
   }
 }

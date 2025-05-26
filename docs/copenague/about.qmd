@@ -1,9 +1,21 @@
----
-title: "About"
----
-
-About this site
+# Practicals Day 1
 
 ```{r}
-1 + 1
+#| echo: false
+#| message: false
+#| warning: false
+#| eval: false
+library(downloadthis)
+## One file example
+download_file(
+  path = system.file("C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\test.html", package = "downloadthis"),
+  output_name = "practical_1",
+  button_label = "Download Practical 1",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
 ```
+
+# Practicals Day 2
