@@ -27,6 +27,7 @@ Start by loading usefull libraries:
 #| warning: false
 #| message: false
 
+
 library(dplyr)
 library(INLA)
 library(ggplot2)
@@ -217,7 +218,6 @@ plot(fit.lm, "Precision for the Gaussian observations")
 ```
 :::
 
-
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
@@ -244,12 +244,11 @@ df %>% mutate(post_mean = fit.lm$summary.fitted.values[1:100,"mean"],
 ```
 :::
 
-
 ### Generate model predictions
 
 ------------------------------------------------------------------------
 
-Now we can take the fitted `bru` object  and use the `predict` function to produce predictions given a new set of values for the model covariates or the original values used for the model fit
+Now we can take the fitted `bru` object and use the `predict` function to produce predictions given a new set of values for the model covariates or the original values used for the model fit
 
 ```{r}
 new_data = data.frame(x = c(df$x, runif(10)),
@@ -257,10 +256,7 @@ new_data = data.frame(x = c(df$x, runif(10)),
 pred = predict(fit.lm, new_data, ~ Intercept + beta_1)
 ```
 
-
-::: {.panel-tabset}
-
-
+::: panel-tabset
 ## Plot
 
 ```{r}
@@ -292,5 +288,3 @@ pred %>% ggplot() +
   xlab("Covariate") + ylab("Observations")
 ```
 :::
-
-
