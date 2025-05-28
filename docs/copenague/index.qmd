@@ -1,7 +1,49 @@
-<iframe class="slide-deck" src="slides_1.html">
+---
+title: "`inlabru` Workshop"
+author: "Jafet Belmont, Sara Martino and Janine Illian"
+subtitle: "Insitution name 2025, Copenhagen"
+---
 
-</iframe>
+# Welcome
 
-<iframe class="slide-deck" src="slides_2.html">
+  - Welcome to the `inlabu` workshop!
+  - The goal for the workshop is to ...
+  - The workshop is intended for ... No knowledge of `R-INLA` is required.
+  - Workshop materials in the github repository [inlabru-workshop](https://github.com/Ecol-Stats/inlabru_workshop/tree/main/docs/copenague)
 
-</iframe>
+## Learning Objectives for the workshop
+
+At the end of the workshop, participants will be able to:
+
+  - ILO1
+  - ILO2
+  - ILO3, etc
+
+Intended audience and level:
+The tutorial is intended for ... No knowledge of `R-INLA` is required.
+
+# Schedule
+
+| Time          | Topic                                                                         | Instructor                    |
+|:-------------:|:-----------------------------------------------------------------------------:|:----------------------------:|
+| 11:00 - 11:30 | Session 1: Topic  1                                                           | XXXXXXXXXXXXX                |
+| 11:30 - 12:30 | Session 2a: Topic 2                                                           | XXXXXXXXXXXXX                |
+| 12:30 - 1:00  | [Practical Session 1](day1_practical.qmd)                          | XXXXXXXXXXXXX                |
+| 1:00 - 2:00   | Lunch break                                                                   |                              |
+| 2:00 - 2:30   | Session 3                                                                     | XXXXXXXXXXXXX                |
+| 2:20 - 3:00   | Session 3b                                                                    | XXXXXXXXXXXXX                |
+| 3:00 - 4:00   | Practical Session 2                                                           | XXXXXXXXXXXXX                |
+| 4:00 - 4:15   | Coffee break                                                                  |                              |
+| 4:15 - 5:00   | Practical Session 3                                                           |                              |
+
+# In preparation for the workshop
+
+Participants are required to follow the next steps before the day of the workshop:
+
+ 1. Install [R-INLA](https://www.r-inla.org/download-install)
+
+ 2. Install `inlabru` (available from CRAN) 
+ 
+ 3. Make sure you have the latest `R-INLA`, `inlabru` and `R` versions installed.
+ 
+

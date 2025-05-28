@@ -1,0 +1,91 @@
+---
+title: "LMM"
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+
+# Linear Mixed Model
+
+Consider the same linear model as in @sec-linmodel except with the addition that the data that comes in groups.  For each group $j$, we have an associated variable $v_j \sim \mathcal{N}(0, \tau^{-1}_v)$.  
+
+The predictor for this model is
+$$
+\mathbb{E}\left[ y_{ij} \right] = \beta_0 + \beta_1 x_i + v_j
+$$
+The model design matrix for the random effect has one row for each observation.  The row of the design matrix associated with the $ij$-th observation consists of zeroes except for the element associated with $v_j$, which has a one.
+
+##### **_Simulate example data_**
+
+```{r load_libs_lmm, message=FALSE, warning=FALSE}
+library(inlabru)
+library(INLA)
+library(ggplot2)
+library(dplyr)
+```
+
+```{r generate_data_lmm}
+
+beta = c(1.5,1)
+sd_error = 1
+tau_group = 1
+
+n = 100
+n.groups = 5
+x = rnorm(n)
+v = rnorm(n.groups, sd = tau_group^{-1/2})
+y = beta[1] + beta[2] * x + rnorm(n, sd = sd_error) +
+  rep(v, each = 20)
+
+df = data.frame(y = y, x = x, j = rep(1:5, each = 20))  
+```
+
+Note that `inlabru` expects an integer indexing variable to label the groups.
+
+```{r plot_data_lmm}
+#| code-fold: true
+#| fig-cap: Data for the linear mixed model example with 5 groups
+df$jfac = as.factor(df$j)
+ggplot(df) +
+  geom_point(aes(x = x, colour = jfac, y = y)) +
+  theme_classic() +
+  scale_colour_discrete("Group")
+
+```
+
+#### **_Define model components and likelihood_**
+
+In order to specify this model we must use the `group` argument to tell `inlabru` which variable indexes the groups.  The `model = "iid"` tells INLA that the groups are independent from one another.
+
+```{r define_components_lmm}
+# Define model components
+cmp =  ~ Intercept(1) + beta_1(x, model = "linear") +
+  v(j, model = "iid")
+```
+
+The group variable is indexed by column `j` in the dataset.  We have chosen to name this component `v()` to connect with the mathematical notation that we used above.  
+
+```{r define_likelihood_lmm}
+# Construct likelihood
+lik =  like(formula = y ~.,
+            family = "gaussian",
+            data = df)
+```
+
+##### **_Fit the model_**
+
+The model can be fitted exactly as in the previous examples by using the `bru` function with the components and likelihood objects.
+
+```{r fit_model_lmm}
+fit = bru(cmp, lik)
+summary(fit)
+```

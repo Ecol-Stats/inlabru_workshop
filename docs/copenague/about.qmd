@@ -1,12 +1,16 @@
 # Practicals Day 1
 
+In this practical session you will cover the basics of linear models and GAMs, which can be accessed.
+
+
+
 ```{r}
 #| echo: false
 #| message: false
 #| warning: false
 #| layout-ncol: 2
 #| column: page
-#| 
+#| eval: false
 library(downloadthis)
 
 download_file(
@@ -16,7 +20,7 @@ download_file(
   button_type = "success",
   has_icon = TRUE,
   icon = "fa fa-save",
-  self_contained = TRUE
+  self_contained = FALSE
 )
 
 download_link(

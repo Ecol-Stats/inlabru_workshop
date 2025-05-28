@@ -1,21 +1,37 @@
 project:
   type: website
   output-dir: docs
-
+  render:
+  - index.qmd
+  - slides.qmd
+  - day1_practical.qmd
+  - slides/slides_1.qmd
+  - slides/slides_2.qmd
 website:
-  title: "inlabru workshop"
+  title: inlabru workshop
   navbar:
+    logo: INLA_logo.png
     left:
-      - href: index.qmd
-        text: Slides
-      - href: about.qmd
-        text: Practicals
-
+    - href: index.qmd
+      text: Home
+    - href: slides.qmd
+      text: Slides
+  sidebar:
+    style: docked
+    search: true
+    contents:
+    - index.qmd
+    - day1_practical.qmd
+  page-navigation: true
 format:
   html:
-    theme: cosmo
-    css: styles.css
+    theme:
+      light: flatly
+      dark: darkly
+    css:
+    - styles.css
+    - include/webex.css
     toc: true
-
+    include-after-body: include/webex.js
 editor: visual
 

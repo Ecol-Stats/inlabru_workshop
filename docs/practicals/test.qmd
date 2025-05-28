@@ -9,17 +9,11 @@ format:
     keep-tex: true
     number-sections: true
 embed-resources: true
-
 editor_options: 
   chunk_output_type: console
 ---
 
-```{r}
-#| echo: false
-#| message: false
-#| warning: false
-library(webexercises)
-```
+## Linear Model {#sec-linmodel}
 
 Start by loading usefull libraries:
 
@@ -36,20 +30,6 @@ library(inlabru)
 # load some libraries to generate nice map plots
 library(scico)
 ```
-
-<font size="5"> **Aim of this practical:** </font> In this first practical we are going to look at some simple models
-
-1.  A [Gaussian model](#Gaussian-link) with simulated data
-2.  A [GLM model with random effects](#GLM-link)
-
-we are going to learn:
-
--   How to fit a simple model with `inlabru`
--   How to explore the results
--   How to change the prior distributions
--   How to get predictions for missing data points
-
-## Linear Model {#sec-linmodel}
 
 As our first example we consider a simple linear regression model with Gaussian observations $y_i\sim\mathcal{N}(\mu_i, \sigma^2)$, $i = 1,\dots,N$ where $\sigma^2$ is the observation error, and the mean parameter $\mu_i$ is linked to the linear predictor through an identity function: $$
 \eta_i = \mu_i = \beta_0 + \beta_1 x_i
@@ -147,6 +127,7 @@ Note that `Intercept()` is one of `inlabru` special names and it is used to defi
 
 ```{r}
 #| eval: false
+#| purl: false
 
 cmp =  ~ -1 + myIntercept(1) + beta_1(x, model = "linear")
 
@@ -213,6 +194,7 @@ See the `summary()` output to check the names for the different model components
 #| fig-align: center
 #| webex.hide: "Click here to see the solution"
 #| code-fold: show
+#| purl: false
 plot(fit.lm, "beta_1") +
 plot(fit.lm, "Precision for the Gaussian observations")
 ```
@@ -235,6 +217,7 @@ Plot the fitted values with 95% Credible intervals.
 #| fig-width: 6
 #| fig-height: 4
 #| fig-align: center
+#| purl: false
 df %>% mutate(post_mean = fit.lm$summary.fitted.values[1:100,"mean"],
               q25 = fit.lm$summary.fitted.values[1:100,"0.025quant"],
               q975 = fit.lm$summary.fitted.values[1:100,"0.975quant"])%>%
