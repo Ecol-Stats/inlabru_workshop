@@ -31,11 +31,16 @@ library(inlabru)
 library(scico)
 ```
 
-As our first example we consider a simple linear regression model with Gaussian observations $y_i\sim\mathcal{N}(\mu_i, \sigma^2)$, $i = 1,\dots,N$ where $\sigma^2$ is the observation error, and the mean parameter $\mu_i$ is linked to the linear predictor through an identity function: $$
-\eta_i = \mu_i = \beta_0 + \beta_1 x_i
-$$ where $x_i$ is a covariate and $\beta_0, \beta_1$ are parameters to be estimated.
+As our first example we consider a simple linear regression model with Gaussian observations 
+$$
+y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
+$$
 
-To finalize the Bayesian model we need to assign a $\text{Gamma}(a,b)$ prior to the precision parameter $\tau = 1/\sigma^2$ and two independent Gaussian priors with mean $0$ and precision $\tau_{\beta}$ to the regression parameters $\beta_0$ and $\beta_1$.
+where $\sigma^2$ is the observation error, and the mean parameter $\mu_i$ is linked to the linear predictor through an identity function: $$
+\eta_i = \mu_i = \beta_0 + \beta_1 x_i
+$$ where $x_i$ is a covariate and $\beta_0, \beta_1$ are parameters to be estimated. We assign $\beta_0$ and $\beta_1$ a vague Gaussian prior.
+
+To finalize the Bayesian model we  assign a $\text{Gamma}(a,b)$ prior to the precision parameter $\tau = 1/\sigma^2$ and two independent Gaussian priors with mean $0$ and precision $\tau_{\beta}$ to the regression parameters $\beta_0$ and $\beta_1$.
 
 ::: {.callout-tip icon="false"}
 ## {{< bi question-octagon color=#6dc83c >}} Question
@@ -47,17 +52,18 @@ What is the dimension of the hyperparameter vector and latent Gaussian field?
 The hyperparameter vector has dimension 1, $\pmb{\theta} = (\tau)$ while the latent Gaussian field $\pmb{u} = (\beta_0, \beta_1)$ has dimension 2, $0$ mean, and sparse precision matrix:
 
 $$
-\pmb{Q} = \tau_{\beta}\begin{bmatrix}
-1 & 0\\
-0 & 1
+\pmb{Q} = \begin{bmatrix}
+\tau_{\beta_0} & 0\\
+0 & \tau_{\beta_1}
 \end{bmatrix}
 $$
+Note that, since $\beta_0$ and $\beta_1$ are fixed effecs, the precision parameters $\tau_{\beta_0}$ and $\tau_{\beta_1}$ are fixed.
 
 `r unhide()`
 :::
 
 ::: callout-note
-We can write the linear predictor vector $\pmb{\eta} = (\eta_i,\dots,\eta_N)$ as
+We can write the linear predictor vector $\pmb{\eta} = (\eta_1,\dots,\eta_N)$ as
 
 $$
 \pmb{\eta} = \pmb{A}\pmb{u} = \pmb{A}_1\pmb{u}_1 + \pmb{A}_2\pmb{u}_2 = \begin{bmatrix}
@@ -73,14 +79,23 @@ x_N
 \end{bmatrix} \beta_1
 $$
 
-Our linear predictor consists then of two components.
+Our linear predictor consists then of two components: an intercept and a slope.
 :::
 
+
+In this practical we will:
+
+   - Simulate Gaussian data
+   - Learn how to fit the model with `inlabru`
+   - Learn how to set priors for linear effects $\beta_0$ and $\beta_1$
+   - Learn how to set the priors for the hyperparameter $\tau = 1/\sigma^2$.
+   - Generate predictions from the model
+   
 ### **Simulate example data**
 
 ------------------------------------------------------------------------
 
-In this practical we will use simulated Gaussian data to get familiar with the `inlabru` workflow. Moreover, we will see how to change the prior distributions both for the fixed effects $\beta_0$ and $\beta_1$ and for the hyperparameter $\tau = 1/\sigma^2$. First, we simulate data from the model
+First, we simulate data from the model
 
 $$
 y_i\sim\mathcal{N}(\eta_i,0.1^2), \ i = 1,\dots,100
@@ -92,13 +107,13 @@ $$
 \eta_i = \beta_0 + \beta_1 x_i
 $$
 
-where $\beta_0 = 2$,$\beta_1 = 0.5$ and the values of the covariate $x$ are generated from an Uniform(0,1) distribution. The simulated response and covariate data are then saved in a `data.frame` object.
+where $\beta_0 = 2$, $\beta_1 = 0.5$ and the values of the covariate $x$ are generated from an Uniform(0,1) distribution. The simulated response and covariate data are then saved in a `data.frame` object.
 
 ```{r}
 #| code-fold: show
 
-beta = c(1,1)
-sd_error = 1
+beta = c(2,0.5)
+sd_error = 0.1
 
 n = 100
 x = rnorm(n)
@@ -120,7 +135,7 @@ The model has two parameters to be estimated $\beta_1$ and $\beta_2$. We need to
 cmp =  ~ Intercept(1) + beta_1(x, model = "linear")
 ```
 
-The `cmp` object is here used to define model components. We can give them any useful names we like
+The `cmp` object is here used to define model components. We can give them any useful names we like, in this case,  `Intercept` and `beta_1`.
 
 ::: callout-note
 Note that `Intercept()` is one of `inlabru` special names and it is used to define a global intercept. You should explicitly exclude automatic intercept when not using the special `Intercept` name, e.g.
@@ -165,6 +180,9 @@ We fit the model using the `bru()` functions which takes as input the components
 fit.lm = bru(cmp, lik)
 ```
 
+**Extract results**
+
+
 The `summary()` function will give access to some basic information about model fit and estimates
 
 ```{r }
@@ -178,7 +196,7 @@ plot(fit.lm, "Intercept")
 ```
 
 ::: {.callout-warning icon="false"}
-## {{< bi pencil-square color=#c8793c >}} Task
+## {{< bi pencil-square color=#c8793c >}} Task 1
 
 Plot the posterior marginals for $\beta_1$ and for the precision of the observation error $\pi(\tau|y)$
 
@@ -201,7 +219,7 @@ plot(fit.lm, "Precision for the Gaussian observations")
 :::
 
 ::: {.callout-warning icon="false"}
-## {{< bi pencil-square color=#c8793c >}} Task
+## {{< bi pencil-square color=#c8793c >}} Task 2
 
 Plot the fitted values with 95% Credible intervals.
 
@@ -227,17 +245,110 @@ df %>% mutate(post_mean = fit.lm$summary.fitted.values[1:100,"mean"],
 ```
 :::
 
+### Change the prior distributions
+
+------------------------------------------------------------------------
+
+Until now, we have used the default priors for both the precision $\tau$ and the fixed effects $\beta_0$ and $\beta_1$. Let's see how to customize these.
+
+
+::: callout-note
+
+To check which priors are used in a fitted model one can use the function `inla.prior.used()`
+
+```{r}
+#| eval: true
+#| purl: true
+
+inla.priors.used(fit.lm)
+```
+
+From the output we see that the precision for the observation $\tau\sim\text{Gamma}(1e+00,5e-05)$ while $\beta_0$ and $\beta_1$ have precision 0.001, that is variance $1/0.001$. 
+
+:::
+
+**Change the precision for the linear effects**
+
+The precision for linear effects is set in the component definition. For example, if we want to increase the precision to 0.01 for $\beta_0$ we define the relative components as:
+
+
+```{r }
+#| echo: false
+#| eval: false
+cmp1 =  ~ Intercept(1, prec.linear = 0.01) + beta_1(x, model = "linear")
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task 3
+
+Run the model again using 0.1 as default precision for both the intercept and the slope parameter.
+
+
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| purl: false
+#| eval: true
+
+cmp2 =  ~ Intercept(1, prec.linear = 0.1) + beta_1(x, model = "linear", 
+                                                   prec.linear = 0.1)
+
+lm.fit2 = bru(cmp2, lik)
+#Note that we can use the same observation model as before since both the #formula and the dataset are unchanged.
+
+```
+
+
+:::
+
+**Change the prior for the precision of the observation error $\tau$ **
+
+
+Priors on the hyperparameters of the observation model must be passed by defining argument `hyper` within `control.family` in the call to the `bru_obs()` function.
+
+```{r}
+
+prec.tau <- list(prec = list(prior = "loggamma", param = c(0.01, 0.01)))
+
+lik2 =  bru_obs(formula = y ~.,
+            family = "gaussian",
+            data = df, 
+            control.family = list(hyper = prec.tau))
+
+fit.lm2 = bru(cmp2, lik2)
+
+```
+
+
+
+
+
+
+
+
 ### Generate model predictions
 
 ------------------------------------------------------------------------
 
-Now we can take the fitted `bru` object and use the `predict` function to produce predictions given a new set of values for the model covariates or the original values used for the model fit
+
+Now we can take the fitted `bru` object and use the `predict` function to produce predictions for $\mu$ given a new set of values for the model covariates or the original values used for the model fit
 
 ```{r}
 new_data = data.frame(x = c(df$x, runif(10)),
                       y = c(df$y, rep(NA,10)))
-pred = predict(fit.lm, new_data, ~ Intercept + beta_1)
+pred = predict(fit.lm, new_data, ~ Intercept + beta_1,
+               n.samples = 1000)
+
+
+
 ```
+
+The `predict` function generate samples from the fitted model. In this case we set ehe number of samples to 1000.
+
 
 ::: panel-tabset
 ## Plot
@@ -269,5 +380,28 @@ pred %>% ggplot() +
   geom_line(aes(x, q0.025), linetype = "dashed")+
   geom_line(aes(x, q0.975), linetype = "dashed")+
   xlab("Covariate") + ylab("Observations")
+```
+:::
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task 4
+
+Generate predictions for a new observation with $x = 0.45$ 
+
+
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+new_data = data.frame(x = 0.45)
+pred = predict(fit.lm, new_data, ~ Intercept + beta_1,
+               n.samples = 1000)
+
 ```
 :::
