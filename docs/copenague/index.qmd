@@ -4,7 +4,7 @@ author: "Jafet Belmont, Sara Martino and Janine Illian"
 subtitle: "Insitution name 2025, Copenhagen"
 ---
 
-# Welcome to the course
+# Welcome to the course!
 
 -   Welcome to the `inlabu` workshop!
 -   The goal for the workshop is to ...
