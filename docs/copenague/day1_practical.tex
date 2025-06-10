@@ -263,7 +263,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, colback={codebgcolor}, frame hidden, sharp corners, boxrule=0pt, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[colback={codebgcolor}, boxrule=0pt, sharp corners, breakable, enhanced, frame hidden]}{\end{tcolorbox}}\fi
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
@@ -299,6 +299,8 @@ look at some simple models
 \item
   A \hyperref[Gaussian-link]{Gaussian model} with simulated data
 \item
+  A Linear mixed model
+\item
   A \hyperref[GLM-link]{GLM model with random effects}
 \end{enumerate}
 
@@ -307,18 +309,28 @@ we are going to learn:
 \begin{itemize}
 \tightlist
 \item
-  How to fit a simple model with \texttt{inlabru}
+  How to fit some commonly used models with \texttt{inlabru}
 \item
   How to explore the results
-\item
-  How to change the prior distributions
 \item
   How to get predictions for missing data points
 \end{itemize}
 
 \subsection{Linear Model}\label{sec-linmodel}
 
-Start by loading usefull libraries:
+In this practical we will:
+
+\begin{itemize}
+\tightlist
+\item
+  Simulate Gaussian data
+\item
+  Learn how to fit a linear model with \texttt{inlabru}
+\item
+  Generate predictions from the model
+\end{itemize}
+
+Start by loading useful libraries:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -333,21 +345,25 @@ Start by loading usefull libraries:
 \end{Shaded}
 
 As our first example we consider a simple linear regression model with
-Gaussian observations \(y_i\sim\mathcal{N}(\mu_i, \sigma^2)\),
-\(i = 1,\dots,N\) where \(\sigma^2\) is the observation error, and the
-mean parameter \(\mu_i\) is linked to the linear predictor through an
-identity function: \[
+Gaussian observations \[
+y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
+\]
+
+where \(\sigma^2\) is the observation error, and the mean parameter
+\(\mu_i\) is linked to the linear predictor through an identity
+function: \[
 \eta_i = \mu_i = \beta_0 + \beta_1 x_i
 \] where \(x_i\) is a covariate and \(\beta_0, \beta_1\) are parameters
-to be estimated.
+to be estimated. We assign \(\beta_0\) and \(\beta_1\) a vague Gaussian
+prior.
 
-To finalize the Bayesian model we need to assign a \(\text{Gamma}(a,b)\)
-prior to the precision parameter \(\tau = 1/\sigma^2\) and two
-independent Gaussian priors with mean \(0\) and precision
-\(\tau_{\beta}\) to the regression parameters \(\beta_0\) and
-\(\beta_1\).
+To finalize the Bayesian model we assign a \(\text{Gamma}(a,b)\) prior
+to the precision parameter \(\tau = 1/\sigma^2\) and two independent
+Gaussian priors with mean \(0\) and precision \(\tau_{\beta}\) to the
+regression parameters \(\beta_0\) and \(\beta_1\) (we will use the
+default prior settings in INLA for now).
 
-\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, rightrule=.15mm, colframe=quarto-callout-tip-color-frame, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, arc=.35mm, coltitle=black, titlerule=0mm, breakable, toptitle=1mm, left=2mm, toprule=.15mm, bottomrule=.15mm, title={Question}, colbacktitle=quarto-callout-tip-color!10!white]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, colback=white, left=2mm, bottomrule=.15mm, coltitle=black, title={Question}, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, toprule=.15mm, titlerule=0mm, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, opacityback=0, opacitybacktitle=0.6, arc=.35mm, bottomtitle=1mm]
 
 What is the dimension of the hyperparameter vector and latent Gaussian
 field?
@@ -359,18 +375,20 @@ while the latent Gaussian field \(\pmb{u} = (\beta_0, \beta_1)\) has
 dimension 2, \(0\) mean, and sparse precision matrix:
 
 \[
-\pmb{Q} = \tau_{\beta}\begin{bmatrix}
-1 & 0\\
-0 & 1
+\pmb{Q} = \begin{bmatrix}
+\tau_{\beta_0} & 0\\
+0 & \tau_{\beta_1}
 \end{bmatrix}
-\]
+\] Note that, since \(\beta_0\) and \(\beta_1\) are fixed effects, the
+precision parameters \(\tau_{\beta_0}\) and \(\tau_{\beta_1}\) are
+fixed.
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, rightrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, arc=.35mm, coltitle=black, titlerule=0mm, breakable, toptitle=1mm, left=2mm, toprule=.15mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colbacktitle=quarto-callout-note-color!10!white]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, colback=white, left=2mm, bottomrule=.15mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, leftrule=.75mm, colframe=quarto-callout-note-color-frame, toprule=.15mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, opacityback=0, opacitybacktitle=0.6, arc=.35mm, bottomtitle=1mm]
 
 We can write the linear predictor vector
-\(\pmb{\eta} = (\eta_i,\dots,\eta_N)\) as
+\(\pmb{\eta} = (\eta_1,\dots,\eta_N)\) as
 
 \[
 \pmb{\eta} = \pmb{A}\pmb{u} = \pmb{A}_1\pmb{u}_1 + \pmb{A}_2\pmb{u}_2 = \begin{bmatrix}
@@ -386,20 +404,14 @@ x_N
 \end{bmatrix} \beta_1
 \]
 
-Our linear predictor consists then of two components.
+Our linear predictor consists then of two components: an intercept and a
+slope.
 
 \end{tcolorbox}
 
-\subsubsection{\texorpdfstring{\textbf{Simulate example
-data}}{Simulate example data}}\label{simulate-example-data}
+\subsubsection{Simulate example data}\label{simulate-example-data}
 
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-In this practical we will use simulated Gaussian data to get familiar
-with the \texttt{inlabru} workflow. Moreover, we will see how to change
-the prior distributions both for the fixed effects \(\beta_0\) and
-\(\beta_1\) and for the hyperparameter \(\tau = 1/\sigma^2\). First, we
-simulate data from the model
+First, we simulate data from the model
 
 \[
 y_i\sim\mathcal{N}(\eta_i,0.1^2), \ i = 1,\dots,100
@@ -411,15 +423,15 @@ with
 \eta_i = \beta_0 + \beta_1 x_i
 \]
 
-where \(\beta_0 = 2\),\(\beta_1 = 0.5\) and the values of the covariate
+where \(\beta_0 = 2\), \(\beta_1 = 0.5\) and the values of the covariate
 \(x\) are generated from an Uniform(0,1) distribution. The simulated
 response and covariate data are then saved in a \texttt{data.frame}
 object.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{beta }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{)}
-\NormalTok{sd\_error }\OtherTok{=} \DecValTok{1}
+\NormalTok{beta }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\FloatTok{0.5}\NormalTok{)}
+\NormalTok{sd\_error }\OtherTok{=} \FloatTok{0.1}
 
 \NormalTok{n }\OtherTok{=} \DecValTok{100}
 \NormalTok{x }\OtherTok{=} \FunctionTok{rnorm}\NormalTok{(n)}
@@ -429,9 +441,8 @@ object.
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{\texorpdfstring{\textbf{Fitting a linear regression model
-with
-\texttt{inlabru}}}{Fitting a linear regression model with inlabru}}\label{fitting-a-linear-regression-model-with-inlabru}
+\subsubsection{\texorpdfstring{Fitting a linear regression model with
+\texttt{inlabru}}{Fitting a linear regression model with inlabru}}\label{fitting-a-linear-regression-model-with-inlabru}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -447,9 +458,10 @@ The model has two parameters to be estimated \(\beta_1\) and
 \end{Shaded}
 
 The \texttt{cmp} object is here used to define model components. We can
-give them any useful names we like
+give them any useful names we like, in this case, \texttt{Intercept} and
+\texttt{beta\_1}.
 
-\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, rightrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, arc=.35mm, coltitle=black, titlerule=0mm, breakable, toptitle=1mm, left=2mm, toprule=.15mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colbacktitle=quarto-callout-note-color!10!white]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, colback=white, left=2mm, bottomrule=.15mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, leftrule=.75mm, colframe=quarto-callout-note-color-frame, toprule=.15mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, opacityback=0, opacitybacktitle=0.6, arc=.35mm, bottomtitle=1mm]
 
 Note that \texttt{Intercept()} is one of \texttt{inlabru} special names
 and it is used to define a global intercept. You should explicitly
@@ -479,7 +491,7 @@ order to define the model predictor.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, rightrule=.15mm, colframe=quarto-callout-note-color-frame, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, arc=.35mm, coltitle=black, titlerule=0mm, breakable, toptitle=1mm, left=2mm, toprule=.15mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colbacktitle=quarto-callout-note-color!10!white]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, colback=white, left=2mm, bottomrule=.15mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, leftrule=.75mm, colframe=quarto-callout-note-color-frame, toprule=.15mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, opacityback=0, opacitybacktitle=0.6, arc=.35mm, bottomtitle=1mm]
 
 In this case we can also use the shortcut
 \texttt{formula\ =\ y\ \textasciitilde{}\ .}. This will tell
@@ -510,118 +522,55 @@ the components and the observation model:
 \end{Highlighting}
 \end{Shaded}
 
+\textbf{Extract results}
+
 The \texttt{summary()} function will give access to some basic
 information about model fit and estimates
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{summary}\NormalTok{(fit.lm)}
+\DocumentationTok{\#\# inlabru version: 2.12.0}
+\DocumentationTok{\#\# INLA version: 25.02.10}
+\DocumentationTok{\#\# Components:}
+\DocumentationTok{\#\# Intercept: main = linear(1), group = exchangeable(1L), replicate = iid(1L), NULL}
+\DocumentationTok{\#\# beta\_1: main = linear(x), group = exchangeable(1L), replicate = iid(1L), NULL}
+\DocumentationTok{\#\# Likelihoods:}
+\DocumentationTok{\#\#   Family: \textquotesingle{}gaussian\textquotesingle{}}
+\DocumentationTok{\#\#     Tag: \textquotesingle{}\textquotesingle{}}
+\DocumentationTok{\#\#     Data class: \textquotesingle{}data.frame\textquotesingle{}}
+\DocumentationTok{\#\#     Response class: \textquotesingle{}numeric\textquotesingle{}}
+\DocumentationTok{\#\#     Predictor: y \textasciitilde{} .}
+\DocumentationTok{\#\#     Used components: effects[Intercept, beta\_1], latent[]}
+\DocumentationTok{\#\# Time used:}
+\DocumentationTok{\#\#     Pre = 0.416, Running = 0.186, Post = 0.0846, Total = 0.687 }
+\DocumentationTok{\#\# Fixed effects:}
+\DocumentationTok{\#\#            mean   sd 0.025quant 0.5quant 0.975quant  mode kld}
+\DocumentationTok{\#\# Intercept 2.005 0.01      1.985    2.005      2.024 2.005   0}
+\DocumentationTok{\#\# beta\_1    0.500 0.01      0.481    0.500      0.519 0.500   0}
+\DocumentationTok{\#\# }
+\DocumentationTok{\#\# Model hyperparameters:}
+\DocumentationTok{\#\#                                           mean    sd 0.025quant 0.5quant}
+\DocumentationTok{\#\# Precision for the Gaussian observations 108.02 15.27      80.20   107.30}
+\DocumentationTok{\#\#                                         0.975quant   mode}
+\DocumentationTok{\#\# Precision for the Gaussian observations     139.97 105.86}
+\DocumentationTok{\#\# }
+\DocumentationTok{\#\# Deviance Information Criterion (DIC) ...............: {-}178.47}
+\DocumentationTok{\#\# Deviance Information Criterion (DIC, saturated) ....: 105.39}
+\DocumentationTok{\#\# Effective number of parameters .....................: 3.00}
+\DocumentationTok{\#\# }
+\DocumentationTok{\#\# Watanabe{-}Akaike information criterion (WAIC) ...: {-}178.02}
+\DocumentationTok{\#\# Effective number of parameters .................: 3.29}
+\DocumentationTok{\#\# }
+\DocumentationTok{\#\# Marginal log{-}Likelihood:  69.75 }
+\DocumentationTok{\#\#  is computed }
+\DocumentationTok{\#\# Posterior summaries for the linear predictor and the fitted values are computed}
+\DocumentationTok{\#\# (Posterior marginals needs also \textquotesingle{}control.compute=list(return.marginals.predictor=TRUE)\textquotesingle{})}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-inlabru version: 2.12.0
-INLA version: 24.06.27
-Components:
-Intercept: main = linear(1), group = exchangeable(1L), replicate = iid(1L), NULL
-beta_1: main = linear(x), group = exchangeable(1L), replicate = iid(1L), NULL
-Likelihoods:
-  Family: 'gaussian'
-    Tag: ''
-    Data class: 'data.frame'
-    Response class: 'numeric'
-    Predictor: y ~ .
-    Used components: effects[Intercept, beta_1], latent[]
-Time used:
-    Pre = 0.569, Running = 0.323, Post = 0.119, Total = 1.01 
-Fixed effects:
-           mean    sd 0.025quant 0.5quant 0.975quant  mode kld
-Intercept 0.907 0.108      0.695    0.907      1.119 0.907   0
-beta_1    0.944 0.129      0.691    0.944      1.197 0.944   0
-
-Model hyperparameters:
-                                         mean    sd 0.025quant 0.5quant
-Precision for the Gaussian observations 0.888 0.126      0.659    0.882
-                                        0.975quant mode
-Precision for the Gaussian observations       1.15 0.87
-
-Deviance Information Criterion (DIC) ...............: 301.69
-Deviance Information Criterion (DIC, saturated) ....: 105.39
-Effective number of parameters .....................: 3.00
-
-Watanabe-Akaike information criterion (WAIC) ...: 301.94
-Effective number of parameters .................: 3.11
-
-Marginal log-Likelihood:  -170.12 
- is computed 
-Posterior summaries for the linear predictor and the fitted values are computed
-(Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')
-\end{verbatim}
 
 We can see that both the intercept and slope and the error precision are
-correctly estimated. We can then plot the marginal posterior for
-\(\beta_0\) as follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{plot}\NormalTok{(fit.lm, }\StringTok{"Intercept"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{day1_practical_files/figure-pdf/unnamed-chunk-14-1.pdf}
-
-\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, arc=.35mm, coltitle=black, titlerule=0mm, breakable, toptitle=1mm, left=2mm, toprule=.15mm, bottomrule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white]
-
-Plot the posterior marginals for \(\beta_1\) and for the precision of
-the observation error \(\pi(\tau|y)\)
-
-Take hint
-
-See the \texttt{summary()} output to check the names for the different
-model components.
-
-Click here to see the solution
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{plot}\NormalTok{(fit.lm, }\StringTok{"beta\_1"}\NormalTok{) }\SpecialCharTok{+}
-\FunctionTok{plot}\NormalTok{(fit.lm, }\StringTok{"Precision for the Gaussian observations"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}
-\includegraphics{day1_practical_files/figure-pdf/unnamed-chunk-15-1.pdf}
-\end{center}
-
-\end{tcolorbox}
-
-\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, arc=.35mm, coltitle=black, titlerule=0mm, breakable, toptitle=1mm, left=2mm, toprule=.15mm, bottomrule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white]
-
-Plot the fitted values with 95\% Credible intervals.
-
-Take hint
-
-\texttt{bru} objects information about the linear predictor can be
-accessed through \texttt{fit.lm\$summary.fitted.values}.
-
-Click here to see the solution
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{df }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{post\_mean =}\NormalTok{ fit.lm}\SpecialCharTok{$}\NormalTok{summary.fitted.values[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{,}\StringTok{"mean"}\NormalTok{],}
-              \AttributeTok{q25 =}\NormalTok{ fit.lm}\SpecialCharTok{$}\NormalTok{summary.fitted.values[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{,}\StringTok{"0.025quant"}\NormalTok{],}
-              \AttributeTok{q975 =}\NormalTok{ fit.lm}\SpecialCharTok{$}\NormalTok{summary.fitted.values[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{,}\StringTok{"0.975quant"}\NormalTok{])}\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{ggplot}\NormalTok{()}\SpecialCharTok{+}\FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{x,}\AttributeTok{y=}\NormalTok{y),}\AttributeTok{alpha=}\FloatTok{0.5}\NormalTok{,}\AttributeTok{color=}\StringTok{"grey40"}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{x,}\AttributeTok{y=}\NormalTok{post\_mean),}\AttributeTok{col=}\DecValTok{2}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{geom\_ribbon}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{ymax =}\NormalTok{ q975, }\AttributeTok{ymin =}\NormalTok{ q25),}\AttributeTok{fill=}\StringTok{"tomato"}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.3}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}
-\includegraphics{day1_practical_files/figure-pdf/unnamed-chunk-16-1.pdf}
-\end{center}
-
-\end{tcolorbox}
+correctly estimated.
 
 \subsubsection{Generate model
 predictions}\label{generate-model-predictions}
@@ -629,23 +578,27 @@ predictions}\label{generate-model-predictions}
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
 Now we can take the fitted \texttt{bru} object and use the
-\texttt{predict} function to produce predictions given a new set of
-values for the model covariates or the original values used for the
-model fit
+\texttt{predict} function to produce predictions for \(\mu\) given a new
+set of values for the model covariates or the original values used for
+the model fit
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{new\_data }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x =} \FunctionTok{c}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{x, }\FunctionTok{runif}\NormalTok{(}\DecValTok{10}\NormalTok{)),}
                       \AttributeTok{y =} \FunctionTok{c}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{y, }\FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{,}\DecValTok{10}\NormalTok{)))}
-\NormalTok{pred }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit.lm, new\_data, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Intercept }\SpecialCharTok{+}\NormalTok{ beta\_1)}
+\NormalTok{pred }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit.lm, new\_data, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Intercept }\SpecialCharTok{+}\NormalTok{ beta\_1,}
+               \AttributeTok{n.samples =} \DecValTok{1000}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
+
+The \texttt{predict} function generate samples from the fitted model. In
+this case we set the number of samples to 1000.
 
 \subsection{Plot}
 
 \begin{figure}[H]
 
-{\centering \includegraphics{day1_practical_files/figure-pdf/unnamed-chunk-18-1.pdf}
+{\centering \includegraphics{day1_practical_files/figure-pdf/unnamed-chunk-11-1.pdf}
 
 }
 
@@ -666,34 +619,101 @@ model fit
 \end{Highlighting}
 \end{Shaded}
 
-\section{Linear Mixed Model}\label{linear-mixed-model}
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, colback=white, left=2mm, bottomrule=.15mm, coltitle=black, title={Task}, leftrule=.75mm, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, opacityback=0, opacitybacktitle=0.6, arc=.35mm, bottomtitle=1mm]
 
-Consider the same linear model as in Section~\ref{sec-linmodel} except
-with the addition that the data that comes in groups. For each group
-\(j\), we have an associated variable
-\(v_j \sim \mathcal{N}(0, \tau^{-1}_v)\).
+Generate predictions for a new observation with \(x_0 = 0.45\)
 
-The predictor for this model is \[
-\mathbb{E}\left[ y_{ij} \right] = \beta_0 + \beta_1 x_i + v_j
-\] The model design matrix for the random effect has one row for each
-observation. The row of the design matrix associated with the \(ij\)-th
-observation consists of zeroes except for the element associated with
-\(v_j\), which has a one.
+Take hint
 
-\subparagraph{\texorpdfstring{\textbf{\emph{Simulate example
-data}}}{Simulate example data}}\label{simulate-example-data-1}
+You can create a new data frame containing the new observation \(x_0\)
+and then use the \texttt{predict} function.
+
+Click here to see the solution
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(inlabru)}
-\FunctionTok{library}\NormalTok{(INLA)}
-\FunctionTok{library}\NormalTok{(ggplot2)}
-\FunctionTok{library}\NormalTok{(dplyr)}
+\NormalTok{new\_data }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x =} \FloatTok{0.45}\NormalTok{)}
+\NormalTok{pred }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit.lm, new\_data, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Intercept }\SpecialCharTok{+}\NormalTok{ beta\_1,}
+               \AttributeTok{n.samples =} \DecValTok{1000}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
+\end{tcolorbox}
+
+\subsection{Linear Mixed Model}\label{linear-mixed-model}
+
+Consider the a simple linear regression model except with the addition
+that the data that comes in groups. For each group \(j\), we have an
+associated variable \(v_j \sim \mathcal{N}(0, \tau^{-1}_u)\).
+
+The model is \[
+ y_{ij}  = \beta_0 + \beta_1 x_i + u_j + \epsilon_{ij} ~~~  \text{for}~i = 1,\ldots,N~ \text{and}~ j = 1,\ldots,m.
+\]The model design matrix for the random effect has one row for each
+observation (this is equivalent to a random intercept model). The row of
+the design matrix associated with the \(ij\)-th observation consists of
+zeros except for the element associated with \(v_j\), which has a one.
+In matrix form, the linear mixed model for the \emph{j}-th group can be
+written as:
+
+\[
+\overbrace{\mathbf{y}_j}^{ N \times 1} = \overbrace{X_j}^{ N \times 2} \underbrace{\beta}_{1\times 1} + \overbrace{Z_j}^{n_j \times 1} + \underbrace{u_j}_{1\times1} + \overbrace{\epsilon_j}^{n_j \times 1},
+\]
+
+where \(\epsilon_j \sim \mathcal{N}(0, \tau^{-1}_\epsilon)\) is column
+vector of the residuals.
+
+\subsubsection{LMM as a LGM}\label{lmm-as-a-lgm}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+In a latent Gaussian model (LGM) formulation the mixed model predictor
+for the \emph{i}-th observation can be written as :
+
+\[
+\eta_i = \beta_0 + \beta_1 x_i + \sum_k^K f_k(u_j)
+\]
+
+where \(f_k(u_j) = u_j\) since there's only one random effect per group
+(i.e., a random intercept for group \(j\)). The fixed effects
+\((\beta_0,\beta_1)\) are assigned Gaussian priors (e.g.,
+\(\beta \sim \mathcal{N}(0,\tau_\beta^{-1})\)). The random effects
+\(\mathbf{u} = (u_1,\ldots,u_m)^T\) follow a Gaussian density
+\(\mathcal{N}(0,\mathbf{Q}_u^{-1})\) where
+\(\mathbf{Q}_u = \tau_u\mathbf{I}_m\) is the precision matrix for the
+random intercepts. Then, the components for the LGM are the following:
+
+\begin{itemize}
+\item
+  Latent field given by
+
+  \[
+  \begin{bmatrix} \beta \\\mathbf{u} 
+  \end{bmatrix} \sim \mathcal{N}\left(\mathbf{0},\begin{bmatrix}\tau_\beta^{-1}\mathbf{I}_2&\mathbf{0}\\\mathbf{0} &\tau_u^{-1}\mathbf{I}_m\end{bmatrix}\right)
+  \]
+\item
+  Likelihood:
+
+  \[
+  y_i \sim \mathcal{N}(\eta_i,\tau_{\epsilon}^{-1})
+  \]
+\item
+  Hyperparameters:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\tau_u\sim\mathrm{Gamma}(a,b)\)
+  \item
+    \(\tau_\epsilon \sim \mathrm{Gamma}(c,d)\)
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{\texorpdfstring{\textbf{Simulate example
+data}}{Simulate example data}}\label{simulate-example-data-1}
+
 \begin{Shaded}
 \begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{12}\NormalTok{)}
 \NormalTok{beta }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\FloatTok{1.5}\NormalTok{,}\DecValTok{1}\NormalTok{)}
 \NormalTok{sd\_error }\OtherTok{=} \DecValTok{1}
 \NormalTok{tau\_group }\OtherTok{=} \DecValTok{1}
@@ -714,9 +734,8 @@ the groups.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{df}\SpecialCharTok{$}\NormalTok{jfac }\OtherTok{=} \FunctionTok{as.factor}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{j)}
 \FunctionTok{ggplot}\NormalTok{(df) }\SpecialCharTok{+}
-  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{colour =}\NormalTok{ jfac, }\AttributeTok{y =}\NormalTok{ y)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{colour =} \FunctionTok{factor}\NormalTok{(j), }\AttributeTok{y =}\NormalTok{ y)) }\SpecialCharTok{+}
   \FunctionTok{theme\_classic}\NormalTok{() }\SpecialCharTok{+}
   \FunctionTok{scale\_colour\_discrete}\NormalTok{(}\StringTok{"Group"}\NormalTok{)}
 \end{Highlighting}
@@ -732,8 +751,12 @@ the groups.
 
 \end{figure}%
 
-\paragraph{\texorpdfstring{\textbf{\emph{Define model components and
-likelihood}}}{Define model components and likelihood}}\label{define-model-components-and-likelihood}
+\subsubsection{\texorpdfstring{Fitting a LMM in
+\texttt{inlabru}}{Fitting a LMM in inlabru}}\label{fitting-a-lmm-in-inlabru}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Defining model components and observational model}
 
 In order to specify this model we must use the \texttt{group} argument
 to tell \texttt{inlabru} which variable indexes the groups. The
@@ -744,7 +767,7 @@ one another.
 \begin{Highlighting}[]
 \CommentTok{\# Define model components}
 \NormalTok{cmp }\OtherTok{=}  \ErrorTok{\textasciitilde{}} \FunctionTok{Intercept}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{beta\_1}\NormalTok{(x, }\AttributeTok{model =} \StringTok{"linear"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{v}\NormalTok{(j, }\AttributeTok{model =} \StringTok{"iid"}\NormalTok{)}
+  \FunctionTok{u}\NormalTok{(j, }\AttributeTok{model =} \StringTok{"iid"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -761,8 +784,7 @@ mathematical notation that we used above.
 \end{Highlighting}
 \end{Shaded}
 
-\subparagraph{\texorpdfstring{\textbf{\emph{Fit the
-model}}}{Fit the model}}\label{fit-the-model}
+\textbf{Fitting the model}
 
 The model can be fitted exactly as in the previous examples by using the
 \texttt{bru} function with the components and likelihood objects.
@@ -771,54 +793,387 @@ The model can be fitted exactly as in the previous examples by using the
 \begin{Highlighting}[]
 \NormalTok{fit }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp, lik)}
 \FunctionTok{summary}\NormalTok{(fit)}
+\DocumentationTok{\#\# inlabru version: 2.12.0}
+\DocumentationTok{\#\# INLA version: 25.02.10}
+\DocumentationTok{\#\# Components:}
+\DocumentationTok{\#\# Intercept: main = linear(1), group = exchangeable(1L), replicate = iid(1L), NULL}
+\DocumentationTok{\#\# beta\_1: main = linear(x), group = exchangeable(1L), replicate = iid(1L), NULL}
+\DocumentationTok{\#\# u: main = iid(j), group = exchangeable(1L), replicate = iid(1L), NULL}
+\DocumentationTok{\#\# Likelihoods:}
+\DocumentationTok{\#\#   Family: \textquotesingle{}gaussian\textquotesingle{}}
+\DocumentationTok{\#\#     Tag: \textquotesingle{}\textquotesingle{}}
+\DocumentationTok{\#\#     Data class: \textquotesingle{}data.frame\textquotesingle{}}
+\DocumentationTok{\#\#     Response class: \textquotesingle{}numeric\textquotesingle{}}
+\DocumentationTok{\#\#     Predictor: y \textasciitilde{} .}
+\DocumentationTok{\#\#     Used components: effects[Intercept, beta\_1, u], latent[]}
+\DocumentationTok{\#\# Time used:}
+\DocumentationTok{\#\#     Pre = 0.277, Running = 0.227, Post = 0.121, Total = 0.625 }
+\DocumentationTok{\#\# Fixed effects:}
+\DocumentationTok{\#\#            mean    sd 0.025quant 0.5quant 0.975quant  mode kld}
+\DocumentationTok{\#\# Intercept 2.108 0.439      1.228    2.108      2.987 2.108   0}
+\DocumentationTok{\#\# beta\_1    1.172 0.120      0.936    1.172      1.408 1.172   0}
+\DocumentationTok{\#\# }
+\DocumentationTok{\#\# Random effects:}
+\DocumentationTok{\#\#   Name     Model}
+\DocumentationTok{\#\#     u IID model}
+\DocumentationTok{\#\# }
+\DocumentationTok{\#\# Model hyperparameters:}
+\DocumentationTok{\#\#                                          mean    sd 0.025quant 0.5quant}
+\DocumentationTok{\#\# Precision for the Gaussian observations 0.996 0.144      0.738    0.986}
+\DocumentationTok{\#\# Precision for u                         1.614 1.062      0.370    1.356}
+\DocumentationTok{\#\#                                         0.975quant  mode}
+\DocumentationTok{\#\# Precision for the Gaussian observations       1.30 0.971}
+\DocumentationTok{\#\# Precision for u                               4.36 0.918}
+\DocumentationTok{\#\# }
+\DocumentationTok{\#\# Deviance Information Criterion (DIC) ...............: 294.34}
+\DocumentationTok{\#\# Deviance Information Criterion (DIC, saturated) ....: 109.02}
+\DocumentationTok{\#\# Effective number of parameters .....................: 6.74}
+\DocumentationTok{\#\# }
+\DocumentationTok{\#\# Watanabe{-}Akaike information criterion (WAIC) ...: 294.35}
+\DocumentationTok{\#\# Effective number of parameters .................: 6.35}
+\DocumentationTok{\#\# }
+\DocumentationTok{\#\# Marginal log{-}Likelihood:  {-}179.93 }
+\DocumentationTok{\#\#  is computed }
+\DocumentationTok{\#\# Posterior summaries for the linear predictor and the fitted values are computed}
+\DocumentationTok{\#\# (Posterior marginals needs also \textquotesingle{}control.compute=list(return.marginals.predictor=TRUE)\textquotesingle{})}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, colback=white, left=2mm, bottomrule=.15mm, coltitle=black, title={Question}, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, toprule=.15mm, titlerule=0mm, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, opacityback=0, opacitybacktitle=0.6, arc=.35mm, bottomtitle=1mm]
+
+Suppose that we are also interested in including random slopes into our
+model. Assuming intercept and slopes are independent, can your write
+down the linear predictor and the components of this model as a LGM?
+
+Give me a hint
+
+In general, the mixed model predictor can decomposed as:
+
+\[ \pmb{\eta} = X\beta + Z\mathbf{u} \]
+
+Where \(X\) is a \(n \times p\) design matrix and \(\beta\) the
+corresponding \emph{p}-dimensional vector of fixed effects. Then \(Z\)
+is a \(n\times q_J\) design matrix for the \(q_J\) random effects and
+\(J\) groups; \(\mathbf{v}\) is then a \(q_J \times 1\) vector of \(q\)
+random effects for the \(J\) groups. In a latent Gaussian model (LGM)
+formulation this can be written as:
+
+\[ \eta_i = \beta_0 + \sum\beta_j x_{ij} + \sum_k f(k) (u_{ij}) \]
+
+See Solution
+
+\begin{itemize}
+\item
+  The linear predictor is given by
+
+  \[
+  \eta_i = \beta_0 + \beta_1x_i + u_{0j} + u_{1j}x_i
+  \]
+\item
+  Latent field defined by:
+
+  \begin{itemize}
+  \item
+    \(\beta \sim \mathcal{N}(0,\tau_\beta^{-1})\)
+  \item
+    \(\mathbf{u}_j = \begin{bmatrix}u_{0j} \\ u_{1j}\end{bmatrix}, \mathbf{u}_j \sim \mathcal{N}(\mathbf{0},\mathbf{Q}_u^{-1})\)
+    where the precision matrix is a block-diagonal matrix with entries
+    \(\mathbf{Q}_u= \begin{bmatrix}\tau_{u_0} & {0} \\{0} & \tau_{u_1}\end{bmatrix}\)
+  \end{itemize}
+\item
+  The hyperparameters are then:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\tau_{u_0},\tau_{u_1} \text{and}~\tau_\epsilon\)
+  \end{itemize}
+\end{itemize}
+
+To fit this model in \texttt{inlabru} we can simply modify the model
+components as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cmp }\OtherTok{=}  \ErrorTok{\textasciitilde{}} \FunctionTok{Intercept}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{beta\_1}\NormalTok{(x, }\AttributeTok{model =} \StringTok{"linear"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{u0}\NormalTok{(j, }\AttributeTok{model =} \StringTok{"iid"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{u1}\NormalTok{(j,x, }\AttributeTok{model =} \StringTok{"iid"}\NormalTok{, }\AttributeTok{hyper =}\NormalTok{ pcprior)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{tcolorbox}
+
+\subsection{Generalized Linear Model}\label{sec-genlinmodel}
+
+In this practical we will:
+
+\begin{itemize}
+\tightlist
+\item
+  Simulate non-Gaussian data
+\item
+  Learn how to fit a generalised linear model with \texttt{inlabru}
+\item
+  Generate predictions from the model
+\end{itemize}
+
+A generalised linear model allows for the data likelihood to be
+non-Gaussian. In this example we have a discrete response variable which
+we model using a Poisson distribution. Thus, we assume that our data \[
+y_i \sim \text{Poisson}(\lambda_i)
+\] with rate parameter \(\lambda_i\) which, using a log link, has
+associated predictor \[
+\eta_i = \log \lambda_i = u_0 + u_1 x_i 
+\] with parameters \(u_0\) and \(u_1\), and covariate \(x\). This is
+identical in form to the predictor in Section~\ref{sec-linmodel}. The
+only difference is now we must specify a different data likelihood.
+
+\subsubsection{\texorpdfstring{\textbf{Simulate example
+data}}{Simulate example data}}\label{simulate-example-data-2}
+
+This code generates 100 samples of covariate \texttt{x} and data
+\texttt{y}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{n }\OtherTok{=} \DecValTok{100}
+\NormalTok{beta }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+\NormalTok{x }\OtherTok{=} \FunctionTok{rnorm}\NormalTok{(n)}
+\NormalTok{lambda }\OtherTok{=} \FunctionTok{exp}\NormalTok{(beta[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ beta[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ x)}
+\NormalTok{y }\OtherTok{=} \FunctionTok{rpois}\NormalTok{(n, }\AttributeTok{lambda  =}\NormalTok{ lambda)}
+\NormalTok{df }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{x =}\NormalTok{ x)  }
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{\texorpdfstring{Fitting a GLM in
+\texttt{inlabru}}{Fitting a GLM in inlabru}}\label{fitting-a-glm-in-inlabru}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\textbf{Define model components and likelihood}
+
+Since the predictor is the same as Section~\ref{sec-linmodel}, we can
+use the same component definition:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cmp }\OtherTok{=}  \ErrorTok{\textasciitilde{}} \FunctionTok{Intercept}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{x\_effect}\NormalTok{(x, }\AttributeTok{model =} \StringTok{"linear"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+However, when building the observation model likelihood we must now
+specify the Poisson likelihood using the \texttt{family} argument (the
+default link function for this family is the \(\log\) link).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lik }\OtherTok{=}  \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{.,}
+            \AttributeTok{family =} \StringTok{"poisson"}\NormalTok{,}
+            \AttributeTok{data =}\NormalTok{ df)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Fit the model}
+
+Once the likelihood object is constructed, fitting the model is exactly
+the same process as in Section~\ref{sec-linmodel}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit\_glm }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp, lik)}
+\end{Highlighting}
+\end{Shaded}
+
+And model summaries can be viewed using
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(fit\_glm)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 inlabru version: 2.12.0
-INLA version: 24.06.27
+INLA version: 25.02.10
 Components:
 Intercept: main = linear(1), group = exchangeable(1L), replicate = iid(1L), NULL
-beta_1: main = linear(x), group = exchangeable(1L), replicate = iid(1L), NULL
-v: main = iid(j), group = exchangeable(1L), replicate = iid(1L), NULL
+x_effect: main = linear(x), group = exchangeable(1L), replicate = iid(1L), NULL
 Likelihoods:
-  Family: 'gaussian'
+  Family: 'poisson'
     Tag: ''
     Data class: 'data.frame'
-    Response class: 'numeric'
+    Response class: 'integer'
     Predictor: y ~ .
-    Used components: effects[Intercept, beta_1, v], latent[]
+    Used components: effects[Intercept, x_effect], latent[]
 Time used:
-    Pre = 0.487, Running = 0.408, Post = 0.282, Total = 1.18 
+    Pre = 0.219, Running = 0.181, Post = 0.0287, Total = 0.429 
 Fixed effects:
            mean    sd 0.025quant 0.5quant 0.975quant  mode kld
-Intercept 1.852 0.397      1.055    1.851      2.649 1.851   0
-beta_1    0.968 0.106      0.758    0.968      1.176 0.968   0
+Intercept 0.915 0.071      0.775    0.915      1.054 0.915   0
+x_effect  1.048 0.056      0.938    1.048      1.157 1.048   0
 
-Random effects:
-  Name    Model
-    v IID model
+Deviance Information Criterion (DIC) ...............: 386.39
+Deviance Information Criterion (DIC, saturated) ....: 120.67
+Effective number of parameters .....................: 2.00
 
-Model hyperparameters:
-                                         mean    sd 0.025quant 0.5quant
-Precision for the Gaussian observations 0.818 0.119      0.607    0.811
-Precision for v                         2.088 1.447      0.452    1.724
-                                        0.975quant  mode
-Precision for the Gaussian observations       1.07 0.798
-Precision for v                               5.86 1.129
+Watanabe-Akaike information criterion (WAIC) ...: 387.33
+Effective number of parameters .................: 2.73
 
-Deviance Information Criterion (DIC) ...............: 314.06
-Deviance Information Criterion (DIC, saturated) ....: 108.97
-Effective number of parameters .....................: 6.69
-
-Watanabe-Akaike information criterion (WAIC) ...: 313.91
-Effective number of parameters .................: 6.17
-
-Marginal log-Likelihood:  -188.93 
+Marginal log-Likelihood:  -204.02 
  is computed 
 Posterior summaries for the linear predictor and the fitted values are computed
 (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')
 \end{verbatim}
+
+\subsubsection{Generate model
+predictions}\label{generate-model-predictions-1}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+To generate new predictions we must provide a data frame that contains
+the covariate values for \(x\) at which we want to predict.
+
+This code block generates predictions for the data we used to fit the
+model (contained in \texttt{df\$x}) as well as 10 new covariate values
+sampled from a uniform distribution \texttt{runif(10)}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Define new data, set to NA the values for prediction}
+
+\NormalTok{new\_data }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x =} \FunctionTok{c}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{x, }\FunctionTok{runif}\NormalTok{(}\DecValTok{10}\NormalTok{)),}
+                      \AttributeTok{y =} \FunctionTok{c}\NormalTok{(df}\SpecialCharTok{$}\NormalTok{y, }\FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{,}\DecValTok{10}\NormalTok{)))}
+
+\CommentTok{\# Define predictor formula}
+\NormalTok{pred\_fml }\OtherTok{\textless{}{-}} \ErrorTok{\textasciitilde{}} \FunctionTok{exp}\NormalTok{(Intercept }\SpecialCharTok{+}\NormalTok{ x\_effect)}
+
+\CommentTok{\# Generate predictions}
+\NormalTok{pred\_glm }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(fit\_glm, new\_data, pred\_fml)}
+\end{Highlighting}
+\end{Shaded}
+
+Since we used a log link (which is the default for
+\texttt{family\ =\ "poisson"}), we want to predict the exponential of
+the predictor. We specify this using a general \texttt{R} expression
+using the formula syntax.
+
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, colback=white, left=2mm, bottomrule=.15mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, leftrule=.75mm, colframe=quarto-callout-note-color-frame, toprule=.15mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, opacityback=0, opacitybacktitle=0.6, arc=.35mm, bottomtitle=1mm]
+
+Note that the predict function will call the component names (i.e.~the
+``labels'') that were decided when defining the model.
+
+\end{tcolorbox}
+
+Since the component definition is looking for a covariate named \(x\),
+all we need to provide is a data frame that contains one, and the
+software does the rest.
+
+\subsection{Plot}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{day1_practical_files/figure-pdf/unnamed-chunk-47-1.pdf}
+
+}
+
+\caption{Data and 95\% credible intervals}
+
+\end{figure}%
+
+\subsection{R Code}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pred\_glm }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(x,y), }\AttributeTok{alpha =} \FloatTok{0.3}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(x,mean)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_ribbon}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{ymax =}\NormalTok{ q0}\FloatTok{.975}\NormalTok{, }\AttributeTok{ymin =}\NormalTok{ q0}\FloatTok{.025}\NormalTok{),}\AttributeTok{fill =} \StringTok{"tomato"}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.3}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Covariate"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{ylab}\NormalTok{(}\StringTok{"Observations (counts)"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, colback=white, left=2mm, bottomrule=.15mm, coltitle=black, title={Task}, leftrule=.75mm, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, opacityback=0, opacitybacktitle=0.6, arc=.35mm, bottomtitle=1mm]
+
+Suppose a binary response such that
+
+\[
+    \begin{aligned}
+y_i &\sim \mathrm{Bernoulli}(\psi_i)\\
+\eta_i &= \mathrm{logit}(\psi_i) = \alpha_0 +\alpha_1 \times w_i 
+\end{aligned}
+\] Using the following simulated data, use \texttt{inlabru} to fit the
+logistic regression above. Then, plot the predictions for the data used
+to fit the model along with 10 new covariate values
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{n }\OtherTok{=} \DecValTok{100}
+\NormalTok{alpha }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{,}\FloatTok{1.5}\NormalTok{)}
+\NormalTok{w }\OtherTok{=} \FunctionTok{rnorm}\NormalTok{(n)}
+\NormalTok{psi }\OtherTok{=} \FunctionTok{plogis}\NormalTok{(alpha[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{+}\NormalTok{ alpha[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{*}\NormalTok{ w)}
+\NormalTok{y }\OtherTok{=} \FunctionTok{rbinom}\NormalTok{(}\AttributeTok{n =}\NormalTok{ n, }\AttributeTok{size =} \DecValTok{1}\NormalTok{, }\AttributeTok{prob =}\NormalTok{  psi) }\CommentTok{\# set size = 1 to draw binary observations}
+\NormalTok{df\_logis }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{w =}\NormalTok{ w)  }
+\end{Highlighting}
+\end{Shaded}
+
+Here we use the logit link function
+\(\mathrm{logit}(x) = \log\left(\frac{x}{1-x}\right)\)
+(\texttt{plogis()} function in R) to link the linear predictor to the
+probabilities \(\psi\).
+
+Take hint
+
+You can set \texttt{family\ =\ "binomial"} for binary responses and the
+\texttt{plogis()} function for computing the predicted values.
+
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, colback=white, left=2mm, bottomrule=.15mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, leftrule=.75mm, colframe=quarto-callout-note-color-frame, toprule=.15mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, opacityback=0, opacitybacktitle=0.6, arc=.35mm, bottomtitle=1mm]
+
+The Bernoulli distribution is equivalent to a
+\(\mathrm{Binomial}(1, \psi)\) pmf. If you have proportional data
+(e.g.~no. successes/no. trials) you can specify the number of events as
+your response and then the number of trials via the
+\texttt{Ntrials\ =\ n} argument of the \texttt{bru\_obs} function (where
+\texttt{n} is the known vector of trials in your data set).
+
+\end{tcolorbox}
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Model components}
+\NormalTok{cmp\_logis }\OtherTok{=}  \ErrorTok{\textasciitilde{}} \FunctionTok{Intercept}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{w\_effect}\NormalTok{(w, }\AttributeTok{model =} \StringTok{"linear"}\NormalTok{)}
+\CommentTok{\# Model likelihood}
+\NormalTok{lik\_logis }\OtherTok{=}  \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{.,}
+            \AttributeTok{family =} \StringTok{"binomial"}\NormalTok{,}
+            \AttributeTok{data =}\NormalTok{ df\_logis)}
+\CommentTok{\# fit the model}
+\NormalTok{fit\_logis }\OtherTok{\textless{}{-}} \FunctionTok{bru}\NormalTok{(cmp\_logis,lik\_logis)}
+
+\CommentTok{\# Define data for prediction}
+\NormalTok{new\_data }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{w =} \FunctionTok{c}\NormalTok{(df\_logis}\SpecialCharTok{$}\NormalTok{w, }\FunctionTok{runif}\NormalTok{(}\DecValTok{10}\NormalTok{)),}
+                      \AttributeTok{y =} \FunctionTok{c}\NormalTok{(df\_logis}\SpecialCharTok{$}\NormalTok{y, }\FunctionTok{rep}\NormalTok{(}\ConstantTok{NA}\NormalTok{,}\DecValTok{10}\NormalTok{)))}
+\CommentTok{\# Define predictor formula}
+\NormalTok{pred\_fml }\OtherTok{\textless{}{-}} \ErrorTok{\textasciitilde{}} \FunctionTok{plogis}\NormalTok{(Intercept }\SpecialCharTok{+}\NormalTok{ w\_effect)}
+
+\CommentTok{\# Generate predictions}
+\NormalTok{pred\_logis }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(fit\_logis, new\_data, pred\_fml)}
+
+\CommentTok{\# Plot predictions}
+\NormalTok{pred\_logis }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(w,y), }\AttributeTok{alpha =} \FloatTok{0.3}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(w,mean)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_ribbon}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ w, }\AttributeTok{ymax =}\NormalTok{ q0}\FloatTok{.975}\NormalTok{, }\AttributeTok{ymin =}\NormalTok{ q0}\FloatTok{.025}\NormalTok{),}\AttributeTok{fill =} \StringTok{"tomato"}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.3}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Covariate"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{ylab}\NormalTok{(}\StringTok{"Observations"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\includegraphics{day1_practical_files/figure-pdf/unnamed-chunk-50-1.pdf}
+\end{center}
+
+\end{tcolorbox}
 
 
 

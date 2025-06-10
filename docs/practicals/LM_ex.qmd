@@ -1,0 +1,272 @@
+---
+title: "Practical"
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+## Linear Model {#sec-linmodel}
+
+In this practical we will:
+
+-   Simulate Gaussian data
+-   Learn how to fit a linear model with `inlabru`
+-   Generate predictions from the model
+
+Start by loading useful libraries:
+
+```{r}
+#| warning: false
+#| message: false
+#| code-summary: "Load libraries"
+
+
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+# load some libraries to generate nice map plots
+library(scico)
+```
+
+As our first example we consider a simple linear regression model with Gaussian observations $$
+y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
+$$
+
+where $\sigma^2$ is the observation error, and the mean parameter $\mu_i$ is linked to the linear predictor through an identity function: $$
+\eta_i = \mu_i = \beta_0 + \beta_1 x_i
+$$ where $x_i$ is a covariate and $\beta_0, \beta_1$ are parameters to be estimated. We assign $\beta_0$ and $\beta_1$ a vague Gaussian prior.
+
+To finalize the Bayesian model we assign a $\text{Gamma}(a,b)$ prior to the precision parameter $\tau = 1/\sigma^2$ and two independent Gaussian priors with mean $0$ and precision $\tau_{\beta}$ to the regression parameters $\beta_0$ and $\beta_1$ (we will use the default prior settings in INLA for now).
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+What is the dimension of the hyperparameter vector and latent Gaussian field?
+
+`r hide("Answer")`
+
+The hyperparameter vector has dimension 1, $\pmb{\theta} = (\tau)$ while the latent Gaussian field $\pmb{u} = (\beta_0, \beta_1)$ has dimension 2, $0$ mean, and sparse precision matrix:
+
+$$
+\pmb{Q} = \begin{bmatrix}
+\tau_{\beta_0} & 0\\
+0 & \tau_{\beta_1}
+\end{bmatrix}
+$$ Note that, since $\beta_0$ and $\beta_1$ are fixed effects, the precision parameters $\tau_{\beta_0}$ and $\tau_{\beta_1}$ are fixed.
+
+`r unhide()`
+:::
+
+::: callout-note
+We can write the linear predictor vector $\pmb{\eta} = (\eta_1,\dots,\eta_N)$ as
+
+$$
+\pmb{\eta} = \pmb{A}\pmb{u} = \pmb{A}_1\pmb{u}_1 + \pmb{A}_2\pmb{u}_2 = \begin{bmatrix}
+1 \\
+1\\
+\vdots\\
+1
+\end{bmatrix} \beta_0 + \begin{bmatrix}
+x_1 \\
+x_2\\
+\vdots\\
+x_N
+\end{bmatrix} \beta_1
+$$
+
+Our linear predictor consists then of two components: an intercept and a slope.
+:::
+
+### Simulate example data
+
+First, we simulate data from the model
+
+$$
+y_i\sim\mathcal{N}(\eta_i,0.1^2), \ i = 1,\dots,100
+$$
+
+with
+
+$$
+\eta_i = \beta_0 + \beta_1 x_i
+$$
+
+where $\beta_0 = 2$, $\beta_1 = 0.5$ and the values of the covariate $x$ are generated from an Uniform(0,1) distribution. The simulated response and covariate data are then saved in a `data.frame` object.
+
+```{r}
+#| code-fold: show
+#| code-summary: "Simulate Data from a LM"
+
+beta = c(2,0.5)
+sd_error = 0.1
+
+n = 100
+x = rnorm(n)
+y = beta[1] + beta[2] * x + rnorm(n, sd = sd_error)
+
+df = data.frame(y = y, x = x)  
+
+```
+
+### Fitting a linear regression model with `inlabru`
+
+------------------------------------------------------------------------
+
+**Defining model components**
+
+The model has two parameters to be estimated $\beta_1$ and $\beta_2$. We need to define the two corresponding model components:
+
+```{r }
+#| code-summary: "Define LM components"
+cmp =  ~ Intercept(1) + beta_1(x, model = "linear")
+```
+
+The `cmp` object is here used to define model components. We can give them any useful names we like, in this case, `Intercept` and `beta_1`.
+
+::: callout-note
+Note that `Intercept()` is one of `inlabru` special names and it is used to define a global intercept. You should explicitly exclude automatic intercept when not using the special `Intercept` name, e.g.
+
+```{r}
+#| eval: false
+#| purl: false
+
+cmp =  ~ -1 + myIntercept(1) + beta_1(x, model = "linear")
+
+```
+:::
+
+**Observation model construction**
+
+The next step is to construct the observation model by defining the model likelihood. The most important inputs here are the `formula`, the `family` and the `data`.
+
+The `formula` defines how the components should be combined in order to define the model predictor.
+
+```{r}
+#| eval: false
+#| code-summary: "Define LM formula"
+formula = y ~ Intercept + beta_1
+```
+
+::: callout-note
+In this case we can also use the shortcut `formula = y ~ .`. This will tell `inlarbu` that the model is linear and that it is not necessary to linearize the model and assess convergence.
+:::
+
+The likelihood is defined using the `bru_obs()` function as follows:
+
+```{r}
+#| code-summary: "Define Observational model"
+lik =  bru_obs(formula = y ~.,
+            family = "gaussian",
+            data = df)
+```
+
+**Fit the model**
+
+We fit the model using the `bru()` functions which takes as input the components and the observation model:
+
+```{r}
+#| code-summary: "Fit LM in `inlabru`"
+fit.lm = bru(cmp, lik)
+```
+
+**Extract results**
+
+The `summary()` function will give access to some basic information about model fit and estimates
+
+```{r }
+#| code-summary: "Model summaries"
+#| collapse: true
+summary(fit.lm)
+```
+
+We can see that both the intercept and slope and the error precision are correctly estimated.
+
+### Generate model predictions
+
+------------------------------------------------------------------------
+
+Now we can take the fitted `bru` object and use the `predict` function to produce predictions for $\mu$ given a new set of values for the model covariates or the original values used for the model fit
+
+```{r}
+new_data = data.frame(x = c(df$x, runif(10)),
+                      y = c(df$y, rep(NA,10)))
+pred = predict(fit.lm, new_data, ~ Intercept + beta_1,
+               n.samples = 1000)
+
+
+
+```
+
+The `predict` function generate samples from the fitted model. In this case we set the number of samples to 1000.
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| code-fold: true
+#| fig-cap: Data and 95% credible intervals
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+
+pred %>% ggplot() + 
+  geom_point(aes(x,y), alpha = 0.3) +
+  geom_line(aes(x,mean)) +
+  geom_line(aes(x, q0.025), linetype = "dashed")+
+  geom_line(aes(x, q0.975), linetype = "dashed")+
+  xlab("Covariate") + ylab("Observations")
+```
+
+## R Code
+
+```{r}
+#| code-fold: show
+#| eval: false
+#| purl: false
+
+
+pred %>% ggplot() + 
+  geom_point(aes(x,y), alpha = 0.3) +
+  geom_line(aes(x,mean)) +
+  geom_line(aes(x, q0.025), linetype = "dashed")+
+  geom_line(aes(x, q0.975), linetype = "dashed")+
+  xlab("Covariate") + ylab("Observations")
+```
+:::
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Generate predictions for a new observation with $x_0 = 0.45$
+
+`r hide("Take hint")`
+
+You can create a new data frame containing the new observation $x_0$ and then use the `predict` function.
+
+`r unhide()`
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+new_data = data.frame(x = 0.45)
+pred = predict(fit.lm, new_data, ~ Intercept + beta_1,
+               n.samples = 1000)
+
+```
+:::

@@ -1,0 +1,23 @@
+---
+title: "Exercises Description"
+output: html_document
+date: "2025-06-10"
+---
+
+## Practical list
+
+Please add any new practical to this list
+
+| File name                     | Topic                     | Description                                                                                                                                          | Data type      |
+|-------------------------------|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|
+| test.qmd (name to be changed) | Template                  | Template including [webexercises](https://psyteachr.github.io/webexercises/) html widgets , custom .css and reactive download data buttons (pending) | NA             |
+| LM_ex.qmd                     | Linear Models             | Introductory example to how define linear model components and compute predictions in inlabru                                                        | Simulated Data |
+| LMM_ex.qmd                    | Linear mixed models       | Fitting a random intercept model in inlabru and how to write a LMM as a LGM                                                                          | Simulated Data |
+| GLM_ex.qmd                    | Generalised Linear Models | Poisson and logistic regression examples.                                                                                                            | Simulated Data |
+|                               |                           |                                                                                                                                                      |                |
+|                               |                           |                                                                                                                                                      |                |
+|                               |                           |                                                                                                                                                      |                |
+|                               |                           |                                                                                                                                                      |                |
+|                               |                           |                                                                                                                                                      |                |
+|                               |                           |                                                                                                                                                      |                |
+|                               |                           |                                                                                                                                                      |                |
