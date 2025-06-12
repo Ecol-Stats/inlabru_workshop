@@ -1,0 +1,60 @@
+---
+title: "Lecture 1"
+format: revealjs
+author: S. Martino
+toc: true
+embed-resources: true
+---
+
+## Topics of this lecture
+
+  - Why Bayesian statistics
+  - What Latent Gaussian Models (LGMs) are and why are they useful
+  - What are model components
+  - How to fit simple models with inlabru
+  
+
+# The `inlabru` workflow
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+
+
+# Define model components
+comps <- component_1(...) + component_2(...) + ...
+
+# Define the model predictor
+pred <- non_linear_function(component_1, component_2, ...)
+
+# Build the observation model
+lik <- bru_obs(components = comps,
+            formula = pred,
+            ...)
+
+# Fit the model
+fit <- bru(comps, lik, ...)
+```
+
+
+# Bayesian Statistics
+
+## 
+
+# Latent Gaussian Models
+
+## What is a LGM?
+
+## A simple linear model
+
+$$
+\begin{aligned}
+y_i|\eta_i & \sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1\dots,N\\
+\eta_i & = \mu_i = \beta_0 + \beta_1x_i\\
+\beta_0,\beta_1&\sim\mathcal{N}(0,\tau)
+\end{aligned}
+$$
+  Is this a LGM?
+  
