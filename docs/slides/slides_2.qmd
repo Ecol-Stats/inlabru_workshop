@@ -1,10 +1,171 @@
 ---
 title: "Lecture 1"
-format: revealjs
-author: S. Martino
-toc: true
+from: markdown+emoji
+subtitle: "Introduction" 
+format:
+   metropolis-beamer-revealjs
+#     logo:  images/logo_white.png
+#     theme: style.scss
+# header-logo: images/logo_white.png
+slide-number: "c/t"
+title-slide-attributes:
+#    data-background-image: images/trondheim3.png
+    data-background-size: cover
+    data-background-opacity: "0.55"
+author:
+  - name: Sara Martino
+    #orcid: 0000-0002-6879-4412
+    email: sara.martino@ntnu.no
+    affiliations: Dept. of Mathematical Science, NTNU
+# date: May 22, 2025
+# bibliography: references.bib
 embed-resources: true
+editor: 
+  markdown: 
+    wrap: 72
+#nocite: |
+#  @INLA_paper
 ---
+
+
+```{r setup}
+#| include: false
+
+knitr::opts_chunk$set(echo = FALSE,  
+                      message=FALSE, 
+                      warning=FALSE, 
+                      strip.white=TRUE, 
+                      prompt=FALSE,
+                      fig.align="center",
+                       out.width = "60%")
+
+library(knitr)    # For knitting document and include_graphics function
+library(ggplot2)  # For plotting
+library(png) 
+library(tidyverse)
+library(INLA)
+library(BAS)
+library(patchwork)
+
+```
+
+
+
+# Introduction
+
+## What is INLA? What is `inlabru`?
+
+**The short answer:**
+
+> INLA is a fast method to do Bayesian inference with
+latent Gaussian models and `inlabru` is an `R`-package that
+implements this method with a flexible and simple interface.
+
+\pause
+
+**The (much) longer answer:**
+
+cite some papers here
+
+
+## Where?
+
+The software, information, examples and help can be found at 
+
+cite github for inlabru
+	
+
+
+* paper
+* tutorials
+* discussion group
+
+## So... Why should you use `inlabru`?{ auto-animate="true"}
+
+::: incremental
+-  What type of problems can we solve?
+-  What type of models can we use?
+-  When can we use it?
+:::
+
+
+## So... Why should you use `inlabru`?{ auto-animate="true"}
+
+-  What type of problems can we solve?
+-  What type of models can we use?
+-  When can we use it?
+
+
+>To give proper answers to these questions, we 
+need to start at the very beginning ..
+
+
+## The core { auto-animate="true"}
+* We have observed something.
+```{r}
+data("bodyfat")
+p1 = bodyfat %>% ggplot() + geom_point(aes(Abdomen,Bodyfat)) 
+p1
+```
+
+## The core{ auto-animate="true"}
+* We have observed something.
+* We have questions. 
+
+```{r}
+my_image <- readPNG("figures_slides2/question.png", native = TRUE)
+p1  +
+  annotate("text", x=120, y=10, label="Does bodyfat vary\n with abdomen circunference??", size = 6,
+              color="red")+ 
+  inset_element(p = my_image,
+                left = 0.5,
+                bottom = 0.55,
+                right = 0.95,
+                top = 0.95)
+```
+
+## The core{ auto-animate="true"}
+
+* We have observed something.
+* We have questions. 
+* We want answers!
+
+
+
+## How do we find answers?{ auto-animate="true"}
+We need to make choices:
+
+>- Bayesian or frequentist?
+>- How do we model the data?
+>- How do we compute the answer?
+
+## How do we find answers?{ auto-animate="true"}
+We need to make choices:
+
+- Bayesian or frequentist?
+- How do we model the data?
+- How do we compute the answer?
+
+
+These questions are **not** independent.
+
+
+## Bayesian or frequentist?
+
+In this course we embrace the Bayesian perspective
+
+- There are no "true but unknown" parameters!
+- Every parameter is described by a probability distribution!
+- Evidence from the data is used to update the belief we had before observing the data!
+
+## A simple example
+
+Assume a simple linear regression model with Gaussian observations $y = (y_1 , \ldots, y_n)$, where
+$$
+		\text{E}(y_i) = \alpha + \beta x_i,  \text{Var}(y_i) = \tau^{-1}, \quad i=1,\ldots, n
+$$
+
+
 
 ## Topics of this lecture
 
