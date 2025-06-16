@@ -76,6 +76,7 @@ y = rnorm(n, mean =  eta, sd = 0.5)
 
 df = data.frame(y = y, 
                 x_smooth = inla.group(x))  
+
 ```
 
 ### Fitting a GAM in `inlabru`
@@ -145,7 +146,7 @@ We can obtain the model predictions using the `predict` function.
 pred = predict(fit, df, ~ (Intercept + smooth))
 ```
 
-The we can plot them together with the true  curve and data points:
+The we can plot them together with the true curve and data points:
 
 ```{r plot_gam}
 #| code-fold: true
@@ -158,3 +159,47 @@ pred %>% ggplot() +
   geom_line(aes(x_smooth, q0.975), linetype = "dashed")+
   xlab("Covariate") + ylab("Observations")
 ```
+
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}}Task
+
+Fit a flexible model using a random walk of order 2 (RW2) and compare the results with the ones above.
+
+
+`r hide("Take hint")`
+
+You can set `model = "rw2"` for assigning a random walk 2 prior.
+
+
+`r unhide()`
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+#| warning: false
+#| message: false
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+
+cmp_rw2 =  ~ Intercept(1) + 
+  smooth(x_smooth, model = "rw2")
+lik_rw2 =  bru_obs(formula = y ~.,
+            family = "gaussian",
+            data = df)
+fit_rw2 = bru(cmp_rw2, lik_rw2)
+
+# Plot the fitted functions
+ggplot() + 
+  geom_line(data= fit$summary.random$smooth,aes(ID,mean,colour="RW1"),lty=2) + 
+  geom_line(data= fit_rw2$summary.random$smooth,aes(ID,mean,colour="RW2")) + 
+  xlab("covariate") + ylab("") + scale_color_discrete(name="Model")
+
+```
+
+We see that the RW1 fit is too wiggly while the RW2 is smoother and  seems to have better fit.
+:::
+
