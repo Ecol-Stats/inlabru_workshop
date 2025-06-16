@@ -42,3 +42,6 @@ we are going to learn:
 
 ```{r child="C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\GLM_ex.qmd"}
 ```
+
+```{r child="C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\GAM_ex.qmd"}
+```

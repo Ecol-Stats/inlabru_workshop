@@ -15,6 +15,12 @@ editor_options:
 
 ## Linear Mixed Model
 
+In this practical we will:
+
+-   Understand the structure of a Linear Mixed Model (LLM) as a Latent Gaussian Model (LGM)
+-   Simulate data from a LMM
+-   Learn how to fit a LMM with `inlabru` and visualize the fitted values.
+
 Consider the a simple linear regression model except with the addition that the data that comes in groups. For each group $j$, we have an associated variable $v_j \sim \mathcal{N}(0, \tau^{-1}_u)$.
 
 The model is $$
@@ -138,6 +144,25 @@ fit = bru(cmp, lik)
 summary(fit)
 ```
 
+
+### **Visualize the fitted values**
+
+The fitted values of the model can be accessed through `model$summary.fitted`. Notice that the first entries correspond to the $n$ observation associated with the linear predictor. We can then plot the fitted values as follows:
+
+```{r}
+#| code-fold: true
+#| code-summary: "LMM fitted values"
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+
+fit$summary.fitted.values[1:100,] %>% mutate(j =df$j,x =df$x) %>%
+  ggplot(aes(x=x,y=mean,color=factor(j)))+geom_line()+geom_point(aes(x=x,y=y,colour=factor(j)))+facet_wrap(~j)
+
+```
+
+
+
 ::: {.callout-tip icon="false"}
 ## {{< bi question-octagon color=#6dc83c >}} Question
 
@@ -178,9 +203,14 @@ To fit this model in `inlabru` we can simply modify the model components as foll
 ```{r}
 #| eval: false
 #| purl: false
+
 cmp =  ~ Intercept(1) + beta_1(x, model = "linear") +
-  u0(j, model = "iid") + u1(j,x, model = "iid", hyper = pcprior)
+  u0(j, model = "iid") + u1(j,x, model = "iid")
 ```
 
 `r unhide()`
 :::
+
+
+
+

@@ -145,6 +145,18 @@ fit = bru(cmp, lik)
 summary(fit)
 
 
+## -----------------------------------------------------------------------------
+#| code-fold: true
+#| code-summary: "LMM fitted values"
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+
+fit$summary.fitted.values[1:100,] %>% mutate(j =df$j,x =df$x) %>%
+  ggplot(aes(x=x,y=mean,color=factor(j)))+geom_line()+geom_point(aes(x=x,y=y,colour=factor(j)))+facet_wrap(~j)
+
+
+
 
 ## ----child="C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\GLM_ex.qmd"----
 
@@ -227,5 +239,77 @@ w = rnorm(n)
 psi = plogis(alpha[1] + alpha[2] * w)
 y = rbinom(n = n, size = 1, prob =  psi) # set size = 1 to draw binary observations
 df_logis = data.frame(y = y, w = w)  
+
+
+
+## ----child="C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\GAM_ex.qmd"----
+
+## -----------------------------------------------------------------------------
+#| echo: false
+#| message: false
+#| warning: false
+library(webexercises)
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+# load some libraries to generate nice map plots
+library(scico)
+
+
+## -----------------------------------------------------------------------------
+#| code-summary: "Simulate GAM Data"
+n = 100
+x = rnorm(n)
+eta = (1 + cos(x))
+y = rnorm(n, mean =  eta, sd = 0.5)
+
+df = data.frame(y = y, 
+                x_smooth = inla.group(x))  
+
+
+## ----define_components_gam----------------------------------------------------
+cmp =  ~ Intercept(1) + 
+  smooth(x_smooth, model = "rw1")
+
+
+## ----define_likelihood_gam----------------------------------------------------
+lik =  bru_obs(formula = y ~.,
+            family = "gaussian",
+            data = df)
+
+
+## ----run_model_gam------------------------------------------------------------
+fit = bru(cmp, lik)
+fit$summary.fixed
+
+
+
+
+## -----------------------------------------------------------------------------
+#| eval: false
+#|
+data.frame(fit$summary.random$smooth) %>% 
+  ggplot() + 
+  geom_ribbon(aes(ID,ymin = X0.025quant, ymax= X0.975quant), alpha = 0.5) + 
+  geom_line(aes(ID,mean)) + 
+  xlab("covariate") + ylab("")
+
+
+## ----get_predictions_gam------------------------------------------------------
+pred = predict(fit, df, ~ (Intercept + smooth))
+
+
+## ----plot_gam-----------------------------------------------------------------
+#| code-fold: true
+#| fig-cap: Data and 95% credible intervals
+pred %>% ggplot() + 
+  geom_point(aes(x_smooth,y), alpha = 0.3) +
+  geom_line(aes(x_smooth,1+cos(x_smooth)),col=2)+
+  geom_line(aes(x_smooth,mean)) +
+  geom_line(aes(x_smooth, q0.025), linetype = "dashed")+
+  geom_line(aes(x_smooth, q0.975), linetype = "dashed")+
+  xlab("Covariate") + ylab("Observations")
 
 
