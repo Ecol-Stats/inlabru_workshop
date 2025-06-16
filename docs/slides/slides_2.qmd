@@ -150,15 +150,64 @@ We need to make choices:
 These questions are **not** independent.
 
 
-## Bayesian or frequentist?
+## Bayesian or frequentist?{ auto-animate="true"}
 
 In this course we embrace the Bayesian perspective
 
-- There are no "true but unknown" parameters!
+- There are no "_true but unknown_" parameters !
+
+
+
+```{r}
+temp <-expression(y == paste(alpha, " + ", beta, "x"))
+p1 +  annotate(geom="text", x=85, y=45, parse = T, label = as.character(temp),
+              size=12) 
+
+```
+
+
+## Bayesian or frequentist?{ auto-animate="true"}
+
+In this course we embrace the Bayesian perspective
+
+- There are no "_true but unknown_" parameters !
+- Every parameter is described by a probability distribution!
+
+
+
+```{r}
+set.seed(100)
+b0 = rnorm(100, -40, 0.35)
+b1 = rnorm(100, 0.63, 0.05)
+
+
+temp <-expression(y == paste(alpha, " + ", beta, "x"))
+p2 = p1 +  annotate(geom="text", x=85, y=45, parse = T, label = as.character(temp),
+              size=12) +  geom_abline( slope = b1, intercept = b0, color = "grey", alpha = 0.5) + geom_point(aes(Abdomen,Bodyfat)) 
+p2
+
+```
+
+
+## Bayesian or frequentist?{ auto-animate="true"}
+
+In this course we embrace the Bayesian perspective
+
+- There are no "_true but unknown_" parameters !
 - Every parameter is described by a probability distribution!
 - Evidence from the data is used to update the belief we had before observing the data!
 
-## A simple example
+
+```{r}
+
+temp <-expression(y == paste(alpha, " + ", beta, "x"))
+
+p2 + geom_smooth(aes(Abdomen, Bodyfat), method = "lm", fill = "red")
+
+```
+
+
+## Let's formalize this a bit...
 
 Assume a simple linear regression model with Gaussian observations $y = (y_1 , \ldots, y_n)$, where
 $$
