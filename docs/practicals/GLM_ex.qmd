@@ -38,8 +38,8 @@ library(webexercises)
 A generalised linear model allows for the data likelihood to be non-Gaussian. In this example we have a discrete response variable which we model using a Poisson distribution. Thus, we assume that our data $$
 y_i \sim \text{Poisson}(\lambda_i)
 $$ with rate parameter $\lambda_i$ which, using a log link, has associated predictor $$
-\eta_i = \log \lambda_i = u_0 + u_1 x_i 
-$$ with parameters $u_0$ and $u_1$, and covariate $x$. This is identical in form to the predictor in @sec-linmodel. The only difference is now we must specify a different data likelihood.
+\eta_i = \log \lambda_i = \beta_0 + \beta_1 x_i 
+$$ with parameters $\beta_0$ and $\beta_1$, and covariate $x$. This is identical in form to the predictor in @sec-linmodel. The only difference is now we must specify a different data likelihood.
 
 ### **Simulate example data**
 
@@ -67,7 +67,7 @@ Since the predictor is the same as @sec-linmodel, we can use the same component 
 ```{r}
 #| code-summary: "GLM components"
 
-cmp =  ~ Intercept(1) + x_effect(x, model = "linear")
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
 ```
 
 However, when building the observation model likelihood we must now specify the Poisson likelihood using the `family` argument (the default link function for this family is the $\log$ link).
@@ -113,7 +113,7 @@ new_data = data.frame(x = c(df$x, runif(10)),
                       y = c(df$y, rep(NA,10)))
 
 # Define predictor formula
-pred_fml <- ~ exp(Intercept + x_effect)
+pred_fml <- ~ exp(beta_0 + beta_1)
 
 # Generate predictions
 pred_glm <- predict(fit_glm, new_data, pred_fml)
@@ -122,7 +122,7 @@ pred_glm <- predict(fit_glm, new_data, pred_fml)
 Since we used a log link (which is the default for `family = "poisson"`), we want to predict the exponential of the predictor. We specify this using a general `R` expression using the formula syntax.
 
 ::: callout-note
-Note that the predict function will call the component names (i.e. the "labels") that were decided when defining the model.
+Note that the `predict` function will call the component names (i.e. the "labels") that were decided when defining the model.
 :::
 
 Since the component definition is looking for a covariate named $x$, all we need to provide is a data frame that contains one, and the software does the rest.
@@ -210,7 +210,7 @@ The Bernoulli distribution is equivalent to a $\mathrm{Binomial}(1, \psi)$ pmf. 
 
 
 # Model components
-cmp_logis =  ~ Intercept(1) + w_effect(w, model = "linear")
+cmp_logis =  ~ -1 + alpha_0(1) + alpha_1(w, model = "linear")
 # Model likelihood
 lik_logis =  bru_obs(formula = y ~.,
             family = "binomial",
@@ -222,7 +222,7 @@ fit_logis <- bru(cmp_logis,lik_logis)
 new_data = data.frame(w = c(df_logis$w, runif(10)),
                       y = c(df_logis$y, rep(NA,10)))
 # Define predictor formula
-pred_fml <- ~ plogis(Intercept + w_effect)
+pred_fml <- ~ plogis(alpha_0 + alpha_1)
 
 # Generate predictions
 pred_logis <- predict(fit_logis, new_data, pred_fml)
