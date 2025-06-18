@@ -28,14 +28,12 @@ Start by loading useful libraries:
 #| message: false
 #| code-summary: "Load libraries"
 
-
-
 library(dplyr)
 library(INLA)
 library(ggplot2)
 library(patchwork)
 library(inlabru)     
-# load some libraries to generate nice map plots
+# load some libraries to generate nice plots
 library(scico)
 ```
 
@@ -43,7 +41,7 @@ As our first example we consider a simple linear regression model with Gaussian 
 y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
 $$
 
-where $\sigma^2$ is the observation error, and the mean parameter $\mu_i$ is linked to the linear predictor through an identity function: $$
+where $\sigma^2$ is the observation error, and the mean parameter $\mu_i$ is linked to the **linear predictor** ($\eta_i$) through an identity function: $$
 \eta_i = \mu_i = \beta_0 + \beta_1 x_i
 $$ where $x_i$ is a covariate and $\beta_0, \beta_1$ are parameters to be estimated. We assign $\beta_0$ and $\beta_1$ a vague Gaussian prior.
 
@@ -129,19 +127,19 @@ The model has two parameters to be estimated $\beta_1$ and $\beta_2$. We need to
 
 ```{r }
 #| code-summary: "Define LM components"
-cmp =  ~ Intercept(1) + beta_1(x, model = "linear")
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
 ```
 
-The `cmp` object is here used to define model components. We can give them any useful names we like, in this case, `Intercept` and `beta_1`.
+The `cmp` object is here used to define model components. We can give them any useful names we like, in this case, `beta_0` and `beta_1`.
 
 ::: callout-note
-Note that `Intercept()` is one of `inlabru` special names and it is used to define a global intercept. You should explicitly exclude automatic intercept when not using the special `Intercept` name, e.g.
+Note that we have excluded the default Intercept term in the model by typing `-1` in the model components. However, `inlabru` has automatic intercept that can be called by typing `Intercept()` , which is one of `inlabru` special names and it is used to define a global intercept, e.g.
 
 ```{r}
 #| eval: false
 #| purl: false
 
-cmp =  ~ -1 + myIntercept(1) + beta_1(x, model = "linear")
+cmp =  ~  Intercept(1) + beta_1(x, model = "linear")
 
 ```
 :::
@@ -155,11 +153,11 @@ The `formula` defines how the components should be combined in order to define t
 ```{r}
 #| eval: false
 #| code-summary: "Define LM formula"
-formula = y ~ Intercept + beta_1
+formula = y ~ beta_0 + beta_1
 ```
 
 ::: callout-note
-In this case we can also use the shortcut `formula = y ~ .`. This will tell `inlarbu` that the model is linear and that it is not necessary to linearize the model and assess convergence.
+In this case we can also use the shortcut `formula = y ~ .`. This will tell `inlabru` that the model is linear and that it is not necessary to linearize the model and assess convergence.
 :::
 
 The likelihood is defined using the `bru_obs()` function as follows:
@@ -201,7 +199,7 @@ Now we can take the fitted `bru` object and use the `predict` function to produc
 ```{r}
 new_data = data.frame(x = c(df$x, runif(10)),
                       y = c(df$y, rep(NA,10)))
-pred = predict(fit.lm, new_data, ~ Intercept + beta_1,
+pred = predict(fit.lm, new_data, ~ beta_0 + beta_1,
                n.samples = 1000)
 
 
@@ -265,7 +263,7 @@ You can create a new data frame containing the new observation $x_0$ and then us
 #| purl: false
 
 new_data = data.frame(x = 0.45)
-pred = predict(fit.lm, new_data, ~ Intercept + beta_1,
+pred = predict(fit.lm, new_data, ~ beta_0 + beta_1,
                n.samples = 1000)
 
 ```

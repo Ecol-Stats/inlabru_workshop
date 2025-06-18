@@ -17,25 +17,28 @@ editor_options:
 
 In this practical we will:
 
--   Understand the structure of a Linear Mixed Model (LLM) as a Latent Gaussian Model (LGM)
+-   Understand the basic structure of a Linear Mixed Model (LLM)
 -   Simulate data from a LMM
--   Learn how to fit a LMM with `inlabru` and visualize the fitted values.
+-   Learn how to fit a LMM with `inlabru` and predict from the model.
 
-Consider the a simple linear regression model except with the addition that the data that comes in groups. For each group $j$, we have an associated variable $v_j \sim \mathcal{N}(0, \tau^{-1}_u)$.
-
-The model is $$
+Consider the a simple linear regression model except with the addition that the data that comes in groups. Suppose that we want to include a random effect for each group $j$ (equivalent to adding a group random intercept). The model is then: $$
  y_{ij}  = \beta_0 + \beta_1 x_i + u_j + \epsilon_{ij} ~~~  \text{for}~i = 1,\ldots,N~ \text{and}~ j = 1,\ldots,m.
-$$The model design matrix for the random effect has one row for each observation (this is equivalent to a random intercept model). The row of the design matrix associated with the $ij$-th observation consists of zeros except for the element associated with $v_j$, which has a one. In matrix form, the linear mixed model for the *j*-th group can be written as:
-
-$$
-\overbrace{\mathbf{y}_j}^{ N \times 1} = \overbrace{X_j}^{ N \times 2} \underbrace{\beta}_{1\times 1} + \overbrace{Z_j}^{n_j \times 1} + \underbrace{u_j}_{1\times1} + \overbrace{\epsilon_j}^{n_j \times 1},
 $$
 
-where $\epsilon_j \sim \mathcal{N}(0, \tau^{-1}_\epsilon)$ is column vector of the residuals.
+Here the random group effect is given by the variable $u_j \sim \mathcal{N}(0, \tau^{-1}_u)$ with $\tau_u = 1/\sigma^2_u$ describing the variability between groups (i.e., how much the group means differ from the overall mean). Then, $\epsilon_j \sim \mathcal{N}(0, \tau^{-1}_\epsilon)$ denotes the residuals of the model and $\tau_\epsilon = 1/\sigma^2_\epsilon$ captures how much individual observations deviate from their group mean (i.e., variability within group).
 
-### LMM as a LGM
+The model design matrix for the random effect has one row for each observation (this is equivalent to a random intercept model). The row of the design matrix associated with the $ij$-th observation consists of zeros except for the element associated with $u_j$, which has a one.
 
-------------------------------------------------------------------------
+$$
+\pmb{\eta} = \pmb{A}\pmb{u} = \pmb{A}_1\pmb{u}_1 + \pmb{A}_2\pmb{u}_2 + \pmb{A}_3\pmb{u}_3
+$$
+
+::: {.callout-note icon="false"}
+## Supplementary material: LMM as a LGM
+
+In matrix form, the linear mixed model for the *j*-th group can be written as:
+
+$$ \overbrace{\mathbf{y}_j}^{ N \times 1} = \overbrace{X_j}^{ N \times 2} \underbrace{\beta}_{1\times 1} + \overbrace{Z_j}^{n_j \times 1} \underbrace{u_j}_{1\times1} + \overbrace{\epsilon_j}^{n_j \times 1}, $$
 
 In a latent Gaussian model (LGM) formulation the mixed model predictor for the *i*-th observation can be written as :
 
@@ -62,6 +65,7 @@ where $f_k(u_j) = u_j$ since there’s only one random effect per group (i.e., a
 
     -   $\tau_u\sim\mathrm{Gamma}(a,b)$
     -   $\tau_\epsilon \sim \mathrm{Gamma}(c,d)$
+:::
 
 ### **Simulate example data**
 
@@ -120,7 +124,7 @@ In order to specify this model we must use the `group` argument to tell `inlabru
 
 ```{r define_components_lmm}
 # Define model components
-cmp =  ~ Intercept(1) + beta_1(x, model = "linear") +
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear") +
   u(j, model = "iid")
 ```
 
@@ -144,10 +148,9 @@ fit = bru(cmp, lik)
 summary(fit)
 ```
 
+### Model predictions
 
-### **Visualize the fitted values**
-
-The fitted values of the model can be accessed through `model$summary.fitted`. Notice that the first entries correspond to the $n$ observation associated with the linear predictor. We can then plot the fitted values as follows:
+To compute model predictions we can create a `data.frame` containing a range of values of covariate where we want the response to be predicted for each group. Then we simply call the predict function while spe
 
 ```{r}
 #| code-fold: true
@@ -156,12 +159,21 @@ The fitted values of the model can be accessed through `model$summary.fitted`. N
 #| fig-width: 4
 #| fig-height: 4
 
-fit$summary.fitted.values[1:100,] %>% mutate(j =df$j,x =df$x) %>%
-  ggplot(aes(x=x,y=mean,color=factor(j)))+geom_line()+geom_point(aes(x=x,y=y,colour=factor(j)))+facet_wrap(~j)
+# New data
+xpred = seq(range(x)[1], range(x)[2], length.out = 100)
+j = 1:n.groups
+pred_data = expand.grid(x = xpred, j = j)
+pred = predict(fit, pred_data, formula = ~ beta_0 + beta_1 + u) 
+
+
+pred %>%
+  ggplot(aes(x=x,y=mean,color=factor(j)))+
+  geom_line()+
+  geom_ribbon(aes(x,ymin = q0.025, ymax= q0.975,fill=factor(j)), alpha = 0.5) + 
+  geom_point(data=df,aes(x=x,y=y,colour=factor(j)))+
+  facet_wrap(~j)
 
 ```
-
-
 
 ::: {.callout-tip icon="false"}
 ## {{< bi question-octagon color=#6dc83c >}} Question
@@ -204,13 +216,9 @@ To fit this model in `inlabru` we can simply modify the model components as foll
 #| eval: false
 #| purl: false
 
-cmp =  ~ Intercept(1) + beta_1(x, model = "linear") +
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear") +
   u0(j, model = "iid") + u1(j,x, model = "iid")
 ```
 
 `r unhide()`
 :::
-
-
-
-
