@@ -1,0 +1,44 @@
+---
+title: "BES workshop"
+author: "Jafet Belmont, Sara Martino and Janine Illian"
+subtitle: "British Ecological Society Meeting 2025, Edinburgh"
+---
+
+# Welcome to the course
+
+-   Welcome to the `inlabu` workshop!
+-   The goal for the workshop is to ...
+-   The workshop is intended for ... No knowledge of `R-INLA` is required.
+
+# Learning Objectives for the workshop
+
+At the end of the workshop, participants will be able to:
+
+-   ILO1
+-   ILO2
+-   ILO3, etc
+
+# Schedule Program
+
+|     Time      |                       Topic                        |
+|:-------------:|:--------------------------------------------------:|
+| 10:00 - 11:00 |              ICES informative session              |
+| 10:30 - 11:30 |      **Session 1**: Introduction to `inlabru`      |
+| 11:30 - 13:00 |     [Practical Session 1](day1_practical.qmd)      |
+| 13:00 - 14:30 |                    Lunch break                     |
+| 14:30 - 15:30 | **Session 2**: Bayesian inference & basics of INLA |
+| 15:30 - 15:45 |                    Coffee Break                    |
+| 15:45 - 16:45 |                Practical Session 2                 |
+| 16:45 - 17:00 |                wrap-up and outlook                 |
+
+: {.striped .hover}
+
+# In preparation for the workshop
+
+Participants are required to follow the next steps before the day of the workshop:
+
+1.  Install [R-INLA](https://www.r-inla.org/download-install)
+
+2.  Install `inlabru` (available from CRAN)
+
+3.  Make sure you have the latest `R-INLA`, `inlabru` and `R` versions installed.
