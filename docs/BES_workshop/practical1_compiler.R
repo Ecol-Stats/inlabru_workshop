@@ -172,3 +172,20 @@ y = rbinom(n = n, size = 1, prob =  psi) # set size = 1 to draw binary observati
 df_logis = data.frame(y = y, w = w)  
 
 
+
+## ----child= "C:\\Users\\jb538u\\OneDrive - University of Glasgow\\Documents\\inlabru_workshop2025\\inlabru_workshop\\docs\\practicals\\spatial_data_types.qmd"----
+
+## -----------------------------------------------------------------------------
+#| warning: false
+#| message: false
+#| code-summary: "Load libraries"
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+# load some libraries to generate nice plots
+library(scico)
+
+

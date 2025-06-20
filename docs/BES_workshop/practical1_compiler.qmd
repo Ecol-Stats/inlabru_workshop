@@ -37,3 +37,6 @@ knitr::purl("practical1_compiler.qmd")
 ```{r child= "C:\\Users\\jb538u\\OneDrive - University of Glasgow\\Documents\\inlabru_workshop2025\\inlabru_workshop\\docs\\practicals\\GLM_ex.qmd"}
 ```
 
+
+```{r child= "C:\\Users\\jb538u\\OneDrive - University of Glasgow\\Documents\\inlabru_workshop2025\\inlabru_workshop\\docs\\practicals\\spatial_data_types.qmd"}
+```
