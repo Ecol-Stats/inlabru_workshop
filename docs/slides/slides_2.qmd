@@ -2007,6 +2007,11 @@ my.germany.map(fit$summary.random$space$mean, autoscale = F)
 
 
 ## Bayesian Geostatistics
+
+
+Encounter probability of Pacific Cod
+(*Gadus macrocephalus*) from a trawl survey.
+
 ```{r}
 #| echo: false
 library(sf)
@@ -2014,63 +2019,79 @@ library(tidyverse)
 library(inlabru)
 library(INLA)
 library(patchwork)
-```
-
-
-
-```{r}
-#| echo: false
-library(sp)
 library(mapview)
-data(meuse)
-meuse0 = st_as_sf(meuse, coords = c("x","y"), crs = "+init=epsg:28992") %>%
-   mutate(log_zinc = log(zinc))
-# ggplot() + geom_sf(data = meuse0, aes(color = log(zinc))) +
-#   ggtitle("log concentration of zinc next to the Meuse river")
 
-mapview(meuse0, zcol = "log_zinc")
+```
 
+
+
+```{r}
+#| echo: false
+
+
+
+df = sdmTMB::pcod 
+qcs_grid = sdmTMB::qcs_grid
+df =   st_as_sf(df, coords = c("lon","lat"), crs = 4326)
+df = st_transform(df, crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
+
+
+depth_sf = st_as_sf(qcs_grid %>% select(X,Y,depth), coords = c("X","Y"), crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
+
+
+mapview(df, zcol = "present")
 ```
 
 
 ```{r}
 #| echo: false
 
-boundary = (fm_nonconvex_hull(meuse0))
-mesh = fm_mesh_2d(boundary = boundary,
-                  max.edge = c(150, 500),
-                     offset = c(100, 250))
-
-meuse.spde <-  inla.spde2.pcmatern(mesh = mesh,
-                                  prior.sigma = c(1, 0.1),
-                                  prior.range = c(1000, 0.5))
+mesh = fm_mesh_2d(df, 
+                  cutoff = 2,
+                  max.edge = c(7,20),
+                  offset = c(5,50))
+ggplot() + gg(mesh) + geom_sf(data= df, aes(color = factor(present)))
 
 
+spde_model =  inla.spde2.pcmatern(mesh,
+                                  prior.sigma = c(1, 0.01),
+                                  prior.range = c(30, 0.01)
+)
 
-cmp = ~ beta0(1) + beta1(dist, model = "linear") + space(geometry, model=meuse.spde )
+depth_mapper <- bru_mapper(inla.mesh.1d(sort(unique(inla.group(log(depth_sf$depth),
+                                                                   method = "quantile", n=25)))), 
+                           indexed = FALSE)
+cmp = ~ -1 + Intercept(1) + 
+  depth_smooth(log(depth), model='rw2', 
+               mapper = depth_mapper, 
+               scale.model=TRUE,
+               hyper = list(prec = list(prior='pc.prec', param=c(1, 0.01))) ) + 
+  space(geometry, model = spde_model)
 
-lik = bru_obs(formula = log(zinc) ~ beta0 + beta1 + space,
-              data = meuse0,
-              family = "gaussian")
- fit = bru(cmp, lik)
+formula = present ~ Intercept + depth_smooth + space
 
+lik = bru_obs(formula = formula, 
+              data = df, 
+              family = "binomial")
+
+fit = bru(cmp, lik)
 ```
 
 
 
 
-$y(s)$ log. zinc concentration in location $s$
+$y(s)$ Presence of absence in location $s$
 
 ## Bayesian Geostatistics{ auto-animate="true"}
 
 
 + **Stage 1** Model for the response
 $$
-y(s)|\eta(s)\sim\mathcal{N}(\eta(s), \sigma^2_y)
+y(s)|\eta(s)\sim\text{Binom}(1, p(s))
 $$
 + **Stage 2** Latent field model
 $$
-\eta(s) = \beta_0 + \beta_1 x(s) + \omega(s)
+\eta(s) = \text{logit}(p(s)) = \beta_0 + f( x(s)) + \omega(s)
 $$
  
 + **Stage 3** Hyperparameters
@@ -2082,14 +2103,14 @@ $$
 
 + **Stage 1** Model for the response
 $$
-y(s)|\eta(s)\sim\mathcal{N}(\eta(s), \sigma^2_y)
+y(s)|\eta(s)\sim\text{Binom}(1, p(s))
 $$
 + **Stage 2** Latent field model
 $$
-\eta(s) = \beta_0 + \beta_1 x(s) + \omega(s)
+\eta(s) = \text{logit}(p(s)) = \beta_0 + f( x(s)) + \omega(s)
 $$
   - A global intercept $\beta_0$
-  - A linear covariate $x(s)$ (distance from the river)
+  - A smooth effect of covariate $x(s)$ (depth)
   - A Gaussian field $\omega(s)$ (will discuss this later..) 
 
 
@@ -2101,18 +2122,18 @@ $$
 
 + **Stage 1** Model for the response
 $$
-y(s)|\eta(s)\sim\mathcal{N}(\eta(s), \sigma^2_y)
+y(s)|\eta(s)\sim\text{Binom}(1, p(s))
 $$
 + **Stage 2** Latent field model
 $$
-\eta(s) = \beta_0 + \beta_1 x(s) + \omega(s)
+\eta(s) = \text{logit}(p(s)) = \beta_0 + \beta_1 x(s) + \omega(s)
 $$
 
 
 + **Stage 3** Hyperparameters
 
-  - Variance in the likelihood $\sigma_y$
-  - Range and sd in teh Gaussian field $\sigma_{\omega}, \tau_{\omega}$
+  - Precision for the smooth function   $f(\cdot)$
+  - Range and sd in the Gaussian field $\sigma_{\omega}, \tau_{\omega}$
 
 
 
@@ -2126,8 +2147,9 @@ $$
 
 $$
 \begin{aligned}
-y(s)|\eta(s) & \sim\mathcal{N}(\eta(s), \sigma^2_y)\\
-\eta(s) & = \color{red}{\boxed{\beta_0}} + \color{red}{\boxed{\beta_1 x(s)}} + \color{red}{\boxed{\omega(s)}}
+y(s)|\eta(s) & \sim\text{Binom}(1, p(s))\\
+\eta(s) &  = \color{red}{\boxed{\beta_0}} + \color{red}{\boxed{ f(x(s))}} + \color{red}{\boxed{ \omega(s)}}\\
+
 \end{aligned}
 $$
 :::
@@ -2135,7 +2157,7 @@ $$
 ::: {.column width="50%"}
 ```{r}
 #| echo: true
-meuse0 %>% select(zinc, dist) %>% print(n = 3)
+df %>% select(depth, present) %>% print(n = 3)
 ```
 :::
 :::
@@ -2149,15 +2171,16 @@ meuse0 %>% select(zinc, dist) %>% print(n = 3)
 #| code-line-numbers: "1-3"
 
 # define model component
-cmp = ~ beta0(1) + beta1(dist, model = "linear") + space(geometry, model=meuse.spde )
+cmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + 
+  space(geometry, model = spde_model)
 
 # define model predictor
-eta = log(zinc) ~ beta0 + beta1 + space
+eta = present ~ Intercept + depth_smooth + space
 
 # build the observation model
-lik = bru_obs(formula = 
-              data = meuse0,
-              family = "gaussian")
+lik = bru_obs(formula = eta,
+              data = df,
+              family = "binomial")
 
 # fit the model
 fit = bru(cmp, lik)
@@ -2187,8 +2210,9 @@ fit = bru(cmp, lik)
 
 $$
 \begin{aligned}
-y(s)|\eta(s) & \sim\mathcal{N}(\eta(s), \sigma^2_y)\\
-\color{red}{\boxed{\eta(s)}} & = \color{red}{\boxed{\beta_0 + \beta_1 x(s) + \omega(s)}}
+y(s)|\eta(s) & \sim\text{Binom}(1, p(s))\\
+\color{red}{\boxed{\eta(s)}} &  = \color{red}{\boxed{\beta_0 +  f(x(s)) +  \omega(s)}}\\
+
 \end{aligned}
 $$
 :::
@@ -2196,7 +2220,7 @@ $$
 ::: {.column width="50%"}
 ```{r}
 #| echo: true
-meuse0 %>% select(zinc, dist) %>% print(n = 3)
+df %>% select(depth, present) %>% print(n = 3)
 ```
 :::
 :::
@@ -2207,22 +2231,26 @@ meuse0 %>% select(zinc, dist) %>% print(n = 3)
 #| eval: false
 #| warning: false
 #| message: false
-#| code-line-numbers: "4-5"
+#| code-line-numbers: "5-6"
 
 # define model component
-cmp = ~ beta0(1) + beta1(dist, model = "linear") + space(geometry, model=meuse.spde )
+cmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + 
+  space(geometry, model = spde_model)
 
 # define model predictor
-eta = log(zinc) ~ beta0 + beta1 + space
+eta = present ~ Intercept + depth_smooth + space
 
 # build the observation model
-lik = bru_obs(formula = 
-              data = meuse0,
-              family = "gaussian")
+lik = bru_obs(formula = eta,
+              data = df,
+              family = "binomial")
 
 # fit the model
 fit = bru(cmp, lik)
 ```
+
+
+
 
 
 
@@ -2248,8 +2276,9 @@ fit = bru(cmp, lik)
 
 $$
 \begin{aligned}
-\color{red}{\boxed{y(s)|\eta(s)}} & \color{red}{\boxed{\sim\mathcal{N}(\eta(s), \sigma^2_y)}}\\
-\eta(s) & = \beta_0 + \beta_1 x(s) + \omega(s)
+\color{red}{\boxed{y(s)|\eta(s)}} & \sim \color{red}{\boxed{\text{Binom}(1, p(s))}}\\
+\eta(s) &  = \beta_0 +  f(x(s)) +  \omega(s)\\
+
 \end{aligned}
 $$
 :::
@@ -2257,7 +2286,7 @@ $$
 ::: {.column width="50%"}
 ```{r}
 #| echo: true
-meuse0 %>% select(zinc, dist) %>% print(n = 3)
+df %>% select(depth, present) %>% print(n = 3)
 ```
 :::
 :::
@@ -2268,22 +2297,26 @@ meuse0 %>% select(zinc, dist) %>% print(n = 3)
 #| eval: false
 #| warning: false
 #| message: false
-#| code-line-numbers: "7-10|12-13"
+#| code-line-numbers: "8-11|13-14"
 
 # define model component
-cmp = ~ beta0(1) + beta1(dist, model = "linear") + space(geometry, model=meuse.spde )
+cmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + 
+  space(geometry, model = spde_model)
 
 # define model predictor
-eta = log(zinc) ~ beta0 + beta1 + space
+eta = present ~ Intercept + depth_smooth + space
 
 # build the observation model
-lik = bru_obs(formula = 
-              data = meuse0,
-              family = "gaussian")
+lik = bru_obs(formula = eta,
+              data = df,
+              family = "binomial")
 
 # fit the model
 fit = bru(cmp, lik)
 ```
+
+
+
 
 
 
@@ -2303,20 +2336,32 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for geostatistics
 
+
 ```{r}
-
-
 library(scico)
-pixel = fm_pixels(mesh)
-pred = predict(fit, pixel, ~ space)
+fit$summary.random$depth_smooth %>%
+  ggplot() + geom_line(aes(ID, mean)) +
+  geom_ribbon(aes(ID, ymin = `0.025quant`,
+                  ymax = `0.975quant`), alpha = 0.5) +
+  geom_point(data = df, aes(x = log(depth), y =-12), shape  = "|") +
+  xlab("Depth") + ylab("") + ggtitle("Smooth effect of depth")
 
-p1 = ggplot() + geom_sf(data = pred, aes(color = mean)) + scale_color_scico(direction = -1)
 
 
-p2 = ggplot() + geom_sf(data = pred, aes(color = sd)) + scale_color_scico(direction = -1)
+preds = predict(fit, depth_sf, ~ data.frame(cov = depth_smooth,
+                                            space = space,
+                                            lp = Intercept + space + depth_smooth,
+                                            prob = inla.link.logit(Intercept + space + depth_smooth,
+                                                                   inverse = T)))
+  
+ggplot() + 
+  geom_tile(data = preds$prob, aes(x = st_coordinates(depth_sf)[,1],
+                            y = st_coordinates(depth_sf)[,2],
+                            fill = mean))+ scale_fill_scico(direction = -1)+
+  geom_sf(data = df, pch = ".") +
+  xlab("") + ylab("") + ggtitle("Predicted probability")
 
 
-p1  + p2
 
 ```
 
