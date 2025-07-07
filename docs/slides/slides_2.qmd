@@ -145,7 +145,7 @@ p1
 * We have questions. 
 
 ```{r}
-my_image <- readPNG("figures_slides2/question.png", native = TRUE)
+my_image <- readPNG("figures/question.png", native = TRUE)
 p1  +
   annotate("text", x=120, y=10, label="Does bodyfat vary\n with abdomen circunference??", size = 6,
               color="red")+ 
