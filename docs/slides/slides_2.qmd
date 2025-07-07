@@ -1299,7 +1299,7 @@ fit <- bru(comps, lik, ...)
 ```
 
 
-**NOTE** we will see later taht this function can also be non-linear....:grin:
+**NOTE** we will see later that this function can also be non-linear....:grin:
 
 
 
