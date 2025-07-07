@@ -51,6 +51,13 @@ library(patchwork)
 
 ```
 
+## Outline
+
+- What are INLA and `inlabru`?
+- Why the Bayesian framework?
+- Which model are `inlabru`-friendly?
+- What are Latent Gaussian Models?
+- How are they implemented in `inlabru`?
 
 ## What is INLA? What is `inlabru`?
 
@@ -604,7 +611,7 @@ $$
 \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
 $$]{style="color: red;"}
 
-2. Linear predictor $\eta_i = \beta_0 = \beta_1 x_i$
+2. Linear predictor $\eta_i = \beta_0 + \beta_1 x_i$
 3. Latent Gaussian field $\pi(\mathbf{u}|\theta)$
 4. The hyperparameters:  $\pi(\theta)$
 :::
@@ -627,7 +634,7 @@ $$
 \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
 $$
 
-2. [Linear predictor $\eta_i = \beta_0 = \beta_1 x_i$]{style="color: red;"}
+2. [Linear predictor $\eta_i = \beta_0 + \beta_1 x_i$]{style="color: red;"}
 3. [Latent Gaussian field $\pi(\mathbf{u}|\theta)$]{style="color: red;"}
 4. The hyperparameters:  $\pi(\theta)$
 :::
@@ -653,7 +660,7 @@ $$
 \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
 $$
 
-2. Linear predictor $\eta_i = \beta_0 = \beta_1 x_i$
+2. Linear predictor $\eta_i = \beta_0 + \beta_1 x_i$
 3. Latent Gaussian field $\pi(\mathbf{u}|\theta)$
 4. [The hyperparameters:  $\pi(\theta)$]{style="color: red;"}
 :::
@@ -682,7 +689,7 @@ $$
 \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
 $$
 
-2. Linear predictor $\eta_i = \beta_0 = \beta_1 x_i$
+2. Linear predictor $\eta_i = \beta_0 + \beta_1 x_i$
 3. Latent Gaussian field $\pi(\mathbf{u}|\theta)$
 4. The hyperparameters:  $\pi(\theta)$
 :::
