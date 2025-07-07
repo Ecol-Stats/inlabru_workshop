@@ -71,7 +71,10 @@ implements this method with a flexible and simple interface.
 
 **The (much) longer answer:**
 
-cite some papers here
+  -   Rue, H., Martino, S. and Chopin, N. (2009), Approximate Bayesian inference for latent Gaussian models by using integrated nested Laplace approximations. *Journal of the Royal Statistical Society: Series B (Statistical Methodology)*, 71: 319-392.
+    -   Van Niekerk, J., Krainski, E., Rustand, D., & Rue, H. (2023). A new avenue for Bayesian inference with INLA. *Computational Statistics & Data Analysis*, 181, 107692.
+    -   Lindgren, F., Bachl, F., Illian, J., Suen, M. H., Rue, H., & Seaton, A. E. (2024). inlabru: software for fitting latent Gaussian models with non-linear predictors. *arXiv preprint* arXiv:2407.00791.
+    -   Lindgren, F., Bolin, D., & Rue, H. (2022). The SPDE approach for Gaussian and non-Gaussian fields: 10 years and still running. *Spatial Statistics*, 50, 100599.
 
 
 ## Where?
@@ -80,11 +83,34 @@ The software, information, examples and help can be found at
 
 cite github for inlabru
 	
+::: {.callout-warning icon="false"}
+## {{< bi globe2 color=#ff7226 >}} Website-tutorials
 
+`inlabru` <https://inlabru-org.github.io/inlabru/>
 
-* paper
-* tutorials
-* discussion group
+`R-INLA` <https://www.r-inla.org/home>
+:::
+
+::: {.callout-tip icon="false"}
+## {{< bi chat-left-quote color=#0c7c0c >}} Discussion forums
+
+`inlabru` <https://github.com/inlabru-org/inlabru/discussions>
+
+`R-INLA` <https://groups.google.com/g/r-inla-discussion-group>
+:::
+
+::: {.callout-note icon="false"}
+## {{< bi book color=#4f11eb >}} Books
+
+-   Blangiardo, M., & Cameletti, M. (2015). Spatial and spatio-temporal Bayesian models with R-INLA. John Wiley & Sons.
+
+-   Gómez-Rubio, V. (2020). Bayesian inference with INLA. Chapman and Hall/CRC.
+
+-   Krainski, E., Gómez-Rubio, V., Bakka, H., Lenzi, A., Castro-Camilo, D., Simpson, D., ... & Rue, H. (2018). Advanced spatial modeling with stochastic partial differential equations using R and INLA. Chapman and Hall/CRC.
+
+-   Wang, X., Yue, Y. R., & Faraway, J. J. (2018). Bayesian regression modeling with INLA. Chapman and Hall/CRC.
+:::
+
 
 ## So... Why should you use `inlabru`?{ auto-animate="true"}
 
