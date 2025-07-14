@@ -1,22 +1,20 @@
 ## ----child="C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\LM_ex.qmd"----
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| warning: false
 #| message: false
 #| code-summary: "Load libraries"
-
-
 
 library(dplyr)
 library(INLA)
 library(ggplot2)
 library(patchwork)
 library(inlabru)     
-# load some libraries to generate nice map plots
+# load some libraries to generate nice plots
 library(scico)
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-fold: show
 #| code-summary: "Simulate Data from a LM"
 
@@ -31,48 +29,48 @@ df = data.frame(y = y, x = x)
 
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-summary: "Define LM components"
-cmp =  ~ Intercept(1) + beta_1(x, model = "linear")
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
 
 
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| eval: false
 #| code-summary: "Define LM formula"
-formula = y ~ Intercept + beta_1
+# formula = y ~ beta_0 + beta_1
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-summary: "Define Observational model"
 lik =  bru_obs(formula = y ~.,
             family = "gaussian",
             data = df)
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-summary: "Fit LM in `inlabru`"
 fit.lm = bru(cmp, lik)
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-summary: "Model summaries"
 #| collapse: true
 summary(fit.lm)
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 new_data = data.frame(x = c(df$x, runif(10)),
                       y = c(df$y, rep(NA,10)))
-pred = predict(fit.lm, new_data, ~ Intercept + beta_1,
+pred = predict(fit.lm, new_data, ~ beta_0 + beta_1,
                n.samples = 1000)
 
 
 
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-fold: true
 #| fig-cap: Data and 95% credible intervals
 #| echo: false
@@ -93,9 +91,9 @@ pred %>% ggplot() +
 
 ## ----child="C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\LMM_ex.qmd"----
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-summary: "Simulate data from a LMM"
-#|
+#| 
 set.seed(12)
 beta = c(1.5,1)
 sd_error = 1
@@ -111,7 +109,7 @@ y = beta[1] + beta[2] * x + rnorm(n, sd = sd_error) +
 df = data.frame(y = y, x = x, j = rep(1:5, each = 20))  
 
 
-## ----plot_data_lmm------------------------------------------------------------
+## ----plot_data_lmm------------------------------------------------------------------------------
 #| code-fold: true
 #| fig-cap: Data for the linear mixed model example with 5 groups
 #| fig-align: center
@@ -125,42 +123,53 @@ ggplot(df) +
 
 
 
-## ----define_components_lmm----------------------------------------------------
+## ----define_components_lmm----------------------------------------------------------------------
 # Define model components
-cmp =  ~ Intercept(1) + beta_1(x, model = "linear") +
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear") +
   u(j, model = "iid")
 
 
-## ----define_likelihood_lmm----------------------------------------------------
+## ----define_likelihood_lmm----------------------------------------------------------------------
 # Construct likelihood
 lik =  like(formula = y ~.,
             family = "gaussian",
             data = df)
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| collapse: true
 #| code-summary: "Fit a LMM in inlabru"
 fit = bru(cmp, lik)
 summary(fit)
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-fold: true
 #| code-summary: "LMM fitted values"
 #| fig-align: center
 #| fig-width: 4
 #| fig-height: 4
 
-fit$summary.fitted.values[1:100,] %>% mutate(j =df$j,x =df$x) %>%
-  ggplot(aes(x=x,y=mean,color=factor(j)))+geom_line()+geom_point(aes(x=x,y=y,colour=factor(j)))+facet_wrap(~j)
+# New data
+xpred = seq(range(x)[1], range(x)[2], length.out = 100)
+j = 1:n.groups
+pred_data = expand.grid(x = xpred, j = j)
+pred = predict(fit, pred_data, formula = ~ beta_0 + beta_1 + u) 
+
+
+pred %>%
+  ggplot(aes(x=x,y=mean,color=factor(j)))+
+  geom_line()+
+  geom_ribbon(aes(x,ymin = q0.025, ymax= q0.975,fill=factor(j)), alpha = 0.5) + 
+  geom_point(data=df,aes(x=x,y=y,colour=factor(j)))+
+  facet_wrap(~j)
 
 
 
 
 ## ----child="C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\GLM_ex.qmd"----
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-summary: "Simulate Data from a GLM"
 set.seed(123)
 n = 100
@@ -171,13 +180,13 @@ y = rpois(n, lambda  = lambda)
 df = data.frame(y = y, x = x)  
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-summary: "GLM components"
 
-cmp =  ~ Intercept(1) + x_effect(x, model = "linear")
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-summary: "GLM likelihood"
 
 lik =  bru_obs(formula = y ~.,
@@ -185,17 +194,17 @@ lik =  bru_obs(formula = y ~.,
             data = df)
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-summary: "Fit a GLM"
 fit_glm = bru(cmp, lik)
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-summary: "GLM summaries"
 summary(fit_glm)
 
 
-## ----get_predictions_glm------------------------------------------------------
+## ----get_predictions_glm------------------------------------------------------------------------
 #| code-summary: "Predcited values for Poisson GLM"
 
 # Define new data, set to NA the values for prediction
@@ -204,13 +213,13 @@ new_data = data.frame(x = c(df$x, runif(10)),
                       y = c(df$y, rep(NA,10)))
 
 # Define predictor formula
-pred_fml <- ~ exp(Intercept + x_effect)
+pred_fml <- ~ exp(beta_0 + beta_1)
 
 # Generate predictions
 pred_glm <- predict(fit_glm, new_data, pred_fml)
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| echo: false
 #| code-summary: "Plot GLM predicted values"
 #| fig-cap: Data and 95% credible intervals
@@ -230,7 +239,7 @@ pred_glm %>% ggplot() +
 
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-summary: "GLM Task"
 set.seed(123)
 n = 100
@@ -244,7 +253,7 @@ df_logis = data.frame(y = y, w = w)
 
 ## ----child="C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\GAM_ex.qmd"----
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| echo: false
 #| message: false
 #| warning: false
@@ -258,7 +267,7 @@ library(inlabru)
 library(scico)
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| code-summary: "Simulate GAM Data"
 n = 100
 x = rnorm(n)
@@ -266,42 +275,43 @@ eta = (1 + cos(x))
 y = rnorm(n, mean =  eta, sd = 0.5)
 
 df = data.frame(y = y, 
-                x_smooth = inla.group(x))  
+                x_smooth = inla.group(x)) # equidistant x's 
 
 
-## ----define_components_gam----------------------------------------------------
+
+## ----define_components_gam----------------------------------------------------------------------
 cmp =  ~ Intercept(1) + 
   smooth(x_smooth, model = "rw1")
 
 
-## ----define_likelihood_gam----------------------------------------------------
+## ----define_likelihood_gam----------------------------------------------------------------------
 lik =  bru_obs(formula = y ~.,
             family = "gaussian",
             data = df)
 
 
-## ----run_model_gam------------------------------------------------------------
+## ----run_model_gam------------------------------------------------------------------------------
 fit = bru(cmp, lik)
 fit$summary.fixed
 
 
 
 
-## -----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------
 #| eval: false
-#|
-data.frame(fit$summary.random$smooth) %>% 
-  ggplot() + 
-  geom_ribbon(aes(ID,ymin = X0.025quant, ymax= X0.975quant), alpha = 0.5) + 
-  geom_line(aes(ID,mean)) + 
-  xlab("covariate") + ylab("")
+#| 
+# data.frame(fit$summary.random$smooth) %>%
+#   ggplot() +
+#   geom_ribbon(aes(ID,ymin = X0.025quant, ymax= X0.975quant), alpha = 0.5) +
+#   geom_line(aes(ID,mean)) +
+#   xlab("covariate") + ylab("")
 
 
-## ----get_predictions_gam------------------------------------------------------
+## ----get_predictions_gam------------------------------------------------------------------------
 pred = predict(fit, df, ~ (Intercept + smooth))
 
 
-## ----plot_gam-----------------------------------------------------------------
+## ----plot_gam-----------------------------------------------------------------------------------
 #| code-fold: true
 #| fig-cap: Data and 95% credible intervals
 pred %>% ggplot() + 
