@@ -2,8 +2,6 @@
 title: "`inlabru` Workshop"
 author: "Jafet Belmont, Sara Martino and Janine Illian"
 subtitle: "ICES 2025, Copenhagen"
-filters: 
-  - shinylive
 ---
 
 # Welcome to the course!

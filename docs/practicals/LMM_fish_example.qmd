@@ -184,7 +184,7 @@ The marginal densities for the hyper parameters can be also found by calling`inl
 
 ```{r}
 #| purl: false
-#| code-fold: true
+#| code-fold: false
 
 
 var_e <- fit$marginals.hyperpar$`Precision for the Gaussian observations` %>%

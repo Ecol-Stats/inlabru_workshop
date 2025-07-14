@@ -130,7 +130,7 @@ We can plot the smoother marginal effect as follows:
 #| fig-align: center
 #| fig-width: 4
 #| fig-height: 4
-#
+
 data.frame(fit_g$summary.random$smooth_g) %>% 
   ggplot() + 
   geom_ribbon(aes(ID,ymin = X0.025quant, ymax= X0.975quant), alpha = 0.5) + 
@@ -161,6 +161,7 @@ Use the `depth_grouped` covariate to define the smoother.
 #| fig-align: center
 #| fig-height: 4
 #| purl: false
+#| webex.hide: "Click here to see the solution"
 
 cmp_rw2 =  ~ -1+ beta_0(1) + 
   smooth_g(depth_grouped, model = "rw2") + 
@@ -185,7 +186,7 @@ data.frame(fit_rw2$summary.random$smooth_g) %>%
 Here we fit a model where each month is allowed to have its own smoother for depth, i.e., $f_i(\text{Depth})_s$. The model structure is given by:
 
 $$
-S_{is} = \beta_0 + f_i(\text{Depth})_s + \text{Month}_i +  \epsilon_{is} ~~\text{such that}~ \epsilon \sim \mathcal{N}(0,\sigma^2_e);~ \text{Month} \sim \mathrm{N}(0,\sigma^2_m).
+S_{is} = \beta_0 + f_i(\text{Depth})_s + \text{Month}_i +  \epsilon_{is}.
 $$
 
 Notice the only different between the global smoother model (Model G) and the group level model (Model GS) is the indexing of the smooth function for depth. We can fit a group-level smoother using the `group` argument within the model component as follows:
