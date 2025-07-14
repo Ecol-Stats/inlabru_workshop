@@ -34,5 +34,3 @@ format:
     toc: true
     include-after-body: include/webex.js
 editor: visual
-
-  

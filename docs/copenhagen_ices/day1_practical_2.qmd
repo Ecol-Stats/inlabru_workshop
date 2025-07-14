@@ -1,0 +1,46 @@
+---
+title: "Practical 1"
+format: 
+  html: default
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+#| results: hide
+library(webexercises)
+knitr::purl("day1_practical_2.qmd")
+```
+
+<font size="5"> **Aim of this practical:** 
+
+1.  Set priors for different linear models
+2.  Compute and visualize posterior densities and summaries for marginal effects
+3.  Calculate different model validation metrics
+4.  Fit hierarchical flexible models
+
+we are going to learn:
+
+-   How to change some of the R default priors in `inlabru`
+-   How to explore and visualize model parameters
+-   How to compare different models
+
+{{< downloadthis day1_practical_2.R dname="day1_practical_2.R" label="Download Practical R script" icon="database-fill-down" type="success" >}}
+
+
+{{< include "C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\LM_ex_priors.qmd" >}}
+
+{{< include "C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\LMM_fish_example.qmd" >}}
+
+{{< include "C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\GLM_scores_ex.qmd" >}}
+
+{{< include "C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\HGAMM_ex.qmd" >}}
+

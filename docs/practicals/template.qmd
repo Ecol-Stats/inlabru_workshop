@@ -1,0 +1,156 @@
+---
+title: "Practical"
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
+library(webexercises)
+
+```
+
+## Exercise Title {#sec-linmodel}
+
+In this practical we will:
+
+-   ILO 1
+-   ILO 2
+-   ILO 3 ...
+
+Libraries to load:
+
+```{r}
+#| warning: false
+#| message: false
+
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+# load some libraries to generate nice map plots
+library(scico)
+```
+
+Some equations:
+
+$$
+\begin{aligned}
+y_i&\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N \\
+\eta_i &= \mu_i = \beta_0 + \beta_1 x_i
+\end{aligned}
+$$
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+This is a Question
+
+`r hide("Answer")`
+
+Show the written answer
+
+`r unhide()`
+:::
+
+::: callout-note
+This is a Note
+:::
+
+### **Section of the exercise**
+
+Some R Code
+
+```{r}
+#| code-fold: show
+
+beta = c(2,0.5)
+sd_error = 0.1
+
+n = 100
+x = rnorm(n)
+y = beta[1] + beta[2] * x + rnorm(n, sd = sd_error)
+
+df = data.frame(y = y, x = x)  
+
+```
+
+**sub section heading**
+
+::: callout-note
+Note with R chunk that is neither evaluate or purled
+
+```{r}
+#| eval: false
+#| purl: false
+
+cmp =  ~ -1 + myIntercept(1) + beta_1(x, model = "linear")
+
+```
+:::
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+This is a Task..
+
+`r hide("Take hint")`
+
+Add hint details here...
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+plot(y~x,data = df) 
+```
+:::
+
+### Download data Example
+
+1.  First we need to write the data set on the datasets file (this could be a `.tiff`, `.RData`, `.csv`,etc.)
+
+    ```{r}
+    iris_subset <- iris %>% 
+      dplyr::select(starts_with("S")) %>%
+      filter(Species=="virginica")
+
+    write.csv(iris_subset,file = "datasets/iris_subset.csv",row.names = F)
+    ```
+
+2.  Then we need to add the following widget based on this quarto [extension](https://github.com/shafayetShafee/downloadthis)
+
+    {{< downloadthis datasets/iris_subset.csv dname="PygmyWFBC.csv" label="Download data set" icon="database-fill-down" type="info" >}}
+
+The controls are:
+
+-   The files path (e.g., datasets/iris_subset.csv)
+
+-   The name of the file (As downloaded)
+
+-   The label of the button
+
+-   the icon of the button
+
+-   the type of button

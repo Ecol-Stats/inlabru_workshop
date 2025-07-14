@@ -5,6 +5,7 @@ project:
   - index.qmd
   - slides.qmd
   - day1_practical.qmd
+  - day1_practical_2.qmd
   - slides/slides_1.qmd
   - slides/slides_2.qmd
 website:
@@ -22,6 +23,7 @@ website:
     contents:
     - index.qmd
     - day1_practical.qmd
+    - day1_practical_2.qmd
   page-navigation: true
 format:
   html:

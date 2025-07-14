@@ -9,7 +9,6 @@ format:
     keep-tex: true
     number-sections: true
 embed-resources: true
-
 editor_options: 
   chunk_output_type: console
 ---
@@ -55,7 +54,7 @@ Increasing the number of basis functions leads to a more *wiggly* line. Too few 
 
 $$
 \mathrm{min}\sum_i(y_i-f(x_i))^2 + \lambda(\sum_kb^2_k)
-$$ The first term measures how close the function $f()$ is to the data while the second term $\lambda(\sum_kb^2_k)$, penalizes the roughness in the function. Here, $lambda >0$ is known as the smoothing parameter because it controls the degree of smoothing (i.e. the trade-off between the two terms). In a Bayesian setting,including the penalty term is equivalent to setting a specific prior on the coefficients of the covariates.
+$$ The first term measures how close the function $f()$ is to the data while the second term $\lambda(\sum_kb^2_k)$, penalizes the roughness in the function. Here, $\lambda >0$ is known as the smoothing parameter because it controls the degree of smoothing (i.e. the trade-off between the two terms). In a Bayesian setting,including the penalty term is equivalent to setting a specific prior on the coefficients of the covariates.
 
 In this exercise we will set a random walk prior of order 1 on $f$, i.e. $f(x_i)-f(x_i-1) \sim \mathcal{N}(0,\sigma^2_f)$ where $\sigma_f^2$ is the smoothing parameter such that small values give large smoothing. Notice that we will assume $x_i$'s are equally spaced for now (we will cover a stochastic differential equation approach that relaxes this assumption later on in the course).
 
@@ -75,7 +74,7 @@ eta = (1 + cos(x))
 y = rnorm(n, mean =  eta, sd = 0.5)
 
 df = data.frame(y = y, 
-                x_smooth = inla.group(x))  
+                x_smooth = inla.group(x)) # equidistant x's 
 
 ```
 
@@ -136,11 +135,9 @@ data.frame(fit$summary.random$smooth) %>%
 ```
 :::
 
-
 ### Model Predictions
 
-We can obtain the model predictions using the `predict` function. 
-
+We can obtain the model predictions using the `predict` function.
 
 ```{r get_predictions_gam}
 pred = predict(fit, df, ~ (Intercept + smooth))
@@ -160,18 +157,14 @@ pred %>% ggplot() +
   xlab("Covariate") + ylab("Observations")
 ```
 
-
-
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}}Task
 
 Fit a flexible model using a random walk of order 2 (RW2) and compare the results with the ones above.
 
-
 `r hide("Take hint")`
 
 You can set `model = "rw2"` for assigning a random walk 2 prior.
-
 
 `r unhide()`
 
@@ -200,6 +193,5 @@ ggplot() +
 
 ```
 
-We see that the RW1 fit is too wiggly while the RW2 is smoother and  seems to have better fit.
+We see that the RW1 fit is too wiggly while the RW2 is smoother and seems to have better fit.
 :::
-

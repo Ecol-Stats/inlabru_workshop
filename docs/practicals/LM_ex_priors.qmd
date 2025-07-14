@@ -1,0 +1,269 @@
+---
+title: "Practical"
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(webexercises)
+
+```
+
+## Setting priors and model checking for Linear Models
+
+In this excercise we will:
+
+-   Learn how to set priors for linear effects $\beta_0$ and $\beta_1$
+-   Learn how to set the priors for the hyperparameter $\tau = 1/\sigma^2$.
+-   Visualize marginal postrerior distributions
+-   Perform model checks for linear models
+
+Start by loading useful libraries:
+
+```{r}
+#| warning: false
+#| message: false
+
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+```
+
+Recall a simple linear regression model with Gaussian observations $$
+y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
+$$
+
+where $\sigma^2$ is the observation error, and the mean parameter $\mu_i$ is linked to the linear predictor through an identity function: $$
+\eta_i = \mu_i = \beta_0 + \beta_1 x_i
+$$ where $x_i$ is a covariate and $\beta_0, \beta_1$ are parameters to be estimated. In INLA, we assume that the model is a latent Gaussian model, i.e., we have to assign $\beta_0$ and $\beta_1$ a Gaussian prior. For the precision hyperparameter $\tau = 1/\sigma^2$ a typical prior choice is a $\text{Gamma}(a,b)$ prior.
+
+In `R-INLA`, the default choice of priors for each $\beta$ is
+
+$$
+\beta \sim \mathcal{N}(0,10^3).
+$$
+
+and the prior for the variance parameter in terms of the log precision is
+
+$$ \log(\tau) \sim \mathrm{logGamma}(1,5 \times 10^{-5}) $$
+
+::: callout-note
+If your model uses the default intercept construction (i.e., `Intercept(1)` in the linear predictor) INLA will assign a default $\mathcal{N} (0,0)$ prior to it.
+:::
+
+Lets see how can we change the default priors using some simulated data
+
+#### **Simulate example data**
+
+We simulate data from a simple linear regression model
+
+```{r}
+#| code-fold: show
+beta = c(2,0.5)
+sd_error = 0.1
+
+n = 100
+x = rnorm(n)
+y = beta[1] + beta[2] * x + rnorm(n, sd = sd_error)
+
+df = data.frame(y = y, x = x)  
+
+```
+
+#### **Fitting the linear regression model with `inlabru`**
+
+Now we fit a simple linear regression model in `inalbru` by defining (1) the model components, (2) the linear predictor and (3) the likelihood.
+
+```{r }
+# Model components
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
+# Linear predictor
+formula = y ~ Intercept + beta_1
+# Observational model likelihood
+lik =  bru_obs(formula = y ~.,
+            family = "gaussian",
+            data = df)
+# Fit the Model
+fit.lm = bru(cmp, lik)
+```
+
+### Change the prior distributions
+
+Until now, we have used the default priors for both the precision $\tau$ and the fixed effects $\beta_0$ and $\beta_1$. Let's see how to customize these.
+
+To check which priors are used in a fitted model one can use the function `inla.prior.used()`
+
+```{r}
+#| eval: true
+#| purl: true 
+
+inla.priors.used(fit.lm)
+```
+
+From the output we see that the precision for the observation $\tau\sim\text{Gamma}(1e+00,5e-05)$ while $\beta_0$ and $\beta_1$ have precision 0.001, that is variance $1/0.001$.
+
+**Change the precision for the linear effects**
+
+The precision for linear effects is set in the component definition. For example, if we want to increase the precision to 0.01 for $\beta_0$ we define the relative components as:
+
+```{r }
+#| eval: false 
+#| purl: false
+
+cmp1 =  ~-1 +  beta_0(1, prec.linear = 0.01) + beta_1(x, model = "linear")
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Run the model again using 0.1 as default precision for both the intercept and the slope parameter.
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: false
+#| fig-width: 6 
+#| fig-height: 4
+#| fig-align: center 
+#| purl: false
+#| eval: true  
+ 
+cmp2 =  ~ -1 + 
+          beta_0(1, prec.linear = 0.1) + 
+          beta_1(x, model = "linear", prec.linear = 0.1)
+
+lm.fit2 = bru(cmp2, lik) 
+```
+
+Note that we can use the same observation model as before since both the formula and the dataset are unchanged.
+:::
+
+**Change the prior for the precision of the observation error** $\tau$
+
+Priors on the hyperparameters of the observation model must be passed by defining argument `hyper` within `control.family` in the call to the `bru_obs()` function.
+
+```{r}
+
+# First we define the logGamma (0.01,0.01) prior 
+
+prec.tau <- list(prec = list(prior = "loggamma",   # prior name
+                             param = c(0.01, 0.01))) # prior values
+
+lik2 =  bru_obs(formula = y ~.,
+                family = "gaussian",
+                data = df,
+                control.family = list(hyper = prec.tau))
+
+fit.lm2 = bru(cmp2, lik2) 
+
+```
+
+The names of the priors available in **R-INLA** can be seen with `names(inla.models()$prior)`
+
+### Visualizing the posterior marginals
+
+Posterior marginal distributions of the ﬁxed effects parameters and the hyperparameters can be visualized using the `plot()` function by calling the name of the component. For example, if want to visualize the posterior density of the intercept $\beta_0$ we can type:
+
+```{r}
+#| fig-width: 4
+#| fig-align: center
+#| fig-height: 4
+#| code-fold: show
+
+plot(fit.lm, "beta_0")
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Plot the posterior marginals for $\beta_1$ and for the precision of the observation error $\pi(\tau|y)$
+
+`r hide("Take hint")`
+
+See the `summary()` output to check the names for the different model components.
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+plot(fit.lm, "beta_1") +
+plot(fit.lm, "Precision for the Gaussian observations")
+```
+:::
+
+### Model Checking
+
+A common way for model diagnostics in regression analysis is by checking residual plots. In a Bayesian setting residuals can be defined in multipleways depending on how you account for posterior uncertainty. Here, we will adopt a Bayesian approach by generating samples from the posterior distribution of the model parameters and then draw samples from the residuals defined as:
+
+$$
+r_i = y_i - x_i^T\beta
+$$
+
+We can use the `predict` function to achieve this:
+
+```{r}
+res_samples <- predict(
+  fit.lm,         # the fitted model
+  df,             # the original data set
+  ~ data.frame(   
+    res = y-(beta_0 + beta_1)  # compute the residuals
+  ),
+  n.samples = 1000   # draw 1000 samples
+)
+
+```
+
+The resulting data frame contains the posterior draw of the residuals mean for which we can produce some diagnostics plots , e.g.
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| fig-cap: "Bayesian residual plots: the left panel is the residual index plot; the right panel is the plot of the residual versus the covariate x"
+#| code-fold: true
+#| code-summary: "Residuals checks for Linear Model"
+
+ggplot(res_samples,aes(y=mean,x=1:100))+geom_point() +
+ggplot(res_samples,aes(y=mean,x=x))+geom_point()
+
+```
+
+We can also compare these against the theoretical quantiles of the Normal distribution as follows:
+
+```{r}
+#| fig-width: 4
+#| fig-height: 4
+#| fig-align: center
+#| code-fold: true
+#| code-summary: "QQPlot for Linear Model"
+
+arrange(res_samples, mean) %>%
+  mutate(theortical_quantiles = qnorm(1:100 / (1+100))) %>%
+  ggplot(aes(x=theortical_quantiles,y= mean)) + 
+  geom_ribbon(aes(ymin = q0.025, ymax = q0.975), fill = "grey70")+
+  geom_abline(intercept = mean(res_samples$mean),
+              slope = sd(res_samples$mean)) +
+  geom_point() +
+  labs(x = "Theoretical Quantiles (Normal)",
+       y= "Sample Quantiles (Residuals)") 
+```

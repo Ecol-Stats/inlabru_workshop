@@ -1,0 +1,243 @@
+---
+title: "Practical"
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+## Linear Mixed Model for fish weight-length relationship {#sec-llm_fish}
+
+In this excercise we will:
+
+-   Plot random effects of a LMM
+-   Compute posterior densities and summaries for the variance components
+
+Libraries to load:
+
+```{r}
+#| warning: false
+#| message: false
+
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| eval: false
+
+library(FSAdata)
+df = PygmyWFBC
+# subset for 2001 and remove nets with zero observations
+df = df %>% filter(year==2001 & !is.na(sex) & net_no %in% c(1:5,7:8)) %>% dplyr::select(net_no,wt,tl,sex)
+write.csv(df,file = "datasets/PygmyWFBC.csv",row.names = F)
+
+```
+
+In this exercise, we will use a subset of the Pygmy Whitefish (*Prosopium coulterii*) dataset from the `FSAdata` R package, containing biological data collected in 2001 from Dina Lake, British Columbia.
+
+{{< downloadthis datasets/PygmyWFBC.csv dname="PygmyWFBC" label="Download data set" icon="database-fill-down" type="info" >}}
+
+The data set contains the following information:
+
+-   `net_no`Unique net identification number
+-   `wt` Fish weight (g)
+-   `tl` Total fish length (cm)
+-   `sex` Sex code (`F`=Female, `M` = Male)
+
+We can visualize the distribution of the response (weight) across the nets split by sex as follows:
+
+```{r}
+#| fig-width: 4
+#| fig-height: 4
+#| fig-align: center
+#| warning: false
+#| message: false
+
+PygmyWFBC <- read.csv("datasets/PygmyWFBC.csv")
+
+ggplot(PygmyWFBC, aes(x = factor(net_no), y = wt,fill = sex)) + 
+  geom_boxplot() + 
+  labs(y="Weight (g)",x = "Net no.")
+
+```
+
+Suppose we are interested in modelling the weight-length relationship for captured fish. The exploratory plot suggest some important variability in this relationship, potentially attributable to differences among sampling nets deployed across various sites in the Dina Lake.
+
+To account for this between-net variability, we model net as a random effect using the following linear mixed model:
+
+$$
+\begin{aligned}
+y_{ij} &\sim\mathcal{N}(\mu_{ij}, \sigma_e^2), \qquad i = 1,\dots,a \qquad j = 1,\ldots,n \\
+\eta_{ij} &= \mu_{ij} = \beta_0 + \beta_1 \times \text{length}_j + \beta_2 \times \mathbb{I}(\mathrm{Sex}_{ij}=\mathrm{M}) +  u_i \\
+u_i &\sim \mathcal{N}(0,\sigma^2_u)
+\end{aligned}
+$$
+
+where:
+
+-   $y_{ij}$ is the weight of the $j$-th fish from net $i$
+
+-   $\text{length}_{ij}$ is the corresponding fish length
+
+-   $\mathbb{I}(\text{Sex}_{ij} = \text{M})$ is an indicator/dummy such that for the *i*th net $$
+    \mathbb{I}(\mathrm{Sex}_{ij}) \begin{cases}1 & \text{if the } j \text{th fish is Male} \\0 & \text{otherwise} \end{cases}
+    $$
+
+-   $u_i$ represents the random intercept for net $i$
+
+-   $\sigma_u^2$ and $\sigma_\epsilon^2$ are the between-net and residual variances, respectively
+
+To run this model in`inlabru` we first need to create our sex dummy variable :
+
+```{r}
+PygmyWFBC$sex_M <- ifelse(PygmyWFBC$sex=="F",0,1)
+```
+
+`inlabru` will treat 0 as the reference category (i.e., the intercept $\beta_0$ will represent the baseline weight for females ). Now we can define the model component, the likelihood and fit the model.
+
+```{r}
+cmp =  ~ -1 + sex_M +  beta_0(1)  + beta_1(tl, model = "linear") +   net_eff(net_no, model = "iid")
+
+lik =  bru_obs(formula = wt ~ .,
+            family = "gaussian",
+            data = PygmyWFBC)
+
+fit = bru(cmp, lik)
+
+summary(fit)
+
+
+```
+
+For interpretability, we could have centered the predictors, but our primary focus here is on estimating the variance components of the mixed model.
+
+We can plot the posterior density of the nets random intercept as follows:
+
+```{r}
+plot(fit,"net_eff")
+
+```
+
+For theoretical and computational purposes, INLA works with the precision which is the inverse of the variance. To obtain the posterior summaries on the SDs scale we can sample from the posterior distribution for the precision while back-transforming the samples and then computing the summary statistics. Transforming the samples is necessary because some quantities such as the mean and mode are not invariant to monotone transformation; alternatively we can use some of the in-built `R-INLA` functions to achieve this (see supplementary note).
+
+We use the `inla.hyperpar.sample` function to draw samples from the approximated joint posterior for the hyperparameters, then invert them to get variances and lastly compute the mean, std. dev., quantiles etc.
+
+```{r}
+
+sampvars <- 1/inla.hyperpar.sample(1000,fit,improve.marginals = T)
+
+colnames(sampvars) <- c("Error variance","Between-net Variance")
+
+apply(sampvars,2,
+      function(x) c("mean"=mean(x),
+                    "std.dev" = sd(x),
+                    quantile(x,c(0.025,0.5,0.975))))
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Another useful quantity we can compute is the intraclass correlation coefﬁcient (ICC) which help us determine how much the response varies within groups compared to between groups. The intraclass correlation coefﬁcient is defined as:
+
+$$
+\text{ICC} = \frac{\sigma^2_u}{\sigma^2_u + \sigma^2_e}
+$$
+
+Compute the median, and quantiles for the ICC using the posterior samples we draw for $\sigma^2_e$ and $\sigma^2_u$.
+
+`r hide("Take hint")`
+
+The `rowSums` function can be used to compute $\sigma^2_{u,s} + \sigma^2_{e,s}$ for the $s$th posterior draw.
+
+`r unhide()`
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+sampicc <- sampvars[,2]/(rowSums(sampvars))
+quantile(sampicc, c(0.025,0.5,0.975))
+```
+:::
+
+::: callout-note
+## Supplementary Material
+
+The marginal densities for the hyper parameters can be also found by calling`inlabru_model$marginals.hyperpar`. We can then apply a transformation using the `inla.tmarginal` function to transform the precision posterior distributions.
+
+```{r}
+#| purl: false
+#| code-fold: true
+
+
+var_e <- fit$marginals.hyperpar$`Precision for the Gaussian observations` %>%
+  inla.tmarginal(function(x) 1/x,.) 
+
+var_u <- fit$marginals.hyperpar$`Precision for net_eff` %>%
+  inla.tmarginal(function(x) 1/x,.) 
+
+```
+
+The marginal densities for the hyper parameters can be found with `inlabru_model$marginals.hyperpar`, then we can apply a transformation using the `inla.tmarginal` function to transform the precision posterior distributions. Then, we can compute posterior summaries using `inla.zmarginal` function as follows:
+
+```{r}
+#| purl: false
+post_var_summaries <- cbind( inla.zmarginal(var_e,silent = T),
+                             inla.zmarginal(var_u,silent = T))
+colnames(post_var_summaries) <- c("sigma_e","sigma_u")
+post_var_summaries
+```
+:::
+
+```{r}
+#| eval: false
+#| purl: false
+#| echo: false
+
+
+# Random slopes model
+
+PygmyWFBC$net_no <- as.numeric(as.factor(PygmyWFBC$net_no))
+
+PygmyWFBC$net_no2 <- PygmyWFBC$net_no +7
+
+cmp =  ~ -1 + sex_M +  beta_0(1)  + beta_1(tl, model = "linear") +   
+  u0(net_no, model = "iid2d",n=2*7) + u1(net_no2,tl, copy = "u0")
+
+
+lik =  bru_obs(formula = wt ~ .,
+            family = "gaussian",
+            data = PygmyWFBC)
+
+fit = bru(cmp, lik)
+
+summary(fit)
+
+
+sampvars <- 1/inla.hyperpar.sample(1000,fit,improve.marginals = T)
+
+
+apply(sampvars,2,
+      function(x) c("mean"=mean(x),
+                    "std.dev" = sd(x),
+                    quantile(x,c(0.025,0.5,0.975))))
+
+
+```
