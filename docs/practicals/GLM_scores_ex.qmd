@@ -25,7 +25,7 @@ library(webexercises)
 
 ## GLM model checking {#sec-linmodel}
 
-In this excercise we will:
+In this exercise we will:
 
 -   Learn about some model assessments techniques available in INLA
 -   Conduct posterior predictive model checking
@@ -102,7 +102,6 @@ fit_pois = bru(cmp, lik)
 summary(fit_pois)
 
 ```
-
 
 ### Model assessment and model choice
 

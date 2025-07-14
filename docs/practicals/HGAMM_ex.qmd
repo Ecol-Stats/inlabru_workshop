@@ -49,7 +49,7 @@ library(inlabru)
 
 The oceans represent Earth's largest habitat, with life distributed unevenly across depths primarily due to variations in light, temperature, and pressure. Biomass generally decreases with depth, though complex factors like water density layers create non-linear patterns. A significant portion of deep-sea organisms exhibit bioluminescence, which scientists measure using specialized equipment like free-fall camera systems to profile vertical distribution.
 
-In this exercise, we analyze the `ISIT` dataset, which contains bioluminescence measurements from the northeast Atlantic Ocean. This dataset was previously examined in @zuur2009 and @gillibrand2007, and consists of observations collected across a depth gradient (0–4,800 m) during spring and summer cruises in 2001–2002 using an ISIT free-fall profiler.
+In this exercise, we analyze the `ISIT` dataset, which contains bioluminescence measurements from the northeast Atlantic Ocean. This dataset was previously examined in Zuur et al. ([2009](https://doi.org/10.1007/978-0-387-87458-6)) and Gillibrand et al. ([2007](https://doi.org/10.3354/meps341037)) and consists of observations collected across a depth gradient (0–4,800 m) during spring and summer cruises in 2001–2002 using an ISIT free-fall profiler.
 
 {{< downloadthis datasets/ISIT.csv dname="ISIT" label="Download data set" icon="database-fill-down" type="info" >}}
 
