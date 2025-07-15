@@ -1,5 +1,5 @@
 ---
-title: "Practical"
+title: ""
 format: 
   html:
     theme:
@@ -47,7 +47,7 @@ In this exercise, we will use data on horseshoe crabs (*Limulus polyphemus*) whe
 
 {{< downloadthis datasets/crabs.csv dname="crabs" label="Download data set" icon="database-fill-down" type="info" >}}
 
-A possible model to study the factors that affect the number of satellites the for female crabs is
+A possible model to study the factors that affect the number of satellites for female crabs is
 
 $$
 \begin{aligned}
@@ -109,7 +109,7 @@ Now that we have fitted the model we would like to carry some model assessments.
 ::: callout-note
 ## Posterior predictive model checking
 
-The posterior predictive distribution for predicted value $\hat{y}$ is
+The posterior predictive distribution for a predicted value $\hat{y}$ is
 
 $$
 \pi(\hat{y}|\mathbf{y}) = \int_\theta \pi(\hat{y}|\theta)\pi(\theta|\mathbf{y})d\theta.
@@ -138,7 +138,7 @@ To compute PIT and CPO we can either:
 
 2.  set this as default in `inlabru` global option using the `bru_options_set` function.
 
-Here we will do the later and re run the model
+Here we will do the later and re-run the model
 
 ```{r}
 bru_options_set(control.compute = list(cpo = TRUE))
@@ -146,7 +146,7 @@ bru_options_set(control.compute = list(cpo = TRUE))
 fit_pois = bru(cmp, lik)
 ```
 
-Now we can produce histograms and QQ plots to assess for uniformity in the CPO values which can be accessed through `inlabru_model$cpo$pit` :
+Now we can produce histograms and QQ plots to assess for uniformity in the PIT values which can be accessed through `inlabru_model$cpo$pit` :
 
 ::: panel-tabset
 # Plot
@@ -160,7 +160,7 @@ Now we can produce histograms and QQ plots to assess for uniformity in the CPO v
 
 par(mfrow=c(1,2))
 
-fit_pois$cpo$pit %>% hist(main = "Histogram of CPO values")
+fit_pois$cpo$pit %>% hist(main = "Histogram of PIT values")
 
 qqplot(qunif(ppoints(length(fit_pois$cpo$pit))),
 
@@ -194,13 +194,14 @@ qqline(fit_pois$cpo$pit,
 ```
 :::
 
-For the CPO values, usually the following summary of the CPO is often used:
+
+Both Q-Q plots and histogram of the PIT values suggest a not so great model fit. For the CPO values, usually the following summary of the CPO is often used:
 
 $$
 -\sum_{i=1}^n \log (\text{CPO}\_i)
 $$
 
-when comparing different models a smaller values indicate a better model fit. CPO values can be accessed by typing `inlabru_model$cpo$cpo`.
+This quantities is useful when comparing different models - a smaller values indicate a better model fit. CPO values can be accessed by typing `inlabru_model$cpo$cpo`.
 
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
@@ -234,7 +235,7 @@ fit_nbinom = bru(cmp, lik_nbinom)
 # PIT checks
 
 fit_nbinom$cpo$pit %>%
-  hist(main = "Histogram of CPO values")
+  hist(main = "Histogram of PIT values")
 
 qqplot(qunif(ppoints(length(fit_nbinom$cpo$pit))),
        fit_nbinom$cpo$pit,
@@ -252,7 +253,8 @@ data.frame( CPO = c(-sum(log(fit_pois$cpo$cpo)),
                     -sum(log(fit_nbinom$cpo$cpo))),
           Model = c("Poisson","Negative Binomial"))
 
+# Overall, we can see that the negative binomial model provides a better fit to the data.
+
 ```
 
-Overall, we can see that the negative binomial model provides a better fit to the data.
 :::

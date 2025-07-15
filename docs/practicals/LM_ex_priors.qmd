@@ -1,5 +1,5 @@
 ---
-title: "Practical"
+title: "Practical 2"
 format: 
   html:
     theme:
@@ -24,11 +24,11 @@ library(webexercises)
 
 ## Setting priors and model checking for Linear Models
 
-In this excercise we will:
+In this exercise we will:
 
 -   Learn how to set priors for linear effects $\beta_0$ and $\beta_1$
 -   Learn how to set the priors for the hyperparameter $\tau = 1/\sigma^2$.
--   Visualize marginal postrerior distributions
+-   Visualize marginal posterior distributions
 -   Perform model checks for linear models
 
 Start by loading useful libraries:

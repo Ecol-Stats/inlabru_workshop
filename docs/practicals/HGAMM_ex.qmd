@@ -1,5 +1,5 @@
 ---
-title: "Practical"
+title: ""
 format: 
   html:
     theme:
@@ -19,7 +19,6 @@ bibliography: references.bib
 #| message: false
 #| warning: false
 
-# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
 library(webexercises)
 
 ```
@@ -215,7 +214,7 @@ pred_gs = predict(fit_gs, icit, ~ (beta_0 + smooth_g+month_reff+smooth_loc))
 
 ```
 
-Lastly, we plot the predicted mean values with their corresponding 95% CrIs.
+Then, we plot the predicted mean values with their corresponding 95% CrIs.
 
 ```{r}
 #| code-summary: "Global + group smoother predictions"
@@ -237,7 +236,7 @@ Re-fit the model GS without the global smoother. By omitting the global smoother
 
 `r hide("Take hint")`
 
-You only need to modify the model components `cmp_gs`
+You only need to modify the model components in `cmp_gs`
 
 Add hint details here...
 
