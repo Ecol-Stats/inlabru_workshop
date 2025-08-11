@@ -2,8 +2,6 @@
 title: "`inlabru` Workshop"
 author: "Jafet Belmont, Sara Martino and Janine Illian"
 subtitle: "ICES 2025, Copenhagen"
-filters: 
-  - shinylive
 ---
 
 # Welcome to the course!
@@ -31,11 +29,11 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 
 |     Time       |                   Topic                        | 
 |:--------------:|:----------------------------------------------:|
-| 10:00 - 11:00  |            ICES informative session            | 
+| 10:00 - 10:30  |            ICES informative session            | 
 | 10:30 - 11:30  |        **Session 1**: Introduction to `inlabru`| 
 | 11:30 - 13:00  | [Practical Session 1](day1_practical.qmd)      | 
 |  13:00 - 14:30 |                Lunch break                     | 
-|  14:30 - 15:30 | **Session 2**: Bayesian inference & basics of INLA | 
+|  14:30 - 15:30 | [Practical Session 2](day1_practical_2.qmd) | 
 |  15:30 - 15:45 |                Coffee Break                    | 
 |  15:45 - 16:45 |            Practical Session 2                 | 
 |  16:45 - 17:00 |               wrap-up and outlook              | 

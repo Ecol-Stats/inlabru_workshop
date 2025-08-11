@@ -5,14 +5,12 @@
 #| message: false
 #| code-summary: "Load libraries"
 
-
-
 library(dplyr)
 library(INLA)
 library(ggplot2)
 library(patchwork)
 library(inlabru)     
-# load some libraries to generate nice map plots
+# load some libraries to generate nice plots
 library(scico)
 
 
@@ -33,7 +31,7 @@ df = data.frame(y = y, x = x)
 
 ## -----------------------------------------------------------------------------
 #| code-summary: "Define LM components"
-cmp =  ~ Intercept(1) + beta_1(x, model = "linear")
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
 
 
 
@@ -41,7 +39,7 @@ cmp =  ~ Intercept(1) + beta_1(x, model = "linear")
 ## -----------------------------------------------------------------------------
 #| eval: false
 #| code-summary: "Define LM formula"
-formula = y ~ Intercept + beta_1
+# formula = y ~ beta_0 + beta_1
 
 
 ## -----------------------------------------------------------------------------
@@ -65,7 +63,7 @@ summary(fit.lm)
 ## -----------------------------------------------------------------------------
 new_data = data.frame(x = c(df$x, runif(10)),
                       y = c(df$y, rep(NA,10)))
-pred = predict(fit.lm, new_data, ~ Intercept + beta_1,
+pred = predict(fit.lm, new_data, ~ beta_0 + beta_1,
                n.samples = 1000)
 
 
@@ -95,7 +93,7 @@ pred %>% ggplot() +
 
 ## -----------------------------------------------------------------------------
 #| code-summary: "Simulate data from a LMM"
-#|
+#| 
 set.seed(12)
 beta = c(1.5,1)
 sd_error = 1
@@ -127,7 +125,7 @@ ggplot(df) +
 
 ## ----define_components_lmm----------------------------------------------------
 # Define model components
-cmp =  ~ Intercept(1) + beta_1(x, model = "linear") +
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear") +
   u(j, model = "iid")
 
 
@@ -152,8 +150,19 @@ summary(fit)
 #| fig-width: 4
 #| fig-height: 4
 
-fit$summary.fitted.values[1:100,] %>% mutate(j =df$j,x =df$x) %>%
-  ggplot(aes(x=x,y=mean,color=factor(j)))+geom_line()+geom_point(aes(x=x,y=y,colour=factor(j)))+facet_wrap(~j)
+# New data
+xpred = seq(range(x)[1], range(x)[2], length.out = 100)
+j = 1:n.groups
+pred_data = expand.grid(x = xpred, j = j)
+pred = predict(fit, pred_data, formula = ~ beta_0 + beta_1 + u) 
+
+
+pred %>%
+  ggplot(aes(x=x,y=mean,color=factor(j)))+
+  geom_line()+
+  geom_ribbon(aes(x,ymin = q0.025, ymax= q0.975,fill=factor(j)), alpha = 0.5) + 
+  geom_point(data=df,aes(x=x,y=y,colour=factor(j)))+
+  facet_wrap(~j)
 
 
 
@@ -174,7 +183,7 @@ df = data.frame(y = y, x = x)
 ## -----------------------------------------------------------------------------
 #| code-summary: "GLM components"
 
-cmp =  ~ Intercept(1) + x_effect(x, model = "linear")
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
 
 
 ## -----------------------------------------------------------------------------
@@ -204,7 +213,7 @@ new_data = data.frame(x = c(df$x, runif(10)),
                       y = c(df$y, rep(NA,10)))
 
 # Define predictor formula
-pred_fml <- ~ exp(Intercept + x_effect)
+pred_fml <- ~ exp(beta_0 + beta_1)
 
 # Generate predictions
 pred_glm <- predict(fit_glm, new_data, pred_fml)
@@ -266,7 +275,8 @@ eta = (1 + cos(x))
 y = rnorm(n, mean =  eta, sd = 0.5)
 
 df = data.frame(y = y, 
-                x_smooth = inla.group(x))  
+                x_smooth = inla.group(x)) # equidistant x's 
+
 
 
 ## ----define_components_gam----------------------------------------------------
@@ -289,12 +299,12 @@ fit$summary.fixed
 
 ## -----------------------------------------------------------------------------
 #| eval: false
-#|
-data.frame(fit$summary.random$smooth) %>% 
-  ggplot() + 
-  geom_ribbon(aes(ID,ymin = X0.025quant, ymax= X0.975quant), alpha = 0.5) + 
-  geom_line(aes(ID,mean)) + 
-  xlab("covariate") + ylab("")
+#| 
+# data.frame(fit$summary.random$smooth) %>%
+#   ggplot() +
+#   geom_ribbon(aes(ID,ymin = X0.025quant, ymax= X0.975quant), alpha = 0.5) +
+#   geom_line(aes(ID,mean)) +
+#   xlab("covariate") + ylab("")
 
 
 ## ----get_predictions_gam------------------------------------------------------

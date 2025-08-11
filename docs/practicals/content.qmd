@@ -1,0 +1,52 @@
+---
+title: "Excercise List"
+embed-resources: true
+---
+
+## Practical list
+
+Please add any new practical to this list
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(DT)
+
+
+read.markdown <- function(file, stringsAsFactors = FALSE, strip.white = TRUE, ...){
+  if (length(file) > 1) {
+    lines <- file
+  } else if (grepl('\n', file)) {
+    con <- textConnection(file)
+    lines <- readLines(con)
+    close(con)
+  } else {
+    lines <- readLines(file)
+  }
+  lines <- lines[!grepl('^[\\:\\s\\+\\-\\=\\_\\|]*$', lines, perl = TRUE)]
+  lines <- gsub('(^\\s*?\\|)|(\\|\\s*?$)', '', lines)
+  read.delim(text = paste(lines, collapse = '\n'), sep = '|', 
+             stringsAsFactors = stringsAsFactors, strip.white = strip.white, ...)
+}
+
+
+
+myDT <- read.markdown(
+'| File name        | Topic                       | Description                                                                                                                                          | Data type                                                            |
+|------------------|------------------|--------------------|------------------|
+| template.qmd     | Template                    | Template including [webexercises](https://psyteachr.github.io/webexercises/) html widgets , custom .css and reactive download data buttons (pending) | Test Data                                                            |
+| LM_ex.qmd        | Linear Models               | Introductory example to how define linear model components and compute predictions in inlabru                                                        | Simulated Data                                                       |
+| LMM_ex.qmd       | Linear mixed models         | Fitting a random intercept model in inlabru and how to write a LMM as a LGM                                                                          | Simulated Data                                                       |
+| GLM_ex.qmd       | Generalised Linear Models   | Poisson and logistic regression examples.                                                                                                            | Simulated Data                                                       |
+| GAM_ex.qmd       | Generalised additive models | Smooth covariate using a random walk model                                                                                                           | Simulated Data                                                       |
+| LM_ex_priors.qmd | Linear Models               | Setting priors for linear model and plotting posterior marginals                                                                                     | Simulated Data                                                       |
+| LMM_fish_example | Linear mixed models         | Fitting LMM, plotting random effects and computing the posterior marginal variance by sampling from the precision posterior.                         | Real Data - Pygmy Whitefish data subset from the `FSAdata` R package |
+| GLM_scores.qmd   | GLM model validation        | Poisson and NegBin model assessment and comparison via CPO and PIT                                                                                   | Real Data - Satellite crabs data set                                 |
+| HGAMM_ex.qmd     | Hierarchical GAMMs          | Hierarchical GAMMS with global and group-level smoother.                                                                                             | Real Data - bioluminiscence sources in the northeast Atlantic Ocean. |
+'
+)
+
+datatable(myDT)
+```
