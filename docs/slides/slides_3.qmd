@@ -51,25 +51,25 @@ library(patchwork)
 ```
 
 
-## Outline
+## Main elements of the INLA methodology
 
 - Latent Gaussian Models
-- 
+- Sparse matrices
+- Laplace approximations
+- ...other "technical" details for the special interested!
+
+# Latent Gaussian Models (repetition)
 
 ## Repetition 
 
-Everything in R-INLA is based on so-called **latent Gaussian models**
+Everything in INLA is based on so-called **latent Gaussian models**
 
-::: {.incremental}
-
-— A few hyperparameters $\theta\sim\pi(\theta)$ control variances, range and so on
-
-— Given these hyperparameters we have an underlying Gaussian distribution $\mathbf{u}|\theta\sim\mathcal{N}(\mathbf{0},\mathbf{Q}^{-1}(\theta))$ that we cannot directly observe
-
-— Instead we make indirect observations $\mathbf{y}|\mathbf{u},\theta\sim\pi(\mathbf{y}|\mathbf{u},\theta)$
+>- A few hyperparameters $\theta\sim\pi(\theta)$ control variances, range and so on
+>- Given these hyperparameters we have an underlying Gaussian distribution $\mathbf{u}|\theta\sim\mathcal{N}(\mathbf{0},\mathbf{Q}^{-1}(\theta))$ that we cannot directly observe
+>- Instead we make indirect observations $\mathbf{y}|\mathbf{u},\theta\sim\pi(\mathbf{y}|\mathbf{u},\theta)$
 of the underlying latent Gaussian field
 
-:::
+
 
 ## Repetition 
 
@@ -85,7 +85,7 @@ $$
 
 occurs in many, seemingly unrelated, statistical models.
 
-## Examples
+## Examples{.smaller}
 
 
 * Generalised linear (mixed) models
@@ -106,8 +106,395 @@ occurs in many, seemingly unrelated, statistical models.
 
 ## Main Characteristics
 
-1. Latent **Gaussian** model
+1. Latent **Gaussian** model $\mathbf{u}|\theta\sim\mathcal{N}(0,\mathbf{Q}^{-1}(\theta))$
 3. The data are *conditionally independent* given the latent field
-4. The predictor is linear^[we will see that this can be partly relaxed :smiley:]
+4. The predictor is linear wrt the elements of $\mathbf{u}$^[we will see that this can be partly relaxed :smiley:]
 5. The dimension of $\mathbf{u}$ can be big ($10^3-10^6$)
 6. The dimension of $\theta$ should be not too big.
+
+. . . 
+
+In this talk we will focus on the characteristics of $\mathbf{u}|\theta$
+
+
+## The big n problem!
+
+For many interesting applications it is necessary to solve large problems.
+
+>- With large problems we think of models where the size $n$ of the latent field $\mathbf{u}$ is between 100 to 100, 000. This includes fixed effects, spatial effects and so on.
+
+>- Computations with  models of this size are cumbersome!
+
+>- The solution in the _INLA world_ are **Gaussian Markov random fields (GMRFs)**!
+
+# Gaussian Markov random fields
+
+## The Gaussian distribution
+
+A Gaussian distribution $\mathbf{u}\sim\mathcal{N}(0,\Sigma)$ is controlled by:
+
+— The mean vector $\mu$, which we have set equal to 0. This  is the centre of the distribution
+
+— The matrix $\Sigma$ describes all pairwise covariances $\Sigma_{ij} = \text{Cov}(u_i, u_j)$
+
+Formally
+$$
+\pi(\mathbf{u}) = \frac{1}{2\pi|\Sigma|^{1/2}}\exp\left\{-\frac{1}{2}\mathbf{u}^T\Sigma^{-1}\mathbf{u}\right\}
+$$
+
+## The Gaussian distribution
+
+
+
+| Advantages 😄👍       | Disadvantages 😔👎                                   |
+|----------------------------------------|--------------------------------|
+| **mostly theoretical**                 | **mostly computational**            |
+| Analytically tractable.               | $Sigma$ usually is large and **dense**   |
+| We have a good understanding of its properties. | Computations scale as $\mathcal{O}(n^3)$ |
+|Basically, it’s easy to do the theory| Not feasible for large problems |
+
+
+. . . 
+
+
+We need to reduce the computational burden !
+
+## Sparse matrices
+
+> A matrix $\mathbf{Q}$ is called _sparse_ if most of its elements is zero.
+
+
+$$
+\mathbf{Q} = \begin{bmatrix}
+1 & 0 & 0 & 0\\
+0& 2& 0 & 0\\
+0& 0& -1 & 0\\
+0& 1& 0 & 0.4\\
+\end{bmatrix}
+$$
+
+— There exist very efficient numerical algorithms to deal with sparse matrices
+
+— In order to solve large problems we need to exploit some property to make the computations feasible
+
+. . . 
+
+Which matrix should be sparse in a Gaussian field?
+
+## Two possible options
+
+
+$$
+\mathcal{u}\sim\mathcal{N}(0,\Sigma)
+$$
+
+1. Force the _covariance_ matrix $\Sigma$ to be sparse
+
+
+2. Force the _precision_ matrix $\Sigma^{-1}$ to be sparse
+
+
+## Two possible options{auto-animate="true"}
+
+$$
+\mathcal{u}\sim\mathcal{N}(0,\Sigma)
+$$
+
+1. Force the _covariance_ matrix $\Sigma$ to be sparse
+
+    - $\Sigma_{ij} = \text{Cov}(u_i, u_j)$ : Covariance between $u_i$ and $u_j$
+    - $\Sigma_{ij} = 0$ $\longrightarrow$ $u_i$ and $u_j$ are _independent_
+    - A sparse covariance matrix implies that many elements of $\mathbf{u}$ are mutually independent.....is this desirable?
+
+2. Force the _precision_ matrix $\mathbf{Q} = \Sigma^{-1}$ to be sparse
+
+## Two possible options{auto-animate="true"}
+
+$$
+\mathcal{u}\sim\mathcal{N}(0,\Sigma)
+$$
+
+1. Force the _covariance_ matrix $\Sigma$ to be sparse
+
+    - $\Sigma_{ij} = \text{Cov}(u_i, u_j)$ : Covariance between $u_i$ and $u_j$
+    - $\Sigma_{ij} = 0$ $\longrightarrow$ $u_i$ and $u_j$ are _independent_
+    - A sparse covariance matrix implies that many elements of $\mathbf{u}$ are mutually independent.....is this desirable?
+
+2. Force the _precision_ matrix $\mathbf{Q} = \Sigma^{-1}$ to be sparse
+
+  - What does $Q_{ij}$ represents?
+  - What does a sparse precision matrix implies?
+  
+
+## Example: The AR1 proces
+
+
+**Definition**
+
+
+$$
+\begin{aligned}
+\mathbf{i=1}&:  u_1 \sim\mathcal{N}(0, \frac{1}{1-\phi^2})\\
+\mathbf{i>1}&:  u_i  = \phi\  u_{i-1} +\epsilon_i,\ \epsilon_i\sim\mathcal{N}(0,1)
+\end{aligned}
+$$
+
+- Very common to model dependence in time
+- The _joint_ distribution of $u_1,u_2,\dots,u_N$ is Gaussian 
+- How do covariance and precision matrices look?
+
+## Covariance and Precision Matrix for AR1{auto-animate="true"}
+
+
+
+
+::::: columns
+::: {.column .smaller width="60%"}
+
+**Covariance Matrix**
+
+$$
+\Sigma = \frac{1}{1-\phi^2}  \begin{bmatrix}
+1& \phi & \phi^2  & \dots& \phi^N \\
+\phi & 1& \phi  & \dots& \phi^{N-1} \\
+\phi^2 & \phi & 1 & \dots& \phi^{N-2} \\
+\dots& \dots& \dots& \dots& \dots& \\
+\phi^{N} & \phi^{N-1}& \phi^{N-2}  & \dots& 1\\
+\end{bmatrix}
+$$
+- This is a _dense_ matrix.
+
+- All elements of the $\mathbf{u}$ vector are _dependent_.
+
+:::
+::: {.column width="40%"}
+
+
+```{r, echo = F, eval = T}
+phi = 0.8
+x = 0:15
+cx = (1-phi^2)^(-1)*phi^x
+
+data.frame(lag = x, cov = cx) %>%
+  ggplot() + geom_point(aes(lag, cov)) +
+  ggtitle(expression("Covariance between "~u[i]~u[i+h])) +
+  xlab("h") + ylab("") + ylim(0,(1-phi^2)^(-1)) +
+   theme(title = element_text(size = 18),
+        axis.text.x = element_text(size = 16),
+        axis.text.y = element_text(size = 16)) 
+```
+
+:::
+:::::
+
+
+## Covariance and Precision Matrix for AR1{auto-animate="true"}
+
+
+
+
+**Precision Matrix**
+
+$$
+\mathbf{Q} = \Sigma^{-1} =  \begin{bmatrix}
+1& -\phi & 0  & 0 &\dots& 0 \\
+-\phi & 1 + \phi^2& -\phi  & 0 & \dots& 0 \\
+0 & -\phi & 1-\phi^2 &-\phi &  \dots& 0 \\
+0 & 0 & -\phi &1-\phi^2 & \dots & \dots \\
+\dots& \dots& \dots& \dots& \dots& \dots& \\
+0 &0 & 0 & \dots  & -\phi& 1\\
+\end{bmatrix}
+$$
+- This is a tridiagonal matrix, it is _sparse_
+
+- The tridiagonal form of $\mathbf{Q}$ can be exploited for quick calculations.
+
+. . . 
+
+- What is the key property of this example that causes $\mathbf{Q}$ to be sparse?
+
+
+## Conditional independence
+
+The key lies in the **full conditionals**
+
+$$
+u_t|\mathbf{u}_{-t}\sim\mathcal{N}\left(\frac{\phi}{1-\phi^2}(x_{t-1}+x_{t+1}), \frac{1}{1+\phi^2}\right)
+$$
+
+- Each timepoint is only **conditionally dependent** on the two closest timepoints
+
+- It is useful to represent the conditional independence structure through a graph
+
+```{dot}
+digraph  {
+    
+    node[style = filled]
+    
+    A[label="$u_1$" ]
+    B[label="" fillcolor = blue fontcolor = white]
+    C[label="" ]
+    D[label="" ]
+    E[label="" ]
+
+    {A} -> {B} -> {C} -> {D} -> {E}
+}
+```
+
+## Conditional independence and the precision matrix
+
+
+> Theorem
+> $u_i\perp u_j|\mathbf{u}_{-ij} \Longleftrightarrow Q_{ij} = 0 $
+
+This is the key property! :smiley:
+
+
+
+## (Informal) definition of a GMRF
+
+— A **GMRF** is a Gaussian distribution where the non-zero elements of the precision matrix are defined by the graph structure.
+
+— In the previous example the precision matrix is tridiagonal since each variable is connected only to its predecessor and successor.
+
+ADD GRAPH HERE!
+
+
+## GMRF and INLA
+
+- All models in INLA are GMRF
+- We will see how the idea of GMRF expands also for continuously indexed processes (SPDE approach)
+
+
+## What do we need to be able to compute?
+
+- We need to compute determinants of large, sparse matrices. This is needed for likelihood calculations.
+
+- We need to compute square roots of large, sparse matrices. This is needed for likelihood calculations and simulations.
+
+. . . 
+
+**Technically:**
+
+- In the end our computations come down to the Cholesky decomposition, $\mathbf{Q} = \mathbf{LL}^T$
+- After $\mathbf{L}$ is available, things are fast
+- The limiting factor is how quickly the Cholesky factorization can be done
+
+
+## What is the gain?
+
+- Temporal structure uses $\mathcal{O}(n)$ operations
+- Spatial structure uses $\mathcal{O}(n^{3/2})$ operations
+- Spatio-temporal structure uses $\mathcal{O}(n^{2})$ operations
+
+Compare this with $\mathcal{O}(n^{3})$ operations in the general case.
+
+
+## Summary
+
+Gaussian Markov Random Fields (GMRF):
+
+- Give faster computations, both in INLA and in MCMC schemes (thanks to sparse precision matrices)
+- Keep the analytical tractability of the Gaussian distribution
+- Allow modelling  through conditional distributions
+- Naturally arises from the SPDE approach (that we will talk about .....)
+
+
+## Formal definition of a GMRF
+
+> **Definition**
+>
+>A random variable $\mathbf{u}$ is said to be a Gaussian Markov random field (GMRF) with respect to the graph $\mathcal{G}$, with vertices $\{1, 2,\dots , n\}$ and edges $\mathcal{E}$, with mean $\mu$ and precision matrix $\mathbf{Q}$ if its probability distribution is given by
+$$
+\pi(\mathbf{u}) = \frac{|\mathbf{Q}|^{1/2}}{(2\pi)^{n/2}}\exp\left\{ -\frac{1}{2}(\mathbf{u}-\mu)^T\mathbf{Q}(\mathbf{u}-\mu)\right\}
+$$
+> and $Q_{ij} \neq 0\Longleftrightarrow \{i,j\}\in\mathcal{E}$
+
+
+# How INLA works
+
+## Our model
+
+## The INLA recipe
+
+- Numerical integration schemes
+- The GMRF-Approximation
+- The Laplace approximation
+- ...many many many "technical" details
+
+## Hierarchical GMRF {.smaller auto-animate="true"}
+
+-   $\mathbf{y}|\mathbf{x},\theta$, Observation model (likelihood)
+-   $\mathbf{x}|\theta$, Gaussian random field
+-   $\theta$ Hyperparameters
+
+## Hierarchical GMRF {.smaller auto-animate="true"}
+
+-   $\mathbf{y}|\mathbf{x},\theta$, Observation model (likelihood)
+-   $\mathbf{x}|\theta$, Gaussian random field
+-   $\theta$ Hyperparameters
+
+### Extra requirements
+
+1.  The latent field $\mathbf{x}$ is a GMRF $$
+     \pi(\mathbf{x}|\theta)\propto\exp\left\{-\frac{1}{2}\mathbf{x}^T\mathbf{Q}\mathbf{x}\right\}
+     $$
+
+    -   The precision matrix $\mathbf{Q}$ is sparse.
+
+## Hierarchical GMRF {.smaller auto-animate="true"}
+
+-   $\mathbf{y}|\mathbf{x},\theta$, Observation model (likelihood)
+-   $\mathbf{x}|\theta$, Gaussian random field
+-   $\theta$ Hyperparameters
+
+### Extra requirements
+
+1.  The latent field $x$ is a GMRF
+    $\pi(\mathbf{x}|\theta)\propto\exp\left\{-\frac{1}{2}\mathbf{x}^T\mathbf{Q}\mathbf{x}\right\}$
+
+2.  We can factorize the likelihood as:
+    $\pi(\mathbf{y}|\mathbf{x},\theta) = \prod_i\pi(y_i|\eta_i,\theta)$
+
+    -   Data are conditional independent give $\mathbf{x}$ and $\theta$
+    -   Each data point depends on only 1 element of the latent field:
+        the *predictor* $\eta_i$
+    -   $\eta$ is a *linear* combination of other elements of
+        $\mathbf{x}$: $\eta = \mathbf{A}^T\mathbf{x}$
+
+## Hierarchical GMRF {.smaller auto-animate="true"}
+
+-   $\mathbf{y}|\mathbf{x},\theta$, Observation model (likelihood)
+-   $\mathbf{x}|\theta$, Gaussian random field
+-   $\theta$ Hyperparameters
+
+### Extra requirements
+
+1.  The latent field $x$ is a GMRF
+    $\pi(\mathbf{x}|\theta)\propto\exp\left\{-\frac{1}{2}\mathbf{x}^T\mathbf{Q}\mathbf{x}\right\}$
+
+2.  We can factorize the likelihood as:
+    $\pi(\mathbf{y}|\mathbf{x},\theta) = \prod_i\pi(y_i|\eta_i,\theta)$
+
+3.  The vector of hyperparameters $\theta$ is low dimensional.
+
+## Inference
+
+**Main Inferential Goal**:
+
+\begin{aligned}
+\overbrace{\pi(\mathbf{x}, {\theta}\mid\mathbf{y})}^{{\text{Posterior}}} &\propto \overbrace{\pi({\theta}) \pi(\mathbf{x}\mid{\theta})}^{{\text{Prior}}} \overbrace{\prod_{i}\pi(y_i \mid \eta_i, {\theta})}^{{\text{Likelihood}}}
+\end{aligned}
+
+::: incremental
+-   The posterior distribution is, in general, not available in closed
+    form...
+-   ..what to do then?
+-   20 years ago MCMC was practically the only answer.
+:::
+
+## Numerical Integration
+
+
+
+## Our inferential goal

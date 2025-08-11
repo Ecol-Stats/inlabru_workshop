@@ -3,7 +3,7 @@ title: "Lecture 1"
 from: markdown+emoji
 subtitle: "Introduction" 
 format:
-   metropolis-beamer-revealjs
+   metropolis-beamer-revealfjs
 #     logo:  images/logo_white.png
 #     theme: style.scss
 # header-logo: images/logo_white.png
@@ -159,7 +159,7 @@ ggdraw() +  draw_plot(p1) + draw_image(sturgeon, scale = .7,y=0.25)
 my_image <- readPNG("figures/question.png", native = TRUE)
 
 ggdraw() +  draw_plot(p1  +
-  annotate("text", x=120, y=10, label="Does the weight of pallid sturgeon vary\n with body length??", size = 6,
+  annotate("text", x=120, y=10, label="How does the weight of pallid sturgeon vary\n with body length??", size = 6,
               color="red")) +
   draw_image(my_image, scale = .5,y=0.25)
   
