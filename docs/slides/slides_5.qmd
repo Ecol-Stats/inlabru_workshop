@@ -1,0 +1,78 @@
+---
+title: "Lecture 5"
+from: markdown+emoji
+subtitle: "Introduction to spatial modelling -- spatial data types" 
+format:
+   metropolis-beamer-revealjs
+#     logo:  images/logo_white.png
+#     theme: style.scss
+# header-logo: images/logo_white.png
+slide-number: "c/t"
+title-slide-attributes:
+#    data-background-image: images/trondheim3.png
+    data-background-size: cover
+    data-background-opacity: "0.55"
+author:
+  - name: Janine Illian
+    #orcid: 0000-0002-6879-4412
+    email: janine.illian@glasgow.ac.uk
+    affiliations: University of Glasgow
+# date: May 22, 2025
+# bibliography: references.bib
+embed-resources: true
+editor: 
+  markdown: 
+    wrap: 72
+execute:
+  allow-html: true
+#nocite: |
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup}
+#| include: false
+#| eval: false
+
+
+knitr::opts_chunk$set(echo = FALSE,  
+                      message=FALSE, 
+                      warning=FALSE, 
+                      strip.white=TRUE, 
+                      prompt=FALSE,
+                      fig.align="center",
+                       out.width = "60%")
+
+library(knitr)    # For knitting document and include_graphics function
+library(ggplot2)  # For plotting
+library(png) 
+library(tidyverse)
+library(INLA)
+library(BAS)
+library(patchwork)
+library(inlabru)
+
+```
+
+## Outline
+
+- Why spatial modelling?
+- Why is spatial modelling computationally expensive?
+- Different data types?
+- Modelling in discrete space -- areal data
+- Modelling in continuous space -- geo-referenced data
+- Modelling continuous space -- spatial point process data
+
+## Spatial modelling
+
+## Types of spatial data
+
+We can distinguish three types of spatial data 
+
+Discrete space:
+- data on a spatial grid (areal data)
+
+Continuous space:
+- geostatistical (geo-referenced) data 
+- spatial point data
