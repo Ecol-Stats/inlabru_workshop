@@ -80,3 +80,36 @@ Discrete space:
 Continuous space:
 - geostatistical (geo-referenced) data 
 - spatial point data
+
+## Discrete space: areal data
+
+- data on a (regular or irregular) spatial grid
+- examples: number of individuals in a region, average rainfall in a province
+
+- (originally geostatistical or point data; gridded for practical reasons)
+
+## Continuous space: geostatistical data 
+
+- phenomenon that is continuous in space
+- examples: nutrient levels in soil, salinity in the sea
+measurements at a given set of locations that are determined by surveyor
+
+Observed response(s):
+measurement(s) taken at given locations
+
+## Continuous space: spatial point patterns
+- patterns formed by locations of objects (individuals) in space (typically 2D)
+- examples: locations of trees in a forest, groups of animals, earthquakes
+
+Observed response(s):
+x,y coordinates of points (individuals/groups)
+maybe also properties of individuals/groups (“marks")
+
+## Take home message!
+
+- all spatial models we discuss here are also special cases of the large class of Latent Gaussian models
+
+- to account for spatial dependence in the data, different types of spatial terms have to be included in the model for different spatial data structures, but they are all approximated by an SPDE model  
+
+- _inlabru_ provides an efficient and  unified  way to fit all these models!
+
