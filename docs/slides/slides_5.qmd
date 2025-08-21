@@ -65,6 +65,10 @@ library(inlabru)
 - Modelling continuous space -- spatial point process data
 
 ## Spatial modelling
+accounting for spatia dependence
+
+## Spatial modelling -- computations
+
 
 ## Types of spatial data
 
