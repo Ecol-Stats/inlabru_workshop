@@ -65,7 +65,57 @@ library(inlabru)
 - Modelling continuous space -- spatial point process data
 
 ## Spatial modelling
-accounting for spatia dependence
+many natural processes take place in space
+large amounts of data collected in space; increased resolution large, complex data sets
+
+HOWEVER: 
+
+- spatial statistical analysis is often not complex enough 
+- inaccessible to practitioners as literature written for statisticians
+- development of methodology often not linked to applications (unrealistic assumptions)
+- difficult to apply (unless you are an expert statistician and programmer)
+
+we will see that inlabru can help with this...
+\pause
+why do we need spatial models in the first place?
+
+
+## an example
+
+**global pm 2.5**
+
+exposure to air pollution; particulate matter < 2.5 microns in diameter (PM 2.5)
+
+- linked to poor health outcomes
+- responsible for three million deaths worldwide each year
+- maybe observations not independent?
+- sparsely measured
+- heterogeneous spatial coverage
+
+We need to take account of spatial dependence... i.e.\ account for autocorrelation... and complexity
+
+## Spatial modelling
+accounting for spatial dependence
+
+- standard statistical modelling usually assumes  _independent observations_
+- distributional assumptions that are made are only true if the independence assumption hold 
+
+- Spatio-temporal data, however, are often not independent, but are spatially _auto correlated_ 
+- independence assumptions are violated here 
+- two observations taken in close proximity are very similar 
+- do not provide two (independent) pieces of information 
+
+## Spatial modelling
+accounting for spatial dependence
+- ignoring this = pretend we have as much independent information as we have observations 
+- pretend we have  more information than we actually have 
+- spurious inference and ultimately wrong conclusions...
+
+spatio-temporal models have special _model components_ that explicitly  model the dependence structure we need to:
+
+* say what the dependence in our data looks like in general: choose a specific class of spatial models, and 
+* estimate its specific properties for a specific dataset 
+
 
 ## Spatial modelling -- computations
 

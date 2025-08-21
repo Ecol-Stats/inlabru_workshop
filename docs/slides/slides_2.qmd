@@ -506,7 +506,7 @@ This means that **all dependencies** in the observations are accounted for by th
 
 ## Some more details II {.smaller}
 
-Given the **linear predictor** $\eta$ the observations a independent on each other!
+Given the **linear predictor** $\eta$ the observations are independent of each other!
 
 ```{r}
 # Calculate inflection y positions
@@ -559,7 +559,9 @@ y_i|\eta_i, \sigma^2 & \sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n\\
 E(y_i|\eta_i, \sigma^2) & = \eta_i
 \end{aligned}
 $$
-**Note**: We assume that, given the  _linear predictor_ $\eta$, the data are independent on each other! Data dependence is expressed through the _components_ if the linear predictor.
+**Note**: We assume that, given the  _linear predictor_ $\eta$, the data are independent of each other!
+
+Any dependence in the data is expressed through the _components_ of the linear predictor.
 
 
 
@@ -577,7 +579,7 @@ $$
 
 
 
-
+  
 
 
 
@@ -803,7 +805,7 @@ digraph posterior {
     B[label="Observation\l model\l" fillcolor = blue fontcolor = white]
     C[label="Bayes Theorem\n &\n Bayesian Computations\n" ]
     D[label="Posterior\n distribution\n" fillcolor = red fontcolor = white]
-    E[label="Bayesian Computation are hard!!\n Here is where\n INLA\n comes in!!!\n" fontcolor = red]
+    E[label="Bayesian Computations are hard!!\n Here is where\n INLA\n comes in!!!\n" fontcolor = red]
 
     {A,B} -> {C} -> {D}
     E -> C
