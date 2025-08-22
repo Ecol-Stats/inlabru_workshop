@@ -100,7 +100,7 @@ accounting for spatial dependence
 - standard statistical modelling usually assumes  _independent observations_
 - distributional assumptions that are made are only true if the independence assumption hold 
 
-- Spatio-temporal data, however, are often not independent, but are spatially _auto correlated_ 
+- spatio-temporal data, however, are often not independent, but are spatially _auto correlated_ 
 - independence assumptions are violated here 
 - two observations taken in close proximity are very similar 
 - do not provide two (independent) pieces of information 
@@ -118,7 +118,8 @@ spatio-temporal models have special _model components_ that explicitly  model th
 
 
 ## Spatial modelling -- computations
-
+- computationally expensive
+- in the past: often MCMC, takes forever
 
 ## Types of spatial data
 
@@ -138,22 +139,61 @@ Continuous space:
 
 - (originally geostatistical or point data; gridded for practical reasons)
 
+**Observed response(s):**
+Measurement over each grid cell (e.g.\ number of individuals in cell; rainfall in province)
+
 ## Continuous space: geostatistical data 
 
 - phenomenon that is continuous in space
 - examples: nutrient levels in soil, salinity in the sea
 measurements at a given set of locations that are determined by surveyor
 
-Observed response(s):
+**Observed response(s):**
 measurement(s) taken at given locations
 
 ## Continuous space: spatial point patterns
 - patterns formed by locations of objects (individuals) in space (typically 2D)
 - examples: locations of trees in a forest, groups of animals, earthquakes
 
-Observed response(s):
+**Observed response(s):**
 x,y coordinates of points (individuals/groups)
-maybe also properties of individuals/groups (“marks")
+sometimes also properties of individuals/groups (“marks")
+
+## point patterns vs. geostatistical data
+
+**point patterns:**
+- data format : x,y coordinates
+optional : properties of objects represented by the points (“marks”)
+
+**geostatistical data:**
+- data format : x,y coordinates
+not optional : measurement taken in these locations 
+
+These seem rather similar...
+
+## point patterns vs. geostatistical data
+
+point patterns :
+- data format : x,y coordinates
+
+optional : properties of objects represented by the points (“marks”)
+
+-  aim : modelling the locations of objects in continuous space
+
+- locations are being modelled and are considered random
+
+- marks only take values in locations where there is a point
+
+geostatistical data :
+- data format : x,y coordinates
+
+not optional : measurement taken in these locations
+
+- aim : modelling continuous process observed in finite number of locations
+
+- locations have typically been deliberately chosen and are fixed
+
+- continuous spatial field takes on values in whole subset of R2
 
 ## Take home message!
 
