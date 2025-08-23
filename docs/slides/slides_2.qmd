@@ -550,7 +550,7 @@ $$
 
 ## Let's formalize this a bit...{ auto-animate="true"}
 
-The elements of an `inlabru` friendly statistical model are:
+The elements of an `inlabru`-friendly statistical model are:
 
 1. The observational model
 $$
@@ -567,7 +567,7 @@ Any dependence in the data is expressed through the _components_ of the linear p
 
 ## Let's formalize this a bit...{ auto-animate="true"}
 
-The elements of an `inlabru` friendly statistical model are:
+The elements of an `inlabru`-friendly statistical model are:
 
 1. The observational model $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
 
@@ -585,7 +585,7 @@ $$
 
 ## Let's formalize this a bit...{ auto-animate="true"}
 
-The elements of an `inlabru` friendly statistical model are:
+The elements of an `inlabru`-friendly statistical model are:
 
 1. The observational model $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
 
@@ -602,7 +602,7 @@ $$
 
 ## Let's formalize this a bit...{ auto-animate="true"}
 
-The elements of an `inlabru` friendly statistical model are:
+The elements of an `inlabru`-friendly statistical model are:
 
 1. The observational model $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
 
@@ -616,24 +616,16 @@ The elements of an `inlabru` friendly statistical model are:
 $$
 \mathbf{u} = \{\beta_0, \beta_1\}\sim\mathcal{N}(0,\mathbf{Q}^{-1})
 $$
-**Note:** These always have a Gaussian prior and are used to explain the dependencies among data!
-
-
-
-
-
-
+**Note:** These always have a Gaussian prior and are used to account for the dependencies among data!
 
 ## Let's formalize this a bit...{ auto-animate="true"}
 
-The elements of an `inlabru` friendly statistical model are:
+The elements of an `inlabru`-friendly statistical model are:
 
 1. The observational model $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
 
 
 2. A model for the _linear predictor_ $\eta_i = \color{red}{\boxed{\beta_0}} + \color{red}{\boxed{\beta_1x_i} }$
-
-
 
 
 3. A prior  for the model components $\mathbf{u} = \{\beta_0, \beta_1\}\sim\mathcal{N}(0,\mathbf{Q}^{-1})$

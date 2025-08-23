@@ -193,7 +193,10 @@ not optional : measurement taken in these locations
 
 - locations have typically been deliberately chosen and are fixed
 
-- continuous spatial field takes on values in whole subset of R2
+- continuous spatial field takes on values in whole subset of $\mathbf R^ 2$
+
+
+
 
 ## Take home message!
 
