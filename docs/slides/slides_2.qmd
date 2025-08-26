@@ -3,8 +3,7 @@ title: "Lecture 1"
 from: markdown+emoji
 subtitle: "Introduction" 
 format:
-   metropolis-beamer-revealfjs
-#     logo:  images/logo_white.png
+   metropolis-beamer-revealjs
 #     theme: style.scss
 # header-logo: images/logo_white.png
 slide-number: "c/t"

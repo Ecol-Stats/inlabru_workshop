@@ -25,9 +25,7 @@ editor:
     wrap: 72
 execute:
   allow-html: true
-
 ---
-
 
 ```{r setup}
 # #| include: false
@@ -50,33 +48,34 @@ library(patchwork)
 
 ```
 
-
 ## Main elements of the INLA methodology
 
-- Latent Gaussian Models
-- Sparse matrices
-- Laplace approximations
-- ...other "technical" details for the special interested!
+-   Latent Gaussian Models
+-   Sparse matrices
+-   Laplace approximations
+-   ...other "technical" details for the special interested!
 
 # Latent Gaussian Models (repetition)
 
-## Repetition 
+## Repetition
 
 Everything in INLA is based on so-called **latent Gaussian models**
 
->- A few hyperparameters $\theta\sim\pi(\theta)$ control variances, range and so on
->- Given these hyperparameters we have an underlying Gaussian distribution $\mathbf{u}|\theta\sim\mathcal{N}(\mathbf{0},\mathbf{Q}^{-1}(\theta))$ that we cannot directly observe
->- Instead we make indirect observations $\mathbf{y}|\mathbf{u},\theta\sim\pi(\mathbf{y}|\mathbf{u},\theta)$
-of the underlying latent Gaussian field
+> -   A few hyperparameters $\theta\sim\pi(\theta)$ control variances,
+>     range and so on
+> -   Given these hyperparameters we have an underlying Gaussian
+>     distribution
+>     $\mathbf{u}|\theta\sim\mathcal{N}(\mathbf{0},\mathbf{Q}^{-1}(\theta))$
+>     that we cannot directly observe
+> -   Instead we make indirect observations
+>     $\mathbf{y}|\mathbf{u},\theta\sim\pi(\mathbf{y}|\mathbf{u},\theta)$
+>     of the underlying latent Gaussian field
 
+## Repetition
 
-
-## Repetition 
-
-Models of this kind:
-$$
+Models of this kind: $$
 \begin{aligned}
-\mathbf{y}|\mathbf{x},\theta &\sim \prod_i \pi(y_i|\eta_i,\theta)\\
+\mathbf{y}|\mathbf{u},\theta &\sim \prod_i \pi(y_i|\eta_i,\theta)\\
 \mathbf{\eta} & = A_1\mathbf{u}_1 + A_2\mathbf{u}_2+\dots + A_k\mathbf{u}_k\\
 \mathbf{u},\theta &\sim \mathcal{N}(0,\mathbf{Q}(θ)^{−1})\\
 \theta & \sim \pi(\theta)
@@ -85,84 +84,87 @@ $$
 
 occurs in many, seemingly unrelated, statistical models.
 
-## Examples{.smaller}
+## Examples {.smaller}
 
-
-* Generalised linear (mixed) models
-* Stochastic volatility
-* Generalised additive (mixed) models
-* Measurement error models
-* Spline smoothing 
-* Semiparametric regression
-* Space-varying (semiparametric) regression models
-* Disease mapping
-* Log-Gaussian Cox-processes
-* Model-based geostatistics (*)
-* Spatio-temporal models
-* Survival analysis
-* +++
-
-
+-   Generalised linear (mixed) models
+-   Stochastic volatility
+-   Generalised additive (mixed) models
+-   Measurement error models
+-   Spline smoothing
+-   Semiparametric regression
+-   Space-varying (semiparametric) regression models
+-   Disease mapping
+-   Log-Gaussian Cox-processes
+-   Model-based geostatistics (\*)
+-   Spatio-temporal models
+-   Survival analysis
+-   +++
 
 ## Main Characteristics
 
-1. Latent **Gaussian** model $\mathbf{u}|\theta\sim\mathcal{N}(0,\mathbf{Q}^{-1}(\theta))$
-3. The data are *conditionally independent* given the latent field
-4. The predictor is linear wrt the elements of $\mathbf{u}$^[we will see that this can be partly relaxed :smiley:]
-5. The dimension of $\mathbf{u}$ can be big ($10^3-10^6$)
-6. The dimension of $\theta$ should be not too big.
+1.  Latent **Gaussian** model
+    $\mathbf{u}|\theta\sim\mathcal{N}(0,\mathbf{Q}^{-1}(\theta))$
+2.  The data are *conditionally independent* given the latent field
+3.  The predictor is linear wrt the elements of $\mathbf{u}$[^1]
+4.  The dimension of $\mathbf{u}$ can be big ($10^3-10^6$)
+5.  The dimension of $\theta$ should be not too big.
 
-. . . 
+[^1]: we will see that this can be partly relaxed :smiley:
 
+. . .
+
+::: {style="font-size:44px"}
 In this talk we will focus on the characteristics of $\mathbf{u}|\theta$
-
+:::
 
 ## The big n problem!
 
-For many interesting applications it is necessary to solve large problems.
+For many interesting applications it is necessary to solve large
+problems.
 
->- With large problems we think of models where the size $n$ of the latent field $\mathbf{u}$ is between 100 to 100, 000. This includes fixed effects, spatial effects and so on.
+> -   With large problems we think of models where the size $n$ of the
+>     latent field $\mathbf{u}$ is between 100 to 100, 000. This
+>     includes fixed effects, spatial effects and so on.
 
->- Computations with  models of this size are cumbersome!
+> -   Computations with models of this size are cumbersome!
 
->- The solution in the _INLA world_ are **Gaussian Markov random fields (GMRFs)**!
+> -   The solution in the *INLA world* are **Gaussian Markov random
+>     fields (GMRFs)**!
 
 # Gaussian Markov random fields
 
 ## The Gaussian distribution
 
-A Gaussian distribution $\mathbf{u}\sim\mathcal{N}(0,\Sigma)$ is controlled by:
+A Gaussian distribution $\mathbf{u}\sim\mathcal{N}(0,\Sigma)$ is
+controlled by:
 
-— The mean vector $\mu$, which we have set equal to 0. This  is the centre of the distribution
+— The mean vector $\mu$, which we have set equal to 0. This is the
+centre of the distribution
 
-— The matrix $\Sigma$ describes all pairwise covariances $\Sigma_{ij} = \text{Cov}(u_i, u_j)$
+— The matrix $\Sigma$ describes all pairwise covariances
+$\Sigma_{ij} = \text{Cov}(u_i, u_j)$
 
-Formally
-$$
+Formally $$
 \pi(\mathbf{u}) = \frac{1}{2\pi|\Sigma|^{1/2}}\exp\left\{-\frac{1}{2}\mathbf{u}^T\Sigma^{-1}\mathbf{u}\right\}
 $$
 
 ## The Gaussian distribution
 
-
-
-| Advantages 😄👍       | Disadvantages 😔👎                                   |
+| Advantages :smile::+1: | Disadvantages :pensive::-1: |
 |----------------------------------------|--------------------------------|
-| **mostly theoretical**                 | **mostly computational**            |
-| Analytically tractable.               | $Sigma$ usually is large and **dense**   |
+| **mostly theoretical** | **mostly computational** |
+| Analytically tractable. | $\Sigma$ usually is large and **dense** |
 | We have a good understanding of its properties. | Computations scale as $\mathcal{O}(n^3)$ |
-|Basically, it’s easy to do the theory| Not feasible for large problems |
+| Basically, it’s easy to do the theory | Not feasible for large problems |
 
-
-. . . 
-
+. . .
 
 We need to reduce the computational burden !
 
 ## Sparse matrices
 
-> A matrix $\mathbf{Q}$ is called _sparse_ if most of its elements is zero.
-
+> A matrix $\mathbf{Q}$ is called *sparse* if most of its elements are
+> zero.
 
 $$
 \mathbf{Q} = \begin{bmatrix}
@@ -173,84 +175,84 @@ $$
 \end{bmatrix}
 $$
 
-— There exist very efficient numerical algorithms to deal with sparse matrices
+— There exist very efficient numerical algorithms to deal with sparse
+matrices:
 
-— In order to solve large problems we need to exploit some property to make the computations feasible
+— In order to solve large problems we need to exploit some property to
+make the computations feasible
 
-. . . 
+. . .
 
+::: {style="font-size:44px"}
 Which matrix should be sparse in a Gaussian field?
+:::
 
 ## Two possible options
 
+$$
+\mathcal{u}\sim\mathcal{N}(0,\Sigma)
+$$
+
+1.  Force the *covariance* matrix $\Sigma$ to be sparse
+
+2.  Force the *precision* matrix $\Sigma^{-1}$ to be sparse
+
+## Two possible options {auto-animate="true"}
 
 $$
 \mathcal{u}\sim\mathcal{N}(0,\Sigma)
 $$
 
-1. Force the _covariance_ matrix $\Sigma$ to be sparse
+1.  Force the *covariance* matrix $\Sigma$ to be sparse
 
+    -   $\Sigma_{ij} = \text{Cov}(u_i, u_j)$ : Covariance between $u_i$
+        and $u_j$
+    -   $\Sigma_{ij} = 0$ $\longrightarrow$ $u_i$ and $u_j$ are
+        *independent*
+    -   A sparse covariance matrix implies that many elements of
+        $\mathbf{u}$ are mutually independent.....is this desirable?
 
-2. Force the _precision_ matrix $\Sigma^{-1}$ to be sparse
+2.  Force the *precision* matrix $\mathbf{Q} = \Sigma^{-1}$ to be sparse
 
-
-## Two possible options{auto-animate="true"}
-
-$$
-\mathcal{u}\sim\mathcal{N}(0,\Sigma)
-$$
-
-1. Force the _covariance_ matrix $\Sigma$ to be sparse
-
-    - $\Sigma_{ij} = \text{Cov}(u_i, u_j)$ : Covariance between $u_i$ and $u_j$
-    - $\Sigma_{ij} = 0$ $\longrightarrow$ $u_i$ and $u_j$ are _independent_
-    - A sparse covariance matrix implies that many elements of $\mathbf{u}$ are mutually independent.....is this desirable?
-
-2. Force the _precision_ matrix $\mathbf{Q} = \Sigma^{-1}$ to be sparse
-
-## Two possible options{auto-animate="true"}
+## Two possible options {auto-animate="true"}
 
 $$
 \mathcal{u}\sim\mathcal{N}(0,\Sigma)
 $$
 
-1. Force the _covariance_ matrix $\Sigma$ to be sparse
+1.  Force the *covariance* matrix $\Sigma$ to be sparse
 
-    - $\Sigma_{ij} = \text{Cov}(u_i, u_j)$ : Covariance between $u_i$ and $u_j$
-    - $\Sigma_{ij} = 0$ $\longrightarrow$ $u_i$ and $u_j$ are _independent_
-    - A sparse covariance matrix implies that many elements of $\mathbf{u}$ are mutually independent.....is this desirable?
+    -   $\Sigma_{ij} = \text{Cov}(u_i, u_j)$ : Covariance between $u_i$
+        and $u_j$
+    -   $\Sigma_{ij} = 0$ $\longrightarrow$ $u_i$ and $u_j$ are
+        *independent*
+    -   A sparse covariance matrix implies that many elements of
+        $\mathbf{u}$ are mutually independent.....is this desirable?
 
-2. Force the _precision_ matrix $\mathbf{Q} = \Sigma^{-1}$ to be sparse
+2.  Force the *precision* matrix $\mathbf{Q} = \Sigma^{-1}$ to be sparse
 
-  - What does $Q_{ij}$ represents?
-  - What does a sparse precision matrix implies?
-  
+    -   What does $Q_{ij}$ represents?
+    -   What does a sparse precision matrix implies?
 
 ## Example: The AR1 proces
 
-
 **Definition**
-
 
 $$
 \begin{aligned}
 \mathbf{i=1}&:  u_1 \sim\mathcal{N}(0, \frac{1}{1-\phi^2})\\
-\mathbf{i>1}&:  u_i  = \phi\  u_{i-1} +\epsilon_i,\ \epsilon_i\sim\mathcal{N}(0,1)
+\mathbf{i=2,\dots,T}&:  u_i  = \phi\  u_{i-1} +\epsilon_i,\ \epsilon_i\sim\mathcal{N}(0,1)
 \end{aligned}
 $$
 
-- Very common to model dependence in time
-- The _joint_ distribution of $u_1,u_2,\dots,u_N$ is Gaussian 
-- How do covariance and precision matrices look?
+-   Very common to model dependence in time
+-   The *joint* distribution of $u_1,u_2,\dots,u_N$ is Gaussian
+-   How do covariance and precision matrices look?
 
-## Covariance and Precision Matrix for AR1{auto-animate="true"}
-
-
-
+## Covariance and Precision Matrix for AR1 {auto-animate="true"}
 
 ::::: columns
 ::: {.column .smaller width="60%"}
-
 **Covariance Matrix**
 
 $$
@@ -262,14 +264,13 @@ $$
 \phi^{N} & \phi^{N-1}& \phi^{N-2}  & \dots& 1\\
 \end{bmatrix}
 $$
-- This is a _dense_ matrix.
 
-- All elements of the $\mathbf{u}$ vector are _dependent_.
+-   This is a *dense* matrix.
 
+-   All elements of the $\mathbf{u}$ vector are *dependent*.
 :::
+
 ::: {.column width="40%"}
-
-
 ```{r, echo = F, eval = T}
 phi = 0.8
 x = 0:15
@@ -283,15 +284,10 @@ data.frame(lag = x, cov = cx) %>%
         axis.text.x = element_text(size = 16),
         axis.text.y = element_text(size = 16)) 
 ```
-
 :::
 :::::
 
-
-## Covariance and Precision Matrix for AR1{auto-animate="true"}
-
-
-
+## Covariance and Precision Matrix for AR1 {auto-animate="true"}
 
 **Precision Matrix**
 
@@ -305,14 +301,16 @@ $$
 0 &0 & 0 & \dots  & -\phi& 1\\
 \end{bmatrix}
 $$
-- This is a tridiagonal matrix, it is _sparse_
 
-- The tridiagonal form of $\mathbf{Q}$ can be exploited for quick calculations.
+-   This is a tridiagonal matrix, it is *sparse*
 
-. . . 
+-   The tridiagonal form of $\mathbf{Q}$ can be exploited for quick
+    calculations.
 
-- What is the key property of this example that causes $\mathbf{Q}$ to be sparse?
+. . .
 
+What is the key property of this example that causes $\mathbf{Q}$ to be
+sparse?
 
 ## Conditional independence
 
@@ -322,159 +320,239 @@ $$
 u_t|\mathbf{u}_{-t}\sim\mathcal{N}\left(\frac{\phi}{1-\phi^2}(x_{t-1}+x_{t+1}), \frac{1}{1+\phi^2}\right)
 $$
 
-- Each timepoint is only **conditionally dependent** on the two closest timepoints
+-   Each timepoint is only **conditionally dependent** on the two
+    closest timepoints
 
-- It is useful to represent the conditional independence structure through a graph
+-   It is useful to represent the conditional independence structure
+    through a graph
 
-```{dot}
-digraph  {
-    
-    node[style = filled]
-    
-    A[label="$u_1$" ]
-    B[label="" fillcolor = blue fontcolor = white]
-    C[label="" ]
-    D[label="" ]
-    E[label="" ]
+<!-- ```{dot, eval = FALSE} -->
+<!-- graph ER { -->
 
-    {A} -> {B} -> {C} -> {D} -> {E}
-}
+<!-- 	layout=circo -->
+
+<!--     A [label = <u<sub>1</sub>> ] -->
+<!--     B [label = <u<sub>2</sub>> ] -->
+<!--     C [label = "..."] -->
+<!--     D [label = <u<sub>T-1</sub>> ] -->
+<!--     E [label = <u<sub>T</sub>> ] -->
+
+
+<!-- 	A -- B; -->
+<!-- 	B -- C; -->
+<!-- 	C -- D; -->
+<!-- 	D -- E; -->
+
+<!-- 	fontsize=20; -->
+<!-- } -->
+
+
+
+<!-- ``` -->
+
+
+
+```{mermaid}
+flowchart LR
+  A[Hard edge] --> B(Round edge)
+  B --> C{Decision}
+  C --> D[Result one]
+  C --> E[Result two]
 ```
+
 
 ## Conditional independence and the precision matrix
 
-
-> Theorem
-> $u_i\perp u_j|\mathbf{u}_{-ij} \Longleftrightarrow Q_{ij} = 0 $
+::: {style="font-size:54px"}
+> **Theorem**:
+> $u_i\perp u_j|\mathbf{u}_{-ij}\Longleftrightarrow Q{ij} =0$
+:::
 
 This is the key property! :smiley:
 
+## (Informal) definition of a GMRF {.smaller}
 
+::: {style="font-size:34px"}
+> A **GMRF** is a Gaussian distribution where the non-zero elements of
+> the precision matrix are defined by the graph structure.
+:::
 
-## (Informal) definition of a GMRF
+. . .
 
-— A **GMRF** is a Gaussian distribution where the non-zero elements of the precision matrix are defined by the graph structure.
+In the previous example the precision matrix is tridiagonal since each
+variable is connected only to its predecessor and successor.
 
-— In the previous example the precision matrix is tridiagonal since each variable is connected only to its predecessor and successor.
+$$
+\mathbf{Q} = \Sigma^{-1} =  \begin{bmatrix}
+1& -\phi & 0  & 0 &\dots& 0 \\
+-\phi & 1 + \phi^2& -\phi  & 0 & \dots& 0 \\
+0 & -\phi & 1-\phi^2 &-\phi &  \dots& 0 \\
+0 & 0 & -\phi &1-\phi^2 & \dots & \dots \\
+\dots& \dots& \dots& \dots& \dots& \dots& \\
+0 &0 & 0 & \dots  & -\phi& 1\\
+\end{bmatrix}
+$$
 
-ADD GRAPH HERE!
+```{dot}
+graph ER {
+	
+	layout=circo
 
+    A [label = <u<sub>1</sub>> ]
+    B [label = <u<sub>2</sub>> ]
+    C [label = "..."]
+    D [label = <u<sub>T-1</sub>> ]
+    E [label = <u<sub>T</sub>> ]
+        
+
+	A -- B;
+	B -- C;
+	C -- D;
+	D -- E;
+}
+```
 
 ## GMRF and INLA
 
-- All models in INLA are GMRF
-- We will see how the idea of GMRF expands also for continuously indexed processes (SPDE approach)
-
+-   Every component of the *latent Gaussian* field $\mathbf{u}$ in an
+    INLA model is always a GMRF!!
+-   We will see how the idea of GMRF expands also for continuously
+    indexed processes (SPDE approach)
 
 ## What do we need to be able to compute?
 
-- We need to compute determinants of large, sparse matrices. This is needed for likelihood calculations.
+-   We need to compute determinants of large, sparse matrices. This is
+    needed for likelihood calculations.
 
-- We need to compute square roots of large, sparse matrices. This is needed for likelihood calculations and simulations.
+-   We need to compute square roots of large, sparse matrices. This is
+    needed for likelihood calculations and simulations.
 
-. . . 
+. . .
 
 **Technically:**
 
-- In the end our computations come down to the Cholesky decomposition, $\mathbf{Q} = \mathbf{LL}^T$
-- After $\mathbf{L}$ is available, things are fast
-- The limiting factor is how quickly the Cholesky factorization can be done
-
+-   In the end our computations come down to the Cholesky decomposition,
+    $\mathbf{Q} = \mathbf{LL}^T$
+-   After $\mathbf{L}$ is available, things are fast
+-   The limiting factor is how quickly the Cholesky factorization can be
+    done
 
 ## What is the gain?
 
-- Temporal structure uses $\mathcal{O}(n)$ operations
-- Spatial structure uses $\mathcal{O}(n^{3/2})$ operations
-- Spatio-temporal structure uses $\mathcal{O}(n^{2})$ operations
+-   Temporal structure uses $\mathcal{O}(n)$ operations
+-   Spatial structure uses $\mathcal{O}(n^{3/2})$ operations
+-   Spatio-temporal structure uses $\mathcal{O}(n^{2})$ operations
 
 Compare this with $\mathcal{O}(n^{3})$ operations in the general case.
 
+```{r}
+n = seq(1,1000,10)
+p0 = data.frame(size = n, 
+           temporal = n,
+           spatial = n^(3/2),
+           space_time = n^2,
+           dense = n^3) %>%
+    pivot_longer(-size, names_to = "structure") %>%
+
+  ggplot() + geom_line(aes(size, value, group = structure, color = structure))+  ggtitle("natural scale")+
+    ylab("n. of operations")
+
+p1 = data.frame(size = n, 
+           temporal = n,
+           spatial = n^(3/2),
+           space_time = n^2,
+           dense = n^3) %>%
+    pivot_longer(-size, names_to = "structure") %>%
+  ggplot() + geom_line(aes(size, value, group = structure, color = structure))+ scale_y_log10() + ggtitle("log-scale") +
+  ylab("")
+p0 + p1 +plot_layout(guides = "collect")
+```
 
 ## Summary
 
 Gaussian Markov Random Fields (GMRF):
 
-- Give faster computations, both in INLA and in MCMC schemes (thanks to sparse precision matrices)
-- Keep the analytical tractability of the Gaussian distribution
-- Allow modelling  through conditional distributions
-- Naturally arises from the SPDE approach (that we will talk about .....)
-
+-   Give faster computations, both in INLA and in MCMC schemes (thanks
+    to sparse precision matrices)
+-   Keep the analytical tractability of the Gaussian distribution
+-   Allow modelling through conditional distributions
+-   Naturally arises from the SPDE approach (that we will talk about
+    .....)
 
 ## Formal definition of a GMRF
 
 > **Definition**
 >
->A random variable $\mathbf{u}$ is said to be a Gaussian Markov random field (GMRF) with respect to the graph $\mathcal{G}$, with vertices $\{1, 2,\dots , n\}$ and edges $\mathcal{E}$, with mean $\mu$ and precision matrix $\mathbf{Q}$ if its probability distribution is given by
-$$
-\pi(\mathbf{u}) = \frac{|\mathbf{Q}|^{1/2}}{(2\pi)^{n/2}}\exp\left\{ -\frac{1}{2}(\mathbf{u}-\mu)^T\mathbf{Q}(\mathbf{u}-\mu)\right\}
-$$
-> and $Q_{ij} \neq 0\Longleftrightarrow \{i,j\}\in\mathcal{E}$
-
+> A random variable $\mathbf{u}$ is said to be a Gaussian Markov random
+> field (GMRF) with respect to the graph $\mathcal{G}$, with vertices
+> $\{1, 2,\dots , n\}$ and edges $\mathcal{E}$, with mean $\mu$ and
+> precision matrix $\mathbf{Q}$ if its probability distribution is given
+> by $$
+> \pi(\mathbf{u}) = \frac{|\mathbf{Q}|^{1/2}}{(2\pi)^{n/2}}\exp\left\{ -\frac{1}{2}(\mathbf{u}-\mu)^T\mathbf{Q}(\mathbf{u}-\mu)\right\}
+> $$ and $Q_{ij} \neq 0\Longleftrightarrow \{i,j\}\in\mathcal{E}$
 
 # How INLA works
 
-## Our model
-
 ## The INLA recipe
 
-- Numerical integration schemes
-- The GMRF-Approximation
-- The Laplace approximation
-- ...many many many "technical" details
+-   Numerical integration schemes
+-   The GMRF-Approximation
+-   The Laplace approximation
+-   ...many many many "technical" details
 
 ## Hierarchical GMRF {.smaller auto-animate="true"}
 
--   $\mathbf{y}|\mathbf{x},\theta$, Observation model (likelihood)
--   $\mathbf{x}|\theta$, Gaussian random field
+-   $\mathbf{y}|\mathbf{u},\theta$, Observation model (likelihood)
+-   $\mathbf{u}|\theta$, Gaussian random field
 -   $\theta$ Hyperparameters
 
 ## Hierarchical GMRF {.smaller auto-animate="true"}
 
--   $\mathbf{y}|\mathbf{x},\theta$, Observation model (likelihood)
--   $\mathbf{x}|\theta$, Gaussian random field
+-   $\mathbf{y}|\mathbf{u},\theta$, Observation model (likelihood)
+-   $\mathbf{u}|\theta$, Gaussian random field
 -   $\theta$ Hyperparameters
 
 ### Extra requirements
 
-1.  The latent field $\mathbf{x}$ is a GMRF $$
-     \pi(\mathbf{x}|\theta)\propto\exp\left\{-\frac{1}{2}\mathbf{x}^T\mathbf{Q}\mathbf{x}\right\}
+1.  The latent field $\mathbf{u}$ is a GMRF $$
+     \pi(\mathbf{u}|\theta)\propto\exp\left\{-\frac{1}{2}\mathbf{u}^T\mathbf{Q}\mathbf{u}\right\}
      $$
 
     -   The precision matrix $\mathbf{Q}$ is sparse.
 
 ## Hierarchical GMRF {.smaller auto-animate="true"}
 
--   $\mathbf{y}|\mathbf{x},\theta$, Observation model (likelihood)
--   $\mathbf{x}|\theta$, Gaussian random field
+-   $\mathbf{y}|\mathbf{u},\theta$, Observation model (likelihood)
+-   $\mathbf{u}|\theta$, Gaussian random field
 -   $\theta$ Hyperparameters
 
 ### Extra requirements
 
 1.  The latent field $x$ is a GMRF
-    $\pi(\mathbf{x}|\theta)\propto\exp\left\{-\frac{1}{2}\mathbf{x}^T\mathbf{Q}\mathbf{x}\right\}$
+    $\pi(\mathbf{u}|\theta)\propto\exp\left\{-\frac{1}{2}\mathbf{u}^T\mathbf{Q}\mathbf{u}\right\}$
 
 2.  We can factorize the likelihood as:
-    $\pi(\mathbf{y}|\mathbf{x},\theta) = \prod_i\pi(y_i|\eta_i,\theta)$
+    $\pi(\mathbf{y}|\mathbf{u},\theta) = \prod_i\pi(y_i|\eta_i,\theta)$
 
-    -   Data are conditional independent give $\mathbf{x}$ and $\theta$
+    -   Data are conditional independent give $\mathbf{u}$ and $\theta$
     -   Each data point depends on only 1 element of the latent field:
         the *predictor* $\eta_i$
     -   $\eta$ is a *linear* combination of other elements of
-        $\mathbf{x}$: $\eta = \mathbf{A}^T\mathbf{x}$
+        $\mathbf{u}$: $\eta = \mathbf{A}^T\mathbf{u}$
 
 ## Hierarchical GMRF {.smaller auto-animate="true"}
 
--   $\mathbf{y}|\mathbf{x},\theta$, Observation model (likelihood)
--   $\mathbf{x}|\theta$, Gaussian random field
+-   $\mathbf{y}|\mathbf{u},\theta$, Observation model (likelihood)
+-   $\mathbf{u}|\theta$, Gaussian random field
 -   $\theta$ Hyperparameters
 
 ### Extra requirements
 
-1.  The latent field $x$ is a GMRF
-    $\pi(\mathbf{x}|\theta)\propto\exp\left\{-\frac{1}{2}\mathbf{x}^T\mathbf{Q}\mathbf{x}\right\}$
+1.  The latent field $\mathbf{u}$ is a GMRF
+    $\pi(\mathbf{u}|\theta)\propto\exp\left\{-\frac{1}{2}\mathbf{u}^T\mathbf{Q}\mathbf{u}\right\}$
 
 2.  We can factorize the likelihood as:
-    $\pi(\mathbf{y}|\mathbf{x},\theta) = \prod_i\pi(y_i|\eta_i,\theta)$
+    $\pi(\mathbf{y}|\mathbf{u},\theta) = \prod_i\pi(y_i|\eta_i,\theta)$
 
 3.  The vector of hyperparameters $\theta$ is low dimensional.
 
@@ -483,18 +561,117 @@ $$
 **Main Inferential Goal**:
 
 \begin{aligned}
-\overbrace{\pi(\mathbf{x}, {\theta}\mid\mathbf{y})}^{{\text{Posterior}}} &\propto \overbrace{\pi({\theta}) \pi(\mathbf{x}\mid{\theta})}^{{\text{Prior}}} \overbrace{\prod_{i}\pi(y_i \mid \eta_i, {\theta})}^{{\text{Likelihood}}}
+\overbrace{\pi(\mathbf{u}, {\theta}\mid\mathbf{y})}^{{\text{Posterior}}} &\propto \overbrace{\pi({\theta}) \pi(\mathbf{u}\mid{\theta})}^{{\text{Prior}}} \overbrace{\prod_{i}\pi(y_i \mid \eta_i, {\theta})}^{{\text{Likelihood}}}
 \end{aligned}
 
 ::: incremental
 -   The posterior distribution is, in general, not available in closed
     form...
 -   ..what to do then?
--   20 years ago MCMC was practically the only answer.
 :::
 
-## Numerical Integration
+## INLA strategy in short
+
+**Assumption**
+
+We are mainly interested in *posterior margianals* $\pi(u_i|\mathbf{y})$
+and $\pi(\theta_j|\mathbf{y})$
+
+**Strategy**
+
+-   We use numerical integration in a smart way
+-   We approximate what we do not know analitically expliting the
+    Gaussian structure of $\mathbf{u}|\theta$
+
+## Numerical Integration{auto-animate="true"}
+
+We want to compute $\pi(u_i|\mathbf{y})$
+
+. . .
+
+::::: columns
+::: {.column width="70%"}
+**Hard way** :-1:
+
+$$
+\pi(u_i|\mathbf{y}) = \int\pi(\mathbf{u}|\theta)\ d\mathbf{u}_{-i}
+$$
+
+-   This is a hard integral as $\mathbf{u}$ can be very high
+    dimentional!!
+:::
+
+::: {.column width="30%"}
+:::
+:::::
 
 
+## Numerical Integration{auto-animate="true"}
 
-## Our inferential goal
+We want to compute $\pi(u_i|\mathbf{y})$
+
+. . .
+
+::::: columns
+::: {.column width="50%"}
+**Hard way** :-1:
+
+$$
+\pi(u_i|\mathbf{y}) = \int\pi(\mathbf{u}|\mathbf{y})\ d\mathbf{u}_{-i}
+$$
+
+-   This is a hard integral as $\mathbf{u}$ can be very high
+    dimentional!!
+:::
+
+::: {.column width="50%"}
+
+**Easier  way** :+1:
+
+$$
+\pi(u_i|\mathbf{y}) = \int\pi(u_i|\theta, \mathbf{y})\pi(\theta|\mathbf{y)}\ d\theta
+$$
+
+-   $\theta$ is a smaller dimensional vectore, easier to integrate
+- **BUT** we need to approximate both $\pi(\theta|\mathbf{y})$ and $\pi(u_i|\theta, \mathbf{y})$
+:::
+:::::
+
+
+## Approximating $\pi(\theta|\mathbf{y})${auto-animate="true"}
+
+$$
+\pi(\mathbf{\theta} \mid \mathbf{y}) =  \frac{
+           \pi(\mathbf{u}, \mathbf{
+           \theta
+}\mid \mathbf{y})}
+      {\pi(\mathbf{u} \mid \mathbf{y},
+            \mathbf{\theta})} \: \Bigg|_{\text{This is just the Bayes theorem! It is valid for  any value of } \mathbf{u}}
+$$
+
+
+## Approximating $\pi(\theta|\mathbf{y})$ {auto-animate="true"}
+
+\begin{aligned}
+\pi(\mathbf{\theta} \mid \mathbf{y}) & =  \frac{
+           \pi(\mathbf{u}, \mathbf{
+           \theta
+}\mid \mathbf{y})}
+      {\pi(\mathbf{u} \mid \mathbf{y},
+            \mathbf{\theta})} \\
+            & \propto \pi(\mathbf{\theta} \mid \mathbf{y}) \propto \frac{
+            \overbrace{\pi( \mathbf{y}\mid \mathbf{u},\mathbf{\theta})\  \pi(\mathbf{\theta})}^{\text{Non-Gaussian, KNOWN}}  \overbrace{\pi( \mathbf{u}\mid \mathbf{\theta})}^{\text{ Gaussian, KNOWN}}  }
+            {\underbrace{\pi(\mathbf{u} \mid \mathbf{y},
+            \mathbf{\theta})}_{\text{Non-Gaussian,UNKNOWN}}}
+\end{aligned}
+
+. . . 
+
+- We approximate $\pi(\mathbf{u} \mid \mathbf{y},\mathbf{\theta})$ with a **Gaussian** distribution $\pi_G(\mathbf{u} \mid \mathbf{y},\mathbf{\theta})$ 
+
+- The approximation $\pi_G(\mathbf{u} \mid \mathbf{y},\mathbf{\theta})$  is build to match the mode and the curvature at the mode
+
+- Why does it work?
+
+  - $\pi(\mathbf{u} \mid \mathbf{y},\mathbf{\theta})$ is _almost_ Gaussian 
+  - $\pi_G(\mathbf{u} \mid \mathbf{y},\mathbf{\theta})$ inherits from $\pi(\mathbf{u} \mid \mathbf{\theta})$ the sparse precision matrix
