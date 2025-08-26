@@ -238,7 +238,7 @@ p3
 
 In this course we embrace the Bayesian perspective
 
-- There are no "_true but unknown_" parameters !
+- There are no "_true but unknown_" parameters!
 - Every parameter is described by a probability distribution!
 - Evidence from the data is used to update the belief we had before observing the data!
 
@@ -359,7 +359,7 @@ In this case $E(y_i|\beta_0, \beta_i) = \eta_i = \beta_0 + \beta_1 x_i$
 
 ## Some more details I{.smaller auto-animate="true} 
 
-We define **linear predictor** the mean (or a function of the mean) of our observations **given** the model components.
+We define **linear predictor** as the mean (or a function of the mean) of our observations **given** the model components.
 
 
 ```{r}
@@ -370,7 +370,7 @@ We define **linear predictor** the mean (or a function of the mean) of our obser
 intercept <- 0
 slope <- 1
 sigma <- 0.6
-
+  
 # Choose some x-values to place the distributions
 x_vals <- c(1, 2, 3)
 x_labels <- c("x[1]", "x[2]", "x[k]")
@@ -505,7 +505,7 @@ This means that **all dependencies** in the observations are accounted for by th
 
 ## Some more details II {.smaller}
 
-Given the **linear predictor** $\eta$ the observations a independent on each other!
+Given the **linear predictor** $\eta$ the observations are independent of each other!
 
 ```{r}
 # Calculate inflection y positions
@@ -549,7 +549,7 @@ $$
 
 ## Let's formalize this a bit...{ auto-animate="true"}
 
-The elements of a `inlabru` friendly statistical model are:
+The elements of an `inlabru`-friendly statistical model are:
 
 1. The observational model
 $$
@@ -558,13 +558,15 @@ y_i|\eta_i, \sigma^2 & \sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n\\
 E(y_i|\eta_i, \sigma^2) & = \eta_i
 \end{aligned}
 $$
-**Note**: We assume that, given the  _linear predictor_ $\eta$, the data are independent on each other! Data dependence is expressed through the _components_ if the linear predictor.
+**Note**: We assume that, given the  _linear predictor_ $\eta$, the data are independent of each other!
+
+Any dependence in the data is expressed through the _components_ of the linear predictor.
 
 
 
 ## Let's formalize this a bit...{ auto-animate="true"}
 
-The elements of a `inlabru` friendly statistical model are:
+The elements of an `inlabru`-friendly statistical model are:
 
 1. The observational model $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
 
@@ -576,13 +578,13 @@ $$
 
 
 
-
+  
 
 
 
 ## Let's formalize this a bit...{ auto-animate="true"}
 
-The elements of a `inlabru` friendly statistical model are:
+The elements of an `inlabru`-friendly statistical model are:
 
 1. The observational model $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
 
@@ -599,7 +601,7 @@ $$
 
 ## Let's formalize this a bit...{ auto-animate="true"}
 
-The elements of a `inlabru` friendly statistical model are:
+The elements of an `inlabru`-friendly statistical model are:
 
 1. The observational model $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
 
@@ -613,17 +615,11 @@ The elements of a `inlabru` friendly statistical model are:
 $$
 \mathbf{u} = \{\beta_0, \beta_1\}\sim\mathcal{N}(0,\mathbf{Q}^{-1})
 $$
-**Note:** These have always a Gaussian prior and are use to explain the dependencies among data!
-
-
-
-
-
-
+**Note:** These always have a Gaussian prior and are used to account for the dependencies among data!
 
 ## Let's formalize this a bit...{ auto-animate="true"}
 
-The elements of a `inlabru` friendly statistical model are:
+The elements of an `inlabru`-friendly statistical model are:
 
 1. The observational model $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
 
@@ -631,11 +627,9 @@ The elements of a `inlabru` friendly statistical model are:
 2. A model for the _linear predictor_ $\eta_i = \color{red}{\boxed{\beta_0}} + \color{red}{\boxed{\beta_1x_i} }$
 
 
-
-
 3. A prior  for the model components $\mathbf{u} = \{\beta_0, \beta_1\}\sim\mathcal{N}(0,\mathbf{Q}^{-1})$
 
-4. A prior for the non-gaussian parameters $\theta$
+4. A prior for the non-Gaussian parameters $\theta$
 $$
 \theta = \sigma^2
 $$
@@ -802,7 +796,7 @@ digraph posterior {
     B[label="Observation\l model\l" fillcolor = blue fontcolor = white]
     C[label="Bayes Theorem\n &\n Bayesian Computations\n" ]
     D[label="Posterior\n distribution\n" fillcolor = red fontcolor = white]
-    E[label="Bayesian Computation are hard!!\n Here is where\n INLA\n comes in!!!\n" fontcolor = red]
+    E[label="Bayesian Computations are hard!!\n Here is where\n INLA\n comes in!!!\n" fontcolor = red]
 
     {A,B} -> {C} -> {D}
     E -> C
@@ -1221,7 +1215,7 @@ In many cases complicated spatio-temporal models are _just_ special cases of the
 
   The likelihood and the latent model typically have hyperparameters that control their behavior.
 
-  They can include:
+  These can include:
 
   - Variance of observation noise
   - Dispersion parameter in the negative binomial model
@@ -2391,7 +2385,7 @@ ggplot() +
 
 ## Take home message!
 
-- Many of the model you have used (and some you have never used but will learn about) are *just* special cases of the large class of Latent Gaussian models
+- Many of the models you have used (and some you have never used but will learn about) are *just* special cases of the large class of Latent Gaussian models
 
-- _inlabru_ provides an efficient and  unified  way to fit all these models!
+- _inlabru_ provides an efficient and  unified way to fit all these models!
 

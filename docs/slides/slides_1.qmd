@@ -29,15 +29,15 @@ embed-resources: true
 +-------------+---------------------------------------+--------------------------------------------------------------------+------------+
 | Time        | Topic                                 | Content                                                            | Excercises |
 +=============+=======================================+====================================================================+============+
-| **XXXX am** | **Introduction to Spatial Modelling** | -   Types of spatial data                                          |            |
-|             |                                       |                                                                    |            |
-|             |                                       | -   Spatial data wrangling and manipulation in R (e.g, terra & sf) |            |
-|             |                                       |                                                                    |            |
-|             |                                       | -   Areal processes                                                |            |
+| **XXXX am** | **Introduction to Spatial Modelling** | -   Types of spatial data                                         |            |
+|             |                                       |                                                                   |            |
+|             |                                       | -   Spatial data wrangling and manipulation in R (e.g., terra & sf) |       |
+|             |                                       |                                                                   |            |
+|             |                                       | -   Areal processes                                               |            |
 +-------------+---------------------------------------+--------------------------------------------------------------------+------------+
 | XXXX am     | **Modelling geostatistical data**     | -   SPDE & the mesh                                                |            |
 |             |                                       |                                                                    |            |
-|             |                                       | -   Geostatistical Data                                            |            |
+|             |                                       | -   Geostatistical data                                            |            |
 |             |                                       |                                                                    |            |
 |             |                                       | -   Spatial predictions                                            |            |
 +-------------+---------------------------------------+--------------------------------------------------------------------+------------+
@@ -47,9 +47,9 @@ embed-resources: true
 +-------------+-----------------------------+-------------------------------------+------------+
 | Time        | Topic                       | Content                             | Excercises |
 +=============+=============================+=====================================+============+
-| **XXXX am** | **Spatial Point processes** | -   Spatial point process           |            |
+| **XXXX am** | **Spatial Point processes** | -   Spatial point processes         |            |
 |             |                             |                                     |            |
-|             |                             |     Distance sampling               |            |
+|             |                             | -   detectability,Distance sampling |            |
 +-------------+-----------------------------+-------------------------------------+------------+
 | XXXX am     | **Spatiotemporal Models**   | -   Separable time-space models     |            |
 |             |                             |                                     |            |

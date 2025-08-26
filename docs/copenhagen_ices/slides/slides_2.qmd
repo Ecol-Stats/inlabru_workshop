@@ -1119,7 +1119,7 @@ cases of the same model structure!! :smiley:
     -   We assume data to be *conditionally* independent given the model
         components and some hyperparameters
     -   This means that all dependencies in data are explained in Stage
-        2.
+        2.  
 
 -   **Stage 2**: What are the model components? and what is their
     distribution?
