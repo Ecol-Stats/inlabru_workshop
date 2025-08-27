@@ -1,13 +1,20 @@
 ---
-title: "ar1"
-format: html
-editor: visual
+title: ""
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
 editor_options: 
   chunk_output_type: console
 bibliography: references.bib
 ---
 
-## AR(1) models in `inlabru`
+## Great Lakes water level
 
 In this exercise we will:
 
@@ -19,10 +26,16 @@ In this exercise we will:
 
 -   Fit a RW(1) model
 
+-   Fit a an AR(1) model with gorup-level correlation
+
+-   Fit an RW(2) model to non-Gaussian data
+
 Start by loading useful libraries:
 
 ```{r}
-library(dplyr) 
+#| warning: false
+#| message: false
+library(tidyverse) 
 library(INLA) 
 library(ggplot2)
 library(patchwork) 
@@ -30,7 +43,6 @@ library(inlabru)
 library(DAAG)
 ```
 
-## Great Lakes water level
 
 In this exercise we will look at [greatLakes](https://rdrr.io/cran/DAAG/man/greatLakes.html) dataset from the `DAAG` package. The data set contains the water level heights for the lakes Erie, Michigan/Huron, Ontario and St Clair from 1918 to 2009.
 
@@ -85,9 +97,27 @@ Erie.df = greatLakes.df %>% filter(Lakes == "Erie")
 
 ```
 
-Now we fit model in `inlabru` by defining (1) the model components (2) the formula and (3) the observational model.
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Fit an AR(1) model to the Erie lake data  using `inlabru`, then plot the model fitted values showing 95% credible intervals.
+
+`r hide("Take hint")`
+
+Remember this is done by (1) defining the model components, (2) the formula and (3) the observational model. Then you can use the `predict` function to compute the predicted values for the mean along with 95% credible intervals.
+
+`r unhide()`
 
 ```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
 # Model components
 cmp =  ~ -1 + alpha(1) + ut(t.idx,model = "ar1")
 # Model formula
@@ -102,24 +132,39 @@ lik =  bru_obs(formula = height   ~.,
 # fit the model
 fit.Erie_ar1 = bru(cmp, lik)
 
-```
-
-**Model predictions**
-
-```{r}
+# Model predictions 
 
 pred_ar1.Erie = predict(fit.Erie_ar1, Erie.df, ~ alpha + ut)
 
+# plot model fitted values
 ggplot(pred_ar1.Erie,aes(y=mean,x=year))+
   geom_line()+
     geom_ribbon(aes(x = year, y = mean, ymin = q0.025, ymax = q0.975),
                 alpha = 0.5) +
   geom_point(aes(y=height,x=year))
 ```
+:::
 
-It is clear that the model overfits the data, leading to poor predictive performance. Thus, we need to introduce some prior information on the what we expect the variation of the process to be. Let review INLA' prior parametrization for autoregressive models:
+
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+Are there any issues with the fitted model, and if so, how do you think we should address them?
+
+`r hide("Answer")`
+
+It is clear that the model overfits the data, leading to poor predictive performance. Thus, we need to introduce some prior information on the what we expect the variation of the process to be. 
+
+`r unhide()`
+:::
+
+
+
 
 **Priors**
+
+Let review INLA' prior parametrization for autoregressive models:
 
 Let $\pmb{\theta} = \{\theta_y,\theta_u,\theta_\phi\}$ be INLA's internal representation of the hyperparameters such that:
 
@@ -169,25 +214,51 @@ lik =  bru_obs(formula = height  ~.,
 # fit the model
 fit.Erie_ar1 = bru(cmp, lik)
 
-# Model predictions
-pred_ar1.Erie = predict(fit.Erie_ar1, Erie.df, ~ alpha + ut)
-
-
 
 ```
 
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+What is the posterior mean for the correlation parameter $\rho$? `r fitb(fit.Erie_ar1$summary.hyperpar$mean[3],tol = 0.01)`
+
+:::
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+
+`r hide("Take hint")`
+
+Plot the fitted values of the model, has the overfitting problem being alleviated?
+
+`r unhide()`
+
 ```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
 #| echo: false
 #| fig-align: center
 #| fig-width: 4
 #| fig-height: 4
-#| 
+
+
+# Model predictions
+pred_ar1.Erie = predict(fit.Erie_ar1, Erie.df, ~ alpha + ut)
+
+
 ggplot(pred_ar1.Erie,aes(y=mean,x=year))+
   geom_line()+
     geom_ribbon(aes(x = year, y = mean, ymin = q0.025, ymax = q0.975),
                 alpha = 0.5) +
   geom_point(aes(y=height,x=year))
 ```
+:::
+
+
 
 ## Fitting a RW(1) model
 
@@ -329,13 +400,15 @@ $$
 y_t|\eta_t & \sim\text{Bin}(n_t, p_t) \\
 \eta_t &= \text{logit}(p_t),\qquad i = 1,\dots,366
 \end{aligned}
-$$ $$
+$$ 
+$$
 n_t = \left\{
  \begin{array}{lr}
 1, & \text{for}\; 29\; \text{February}\\
 2, & \text{other days}
 \end{array}\right.
-$$ $$
+$$ 
+$$
 y_t =
 \begin{cases}
 \{0,1\}, & \text{for}\; 29\; \text{February}\\
@@ -357,6 +430,7 @@ $$
 
 The smoothness is controlled by a hyperparameter $\tau_f$ . Thus, we assign a prior to $\tau_f$ to finalize the model.
 
+
 We can fit the model as follows:
 
 ```{r}
@@ -377,7 +451,7 @@ lik = bru_obs(formula = eta,
 fit = bru(cmp, lik)
 ```
 
-Notice that we have set `cyclic = TRUE` as this is a cyclic effect. Finaly, we can produce model predictions in a similar fashion as we did before:
+Notice that we have set `cyclic = TRUE` as this is a cyclic effect. Finally, we can produce model predictions in a similar fashion as we did before:
 
 ```{r}
 

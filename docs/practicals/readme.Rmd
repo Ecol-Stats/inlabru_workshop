@@ -8,14 +8,16 @@ date: "2025-06-10"
 
 Please add any new practical to this list
 
-| File name        | Topic                       | Description                                                                                                                                          | Data type                                                            |
-|------------------|------------------|--------------------|------------------|
-| template.qmd     | Template                    | Template including [webexercises](https://psyteachr.github.io/webexercises/) html widgets , custom .css and reactive download data buttons (pending) | Test Data                                                            |
-| LM_ex.qmd        | Linear Models               | Introductory example to how define linear model components and compute predictions in inlabru                                                        | Simulated Data                                                       |
-| LMM_ex.qmd       | Linear mixed models         | Fitting a random intercept model in inlabru and how to write a LMM as a LGM                                                                          | Simulated Data                                                       |
-| GLM_ex.qmd       | Generalised Linear Models   | Poisson and logistic regression examples.                                                                                                            | Simulated Data                                                       |
-| GAM_ex.qmd       | Generalised additive models | Smooth covariate using a random walk model                                                                                                           | Simulated Data                                                       |
-| LM_ex_priors.qmd | Linear Models               | Setting priors for linear model and plotting posterior marginals                                                                                     | Simulated Data                                                       |
-| LMM_fish_example | Linear mixed models         | Fitting LMM, plotting random effects and computing the posterior marginal variance by sampling from the precision posterior.                         | Real Data - Pygmy Whitefish data subset from the `FSAdata` R package |
-| GLM_scores.qmd   | GLM model validation        | Poisson and NegBin model assessment and comparison via CPO and PIT                                                                                   | Real Data - Satellite crabs data set                                 |
-| HGAMM_ex.qmd     | Hierarchical GAMMs          | Hierarchical GAMMS with global and group-level smoother.                                                                                             | Real Data - bioluminiscence sources in the northeast Atlantic Ocean. |
+| File name | Topic | Description | Data type |
+|------------------|------------------|-------------------|------------------|
+| template.qmd | Template | Template including [webexercises](https://psyteachr.github.io/webexercises/) html widgets , custom .css and reactive download data buttons (pending) | Test Data |
+| LM_ex.qmd | Linear Models | Introductory example to how define linear model components and compute predictions in inlabru | Simulated Data |
+| LMM_ex.qmd | Linear mixed models | Fitting a random intercept model in inlabru and how to write a LMM as a LGM | Simulated Data |
+| GLM_ex.qmd | Generalised Linear Models | Poisson and logistic regression examples. | Simulated Data |
+| GAM_ex.qmd | Generalised additive models | Smooth covariate using a random walk model | Simulated Data |
+| LM_ex_priors.qmd | Linear Models | Setting priors for linear model and plotting posterior marginals | Simulated Data |
+| LMM_fish_example | Linear mixed models | Fitting LMM, plotting random effects and computing the posterior marginal variance by sampling from the precision posterior. | Real Data - Pygmy Whitefish data subset from the `FSAdata` R package |
+| GLM_scores.qmd | GLM model validation | Poisson and NegBin model assessment and comparison via CPO and PIT | Real Data - Satellite crabs data set |
+| HGAMM_ex.qmd | Hierarchical GAMMs | Hierarchical GAMMS with global and group-level smoother. | Real Data - bioluminiscence sources in the northeast Atlantic Ocean. |
+| Ar1_ex.qmd | AR(1) Model | fitting ar1 model, predicting the mean and forecasting. | Simulated Data |
+| Ar1_Rw1_ex.qmd | AR(1) and RW(1-2) Models | fitting an ar and rw models, change prior for Gaussian error and set PC prior for correlation parameter. add group-level correlation and fit a model to non-Gaussian data | Real Data - water height levels in `greatlakes` dataset from `DAAG` library and `Tokyo` rainfall data |
