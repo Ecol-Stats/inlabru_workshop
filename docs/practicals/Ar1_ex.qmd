@@ -1,7 +1,14 @@
 ---
-title: "Autoregressive Models"
-format: html
-editor: visual
+title: ""
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
 editor_options: 
   chunk_output_type: console
 ---
@@ -16,10 +23,14 @@ In this exercise we will:
 
 -   Visualize model predictions.
 
+-   Forecasting for future observations
+
 Start by loading useful libraries:
 
 ```{r}
-library(dplyr)
+#| warning: false
+#| message: false
+library(tidyverse)
 library(INLA)
 library(ggplot2)
 library(patchwork)
@@ -30,7 +41,7 @@ Time series analysis is particularly valuable for modelling data with temporal d
 
 A time series process is a stochastic process $\{X_t~|~t \in T\}$, which is a collection of random variables that are ordered in time where $T$ is the *index set* that determines the set of discrete and equally spaced time points at which the process is defined and observations are made.
 
-Autoregressive processes allow us to account for the time dependece by regressing $X_t$ on past values $X_{t-1},\ldots,X_{t-p}$ with associated coefficients $\phi_k$ for each lag $k = 1,\ldots,p$. Thus an **autoregressive process of order** $p$, denoted AR($p$) , is given by:
+Autoregressive processes allow us to account for the time dependence by regressing $X_t$ on past values $X_{t-1},\ldots,X_{t-p}$ with associated coefficients $\phi_k$ for each lag $k = 1,\ldots,p$. Thus an **autoregressive process of order** $p$, denoted AR($p$) , is given by:
 
 $$
 X_t = \phi_1 X_{t-1} + \ldots + \phi_p X_{t-p} + \varepsilon_t; ~~ \varepsilon_t \sim \mathcal{N}(0,\sigma^2_e)
@@ -43,12 +54,12 @@ $$
 y_t &\sim \mathcal{N}(\mu_t,\tau_y^{-1})\\
 \eta_t &= g^{-1}(\mu_t) = \alpha + u_t \\
 u_t &= \phi u_{t-1} + \delta_t ; ~~ \delta_t \sim \mathcal{N}(0,\tau_u^{-1}); ~~ t > 1 \\
-x_1 &= \mathcal{N}(0,\kappa^{-1})\\
+u_1 &= \mathcal{N}(0,\kappa^{-1})\\
 \kappa &= \tau_u (1-\phi^2)
 \end{aligned}
 $$
 
-The response $y_t$ is assumed to be normal distributed with mean $\alpha + u_t$ and precision error $\tau_y$ ( here $g(\cdot)$ can be a link function that maps the linear predictor to the mean of the process). Then, the process $u_t$ follows an AR(1) process where $u_1$ is drawn from a stationary normal distribution such that $\kappa$ denotes the marginal precision for state $u_t$
+The response $y_t$ is assumed to be normal distributed with mean $\alpha + u_t$ and precision error $\tau_y$ ( here $g(\cdot)$ is just the identity link function that maps the linear predictor to the mean of the process). Then, the process $u_t$ follows an AR(1) process where $u_1$ is drawn from a stationary normal distribution such that $\kappa$ denotes the marginal precision for state $u_t$
 
 The covariance matrix is then given by:
 
@@ -85,7 +96,7 @@ set.seed(123)
 phi = 0.8
 tau_u = 10
 marg.prec = tau_u * (1-phi^2) # ar1 in INLA is parametrized as marginal variance
-u_t =  as.vector(arima.sim(list(order = c(1,0,0), ar = rho), 
+u_t =  as.vector(arima.sim(list(order = c(1,0,0), ar = phi), 
                           n = 100,
                           sd=sqrt(1/tau_u)))
 a = 1
@@ -110,29 +121,46 @@ ggplot(ts_dat,aes(y=y,x=x))+geom_line()
 
 ### Fitting an AR(1) model with `inlabru`
 
+**Model components**
+
+First, we define the model components, notice that the latent field is defined by two components: the intercept $\alpha$ and the autoregressive random effects $u_t$:
+
 ```{r}
 # Model components
 cmp =  ~ -1 + alpha(1) + ut(x,model = "ar1")
+
+```
+
+The we can define the formula for the linear predictor and specify the observational model
+
+```{r}
 # Model formula
 formula = y ~ alpha + ut
 # Observational model
 lik =  bru_obs(formula = y ~.,
             family = "gaussian",
             data = ts_dat)
+
+```
+
+Lastly, we fit the model using the `bru` function and compare the model estimates with the true mdeol parameters we simulate our data from.
+
+```{r}
 # fit the model
 fit.ar1 = bru(cmp, lik)
 
-# compare agiast the true values
+# compare against the true values
 
 data.frame(
   true = c(a,tau_e,marg.prec,phi),
   rbind(fit.ar1$summary.fixed[,c(1,3,5)],
         fit.ar1$summary.hyperpar[,c(1,3,5)])
         ) %>% round(2)
-
 ```
 
 **Model predictions**
+
+Here, we will predict the mean of our time series along with 95% credible intervals. Note that this interval are for the mean and not for new observations, we will cover forecasting new observations next.
 
 ```{r}
 pred_ar1 = predict(fit.ar1, ts_dat, ~ alpha + ut)
@@ -142,5 +170,77 @@ ggplot(pred_ar1,aes(y=mean,x=x))+
     geom_ribbon(aes(x = x, y = mean, ymin = q0.025, ymax = q0.975),
                 alpha = 0.5) +
   geom_point(aes(y=y,x=x))
+
+```
+
+### **Forecasting**
+
+A common goal in time series modelling is forecasting into the future. Forecasting can be treated as a missing data problem where future values of the response variable are missing. Let $y_m$ be the missing response, then, by fitting a statistical model to the observed data $\mathbf{y}_{obs}$, we condition on its parameters to obtain the posterior predictive distribution:
+
+$$
+\pi(y_{m} \mid \mathbf{y}_{obs}) = \int \pi(y_{m}, \theta \mid \mathbf{y}_{obs})  d\theta = \int \pi(y_{m} \mid \mathbf{y}_{obs}, \theta) \pi(\theta \mid \mathbf{y}_{obs})  d\theta
+$$
+
+This distribution, which integrates over all parameter uncertainty, provides the complete probabilistic forecast for the missing values. `INLA` will automatically compute the predictive distributions for all missing values in the response. To do so, we can augment our data set by including the new time points at which the prediction will be made and setting the response value to `NA` for these new time points:
+
+```{r}
+ts.forecast <- rbind(ts_dat, 
+  data.frame(y = rep(NA, 50), x = 101:150))
+
+```
+
+Next, we fit the `ar1` model to the new dataset so that the predictive distributions are computed:
+
+```{r}
+
+cmp =  ~ -1 + alpha(1) + ut(x,model = "ar1")
+
+pred_lik =  bru_obs(formula = y ~.,
+            family = "gaussian",
+            data = ts.forecast)
+
+fit.forecast = bru(cmp, pred_lik)
+
+
+```
+
+Lastly, we can draw samples from the posterior predictive distribution using the `predict` function and visualize our forecast as follows:
+
+```{r}
+pred_forecast = predict(fit.forecast, ts.forecast, ~ alpha + ut)
+
+p1= ggplot(pred_forecast,aes(y=mean,x=x))+
+  geom_line()+
+    geom_ribbon(aes(x = x, y = mean, ymin = q0.025, ymax = q0.975),
+                alpha = 0.5) +
+  geom_point(data=ts_dat, aes(y=y,x=x))
+```
+
+**Using generate to sample from the PPD**
+
+```{r}
+ff = generate(fit.ar1, 
+        data.frame(x = seq(1,150)), 
+        ~ data.frame(mean = alpha + ut,
+                     sd = sqrt(1/Precision_for_the_Gaussian_observations)),
+        n.samples = 5000)
+
+ff1 = sapply(ff, function(xx) rnorm(150, mean = xx[,1], sd = xx[,2]))
+
+
+p_pred = ggplot(pred_ar1,aes(y=mean,x=x))+
+  geom_line()+
+    geom_ribbon(aes(x = x, y = mean, ymin = q0.025, ymax = q0.975),
+                alpha = 0.5) +
+  geom_point(aes(y=y,x=x))
+
+
+pred_int = data.frame(x = seq(1,150),
+                      mean = apply(ff1,1,mean),
+                      q1 = apply(ff1, 1, quantile,probs =  0.025),
+                      q2 = apply(ff1, 1, quantile, 0.975)
+                      )
+ p1 + geom_line(data = pred_int ,aes(x=x,y=mean))+
+   geom_ribbon(data = pred_int, aes(x, ymin = q1, ymax = q2), alpha = 0.5, fill = "red")
 
 ```
