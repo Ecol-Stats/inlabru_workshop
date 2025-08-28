@@ -22,7 +22,7 @@ In this exercise we will:
 Start by loading useful libraries:
 
 ```{r}
-library(dplyr) 
+library(tidyverse) 
 library(INLA) 
 library(ggplot2)
 library(patchwork) 

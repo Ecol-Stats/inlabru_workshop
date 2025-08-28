@@ -1078,7 +1078,7 @@ p_int = fit$marginals.fixed$beta0 %>% ggplot() + geom_line(aes(x,y)) +
 
 p_cov = fit$marginals.fixed$beta1 %>% ggplot() + geom_line(aes(x,y)) +
   geom_line(data = prior, aes(x,y), linetype= "dashed") + xlab("") + ylab("") +
-  ggtitle("Covariate") + coord_cartesian(xlim = c(0.5,0.8))
+  ggtitle("Covariate") 
 
 
 preds = predict(fit, data.frame(tl = seq(90,165)), ~ beta0 + beta1)
