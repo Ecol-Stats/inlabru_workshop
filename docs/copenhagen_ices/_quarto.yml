@@ -4,12 +4,10 @@ project:
   render:
   - index.qmd
   - slides.qmd
-  - day1_practical1.qmd
+  - day1_practical.qmd
   - day1_practical_2.qmd
-  - day2_practical_3.qmd
   - slides/slides_1.qmd
   - slides/slides_2.qmd
-  - slides/slides_3.qmd
 website:
   title: inlabru workshop
   navbar:
@@ -24,9 +22,8 @@ website:
     search: true
     contents:
     - index.qmd
-    - day1_practical1.qmd
+    - day1_practical.qmd
     - day1_practical_2.qmd
-    - day2_practical_3.qmd
   page-navigation: true
 format:
   html:
