@@ -215,32 +215,3 @@ p1= ggplot(pred_forecast,aes(y=mean,x=x))+
                 alpha = 0.5) +
   geom_point(data=ts_dat, aes(y=y,x=x))
 ```
-
-**Using generate to sample from the PPD**
-
-```{r}
-ff = generate(fit.ar1, 
-        data.frame(x = seq(1,150)), 
-        ~ data.frame(mean = alpha + ut,
-                     sd = sqrt(1/Precision_for_the_Gaussian_observations)),
-        n.samples = 5000)
-
-ff1 = sapply(ff, function(xx) rnorm(150, mean = xx[,1], sd = xx[,2]))
-
-
-p_pred = ggplot(pred_ar1,aes(y=mean,x=x))+
-  geom_line()+
-    geom_ribbon(aes(x = x, y = mean, ymin = q0.025, ymax = q0.975),
-                alpha = 0.5) +
-  geom_point(aes(y=y,x=x))
-
-
-pred_int = data.frame(x = seq(1,150),
-                      mean = apply(ff1,1,mean),
-                      q1 = apply(ff1, 1, quantile,probs =  0.025),
-                      q2 = apply(ff1, 1, quantile, 0.975)
-                      )
- p1 + geom_line(data = pred_int ,aes(x=x,y=mean))+
-   geom_ribbon(data = pred_int, aes(x, ymin = q1, ymax = q2), alpha = 0.5, fill = "red")
-
-```
