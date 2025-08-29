@@ -1,4 +1,4 @@
-## ----child="C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\LM_ex.qmd"----
+## ----child="C:/Users/admin/Documents/inlabru_workshop/inlabru_workshop/docs/practicals\\LM_ex.qmd"----
 
 ## -----------------------------------------------------------------------------
 #| warning: false
@@ -89,7 +89,7 @@ pred %>% ggplot() +
 
 
 
-## ----child="C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\LMM_ex.qmd"----
+## ----child="C:/Users/admin/Documents/inlabru_workshop/inlabru_workshop/docs/practicals\\LMM_ex.qmd"----
 
 ## -----------------------------------------------------------------------------
 #| code-summary: "Simulate data from a LMM"
@@ -167,7 +167,7 @@ pred %>%
 
 
 
-## ----child="C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\GLM_ex.qmd"----
+## ----child="C:/Users/admin/Documents/inlabru_workshop/inlabru_workshop/docs/practicals\\GLM_ex.qmd"----
 
 ## -----------------------------------------------------------------------------
 #| code-summary: "Simulate Data from a GLM"
@@ -251,7 +251,7 @@ df_logis = data.frame(y = y, w = w)
 
 
 
-## ----child="C:\\Users\\jaf_i\\OneDrive\\Documentos\\inlabru_worhsop\\inlabru_workshop\\docs\\practicals\\GAM_ex.qmd"----
+## ----child="C:/Users/admin/Documents/inlabru_workshop/inlabru_workshop/docs/practicals\\GAM_ex.qmd"----
 
 ## -----------------------------------------------------------------------------
 #| echo: false

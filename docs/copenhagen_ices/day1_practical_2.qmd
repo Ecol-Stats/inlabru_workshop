@@ -39,11 +39,11 @@ we are going to learn:
 
 
 
-{{< include "C:\Users\jaf_i\OneDrive\Documentos\inlabru_worhsop\inlabru_workshop\docs\practicals\LM_ex_priors.qmd" >}}
+{{< include "C:/Users/admin/Documents/inlabru_workshop/inlabru_workshop/docs/practicals/LM_ex_priors.qmd" >}}
 
 
-{{< include "C:\Users\jaf_i\OneDrive\Documentos\inlabru_worhsop\inlabru_workshop\docs\practicals\LMM_fish_example.qmd" >}}
+{{< include "C:/Users/admin/Documents/inlabru_workshop/inlabru_workshop/docs/practicals/LMM_fish_example.qmd" >}}
 
-{{< include "C:\Users\jaf_i\OneDrive\Documentos\inlabru_worhsop\inlabru_workshop\docs\practicals\GLM_scores_ex.qmd" >}}
+{{< include "C:/Users/admin/Documents/inlabru_workshop/inlabru_workshop/docs/practicals/GLM_scores_ex.qmd" >}}
 
-{{< include "C:\Users\jaf_i\OneDrive\Documentos\inlabru_worhsop\inlabru_workshop\docs\practicals\HGAMM_ex.qmd" >}}
+{{< include "C:/Users/admin/Documents/inlabru_workshop/inlabru_workshop/docs/practicals/HGAMM_ex.qmd" >}}
