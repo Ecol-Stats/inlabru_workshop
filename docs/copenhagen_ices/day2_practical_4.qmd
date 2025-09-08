@@ -47,3 +47,4 @@ we are going to learn:
 ```
 
 
+{{< include "C:/Users/admin/Documents/inlabru_workshop/inlabru_workshop/docs/practicals/spatial_data_types_points.qmd" >}}

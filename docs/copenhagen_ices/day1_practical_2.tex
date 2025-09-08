@@ -279,7 +279,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, breakable, boxrule=0pt, frame hidden, enhanced, colback={codebgcolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, boxrule=0pt, colback={codebgcolor}, breakable, enhanced, sharp corners]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -386,7 +386,7 @@ is
 
 \[ \log(\tau) \sim \mathrm{logGamma}(1,5 \times 10^{-5}) \]
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colframe=quarto-callout-note-color-frame, opacityback=0, leftrule=.75mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, breakable, toprule=.15mm, toptitle=1mm, colback=white, bottomtitle=1mm, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, breakable, opacitybacktitle=0.6, rightrule=.15mm, left=2mm, arc=.35mm, toptitle=1mm, coltitle=black, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, bottomrule=.15mm, leftrule=.75mm, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, toprule=.15mm]
 
 If your model uses the default intercept construction (i.e.,
 \texttt{Intercept(1)} in the linear predictor) INLA will assign a
@@ -489,7 +489,7 @@ define the relative components as:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, title={Task}, colframe=quarto-callout-warning-color-frame, opacityback=0, leftrule=.75mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, breakable, toprule=.15mm, toptitle=1mm, colback=white, bottomtitle=1mm, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, breakable, opacitybacktitle=0.6, rightrule=.15mm, left=2mm, arc=.35mm, toptitle=1mm, coltitle=black, colframe=quarto-callout-warning-color-frame, opacityback=0, colback=white, bottomrule=.15mm, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, title={Task}, toprule=.15mm]
 
 Run the model again using 0.1 as default precision for both the
 intercept and the slope parameter.
@@ -555,7 +555,7 @@ posterior density of the intercept \(\beta_0\) we can type:
 \pandocbounded{\includegraphics[keepaspectratio]{day1_practical_2_files/figure-pdf/unnamed-chunk-10-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, title={Task}, colframe=quarto-callout-warning-color-frame, opacityback=0, leftrule=.75mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, breakable, toprule=.15mm, toptitle=1mm, colback=white, bottomtitle=1mm, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, breakable, opacitybacktitle=0.6, rightrule=.15mm, left=2mm, arc=.35mm, toptitle=1mm, coltitle=black, colframe=quarto-callout-warning-color-frame, opacityback=0, colback=white, bottomrule=.15mm, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, title={Task}, toprule=.15mm]
 
 Plot the posterior marginals for \(\beta_1\) and for the precision of
 the observation error \(\pi(\tau|y)\)
@@ -792,11 +792,11 @@ Observation models:
     Additive/Linear: TRUE/TRUE
     Used components: effects[sex_M, beta_0, beta_1, net_eff], latent[]
 Time used:
-    Pre = 0.297, Running = 0.29, Post = 0.149, Total = 0.736 
+    Pre = 0.306, Running = 0.303, Post = 0.141, Total = 0.75 
 Fixed effects:
           mean    sd 0.025quant 0.5quant 0.975quant    mode kld
 sex_M   -1.106 0.218     -1.534   -1.106     -0.678  -1.106   0
-beta_0 -15.816 0.870    -17.515  -15.819    -14.099 -15.819   0
+beta_0 -15.816 0.870    -17.515  -15.819    -14.100 -15.819   0
 beta_1   2.555 0.072      2.414    2.555      2.696   2.555   0
 
 Random effects:
@@ -806,12 +806,12 @@ Random effects:
 Model hyperparameters:
                                          mean    sd 0.025quant 0.5quant
 Precision for the Gaussian observations 0.475 0.044      0.392    0.473
-Precision for net_eff                   2.148 1.321      0.564    1.838
+Precision for net_eff                   2.151 1.331      0.558    1.837
                                         0.975quant mode
 Precision for the Gaussian observations      0.567 0.47
-Precision for net_eff                        5.552 1.32
+Precision for net_eff                        5.581 1.31
 
-Marginal log-Likelihood:  -467.54 
+Marginal log-Likelihood:  -467.53 
  is computed 
 Posterior summaries for the linear predictor and the fitted values are computed
 (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')
@@ -861,14 +861,14 @@ etc.
 
 \begin{verbatim}
         Error variance Between-net Variance
-mean         2.1251837            0.6511220
-std.dev      0.1982968            0.4155085
-2.5%         1.7680828            0.1827517
-50%          2.1141423            0.5434637
-97.5%        2.5428094            1.7463257
+mean         2.1253048            0.6533978
+std.dev      0.1983667            0.4209485
+2.5%         1.7684930            0.1818261
+50%          2.1140833            0.5436095
+97.5%        2.5434788            1.7644842
 \end{verbatim}
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, title={Task}, colframe=quarto-callout-warning-color-frame, opacityback=0, leftrule=.75mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, breakable, toprule=.15mm, toptitle=1mm, colback=white, bottomtitle=1mm, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, breakable, opacitybacktitle=0.6, rightrule=.15mm, left=2mm, arc=.35mm, toptitle=1mm, coltitle=black, colframe=quarto-callout-warning-color-frame, opacityback=0, colback=white, bottomrule=.15mm, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, title={Task}, toprule=.15mm]
 
 Another useful quantity we can compute is the intraclass correlation
 coefﬁcient (ICC) which help us determine how much the response varies
@@ -897,13 +897,13 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{verbatim}
-     2.5%       50%     97.5% 
-0.0775818 0.2070739 0.4567844 
+      2.5%        50%      97.5% 
+0.07766672 0.20463154 0.46566811 
 \end{verbatim}
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Supplementary Material}, colframe=quarto-callout-note-color-frame, opacityback=0, leftrule=.75mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, breakable, toprule=.15mm, toptitle=1mm, colback=white, bottomtitle=1mm, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, breakable, opacitybacktitle=0.6, rightrule=.15mm, left=2mm, arc=.35mm, toptitle=1mm, coltitle=black, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, bottomrule=.15mm, leftrule=.75mm, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Supplementary Material}, toprule=.15mm]
 
 The marginal densities for the hyper parameters can be also found by
 calling\texttt{inlabru\_model\$marginals.hyperpar}. We can then apply a
@@ -936,14 +936,14 @@ summaries using \texttt{inla.zmarginal} function as follows:
 \end{Shaded}
 
 \begin{verbatim}
-           sigma_e   sigma_u  
-mean       2.124765  0.6504548
-sd         0.1982092 0.4158235
-quant0.025 1.766088  0.1806027
-quant0.25  1.985444  0.3685557
-quant0.5   2.1134    0.5417868
-quant0.75  2.252034  0.8076368
-quant0.975 2.543966  1.752613 
+           sigma_e  sigma_u  
+mean       2.124886 0.6527294
+sd         0.198279 0.4212976
+quant0.025 1.7665   0.1796571
+quant0.25  1.985474 0.3677913
+quant0.5   2.11334  0.5419084
+quant0.75  2.252102 0.8103722
+quant0.975 2.54464  1.77092  
 \end{verbatim}
 
 \end{tcolorbox}
@@ -1071,7 +1071,7 @@ Observation models:
     Additive/Linear: TRUE/TRUE
     Used components: effects[beta0, colordarker, colorlight, colormedium, w], latent[]
 Time used:
-    Pre = 0.28, Running = 0.227, Post = 0.0493, Total = 0.557 
+    Pre = 0.292, Running = 0.246, Post = 0.0555, Total = 0.593 
 Fixed effects:
               mean    sd 0.025quant 0.5quant 0.975quant   mode kld
 beta0       -0.501 0.196     -0.885   -0.501     -0.117 -0.501   0
@@ -1095,7 +1095,7 @@ predictive checks. To do so, we will use the CPO and PIT - two commonly
 used Bayesian model assessment criteria based on the \textbf{posterior
 predictive distribution}.
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Posterior predictive model checking}, colframe=quarto-callout-note-color-frame, opacityback=0, leftrule=.75mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, breakable, toprule=.15mm, toptitle=1mm, colback=white, bottomtitle=1mm, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, breakable, opacitybacktitle=0.6, rightrule=.15mm, left=2mm, arc=.35mm, toptitle=1mm, coltitle=black, colframe=quarto-callout-note-color-frame, opacityback=0, colback=white, bottomrule=.15mm, leftrule=.75mm, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Posterior predictive model checking}, toprule=.15mm]
 
 The posterior predictive distribution for a predicted value \(\hat{y}\)
 is
@@ -1198,7 +1198,7 @@ This quantities is useful when comparing different models - a smaller
 values indicate a better model fit. CPO values can be accessed by typing
 \texttt{inlabru\_model\$cpo\$cpo}.
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, title={Task}, colframe=quarto-callout-warning-color-frame, opacityback=0, leftrule=.75mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, breakable, toprule=.15mm, toptitle=1mm, colback=white, bottomtitle=1mm, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, breakable, opacitybacktitle=0.6, rightrule=.15mm, left=2mm, arc=.35mm, toptitle=1mm, coltitle=black, colframe=quarto-callout-warning-color-frame, opacityback=0, colback=white, bottomrule=.15mm, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, title={Task}, toprule=.15mm]
 
 The model assessment above suggests that a Poisson model might not be
 the most appropriate model, likely due to the overdispersion we detected
@@ -1407,10 +1407,10 @@ Observation models:
     Additive/Linear: TRUE/TRUE
     Used components: effects[beta_0, smooth_g, month_reff], latent[]
 Time used:
-    Pre = 0.318, Running = 0.679, Post = 0.381, Total = 1.38 
+    Pre = 0.327, Running = 0.614, Post = 0.35, Total = 1.29 
 Fixed effects:
          mean    sd 0.025quant 0.5quant 0.975quant   mode kld
-beta_0 10.016 1.634      6.643   10.025     13.335 10.023   0
+beta_0 10.014 1.662      6.589   10.023     13.388 10.022   0
 
 Random effects:
   Name    Model
@@ -1420,14 +1420,14 @@ Random effects:
 Model hyperparameters:
                                           mean    sd 0.025quant 0.5quant
 Precision for the Gaussian observations  0.024 0.001      0.021    0.024
-Precision for smooth_g                  21.221 5.505     12.500   20.517
-Precision for month_reff                 0.140 0.098      0.027    0.115
+Precision for smooth_g                  21.154 5.400     12.414   20.525
+Precision for month_reff                 0.142 0.104      0.029    0.115
                                         0.975quant   mode
 Precision for the Gaussian observations      0.026  0.024
-Precision for smooth_g                      34.022 19.160
-Precision for month_reff                     0.393  0.072
+Precision for smooth_g                      33.525 19.349
+Precision for month_reff                     0.415  0.073
 
-Marginal log-Likelihood:  -2217.21 
+Marginal log-Likelihood:  -2217.22 
 CPO, PIT is computed 
 Posterior summaries for the linear predictor and the fitted values are computed
 (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')
@@ -1461,7 +1461,7 @@ bin data into groups according to the values of the covariate:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, title={Task}, colframe=quarto-callout-warning-color-frame, opacityback=0, leftrule=.75mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, breakable, toprule=.15mm, toptitle=1mm, colback=white, bottomtitle=1mm, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, breakable, opacitybacktitle=0.6, rightrule=.15mm, left=2mm, arc=.35mm, toptitle=1mm, coltitle=black, colframe=quarto-callout-warning-color-frame, opacityback=0, colback=white, bottomrule=.15mm, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, title={Task}, toprule=.15mm]
 
 Re-run the global smoother model using a RW2 prior for the depth
 smoother and compare your results with the RW1 model.
@@ -1556,7 +1556,7 @@ CrIs.
 
 \pandocbounded{\includegraphics[keepaspectratio]{day1_practical_2_files/figure-pdf/unnamed-chunk-46-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, title={Task}, colframe=quarto-callout-warning-color-frame, opacityback=0, leftrule=.75mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, breakable, toprule=.15mm, toptitle=1mm, colback=white, bottomtitle=1mm, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, titlerule=0mm, breakable, opacitybacktitle=0.6, rightrule=.15mm, left=2mm, arc=.35mm, toptitle=1mm, coltitle=black, colframe=quarto-callout-warning-color-frame, opacityback=0, colback=white, bottomrule=.15mm, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, title={Task}, toprule=.15mm]
 
 Re-fit the model GS without the global smoother. By omitting the global
 smoother, we do not longer force group-level smooths to follow a shared

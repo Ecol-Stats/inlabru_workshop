@@ -279,7 +279,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, colback={codebgcolor}, frame hidden, enhanced, boxrule=0pt, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, colback={codebgcolor}, breakable, enhanced, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -287,7 +287,6 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Practical 4},
   colorlinks=true,
   linkcolor={highlight},
   filecolor={Maroon},
@@ -296,12 +295,10 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{Practical 4}
 \author{}
 \date{}
 
 \begin{document}
-\maketitle
 
 \pagestyle{mystyle}
 
@@ -480,10 +477,10 @@ a layer per year and chose an appropriate color palette using the
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-11-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-26-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, toprule=.15mm, rightrule=.15mm, arc=.35mm, coltitle=black, leftrule=.75mm, colframe=quarto-callout-warning-color-frame, colback=white, left=2mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, toptitle=1mm, titlerule=0mm, title={Task}, opacitybacktitle=0.6, opacityback=0, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, breakable, colbacktitle=quarto-callout-warning-color!10!white, colback=white, leftrule=.75mm, opacitybacktitle=0.6, left=2mm, toptitle=1mm, titlerule=0mm, colframe=quarto-callout-warning-color-frame, title={Task}, arc=.35mm, coltitle=black, rightrule=.15mm, bottomrule=.15mm, opacityback=0, toprule=.15mm]
 
 Produce a map that shows the spatial distribution of each of the
 following variables for the year 2011:
@@ -540,7 +537,7 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-12-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-27-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
@@ -593,7 +590,7 @@ separated by the River Clyde.
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-14-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-29-1.pdf}}
 \end{center}
 
 You could use the \texttt{snap} argument within \texttt{poly2nb} to set
@@ -638,7 +635,7 @@ Average number of links: 6.487085
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-17-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-32-1.pdf}}
 \end{center}
 
 Once we have identified a set of neighbours using our chosen method, we
@@ -724,7 +721,7 @@ Moran I statistic       Expectation          Variance
       0.439899780      -0.003703704       0.001508809 
 \end{verbatim}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, toprule=.15mm, rightrule=.15mm, arc=.35mm, coltitle=black, leftrule=.75mm, colframe=quarto-callout-tip-color-frame, colback=white, left=2mm, colbacktitle=quarto-callout-tip-color!10!white, bottomtitle=1mm, toptitle=1mm, titlerule=0mm, title={Question}, opacitybacktitle=0.6, opacityback=0, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, breakable, colbacktitle=quarto-callout-tip-color!10!white, colback=white, leftrule=.75mm, opacitybacktitle=0.6, left=2mm, toptitle=1mm, titlerule=0mm, colframe=quarto-callout-tip-color-frame, title={Question}, arc=.35mm, coltitle=black, rightrule=.15mm, bottomrule=.15mm, opacityback=0, toprule=.15mm]
 
 What do we conclude from the Moran's I test?
 
@@ -789,7 +786,7 @@ features:
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-21-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-36-1.pdf}}
 \end{center}
 
 In this practical we will:
@@ -952,10 +949,10 @@ Pacific Cod in 2017 using the \texttt{mapview} function:
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-47-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-62-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, toprule=.15mm, rightrule=.15mm, arc=.35mm, coltitle=black, leftrule=.75mm, colframe=quarto-callout-warning-color-frame, colback=white, left=2mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, toptitle=1mm, titlerule=0mm, title={Task}, opacitybacktitle=0.6, opacityback=0, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, breakable, colbacktitle=quarto-callout-warning-color!10!white, colback=white, leftrule=.75mm, opacitybacktitle=0.6, left=2mm, toptitle=1mm, titlerule=0mm, colframe=quarto-callout-warning-color-frame, title={Task}, arc=.35mm, coltitle=black, rightrule=.15mm, bottomrule=.15mm, opacityback=0, toprule=.15mm]
 
 Use \texttt{ggplot} and the \texttt{sf} library to map the biomass
 density of the pacific code across years.
@@ -978,7 +975,7 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-48-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-63-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
@@ -1068,10 +1065,10 @@ The following object is masked from 'package:stats':
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-51-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-66-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, toprule=.15mm, rightrule=.15mm, arc=.35mm, coltitle=black, leftrule=.75mm, colframe=quarto-callout-warning-color-frame, colback=white, left=2mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, toptitle=1mm, titlerule=0mm, title={Task}, opacitybacktitle=0.6, opacityback=0, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, breakable, colbacktitle=quarto-callout-warning-color!10!white, colback=white, leftrule=.75mm, opacitybacktitle=0.6, left=2mm, toptitle=1mm, titlerule=0mm, colframe=quarto-callout-warning-color-frame, title={Task}, arc=.35mm, coltitle=black, rightrule=.15mm, bottomrule=.15mm, opacityback=0, toprule=.15mm]
 
 Map the scaled depth and the presence/absence records of the Pacific cod
 for 2003 to 2005 only.
@@ -1100,7 +1097,7 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-52-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-67-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
@@ -1155,14 +1152,14 @@ We obtain this by computing the semi-variance for all possible pairs of
 observations:
 \(\gamma(\mathbf{s}, \mathbf{t}) = 0.5(Z(\mathbf{s}) - Z(\mathbf{t}))^2\).
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, toprule=.15mm, rightrule=.15mm, arc=.35mm, coltitle=black, leftrule=.75mm, colframe=quarto-callout-note-color-frame, colback=white, left=2mm, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, toptitle=1mm, titlerule=0mm, title={Example}, opacitybacktitle=0.6, opacityback=0, breakable]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, breakable, colbacktitle=quarto-callout-note-color!10!white, colback=white, leftrule=.75mm, opacitybacktitle=0.6, left=2mm, toptitle=1mm, titlerule=0mm, colframe=quarto-callout-note-color-frame, title={Example}, arc=.35mm, coltitle=black, rightrule=.15mm, bottomrule=.15mm, opacityback=0, toprule=.15mm]
 
 To illustrate how an empirical variogram is computed, consider the
 biomass density of the Pacific Cod in 2017 for the two highlighted
 locations below.
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-53-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-68-1.pdf}}
 \end{center}
 
 \begin{enumerate}
@@ -1212,7 +1209,7 @@ variogram for the biomass density of the Pacific Cod in 2017:
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-54-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-69-1.pdf}}
 \end{center}
 
 \textbf{Assessing spatial dependence}
@@ -1244,12 +1241,324 @@ function:
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-55-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-70-1.pdf}}
 \end{center}
 
 \begin{verbatim}
 [1] "There are 1 out of 15 variogram estimates outside the 95% envelope."
 \end{verbatim}
+
+In this practical we will:
+
+\begin{itemize}
+\tightlist
+\item
+  Explore tools for spatial point pattern data wrangling and
+  visualization.
+\end{itemize}
+
+First, lets load some useful libraries:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# For plotting}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(scico) }\CommentTok{\# for colouring palettes}
+
+\CommentTok{\# Data manipulation}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Spatial Point processes
+data}\label{spatial-point-processes-data}
+
+In point processes we measure the locations where events occur and the
+coordinates of such occurrences are our data.
+
+Point process models are probabilistic models that describe the
+likelihood of \emph{patterns} of points that represent the random
+location of some event. A spatial point process is a set of locations
+that have been generated by some form of stochastic (random) mechanism.
+In other words, the point process is a random variable operating in
+continuous space, and we observe realisations of this variable as point
+patterns across space (and/or time).
+
+Consider a fixed geographical region \(A\). The set of locations at
+which events occur are denoted \(\mathbf{s} = s_1,\ldots,s_n\). We let
+\(N(A)\) be the random variable which represents the number of events in
+region \(A\).
+
+Our primary interest is in measuring where events occur, so the
+locations are our data. We typically assume that a spatial point pattern
+is generated by an unique point process over the whole study area. This
+means that the delimitation of the study area will affect the observed
+point patters.
+
+The observed distribution of points can be described based on the
+intensity of points within a delimited region. We can define the (first
+order) intensity of a point process as the expected number of events per
+unit area. This can also be thought of as a measure of the density of
+our points. In some cases, the intensity will be constant over space
+(homogeneous), while in other cases it can vary by location
+(inhomogeneous or heterogenous).
+
+In the next example, we will explore tools for visualizing spatial point
+patterns. Specifically, we will map the spatial distribution of the
+Ringlet butterfly in Scotland's Cairngorms National Park (CNP).
+
+\subsubsection{BNM citizen science
+program}\label{bnm-citizen-science-program}
+
+Citizen science initiatives have become an important source of
+information in ecological research, offering large volumes of species
+distribution data collected by volunters for multiple taxonomic groups
+across wide spatial and temporal scales
+
+Butterflies for the New Millennium (BNM) is a large-scale monitoring
+scheme launched in the earlies 70's to keep track of butterflies'
+populations in the UK. With over 12 million butterflies sighting and
+more than 10,000 volunteers, this recording scheme has proven to be a
+successful program that has been used to assess long-term changes in the
+distributions of UK butterfly species.
+
+Here we will focus on the distribution of the Ringlet butterfly species,
+which holds particular significance in environmental studies as one of
+the \emph{Habitat specialists} species (UK Government, 2024). The data
+set consists of Ringlet butterfly presence-only records collected by
+volunteers in Scotland's Cairngorms National Park (CNP).
+
+\textbf{Reading shapefiles into R}
+
+First, we load the geographical region of interest which can be
+downloaded
+\href{https://maps.gov.scot/ATOM/shapefiles/SG_CairngormsNationalPark_2010.zip}{here}
+(i.e., CNP boundaries). We can use thre \texttt{st\_read} function from
+the \texttt{sf} library to load the \texttt{.shp} file by specifying the
+directory where you downloaded the files:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(sf)}
+\NormalTok{shp\_SGC }\OtherTok{\textless{}{-}}  \FunctionTok{st\_read}\NormalTok{(}\StringTok{"datasets/SG\_CairngormsNationalPark/SG\_CairngormsNationalPark\_2010.shp"}\NormalTok{,}\AttributeTok{quiet =}\NormalTok{T)}
+\end{Highlighting}
+\end{Shaded}
+
+Then, we can use appropriate CRS for the UK (i.e., EPSG code: 27700) :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{shp\_SGC }\OtherTok{\textless{}{-}}\NormalTok{ shp\_SGC }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{st\_transform}\NormalTok{(}\AttributeTok{crs =} \DecValTok{27700}\NormalTok{)}
+\FunctionTok{st\_crs}\NormalTok{(shp\_SGC)}\SpecialCharTok{$}\NormalTok{units}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "m"
+\end{verbatim}
+
+Notice that the spatial resolution is in meters. Let's change the
+spatial units to \emph{km} to make resulting distance/area values more
+intuitive to interpret:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{shp\_SGC }\OtherTok{\textless{}{-}} \FunctionTok{st\_transform}\NormalTok{(shp\_SGC,}\FunctionTok{gsub}\NormalTok{(}\StringTok{"units=m"}\NormalTok{,}\StringTok{"units=km"}\NormalTok{,}\FunctionTok{st\_crs}\NormalTok{(shp\_SGC)}\SpecialCharTok{$}\NormalTok{proj4string)) }
+\FunctionTok{st\_crs}\NormalTok{(shp\_SGC)}\SpecialCharTok{$}\NormalTok{units}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "km"
+\end{verbatim}
+
+We can then plot the CNP boundary as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data=}\NormalTok{shp\_SGC)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-9-1.pdf}}
+\end{center}
+
+\textbf{Creating sf spatial objects in R}
+
+Now we will read the Ringlet butterfly records which can be downloaded
+below:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ringlett }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"datasets/bnm\_ringlett.csv"}\NormalTok{)}
+\FunctionTok{head}\NormalTok{(ringlett)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+         y         x
+1 57.58752 -2.712498
+2 54.97742 -3.274879
+3 54.89929 -3.771451
+4 55.40323 -5.737059
+5 54.91438 -3.959336
+6 55.87255 -4.167174
+\end{verbatim}
+
+The data set contains the longitude latitude where an observation was
+made. We can convert this into a spatial \texttt{sf} object using the
+\texttt{st\_as\_sf} function by declaring the columns in our data that
+contain the spatial coordinates:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ringlett\_sf }\OtherTok{\textless{}{-}}\NormalTok{ ringlett }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{st\_as\_sf}\NormalTok{(}\AttributeTok{coords =} \FunctionTok{c}\NormalTok{(}\StringTok{"x"}\NormalTok{,}\StringTok{"y"}\NormalTok{),}\AttributeTok{crs =} \StringTok{"+proj=longlat +datum=WGS84"}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, breakable, colbacktitle=quarto-callout-warning-color!10!white, colback=white, leftrule=.75mm, opacitybacktitle=0.6, left=2mm, toptitle=1mm, titlerule=0mm, colframe=quarto-callout-warning-color-frame, title={Task}, arc=.35mm, coltitle=black, rightrule=.15mm, bottomrule=.15mm, opacityback=0, toprule=.15mm]
+
+We have set standard WGS84 coordinates for the Ringlet butterfly
+occurrence records. Set the CRS to match the CRS used in shapefile.
+Then, produce a map of the CNP region with the projected observations
+overlayed.
+
+Take hint
+
+You can use the \texttt{st\_transform()} function to change the
+coordinates of an \texttt{sf} object (type \texttt{?st\_transform} for
+more details)/
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ringlett\_sf }\OtherTok{\textless{}{-}}\NormalTok{ ringlett\_sf }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_transform}\NormalTok{(}\FunctionTok{st\_crs}\NormalTok{(shp\_SGC))}
+
+\FunctionTok{ggplot}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data=}\NormalTok{shp\_SGC)}\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data=}\NormalTok{ringlett\_sf)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-12-1.pdf}}
+\end{center}
+
+\end{tcolorbox}
+
+We can subset two \texttt{sf} objects with the \textbf{same} CRS in the
+same way as we subset a data frame in R. For example, if we want to
+subset the Ringlet butterfly occurrence records to those contained only
+within the CNP, we can type the following:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ringlett\_CNP }\OtherTok{\textless{}{-}}\NormalTok{ ringlett\_sf[shp\_SGC,] }\CommentTok{\# crop to mainland}
+\end{Highlighting}
+\end{Shaded}
+
+If we plot the \texttt{ringlett\_CNP} object along with the CNP
+boundary, we should then obtain a map of the occurrence records within
+the park:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{()}\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data=}\NormalTok{shp\_SGC)}\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data=}\NormalTok{ringlett\_CNP)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-14-1.pdf}}
+\end{center}
+
+\textbf{Reading Raster Data}
+
+We can use the \texttt{terra} R package to read raster files. The
+\texttt{Scotland\_elev.tiff} raster contains the output of a digital
+elevation model for Scotland:
+
+Once you download the raster you can read it using the \texttt{rast}
+function after specifying the path where the file has been stored. Then,
+we assign the same CRS as our data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(terra)}
+\NormalTok{elevation\_r }\OtherTok{\textless{}{-}} \FunctionTok{rast}\NormalTok{(}\StringTok{"datasets/Scotland\_elev.tiff"}\NormalTok{)}
+\FunctionTok{crs}\NormalTok{(elevation\_r) }\OtherTok{=} \FunctionTok{crs}\NormalTok{(shp\_SGC)}
+\FunctionTok{plot}\NormalTok{(elevation\_r)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-15-1.pdf}}
+\end{center}
+
+We can apply different R functions to our rasters. For example, we can
+scale the elevation values as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{elevation\_r }\OtherTok{\textless{}{-}}\NormalTok{ elevation\_r }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{scale}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+Lastly, we can crop the raster to the boundaries of our region of
+interest. Let's crop the elevation raster to the CNP area using the
+\texttt{crop} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{elev\_CNP }\OtherTok{\textless{}{-}}\NormalTok{ terra}\SpecialCharTok{::}\FunctionTok{crop}\NormalTok{(elevation\_r,shp\_SGC,}\AttributeTok{mask=}\NormalTok{T)}
+\FunctionTok{plot}\NormalTok{(elev\_CNP)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-17-1.pdf}}
+\end{center}
+
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, breakable, colbacktitle=quarto-callout-warning-color!10!white, colback=white, leftrule=.75mm, opacitybacktitle=0.6, left=2mm, toptitle=1mm, titlerule=0mm, colframe=quarto-callout-warning-color-frame, title={Task}, arc=.35mm, coltitle=black, rightrule=.15mm, bottomrule=.15mm, opacityback=0, toprule=.15mm]
+
+Using \texttt{tidyterra} and \texttt{ggplot}, produce a map of the
+elevation profile in the CNP and overlay the spatial point pattern of
+the Ringlet butterfly occurrence records. Use an appropriate colouring
+scheme for the elevation values. Do you see any pattern?
+
+Take hint
+
+You can use the \texttt{geom\_spatraster()} to add a raster layer to a
+ggplot object. Furthermore the \texttt{scico} library contains a nice
+range of coloring palettes you can choose, type
+\texttt{scico\_palette\_show()} to see the color palettes that are
+available.
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(scico)}
+
+\FunctionTok{ggplot}\NormalTok{()}\SpecialCharTok{+} 
+\NormalTok{  tidyterra}\SpecialCharTok{::}\FunctionTok{geom\_spatraster}\NormalTok{(}\AttributeTok{data=}\NormalTok{elev\_CNP)}\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data=}\NormalTok{ringlett\_CNP)}\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_scico}\NormalTok{(}\AttributeTok{name =} \StringTok{"Elevation scaled"}\NormalTok{,}
+                   \AttributeTok{palette =} \StringTok{"devon"}\NormalTok{,}
+                   \AttributeTok{na.value =} \StringTok{"transparent"}\NormalTok{ )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-18-1.pdf}}
+\end{center}
+
+\end{tcolorbox}
 
 
 
