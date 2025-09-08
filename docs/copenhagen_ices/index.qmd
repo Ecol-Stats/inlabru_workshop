@@ -45,12 +45,12 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 |:-------------:|:------------------------------------------------------:|
 | 9:00 - 10:00  | **Session 3**: Temporal modelling and smoothing part 1 |
 | 10:00 - 10:30 |                        Snack 🥙                        |
-| 10:30 - 11:30 | **Session 4**: Temporal modelling and smoothing part 1 |
+| 10:30 - 11:30 | **Session 4**: Temporal modelling and smoothing part 2 |
 | 11:30 - 13:00 |      [Practical Session 3](day2_practical_3.qmd)       |
 | 13:00 - 14:30 |                     Lunch break 🍽️                     |
 | 14:30 - 15:30 |   **Session 5**: Introduction to Spatial Statistics    |
 | 15:35 - 15:45 |                    Coffee Break ☕                     |
-| 15:45 - 16:45 |                  Practical Session 4                   |
+| 15:45 - 16:45 |      [Practical Session 4](day2_practical_4.qmd)       |
 | 16:45 - 17:00 |                  wrap-up and outlook                   |
 
 : {.striped .hover}
@@ -90,7 +90,7 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 ### Day 5
 
 | Time | Topic |
-|:----------------:|:----------------------------------------------------:|
+|:--:|:--:|
 | 9:00 - 10:00 | **Session 12**: Complex observational processes: Zero inflated models |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | **Session 13**: Complex observational processes: Thinned point processes |
