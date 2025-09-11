@@ -17,7 +17,7 @@ At the end of the workshop, participants will be able to:
 
 -   ILO1
 -   ILO2
--   ILO3, etc
+-   ILO3
 
 Intended audience and level: The tutorial is intended for ... No knowledge of `R-INLA` is required.
 
@@ -90,7 +90,7 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 ### Day 5
 
 | Time | Topic |
-|:--:|:--:|
+|:----------------------------------:|:----------------------------------:|
 | 9:00 - 10:00 | **Session 12**: Complex observational processes: Zero inflated models |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | **Session 13**: Complex observational processes: Thinned point processes |

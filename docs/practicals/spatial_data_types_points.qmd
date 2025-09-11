@@ -221,7 +221,7 @@ You can use the `geom_spatraster()` to add a raster layer to a ggplot object. Fu
 `r unhide()`
 
 ```{r}
-#| fig-width: 
+#| fig-width: 4
 #| fig-height: 4
 #| fig-align: center
 #| webex.hide: "Click here to see the solution"
