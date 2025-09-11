@@ -326,39 +326,8 @@ $$
 -   It is useful to represent the conditional independence structure
     through a graph
 
-<!-- ```{dot, eval = FALSE} -->
-<!-- graph ER { -->
+![](figures/ar1.png)
 
-<!-- 	layout=circo -->
-
-<!--     A [label = <u<sub>1</sub>> ] -->
-<!--     B [label = <u<sub>2</sub>> ] -->
-<!--     C [label = "..."] -->
-<!--     D [label = <u<sub>T-1</sub>> ] -->
-<!--     E [label = <u<sub>T</sub>> ] -->
-
-
-<!-- 	A -- B; -->
-<!-- 	B -- C; -->
-<!-- 	C -- D; -->
-<!-- 	D -- E; -->
-
-<!-- 	fontsize=20; -->
-<!-- } -->
-
-
-
-<!-- ``` -->
-
-
-
-```{mermaid}
-flowchart LR
-  A[Hard edge] --> B(Round edge)
-  B --> C{Decision}
-  C --> D[Result one]
-  C --> E[Result two]
-```
 
 
 ## Conditional independence and the precision matrix
@@ -393,24 +362,8 @@ $$
 \end{bmatrix}
 $$
 
-```{dot}
-graph ER {
-	
-	layout=circo
+![](figures/ar1.png)
 
-    A [label = <u<sub>1</sub>> ]
-    B [label = <u<sub>2</sub>> ]
-    C [label = "..."]
-    D [label = <u<sub>T-1</sub>> ]
-    E [label = <u<sub>T</sub>> ]
-        
-
-	A -- B;
-	B -- C;
-	C -- D;
-	D -- E;
-}
-```
 
 ## GMRF and INLA
 
