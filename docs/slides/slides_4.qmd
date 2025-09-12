@@ -1,0 +1,182 @@
+---
+title: "Lecture 3"
+from: markdown+emoji
+subtitle: "Temporal models and smoothing" 
+format:
+   metropolis-beamer-revealjs
+#     logo:  images/logo_white.png
+#     theme: style.scss
+# header-logo: images/logo_white.png
+slide-number: "c/t"
+title-slide-attributes:
+#    data-background-image: images/trondheim3.png
+    data-background-size: cover
+    data-background-opacity: "0.55"
+author:
+  - name: Sara Martino
+    #orcid: 0000-0002-6879-4412
+    email: sara.martino@ntnu.no
+    affiliations: Dept. of Mathematical Science, NTNU
+# date: May 22, 2025
+# bibliography: references.bib
+embed-resources: true
+editor: 
+  markdown: 
+    wrap: 72
+execute:
+  allow-html: true
+---
+
+```{r setup}
+# #| include: false
+
+knitr::opts_chunk$set(echo = FALSE,
+                      message=FALSE,
+                      warning=FALSE,
+                      strip.white=TRUE,
+                      prompt=FALSE,
+                      fig.align="center",
+                       out.width = "60%")
+
+library(knitr)    # For knitting document and include_graphics function
+library(ggplot2)  # For plotting
+library(png)
+library(tidyverse)
+library(INLA)
+library(BAS)
+library(patchwork)
+library(DAAG)
+library(inlabru)
+library(cowplot) # needs install.packages("magick") to draw images
+
+```
+
+## Motivation {.smaller}
+
+ Data are often observed in time, and time dependence is often expected.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+lakes = as.data.frame(greatLakes ) %>% mutate(year = 1918:2009)
+lakes %>% 
+  pivot_longer(-year) %>%
+  ggplot() + geom_point(aes(year, value ))+
+  facet_wrap(.~name,scales = "free" ) + xlab("") + ylab("")
+```
+
+. . . 
+
+
+
+ - Observations are correlated in time
+ - We also have correlations between the time series (will look at the later...)
+
+
+## Motivation {auto-animate="true"}
+
+
+
+1. Smoothing of the time effect 
+
+
+
+```{r}
+lakes = as.data.frame(greatLakes ) %>% mutate(year = 1918:2009)
+
+cmp = ~ -1 + Intercept(1) + time(year, model = "rw2", 
+                                 scale.model = T,
+                                 hyper = list(prec = list(prior = "pc.prec", param = c(1, 0.01))))
+
+lik = bru_obs(formula = Erie~.,
+              data = lakes)
+out = bru(cmp, lik)
+pred = predict(out, lakes, ~ Intercept + time)
+
+pred %>% ggplot() + geom_line(aes(year, mean)) +
+  geom_ribbon(aes(year, ymin = q0.025, ymax = q0.975), alpha = 0.4 ) + 
+  geom_point(data = lakes, aes(year, Erie)) + ylab("") + xlab("")
+```
+
+
+## What is our goal? {auto-animate="true"}
+
+1. Smoothing of the time effect 
+
+```{r}
+
+pred %>% ggplot() + geom_line(aes(year, mean)) +
+  geom_ribbon(aes(year, ymin = q0.025, ymax = q0.975), alpha = 0.4 ) + 
+  geom_point(data = lakes, aes(year, Erie)) + ylab("") + xlab("")
+```
+
+**Note:** We can use the same model to smooth covariate effects!
+
+## What is our goal? {auto-animate="true"}
+
+
+1. Smoothing of the time effect 
+
+2. Prediction 
+
+```{r}
+
+
+question <- readPNG("figures/question.png", native = TRUE)
+
+
+p1 = pred %>% ggplot() + geom_line(aes(year, mean)) +
+  geom_ribbon(aes(year, ymin = q0.025, ymax = q0.975), alpha = 0.4 ) + 
+  geom_point(data = lakes, aes(year, Erie)) + ylab("") + xlab("") + xlim(1919,2030)
+ggdraw() +  draw_plot(p1) + draw_image(question, scale = .4, y = 0.15, x=0.35)
+
+```
+. . . 
+
+We can  "predict" any unobserved data, does not have to be in the future  
+
+## Modeling time with INLA{auto-animate="true"}
+
+Time can be indexed over a 
+
+  1. discrete domain (e.g., years) 
+  2. continuous domain
+
+
+## Modeling time with INLA{auto-animate="true"}
+
+Time can be indexed over a 
+
+  1. Discrete domain (e.g., years) 
+    
+    - Main models:  RW1,  RW2 and AR1
+    
+    - **NB** RW1 and RW2  are also used for smoothing
+    
+  2. Continuous domain
+  
+    - Here 
+    
+## Random Walk models 
+
+
+Random walk models  encourage the mean of the linear predictor 
+to vary gradually over time.
+
+. . . 
+
+They do this by assuming that, on average, the   time effect at each point is the mean of the effect at the neighboring points.
+
+. . . 
+
+ - Random Walk of order 1 (RW1) we take the two nearest neighbors 
+ 
+ - Random Walk of order 2 (RW1) we take the four nearest neighbors 
+ 
+## Random walks of order 1
+
+**Definition**
+$$
+u_t|\mathbf{u}_{-t},\tau \sim
+$$
