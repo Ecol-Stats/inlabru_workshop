@@ -533,7 +533,7 @@ and $\pi(\theta_j|\mathbf{y})$
 **Strategy**
 
 -   We use numerical integration in a smart way
--   We approximate what we do not know analitically expliting the
+-   We approximate what we do not know analitically exploiting the
     Gaussian structure of $\mathbf{u}|\theta$
 
 ## Numerical Integration{auto-animate="true"}
@@ -591,7 +591,9 @@ $$
 :::::
 
 
-## Approximating $\pi(\theta|\mathbf{y})${auto-animate="true"}
+## Approximating the posterior for the hyperparameters{auto-animate="true"}
+
+We want to build an approximation to $\pi(\theta|\mathbf{y})$
 
 $$
 \pi(\mathbf{\theta} \mid \mathbf{y}) =  \frac{
@@ -603,7 +605,9 @@ $$
 $$
 
 
-## Approximating $\pi(\theta|\mathbf{y})$ {auto-animate="true"}
+## Approximating the posterior for the hyperparameters{auto-animate="true"}
+
+We want to build an approximation to $\pi(\theta|\mathbf{y})$
 
 \begin{aligned}
 \pi(\mathbf{\theta} \mid \mathbf{y}) & =  \frac{
@@ -612,7 +616,7 @@ $$
 }\mid \mathbf{y})}
       {\pi(\mathbf{u} \mid \mathbf{y},
             \mathbf{\theta})} \\
-            & \propto \pi(\mathbf{\theta} \mid \mathbf{y}) \propto \frac{
+            & \propto \frac{
             \overbrace{\pi( \mathbf{y}\mid \mathbf{u},\mathbf{\theta})\  \pi(\mathbf{\theta})}^{\text{Non-Gaussian, KNOWN}}  \overbrace{\pi( \mathbf{u}\mid \mathbf{\theta})}^{\text{ Gaussian, KNOWN}}  }
             {\underbrace{\pi(\mathbf{u} \mid \mathbf{y},
             \mathbf{\theta})}_{\text{Non-Gaussian,UNKNOWN}}}
@@ -622,9 +626,276 @@ $$
 
 - We approximate $\pi(\mathbf{u} \mid \mathbf{y},\mathbf{\theta})$ with a **Gaussian** distribution $\pi_G(\mathbf{u} \mid \mathbf{y},\mathbf{\theta})$ 
 
-- The approximation $\pi_G(\mathbf{u} \mid \mathbf{y},\mathbf{\theta})$  is build to match the mode and the curvature at the mode
 
-- Why does it work?
 
-  - $\pi(\mathbf{u} \mid \mathbf{y},\mathbf{\theta})$ is _almost_ Gaussian 
-  - $\pi_G(\mathbf{u} \mid \mathbf{y},\mathbf{\theta})$ inherits from $\pi(\mathbf{u} \mid \mathbf{\theta})$ the sparse precision matrix
+## The GMRF Approximation {.smaller auto-animate="true"}
+
+
+
+$$
+\begin{aligned}
+\pi(\mathbf{u}\mid {\theta},\mathbf{y}) & \propto \pi(\mathbf{u}\mid {\theta}) \pi(\mathbf{y}|\mathbf{u},\theta) \\
+& \propto \exp\left\{-\frac{1}{2}\mathbf{u}^T\mathbf{Q}\mathbf{u} + \sum \log \pi(y_i|\eta_i,\theta)\right\}\\
+\end{aligned}
+$$
+
+## The GMRF Approximation {.smaller auto-animate="true"}
+
+$$
+\begin{aligned}
+\pi(\mathbf{u}\mid {\theta},\mathbf{y}) & \propto \pi(\mathbf{u}\mid {\theta}) \pi(\mathbf{y}|\mathbf{u},\theta) \\
+& \propto \exp\left\{-\frac{1}{2}\mathbf{u}^T\mathbf{Q}\mathbf{u} + \sum \log \pi(y_i|\eta_i,\theta)\right\}\\
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+& \approx \exp\left\{-\frac{1}{2}\mathbf{u}^T\mathbf{Q}\mathbf{u} + \sum (b_i\eta_i - \frac{1}{2}c_i\eta_i^2)\right\}
+\end{aligned}
+$$
+
+Recall $$
+\begin{aligned}
+        f(x) \approx f(x_0) + f'(x_0)(x-x_0)+ \frac{1}{2} f''(x_0)(x-x_0)^2
+        = a+ bx - \frac{1}{2}cx^2
+\end{aligned}
+$$ with
+
+$$
+\begin{aligned}
+b &=f'(x_0) - f''(x_0)x_0\\
+c &= -f''(x_0)
+\end{aligned}
+$$.
+
+## The GMRF Approximation {.smaller auto-animate="true"}
+
+$$
+\begin{aligned}
+\pi(\mathbf{u}\mid {\theta},\mathbf{y}) & \propto \pi(\mathbf{u}\mid {\theta}) \pi(\mathbf{y}|\mathbf{u},\theta) \\
+& \propto \exp\left\{-\frac{1}{2}\mathbf{u}^T\mathbf{Q}\mathbf{u} + \sum \log \pi(y_i|\eta_i,\theta)\right\}\\
+& = \exp \left\{ -\frac{1}{2} \mathbf{u}^T\tilde{\mathbf{Q}}  \mathbf{u} + \tilde{\mathbf{b}}\mathbf{u}\right\}
+\end{aligned}
+$$ Which means that we approximate
+$\pi(\mathbf{u}\mid {\theta},\mathbf{y})$ with
+
+$$
+\mathcal{N}(\tilde{\mathbf{Q}}^{-1}\tilde{\mathbf{b}},\tilde{\mathbf{Q}}^{-1})\  \text{ with   }\ \tilde{\mathbf{Q}} = \mathbf{Q} +\begin{bmatrix}
+\text{diag}(\mathbf{c}) & 0\\
+0& 0
+\end{bmatrix}\qquad \tilde{\mathbf{b}} = [\mathbf{b}\ 0]^T
+$$
+
+<!-- . . . -->
+
+<!-- ::: {.r-stack .larger style="font-size: 1.5em;"} -->
+<!-- **Q**: Why do we want $\mathbf{\eta}$ to be part of the $\mathbf{u}$ -->
+<!-- vector? -->
+<!-- ::: -->
+
+<!--  - It creates a general structure equal for all models -->
+<!--  - It allows to easily do inference for $\eta$ -->
+
+## The GMFR approximation - One dimensional example {.smaller}
+
+::::: columns
+::: {.column width="40%"}
+Assume $$
+\begin{aligned}
+  y|\lambda \sim\text{Poisson}(\lambda)  & \text{ Likelihood}\\
+  \eta = \log(\lambda)  & \text{ Predictor}\\
+  \mathbf{u}  = \eta & \text{ Latent field }\\
+  x\sim\mathcal{N}(0,1) & \text{ Latent Model}
+\end{aligned}
+$$ we have that
+
+$$
+\begin{aligned}
+  \pi(x|y) & \propto\pi(y|x)\pi(x)\\
+  & \propto\exp\{ -\frac{1}{2}x^2+
+  \underbrace{xy-\exp(x)}_{\text{non-gaussian part}}
+  \}
+\end{aligned}
+$$
+:::
+
+::: {.column width="60%"}
+```{r}
+source("Code/GMRF_approx.R")
+library(patchwork)
+
+df = data.frame(x = xi,
+                  true = fc(xi, y, eta,delta)/nominator,
+                  app1  = NA,
+                  app2 = NA,
+                  app3 = NA,
+                  app4 = NA
+                  )
+mode =  xi[which.max(fc(xi, y, eta,delta)/nominator)]
+xi_0 = c(0,0.5,1.5, mode)
+
+exp.points = data.frame(mode =  rep(mode,4),
+                          exp.point = xi_0)
+
+for(i in 1:4)
+  {
+    gmrf <- GMRF_approx(xi, xi_0[i], y, eta, delta)
+    df[,i+2] = dnorm(xi, gmrf$b/gmrf$c, sqrt(1/gmrf$c))
+  }
+
+p1 = ggplot() + geom_line(data  = df, aes(x,true))  +
+   geom_line(data = df, aes(x, app1), color = "red") +
+   xlab("") + ylab("") + ggtitle(paste("Expansion around", xi_0[1])) +
+  geom_point(aes(x=exp.points[1,1], y=0), size = 2) +
+   geom_point(aes(x=exp.points[1,2], y=0), color = "red", size = 2)
+p2 = ggplot() + geom_line(data  = df, aes(x,true))  +
+   geom_line(data = df, aes(x, app2), color = "red") +
+   xlab("") + ylab("") + ggtitle(paste("Expansion around", xi_0[2])) +
+  geom_point(aes(x=exp.points[2,1], y=0), size = 2) +
+   geom_point(aes(x=exp.points[2,2], y=0), color = "red", size = 2)
+p3 = ggplot() + geom_line(data  = df, aes(x,true))  +
+   geom_line(data = df, aes(x, app3), color = "red") +
+   xlab("") + ylab("") + ggtitle(paste("Expansion around", xi_0[3])) +
+  geom_point(aes(x=exp.points[3,1], y=0), size = 2) +
+   geom_point(aes(x=exp.points[3,2], y=0), color = "red", size = 2)
+p4 = ggplot() + geom_line(data  = df, aes(x,true))  +
+   geom_line(data = df, aes(x, app4), color = "red") +
+   xlab("") + ylab("") + ggtitle(paste("Expansion around the mode")) +
+  geom_point(aes(x=exp.points[4,1], y=0), size = 2) +
+   geom_point(aes(x=exp.points[4,2], y=0), color = "red", size = 2)
+
+p1+p2+p3+p4
+```
+:::
+:::::
+
+## The GMFR approximation
+
+
+
+-   :smile: Easy to compute
+-   :smile: Exact for Gaussian likelihood
+-   :smile: Good when you have little or a lot of data
+-    :smile: inherits the same sparseness of $\mathbf{u}$
+-   :worried: No skewness
+
+## The Laplace Approximation {auto-animate="true"}
+
+::::: columns
+::: {.column .smaller width="60%"}
+$$
+\begin{aligned}
+\pi(\mathbf{\theta} \mid  \mathbf{y})  & \propto \frac{
+            \pi( \mathbf{y}\mid \mathbf{u},\mathbf{\theta})\  \pi(\mathbf{\theta})  \pi( \mathbf{u}\mid \mathbf{\theta})  }
+            {\pi(\mathbf{u} \mid \mathbf{y},
+            \mathbf{\theta})}\\
+            & \approx \frac{
+            \pi( \mathbf{y}\mid \mathbf{u},\mathbf{\theta})\  \pi(\mathbf{\theta})  \pi( \mathbf{u}\mid \mathbf{\theta})  }
+            {\pi_G(\mathbf{u} \mid \mathbf{y},
+            \mathbf{\theta})}  \: \Bigg|_{\mathbf{u} = \mathbf{u}^\star(\mathbf{\theta})}
+\end{aligned}
+$$
+
+If $\theta$ is **low dimension** we can actually compute this!
+:::
+
+::: {.column width="40%"}
+```{r, echo = F, }
+
+knitr::include_graphics('figures/hyperpar_approx.gif')
+```
+:::
+:::::
+
+This is the Laplace approximation to $\pi(\theta|\mathbf{y})$ !
+
+
+
+
+
+
+
+
+## The INLA scheme
+
+
+1. Approximate $\pi(\theta|\mathbf{y})$ ✅
+2. Approximate $\pi(u_i|\theta,\mathbf{y})$
+3. Use numerical integration to compute $\pi(u_i|\mathbf{y})$ ✅
+
+
+## Approximating the posterior for the latent field.
+
+- Now we have an aproximation for $\pi(\theta|\mathbf{y})$
+
+- We need an approximation for $\pi(u_i|\theta,\mathbf{y})$
+
+- This is more difficult...  $\mathbf{u}$ is large!! Anything we do we have to do it many times!
+  
+  
+. . .
+
+Can we use the marginal from $\pi_G(\mathbf{u}|\theta, \mathbf{y})$ ?
+
+## ...unfortunately it is **not** accurate enough!
+
+:::::: columns
+:::: {.column width="60%"}
+![](figures/GMRF_approx.png){fig-align="center" width="100%"
+height="70%"}
+
+::: {style="font-size: 0.6em"}
+From Rue and Martino 2007
+:::
+::::
+
+::: {.column width="40%"}
+Notes:
+
+-   Results are quite accurate in general
+-   There can be errors in the location and/or errors due to the lack of
+    skewness...
+:::
+::::::
+
+## INLA and Variational Bayes{.smaller}
+
+- Variational Bayes techniques are used to improve the mean of  the GMRF approximation $\pi_G(\mathbf{u}|\theta, \mathbf{y})$
+- From this improved GMRF approximation we can compute the marginals 
+$\pi_G^*(u_i|\theta,\mathbf{y})$ that can then be used to numerically compute:
+$$
+\tilde{\pi}(u_i|\mathbf{y}) = \sum_k\pi_G^*(u_i|\theta, \mathbf{y})\tilde{\pi}(\theta|\mathbf{y)}\ w_k
+$$
+
+. . .
+
+**NOTE:**
+
+- We know the _precision matrix_ $\mathbf{Q}$ of the GRMF approximation $\pi_G^*(\mathbf{u}|\theta, \mathbf{y})$
+- Efficient algoriths to compute the marginal variance are used.
+
+
+## INLA posterior sampling
+
+Although INLA mainly computes _posterior marginals_
+
+- $\pi(\theta|\mathbf{y})$
+- $\pi(u_i|\mathbf{y})$
+
+INLA allowes to sample from the approximate  posterior $\pi(\mathbf{u}|\mathbf{y})$
+
+This is important is one is interested in the posterior of  _functions_ of one or more   parameters.
+
+## Take home messages!
+
+
+
+- The INLA methodology heavily relies on _sparse matrices_ !
+- GMRF are the key tool in INLA-friendly models
+- INLA uses numerical approximation and numerical integration to provide efficient and precise approximations to posterior marginals
+
+But ultimateli....
+
+. . .
+
+You do not need to deeply understand all of this if you want to use \texttt{inlabru} to solve your (statistical) problems :smile:
