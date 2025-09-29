@@ -1,5 +1,5 @@
 ---
-title: "Practical"
+title: "Practical 6"
 execute: 
   warning: false
   message: false
@@ -28,11 +28,9 @@ library(webexercises)
 
 ## Geostatistics {#sec-linmodel}
 
-In this practical we are going to fit a geostatisticsl  model Encounter probability of Pacific Cod (_Gadus macrocephalus_) from a trawl survey.
+In this practical we are going to fit a geostatistical  model. We will:
 
-In this practical we will:
-
-- Learn how to fit a spatial model in `inlabru`
+- Learn how to fit a geostatistical model in `inlabru`
 
 - Learn how to add spatial covariates to the model
 
@@ -427,4 +425,151 @@ ggplot() + geom_sf(data = pred_pxl1$total,aes(color = sd)) + scale_color_scico()
 
 ```
 :::
+
+
+Instead of computing the posterior mean and standard deviations of the estimated surface, one can also _simulate_ possible realizations of such surface. This will give the user a better idea of the type of realized surfaces one can expect. We can do this using the function `generate()`.
+
+```{r}
+# we simulate 4 samples from the 
+gens = generate(fit1, pxl1, ~ (Intercept + space),
+                n.samples = 4)
+
+pp = cbind(pxl1, gens)
+
+pp %>% select(-depth) %>%
+  pivot_longer(-geometry) %>%
+    ggplot() + 
+      geom_sf(aes(color = value)) +
+      facet_wrap(.~name) +
+        scale_color_scico(direction = -1) +
+        ggtitle("Sample from the fitted model")
+```
+
+
+# An alternative model
+
+We now want to check if the `depth` covatiate has an influende on the probability of presence. We do this in two different models
+  
+  1. **Model 1** The depth enters the model in a linear way. The linear predictor is then defined as:
+  
+$$
+  \eta(s) = \text{logit}(p(s)) = \beta_0 + \omega(s) + \beta_1\ \text{depth}(s)
+$$
+
+  
+  2. **Model 1** The depth enters the model in a non linear way. The linear predictor is then defined as:
+  
+$$
+  \eta(s) = \text{logit}(p(s)) = \beta_0 + \omega(s) +  f(\text{depth}(s))
+$$
+  where $f(.)$ is a smooth function. We will use a RW2 model for this.
+  
+  
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Fit model 1. Define components, observation model and use the `bru()` function to estimate the parameters. 
+
+**Note** Use the scaled version of the covariate stored in `depth_r$depth_scaled`.
+
+What is the liner effect of depth on the logit probability?
+
+`r hide("Take hint")`
+
+Add hint details here...
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+
+cmp = ~ Intercept(1) + space(geometry, model = spde_model3) +
+        covariate(depth_r$depth_scaled, model = "linear")
+
+formula = present ~ Intercept  + space + covariate
+
+lik = bru_obs(formula = formula, 
+              data = pcod_sf, 
+              family = "binomial")
+
+
+fit2 = bru(cmp, lik)
+
+```
+:::
+
+
+We now want to fit **Model 2** where we allow the effect of depth to be non-linear. To use the RW2 model we need to _group_ the values of depth into distinct classe. To do this we use the function `inla.group()` which, by default, creates 20 groups. The we can fit the model as usual
+
+
+
+```{r}
+
+# create the grouped variable
+depth_r$depth_group = inla.group(values(depth_r$depth_scaled))
+
+# run the model
+cmp = ~ Intercept(1) + space(geometry, model = spde_model3) +
+        covariate(depth_r$depth_group, model = "rw2")
+
+formula = present ~ Intercept  + space + covariate
+
+lik = bru_obs(formula = formula, 
+              data = pcod_sf, 
+              family = "binomial")
+
+
+fit3 = bru(cmp, lik)
+
+# plot the estimated effect of depth
+
+fit3$summary.random$covariate %>% ggplot() + geom_line(aes(ID,mean)) + 
+                                  geom_ribbon(aes(ID, ymin = `0.025quant`, 
+                                                      ymax = `0.975quant`), alpha = 0.5)
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+
+Create a map of predicted _probability_ from Model 3. You can use a inverse logit function defined as
+```{r}
+#| eval: false
+
+inv_logit = function(x) (1+exp(-x))^(-1)
+```
+
+
+`r hide("Take hint")`
+
+The `predict()` function can take as input also functions of elements of the components you want to consider
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+inv_logit = function(x) (1+exp(-x))^(-1)
+
+pred3  = predict(fit3, pxl1, ~inv_logit(Intercept + space + covariate) )
+
+pred3 %>% ggplot() + 
+      geom_sf(aes(color = mean)) +
+        scale_color_scico(direction = -1) +
+        ggtitle("Sample from the fitted model")
+```
+:::
+
+
+
 
