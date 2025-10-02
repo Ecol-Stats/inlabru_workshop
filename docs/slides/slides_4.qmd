@@ -140,23 +140,92 @@ We can  "predict" any unobserved data, does not have to be in the future
 
 Time can be indexed over a 
 
-  1. discrete domain (e.g., years) 
-  2. continuous domain
+- Discrete domain (e.g., years) 
+
+- Continuous domain
 
 
 ## Modeling time with INLA{auto-animate="true"}
 
 Time can be indexed over a 
 
-  1. Discrete domain (e.g., years) 
+- Discrete domain (e.g., years) 
     
-    - Main models:  RW1,  RW2 and AR1
-    
-    - **NB** RW1 and RW2  are also used for smoothing
-    
-  2. Continuous domain
+  - Main models:  RW1,  RW2 and AR1
   
-    - Here 
+  - **NB** RW1 and RW2  are also used for smoothing
+    
+- Continuous domain
+  
+  - Here we use the so-called SPDE-approach
+
+
+# Discrete time modelling
+
+## Example - (log) Number of Air Passengers in time
+```{r}
+
+
+data("AirPassengers")
+df = data.frame(y = log(as.numeric(AirPassengers)),
+                year = rep(1949:1960, each =12),
+                month = rep(1:12, 12)) %>%
+  mutate(date = as.Date(paste(year, "-" , month, "-01", sep="")))
+
+
+
+df_preds = data.frame(y = NA,
+                      year = rep(1961,12),
+                      month = 1:12) %>%
+  mutate(date = as.Date(paste(year, "-" , month, "-01", sep="")))
+
+df= rbind(df, df_preds) %>%
+  mutate(time = seq_along(y))
+df %>% ggplot() + geom_point(aes(date, y)) + 
+  ylab("log(n.passenger)") + xlab("Time")
+
+
+
+
+if(0)
+{
+cmp = ~ Intercept(1)+year(year, model = "linear") + time(time, model = "rw2")
+lik = bru_obs(formula = y~.,
+              family = "gaussian",
+              data = df)
+
+fit = bru(cmp, lik)
+
+preds = predict(fit, df, ~Intercept+year + time)
+
+
+
+cmp2 = ~ Intercept(1)+year(year, model = "linear") + seas(month, model = "rw2", cyclic = T)
+lik2 = bru_obs(formula = y~.,
+              family = "gaussian",
+              data = df)
+
+fit2 = bru(cmp2, lik2)
+
+
+
+
+preds2 = predict(fit2, df, ~Intercept+year + seas)
+
+
+ppreds = rbind(cbind(preds, model = 1),
+               cbind(preds2, model = 2))
+ppreds %>% 
+  filter(!is.na(y)) %>%
+  ggplot() + geom_line(aes(time, mean, group = model, color = factor(model))) + 
+   geom_ribbon(aes(time, ymin = q0.025, ymax = q0.975, group = model, fill = factor(model) ), alpha =  0.5) 
+
+}
+
+```
+
+
+**Goal** we want understand the pattern and predict into the future
     
 ## Random Walk models 
 
@@ -168,15 +237,89 @@ to vary gradually over time.
 
 They do this by assuming that, on average, the   time effect at each point is the mean of the effect at the neighboring points.
 
+
+```{r}
+# Example random walk data
+dd <- data.frame(
+  time = 0:6,
+  y = (-3:3)/2 # example path
+)
+
+# Define a normal distribution at time = 3
+dens <- data.frame(y = seq(-3, 3, length.out = 200))
+dens$density <- dnorm(dens$y, mean = 0, sd = .2)
+
+# scale density so it looks like a vertical shape at x = 3
+scale_factor <- 0.5
+dens$x <- 3 + dens$density * scale_factor
+
+ggplot(dd, aes(time, y)) +
+  # grey background
+ 
+  
+  # points
+  geom_point(size = 2) +
+  
+  # connecting line between neighbors t=2 and t=4
+  geom_line(data = dd %>% filter(time %in% c(2,4)), aes(time, y), color = "black") +
+  
+  # normal density "red blob"
+  geom_polygon(data = dens,
+               aes(x, y), fill = "red", alpha = 0.8) +
+  
+  # predicted mean point
+  geom_point(aes(x = 3, y = 0), color = "blue", size = 3) +
+  ylim(-2,2) + 
+  # labels
+  labs(title = "First Order Random Walk",
+       x = "Time",
+       y = "Mean Response")
+
+```
+
+
+
 . . . 
 
  - Random Walk of order 1 (RW1) we take the two nearest neighbors 
  
- - Random Walk of order 2 (RW1) we take the four nearest neighbors 
+ - Random Walk of order 2 (RW2) we take the four nearest neighbors 
  
-## Random walks of order 1
+ 
+ 
+ 
+ 
+## Random walks of order 1{.smaller}
 
 **Definition**
+
 $$
-u_t|\mathbf{u}_{-t},\tau \sim
+\begin{aligned}
+  \pi(\mathbf{u} \mid \sigma^2) & \;\propto\;
+  \exp\!\left(
+     -\frac{1}{2\sigma^2} \sum_{t=1}^{T-1} (u_{t+1} - u_t)^2
+  \right)\\
+   & \;=\; \exp\!\left(
+     -\frac{1}{2\sigma^2} \sum_{t \sim t'} ({u_t - u_{t'}})^2
+  \right)
+  = \exp\!\left(-\tfrac{1}{2} \, \mathbf{u}^{\top} \mathbf{Q}\ \mathbf{u}\right)
+\end{aligned}
 $$
+where $t \sim t'$ indicates $t$ is a **neighbor** of $t'$,  and the precision is
+$\mathbf{Q} = \mathbf{R}/\sigma^2$ with
+
+$$
+    \mathbf{R} =
+    \begin{bmatrix}
+      1 & -1 &  &        &        &   \\
+      -1 & 2 & -1 &        &        &   \\
+         & -1 & 2 & -1     &        &   \\
+         &    & \ddots & \ddots & \ddots &   \\
+         &    &        & -1     & 2 & -1 \\
+         &    &        &        & -1 & 1
+    \end{bmatrix}
+$$
+
+## What is the role of the precision parameter?
+
+

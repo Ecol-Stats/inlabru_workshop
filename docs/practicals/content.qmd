@@ -48,6 +48,8 @@ myDT <- read.markdown(
 | Ar1_ex.qmd | Time series; AR(1) Model | fitting ar1 model, predicting the mean and forecasting. | Simulated Data |
 | Ar1_Rw1_ex.qmd | Time series; Smoothing; AR(1) and RW(1) | fitting an ar and rw models, change prior for Gaussian error and set PC prior for correlation parameter. add group-level correlation. | Real Data - water height levels in `greatlakes` dataset from `DAAG` library. |
 | Tokyo_rainfall.qmd | Time series ; Smoothing; RW(2) model | Fit a RW(2) model to non-Gaussian data | `Tokyo` rainfall data from `INLA` |
+| Areal_ex.qmd | Discrete space  ; Smoothing; CAR model | Fit a CAR model to non-Gaussian data | `pollutionhealthdata`  data from `CARBayesdata` |
+| Geostat_ex.qmd | Continuous space  ; SPDE; Mesh | Fit a SPDE model to Binomial data | `pcod`  data from `sdmTMB` |
 '
 )
 

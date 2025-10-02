@@ -1,0 +1,344 @@
+---
+title: "Practical 5"
+execute: 
+  warning: false
+  message: false
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+#| echo: false
+
+# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
+library(webexercises)
+
+```
+
+## Models for areal data {#sec-linmodel}
+
+
+In this practical we are going to fit an areal model. We will: 
+
+- Learn how to fit an areal model in `inlabru`
+
+- Learn how to add spatial covariates to the model
+
+- Learn how to do predictions
+
+- Learn how to simulate from the fitted model
+
+
+
+---
+
+Libraries to load:
+
+```{r}
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)   
+library(mapview)
+
+# load some libraries to generate nice map plots
+library(scico)
+```
+
+
+
+# The data
+
+
+We consider data on respiratory hospitalizations for Greater Glasgow and Clyde in 2007. The data are available from the `CARBayesdata` R Package:
+
+```{r}
+
+library(CARBayesdata)
+
+data(pollutionhealthdata)
+data(GGHB.IZ)
+```
+
+The `pollutionhealthdata` contains the spatiotemporal data on respiratory hospitalizations, air pollution concentrations and socio-economic deprivation covariates for the 271 Intermediate Zones (IZ) that make up the Greater Glasgow and Clyde health board in Scotland. Data are provided by the [Scottish Government](http://statistics.gov.scot.) and the available variables are:
+
+-   `IZ`: unique identifier for each IZ.
+-   `year`: the year when the measurements were taken
+-   `observed`: observed numbers of hospitalizations due to respiratory disease.
+-   `expected`: expected numbers of hospitalizations due to respiratory disease computed using indirect standardisation from Scotland-wide respiratory hospitalization rates.
+-   `pm10`: Average particulate matter (less than 10 microns) concentrations.
+-   `jsa`: The percentage of working age people who are in receipt of Job Seekers Allowance
+-   `price`: Average property price (divided by 100,000).
+
+The `GGHB.IZ` data is a Simple Features (`sf`) object containing the spatial polygon information for the set of 271 Intermediate Zones (IZ), that make up of the Greater Glasgow and Clyde health board in Scotland ( @fig-GGC ).
+
+```{r}
+#| echo: false
+#| fig-width: 4
+#| fig-height: 4
+#| fig-align: center
+#| label: fig-GGC
+#| fig-cap: "Greater Glasgow and Clyde health board represented by 271 Intermediate Zones"
+#| purl: false
+
+mapview(GGHB.IZ)
+
+```
+
+
+We first merge the two dataset and select only one year of data, compute the SME  and plot the observed 
+
+```{r}
+
+resp_cases <- merge(GGHB.IZ %>%
+                      mutate(space = 1:dim(GGHB.IZ)[1]),
+                             pollutionhealthdata, by = "IZ") %>%
+  filter(year == 2007) %>%
+    mutate(SMR = observed/expected)
+
+ggplot() + geom_sf(data = resp_cases, aes(fill = SMR)) + scale_fill_scico(direction = -1)
+
+
+```
+
+
+Then we compute the adjacency matrix using the functions `poly2nb()` and  `nb2mat()` in the `spdep` library. We then convert the adjacency matrix into the precision matrix $\mathbf{Q}$ of the CAR model. Remember this matrix has, on the diagonal the number of e 
+
+```{r}
+library(spdep)
+
+W.nb <- poly2nb(GGHB.IZ,queen = TRUE)
+R <- nb2mat(W.nb, style = "B", zero.policy = TRUE)
+
+diag = apply(R,1,sum)
+Q = -R
+diag(Q) = diag
+```
+
+
+
+# The model
+
+We fit a first model to the data where we consider a Poisson model for the  observed cases.
+
+
+**Stage 1** Model for the response
+$$
+y_i|\eta_i\sim\text{Poisson}(E_i\lambda_i)
+$$
+where $E_i$ are the expected cases for area $i$.
+
+**Stage 2** Latent field model
+$$
+\eta_i = \text{log}(\lambda_i) = \beta_0 + \omega_i + z_i
+$$
+where
+ 
+ - $\beta_0$ is a common intercept 
+ - $\mathbf{\omega} = (\omega_1, \dots, \omega_k)$ is a conditional Autorgressive model (CAR) with precision matrix $\tau_1\mathbf{Q}$
+ - $\mathbf{z} = (z_1, \dots, z_k)$ is an unstrictured random effect with precision $\tau_2$
+
+ 
+**Stage 3** Hyperparameters
+
+The hyperparameters of the model are $\tau_1$ and $\tau_2$
+
+
+**NOTE** In this case the linear predictor $\eta$ consists of three components!!
+
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+Fit the above model in using `inlabru` by completing the following code:
+
+```{r}
+#| echo: true
+#| eval: false
+
+cmp = ~ Intercept(1) + space(...) + iid(...)
+
+formula = ...
+
+
+lik = bru_obs(formula = formula, 
+              family = ...,
+              E = ...,
+              data = ...)
+
+fit = bru(cmp, lik)
+
+```
+
+
+`r hide("Answer")`
+
+
+```{r}
+
+cmp = ~ Intercept(1) + space(space, model = "besag", graph = Q) + iid(space, model = "iid")
+
+formula = observed ~ Intercept + space + iid
+
+lik = bru_obs(formula = formula, 
+              family = "poisson",
+              E = expected,
+              data = resp_cases)
+
+fit = bru(cmp, lik)
+
+```
+
+
+
+`r unhide()`
+:::
+
+After fitting the model we want to extract results.
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+1. What is the estimated value for $\beta_0$?
+
+2. Look at the estimated values of the hyperparameters using
+```{r}
+#| echo: true
+#| eval: false
+fit$summary.hyperpar
+```
+
+which of the two spatial components (structured or unstructured) explains more of the variability in the counts?
+
+:::
+
+
+We now look at the predictions over space.
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+Complete the code below to produce prediction of the linear predictor $\eta_i$ and of the risk $\lambda_i$ and of the expected cases $E_i\exp(\lambda_i)$ over the whole space of interest. Then plot the mean and sd of the resulting surfaces.
+
+
+
+```{r}
+#| echo: true
+#| eval: false
+
+pred = predict(fit, resp_cases, ~data.frame(log_risk = ...,
+                                             risk = exp(...),
+                                             cases = ...
+                                             ),
+               n.samples = 1000)
+
+```
+
+
+
+`r hide("Answer")`
+
+
+```{r}
+
+# produce predictions
+pred = predict(fit, resp_cases, ~data.frame(log_risk = Intercept + space,
+                                             risk = exp(Intercept + space),
+                                             cases = expected * exp(Intercept + space)
+                                             ),
+               n.samples = 1000)
+# plot the predictions
+
+p1 = ggplot() + geom_sf(data = pred$log_risk, aes(fill = mean)) + scale_fill_scico(direction = -1) + ggtitle("mean log risk")
+p2 = ggplot() + geom_sf(data = pred$log_risk, aes(fill = sd)) + scale_fill_scico(direction = -1) + ggtitle("sd log risk")
+p1 + p2
+
+p1 = ggplot() + geom_sf(data = pred$risk, aes(fill = mean)) + scale_fill_scico(direction = -1) + ggtitle("mean  risk")
+p2 = ggplot() + geom_sf(data = pred$risk, aes(fill = sd)) + scale_fill_scico(direction = -1) + ggtitle("sd  risk")
+p1 + p2
+
+p1 = ggplot() + geom_sf(data = pred$cases, aes(fill = mean)) + scale_fill_scico(direction = -1)+ ggtitle("mean  expected counts")
+p2 = ggplot() + geom_sf(data = pred$cases, aes(fill = sd)) + scale_fill_scico(direction = -1)+ ggtitle("sd  expected counts")
+p1 + p2
+
+```
+
+
+
+`r unhide()`
+
+:::
+
+
+
+## Getting prediction densities
+
+Posterior predictive distributions, that is $\pi(y_i^{\text{new}}|\mathbf{y})$ are of interest in many applied problems. The `bru()` function
+does not return predictive densities. In the previous step we have computed predictions for the `expected counts` $\pi(E_i\lambda_i|\mathbf{y})$. The predictive distribution is then:
+$$
+\pi(y_i^{\text{new}}|\mathbf{y}) = \int \pi(y_i|E_i\lambda_i)\pi(E_i\lambda_i|\mathbf{y})\ dE_i\lambda_i
+$$
+where, in our case, $\pi(y_i|E_i\lambda_i)$ is Poisson with mean $E_i\lambda_i$. We can achieve this using the following algorith:
+
+  1. Simulate $n$ replicates of $g^k = E_i\lambda_i$ for $k = 1,\dots,n$ using the function _generate()_ which takes the same input as _predict()_
+  2. For each of the $k$ replicates simulate a new value $y_i^{new}$ using the function _rpois()_
+  3. Summarise the $n$ samples of $y_i^{new}$ using, for example the mean and the 0.025 and 0.975 quantiles.
+
+Here is the code:
+
+
+```{r}
+
+# simulate 1000 realizations of E_i\lambda_i
+expected_counts = generate(fit, resp_cases, 
+                           ~ expected * exp(Intercept + space),
+                           n.samples = 1000)
+
+
+# simulate poisson data
+aa = rpois(271*1000, lambda = as.vector(expected_counts))
+sim_counts = matrix(aa, 271, 1000)
+
+# summarise the samples with posterior means and quantiles
+pred_counts = data.frame(observed = resp_cases$observed,
+                         m = apply(sim_counts,1,mean),
+                         q1 = apply(sim_counts,1,quantile, 0.025),
+                         q2 = apply(sim_counts,1,quantile, 0.975),
+                         vv = apply(sim_counts,1,var)
+                         )
+```
+
+
+Let's now plot the observed data against the predicted 
+
+
+```{r}
+
+pred_counts %>% ggplot() + geom_point(aes(observed, m)) + 
+  geom_errorbar(aes(observed, ymin = q1, ymax = q2)) +
+  geom_abline(intercept = 0, slope =1)
+
+```
+
+
+
+<!-- cmp2 = ~ Intercept(1) + space(space, model = "bym2", graph = Q)  -->
+<!-- formula2 = observed ~ Intercept + space  -->
+
+<!-- lik2 = bru_obs(formula = formula2,  -->
+<!--               family = "poisson", -->
+<!--               E = expected, -->
+<!--               data = resp_cases) -->
+
+<!-- fit2 = bru(cmp2, lik2) -->
