@@ -281,6 +281,16 @@ p1 + p2
 :::
 
 
+Finally we want to compare our observations $y_i$ with the predicted means of the Poisson distribution $E_i\exp(\lambda_i)$
+
+```{r}
+pred$cases %>% ggplot() + geom_point(aes(observed, mean)) + 
+  geom_errorbar(aes(observed, ymin = q0.025, ymax = q0.975)) +
+  geom_abline(intercept = 0, slope = 1)
+
+```
+
+**Note:** Here we are predicting the _mean_ of counts, not the counts!!! Predicting counts is the theme of the next task!
 
 ## Getting prediction densities
 
@@ -320,25 +330,34 @@ pred_counts = data.frame(observed = resp_cases$observed,
 ```
 
 
-Let's now plot the observed data against the predicted 
 
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Plot the observations against the predicted new counts and the predicted expected counts. Include the uncertainty and compare the two.
+
+`r hide("Take hint")`
+
+
+`r unhide()`
 
 ```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
 
-pred_counts %>% ggplot() + geom_point(aes(observed, m)) + 
-  geom_errorbar(aes(observed, ymin = q1, ymax = q2)) +
+ggplot() + 
+  geom_point(data = pred_counts, aes(observed, m, color = "Pred_obs")) + 
+  geom_errorbar(data = pred_counts, aes(observed, ymin = q1, ymax = q2, color = "Pred_obs")) +
+  geom_point(data = pred$cases, aes(observed, mean, color = "Pred_means")) + 
+  geom_errorbar(data = pred$cases, aes(observed, ymin = q0.025, ymax = q0.975, color = "Pred_means")) +
+  
   geom_abline(intercept = 0, slope =1)
 
 ```
+:::
 
 
-
-<!-- cmp2 = ~ Intercept(1) + space(space, model = "bym2", graph = Q)  -->
-<!-- formula2 = observed ~ Intercept + space  -->
-
-<!-- lik2 = bru_obs(formula = formula2,  -->
-<!--               family = "poisson", -->
-<!--               E = expected, -->
-<!--               data = resp_cases) -->
-
-<!-- fit2 = bru(cmp2, lik2) -->
