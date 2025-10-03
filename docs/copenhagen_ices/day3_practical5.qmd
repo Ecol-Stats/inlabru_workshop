@@ -26,9 +26,7 @@ knitr::purl("day3_practical5.qmd")
 
 <font size="5"> **Aim of this practical:** </font> In this first practical we are going to look at some simple models
 
-1.  Areal data [Areal_ex.qmd]{Areal_ex.qmd}
-2.  A Linear mixed model
-3.  A GLM model with random effects
+[Practical Session 3](Areal_ex.qmd) 1. Areal data \[Areal_ex.qmd\]{Areal_ex.qmd} 2. A Linear mixed model 3. A GLM model with random effects
 
 we are going to learn:
 
