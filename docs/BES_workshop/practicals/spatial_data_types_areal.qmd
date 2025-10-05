@@ -1,0 +1,199 @@
+---
+title: ""
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+In this practical we will:
+
+-   Explore tools for areal spatial data wrangling and visualization.
+-   Compute Morans'I to identify spatial autocorrelation in our data.
+
+## Areal (lattice) data {#sec-areal_data}
+
+In areal data our measurements are summarised across a set of discrete, non-overlapping spatial units such as postcode areas, health board or pixels on a satellite image. In consequence, the spatial domain is a countable collection of (regular or irregular) areal units at which variables are observed. Many public health studies use data aggregated over groups rather than data on individuals - often this is for privacy reasons, but it may also be for convenience.
+
+In the next example we are going to explore data on respiratory hospitalisations for Greater Glasgow and Clyde between 2007 and 2011. The data are available from the `CARBayesdata` R Package:
+
+```{r}
+#| message: false
+#| warning: false
+library(CARBayesdata)
+
+data(pollutionhealthdata)
+data(GGHB.IZ)
+```
+
+The `pollutionhealthdata` contains the spatiotemporal data on respiratory hospitalisations, air pollution concentrations and socio-economic deprivation covariates for the 271 Intermediate Zones (IZ) that make up the Greater Glasgow and Clyde health board in Scotland. Data are provided by the [Scottish Government](http://statistics.gov.scot.) and the available variables are:
+
+-   `IZ`: unique identifier for each IZ.
+-   `year`: the year were the measruments were taken
+-   `observed`: observed numbers of hospitalisations due to respiratory disease.
+-   `expected`: expected numbers of hospitalisations due to respiratory disease computed using indirect standardisation from Scotland-wide respiratory hospitalisation rates.
+-   `pm10`: Average particulate matter (less than 10 microns) concentrations.
+-   `jsa`: The percentage of working age people who are in receipt of Job Seekers Allowance
+-   `price`: Average property price (divided by 100,000).
+
+The `GGHB.IZ` data is a Simple Features (`sf`) object containing the spatial polygon information for the set of 271 Intermediate Zones (IZ), that make up of the Greater Glasgow and Clyde health board in Scotland ( @fig-GGC ).
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 4
+#| fig-height: 4
+#| fig-align: center
+#| label: fig-GGC
+#| fig-cap: "Greater Glasgow and Clyde health board represented by 271 Intermediate Zones"
+#| purl: false
+
+library(mapview)
+mapview(GGHB.IZ)
+
+```
+
+Let's start by loading useful libraries:
+
+```{r}
+#| message: false
+#| warning: false
+library(sf)
+library(ggplot2)
+library(scico)
+```
+
+The `sf` package allows us to work with vector data which is used to represent points, lines, and polygons. It can also be used to read vector data stored as a shapefiles.
+
+First, lets combine both data sets based on the Intermediate Zones (IZ) variable using the `merge` function from `base` R:
+
+```{r}
+resp_cases <- merge(GGHB.IZ, pollutionhealthdata, by = "IZ")
+```
+
+In epidemiology, disease risk is usually estimated using Standardized Mortality Ratios (SMR). The SMR for a given spatial areal unit $i$ is defined as the ratio between the observed ( $Y_i$ ) and expected ( $E_i$ ) number of cases:
+
+$$
+SMR_i = \dfrac{Y_i}{E_i}
+$$
+
+A value $SMR > 1$ indicates that there are more observed cases than expected which corresponds to a high risk area. On the other hand, if $SMR<1$ then there are fewer observed cases than expected, suggesting a low risk area.
+
+We can manipulate `sf` objects the same way we manipulate standard data frame objects via the `dplyr` package. Lets use the pipeline command `%>%` and the `mutate` function to calculate the yearly SMR values for each IZ:
+
+```{r}
+#| message: false
+#| warning: false
+library(dplyr)
+resp_cases <- resp_cases %>% 
+  mutate(SMR = observed/expected, .by = year )
+```
+
+Now we use `ggplot` to visualize our data by adding a `geom_sf` layer and coloring it according to our variable of interest (i.e., SMR). We can further use `facet_wrap` to create a layer per year and chose an appropriate color palette using the `scale_fill_scico` from the `scico` package:
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+ggplot()+
+  geom_sf(data=resp_cases,aes(fill=SMR))+
+  facet_wrap(~year)+scale_fill_scico(palette = "roma")
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Produce a map that shows the spatial distribution of each of the following variables for the year 2011:
+
+-   Average particulate matter `pm10`
+
+-   Average property price `price`
+
+-   Percentage of working age people who are in receipt of Job Seekers Allowance `jsa`
+
+`r hide("hint")`
+
+You can use the `filter` function from `dplyr` to subset the data according to the year of interest.
+
+`r unhide()`
+
+```{r}
+#| webex.hide: "Click here to see the solution" 
+#| purl: false  
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+
+# Library for plotting multiple maps together
+
+library(patchwork)
+
+# subset data set for 2011
+
+resp_cases_2011 <- resp_cases %>% filter(year ==2011)
+
+# pm10 plot
+
+pm10_plot <- ggplot()+
+  geom_sf(data=resp_cases_2011,aes(fill=pm10))+
+  scale_fill_scico(palette = "navia")
+
+# property price
+
+price_plot <- ggplot()+
+  geom_sf(data=resp_cases_2011,aes(fill=price))+
+  facet_wrap(~year)+scale_fill_scico(palette = "bilbao")
+
+#  percentage jsa
+
+jsa_plot <- ggplot()+
+  geom_sf(data=resp_cases_2011,aes(fill=jsa))+
+  facet_wrap(~year)+scale_fill_scico(palette = "lapaz") 
+
+# plot maps together
+
+pm10_plot + price_plot + jsa_plot + plot_layout(ncol=3)
+```
+:::
+
+As with the other types of spatial modelling, our goal is to observe and explain spatial variation in our data. Generally, we are aiming to produce a smoothed map which summarises the spatial patterns we observe in our data.
+
+A key aspect of any spatial analysis is that observations closer together in space are likely to have more in common than those further apart. This can lead us towards approaches similar to those used in time series, where we consider the spatial *closeness* of our regions in terms of a *neighbourhood structure*.
+
+The function [`poly2nb()`](https://r-spatial.github.io/spdep/reference/poly2nb.html) of the `spdep` package can be used to construct a list of neighbors based on areas with contiguous boundaries (e.g., using Queen contiguity).
+
+```{r}
+#| message: false
+#| warning: false
+
+library(spdep)
+
+W.nb <- poly2nb(GGHB.IZ,queen = TRUE)
+W.nb
+```
+
+The warning tell us that the neighbourhood is comprised of two interconnected regions. By looking at the neighbourhood graph below, we can see that these are the North and South Glasgow regions which are separated by the River Clyde.
+
+```{r}
+#| fig-width: 4
+#| fig-height: 4
+#| fig-align: center
+#| purl: false
+plot(st_geometry(GGHB.IZ), border = "lightgray")
+plot.nb(W.nb, st_geometry(GGHB.IZ), add = TRUE)
+
+```
+
+::: callout-note
+You could use the `snap` argument within `poly2nb` to set a distance at which the different regions centroids are consider neighbours.
+:::
