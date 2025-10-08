@@ -45,7 +45,7 @@ library(dplyr)
 
 ```
 
-## Geostatistical data
+## Georeferenced data
 
 Tobler's first law of geography states that:
 
@@ -53,15 +53,15 @@ Tobler's first law of geography states that:
 
 Spatial patterns are fundamental in environmental and ecological data. In many ecological and environmental settings, measurements from fixed sampling units, aiming to quantify spatial variation and interpolate values at unobserved sites.
 
-**Geostatistical** data are the most common form of spatial data found in environmental setting. In these data we regularly take measurements of a spatial ecological or environmental process at a set of fixed locations. This could be data from transects (e.g, where the height of trees is recorded), samples taken across a region (e.g., water depth in a lake) or from monitoring stations as part of a network (e.g., air pollution). In each of these cases, our goal is to estimate the value of our variable across the entire space.
+**Georefernced** data are the most common form of spatial data found in environmental setting. In these data we regularly take measurements of a spatial ecological or environmental process at a set of fixed locations. This could be data from transects (e.g, where the height of trees is recorded), samples taken across a region (e.g., water depth in a lake) or from monitoring stations as part of a network (e.g., air pollution). In each of these cases, our goal is to estimate the value of our variable across the entire space.
 
-Let $D$ be our two-dimensional region of interest. In principle, there are infinite locations within $D$, each of which can be represented by mathematical coordinates (e.g., latitude and longitude). We then can identify any individual location as $s_i = (x_i, y_i)$, where $x_i$ and $y_i$ are their coordinates.
+Let $D$ be our two-dimensional region of interest. In principle, there is aninfinite number of locations within $D$, each of which can be represented by mathematical coordinates (e.g., latitude and longitude). We then can identify any individual location as $s_i = (x_i, y_i)$, where $x_i$ and $y_i$ are their coordinates.
 
 We can treat our variable of interest as a random variable, $Z$ which can be observed at any location as $Z(\mathbf{s}_i)$.
 
 Our geostatistical process can therefore be written as: $$\{Z(\mathbf{s}); \mathbf{s} \in D\}$$
 
-In practice, our data are observed at a finite number of locations, $m$, and can be denoted as:
+In practice, our data are observed in a finite number of locations, $m$, and can be denoted as:
 
 $$z = \{z(\mathbf{s}_1), \ldots z(\mathbf{s}_m) \}$$
 
@@ -126,13 +126,13 @@ pcod_sf %>%
   filter(year== 2017) %>%
   mutate(present = as.factor(present)) %>%
 mapview(zcol = "present",
-        layer.name = "Occupancy status of Pacific Code in 2017")
+        layer.name = "Occupancy status of Pacific Cod in 2017")
 ```
 
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
-Use `ggplot` and the `sf` library to map the biomass density of the pacific code across years.
+Use `ggplot` and the `sf` library to map the biomass density of the pacific cod across years.
 
 `r hide("hint")`
 
@@ -159,7 +159,7 @@ ggplot()+
 
 ### Raster Data
 
-Environmental data is typically stored in raster format, which represents spatially continuous phenomena by dividing a region into a grid of equally-sized cells, each storing a value for the variable of interest. In R, the `terra` package is a modern and powerful tool for efficiently working with raster data. The function `rast()`, can be used both to read raster files from standard formats (e.g., `.tif` or `.tiff`) and to create a new raster object from a data frame. For instance, the following code creates a raster from the `qcs_grid` grid data for Queen Charlotte Sound.
+Environmental data are typically stored in raster format, which represents spatially continuous phenomena by dividing a region into a grid of equally-sized cells, each storing a value for the variable of interest. In R, the `terra` package is a modern and powerful tool for efficiently working with raster data. The function `rast()`, can be used both to read raster files from standard formats (e.g., `.tif` or `.tiff`) and to create a new raster object from a data frame. For instance, the following code creates a raster from the `qcs_grid` grid data for Queen Charlotte Sound.
 
 ```{r}
 #| message: false
@@ -240,9 +240,9 @@ ggplot()+
 
 ### Autocorrelation and Variograms
 
-Spatial statistics quantifies the fundamental principle that nearby things are more related. This spatial dependence means that data points are not independent, as assumed by most classical statistical models, but are instead correlated based on their proximity. While this correlation can be a valuable source of information, it must be explicitly accounted for to avoid biased inference and incorrect conclusions.
+Spatial statistics quantifies the fundamental principle that nearby things are closely related. This spatial dependence means that observation are not independent, as assumed by most classical statistical models, but are instead correlated relative to their proximity. While this correlation can be a valuable source of information, it must be explicitly accounted for to avoid wrong inference and incorrect conclusions.
 
-The first step is to assess whether there is any evidence of spatial dependency in our data. Spatial dependence can be explored by a function known as a variogram $2\gamma(\cdot)$ (or semivariogram $\gamma(\cdot)$). The variogram is similar in many ways to the autocorrelation function used in time series modelling. In simple terms, it is a function which measures the difference in the spatial process between a pair of locations a fixed distance apart
+The first step is to assess whether there is any evidence of spatial dependency in our data. Spatial dependence in georeferenced data can be explored by a function known as a variogram $2\gamma(\cdot)$ (or semivariogram $\gamma(\cdot)$). The variogram is similar in many ways to the autocorrelation function used in time series modelling. In simple terms, it is a function which measures the difference in the spatial process between a pair of locations a fixed distance apart.
 
 The variogram measures the variance of the difference in the process $Z(\cdot)$ at two spatial locations $\mathbf{s}$ and $\mathbf{s+h}$ and is defined as :
 
