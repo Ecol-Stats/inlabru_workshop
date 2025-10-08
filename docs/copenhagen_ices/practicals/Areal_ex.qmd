@@ -74,7 +74,7 @@ The `pollutionhealthdata` contains the spatiotemporal data on respiratory hospit
 -   `jsa`: The percentage of working age people who are in receipt of Job Seekers Allowance
 -   `price`: Average property price (divided by 100,000).
 
-The `GGHB.IZ` data is a Simple Features (`sf`) object containing the spatial polygon information for the set of 271 Intermediate Zones (IZ), that make up of the Greater Glasgow and Clyde health board in Scotland ( @fig-GGC ).
+The `GGHB.IZ` data are a Simple Features (`sf`) object containing the spatial polygon information for the set of 271 Intermediate Zones (IZ), that make up of the Greater Glasgow and Clyde health board in Scotland ( @fig-GGC ).
 
 ```{r}
 #| echo: false
