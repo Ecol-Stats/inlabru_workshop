@@ -89,6 +89,46 @@ pred %>% ggplot() +
 
 
 
+
+
+
+## -----------------------------------------------------------------------------
+#| eval: true
+#| purl: true 
+
+inla.priors.used(fit.lm)
+
+
+
+
+
+
+## -----------------------------------------------------------------------------
+
+# First we define the logGamma (0.01,0.01) prior 
+
+prec.tau <- list(prec = list(prior = "loggamma",   # prior name
+                             param = c(0.01, 0.01))) # prior values
+
+lik2 =  bru_obs(formula = y ~.,
+                family = "gaussian",
+                data = df,
+                control.family = list(hyper = prec.tau))
+
+fit.lm2 = bru(cmp2, lik2) 
+
+
+
+## -----------------------------------------------------------------------------
+#| fig-width: 4
+#| fig-align: center
+#| fig-height: 4
+#| code-fold: show
+
+plot(fit.lm, "beta_0")
+
+
+
 ## ----child="practicals\\LMM_ex.qmd"-------------------------------------------
 
 ## -----------------------------------------------------------------------------

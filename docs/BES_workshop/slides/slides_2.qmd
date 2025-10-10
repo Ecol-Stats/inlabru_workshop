@@ -1,0 +1,503 @@
+---
+title: "Lecture 2"
+subtitle: Spatial Modelling with `inlabru`
+author:
+  - name: Jafet Belmont 
+    email: Jafet.BelmontOsuna@glasgow.ac.uk
+    affiliations: School of Mathematics and Statistics, University of Glasgow
+  - name: Janine Illian
+format:
+  revealjs:
+    margin: 0
+    logo:  UofG.png
+    theme: uofg_theme.scss
+    header-includes: |
+      <script src="custom.js" type="application/javascript"></script>
+title-slide-attributes: 
+  data-background-color: "#f1f1f1"
+slide-number: true
+date: 12/15/2025
+date-format: long
+execute: 
+  eval: true
+  echo: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup}
+#| include: false
+
+knitr::opts_chunk$set(echo = FALSE,  
+                      message=FALSE, 
+                      warning=FALSE, 
+                      strip.white=TRUE, 
+                      prompt=FALSE,
+                      fig.align="center",
+                       out.width = "60%")
+
+library(knitr)    # For knitting document and include_graphics function
+library(ggplot2)  # For plotting
+library(png) 
+library(tidyverse)
+library(INLA)
+library(BAS)
+library(patchwork)
+library(inlabru)
+
+```
+
+##  {background-image="river.png" background-color="black"}
+
+::: {style="height: 50px;"}
+:::
+
+::: {.blockquote style="color: #FFFFFF; background-color:rgb(38, 38, 38,0.3); font-size: 1.25em; padding: 20px; border-radius: 5px;"}
+> Space is inherent to all ecological processes, influencing dynamics such as migration, dispersal, and species interactions. A primary goal in ecology is to understand how these processes shape species distributions and dynamics across space.
+:::
+
+## Statistics in space
+
+-   Many natural processes take place in space
+
+-   Large amounts of data collected in space;
+
+-   Recent technologies facilitate access to complex spatial data sets.
+
+::: incremental
+-   Spatial statistical analysis is often not complex enough
+
+-   Inaccessible to practitioners
+
+-   Literature written for statisticians development of methodology often not linked to applications (unrealistic assumptions)
+
+-   Difficult to apply (unless you are an expert statistician and programmer)
+
+-   we shall see that `inlabru` can help with this...
+:::
+
+## Spatial data structures {.smaller auto-animate="true" background-color="#FFFFFF"}
+
+We can distinguish three types of spatial data structures
+
+:::::: columns
+::: {.column width="33.33%"}
+**Areal data**
+
+![Map of bird conservation regions (BCRs) showing the proportion of bird species within each region showing a declining trend](figures/BCRtrends.jpg){fig-align="center" width="442"}
+:::
+
+::: {.column width="33.33%"}
+**Geostatistical data**
+
+![Scotland river temperature monitoring network](figures/srtmn-png.png){fig-align="center" width="605"}
+:::
+
+::: {.column width="33.33%"}
+**Point-referenced data**
+
+![Occurrence records of four ungulate species in the Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
+:::
+::::::
+
+## Spatial data structures {.smaller auto-animate="true" background-color="#FFFFFF"}
+
+We can distinguish three types of spatial data structures
+
+:::::: columns
+::: {.column width="60%"}
+**Areal data**
+
+In areal data our measurements are summarised across a set of **discrete**, non-overlapping spatial units.
+
+![Map of bird conservation regions (BCRs) showing the proportion of bird species within each region showing a declining trend](figures/BCRtrends.jpg){fig-align="center" width="442"}
+:::
+
+::: {.column width="20%"}
+**Geostatistical data**
+
+![Scotland river temperature monitoring network](figures/srtmn-png.png){fig-align="center" width="605"}
+:::
+
+::: {.column width="20%"}
+**Point-referenced data**
+
+![Occurrence records of four ungulate species in the Tibet](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
+:::
+::::::
+
+## Spatial data structures {.smaller auto-animate="true" background-color="#FFFFFF"}
+
+We can distinguish three types of spatial data structures
+
+:::::: columns
+::: {.column width="20%"}
+**Areal data**
+
+![Map of bird conservation regions (BCRs) showing the proportion of bird species within each region showing a declining trend](figures/BCRtrends.jpg){fig-align="center" width="442"}
+:::
+
+::: {.column width="60%"}
+**Geostatistical data**
+
+In geostatistical data, measurements a **continuous** process are taken at a set of fixed locations.
+
+![Scotland river temperature monitoring network](figures/srtmn-png.png){fig-align="center" width="605"}
+:::
+
+::: {.column width="20%"}
+**Point-referenced data**
+
+![Occurrence records of four ungulate species in the Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
+:::
+::::::
+
+## Spatial data structures {.smaller auto-animate="true" background-color="#FFFFFF"}
+
+We can distinguish three types of spatial data structures
+
+:::::: columns
+::: {.column width="20%"}
+**Areal data**
+
+![Map of bird conservation regions (BCRs) showing the proportion of bird species within each region showing a declining trend](figures/BCRtrends.jpg){fig-align="center" width="442"}
+:::
+
+::: {.column width="20%"}
+**Geostatistical data**
+
+![Scotland river temperature monitoring network](figures/srtmn-png.png){fig-align="center" width="605"}
+:::
+
+::: {.column width="60%"}
+**Point-referenced data**
+
+In point-referenced data we measure the locations where events occur (e.g. trees in a forest, earthquakes) and the coordinates of such occurrences are our data.
+
+![Occurrence records of four ungulate species in the Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
+:::
+::::::
+
+# Areal Data 
+
+## How do we model this? {auto-animate="true}
+
+Imagine we have animal counts in each region. We can model them as Poisson
+
+$$
+y_i \sim \mathrm{Poisson}(e^{\eta_i})
+$$ How do we model the linear predictor $\eta_i$?
+
+::: {.fragment .fade-in}
+-   We could model the number of animals in each region independently 
+
+$$
+ \eta_i = \beta_0 + \mathbf{x}'\beta + u_i ~~~ u_i \overset{iid}{\sim} N(0,\sigma^2_i)
+$$
+
+-   where regional differences are accounted through a *random effect*
+:::
+
+
+## How do we model this? {auto-animate="true}
+
+Imagine we have animal counts in each region. We can model them as Poisson
+
+$$
+y_i \sim \mathrm{Poisson}(e^{\eta_i})
+$$ How do we model the linear predictor $\eta_i$?
+
+::: {.fragment .fade-in}
+-   But... what if the distribution is *inhomogeneous*?
+-   If there’s an area where the animal is rare, we’ll get lots of zero counts
+:::
+
+
+
+
+## How do we model this? {auto-animate="true}
+
+Imagine we have animal counts in each region. We can model them as Poisson
+
+$$
+y_i \sim \mathrm{Poisspn}(e^{\eta_i})
+$$ How do we model the linear predictor $\eta_i$?
+
+
+::: {.fragment .fade-in}
+-   We could model some dependence across regions:
+    -   *Nearby regions* should have similar counts
+
+$$
+\eta_i = \beta_0 + \mathbf{x}'\beta + u_i ~~~ u_i \overset{iid}{\sim} N(0,Q^{-1})
+$$
+
+-   Now the random effect $u_i \sim N(0, Q^{-1})$ is correlated.
+:::
+
+## Overview of Areal processes {.smaller}
+
+An **areal process** (or lattice process) is a stochastic process defined on a set of regions that form a partition of our region of interest $D$.
+
+-   Let $B_1, \ldots B_m$ be our set of $m$ distinct regions such that: $$\bigcup\limits_{i=1}^m \hspace{1mm}B_i = D.$$
+
+-   Here we require that our regions are non-overlapping, with $$B_i \cap B_j = \emptyset.$$
+
+-   Then our areal process is simply the stochastic process $$\{Z(B_i); i=1,\ldots,m\}.$$
+
+## Neighbourhood structures
+
+::: incremental
+-   Each of our regions $B_i$ has a set of other nearby which can be considered **neighbours**
+
+-   We might expect that areas have more in common with their neighbours.
+
+-   Therefore, we can construct dependence structures based on the principle that neighbours are correlated and non-neighbours are uncorrelated.
+
+-   However, we need to come up with a sensible way of defining what a neighbour is in this context.
+:::
+
+## Defining a Neighbourhood {.smaller}
+
+-   There are many different ways to define a region's neighbours.
+
+-   The most common ones fall into *two main categories* - those based on borders, and those based on distance.
+
+::::: columns
+::: {.column width="50%"}
+**Common borders**
+
+Assume that regions which share a border on a map are neighbours.
+
+-   Simple and easy to implement
+
+-   Treats all borders the same, regardless of length, which can be unrealistic.
+
+-   Areas very close together are not neighbours if there is even a small gap between them.
+
+![](figures/USAborders.png){fig-align="center" width="457"}
+:::
+
+::: {.column width="50%"}
+**Distance-based**
+
+Assume that regions which are a within a certain distance of each other area neighbours.
+
+-   What distance do you choose? How do you decide that?
+
+-   Where do you measure from? (e.g., nearest border or a central point).
+
+![](figures/USAdistance.png){fig-align="center" width="453"}
+:::
+:::::
+
+## Neighbourhood matrix
+
+::: incremental
+-   Once we have identified a set of neighbours using our chosen method, we can use this to account for spatial correlation.
+
+-   We construct a **neighbourhood matrix** (or proximity matrix), which defines how each of our $m$ regions relate to each other.
+
+-   Let $W$ denote an $m \times m$ matrix where the $(i,j)$th entry, $w_{ij}$ denotes the proximity between regions $B_i$ and $B_j$.
+
+    ::: callout-note
+    The values of this matrix can be discrete (which regions are neighbours) or continuous (how far apart are the regions).
+    :::
+:::
+
+## Binary Neighbourhood matrix
+
+By far the most common approach is to use a binary neighbourhood matrix, $W$, denoted by
+
+$$
+\begin{aligned}
+w_{ij} &= 1 \hspace{2mm} \mbox{ if areas} (B_i, B_j) \mbox{ are neighbours.}\\
+w_{ij} &= 0 \hspace{2mm} \mbox{ otherwise.}
+\end{aligned}
+$$
+
+-   Dependencies structures are described through this spatial weights matrix
+
+-   Binary matrices are used for their simplicity
+
+![](figures/Wmatrix.png){fig-align="center" width="293"}
+
+## Modelling spatial similarity
+
+One of the most popular CAR approaches to model spatial correlation is the Besag model a.k.a. Intrinsic Conditional Autoregressive (ICAR) model. The conditional distribution for $u_i$ is
+
+$$
+u_i|\mathbf{u}_{-i} \sim N\left(\frac{1}{d_i}\sum_{j\sim i}u_j,\frac{1}{d_i\tau_u}\right)
+$$
+
+-   $\mathbf{u}_{-i} = (u_i,\ldots,u_{i-1},u_{i+1},\ldots,u_n)^T$
+
+-   $\tau_u$ is the precision parameter (inverse variance).
+
+-   $d_i$ is the number of neighbours
+
+-   The mean of $u_i$ is equivalent to the the mean of the effects over all neighbours, and the precision is proportional to the number of neighbours.
+
+## Modelling spatial similarity
+
+The joint distribution is given by:
+
+$$
+\mathbf{u}|\tau_u \sim N\left(0,\frac{1}{\tau_u}Q^{-1}\right),
+$$
+
+Where $Q$ denotes the precision matrix defined as
+
+$$
+Q_{i,j} = \begin{cases}
+d_i, & i = j \\
+-1, & i \sim j \\
+0, &\text{otherwise}
+\end{cases}
+$$
+
+This structure matrix directly defines the neighbourhood structure and is sparse.
+
+## Modelling spatial similarity
+
+The ICAR model accounts only for spatially structured variability and does not include a limiting case where no spatial structure is present.
+
+::: incremental
+-   We typically add an unstructured random effect $z_i|\tau_v \sim N(0,\tau_{z}^{-1})$
+
+-   The resulting model $v_i = u_i + z_i$ is known as the Besag-York-Mollié model (BYM)
+
+-   The structured spatial effect is controlled by $\tau_u$ which control the degree of smoothing:
+
+    -   Higher $\tau_u$ values lead to stronger smoothing (less spatial variability).
+
+    -   Lower $\tau_u$ values allow for greater local variation.
+
+-   In the next example we will illustrate how to fit this model using `inlabru`.
+:::
+
+## Example: Respiratory hospitalisation in Glasgow
+
+In This example we model the number of respiratory hospitalisations across Intermediate Zones (IZ) that make up the Greater Glasgow and Clyde health board in Scotland.
+
+::::: columns
+::: {.column width="40%"}
+In epidemiology, disease risk is usually estimated using Standardized Mortality Ratios (SMR) computed as:
+
+$$ SMR_i = \dfrac{Y_i}{E_i} $$
+
+-   A value $SMR > 1$ indicates that there are more observed cases than expected which corresponds to a high risk area.
+-   if $SMR<1$ then there are fewer observed cases than expected, suggesting a low risk area.
+:::
+
+::: {.column width="60%"}
+```{r}
+#| echo: false
+#| message: false
+#| eval: true
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)   
+library(mapview)
+library(sf)
+
+# load some libraries to generate nice map plots
+library(scico)
+library(CARBayesdata)
+data(pollutionhealthdata)
+data(GGHB.IZ)
+resp_cases <- merge(GGHB.IZ %>%
+                      mutate(space = 1:dim(GGHB.IZ)[1]),
+                             pollutionhealthdata, by = "IZ")%>%
+  dplyr::filter(year == 2007) 
+
+resp_cases <- resp_cases %>% 
+  mutate(SMR = observed/expected )
+
+mapview(resp_cases,zcol = "SMR")
+
+```
+:::
+:::::
+
+## Bayesian disease risk mapping {.smaller}
+
+> -   **Stage 1:** We assume the responses are Poisson distributed: $$          
+>     \begin{aligned}y_i|\eta_i & \sim \text{Poisson}(E_i\lambda_i)\\\text{log}(\lambda_i) = \color{#FF6B6B}{\boxed{\eta_i}} & = \color{#FF6B6B}{\boxed{\beta_0  + u_i + z_i} }\end{aligned}
+>     $$
+
+> -   **Stage 2:** $\eta_i$ is a linear function of **three components**: an intercept, a spatially structured effect $u$ and an unstructured iid random effect $z$:\
+>     $$
+>     \eta_i = \beta_0 + \overbrace{u_i + z_i}^{v_i}
+>     $$
+
+> -   **Stage 3:**
+>     -   $\{\tau_{z},\tau_u\}$: Precision parameters for the random effects
+
+. . .
+
+The latent field is $\mathbf{x}= (\beta_0, \beta_1, u_1, u_2,\ldots, u_n,z_1,...)$, the hyperparameters are $\boldsymbol{\theta} = (\tau_u,\tau_z)$, and must be given a prior.
+
+## `inlabru` for disease mapping {.smaller auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+y_i|\eta_t & \sim \text{Poisson}(E_i\lambda_i)\\
+\text{log}(\lambda_i) = \eta_i & = \color{#FF6B6B}{\boxed{\beta_0}} + \color{#FF6B6B}{\boxed{\beta_1\ c_i}} + \color{#FF6B6B}{\boxed{\omega_i}}
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+library(spdep)
+W.nb <- poly2nb(GGHB.IZ,queen = TRUE)
+R <- nb2mat(W.nb, style = "B", zero.policy = TRUE)
+diag = apply(R,1,sum)
+Q = -R
+diag(Q) = diag
+plot(st_geometry(GGHB.IZ), border = "lightgray")
+plot.nb(W.nb, st_geometry(GGHB.IZ), add = TRUE)
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "1-4"
+
+# define model component
+cmp = ~ Intercept(1) + 
+  space(space, model = "besag", graph = Q) + 
+  iid(space, model = "iid")
+
+# define model predictor
+eta =  observed ~ Intercept + space + iid
+
+# build the observation model
+lik = bru_obs(formula = formula, 
+              family = "poisson",
+              E = expected,
+              data = resp_cases)
+
+# fit the model
+fit = bru(cmp, lik)
+
+
+```

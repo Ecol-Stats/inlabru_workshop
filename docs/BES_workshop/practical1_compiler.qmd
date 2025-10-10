@@ -1,7 +1,8 @@
 ---
 title: "Practical 1"
 format: 
-  html: default
+  html:
+    number-sections: true
   PrettyPDF-pdf:
     keep-tex:  true
     number-sections: true
@@ -35,7 +36,7 @@ We are going to learn:
 
 -   How to fit some commonly used models with `inlabru`
 
--    How to explore the results
+-   How to explore the results
 
 -   How to get predictions for missing data points
 
@@ -52,5 +53,3 @@ We are going to learn:
 
 ```{r child="practicals\\GAM_ex.qmd"}
 ```
-
-

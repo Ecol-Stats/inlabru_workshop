@@ -6,30 +6,32 @@ subtitle: "British Ecological Society Meeting 2025, Edinburgh"
 
 # Welcome to the course!
 
--   Welcome to the `inlabu` workshop!
--   The goal for the workshop is to ...
--   The workshop is intended for ... No knowledge of `R-INLA` is required.
+-   Welcome to the `inlabru` workshop!
+-   The goal of this workshop is to introduce new users to the `inlabru` software for Bayesian spatial modelling using the integrated nested Laplace approximation (INLA). 
+-   The workshop is intended for applied statisticians and quantitative ecologists who are interested in efficiently modelling spatial data- No prior knowledge of `R-INLA` is required.
 
 # Learning Objectives for the workshop
 
 At the end of the workshop, participants will be able to:
 
--   ILO1
--   ILO2
--   ILO3, etc
+-   Understand the `inlabru` workflow and software principles.
+-   Fit commonly used models such as Linear models, LMM, GLM and GAMs using `inlabru`.
+-   Describe different types of spatial data and fit appropriate spatial models.
+-   Interpret model outputs and create spatial maps and predictions.
+-   Implement a complete, reproducible spatial analysis workflow from data preparation to result visualization.
+
 
 # Schedule Program
 
 |     Time      |                       Topic                        |
 |:-------------:|:--------------------------------------------------:|
-| 10:00 - 11:00 |              ICES informative session              |
-| 10:30 - 11:30 |      **Session 1**: Introduction to `inlabru`      |
-| 11:30 - 13:00 |     [Practical Session 1](day1_practical.qmd)      |
-| 13:00 - 14:30 |                    Lunch break                     |
-| 14:30 - 15:30 | **Session 2**: Bayesian inference & basics of INLA |
-| 15:30 - 15:45 |                    Coffee Break                    |
-| 15:45 - 16:45 |                Practical Session 2                 |
-| 16:45 - 17:00 |                wrap-up and outlook                 |
+| 13:00 - 14:00 |              Workshop registration                 |
+| 14:00 - 14:45 |      **Session 1**: Introduction to `inlabru`      |
+| 14:45 - 15:45 |     [Practical Session 1](day1_practical.qmd)      |
+| 15:45 - 16:00 |                     Coffee break                   |
+| 16:00 - 16:45 | **Session 2**: Spatial Modelling with `inlabru`    |
+| 16:45 - 17:45 |     [Practical Session 2](practical2_compiler.qmd) |
+| 17:45 - 18:00 |                Wrap-up and outlook                 |
 
 : {.striped .hover}
 
@@ -42,3 +44,5 @@ Participants are required to follow the next steps before the day of the worksho
 2.  Install `inlabru` (available from CRAN)
 
 3.  Make sure you have the latest `R-INLA`, `inlabru` and `R` versions installed.
+
+

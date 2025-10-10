@@ -13,12 +13,13 @@ editor_options:
   chunk_output_type: console
 ---
 
+## Areal (lattice) data {#sec-areal_data}
+
 In this practical we will:
 
 -   Explore tools for areal spatial data wrangling and visualization.
--   Compute Morans'I to identify spatial autocorrelation in our data.
 
-## Areal (lattice) data {#sec-areal_data}
+-   Learn how to fit an areal model in `inlabru`
 
 In areal data our measurements are summarised across a set of discrete, non-overlapping spatial units such as postcode areas, health board or pixels on a satellite image. In consequence, the spatial domain is a countable collection of (regular or irregular) areal units at which variables are observed. Many public health studies use data aggregated over groups rather than data on individuals - often this is for privacy reasons, but it may also be for convenience.
 
@@ -61,22 +62,34 @@ mapview(GGHB.IZ)
 
 ```
 
+### Maipulating and visualizing areal data
+
 Let's start by loading useful libraries:
 
 ```{r}
 #| message: false
 #| warning: false
-library(sf)
+library(dplyr)
+library(INLA)
 library(ggplot2)
+library(patchwork)
+library(inlabru)   
+library(mapview)
+library(sf)
+
+# load some libraries to generate nice map plots
 library(scico)
 ```
 
 The `sf` package allows us to work with vector data which is used to represent points, lines, and polygons. It can also be used to read vector data stored as a shapefiles.
 
-First, lets combine both data sets based on the Intermediate Zones (IZ) variable using the `merge` function from `base` R:
+First, lets combine both data sets based on the Intermediate Zones (IZ) variable using the `merge` function from `base` R, and select only one year of data
 
 ```{r}
-resp_cases <- merge(GGHB.IZ, pollutionhealthdata, by = "IZ")
+resp_cases <- merge(GGHB.IZ %>%
+                      mutate(space = 1:dim(GGHB.IZ)[1]),
+                             pollutionhealthdata, by = "IZ")%>%
+  dplyr::filter(year == 2007) 
 ```
 
 In epidemiology, disease risk is usually estimated using Standardized Mortality Ratios (SMR). The SMR for a given spatial areal unit $i$ is defined as the ratio between the observed ( $Y_i$ ) and expected ( $E_i$ ) number of cases:
@@ -92,81 +105,25 @@ We can manipulate `sf` objects the same way we manipulate standard data frame ob
 ```{r}
 #| message: false
 #| warning: false
-library(dplyr)
 resp_cases <- resp_cases %>% 
-  mutate(SMR = observed/expected, .by = year )
+  mutate(SMR = observed/expected )
 ```
 
-Now we use `ggplot` to visualize our data by adding a `geom_sf` layer and coloring it according to our variable of interest (i.e., SMR). We can further use `facet_wrap` to create a layer per year and chose an appropriate color palette using the `scale_fill_scico` from the `scico` package:
+Now we use `ggplot` to visualize our data by adding a `geom_sf` layer and coloring it according to our variable of interest (i.e., SMR).
 
 ```{r}
-#| fig-width: 8
-#| fig-height: 6
+#| fig-width: 5
+#| fig-height: 5
 #| fig-align: center
+#| code-fold: show
 ggplot()+
   geom_sf(data=resp_cases,aes(fill=SMR))+
-  facet_wrap(~year)+scale_fill_scico(palette = "roma")
+  scale_fill_scico(palette = "roma")
 ```
-
-::: {.callout-warning icon="false"}
-## {{< bi pencil-square color=#c8793c >}} Task
-
-Produce a map that shows the spatial distribution of each of the following variables for the year 2011:
-
--   Average particulate matter `pm10`
-
--   Average property price `price`
-
--   Percentage of working age people who are in receipt of Job Seekers Allowance `jsa`
-
-`r hide("hint")`
-
-You can use the `filter` function from `dplyr` to subset the data according to the year of interest.
-
-`r unhide()`
-
-```{r}
-#| webex.hide: "Click here to see the solution" 
-#| purl: false  
-#| message: false
-#| warning: false
-#| fig-width: 8
-#| fig-height: 6
-#| fig-align: center
-
-# Library for plotting multiple maps together
-
-library(patchwork)
-
-# subset data set for 2011
-
-resp_cases_2011 <- resp_cases %>% filter(year ==2011)
-
-# pm10 plot
-
-pm10_plot <- ggplot()+
-  geom_sf(data=resp_cases_2011,aes(fill=pm10))+
-  scale_fill_scico(palette = "navia")
-
-# property price
-
-price_plot <- ggplot()+
-  geom_sf(data=resp_cases_2011,aes(fill=price))+
-  facet_wrap(~year)+scale_fill_scico(palette = "bilbao")
-
-#  percentage jsa
-
-jsa_plot <- ggplot()+
-  geom_sf(data=resp_cases_2011,aes(fill=jsa))+
-  facet_wrap(~year)+scale_fill_scico(palette = "lapaz") 
-
-# plot maps together
-
-pm10_plot + price_plot + jsa_plot + plot_layout(ncol=3)
-```
-:::
 
 As with the other types of spatial modelling, our goal is to observe and explain spatial variation in our data. Generally, we are aiming to produce a smoothed map which summarises the spatial patterns we observe in our data.
+
+### Spatial neighbourhood structures
 
 A key aspect of any spatial analysis is that observations closer together in space are likely to have more in common than those further apart. This can lead us towards approaches similar to those used in time series, where we consider the spatial *closeness* of our regions in terms of a *neighbourhood structure*.
 
@@ -182,11 +139,9 @@ W.nb <- poly2nb(GGHB.IZ,queen = TRUE)
 W.nb
 ```
 
-The warning tell us that the neighbourhood is comprised of two interconnected regions. By looking at the neighbourhood graph below, we can see that these are the North and South Glasgow regions which are separated by the River Clyde.
-
 ```{r}
-#| fig-width: 4
-#| fig-height: 4
+#| fig-width: 5
+#| fig-height: 5
 #| fig-align: center
 #| purl: false
 plot(st_geometry(GGHB.IZ), border = "lightgray")
@@ -196,4 +151,260 @@ plot.nb(W.nb, st_geometry(GGHB.IZ), add = TRUE)
 
 ::: callout-note
 You could use the `snap` argument within `poly2nb` to set a distance at which the different regions centroids are consider neighbours.
+:::
+
+With this neighborhood matrix, we can then fit a conditional autoregressive (CAR) model. One of the most popular CAR approaches to model spatial correlation is the Besag model a.k.a. Intrinsic Conditional Autoregressive (ICAR) model.
+
+The conditional distribution for $u_i$ given $\mathbf{u}_{-i} = (u_i,\ldots,u_{i-1},u_{i+1},\ldots,u_n)^T$ is
+
+$$
+u_i|\mathbf{u}_{-i} \sim N\left(\frac{1}{d_i}\sum_{j\sim i}u_j,\frac{1}{d_i\tau_u}\right)
+$$
+
+where $\tau_u$ is the precision parameter, $j\sim i$ denotes that $i$ and $j$ are neighbors, and $d_i$ is the number of neighbors. Thus, the mean of $u_i$ is equivalent to the the mean of the effects over all neighbours, and the precision is proportional to the number of neighbors. The joint distribution is given by:
+
+$$
+\mathbf{u}|\tau_u \sim N\left(0,\frac{1}{\tau_u}Q^{-1}\right),
+$$
+
+Where $Q$ denotes the structure matrix defined as
+
+$$
+Q_{i,j} = \begin{cases}
+d_i, & i = j \\
+-1, & i \sim j \\
+0, &\text{otherwise}
+\end{cases}
+$$
+
+This structure matrix directly defines the neighbourhood structure and is sparse. We can compute the adjacency matrix using the function `nb2mat()` in the `spdep` library. Then convert the adjacency matrix into the precision matrix $\mathbf{Q}$ of the CAR model as follows:
+
+```{r}
+library(spdep)
+R <- nb2mat(W.nb, style = "B", zero.policy = TRUE)
+diag = apply(R,1,sum)
+Q = -R
+diag(Q) = diag
+```
+
+The ICAR model accounts only for spatially structured variability and does not include a limiting case where no spatial structure is present. Therefore, it is typically combined with an additional unstructured random effect $z_i|\tau_z \sim N(0,\tau_{z}^{-1})$ . The resulting model $v_i = u_i + z_i$ is known as the Besag-York-Mollié model (BYM) which is an extension to the intrinsic CAR model that contains an i.i.d. model component.
+
+### Fitting an ICAR model in `inlabru`
+
+We fit a first model to the data where we consider a Poisson model for the observed cases.
+
+**Stage 1** Model for the response $$
+y_i|\eta_i\sim\text{Poisson}(E_i\lambda_i)
+$$ where $E_i$ are the expected cases for area $i$.
+
+**Stage 2** Latent field model $$
+\eta_i = \text{log}(\lambda_i) = \beta_0 + u_i + z_i
+$$ where
+
+-   $\beta_0$ is a common intercept
+-   $\mathbf{u} = (u_1, \dots, u_k)$ is a conditional Autoregressive model (CAR) with precision matrix $\tau_u\mathbf{Q}$
+-   $\mathbf{z} = (z_1, \dots, z_k)$ is an unstructured random effect with precision $\tau_z$
+
+**Stage 3** Hyperparameters
+
+The hyperparameters of the model are $\tau_u$ and $\tau_z$
+
+**NOTE** In this case the linear predictor $\eta$ consists of three components!!
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+Fit the above model in using `inlabru` by completing the following code:
+
+```{r}
+#| echo: true
+#| eval: false
+
+
+cmp = ~ Intercept(1) + space(...) + iid(...)
+
+formula = ...
+
+
+lik = bru_obs(formula = formula, 
+              family = ...,
+              E = ...,
+              data = ...)
+
+fit = bru(cmp, lik)
+
+```
+
+`r hide("Answer")`
+
+```{r}
+#| purl: false
+cmp = ~ Intercept(1) + space(space, model = "besag", graph = Q) + iid(space, model = "iid")
+
+formula = observed ~ Intercept + space + iid
+
+lik = bru_obs(formula = formula, 
+              family = "poisson",
+              E = expected,
+              data = resp_cases)
+
+fit = bru(cmp, lik)
+
+```
+
+`r unhide()`
+:::
+
+After fitting the model we want to extract results.
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+1.  What is the estimated value for $\beta_0$?
+
+2.  Look at the estimated values of the hyperparameters using
+
+```{r}
+#| echo: true
+#| eval: false
+fit$summary.hyperpar
+```
+
+Which of the two spatial components (structured or unstructured) explains more of the variability in the counts?
+:::
+
+### Areal model predictions
+
+We now look at the predictions over space.
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Complete the code below to produce:
+
+1.  prediction of the linear predictor $\eta_i$
+
+2.  The risk rate $\lambda_i$
+
+3.  The expected cases $E_i\exp(\lambda_i)$ over the whole space of interest.
+
+Plot the mean and sd of the resulting surfaces.
+
+```{r}
+#| echo: true
+#| eval: false
+#| purl: false
+
+pred = predict(fit, resp_cases, ~data.frame(log_risk = ...,
+                                             risk = exp(...),
+                                             cases = ...
+                                             ),
+               n.samples = 1000)
+
+```
+
+`r hide("See Solution")`
+
+```{r}
+# produce predictions
+pred = predict(fit, 
+               resp_cases,
+               ~data.frame(log_risk = Intercept + space,
+                           risk = exp(Intercept + space),
+                           cases = expected * exp(Intercept + space)),
+               n.samples = 1000)
+
+# plot the predictions
+
+p1 = ggplot() + 
+  geom_sf(data = pred$log_risk, aes(fill = mean)) + scale_fill_scico(direction = -1) +
+  ggtitle("mean log risk")
+p2 = ggplot() + 
+  geom_sf(data = pred$log_risk, aes(fill = sd)) + scale_fill_scico(direction = -1) +
+  ggtitle("sd log risk")
+
+p3 = ggplot() +
+  geom_sf(data = pred$risk, aes(fill = mean)) + scale_fill_scico(direction = -1) +
+  ggtitle("mean  risk")
+
+p4 = ggplot() + 
+  geom_sf(data = pred$risk, aes(fill = sd)) +
+  scale_fill_scico(direction = -1) +
+  ggtitle("sd  risk")
+
+p5 = ggplot() + geom_sf(data = pred$cases, aes(fill = mean)) + scale_fill_scico(direction = -1)+ 
+  ggtitle("mean  expected counts")
+p6 = ggplot() + geom_sf(data = pred$cases, aes(fill = sd)) + scale_fill_scico(direction = -1)+
+  ggtitle("sd  expected counts")
+
+p1 + p2 + p3 + p4 +p5 + p6 + plot_layout(ncol=2)
+
+```
+
+`r unhide()`
+:::
+
+Finally we want to compare our observations $y_i$ with the predicted means of the Poisson distribution $E_i\exp(\lambda_i)$
+
+```{r}
+#| fig-width: 4
+#| fig-height: 4
+#| fig-align: center
+pred$cases %>% ggplot() + geom_point(aes(observed, mean)) + 
+  geom_errorbar(aes(observed, ymin = q0.025, ymax = q0.975)) +
+  geom_abline(intercept = 0, slope = 1)
+
+```
+
+Here we are predicting the *mean* of counts, not the counts. Predicting the counts is beyond the scope of this short course but you can check the supplementary material below.
+
+::: {.callout-note appearance="simple" icon="false"}
+## {{< bi book color=#298196 >}} Supplementary Material
+
+Posterior predictive distributions, i.e., $\pi(y_i^{\text{new}}|\mathbf{y})$ are of interest in many applied problems. The `bru()` function does not return predictive densities. In the previous step we have computed predictions for the `expected counts` $\pi(E_i\lambda_i|\mathbf{y})$.
+
+The predictive distribution is then: $$
+\pi(y_i^{\text{new}}|\mathbf{y}) = \int \pi(y_i|E_i\lambda_i)\pi(E_i\lambda_i|\mathbf{y})\ dE_i\lambda_i
+$$ where, in our case, $\pi(y_i|E_i\lambda_i)$ is Poisson with mean $E_i\lambda_i$. We can achieve this using the following algorithm:
+
+1.  Simulate $n$ replicates of $g^k = E_i\lambda_i$ for $k = 1,\dots,n$ using the function `generate()` which takes the same input as `predict()`
+2.  For each of the $k$ replicates simulate a new value $y_i^{new}$ using the function `rpois()`
+3.  Summarise the $n$ samples of $y_i^{new}$ using, for example the mean and the 0.025 and 0.975 quantiles.
+4.  
+
+```{r}
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+#| code-fold: true
+#| code-summary: "Click here to see the code"
+
+# simulate 1000 realizations of E_i\lambda_i
+expected_counts = generate(fit, resp_cases, 
+                           ~ expected * exp(Intercept + space),
+                           n.samples = 1000)
+
+
+# simulate poisson data
+aa = rpois(271*1000, lambda = as.vector(expected_counts))
+sim_counts = matrix(aa, 271, 1000)
+
+# summarise the samples with posterior means and quantiles
+pred_counts = data.frame(observed = resp_cases$observed,
+                         m = apply(sim_counts,1,mean),
+                         q1 = apply(sim_counts,1,quantile, 0.025),
+                         q2 = apply(sim_counts,1,quantile, 0.975),
+                         vv = apply(sim_counts,1,var)
+                         )
+# Plot the observations against the predicted new counts and the predicted expected counts
+
+ggplot() + 
+  geom_point(data = pred_counts, aes(observed, m, color = "Pred_obs")) + 
+  geom_errorbar(data = pred_counts, aes(observed, ymin = q1, ymax = q2, color = "Pred_obs")) +
+  geom_point(data = pred$cases, aes(observed, mean, color = "Pred_means")) + 
+  geom_errorbar(data = pred$cases, aes(observed, ymin = q0.025, ymax = q0.975, color = "Pred_means")) +
+  
+  geom_abline(intercept = 0, slope =1)
+
+```
 :::

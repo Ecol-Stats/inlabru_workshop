@@ -5,6 +5,7 @@ project:
   - index.qmd
   - about.qmd
   - practical1_compiler.qmd
+  - practical2_compiler.qmd
   - slides/slides_1.qmd
 website:
   title: BES workshop 2025
@@ -21,6 +22,7 @@ website:
     contents:
     - index.qmd
     - practical1_compiler.qmd
+    - practical2_compiler.qmd
   page-navigation: true
 format:
   html:
