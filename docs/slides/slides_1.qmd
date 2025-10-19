@@ -1,10 +1,32 @@
 ---
-title: "`inlabru` workshop"
-format: revealjs
-author: S. Martino
-toc: true
+title: "Lecture 1"
+subtitle: Spatial Modelling with `inlabru`
+author:
+  - name: Sara Martino
+    # email: Jafet.BelmontOsuna@glasgow.ac.uk
+    affiliations: Norwegian University of Science and Technology
+  - name: Janine Illian
+  - affiliations: University of Glasgow
+format:
+  revealjs:
+    margin: 0
+    logo:  UofG.png
+    theme: uofg_theme.scss
+    header-includes: |
+      <script src="custom.js" type="application/javascript"></script>
+title-slide-attributes: 
+  data-background-color: "#f1f1f1"
+slide-number: true
+date: 12/15/2025
+date-format: long
+execute: 
+  eval: true
+  echo: true
 embed-resources: true
+editor_options: 
+  chunk_output_type: console
 ---
+
 
 # Welcome to the course
 

@@ -1,11 +1,14 @@
 ---
-title: "Lecture 1"
+title: "Lecture 2"
 from: markdown+emoji
-subtitle: "Introduction" 
+subtitle: "Latent Gaussian Models and INLA" 
 format:
-   metropolis-beamer-revealjs
-#     theme: style.scss
-# header-logo: images/logo_white.png
+  revealjs:
+    margin: 0
+    logo:  UofG.png
+    theme: uofg_theme.scss
+    header-includes: |
+      <script src="custom.js" type="application/javascript"></script>
 slide-number: "c/t"
 title-slide-attributes:
 #    data-background-image: images/trondheim3.png
@@ -16,18 +19,17 @@ author:
     #orcid: 0000-0002-6879-4412
     email: sara.martino@ntnu.no
     affiliations: Dept. of Mathematical Science, NTNU
+  - name: Janine Illian
+    #orcid: 0000-0002-6879-4412
+    email: Janine.Illian@glasgow.ac.uk
+    affiliations: University of Glasgow    
 # date: May 22, 2025
 # bibliography: references.bib
 embed-resources: true
-editor: 
-  markdown: 
-    wrap: 72
 execute:
   allow-html: true
-#nocite: |
-editor_options: 
-  chunk_output_type: console
 ---
+
 
 
 ```{r setup}
@@ -330,7 +332,7 @@ p1 = ggplot() +
                color = "darkred", linewidth = 0.7) +
   
   # X-axis labels
-  scale_x_continuous(breaks = x_vals, labels = parse(text = x_labels), expand = expansion(mult = c(0.1, 0.1))) +
+  #scale_x_continuous(breaks = x_vals, labels = parse(text = x_labels), expand = expansion(mult = c(0.1, 0.1))) +
   labs(x = "x", y = "y") +
   coord_cartesian(ylim = c(-1, 6),
                   xlim = c(0.5, 3.5)) +
@@ -431,7 +433,7 @@ p1 = ggplot() +
                color = "darkred", linewidth = 0.7) +
   
   # X-axis labels
-  scale_x_continuous(breaks = x_vals, labels = parse(text = x_labels), expand = expansion(mult = c(0.1, 0.1))) +
+  #scale_x_continuous(breaks = x_vals, labels = parse(text = x_labels), expand = expansion(mult = c(0.1, 0.1))) +
   labs(x = "x", y = "y") +
   coord_cartesian(ylim = c(-1, 6),
                   xlim = c(0.5, 3.5)) +
@@ -1069,8 +1071,8 @@ lik = bru_obs(formula = eta,
 # fit the model
 fit = bru(cmp, lik)
 
-prior = data.frame(x = seq(-50,50)) %>%
-  mutate(y = dnorm(x,0,sqrt(1/0.001)))
+prior = data.frame(x = seq(-30,20, 0.1)) %>%
+  mutate(y = dnorm(x,0,sqrt(1/0.01)))
 p_int = fit$marginals.fixed$beta0 %>% ggplot() + geom_line(aes(x,y)) +
   geom_line(data = prior, aes(x,y), linetype= "dashed") + xlab("") + ylab("") +
   ggtitle("Intercept")
@@ -1078,6 +1080,7 @@ p_int = fit$marginals.fixed$beta0 %>% ggplot() + geom_line(aes(x,y)) +
 
 p_cov = fit$marginals.fixed$beta1 %>% ggplot() + geom_line(aes(x,y)) +
   geom_line(data = prior, aes(x,y), linetype= "dashed") + xlab("") + ylab("") +
+  xlim(c(0,0.5)) + 
   ggtitle("Covariate") 
 
 
@@ -1112,7 +1115,7 @@ p3 = p_pred +
 #| echo: false
 #| eval: true
  
-(p_int | p_cov) / p3
+p_int + p_cov +  p3
 
 ```
 
@@ -1641,8 +1644,6 @@ lik = bru_obs(formula = eta,
 fit = bru(cmp, lik)
 
 ```
-
-
 
 
 

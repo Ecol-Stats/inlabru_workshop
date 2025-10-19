@@ -7,11 +7,13 @@ dplyr
 ggplot2
 gstat
 inlabru
+lubridate
 mapview
 patchwork
 scico
 sdmTMB
 sf
+spatstat
 spdep
 terra
 tidyr

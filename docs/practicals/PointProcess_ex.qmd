@@ -1,0 +1,613 @@
+---
+title: "Practical 7"
+execute: 
+  warning: false
+  message: false
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
+library(webexercises)
+
+```
+
+## Log-Gaussian Cox Processes {#sec-linmodel}
+
+In this practical we will:
+
+-   Fit a [homogeneous Point Process](#HPP)
+-   Fit a [non-homogeneous Point Process](#NHPP)
+-   Fit a LGCP (log-Gaussian Cox Process)
+
+Libraries to load:
+
+```{r}
+#| warning: false
+#| message: false
+
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+library(spatstat)
+library(sf)
+library(scico)
+library(spatstat)
+library(lubridate)
+library(terra)
+library(tidyterra)
+```
+
+------------------------------------------------------------------------
+
+In this practical we consider the data `clmfires` in the `spatstat` library.
+
+This dataset is a record of forest fires in the Castilla-La Mancha region of Spain between 1998 and 2007. This region is approximately 400 by 400 kilometres. The coordinates are recorded in kilometres. For more info about the data you can type:
+
+```{r}
+#| echo: true
+#| eval: false
+#| purl: false
+?clmfires
+```
+
+We first read the data and transform them into an `sf` object. We also create a polygon that represents the border of the Castilla-La Mancha region. We select the data for year 2004 and only those fires caused by lightning.
+
+
+```{r}
+#| label: fig-points
+#| fig-cap: "Distribution of the observed forest fires caused by lightning in Castilla-La Mancha in 2004"
+#| 
+data("clmfires")
+pp = st_as_sf(as.data.frame(clmfires) %>%
+                mutate(x = x, 
+                       y = y),
+              coords = c("x","y"),
+              crs = NA) %>%
+  filter(cause == "lightning",
+         year(date) == 2004)
+
+poly = as.data.frame(clmfires$window$bdry[[1]]) %>%
+  mutate(ID = 1)
+
+region = poly %>% 
+  st_as_sf(coords = c("x", "y"), crs = NA) %>% 
+  dplyr::group_by(ID) %>% 
+  summarise(geometry = st_combine(geometry)) %>%
+  st_cast("POLYGON") 
+  
+ggplot() + geom_sf(data = region, alpha = 0) + geom_sf(data = pp)  
+```
+
+## Fit a homogeneous Poisson Process{ #HPP }
+
+As a first exercise we are going to fit a homogeneous Poisson process (HPP) to the data. This is a model that assume constant intensity over the whole space so our liner predictor is  
+$$
+\eta(s) = \log\lambda(s) = \beta_0 , \ \mathbf{s}\in\Omega
+$$ 
+so  the likelihood can be written as: 
+$$
+\begin{aligned}
+p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
+& = \exp\left( -\int_{\Omega}\exp(\beta_0)ds\right)\prod_{i=1}^n \lambda(\mathbf{s}_i) \\
+
+\end{aligned}
+$$
+where $|\Omega|$ is the area of the domain of interest. 
+
+We need to approximate the integral using a numerical integration scheme as:
+$$
+\approx\exp\left(-\sum_{k=1}^{N_k}w_k\lambda(s_k)\right)\prod_{i=1}^n \lambda(\mathbf{s}_i)
+$$
+Where $N_k$ is the number of integration points $s_1,\dots,s_{N_k}$ and $w_1,\dots,w_{N_k}$ are the integration weights.
+
+In this case, since the intensity is constant, the integration scheme is really simple: it is enough to consider one random point inside the domain with weight equal to the area of the domain.
+
+
+```{r}
+# define integration scheme
+
+ips = st_sf(
+geometry = st_sample(region, 1)) # some random location inside the domain
+ips$weight = st_area(region) # integration weight is the area of the domain
+
+cmp = ~ 0 + beta_0(1)
+
+formula = geometry ~ beta_0
+
+lik = bru_obs(data = pp,
+              family = "cp",
+              formula = formula,
+              ips = ips)
+fit1 = bru(cmp, lik)
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+1. What is the estimated intensity? 
+2. Compare the estimated expected number of fires on the whole domain with the observed ones. 
+`r hide("Take hint")`
+
+Remember that in the `inlabru` framework we model the log intensity $\eta = log(\lambda)$
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+# 1) The estimated posterior distribution of the  intensity is
+
+post_int = inla.tmarginal(function(x) exp(x), fit1$marginals.fixed$beta_0)
+post_int %>% ggplot() + geom_line(aes(x,y))
+
+# 2) To compute the expected number of points in the area we need to multiply the 
+# estimated intensity by the area of the domain. 
+# In the same plot we also show the number of observed fires as a vertical line.
+
+post_int = inla.tmarginal(function(x) st_area(region)* exp(x), fit1$marginals.fixed$beta_0)
+post_int %>% ggplot() + geom_line(aes(x,y)) +
+  geom_vline(xintercept = dim(pp)[1])
+```
+:::
+
+
+
+
+
+
+# Inhomogeneous Poisson Process { #NHPP }
+The model above has the clear disadvantages that assumes a constant intensity and from Figure @fig-points we clearly see that this is not the case.
+
+The library `spatstat` contains also some covariates that can help explain the fires distribution. Figure @fit-altitude shows the location of fires together with the (scaled) altitude. 
+
+```{r}
+#| label: fig-altitude
+#| fig-cap: "Distribution of the observed forest fires and scaled altitude"
+#| 
+elev_raster = rast(clmfires.extra[[2]]$elevation)
+elev_raster = scale(elev_raster)
+ggplot() + geom_spatraster(data = elev_raster) + geom_sf(data = pp) + scale_fill_scico()
+
+```
+
+We are now going to use the altitude as a covariate to explain the variability of the intensity $\lambda(s)$ over the domain of interest.
+
+Our model is 
+$$
+\log\lambda(s) = \beta_0 + \beta_1x(s)
+$$
+where $x(s)$ is the altitude at location $s$.
+
+The likelihood becomes:
+$$
+\begin{aligned}
+p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
+& = \exp \left( -\int_\Omega \exp(\beta_0 + \beta_1x(s)) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
+\end{aligned}
+$$
+Now we need to choose an integration scheme to solve the integral.
+
+In this case we will take a simple grid based approach where each quadrature location has an equal weight.
+Our  grid consists of $N_k = 1000$ points and the weights are all  equal to $|\Omega|/N_k$. 
+
+```{r}
+#| label: fig-int2
+#| fig-cap: "Integration scheme."
+#| 
+n.int = 1000
+ips = st_sf(geometry = st_sample(region,
+            size = n.int,
+            type = "regular"))
+
+ips$weight = st_area(region) / n.int
+ggplot() + geom_sf(data = ips, aes(color = weight)) + geom_sf(data= region, alpha = 0)
+
+```
+
+**OBS**: The implicit assumption here is that the intensity is constant inside each grid box, _and so is the covariate_!!
+
+We can now fit the model:
+
+```{r}
+cmp = ~ Intercept(1) + elev(elev_raster, model = "linear")
+formula = geometry ~ Intercept + elev
+lik = bru_obs(data = pp,
+              family = "cp",
+              formula = formula,
+              ips = ips)
+fit2 = bru(cmp, lik)
+```
+
+
+```{r}
+
+est_grid = st_as_sf(data.frame(crds(elev_raster)), coords = c("x","y"))
+est_grid  = st_intersection(est_grid, region)
+
+preds2 = predict(fit2, est_grid, ~ data.frame(log_scale = Intercept + elev,
+                                              lin_scale = exp(Intercept + elev)))
+
+preds2$lin_scale %>% ggplot() + geom_sf(aes(color = mean)) + scale_color_scico()
+
+```
+
+
+
+```{r}
+
+Lam_samps2 = generate(fit2, ips, ~ sum(weight * exp(elev + Intercept)),
+                    n.samples = 2000)
+
+
+
+Lam_df = data.frame(
+  Lam = as.numeric(Lam_samps2))
+
+ggplot(Lam_df) +
+  geom_histogram(aes(x = Lam),
+                 colour = "blue",
+                 alpha = 0.5,
+                 bins = 20) +
+  geom_vline(xintercept = nrow(pp),
+             colour = "red") +
+  theme_minimal() +
+  xlab(expression(Lambda))
+
+
+```
+
+::: callout-note
+
+
+
+
+:::
+
+# Log-Gaussian Cox Process 
+
+```{r}
+
+mesh = fm_mesh_2d(boundary = region,
+                  max.edge = c(5, 10),
+                  cutoff = 4, crs = NA)
+ggplot() + gg(mesh) + geom_sf(data = pp)
+
+
+
+spde_model =  inla.spde2.pcmatern(mesh,
+                                  prior.sigma = c(1, 0.5),
+                                  prior.range = c(100, 0.5))
+
+
+ips = fm_int(mesh, samplers = region)
+ggplot() + geom_sf(data = ips, aes(color = weight)) + 
+  gg(mesh) + 
+   scale_color_scico()
+
+cmp = ~ Intercept(1) + space(geometry, model = spde_model) + elev(elev_raster, model = "linear")
+
+formula = geometry ~ Intercept + space + elev
+
+
+lik = bru_obs("cp",
+              formula = formula,
+              data = pp,
+              ips = ips)
+
+
+fit3 = bru(cmp, lik)
+
+
+Lam_samps3 = generate(fit3, ips, ~ sum(weight * exp(space + Intercept + elev)),
+                    n.samples = 2000)
+
+
+
+
+
+Lam_df3 = data.frame(
+  Lam = as.numeric(Lam_samps3))
+
+ggplot(Lam_df3) +
+  geom_histogram(aes(x = Lam),
+                 colour = "blue",
+                 alpha = 0.5,
+                 bins = 20) +
+  geom_vline(xintercept = nrow(pp),
+             colour = "red") +
+  theme_minimal() +
+  xlab(expression(Lambda))
+
+
+
+
+```
+
+<!-- #covars = st_as_sf(clmfires.extra[[1]][[1]])  -->
+
+<!-- pp %>%  -->
+
+<!--   st_drop_geometry() %>% -->
+
+<!--   mutate(yy = year(date)) %>% -->
+
+<!--   group_by(yy, cause )%>% -->
+
+<!--   summarise(n = n()) %>% -->
+
+<!--   ggplot() + geom_line(aes(yy, n, group = cause, color = cause)) -->
+
+<!-- pp %>%  -->
+
+<!--   st_drop_geometry() %>% -->
+
+<!--   mutate(yy = month(date)) %>% -->
+
+<!--   group_by(yy, cause )%>% -->
+
+<!--   summarise(n = n()) %>% -->
+
+<!--   ggplot() + geom_line(aes(yy, n, group = cause, color = cause)) -->
+
+<!-- pp %>%  -->
+
+<!--   mutate(yy = year(date)) %>% -->
+
+<!--   filter(yy %in% c( 2004, 2005), -->
+
+<!--          cause == "lightning") %>% -->
+
+<!--   ggplot() +  -->
+
+<!--   geom_sf(aes(color = cause), alpha = 0.3)  +  -->
+
+<!--   geom_sf(data = region, alpha = 0) + -->
+
+<!--   facet_wrap(~year(date)) -->
+
+<!-- pp1 = pp %>% filter(year(date)==2004, cause == "lightning") -->
+
+<!-- ggplot() + geom_sf(data = region) + geom_sf(data = pp1) -->
+
+<!-- summary(fit) -->
+
+<!-- pred_grid = fm_pixels(mesh, mask = region) -->
+
+<!-- preds = predict(fit, pred_grid, ~   data.frame( logscale = Intercept + space, -->
+
+<!--                                                 expscale = exp(Intercept + space))) -->
+
+<!-- preds$expscale %>% ggplot() + geom_sf(aes(color = median)) + scale_color_scico() + -->
+
+<!--   geom_sf(data = pp1, size = 0.3) -->
+
+<!-- preds %>% ggplot() + geom_sf(aes(color = sd)) + scale_color_scico() -->
+
+<!-- ``` -->
+
+<!-- ```{r} -->
+
+<!-- data(gorillas_sf, package = "inlabru") -->
+
+<!-- matern <- inla.spde2.pcmatern(gorillas_sf$mesh, -->
+
+<!--   prior.range = c(0.1, 0.01), -->
+
+<!--   prior.sigma = c(1, 0.01) -->
+
+<!-- ) -->
+
+<!-- cmp <- ~ -->
+
+<!--   Common(geometry, model = matern) + -->
+
+<!--     Difference(geometry, model = matern) + -->
+
+<!--     Intercept(1) -->
+
+<!-- fml.major <- geometry ~ Intercept + Common + Difference / 2 -->
+
+<!-- fml.minor <- geometry ~ Intercept + Common - Difference / 2 -->
+
+<!-- lik_minor <- bru_obs("cp", -->
+
+<!--   formula = fml.major, -->
+
+<!--   data = gorillas_sf$nests[gorillas_sf$nests$group == "major", ], -->
+
+<!--   samplers = gorillas_sf$boundary, -->
+
+<!--   domain = list(geometry = gorillas_sf$mesh) -->
+
+<!-- ) -->
+
+<!-- lik_major <- bru_obs("cp", -->
+
+<!--   formula = fml.minor, -->
+
+<!--   data = gorillas_sf$nests[gorillas_sf$nests$group == "minor", ], -->
+
+<!--   samplers = gorillas_sf$boundary, -->
+
+<!--   domain = list(geometry = gorillas_sf$mesh) -->
+
+<!-- ) -->
+
+<!-- jfit <- bru(cmp, lik_major, lik_minor, -->
+
+<!--   options = list( -->
+
+<!--     control.inla = list( -->
+
+<!--       int.strategy = "eb" -->
+
+<!--     ), -->
+
+<!--     bru_max_iter = 1 -->
+
+<!--   ) -->
+
+<!-- ) -->
+
+<!-- ``` -->
+
+<!-- Some equations: -->
+
+<!-- $$ -->
+
+<!-- \begin{aligned} -->
+
+<!-- y_i&\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N \\ -->
+
+<!-- \eta_i &= \mu_i = \beta_0 + \beta_1 x_i -->
+
+<!-- \end{aligned} -->
+
+<!-- $$ -->
+
+<!-- ::: {.callout-tip icon="false"} -->
+
+<!-- ## {{< bi question-octagon color=#6dc83c >}} Question -->
+
+<!-- This is a Question -->
+
+<!-- `r hide("Answer")` -->
+
+<!-- Show the written answer -->
+
+<!-- `r unhide()` -->
+
+<!-- ::: -->
+
+<!-- ::: callout-note -->
+
+<!-- This is a Note -->
+
+<!-- ::: -->
+
+<!-- ### **Section of the exercise** -->
+
+<!-- Some R Code -->
+
+<!-- ```{r} -->
+
+<!-- #| code-fold: show -->
+
+<!-- beta = c(2,0.5) -->
+
+<!-- sd_error = 0.1 -->
+
+<!-- n = 100 -->
+
+<!-- x = rnorm(n) -->
+
+<!-- y = beta[1] + beta[2] * x + rnorm(n, sd = sd_error) -->
+
+<!-- df = data.frame(y = y, x = x)   -->
+
+<!-- ``` -->
+
+<!-- **sub section heading** -->
+
+<!-- ::: callout-note -->
+
+<!-- Note with R chunk that is neither evaluate or purled -->
+
+<!-- ```{r} -->
+
+<!-- #| eval: false -->
+
+<!-- #| purl: false -->
+
+<!-- cmp =  ~ -1 + myIntercept(1) + beta_1(x, model = "linear") -->
+
+<!-- ``` -->
+
+<!-- ::: -->
+
+<!-- ::: {.callout-warning icon="false"} -->
+
+<!-- ## {{< bi pencil-square color=#c8793c >}} Task -->
+
+<!-- This is a Task.. -->
+
+<!-- `r hide("Take hint")` -->
+
+<!-- Add hint details here... -->
+
+<!-- `r unhide()` -->
+
+<!-- ```{r} -->
+
+<!-- #| fig-width: 6 -->
+
+<!-- #| fig-height: 4 -->
+
+<!-- #| fig-align: center -->
+
+<!-- #| webex.hide: "Click here to see the solution" -->
+
+<!-- #| code-fold: show -->
+
+<!-- #| purl: false -->
+
+<!-- plot(y~x,data = df)  -->
+
+<!-- ``` -->
+
+<!-- ::: -->
+
+<!-- ### Download data Example -->
+
+<!-- 1.  First we need to write the data set on the datasets file (this could be a `.tiff`, `.RData`, `.csv`,etc.) -->
+
+<!--     ```{r} -->
+
+<!--     iris_subset <- iris %>%  -->
+
+<!--       dplyr::select(starts_with("S")) %>% -->
+
+<!--       filter(Species=="virginica") -->
+
+<!--     write.csv(iris_subset,file = "datasets/iris_subset.csv",row.names = F) -->
+
+<!--     ``` -->
+
+<!-- 2.  Then we need to add the following widget based on this quarto [extension](https://github.com/shafayetShafee/downloadthis) -->
+
+<!--     {{< downloadthis datasets/iris_subset.csv dname="PygmyWFBC.csv" label="Download data set" icon="database-fill-down" type="info" >}} -->
+
+<!-- The controls are: -->
+
+<!-- -   The files path (e.g., datasets/iris_subset.csv) -->
+
+<!-- -   The name of the file (As downloaded) -->
+
+<!-- -   The label of the button -->
+
+<!-- -   the icon of the button -->
+
+<!-- -   the type of button -->

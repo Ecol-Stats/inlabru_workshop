@@ -1,12 +1,14 @@
 ---
 title: "Lecture 3"
 from: markdown+emoji
-subtitle: "Temporal models and smoothing" 
+subtitle: "Temporal Models and Smoothing" 
 format:
-   metropolis-beamer-revealjs
-#     logo:  images/logo_white.png
-#     theme: style.scss
-# header-logo: images/logo_white.png
+  revealjs:
+    margin: 0
+    logo:  NTNU_UofG.png
+    theme: uofg_theme.scss
+    header-includes: |
+      <script src="custom.js" type="application/javascript"></script>
 slide-number: "c/t"
 title-slide-attributes:
 #    data-background-image: images/trondheim3.png
@@ -17,12 +19,13 @@ author:
     #orcid: 0000-0002-6879-4412
     email: sara.martino@ntnu.no
     affiliations: Dept. of Mathematical Science, NTNU
+  - name: Janine Illian
+    #orcid: 0000-0002-6879-4412
+    email: Janine.Illian@glasgow.ac.uk
+    affiliations: University of Glasgow     
 # date: May 22, 2025
 # bibliography: references.bib
 embed-resources: true
-editor: 
-  markdown: 
-    wrap: 72
 execute:
   allow-html: true
 ---
