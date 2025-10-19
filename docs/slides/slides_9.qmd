@@ -68,7 +68,7 @@ library(cowplot) # needs install.packages("magick") to draw images
 
 . . . 
 
-2. How do we choose the best between our models? - **Model Comparison**
+2. How do we choose the best  model? - **Model Comparison**
 
 
 . . . 
@@ -87,11 +87,11 @@ But..it is not always easy to distinguish between the two!
 model
     - Ones that look at how model the data fits the data
 - In general *it is not an easy task*
-- _inlabru_ provides some options available
+- `inlabru` provides some options available
 
 . . . 
 
-## Model Comparison/Validation in _inlabru_{.smaller}
+## Model Comparison/Validation in `inlabru`{.smaller}
 
 - Criteria of fit
 
@@ -104,7 +104,7 @@ model
   - Conditional predictive ordinate (CPO)
   - Probability integral transform (PIT)
 
-- You can sample from the posterior using the _generate()_ function. These can be used to compute
+- You can sample from the posterior using  `generate()`  and compute
   - log-scores
   - CRPS
   - ...
@@ -165,13 +165,10 @@ fit$dic$dic
 <hr>
 
 - Measure of complexity and fit. 
-- Defined as:
-$$
-\text{DIC} = \bar{D} + p_D
-$$
+- Defined as: $\text{DIC} = \bar{D} + p_D$
     -  $\bar{D}$  is the posterior mean of the deviance 
     -  $p_D$ is the effective number of parameters. 
-- Smaller values of the DIC indicate better trade-off between complexity and fit of the model.
+- Smaller values indicate better trade-off between complexity and fit.
 
 ## Widely applicable information criterion (WAIC)
 
@@ -192,8 +189,8 @@ fit$waic$waic
 
 
 - similar to the DIC...but maybe better^[See "Understanding predictive information criteria for Bayesian models" (2013) by Andrew Gelman, Jessica Hwang, and Aki Vehtari]
-- linked to the leave-one-out crossvalidation
-- smaller values indicate better trade-off between complexity and fit 
+- Linked to the leave-one-out crossvalidation
+- Smaller values indicate better trade-off between complexity and fit 
 
 
 # Posterior predictive checks
@@ -208,7 +205,7 @@ $$
 \pi(\theta )& &\ \text{  hyperprior}\\
 \end{eqnarray}
 $$
-using _inlabru_ we estimate the _posterior distribution_ $\pi(\mathbf{u},\theta|\mathbf{y})$.
+using `inlabru` we estimate the _posterior distribution_ $\pi(\mathbf{u},\theta|\mathbf{y})$.
 
 
 The *posterior predictive distribution* for a new data $\hat{y}$ is then:
@@ -228,7 +225,7 @@ $$
 $$
 
 
-**NOTE:** In general this is NOT computed by _inlabru_ but needs to be approximated 
+**NOTE:** In general this is NOT computed by `inlabru` but needs to be approximated 
   
   - Use generate to sample from the posterior
   $(\mathbf{u}^*_i,\theta^*_i)\sim\pi(\mathbf{u},\theta|\mathbf{y})$
@@ -239,7 +236,7 @@ $$
   
 . . .
 
-**BUT** _inlabru_ computes automatically two quantities that are useful for model check!
+**BUT** `inlabru` computes automatically two quantities that are useful for model check!
   
   - Conditional predictive ordinate (CPO) 
   - Probability integral transform (PIT) 
@@ -351,7 +348,7 @@ In the literature there are many proposed scores for evaluate predictions. For e
 
 They all have their strength and wakness and which one is better depends on the goals of the model.
 
-_inlabru_ does not provide such scores automatcally, but they can be computed using simulations from the posterior distribution.
+`inlabru` does not provide such scores automatcally, but they can be computed using simulations from the posterior distribution.
 
 
 ## Example:  CRPS for Poisson data
@@ -511,6 +508,7 @@ $s$
 A better option is to use posterior predictive checks^[See Gelman et. al (2020) "Bayesian Workflow"]
 
 
+
 ## One example of posterior predictive checks
 
 :::: {.columns}
@@ -600,7 +598,7 @@ df %>% ggplot() + geom_point(aes(x,y)) +
 
 ## One example of posterior predictive checks
 
-1. Sample $y^{1k}_i\sim\pi(y_i|\mathbf{y})$ using _generate()_
+1. Sample $y^{1k}_i\sim\pi(y_i|\mathbf{y})$ using `generate()`
 2. Compare the distribution of the simulated data with the one of the observed one
 
 ```{r}
@@ -646,6 +644,12 @@ p1 + p2
 This is just a simple example, but more complex checks can be computed with the same idea!
 
 
+## Leave Group Our Cross-Validation
+
+This is a new option for cross-validation in `inlabru`
+
+[HOW MUCH SHOULD WE SAY ABOUT THIS??]
+
 # Model validation for LGCP
 
 # Conclusion
@@ -654,6 +658,6 @@ This is just a simple example, but more complex checks can be computed with the 
 
 - Model check and model comparison are complex topics
 - There are no universal solutions, it all depends on which model characteristics you are interested in.
-- _inlabru_ provides some easy to compute alternatives
+- `inlabru` provides some easy to compute alternatives
 - LGCP require own tools to validate the model
 
