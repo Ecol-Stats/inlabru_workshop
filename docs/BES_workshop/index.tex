@@ -263,7 +263,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[colback={codebgcolor}, frame hidden, breakable, enhanced, sharp corners, boxrule=0pt]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, breakable, colback={codebgcolor}, enhanced, frame hidden]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -397,6 +397,7 @@ workshop:
   \texttt{R} versions installed.
 \item
   Install the following libraries:
+\end{enumerate}
 
 \begin{verbatim}
 install.packages(c(
@@ -419,7 +420,6 @@ install.packages(c(
   "viridis"
 ))
 \end{verbatim}
-\end{enumerate}
 
 
 

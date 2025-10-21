@@ -67,10 +67,10 @@ Participants are required to follow the next steps before the day of the worksho
 
 4.  Install the following libraries:
 
-    ```{r}
-    #| echo: false
-    #| warning: false
-    #| message: false
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
 
     if (file.exists("practicals_libraries.rds")) {
       libs_data <- readRDS("practicals_libraries.rds")
@@ -91,4 +91,5 @@ Participants are required to follow the next steps before the day of the worksho
         cat("No libraries found after filtering.\n")
       }
     }
-    ```
+```
+
