@@ -1,6 +1,3 @@
-
-
-
 ## ----child="practicals\\spatial_data_types_areal.qmd"-------------------------
 
 ## -----------------------------------------------------------------------------
@@ -368,5 +365,177 @@ inv_logit = function(x) (1+exp(-x))^(-1)
 
 
 
+
+## ----child="practicals\\spatial_data_types_PP.qmd"----------------------------
+
+## -----------------------------------------------------------------------------
+#| fig-cap: "Distribution of the observed forest fires caused by lightning in Castilla-La Mancha in 2004"
+#| 
+data("clmfires")
+pp = st_as_sf(as.data.frame(clmfires) %>%
+                dplyr::mutate(x = x, 
+                       y = y),
+              coords = c("x","y"),
+              crs = NA) %>%
+  dplyr::filter(cause == "lightning",
+         year(date) == 2004)
+
+poly = as.data.frame(clmfires$window$bdry[[1]]) %>%
+  mutate(ID = 1)
+
+region = poly %>% 
+  st_as_sf(coords = c("x", "y"), crs = NA) %>% 
+  dplyr::group_by(ID) %>% 
+  summarise(geometry = st_combine(geometry)) %>%
+  st_cast("POLYGON") 
+  
+ggplot() + geom_sf(data = region, alpha = 0) + geom_sf(data = pp)  
+
+
+## -----------------------------------------------------------------------------
+
+elev_raster = rast(clmfires.extra[[2]]$elevation)
+elev_raster = scale(elev_raster)
+
+
+
+
+
+## -----------------------------------------------------------------------------
+#| fig-width: 4
+#| fig-height: 4
+#| fig-align: center
+# mesh options
+
+mesh <-  fm_mesh_2d(boundary = region,
+                  max.edge = c(5, 10),
+                  cutoff = 4, crs = NA)
+
+ggplot() + gg(mesh) + geom_sf(data=pp)
+
+
+## -----------------------------------------------------------------------------
+st_area(region)
+
+
+## -----------------------------------------------------------------------------
+spde_model =  inla.spde2.pcmatern(mesh,
+                       prior.sigma = c(1, 0.5), # P(sigma > 1) = 0.5
+                       prior.range = c(100, 0.5)) # P(range < 100) = 0.5
+
+
+
+## -----------------------------------------------------------------------------
+# build integration scheme
+ips = fm_int(mesh,
+             samplers = region)
+
+
+
+## -----------------------------------------------------------------------------
+eval_spatial(elev_raster,pp) %>% is.na() %>% any()
+eval_spatial(elev_raster,ips) %>% is.na() %>% any()
+
+
+## -----------------------------------------------------------------------------
+#| echo: false
+#| fig-align: center
+#| fig-width: 4.5
+#| fig-height: 4.5
+#| label: fig-points
+#| fig-cap: "Integration scheme for numerical approximation of the stochastic integral in La Mancha Region"
+ggplot()+tidyterra::geom_spatraster(data=elev_raster)+
+  geom_sf(data=ips,alpha=0.25,col=1)+
+   geom_sf(data=ips[3525,],col=2)
+
+
+## -----------------------------------------------------------------------------
+# Extend raster ext by 5 % of the original raster
+re <- extend(elev_raster, ext(elev_raster)*1.05)
+# Convert to an sf spatial object
+re_df <- re %>% stars::st_as_stars() %>%  st_as_sf(na.rm=F)
+# fill in missing values using the original raster 
+re_df$lyr.1 <- bru_fill_missing(elev_raster,re_df,re_df$lyr.1)
+# rasterize
+elev_rast_p <- stars::st_rasterize(re_df) %>% rast()
+
+
+
+## -----------------------------------------------------------------------------
+#| echo: false
+#| fig-align: center
+#| fig-width: 4.5
+#| fig-height: 4.5
+ggplot()+tidyterra::geom_spatraster(data=elev_rast_p)+
+  geom_sf(data=ips,alpha=0.25,col=1)+
+   geom_sf(data=ips[3525,],col=2)
+
+
+## -----------------------------------------------------------------------------
+cmp_lgcp <-  geometry ~  Intercept(1)  + 
+  elev(elev_rast_p, model = "linear") +
+  space(geometry, model = spde_model)
+
+
+## -----------------------------------------------------------------------------
+formula = geometry ~ Intercept  + elev + space
+
+
+## -----------------------------------------------------------------------------
+lik = bru_obs(formula = formula, 
+              data = pp, 
+              family = "cp",
+              ips = ips)
+
+
+
+
+
+## -----------------------------------------------------------------------------
+fit_lgcp = bru(cmp_lgcp,lik)
+
+
+## -----------------------------------------------------------------------------
+#| eval: false
+
+# summary(fit_lgcp)
+
+
+
+
+## -----------------------------------------------------------------------------
+elev_crop <- terra::crop(x = elev_raster,y = region,mask=TRUE)
+
+
+pxl1 = data.frame(crds(elev_crop), 
+                  as.data.frame(elev_crop$lyr.1)) %>% 
+       filter(!is.na(lyr.1)) %>%
+st_as_sf(coords = c("x","y")) %>%
+  dplyr::select(-lyr.1)
+
+
+
+
+## -----------------------------------------------------------------------------
+#| eval: false
+
+# lgcp_pred <- predict(
+#   fit_lgcp,
+#   pxl1,
+#   ~ data.frame(
+#     lambda = exp(Intercept + elev + space), # intensity
+#     loglambda = Intercept + elev +space,  #log-intensity
+#     GF = space # matern field
+#   )
+# )
+# 
+# # predicted log intensity
+# ggplot() + gg(lgcp_pred$loglambda, geom = "tile")
+# # standard deviation of the predicted log intensity
+# ggplot() + gg(lgcp_pred$loglambda, geom = "tile",aes(fill=sd))
+# # predicted intensity
+# ggplot() +  gg(lgcp_pred$lambda, geom = "tile")
+# # spatial field
+# ggplot() +  gg(lgcp_pred$GF, geom = "tile")
 
 

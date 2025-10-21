@@ -1,10 +1,28 @@
 [
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "BES workshop",
+    "section": "",
+    "text": "Welcome to the course!\n\nWelcome to the inlabru workshop!\nThe goal of this workshop is to introduce new users to the inlabru software for Bayesian spatial modelling using the integrated nested Laplace approximation (INLA).\nThe workshop is intended for applied statisticians and quantitative ecologists who are interested in efficiently modelling spatial data- No prior knowledge of R-INLA is required.\n\n\n\nLearning Objectives for the workshop\nAt the end of the workshop, participants will be able to:\n\nUnderstand the inlabru workflow and software principles.\nFit commonly used models such as Linear models, LMM, GLM and GAMs using inlabru.\nDescribe different types of spatial data and fit appropriate spatial models.\nInterpret model outputs and create spatial maps and predictions.\nImplement a complete, reproducible spatial analysis workflow from data preparation to result visualization.\n\n\n\nSchedule Program\n\n\n\nTime\nTopic\n\n\n\n\n13:00 - 14:00\nWorkshop registration\n\n\n14:00 - 14:45\nSession 1: Introduction to inlabru\n\n\n14:45 - 15:45\nPractical Session 1\n\n\n15:45 - 16:00\nCoffee break\n\n\n16:00 - 16:45\nSession 2: Spatial Modelling with inlabru\n\n\n16:45 - 17:45\nPractical Session 2\n\n\n17:45 - 18:00\nWrap-up and outlook\n\n\n\n\n\nIn preparation for the workshop\nParticipants are required to follow the next steps before the day of the workshop:\n\nInstall R-INLA\nInstall inlabru (available from CRAN)\n\n# Enable universe(s) by inlabru-org\noptions(repos = c(\n  inlabruorg = \"https://inlabru-org.r-universe.dev\",\n  INLA = \"https://inla.r-inla-download.org/R/testing\",\n  CRAN = \"https://cloud.r-project.org\"\n))\n\n# Install some packages\ninstall.packages(\"inlabru\")\n\nMake sure you have the latest R-INLA, inlabru and R versions installed.\nInstall the following libraries",
+    "crumbs": [
+      "Home",
+      "BES workshop"
+    ]
+  },
+  {
+    "objectID": "slides/slides_1.html",
+    "href": "slides/slides_1.html",
+    "title": "Lecture 1",
+    "section": "",
+    "text": "What are INLA and inlabru?\nWhy the Bayesian framework?\nWhich model are inlabru-friendly?\nWhat are Latent Gaussian Models?\nHow are they implemented in inlabru?"
+  },
+  {
     "objectID": "slides/slides_1.html#outline",
     "href": "slides/slides_1.html#outline",
     "title": "Lecture 1",
-    "section": "Outline",
-    "text": "Outline\n\n\n\n\nWhat are INLA and inlabru?\nWhy the Bayesian framework?\nWhich model are inlabru-friendly?\nWhat are Latent Gaussian Models?\nHow are they implemented in inlabru?"
+    "section": "",
+    "text": "What are INLA and inlabru?\nWhy the Bayesian framework?\nWhich model are inlabru-friendly?\nWhat are Latent Gaussian Models?\nHow are they implemented in inlabru?"
   },
   {
     "objectID": "slides/slides_1.html#what-is-inla-what-is-inlabru",
@@ -18,7 +36,7 @@
     "href": "slides/slides_1.html#where",
     "title": "Lecture 1",
     "section": "Where?",
-    "text": "Where?\n\n\n\n Website-tutorials\n\n\ninlabru https://inlabru-org.github.io/inlabru/\nR-INLA https://www.r-inla.org/home\n\n\n\n\n\n\n Discussion forums\n\n\ninlabru https://github.com/inlabru-org/inlabru/discussions\nR-INLA https://groups.google.com/g/r-inla-discussion-group\n\n\n\n\n\n\n Books\n\n\n\nBlangiardo, M., & Cameletti, M. (2015). Spatial and spatio-temporal Bayesian models with R-INLA. John Wiley & Sons.\nGómez-Rubio, V. (2020). Bayesian inference with INLA. Chapman and Hall/CRC.\nKrainski, E., Gómez-Rubio, V., Bakka, H., Lenzi, A., Castro-Camilo, D., Simpson, D., … & Rue, H. (2018). Advanced spatial modeling with stochastic partial differential equations using R and INLA. Chapman and Hall/CRC.\nWang, X., Yue, Y. R., & Faraway, J. J. (2018). Bayesian regression modeling with INLA. Chapman and Hall/CRC."
+    "text": "Where?\n\n\n\n\n\n\n Website-tutorials\n\n\n\ninlabru https://inlabru-org.github.io/inlabru/\nR-INLA https://www.r-inla.org/home\n\n\n\n\n\n\n\n\n Discussion forums\n\n\n\ninlabru https://github.com/inlabru-org/inlabru/discussions\nR-INLA https://groups.google.com/g/r-inla-discussion-group\n\n\n\n\n\n\n\n\n Books\n\n\n\n\nBlangiardo, M., & Cameletti, M. (2015). Spatial and spatio-temporal Bayesian models with R-INLA. John Wiley & Sons.\nGómez-Rubio, V. (2020). Bayesian inference with INLA. Chapman and Hall/CRC.\nKrainski, E., Gómez-Rubio, V., Bakka, H., Lenzi, A., Castro-Camilo, D., Simpson, D., … & Rue, H. (2018). Advanced spatial modeling with stochastic partial differential equations using R and INLA. Chapman and Hall/CRC.\nWang, X., Yue, Y. R., & Faraway, J. J. (2018). Bayesian regression modeling with INLA. Chapman and Hall/CRC."
   },
   {
     "objectID": "slides/slides_1.html#so-why-should-you-use-inlabru",
@@ -60,7 +78,7 @@
     "href": "slides/slides_1.html#how-do-we-find-answers",
     "title": "Lecture 1",
     "section": "How do we find answers?",
-    "text": "How do we find answers?\nWe need to make choices:\n\n\n\nBayesian or frequentist?\nHow do we model the data?\nHow do we compute the answer?"
+    "text": "How do we find answers?\nWe need to make choices:\n\n\nBayesian or frequentist?\nHow do we model the data?\nHow do we compute the answer?"
   },
   {
     "objectID": "slides/slides_1.html#how-do-we-find-answers-1",
@@ -95,35 +113,35 @@
     "href": "slides/slides_1.html#some-more-details-i",
     "title": "Lecture 1",
     "section": "Some more details I",
-    "text": "Some more details I\nWe define linear predictor the mean (or a function of the mean) of our observations given the model components.\n\nIn this case \\(E(y_i|\\beta_0, \\beta_i) = \\eta_i = \\beta_0 + \\beta_1 x_i\\)"
+    "text": "Some more details I\nWe define linear predictor the mean (or a function of the mean) of our observations given the model components.\n\n\n\n\n\n\n\n\n\nIn this case \\(E(y_i|\\beta_0, \\beta_i) = \\eta_i = \\beta_0 + \\beta_1 x_i\\)"
   },
   {
     "objectID": "slides/slides_1.html#some-more-details-i-1",
     "href": "slides/slides_1.html#some-more-details-i-1",
     "title": "Lecture 1",
     "section": "Some more details I",
-    "text": "Some more details I\nWe define linear predictor the mean (or a function of the mean) of our observations given the model components.\n\nIn this case \\(E(y_i|\\beta_0, \\beta_i) =\\eta_i =  \\color{red}{\\boxed{\\beta_0}} +  \\color{red}{\\boxed{\\beta_1 x_i}}\\)\nThis model as two components !"
+    "text": "Some more details I\nWe define linear predictor the mean (or a function of the mean) of our observations given the model components.\n\n\n\n\n\n\n\n\n\nIn this case \\(E(y_i|\\beta_0, \\beta_i) =\\eta_i =  \\color{red}{\\boxed{\\beta_0}} +  \\color{red}{\\boxed{\\beta_1 x_i}}\\)\nThis model as two components !"
   },
   {
     "objectID": "slides/slides_1.html#some-more-details-ii",
     "href": "slides/slides_1.html#some-more-details-ii",
     "title": "Lecture 1",
     "section": "Some more details II",
-    "text": "Some more details II\nGiven the linear predictor \\(\\eta\\) the observations a independent on each other!\n\nThis means that all dependencies in the observations are accounted for by the components!"
+    "text": "Some more details II\nGiven the linear predictor \\(\\eta\\) the observations a independent on each other!\n\n\n\n\n\n\n\n\n\nThis means that all dependencies in the observations are accounted for by the components!"
   },
   {
     "objectID": "slides/slides_1.html#some-more-details-ii-1",
     "href": "slides/slides_1.html#some-more-details-ii-1",
     "title": "Lecture 1",
     "section": "Some more details II",
-    "text": "Some more details II\nGiven the linear predictor \\(\\eta\\) the observations a independent on each other!\n\nThe observation model (likelihood) can be written as: \\[\n\\pi(\\mathbf{y}|\\eta,\\sigma^2) = \\prod_{i = 1}^n\\pi(y_i|\\eta_i,\\sigma^2)\n\\]"
+    "text": "Some more details II\nGiven the linear predictor \\(\\eta\\) the observations a independent on each other!\n\n\n\n\n\n\n\n\n\nThe observation model (likelihood) can be written as: \\[\n\\pi(\\mathbf{y}|\\eta,\\sigma^2) = \\prod_{i = 1}^n\\pi(y_i|\\eta_i,\\sigma^2)\n\\]"
   },
   {
     "objectID": "slides/slides_1.html#lets-formalize-this-a-bit",
     "href": "slides/slides_1.html#lets-formalize-this-a-bit",
     "title": "Lecture 1",
     "section": "Let’s formalize this a bit…",
-    "text": "Let’s formalize this a bit…\nThe elements of a inlabru friendly statistical model are:\nThe observational model \\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim\\mathcal{N}(\\eta_i,\\sigma^2),\\qquad i = 1,\\dots,n\\\\\nE(y_i|\\eta_i, \\sigma^2) & = \\eta_i\n\\end{aligned}\n\\]\n\n\n\n\n\n\nNote\n\n\nWe assume that, given the linear predictor \\(\\eta\\), the data are independent on each other! Data dependence is expressed through the components if the linear predictor."
+    "text": "Let’s formalize this a bit…\nThe elements of a inlabru friendly statistical model are:\nThe observational model \\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim\\mathcal{N}(\\eta_i,\\sigma^2),\\qquad i = 1,\\dots,n\\\\\nE(y_i|\\eta_i, \\sigma^2) & = \\eta_i\n\\end{aligned}\n\\]\n\n\n\n\n\n\nNote\n\n\n\nWe assume that, given the linear predictor \\(\\eta\\), the data are independent on each other! Data dependence is expressed through the components if the linear predictor."
   },
   {
     "objectID": "slides/slides_1.html#lets-formalize-this-a-bit-1",
@@ -179,7 +197,7 @@
     "href": "slides/slides_1.html#latent-gaussian-models-lgm-3",
     "title": "Lecture 1",
     "section": "Latent Gaussian Models (LGM)",
-    "text": "Latent Gaussian Models (LGM)\n\n\n\nThe observation model: \\[\n\\pi(\\mathbf{y}|\\eta,\\theta) = \\prod_{i=1}^{n}\\pi(y_i|\\eta_i,\\theta)\n\\]\nLinear predictor \\(\\eta_i = \\beta_0 + \\beta_1 x_i\\)\nLatent Gaussian field \\(\\pi(\\mathbf{u}|\\theta)\\)\nThe hyperparameters: \\(\\pi(\\theta)\\)\n\n\n\n\n\nStage 1 The data generating process\n\n\n\nStage 2 The dependence structure\n\n\n\nStage 3 The hyperparameters\n\n\nQ: What are we interested in?"
+    "text": "Latent Gaussian Models (LGM)\n\n\n\nThe observation model: \\[\n\\pi(\\mathbf{y}|\\eta,\\theta) = \\prod_{i=1}^{n}\\pi(y_i|\\eta_i,\\theta)\n\\]\nLinear predictor \\(\\eta_i = \\beta_0 + \\beta_1 x_i\\)\nLatent Gaussian field \\(\\pi(\\mathbf{u}|\\theta)\\)\nThe hyperparameters: \\(\\pi(\\theta)\\)\n\n\n\n\n\nStage 1 The data generating process\n\n\n\nStage 2 The dependence structure\n\n\n\nStage 3 The hyperparameters\n\n\n\nQ: What are we interested in?"
   },
   {
     "objectID": "slides/slides_1.html#the-posterior-distribution",
@@ -200,35 +218,35 @@
     "href": "slides/slides_1.html#inlabru-for-linear-regression",
     "title": "Lecture 1",
     "section": "inlabru for linear regression",
-    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\beta_i x_i\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\beta_i x_i\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-linear-regression-1",
     "href": "slides/slides_1.html#inlabru-for-linear-regression-1",
     "title": "Lecture 1",
     "section": "inlabru for linear regression",
-    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{\\beta_i x_i}}\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{\\beta_i x_i}}\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-linear-regression-2",
     "href": "slides/slides_1.html#inlabru-for-linear-regression-2",
     "title": "Lecture 1",
     "section": "inlabru for linear regression",
-    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0 + \\beta_i x_i}}\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0 + \\beta_i x_i}}\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-linear-regression-3",
     "href": "slides/slides_1.html#inlabru-for-linear-regression-3",
     "title": "Lecture 1",
     "section": "inlabru for linear regression",
-    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y_i|\\eta_i, \\sigma^2}} & \\color{#FF6B6B}{\\boxed{\\sim \\mathcal{N}(\\eta_i,\\sigma^2)}}\\\\\n\\eta_i & = \\beta_0 + \\beta_i x_i\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y_i|\\eta_i, \\sigma^2}} & \\color{#FF6B6B}{\\boxed{\\sim \\mathcal{N}(\\eta_i,\\sigma^2)}}\\\\\n\\eta_i & = \\beta_0 + \\beta_i x_i\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-linear-regression-4",
     "href": "slides/slides_1.html#inlabru-for-linear-regression-4",
     "title": "Lecture 1",
     "section": "inlabru for linear regression",
-    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\beta_i x_i\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\beta_i x_i\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-linear-regression-5",
@@ -326,28 +344,28 @@
     "href": "slides/slides_1.html#inlabru-for-time-series",
     "title": "Lecture 1",
     "section": "inlabru for time series",
-    "text": "inlabru for time series\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_t|\\eta_t & \\sim \\text{Binomial}(n_t,p_t)\\\\\n\\text{logit}(p_t) = \\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{f(\\text{time}_t)}}\n\\end{aligned}\n\\]\n\n\nTokyo[1:3,]\n\n  y n time\n1 0 2    1\n2 0 2    2\n3 1 2    3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + time_effect(time, model = \"rw2\", cyclic = TRUE)\n\n# define model predictor\neta = y ~ beta0 + time_effect\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"binomial\",\n              Ntrials = n,\n              data = Tokyo)\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for time series\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_t|\\eta_t & \\sim \\text{Binomial}(n_t,p_t)\\\\\n\\text{logit}(p_t) = \\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{f(\\text{time}_t)}}\n\\end{aligned}\n\\]\n\n\nTokyo[1:3,]\n\n  y n time\n1 0 2    1\n2 0 2    2\n3 1 2    3\n\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + time_effect(time, model = \"rw2\", cyclic = TRUE)\n\n# define model predictor\neta = y ~ beta0 + time_effect\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"binomial\",\n              Ntrials = n,\n              data = Tokyo)\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-time-series-1",
     "href": "slides/slides_1.html#inlabru-for-time-series-1",
     "title": "Lecture 1",
     "section": "inlabru for time series",
-    "text": "inlabru for time series\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_t|\\eta_t & \\sim \\text{Binomial}(n_t,p_t)\\\\\n\\text{logit}(p_t) = \\color{#FF6B6B}{\\boxed{\\eta_i}} & = \\color{#FF6B6B}{\\boxed{\\beta_0 + f(\\text{time}_t)}}\n\\end{aligned}\n\\]\n\n\nTokyo[1:3,]\n\n  y n time\n1 0 2    1\n2 0 2    2\n3 1 2    3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + time_effect(time, model = \"rw2\", cyclic = TRUE)\n\n# define model predictor\neta = y ~ beta0 + time_effect\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"binomial\",\n              Ntrials = n,\n              data = Tokyo)\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for time series\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_t|\\eta_t & \\sim \\text{Binomial}(n_t,p_t)\\\\\n\\text{logit}(p_t) = \\color{#FF6B6B}{\\boxed{\\eta_i}} & = \\color{#FF6B6B}{\\boxed{\\beta_0 + f(\\text{time}_t)}}\n\\end{aligned}\n\\]\n\n\nTokyo[1:3,]\n\n  y n time\n1 0 2    1\n2 0 2    2\n3 1 2    3\n\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + time_effect(time, model = \"rw2\", cyclic = TRUE)\n\n# define model predictor\neta = y ~ beta0 + time_effect\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"binomial\",\n              Ntrials = n,\n              data = Tokyo)\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-time-series-2",
     "href": "slides/slides_1.html#inlabru-for-time-series-2",
     "title": "Lecture 1",
     "section": "inlabru for time series",
-    "text": "inlabru for time series\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y_t|\\eta_t}} & \\color{#FF6B6B}{\\boxed{\\sim \\text{Binomial}(n_t,p_t)}}\\\\\n\\text{logit}(p_t) = \\eta_i & = \\beta_0 + f(\\text{time}_t)\n\\end{aligned}\n\\]\n\n\nTokyo[1:3,]\n\n  y n time\n1 0 2    1\n2 0 2    2\n3 1 2    3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + time_effect(time, model = \"rw2\", cyclic = TRUE)\n\n# define model predictor\neta = y ~ beta0 + time_effect\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"binomial\",\n              Ntrials = n,\n              data = Tokyo)\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for time series\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y_t|\\eta_t}} & \\color{#FF6B6B}{\\boxed{\\sim \\text{Binomial}(n_t,p_t)}}\\\\\n\\text{logit}(p_t) = \\eta_i & = \\beta_0 + f(\\text{time}_t)\n\\end{aligned}\n\\]\n\n\nTokyo[1:3,]\n\n  y n time\n1 0 2    1\n2 0 2    2\n3 1 2    3\n\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + time_effect(time, model = \"rw2\", cyclic = TRUE)\n\n# define model predictor\neta = y ~ beta0 + time_effect\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"binomial\",\n              Ntrials = n,\n              data = Tokyo)\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-time-series-3",
     "href": "slides/slides_1.html#inlabru-for-time-series-3",
     "title": "Lecture 1",
     "section": "inlabru for time series",
-    "text": "inlabru for time series\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_t|\\eta_t & \\sim \\text{Binomial}(n_t,p_t)\\\\\n\\text{logit}(p_t) = \\eta_i & = \\beta_0 + f(\\text{time}_t)\n\\end{aligned}\n\\]\n\n\nTokyo[1:3,]\n\n  y n time\n1 0 2    1\n2 0 2    2\n3 1 2    3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + time_effect(time, model = \"rw2\", cyclic = TRUE)\n\n# define model predictor\neta = y ~ beta0 + time_effect\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"binomial\",\n              Ntrials = n,\n              data = Tokyo)\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for time series\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_t|\\eta_t & \\sim \\text{Binomial}(n_t,p_t)\\\\\n\\text{logit}(p_t) = \\eta_i & = \\beta_0 + f(\\text{time}_t)\n\\end{aligned}\n\\]\n\n\nTokyo[1:3,]\n\n  y n time\n1 0 2    1\n2 0 2    2\n3 1 2    3\n\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + time_effect(time, model = \"rw2\", cyclic = TRUE)\n\n# define model predictor\neta = y ~ beta0 + time_effect\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"binomial\",\n              Ntrials = n,\n              data = Tokyo)\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#example-disease-mapping",
@@ -361,28 +379,28 @@
     "href": "slides/slides_1.html#bayesian-disease-mapping",
     "title": "Lecture 1",
     "section": "Bayesian disease mapping",
-    "text": "Bayesian disease mapping\n\n\n\nStage 1: We assume the responses are Poisson distributed: \\[          \ny_i \\mid \\eta_i \\sim \\text{Poisson}(E_i\\exp(\\eta_i)))\n\\]\n\n\n\n\n\n\nStage 2: \\(\\eta_i\\) is a linear function of three components: an intercept, a covariate \\(c_i\\), a spatially structured effect \\(\\omega\\) likelihood by \\[\n\\eta_i = \\beta_0 + \\beta_1\\ c_i + \\omega_i\n\\]\n\n\n\n\n\n\nStage 3:\n\n\\(\\tau_{\\omega}\\): Precisions parameter for the random effects\n\n\n\n\n\nThe latent field is \\(\\boldsymbol{u} = (\\beta_0, \\beta_1, \\omega_1, \\omega_2,\\ldots, \\omega_n)\\), the hyperparameters are \\(\\boldsymbol{\\theta} = (\\tau_{\\omega})\\), and must be given a prior."
+    "text": "Bayesian disease mapping\n\n\nStage 1: We assume the responses are Poisson distributed: \\[          \ny_i \\mid \\eta_i \\sim \\text{Poisson}(E_i\\exp(\\eta_i)))\n\\]\n\n\n\n\nStage 2: \\(\\eta_i\\) is a linear function of three components: an intercept, a covariate \\(c_i\\), a spatially structured effect \\(\\omega\\) likelihood by \\[\n\\eta_i = \\beta_0 + \\beta_1\\ c_i + \\omega_i\n\\]\n\n\n\n\nStage 3:\n\n\\(\\tau_{\\omega}\\): Precisions parameter for the random effects\n\n\n\n. . .\nThe latent field is \\(\\boldsymbol{u} = (\\beta_0, \\beta_1, \\omega_1, \\omega_2,\\ldots, \\omega_n)\\), the hyperparameters are \\(\\boldsymbol{\\theta} = (\\tau_{\\omega})\\), and must be given a prior."
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-disease-mapping",
     "href": "slides/slides_1.html#inlabru-for-disease-mapping",
     "title": "Lecture 1",
     "section": "inlabru for disease mapping",
-    "text": "inlabru for disease mapping\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_t & \\sim \\text{Poisson}(E_i\\lambda_i)\\\\\n\\text{log}(\\lambda_i) = \\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{\\beta_1\\ c_i}} + \\color{#FF6B6B}{\\boxed{\\omega_i}}\n\\end{aligned}\n\\]\n\n\ng = system.file(\"demodata/germany.graph\",\n                package=\"INLA\")\nGermany[1:3,]\n\n  region         E  Y  x region.struct\n1      1  7.965008  8 56             1\n2      2 22.836219 22 65             2\n3      3 22.094716 19 50             3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + beta1(x, model = \"linear\") +\n  space(region, model = \"besag\", graph = g)\n\n# define model predictor\neta = Y ~ beta0 + beta1 + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"poisson\",\n              E = E,\n              data = Germany)\n\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for disease mapping\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_t & \\sim \\text{Poisson}(E_i\\lambda_i)\\\\\n\\text{log}(\\lambda_i) = \\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{\\beta_1\\ c_i}} + \\color{#FF6B6B}{\\boxed{\\omega_i}}\n\\end{aligned}\n\\]\n\n\ng = system.file(\"demodata/germany.graph\",\n                package=\"INLA\")\nGermany[1:3,]\n\n  region         E  Y  x region.struct\n1      1  7.965008  8 56             1\n2      2 22.836219 22 65             2\n3      3 22.094716 19 50             3\n\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + beta1(x, model = \"linear\") +\n  space(region, model = \"besag\", graph = g)\n\n# define model predictor\neta = Y ~ beta0 + beta1 + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"poisson\",\n              E = E,\n              data = Germany)\n\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-disease-mapping-1",
     "href": "slides/slides_1.html#inlabru-for-disease-mapping-1",
     "title": "Lecture 1",
     "section": "inlabru for disease mapping",
-    "text": "inlabru for disease mapping\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_t & \\sim \\text{Poisson}(E_i\\lambda_i)\\\\\n\\text{log}(\\lambda_i) = \\color{#FF6B6B}{\\boxed{\\eta_i}} & = \\color{#FF6B6B}{\\boxed{\\beta_0 + \\beta_1\\ c_i + \\omega_i}}\n\\end{aligned}\n\\]\n\n\ng = system.file(\"demodata/germany.graph\",\n                package=\"INLA\")\nGermany[1:3,]\n\n  region         E  Y  x region.struct\n1      1  7.965008  8 56             1\n2      2 22.836219 22 65             2\n3      3 22.094716 19 50             3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + beta1(x, model = \"linear\") +\n  space(region, model = \"bym2\", graph = g)\n\n# define model predictor\neta = Y ~ beta0 + beta1 + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"poisson\",\n              E = E,\n              data = Germany)\n\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for disease mapping\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_t & \\sim \\text{Poisson}(E_i\\lambda_i)\\\\\n\\text{log}(\\lambda_i) = \\color{#FF6B6B}{\\boxed{\\eta_i}} & = \\color{#FF6B6B}{\\boxed{\\beta_0 + \\beta_1\\ c_i + \\omega_i}}\n\\end{aligned}\n\\]\n\n\ng = system.file(\"demodata/germany.graph\",\n                package=\"INLA\")\nGermany[1:3,]\n\n  region         E  Y  x region.struct\n1      1  7.965008  8 56             1\n2      2 22.836219 22 65             2\n3      3 22.094716 19 50             3\n\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + beta1(x, model = \"linear\") +\n  space(region, model = \"bym2\", graph = g)\n\n# define model predictor\neta = Y ~ beta0 + beta1 + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"poisson\",\n              E = E,\n              data = Germany)\n\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-disease-mapping-2",
     "href": "slides/slides_1.html#inlabru-for-disease-mapping-2",
     "title": "Lecture 1",
     "section": "inlabru for disease mapping",
-    "text": "inlabru for disease mapping\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y_i|\\eta_t}} & \\color{#FF6B6B}{\\boxed{\\sim \\text{Poisson}(E_i\\lambda_i)}}\\\\\n\\text{log}(\\lambda_i) = \\eta_i & = \\beta_0 + \\beta_1\\ c_i + \\omega_i\n\\end{aligned}\n\\]\n\n\ng = system.file(\"demodata/germany.graph\",\n                package=\"INLA\")\nGermany[1:3,]\n\n  region         E  Y  x region.struct\n1      1  7.965008  8 56             1\n2      2 22.836219 22 65             2\n3      3 22.094716 19 50             3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + beta1(x, model = \"linear\") +\n  space(region, model = \"bym2\", graph = g)\n\n# define model predictor\neta = Y ~ beta0 + beta1 + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"poisson\",\n              E = E,\n              data = Germany)\n\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for disease mapping\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y_i|\\eta_t}} & \\color{#FF6B6B}{\\boxed{\\sim \\text{Poisson}(E_i\\lambda_i)}}\\\\\n\\text{log}(\\lambda_i) = \\eta_i & = \\beta_0 + \\beta_1\\ c_i + \\omega_i\n\\end{aligned}\n\\]\n\n\ng = system.file(\"demodata/germany.graph\",\n                package=\"INLA\")\nGermany[1:3,]\n\n  region         E  Y  x region.struct\n1      1  7.965008  8 56             1\n2      2 22.836219 22 65             2\n3      3 22.094716 19 50             3\n\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + beta1(x, model = \"linear\") +\n  space(region, model = \"bym2\", graph = g)\n\n# define model predictor\neta = Y ~ beta0 + beta1 + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"poisson\",\n              E = E,\n              data = Germany)\n\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-disease-mapping-3",
@@ -396,7 +414,7 @@
     "href": "slides/slides_1.html#bayesian-geostatistics",
     "title": "Lecture 1",
     "section": "Bayesian Geostatistics",
-    "text": "Bayesian Geostatistics\nEncounter probability of Pacific Cod (Gadus macrocephalus) from a trawl survey.\n\n\n\n\n\n\n\n\\(y(s)\\) Presence of absence in location \\(s\\)"
+    "text": "Bayesian Geostatistics\nEncounter probability of Pacific Cod (Gadus macrocephalus) from a trawl survey.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\(y(s)\\) Presence of absence in location \\(s\\)"
   },
   {
     "objectID": "slides/slides_1.html#bayesian-geostatistics-1",
@@ -424,21 +442,21 @@
     "href": "slides/slides_1.html#inlabru-for-geostatistics",
     "title": "Lecture 1",
     "section": "inlabru for geostatistics",
-    "text": "inlabru for geostatistics\n\n\nThe Model\n\\[\n\\begin{aligned}\ny(s)|\\eta(s) & \\sim \\text{Binom}(1, p(s))\\\\\n\\eta(s) &  = \\color{#FF6B6B}{\\boxed{\\beta_0 }}+  \\color{#FF6B6B}{\\boxed{f(x(s))}} +  \\color{#FF6B6B}{\\boxed{\\omega(s)}}\\\\\n\\end{aligned}\n\\]\n\n\ndf %&gt;% select(depth, present) %&gt;% print(n = 3)\n\nSimple feature collection with 2143 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 343.0617 ymin: 5635.893 xmax: 579.3681 ymax: 5839.019\nProjected CRS: +proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\n# A tibble: 2,143 × 3\n  depth present            geometry\n  &lt;dbl&gt;   &lt;dbl&gt;        &lt;POINT [km]&gt;\n1   201       1 (446.4752 5793.426)\n2   212       1 (446.4594 5800.136)\n3   220       0 (448.5987 5801.687)\n# ℹ 2,140 more rows\n\n\n\nThe code\n\n# define model component\ncmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + \n  space(geometry, model = spde_model)\n\n# define model predictor\neta = present ~ Intercept + depth_smooth + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              data = df,\n              family = \"binomial\")\n\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for geostatistics\n\n\nThe Model\n\\[\n\\begin{aligned}\ny(s)|\\eta(s) & \\sim \\text{Binom}(1, p(s))\\\\\n\\eta(s) &  = \\color{#FF6B6B}{\\boxed{\\beta_0 }}+  \\color{#FF6B6B}{\\boxed{f(x(s))}} +  \\color{#FF6B6B}{\\boxed{\\omega(s)}}\\\\\n\\end{aligned}\n\\]\n\n\ndf %&gt;% select(depth, present) %&gt;% print(n = 3)\n\nSimple feature collection with 2143 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 343.0617 ymin: 5635.893 xmax: 579.3681 ymax: 5839.019\nProjected CRS: +proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\n# A tibble: 2,143 × 3\n  depth present            geometry\n  &lt;dbl&gt;   &lt;dbl&gt;        &lt;POINT [km]&gt;\n1   201       1 (446.4752 5793.426)\n2   212       1 (446.4594 5800.136)\n3   220       0 (448.5987 5801.687)\n# ℹ 2,140 more rows\n\n\n\n\nThe code\n\n# define model component\ncmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + \n  space(geometry, model = spde_model)\n\n# define model predictor\neta = present ~ Intercept + depth_smooth + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              data = df,\n              family = \"binomial\")\n\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-geostatistics-1",
     "href": "slides/slides_1.html#inlabru-for-geostatistics-1",
     "title": "Lecture 1",
     "section": "inlabru for geostatistics",
-    "text": "inlabru for geostatistics\n\n\nThe Model\n\\[\n\\begin{aligned}\ny(s)|\\eta(s) & \\sim \\text{Binom}(1, p(s))\\\\\n\\color{#FF6B6B}{\\boxed{\\eta(s)}} &  = \\color{#FF6B6B}{\\boxed{\\beta_0 +  f(x(s)) +  \\omega(s)}}\\\\\n\\end{aligned}\n\\]\n\n\ndf %&gt;% select(depth, present) %&gt;% print(n = 3)\n\nSimple feature collection with 2143 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 343.0617 ymin: 5635.893 xmax: 579.3681 ymax: 5839.019\nProjected CRS: +proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\n# A tibble: 2,143 × 3\n  depth present            geometry\n  &lt;dbl&gt;   &lt;dbl&gt;        &lt;POINT [km]&gt;\n1   201       1 (446.4752 5793.426)\n2   212       1 (446.4594 5800.136)\n3   220       0 (448.5987 5801.687)\n# ℹ 2,140 more rows\n\n\n\nThe code\n\n# define model component\ncmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + \n  space(geometry, model = spde_model)\n\n# define model predictor\neta = present ~ Intercept + depth_smooth + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              data = df,\n              family = \"binomial\")\n\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for geostatistics\n\n\nThe Model\n\\[\n\\begin{aligned}\ny(s)|\\eta(s) & \\sim \\text{Binom}(1, p(s))\\\\\n\\color{#FF6B6B}{\\boxed{\\eta(s)}} &  = \\color{#FF6B6B}{\\boxed{\\beta_0 +  f(x(s)) +  \\omega(s)}}\\\\\n\\end{aligned}\n\\]\n\n\ndf %&gt;% select(depth, present) %&gt;% print(n = 3)\n\nSimple feature collection with 2143 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 343.0617 ymin: 5635.893 xmax: 579.3681 ymax: 5839.019\nProjected CRS: +proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\n# A tibble: 2,143 × 3\n  depth present            geometry\n  &lt;dbl&gt;   &lt;dbl&gt;        &lt;POINT [km]&gt;\n1   201       1 (446.4752 5793.426)\n2   212       1 (446.4594 5800.136)\n3   220       0 (448.5987 5801.687)\n# ℹ 2,140 more rows\n\n\n\n\nThe code\n\n# define model component\ncmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + \n  space(geometry, model = spde_model)\n\n# define model predictor\neta = present ~ Intercept + depth_smooth + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              data = df,\n              family = \"binomial\")\n\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-geostatistics-2",
     "href": "slides/slides_1.html#inlabru-for-geostatistics-2",
     "title": "Lecture 1",
     "section": "inlabru for geostatistics",
-    "text": "inlabru for geostatistics\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y(s)|\\eta(s)}} & \\sim \\color{#FF6B6B}{\\boxed{\\text{Binom}(1, p(s))}}\\\\\n\\eta(s) &  = \\beta_0 +  f(x(s)) +  \\omega(s)\\\\\n\\end{aligned}\n\\]\n\n\ndf %&gt;% select(depth, present) %&gt;% print(n = 3)\n\nSimple feature collection with 2143 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 343.0617 ymin: 5635.893 xmax: 579.3681 ymax: 5839.019\nProjected CRS: +proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\n# A tibble: 2,143 × 3\n  depth present            geometry\n  &lt;dbl&gt;   &lt;dbl&gt;        &lt;POINT [km]&gt;\n1   201       1 (446.4752 5793.426)\n2   212       1 (446.4594 5800.136)\n3   220       0 (448.5987 5801.687)\n# ℹ 2,140 more rows\n\n\n\nThe code\n\n# define model component\ncmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + \n  space(geometry, model = spde_model)\n\n# define model predictor\neta = present ~ Intercept + depth_smooth + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              data = df,\n              family = \"binomial\")\n\n# fit the model\nfit = bru(cmp, lik)"
+    "text": "inlabru for geostatistics\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y(s)|\\eta(s)}} & \\sim \\color{#FF6B6B}{\\boxed{\\text{Binom}(1, p(s))}}\\\\\n\\eta(s) &  = \\beta_0 +  f(x(s)) +  \\omega(s)\\\\\n\\end{aligned}\n\\]\n\n\ndf %&gt;% select(depth, present) %&gt;% print(n = 3)\n\nSimple feature collection with 2143 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 343.0617 ymin: 5635.893 xmax: 579.3681 ymax: 5839.019\nProjected CRS: +proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\n# A tibble: 2,143 × 3\n  depth present            geometry\n  &lt;dbl&gt;   &lt;dbl&gt;        &lt;POINT [km]&gt;\n1   201       1 (446.4752 5793.426)\n2   212       1 (446.4594 5800.136)\n3   220       0 (448.5987 5801.687)\n# ℹ 2,140 more rows\n\n\n\n\nThe code\n\n# define model component\ncmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + \n  space(geometry, model = spde_model)\n\n# define model predictor\neta = present ~ Intercept + depth_smooth + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              data = df,\n              family = \"binomial\")\n\n# fit the model\nfit = bru(cmp, lik)"
   },
   {
     "objectID": "slides/slides_1.html#inlabru-for-geostatistics-3",
@@ -507,17 +525,6 @@
     "crumbs": [
       "Home",
       "Practical 1"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "BES workshop",
-    "section": "",
-    "text": "Welcome to the course!\n\nWelcome to the inlabru workshop!\nThe goal of this workshop is to introduce new users to the inlabru software for Bayesian spatial modelling using the integrated nested Laplace approximation (INLA).\nThe workshop is intended for applied statisticians and quantitative ecologists who are interested in efficiently modelling spatial data- No prior knowledge of R-INLA is required.\n\n\n\nLearning Objectives for the workshop\nAt the end of the workshop, participants will be able to:\n\nUnderstand the inlabru workflow and software principles.\nFit commonly used models such as Linear models, LMM, GLM and GAMs using inlabru.\nDescribe different types of spatial data and fit appropriate spatial models.\nInterpret model outputs and create spatial maps and predictions.\nImplement a complete, reproducible spatial analysis workflow from data preparation to result visualization.\n\n\n\nSchedule Program\n\n\n\nTime\nTopic\n\n\n\n\n13:00 - 14:00\nWorkshop registration\n\n\n14:00 - 14:45\nSession 1: Introduction to inlabru\n\n\n14:45 - 15:45\nPractical Session 1\n\n\n15:45 - 16:00\nCoffee break\n\n\n16:00 - 16:45\nSession 2: Spatial Modelling with inlabru\n\n\n16:45 - 17:45\nPractical Session 2\n\n\n17:45 - 18:00\nWrap-up and outlook\n\n\n\n\n\nIn preparation for the workshop\nParticipants are required to follow the next steps before the day of the workshop:\n\nInstall R-INLA\nInstall inlabru (available from CRAN)\nMake sure you have the latest R-INLA, inlabru and R versions installed.",
-    "crumbs": [
-      "Home",
-      "BES workshop"
     ]
   },
   {
