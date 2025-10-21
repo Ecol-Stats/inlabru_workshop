@@ -32,7 +32,6 @@ In this practical we are going to look at commonly used spatial models
 
 3.  A Point process model for georeferenced species occurrence data
 
-
 ```{r child="practicals\\spatial_data_types_areal.qmd"}
 ```
 
@@ -41,6 +40,3 @@ In this practical we are going to look at commonly used spatial models
 
 ```{r child="practicals\\spatial_data_types_PP.qmd"}
 ```
-
-
-
