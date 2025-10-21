@@ -286,7 +286,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, enhanced, frame hidden, colback={codebgcolor}, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, colback={codebgcolor}, sharp corners, enhanced, breakable, frame hidden]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -537,7 +537,7 @@ Average number of links: 5.254613
 \pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-8-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, coltitle=black, breakable, leftrule=.75mm, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, rightrule=.15mm, colback=white, bottomtitle=1mm, opacitybacktitle=0.6, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, opacityback=0, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, left=2mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colframe=quarto-callout-note-color-frame, colback=white, opacityback=0, breakable, toprule=.15mm, coltitle=black, bottomtitle=1mm, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, rightrule=.15mm, titlerule=0mm]
 
 You could use the \texttt{snap} argument within \texttt{poly2nb} to set
 a distance at which the different regions centroids are consider
@@ -634,7 +634,7 @@ The hyperparameters of the model are \(\tau_u\) and \(\tau_z\)
 \textbf{NOTE} In this case the linear predictor \(\eta\) consists of
 three components!!
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, coltitle=black, breakable, leftrule=.75mm, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, rightrule=.15mm, colback=white, bottomtitle=1mm, opacitybacktitle=0.6, toptitle=1mm, titlerule=0mm, title={Question}, arc=.35mm, opacityback=0, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, left=2mm, bottomrule=.15mm, title={Question}, colframe=quarto-callout-tip-color-frame, colback=white, opacityback=0, breakable, toprule=.15mm, coltitle=black, bottomtitle=1mm, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, rightrule=.15mm, titlerule=0mm]
 
 Fit the above model in using \texttt{inlabru} by completing the
 following code:
@@ -676,7 +676,7 @@ Answer
 
 After fitting the model we want to extract results.
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, coltitle=black, breakable, leftrule=.75mm, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, rightrule=.15mm, colback=white, bottomtitle=1mm, opacitybacktitle=0.6, toptitle=1mm, titlerule=0mm, title={Question}, arc=.35mm, opacityback=0, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, left=2mm, bottomrule=.15mm, title={Question}, colframe=quarto-callout-tip-color-frame, colback=white, opacityback=0, breakable, toprule=.15mm, coltitle=black, bottomtitle=1mm, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, rightrule=.15mm, titlerule=0mm]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -701,7 +701,7 @@ explains more of the variability in the counts?
 
 We now look at the predictions over space.
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, coltitle=black, breakable, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, colback=white, bottomtitle=1mm, opacitybacktitle=0.6, toptitle=1mm, titlerule=0mm, title={Task}, arc=.35mm, opacityback=0, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, left=2mm, bottomrule=.15mm, title={Task}, colframe=quarto-callout-warning-color-frame, colback=white, opacityback=0, breakable, toprule=.15mm, coltitle=black, bottomtitle=1mm, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, rightrule=.15mm, titlerule=0mm]
 
 Complete the code below to produce:
 
@@ -790,7 +790,7 @@ Here we are predicting the \emph{mean} of counts, not the counts.
 Predicting the counts is beyond the scope of this short course but you
 can check the supplementary material below.
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, breakable, leftrule=.75mm, arc=.35mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, rightrule=.15mm, opacityback=0, colback=white, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, left=2mm, bottomrule=.15mm, toprule=.15mm, colframe=quarto-callout-note-color-frame, colback=white, arc=.35mm, opacityback=0, rightrule=.15mm, breakable, leftrule=.75mm]
 
 \vspace{-3mm}\textbf{Supplementary Material}\vspace{3mm}
 
@@ -1045,7 +1045,7 @@ observations, these are contained in the dataset \texttt{pcod\_sf}
 \pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-41-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, coltitle=black, breakable, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, colback=white, bottomtitle=1mm, opacitybacktitle=0.6, toptitle=1mm, titlerule=0mm, title={Task}, arc=.35mm, opacityback=0, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, left=2mm, bottomrule=.15mm, title={Task}, colframe=quarto-callout-warning-color-frame, colback=white, opacityback=0, breakable, toprule=.15mm, coltitle=black, bottomtitle=1mm, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, rightrule=.15mm, titlerule=0mm]
 
 Look at the documentation for the \texttt{fm\_mesh\_2d} function typing
 
@@ -1117,7 +1117,7 @@ P(\sigma>\sigma_0)=p_{\sigma}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, coltitle=black, breakable, leftrule=.75mm, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, rightrule=.15mm, colback=white, bottomtitle=1mm, opacitybacktitle=0.6, toptitle=1mm, titlerule=0mm, title={Question}, arc=.35mm, opacityback=0, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, left=2mm, bottomrule=.15mm, title={Question}, colframe=quarto-callout-tip-color-frame, colback=white, opacityback=0, breakable, toprule=.15mm, coltitle=black, bottomtitle=1mm, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, rightrule=.15mm, titlerule=0mm]
 
 Considering the \texttt{pcod\_sf} spatial extension and type of the
 data, which of the previous choices is more reasonable?
@@ -1205,7 +1205,7 @@ Finally we are ready to run the model
 
 \paragraph{Hyperparameters}\label{hyperparameters}
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, coltitle=black, breakable, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, colback=white, bottomtitle=1mm, opacitybacktitle=0.6, toptitle=1mm, titlerule=0mm, title={Task}, arc=.35mm, opacityback=0, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, left=2mm, bottomrule=.15mm, title={Task}, colframe=quarto-callout-warning-color-frame, colback=white, opacityback=0, breakable, toprule=.15mm, coltitle=black, bottomtitle=1mm, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, rightrule=.15mm, titlerule=0mm]
 
 What are the posterior for the range \(\rho\) and the standard deviation
 \(\sigma\)? Plot the posterior together with the prior for both
@@ -1307,7 +1307,7 @@ the probability of presence. We do this in two different models
 \] where \(f(.)\) is a smooth function. We will use a RW2 model for
 this.
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, coltitle=black, breakable, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, colback=white, bottomtitle=1mm, opacitybacktitle=0.6, toptitle=1mm, titlerule=0mm, title={Task}, arc=.35mm, opacityback=0, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, left=2mm, bottomrule=.15mm, title={Task}, colframe=quarto-callout-warning-color-frame, colback=white, opacityback=0, breakable, toprule=.15mm, coltitle=black, bottomtitle=1mm, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, rightrule=.15mm, titlerule=0mm]
 
 Fit model 1. Define components, observation model and use the
 \texttt{bru()} function to estimate the parameters.
@@ -1399,7 +1399,7 @@ this by defining a \texttt{sf} object using coordinates in the object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, coltitle=black, breakable, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, colback=white, bottomtitle=1mm, opacitybacktitle=0.6, toptitle=1mm, titlerule=0mm, title={Task}, arc=.35mm, opacityback=0, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, left=2mm, bottomrule=.15mm, title={Task}, colframe=quarto-callout-warning-color-frame, colback=white, opacityback=0, breakable, toprule=.15mm, coltitle=black, bottomtitle=1mm, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, rightrule=.15mm, titlerule=0mm]
 
 Create a map of predicted \emph{probability} from Model 3 by predicting
 prediction over \texttt{pxl1}. You can use a inverse logit function
@@ -1470,68 +1470,84 @@ density of our points. In some cases, the intensity will be constant
 over space (homogeneous), while in other cases it can vary by location
 (inhomogeneous or heterogenous).
 
-In the next example we will be looking at butterflies occurrence records
-obtained from the \emph{Butterflies for the New Millennium} (BNM)
-monitoring scheme. The data set consists of Ringlet butterfly's
-presence-only records collected by volunteers in Scotland's Cairngorms
-National Park (CNP).
+In the next example we will be looking at the location where forest
+fires occurred in the Castilla-La Mancha region of Spain between 1998
+and 2007.
 
 \subsubsection{Point-referenced data
 visualization}\label{point-referenced-data-visualization}
 
-Let's begin by loading the data which can be downloaded below:
+In this practical we consider the data \texttt{clmfires} in the
+\texttt{spatstat} library.
+
+This dataset is a record of forest fires in the Castilla-La Mancha
+region of Spain between 1998 and 2007. This region is approximately 400
+by 400 kilometres. The coordinates are recorded in kilometres. For more
+info about the data you can type:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# load data files (set the correct path to where the data are stored)}
-\FunctionTok{load}\NormalTok{(}\StringTok{"datasets/ringlett\_CNP.RData"}\NormalTok{)}
-\NormalTok{elev\_rast }\OtherTok{=}\NormalTok{ terra}\SpecialCharTok{::}\FunctionTok{rast}\NormalTok{(}\StringTok{"datasets/elev\_CNP.tiff"}\NormalTok{)}
+\NormalTok{?clmfires}
 \end{Highlighting}
 \end{Shaded}
 
-Then, we load the geographical region of interest which can be
-downloaded
-\href{https://maps.gov.scot/ATOM/shapefiles/SG_CairngormsNationalPark_2010.zip}{here}
-(i.e., CNP boundaries). We can use thre \texttt{st\_read} function from
-the \texttt{sf} library to load the \texttt{.shp} file by specifying the
-directory where you downloaded the files. For example,
+We first read the data and transform them into an \texttt{sf} object. We
+also create a polygon that represents the border of the Castilla-La
+Mancha region. We select the data for year 2004 and only those fires
+caused by lightning.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{shp\_SGC }\OtherTok{\textless{}{-}}  \FunctionTok{st\_read}\NormalTok{(}\StringTok{"datasets/SG\_CairngormsNationalPark/SG\_CairngormsNationalPark\_2010.shp"}\NormalTok{,}\AttributeTok{quiet =}\NormalTok{T)}
+\FunctionTok{data}\NormalTok{(}\StringTok{"clmfires"}\NormalTok{)}
+\NormalTok{pp }\OtherTok{=} \FunctionTok{st\_as\_sf}\NormalTok{(}\FunctionTok{as.data.frame}\NormalTok{(clmfires) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{                dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }
+                       \AttributeTok{y =}\NormalTok{ y),}
+              \AttributeTok{coords =} \FunctionTok{c}\NormalTok{(}\StringTok{"x"}\NormalTok{,}\StringTok{"y"}\NormalTok{),}
+              \AttributeTok{crs =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(cause }\SpecialCharTok{==} \StringTok{"lightning"}\NormalTok{,}
+         \FunctionTok{year}\NormalTok{(date) }\SpecialCharTok{==} \DecValTok{2004}\NormalTok{)}
+
+\NormalTok{poly }\OtherTok{=} \FunctionTok{as.data.frame}\NormalTok{(clmfires}\SpecialCharTok{$}\NormalTok{window}\SpecialCharTok{$}\NormalTok{bdry[[}\DecValTok{1}\NormalTok{]]) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{ID =} \DecValTok{1}\NormalTok{)}
+
+\NormalTok{region }\OtherTok{=}\NormalTok{ poly }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{st\_as\_sf}\NormalTok{(}\AttributeTok{coords =} \FunctionTok{c}\NormalTok{(}\StringTok{"x"}\NormalTok{, }\StringTok{"y"}\NormalTok{), }\AttributeTok{crs =} \ConstantTok{NA}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{group\_by}\NormalTok{(ID) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{geometry =} \FunctionTok{st\_combine}\NormalTok{(geometry)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_cast}\NormalTok{(}\StringTok{"POLYGON"}\NormalTok{) }
+  
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ region, }\AttributeTok{alpha =} \DecValTok{0}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ pp)  }
 \end{Highlighting}
 \end{Shaded}
 
-We need to set an appropriate CRS for our shapefile:
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-80-1.pdf}}
+
+}
+
+\caption{Distribution of the observed forest fires caused by lightning
+in Castilla-La Mancha in 2004}
+
+\end{figure}%
+
+The library \texttt{spatstat} contains also some covariates that can
+help explain the fires distribution. We can a raster for the scaled
+values of elevation using the following code:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{shp\_SGC }\OtherTok{\textless{}{-}}\NormalTok{ shp\_SGC }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{st\_transform}\NormalTok{(}\AttributeTok{crs =} \DecValTok{27700}\NormalTok{)}
-\NormalTok{shp\_SGC }\OtherTok{\textless{}{-}} \FunctionTok{st\_transform}\NormalTok{(shp\_SGC,}\FunctionTok{gsub}\NormalTok{(}\StringTok{"units=m"}\NormalTok{,}\StringTok{"units=km"}\NormalTok{,}\FunctionTok{st\_crs}\NormalTok{(shp\_SGC)}\SpecialCharTok{$}\NormalTok{proj4string)) }
+\NormalTok{elev\_raster }\OtherTok{=} \FunctionTok{rast}\NormalTok{(clmfires.extra[[}\DecValTok{2}\NormalTok{]]}\SpecialCharTok{$}\NormalTok{elevation)}
+\NormalTok{elev\_raster }\OtherTok{=} \FunctionTok{scale}\NormalTok{(elev\_raster)}
 \end{Highlighting}
 \end{Shaded}
 
-We can then visually verify the projections by plotting the observation
-records against the spatial domain of interest as follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{()}\SpecialCharTok{+}
-  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data=}\NormalTok{shp\_SGC)}\SpecialCharTok{+}
-  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data=}\NormalTok{ringlett\_CNP,}\AttributeTok{size=}\DecValTok{2}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-82-1.pdf}}
-\end{center}
-
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, coltitle=black, breakable, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, colback=white, bottomtitle=1mm, opacitybacktitle=0.6, toptitle=1mm, titlerule=0mm, title={Task}, arc=.35mm, opacityback=0, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, left=2mm, bottomrule=.15mm, title={Task}, colframe=quarto-callout-warning-color-frame, colback=white, opacityback=0, breakable, toprule=.15mm, coltitle=black, bottomtitle=1mm, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, rightrule=.15mm, titlerule=0mm]
 
 Using \texttt{tidyterra} and \texttt{ggplot}, produce a map of the
-elevation profile in the CNP and overlay the spatial point pattern of
-the Ringlet butterfly occurrence records. Use an appropriate colouring
-scheme for the elevation values. Do you see any pattern?
+elevation profile in La Mancha region and overlay the spatial point
+pattern of the fire locations. Use an appropriate colouring scheme for
+the elevation values. Do you see any pattern?
 
 Take hint
 
@@ -1549,18 +1565,14 @@ Click here to see the solution
 \FunctionTok{library}\NormalTok{(tidyterra)}
 \FunctionTok{library}\NormalTok{(scico)}
 
-\FunctionTok{ggplot}\NormalTok{()}\SpecialCharTok{+} 
-\NormalTok{  tidyterra}\SpecialCharTok{::}\FunctionTok{geom\_spatraster}\NormalTok{(}\AttributeTok{data=}\NormalTok{elev\_rast)}\SpecialCharTok{+}
-  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data=}\NormalTok{ringlett\_CNP,}\AttributeTok{color=}\StringTok{"white"}\NormalTok{,}\AttributeTok{size=}\DecValTok{2}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data=}\NormalTok{ringlett\_CNP,}\AttributeTok{color=}\StringTok{"forestgreen"}\NormalTok{,}\AttributeTok{size=}\DecValTok{1}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{scale\_fill\_scico}\NormalTok{(}\AttributeTok{name =} \StringTok{"Elevation (m.a.s.l)"}\NormalTok{,}
-                   \AttributeTok{palette =} \StringTok{"devon"}\NormalTok{,}
-                   \AttributeTok{na.value =} \StringTok{"transparent"}\NormalTok{ )}
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_spatraster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ elev\_raster) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ pp) }\SpecialCharTok{+} \FunctionTok{scale\_fill\_scico}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-83-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-82-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
@@ -1603,7 +1615,7 @@ maximum triangle edge lengths, \texttt{offset} for inner and outer
 extensions (to prevent edge effects), and cutoff to avoid overly small
 triangles in clustered areas.
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, coltitle=black, breakable, leftrule=.75mm, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, rightrule=.15mm, colback=white, bottomtitle=1mm, opacitybacktitle=0.6, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, opacityback=0, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, left=2mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colframe=quarto-callout-note-color-frame, colback=white, opacityback=0, breakable, toprule=.15mm, coltitle=black, bottomtitle=1mm, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, rightrule=.15mm, titlerule=0mm]
 
 \textbf{General guidelines for creating the mesh}
 
@@ -1633,21 +1645,17 @@ triangles in clustered areas.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# mesh options}
-\NormalTok{max.edge }\OtherTok{=} \DecValTok{2}
-\NormalTok{bound.outer }\OtherTok{=} \DecValTok{10}
 
-\NormalTok{mesh }\OtherTok{\textless{}{-}} \FunctionTok{fm\_mesh\_2d}\NormalTok{(}\AttributeTok{boundary =}\NormalTok{ shp\_SGC,}
-                   \AttributeTok{max.edge =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{)}\SpecialCharTok{*}\NormalTok{max.edge,}
-                   \AttributeTok{offset=}\FunctionTok{c}\NormalTok{(max.edge, bound.outer),}
-                   \AttributeTok{cutoff =} \FloatTok{1.5}\NormalTok{,}
-                   \AttributeTok{crs=}\FunctionTok{st\_crs}\NormalTok{(shp\_SGC))}
+\NormalTok{mesh }\OtherTok{\textless{}{-}}  \FunctionTok{fm\_mesh\_2d}\NormalTok{(}\AttributeTok{boundary =}\NormalTok{ region,}
+                  \AttributeTok{max.edge =} \FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{),}
+                  \AttributeTok{cutoff =} \DecValTok{4}\NormalTok{, }\AttributeTok{crs =} \ConstantTok{NA}\NormalTok{)}
 
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{gg}\NormalTok{(mesh) }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data=}\NormalTok{ringlett\_CNP)}
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{gg}\NormalTok{(mesh) }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data=}\NormalTok{pp)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-84-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-83-1.pdf}}
 \end{center}
 
 \paragraph{Step 2. Defining the SPDE
@@ -1659,12 +1667,12 @@ useful to consider the spatial extension of our study.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{st\_area}\NormalTok{(shp\_SGC)}
+\FunctionTok{st\_area}\NormalTok{(region)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-4528.099 [km^2]
+[1] 79354.67
 \end{verbatim}
 
 We can use PC-priors for the range \(\rho\) and the standard deviation
@@ -1683,38 +1691,11 @@ We can use PC-priors for the range \(\rho\) and the standard deviation
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{matern }\OtherTok{\textless{}{-}} \FunctionTok{inla.spde2.pcmatern}\NormalTok{(mesh,}
-                              \AttributeTok{prior.range =} \FunctionTok{c}\NormalTok{(}\DecValTok{20}\NormalTok{, }\FloatTok{0.5}\NormalTok{), }\CommentTok{\# P(range \textless{} 20) = 0.5}
-                              \AttributeTok{prior.sigma =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FloatTok{0.5}\NormalTok{))  }\CommentTok{\# P(sigma \textgreater{} 1) = 0.5}
+\NormalTok{spde\_model }\OtherTok{=}  \FunctionTok{inla.spde2.pcmatern}\NormalTok{(mesh,}
+                       \AttributeTok{prior.sigma =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FloatTok{0.5}\NormalTok{), }\CommentTok{\# P(sigma \textgreater{} 1) = 0.5}
+                       \AttributeTok{prior.range =} \FunctionTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\FloatTok{0.5}\NormalTok{)) }\CommentTok{\# P(range \textless{} 100) = 0.5}
 \end{Highlighting}
 \end{Shaded}
-
-Now, for a point process models, the spatial covariates (i.e., the
-elevation raster) has to be also projected outside the outer mesh for
-computational purposes. We can achieve this using the following code:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(stars)}
-
-\CommentTok{\# Standardize the raster }
-\NormalTok{elev\_rast }\OtherTok{\textless{}{-}} \FunctionTok{scale}\NormalTok{(elev\_rast)}
-\CommentTok{\# Extend raster ext by a factor of 1.5}
-\NormalTok{re }\OtherTok{\textless{}{-}} \FunctionTok{extend}\NormalTok{(elev\_rast, }\FunctionTok{ext}\NormalTok{(elev\_rast)}\SpecialCharTok{*}\FloatTok{1.5}\NormalTok{)}
-\CommentTok{\# Convert to spatial object}
-\NormalTok{re\_df }\OtherTok{\textless{}{-}}\NormalTok{ re }\SpecialCharTok{\%\textgreater{}\%}\NormalTok{ stars}\SpecialCharTok{::}\FunctionTok{st\_as\_stars}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}  \FunctionTok{st\_as\_sf}\NormalTok{(}\AttributeTok{na.rm=}\NormalTok{F)}
-\CommentTok{\# fill in missing values using the original raster }
-\NormalTok{re\_df}\SpecialCharTok{$}\NormalTok{GBR\_elv\_msk }\OtherTok{\textless{}{-}} \FunctionTok{bru\_fill\_missing}\NormalTok{(elev\_rast,re\_df,re\_df}\SpecialCharTok{$}\NormalTok{GBR\_elv\_msk)}
-\CommentTok{\# rasterize}
-\NormalTok{elev\_rast\_p }\OtherTok{\textless{}{-}}\NormalTok{ stars}\SpecialCharTok{::}\FunctionTok{st\_rasterize}\NormalTok{(re\_df) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{rast}\NormalTok{()}
-\CommentTok{\# visualize}
-\FunctionTok{plot}\NormalTok{(elev\_rast\_p)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-87-1.pdf}}
-\end{center}
 
 \paragraph{Step 3. Defining model
 components}\label{step-3.-defining-model-components}
@@ -1732,27 +1713,98 @@ l(\beta;s) = \sum_{i=1}^m \log [\lambda(s_i)] - \int_A \lambda(s)ds.
 The integral in this expression can be interpreted as the expected
 number of points in the whole study region. However, the integral of the
 intensity function has no close form solution and thus we need to
-approximate it using numerical integration. Luckuly, LGCPs are latent
-Gaussian models and they may be fitted using INLA.
+approximate it using numerical integration. \texttt{inlabru} has
+implemented the \texttt{fm\_int} function to create integration schemes
+that are especially well suited to integrating the intensity in models
+with an SPDE effect. We strongly recommend that users use these
+integration schemes in this context. See \texttt{?fm\_int} for more
+information.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# build integration scheme}
+\NormalTok{ips }\OtherTok{=} \FunctionTok{fm\_int}\NormalTok{(mesh,}
+             \AttributeTok{samplers =}\NormalTok{ region)}
+\end{Highlighting}
+\end{Shaded}
+
+Now, for a point process models, the spatial covariates (i.e., the
+elevation raster) have to be also available at both data-points and
+quadrature locations. We can check this using the \texttt{eval\_spatial}
+function from \texttt{inlabru} :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{eval\_spatial}\NormalTok{(elev\_raster,pp) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{is.na}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{any}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] FALSE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{eval\_spatial}\NormalTok{(elev\_raster,ips) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{is.na}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{any}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] TRUE
+\end{verbatim}
+
+Here, we notice that there is a single point that for which elevation
+values are missing (see Figure~\ref{fig-points} the red point that lies
+outside the raster extension ).
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/fig-points-1.pdf}}
+
+}
+
+\caption{\label{fig-points}Integration scheme for numerical
+approximation of the stochastic integral in La Mancha Region}
+
+\end{figure}%
+
+To solve this, we can increase the raster extension so it covers all
+both data-points and quadrature locations as well. Then, we can use the
+\texttt{bru\_fill\_missing()} function to input the missing values with
+the nearest-available-value/ We can achieve this using the following
+code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extend raster ext by 5 \% of the original raster}
+\NormalTok{re }\OtherTok{\textless{}{-}} \FunctionTok{extend}\NormalTok{(elev\_raster, }\FunctionTok{ext}\NormalTok{(elev\_raster)}\SpecialCharTok{*}\FloatTok{1.05}\NormalTok{)}
+\CommentTok{\# Convert to an sf spatial object}
+\NormalTok{re\_df }\OtherTok{\textless{}{-}}\NormalTok{ re }\SpecialCharTok{\%\textgreater{}\%}\NormalTok{ stars}\SpecialCharTok{::}\FunctionTok{st\_as\_stars}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}  \FunctionTok{st\_as\_sf}\NormalTok{(}\AttributeTok{na.rm=}\NormalTok{F)}
+\CommentTok{\# fill in missing values using the original raster }
+\NormalTok{re\_df}\SpecialCharTok{$}\NormalTok{lyr}\FloatTok{.1} \OtherTok{\textless{}{-}} \FunctionTok{bru\_fill\_missing}\NormalTok{(elev\_raster,re\_df,re\_df}\SpecialCharTok{$}\NormalTok{lyr}\FloatTok{.1}\NormalTok{)}
+\CommentTok{\# rasterize}
+\NormalTok{elev\_rast\_p }\OtherTok{\textless{}{-}}\NormalTok{ stars}\SpecialCharTok{::}\FunctionTok{st\_rasterize}\NormalTok{(re\_df) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{rast}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-89-1.pdf}}
+\end{center}
 
 \textbf{Stage 2} Latent field model
 
-We will model the Ringlet distribution as a point process whose
-intensity function \(\lambda(s)\) is additive on the log-scale:
+We will model the fire locations as a point process whose intensity
+function \(\lambda(s)\) is additive on the log-scale:
 
 \[
-\eta(s) = \log (\lambda(s))= \beta_0 +  \mathbf{x}'(s)\beta + \omega(s),
+\eta(s) = \log ~ \lambda(s)= \beta_0 +  \beta_1 ~ \text{elevation}(s) + \omega(s),
 \]
 
-Here, \(\mathbf{x}(s)\) is a set of covariates detected at location
-\(s\) with linear fixed effects \(\beta\) to be estimated, and
-\(\omega(s)\) is the Matérn Gaussian field capturing the spatial
-structure of all the locations where species have been observed (The
-location where a species occur are assumed to be independent given the
-Gaussian field).
-
-In this exercise, we will use elevation as our covariate as it seems to
-be closely related to the distribution of the Ringlet butterfly.
+Here, \(\omega(s)\) is the Matérn Gaussian field capturing the spatial
+structure of all the locations where fires have occurred (these
+locations are assumed to be independent given the Gaussian field).
 
 \textbf{Stage 3} Hyperparameters
 
@@ -1774,15 +1826,14 @@ components).
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{cmp\_lgcp }\OtherTok{\textless{}{-}}\NormalTok{  geometry }\SpecialCharTok{\textasciitilde{}}  \FunctionTok{Intercept}\NormalTok{(}\DecValTok{1}\NormalTok{)  }\SpecialCharTok{+} 
-  \FunctionTok{elevation}\NormalTok{(elev\_rast\_p, }\AttributeTok{model =} \StringTok{"linear"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{grf}\NormalTok{(geometry, }\AttributeTok{model =}\NormalTok{ matern)}
+  \FunctionTok{elev}\NormalTok{(elev\_rast\_p, }\AttributeTok{model =} \StringTok{"linear"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{space}\NormalTok{(geometry, }\AttributeTok{model =}\NormalTok{ spde\_model)}
 \end{Highlighting}
 \end{Shaded}
 
-Here the labels \texttt{Intercept}, \texttt{elevation} (elevation
-effect) and \texttt{grf} (an abbreviation of Gaussian random field) are
-used to name the components of the model but they equally well could be
-something else.
+Recall that the labels \texttt{Intercept}, \texttt{elev} (elevation
+effect) and \texttt{space} are used to name the components of the model
+but they equally well could be something else.
 
 Now, notice that we have called the \texttt{elev\_rast\_p} raster data
 within the \texttt{elevation} component. Recall that
@@ -1790,11 +1841,11 @@ within the \texttt{elevation} component. Recall that
 structures, allowing it to extract information from spatial data
 objects. This is particularly relevant for LGCP, as spatial covariates
 (e.g., the elevation raster) must be available across the whole study
-area (including the outer mesh).
+area.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{formula }\OtherTok{=}\NormalTok{ geometry }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Intercept  }\SpecialCharTok{+}\NormalTok{ elevation }\SpecialCharTok{+}\NormalTok{ grf}
+\NormalTok{formula }\OtherTok{=}\NormalTok{ geometry }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Intercept  }\SpecialCharTok{+}\NormalTok{ elev }\SpecialCharTok{+}\NormalTok{ space}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1806,22 +1857,40 @@ specify this as our response
 model}\label{step-4.-defining-th-observational-model}
 
 \texttt{inlabru} has support for latent Gaussian Cox processes through
-the \texttt{cp} likelihood family:
+the \texttt{cp} likelihood family. We just need to supply the
+\texttt{sf} object as our data and the integration scheme \texttt{ips}:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{lik }\OtherTok{=} \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ formula, }
-              \AttributeTok{data =}\NormalTok{ ringlett\_CNP, }
+              \AttributeTok{data =}\NormalTok{ pp, }
               \AttributeTok{family =} \StringTok{"cp"}\NormalTok{,}
-              \AttributeTok{samplers =}\NormalTok{ shp\_SGC,}
-              \AttributeTok{domain =} \FunctionTok{list}\NormalTok{(}\AttributeTok{geometry =}\NormalTok{ mesh))}
+              \AttributeTok{ips =}\NormalTok{ ips)}
 \end{Highlighting}
 \end{Shaded}
 
-Notice that we have supplied an \texttt{sf} object as our data. LGCPs
-can be fitted using an \texttt{sf} points object to describe the
-locations of the observed points and an \texttt{sf} polygon object to
-define the observation window (\texttt{samplers} in the code above).
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, left=2mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colframe=quarto-callout-note-color-frame, colback=white, opacityback=0, breakable, toprule=.15mm, coltitle=black, bottomtitle=1mm, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, rightrule=.15mm, titlerule=0mm]
+
+\texttt{inlabru} supports a shortcut for defining the integration points
+using the \texttt{domain} and \texttt{samplers} argument of
+\texttt{like()}. This \texttt{domain} argument expects a list of named
+domains with inputs that are then internally passed to
+\texttt{fm\_int()} to build the integration scheme. The
+\texttt{samplers} argument is used to define subsets of the domain over
+which the integral should be computed. An equivalent way to define the
+same model as above is:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lik }\OtherTok{=} \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ formula, }
+              \AttributeTok{data =}\NormalTok{ pp, }
+              \AttributeTok{family =} \StringTok{"cp"}\NormalTok{,}
+              \AttributeTok{domain =} \FunctionTok{list}\NormalTok{(}\AttributeTok{geometry =}\NormalTok{ mesh),}
+              \AttributeTok{samplers =}\NormalTok{ region)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{tcolorbox}
 
 \subsubsection{Step 5. Run the model}\label{step-5.-run-the-model-1}
 
@@ -1848,10 +1917,10 @@ obtained using the \texttt{summary()} function.
 \toprule
 mean & sd & 0.025quant & 0.5quant & 0.975quant & mode \\ 
 \midrule\addlinespace[2.5pt]
--4.72 & 0.31 & -5.37 & -4.71 & -4.14 & -4.71 \\ 
--2.21 & 0.16 & -2.52 & -2.21 & -1.90 & -2.21 \\ 
-22.12 & 10.69 & 8.76 & 19.75 & 49.63 & 15.86 \\ 
-0.48 & 0.13 & 0.27 & 0.47 & 0.76 & 0.45 \\ 
+-7.49 & 0.85 & -9.25 & -7.48 & -5.83 & -7.48 \\ 
+-0.07 & 0.17 & -0.41 & -0.07 & 0.26 & -0.07 \\ 
+132.90 & 37.50 & 76.98 & 127.05 & 223.21 & 115.20 \\ 
+1.76 & 0.35 & 1.19 & 1.72 & 2.56 & 1.63 \\ 
 \bottomrule
 \end{tabular*}
 \end{table}
@@ -1861,15 +1930,19 @@ mean & sd & 0.025quant & 0.5quant & 0.975quant & mode \\
 Model predictions can be computed using the \texttt{predict} function by
 supplying the coordinates where the covariate is defined. We can do this
 by defining a \texttt{sf} object using coordinates in our original
-raster data.
+raster data (we will crop the extension to that of \emph{La Mancha}
+Region).
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{pxl1 }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\FunctionTok{crds}\NormalTok{(elev\_rast), }
-                  \FunctionTok{as.data.frame}\NormalTok{(elev\_rast}\SpecialCharTok{$}\NormalTok{GBR\_elv\_msk)) }\SpecialCharTok{\%\textgreater{}\%} 
-       \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(GBR\_elv\_msk)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{elev\_crop }\OtherTok{\textless{}{-}}\NormalTok{ terra}\SpecialCharTok{::}\FunctionTok{crop}\NormalTok{(}\AttributeTok{x =}\NormalTok{ elev\_raster,}\AttributeTok{y =}\NormalTok{ region,}\AttributeTok{mask=}\ConstantTok{TRUE}\NormalTok{)}
+
+
+\NormalTok{pxl1 }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\FunctionTok{crds}\NormalTok{(elev\_crop), }
+                  \FunctionTok{as.data.frame}\NormalTok{(elev\_crop}\SpecialCharTok{$}\NormalTok{lyr}\FloatTok{.1}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%} 
+       \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(lyr}\FloatTok{.1}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
 \FunctionTok{st\_as\_sf}\NormalTok{(}\AttributeTok{coords =} \FunctionTok{c}\NormalTok{(}\StringTok{"x"}\NormalTok{,}\StringTok{"y"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{GBR\_elv\_msk)}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{lyr}\FloatTok{.1}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1885,7 +1958,7 @@ Support for plotting \texttt{sf} data objects is available in the
 
 \section{Model predictions}
 
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-95-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-98-1.pdf}}
 
 \section{R Code}
 
@@ -1895,9 +1968,9 @@ Support for plotting \texttt{sf} data objects is available in the
 \NormalTok{  fit\_lgcp,}
 \NormalTok{  pxl1,}
   \SpecialCharTok{\textasciitilde{}} \FunctionTok{data.frame}\NormalTok{(}
-    \AttributeTok{lambda =} \FunctionTok{exp}\NormalTok{(Intercept }\SpecialCharTok{+}\NormalTok{ elevation }\SpecialCharTok{+}\NormalTok{ grf), }\CommentTok{\# intensity}
-    \AttributeTok{loglambda =}\NormalTok{ Intercept }\SpecialCharTok{+}\NormalTok{ elevation }\SpecialCharTok{+}\NormalTok{grf,  }\CommentTok{\#log{-}intensity}
-    \AttributeTok{GF =}\NormalTok{ grf }\CommentTok{\# matern field}
+    \AttributeTok{lambda =} \FunctionTok{exp}\NormalTok{(Intercept }\SpecialCharTok{+}\NormalTok{ elev }\SpecialCharTok{+}\NormalTok{ space), }\CommentTok{\# intensity}
+    \AttributeTok{loglambda =}\NormalTok{ Intercept }\SpecialCharTok{+}\NormalTok{ elev }\SpecialCharTok{+}\NormalTok{space,  }\CommentTok{\#log{-}intensity}
+    \AttributeTok{GF =}\NormalTok{ space }\CommentTok{\# matern field}
 \NormalTok{  )}
 \NormalTok{)}
 
