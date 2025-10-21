@@ -279,7 +279,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, breakable, enhanced, frame hidden, colback={codebgcolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[colback={codebgcolor}, boxrule=0pt, sharp corners, enhanced, breakable, frame hidden]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -378,7 +378,7 @@ Gaussian priors with mean \(0\) and precision \(\tau_{\beta}\) to the
 regression parameters \(\beta_0\) and \(\beta_1\) (we will use the
 default prior settings in INLA for now).
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-tip-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-tip-color!10!white, titlerule=0mm, title={Question}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-tip-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title={Question}, opacityback=0, rightrule=.15mm]
 
 What is the dimension of the hyperparameter vector and latent Gaussian
 field?
@@ -400,7 +400,7 @@ fixed.
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-note-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-note-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacityback=0, rightrule=.15mm]
 
 We can write the linear predictor vector
 \(\pmb{\eta} = (\eta_1,\dots,\eta_N)\) as
@@ -476,7 +476,7 @@ The \texttt{cmp} object is here used to define model components. We can
 give them any useful names we like, in this case, \texttt{beta\_0} and
 \texttt{beta\_1}.
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-note-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-note-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacityback=0, rightrule=.15mm]
 
 Note that we have excluded the default Intercept term in the model by
 typing \texttt{-1} in the model components. However, \texttt{inlabru}
@@ -507,7 +507,7 @@ order to define the model predictor.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-note-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-note-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacityback=0, rightrule=.15mm]
 
 In this case we can also use the shortcut
 \texttt{formula\ =\ y\ \textasciitilde{}\ .}. This will tell
@@ -560,19 +560,19 @@ information about model fit and estimates
 \DocumentationTok{\#\#     Additive/Linear: TRUE/TRUE}
 \DocumentationTok{\#\#     Used components: effects[beta\_0, beta\_1], latent[]}
 \DocumentationTok{\#\# Time used:}
-\DocumentationTok{\#\#     Pre = 0.389, Running = 0.256, Post = 0.105, Total = 0.75 }
+\DocumentationTok{\#\#     Pre = 0.392, Running = 0.251, Post = 0.12, Total = 0.764 }
 \DocumentationTok{\#\# Fixed effects:}
 \DocumentationTok{\#\#         mean    sd 0.025quant 0.5quant 0.975quant  mode kld}
-\DocumentationTok{\#\# beta\_0 1.994 0.010      1.975    1.994      2.013 1.994   0}
-\DocumentationTok{\#\# beta\_1 0.500 0.009      0.482    0.500      0.518 0.500   0}
+\DocumentationTok{\#\# beta\_0 2.001 0.009      1.982    2.001      2.019 2.001   0}
+\DocumentationTok{\#\# beta\_1 0.506 0.009      0.488    0.506      0.523 0.506   0}
 \DocumentationTok{\#\# }
 \DocumentationTok{\#\# Model hyperparameters:}
 \DocumentationTok{\#\#                                           mean    sd 0.025quant 0.5quant}
-\DocumentationTok{\#\# Precision for the Gaussian observations 109.93 15.54      81.62   109.20}
+\DocumentationTok{\#\# Precision for the Gaussian observations 114.97 16.26      85.36   114.21}
 \DocumentationTok{\#\#                                         0.975quant   mode}
-\DocumentationTok{\#\# Precision for the Gaussian observations     142.45 107.74}
+\DocumentationTok{\#\# Precision for the Gaussian observations     148.98 112.68}
 \DocumentationTok{\#\# }
-\DocumentationTok{\#\# Marginal log{-}Likelihood:  70.58 }
+\DocumentationTok{\#\# Marginal log{-}Likelihood:  72.82 }
 \DocumentationTok{\#\#  is computed }
 \DocumentationTok{\#\# Posterior summaries for the linear predictor and the fitted values are computed}
 \DocumentationTok{\#\# (Posterior marginals needs also \textquotesingle{}control.compute=list(return.marginals.predictor=TRUE)\textquotesingle{})}
@@ -629,7 +629,7 @@ this case we set the number of samples to 1000.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-warning-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, title={Task}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-warning-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title={Task}, opacityback=0, rightrule=.15mm]
 
 Generate predictions for a new observation with \(x_0 = 0.45\)
 
@@ -661,7 +661,7 @@ is
 
 \[ \log(\tau) \sim \mathrm{logGamma}(1,5 \times 10^{-5}) \]
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-note-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-note-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacityback=0, rightrule=.15mm]
 
 If your model uses the default intercept construction (i.e.,
 \texttt{Intercept(1)} in the linear predictor) INLA will assign a
@@ -714,7 +714,7 @@ define the relative components as:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-warning-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, title={Task}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-warning-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title={Task}, opacityback=0, rightrule=.15mm]
 
 Run the model again using 0.1 as default precision for both the
 intercept and the slope parameter.
@@ -780,7 +780,7 @@ posterior density of the intercept \(\beta_0\) we can type:
 \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-18-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-warning-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, title={Task}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-warning-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title={Task}, opacityback=0, rightrule=.15mm]
 
 Plot the posterior marginals for \(\beta_1\) and for the precision of
 the observation error \(\pi(\tau|y)\)
@@ -845,7 +845,7 @@ zeros except for the element associated with \(u_j\), which has a one.
 \pmb{\eta} = \pmb{A}\pmb{u} = \pmb{A}_1\pmb{u}_1 + \pmb{A}_2\pmb{u}_2 + \pmb{A}_3\pmb{u}_3
 \]
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-note-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, title={Supplementary material: LMM as a LGM}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-note-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title={Supplementary material: LMM as a LGM}, opacityback=0, rightrule=.15mm]
 
 In matrix form, the linear mixed model for the \emph{j}-th group can be
 written as:
@@ -1001,7 +1001,7 @@ The model can be fitted exactly as in the previous examples by using the
 \DocumentationTok{\#\#     Additive/Linear: TRUE/TRUE}
 \DocumentationTok{\#\#     Used components: effects[beta\_0, beta\_1, u], latent[]}
 \DocumentationTok{\#\# Time used:}
-\DocumentationTok{\#\#     Pre = 0.379, Running = 0.361, Post = 0.169, Total = 0.909 }
+\DocumentationTok{\#\#     Pre = 0.349, Running = 0.297, Post = 0.2, Total = 0.846 }
 \DocumentationTok{\#\# Fixed effects:}
 \DocumentationTok{\#\#         mean    sd 0.025quant 0.5quant 0.975quant  mode kld}
 \DocumentationTok{\#\# beta\_0 2.108 0.438      1.229    2.108      2.986 2.108   0}
@@ -1055,7 +1055,7 @@ while spe
 \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-43-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-tip-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-tip-color!10!white, titlerule=0mm, title={Question}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-tip-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title={Question}, opacityback=0, rightrule=.15mm]
 
 Suppose that we are also interested in including random slopes into our
 model. Assuming intercept and slopes are independent, can your write
@@ -1224,7 +1224,7 @@ Observation models:
     Additive/Linear: TRUE/TRUE
     Used components: effects[beta_0, beta_1], latent[]
 Time used:
-    Pre = 0.262, Running = 0.215, Post = 0.0426, Total = 0.52 
+    Pre = 0.262, Running = 0.219, Post = 0.0393, Total = 0.52 
 Fixed effects:
         mean    sd 0.025quant 0.5quant 0.975quant  mode kld
 beta_0 0.915 0.071      0.775    0.915      1.054 0.915   0
@@ -1268,7 +1268,7 @@ Since we used a log link (which is the default for
 the predictor. We specify this using a general \texttt{R} expression
 using the formula syntax.
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-note-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-note-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacityback=0, rightrule=.15mm]
 
 Note that the \texttt{predict} function will call the component names
 (i.e.~the ``labels'') that were decided when defining the model.
@@ -1303,7 +1303,7 @@ software does the rest.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-warning-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, title={Task}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-warning-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title={Task}, opacityback=0, rightrule=.15mm]
 
 Suppose a binary response such that
 
@@ -1338,7 +1338,7 @@ Take hint
 You can set \texttt{family\ =\ "binomial"} for binary responses and the
 \texttt{plogis()} function for computing the predicted values.
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-note-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-note-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacityback=0, rightrule=.15mm]
 
 The Bernoulli distribution is equivalent to a
 \(\mathrm{Binomial}(1, \psi)\) pmf. If you have proportional data
@@ -1503,10 +1503,8 @@ We then can fit the model:
 \end{Shaded}
 
 \begin{verbatim}
-              mean         sd 0.025quant 0.5quant 0.975quant    mode
-Intercept 1.298799 0.06506724   1.171641 1.298566   1.427294 1.29857
-                   kld
-Intercept 9.965719e-09
+            mean         sd 0.025quant 0.5quant 0.975quant    mode          kld
+Intercept 1.2988 0.06506725   1.171641 1.298566   1.427294 1.29857 9.965741e-09
 \end{verbatim}
 
 The posterior summary regarding the estimated function using RW1 can be
@@ -1574,7 +1572,7 @@ The we can plot them together with the true curve and data points:
 
 \end{figure}%
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toptitle=1mm, coltitle=black, opacityback=0, breakable, colback=white, colframe=quarto-callout-warning-color-frame, toprule=.15mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, title={Task}, arc=.35mm, rightrule=.15mm, opacitybacktitle=0.6, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, leftrule=.75mm, bottomtitle=1mm, toprule=.15mm, colframe=quarto-callout-warning-color-frame, colback=white, breakable, coltitle=black, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, bottomrule=.15mm, left=2mm, titlerule=0mm, title={Task}, opacityback=0, rightrule=.15mm]
 
 Fit a flexible model using a random walk of order 2 (RW2) and compare
 the results with the ones above.
