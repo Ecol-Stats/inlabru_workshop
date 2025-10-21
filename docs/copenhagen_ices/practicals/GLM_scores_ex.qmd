@@ -1,0 +1,260 @@
+---
+title: ""
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(webexercises)
+
+```
+
+## GLM model checking {#sec-linmodel}
+
+In this exercise we will:
+
+-   Learn about some model assessments techniques available in INLA
+-   Conduct posterior predictive model checking
+
+Libraries to load:
+
+```{r}
+#| warning: false
+#| message: false
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+
+```
+
+In this exercise, we will use data on horseshoe crabs (*Limulus polyphemus*) where the number of satellites males surrounding a breeding female are counted along with the female's color and carapace width.
+
+{{< downloadthis datasets/crabs.csv dname="crabs" label="Download data set" icon="database-fill-down" type="info" >}}
+
+A possible model to study the factors that affect the number of satellites for female crabs is
+
+$$
+\begin{aligned}
+y_i&\sim\mathrm{Poisson}(\mu_i), \qquad i = 1,\dots,N \\
+\eta_i &= \mu_i = \beta_0 + \beta_1 x_i + \ldots
+\end{aligned}
+$$
+
+We can explore the conditional means and variances given the female's color:
+
+```{r}
+crabs <- read.csv("datasets/crabs.csv")
+
+# conditional means and variances
+crabs %>%
+  summarise( Mean = mean(satell ),
+             Variance = var(satell),
+                     .by = color)
+```
+
+The mean of the number of satellites vary by color which gives a good indication that color might be useful for predicting satellites numbers. However, notice that the mean is lower than its variance suggesting that overdispersion might be present and that a negative binomial model would be more appropriate for the data (we will cover this later).
+
+**Fitting the model**
+
+First, lets begin fitting the Poisson model above using the carapace's color and width as predictors. Since, color is a categorical variable in our model we need to create a dummy variable for it. We can use the `model.matrix` function to help us constructing the design matrix and then append this to our data:
+
+```{r}
+
+crabs_df = model.matrix( ~  color , crabs) %>%
+  as.data.frame() %>%
+  select(-1) %>%        # drop intercept
+  bind_cols(crabs) %>%  # append to original data
+  select(-color)        # remove original color categorical variable
+
+```
+
+The new data set `crabs_df` contains a dummy variable for the different color categories (`dark` being the reference category). Then we can fit the model in `inlabru` as follows:
+
+```{r}
+
+cmp =  ~ -1 + beta0(1) +  colordarker +
+       colorlight + colormedium +
+       w(weight, model = "linear")
+
+lik =  bru_obs(formula = satell ~.,
+            family = "poisson",
+            data = crabs_df)
+
+fit_pois = bru(cmp, lik)
+
+summary(fit_pois)
+
+```
+
+### Model assessment and model choice
+
+Now that we have fitted the model we would like to carry some model assessments. In a Bayesian setting, this is often based on posterior predictive checks. To do so, we will use the CPO and PIT - two commonly used Bayesian model assessment criteria based on the **posterior predictive distribution**.
+
+::: callout-note
+## Posterior predictive model checking
+
+The posterior predictive distribution for a predicted value $\hat{y}$ is
+
+$$
+\pi(\hat{y}|\mathbf{y}) = \int_\theta \pi(\hat{y}|\theta)\pi(\theta|\mathbf{y})d\theta.
+$$
+
+The probability integral transform (PIT) introduced by Dawid (1984) is defined for each observation as:
+
+$$
+\mathrm{PIT}_i = \pi(\hat{y}_i \leq y_i |\mathbf{y}{-i})
+$$
+
+The PIT evaluates how well a model's predicted values match the observed data distribution. It is computed as the cumulative distribution function (CDF) of the observed data evaluated at each predicted value. If the model is well-calibrated, the PIT values should be *approximately uniformly distributed*. Deviations from this uniform distribution may indicate issues with model calibration or overfitting.
+
+Another metric we could used to asses the model fit is the conditional predictive ordinate (CPO) introduced by Pettit (1990), and deﬁned as:
+
+$$
+\text{CPO}_i = \pi(y_i| \mathbf{y}{-i})
+$$
+
+The CPO measures the probability of the observed value of $y_i$ when model is fit using all data but $y_i$. CPO provides a measure of how well the model predicts each individual observation while taking into account the rest of the data and the model. *Large values indicate a better fit* of the model to the data, while small values indicate a bad fitting of the model
+:::
+
+To compute PIT and CPO we can either:
+
+1.  ask `inlabru` to compute them by set `options = list(control.compute = list(cpo = TRUE))` in the `bru()` function arguments.
+
+2.  set this as default in `inlabru` global option using the `bru_options_set` function.
+
+Here we will do the later and re-run the model
+
+```{r}
+bru_options_set(control.compute = list(cpo = TRUE))
+
+fit_pois = bru(cmp, lik)
+```
+
+Now we can produce histograms and QQ plots to assess for uniformity in the PIT values which can be accessed through `inlabru_model$cpo$pit` :
+
+::: panel-tabset
+# Plot
+
+```{r}
+#| echo: false
+#| fig-width: 8
+#| fig-height: 4
+#| fig-align: center
+#| purl: false
+
+par(mfrow=c(1,2))
+
+fit_pois$cpo$pit %>% hist(main = "Histogram of PIT values")
+
+qqplot(qunif(ppoints(length(fit_pois$cpo$pit))),
+
+fit_pois$cpo$pit,
+main = "Q-Q plot for Unif(0,1)", 
+xlab = "Theoretical Quantiles", ylab = "Sample Quantiles")
+
+qqline(fit_pois$cpo$pit ,distribution = function(p) qunif(p),
+       prob  = c(0.1, 0.9))
+par(mfrow=c(1,1))
+```
+
+# R Code
+
+```{r}
+#| eval: false
+
+
+fit_pois$cpo$pit %>%
+  hist(main = "Histogram of PIT values")
+
+qqplot(qunif(ppoints(length(fit_pois$cpo$pit))),
+       fit_pois$cpo$pit,
+       main = "Q-Q plot for Unif(0,1)",
+       xlab = "Theoretical Quantiles",
+       ylab = "Sample Quantiles")
+
+qqline(fit_pois$cpo$pit,
+       distribution = function(p) qunif(p),
+       prob = c(0.1, 0.9))
+```
+:::
+
+
+Both Q-Q plots and histogram of the PIT values suggest a not so great model fit. For the CPO values, usually the following summary of the CPO is often used:
+
+$$
+-\sum_{i=1}^n \log (\text{CPO}\_i)
+$$
+
+This quantities is useful when comparing different models - a smaller values indicate a better model fit. CPO values can be accessed by typing `inlabru_model$cpo$cpo`.
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+The model assessment above suggests that a Poisson model might not be the most appropriate model, likely due to the overdispersion we detected previously. Fit a Negative binomial to relax the Poisson model assumption that the conditional mean and variance are equal. Then, compute the CPO summary statistic and PIT QQ plot to decide which model gives the better fit.
+
+`r hide("Take hint")`
+
+To specify a negative binomial model you only need to change the family distribution to `family =  "nbinomial"`.
+
+`r unhide()`
+
+```{r}
+#| fig-width: 8
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+par(mfrow=c(1,2))
+
+# Fit the negative binomial model
+
+lik_nbinom =  bru_obs(formula = satell ~.,
+            family = "nbinomial",
+            data = crabs_df)
+
+fit_nbinom = bru(cmp, lik_nbinom)
+
+# PIT checks
+
+fit_nbinom$cpo$pit %>%
+  hist(main = "Histogram of PIT values")
+
+qqplot(qunif(ppoints(length(fit_nbinom$cpo$pit))),
+       fit_nbinom$cpo$pit,
+       main = "Q-Q plot for Unif(0,1)",
+       xlab = "Theoretical Quantiles",
+       ylab = "Sample Quantiles")
+
+qqline(fit_nbinom$cpo$pit,
+       distribution = function(p) qunif(p),
+       prob = c(0.1, 0.9))
+
+# CPO comparison
+
+data.frame( CPO = c(-sum(log(fit_pois$cpo$cpo)),
+                    -sum(log(fit_nbinom$cpo$cpo))),
+          Model = c("Poisson","Negative Binomial"))
+
+# Overall, we can see that the negative binomial model provides a better fit to the data.
+
+```
+
+:::

@@ -1,0 +1,364 @@
+---
+title: "Spatial Data types"
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| purl: false
+
+library(webexercises)
+
+```
+
+In this practical we will:
+
+-   Explore tools for geostatistical spatial data wrangling and visualization.
+-   Compute a variogram to assess for spatial autocorrelation in our data.
+
+First, lets load some useful libraries for data wrangling and visualization
+
+```{r}
+#| message: false
+#| warning: false
+
+# For plotting
+library(mapview)
+library(ggplot2)
+library(scico) # for colouring palettes
+
+# Data manipulation
+library(dplyr)
+
+
+```
+
+## Georeferenced data
+
+Tobler's first law of geography states that:
+
+"*Everything is related to everything else, but near things are more related than distant things*"
+
+Spatial patterns are fundamental in environmental and ecological data. In many ecological and environmental settings, measurements from fixed sampling units, aiming to quantify spatial variation and interpolate values at unobserved sites.
+
+**Georefernced** data are the most common form of spatial data found in environmental setting. In these data we regularly take measurements of a spatial ecological or environmental process at a set of fixed locations. This could be data from transects (e.g, where the height of trees is recorded), samples taken across a region (e.g., water depth in a lake) or from monitoring stations as part of a network (e.g., air pollution). In each of these cases, our goal is to estimate the value of our variable across the entire space.
+
+Let $D$ be our two-dimensional region of interest. In principle, there is aninfinite number of locations within $D$, each of which can be represented by mathematical coordinates (e.g., latitude and longitude). We then can identify any individual location as $s_i = (x_i, y_i)$, where $x_i$ and $y_i$ are their coordinates.
+
+We can treat our variable of interest as a random variable, $Z$ which can be observed at any location as $Z(\mathbf{s}_i)$.
+
+Our geostatistical process can therefore be written as: $$\{Z(\mathbf{s}); \mathbf{s} \in D\}$$
+
+In practice, our data are observed in a finite number of locations, $m$, and can be denoted as:
+
+$$z = \{z(\mathbf{s}_1), \ldots z(\mathbf{s}_m) \}$$
+
+In the next example, we will explore data on the Pacific Cod (*Gadus macrocephalus*) from a trawl survey in Queen Charlotte Sound. The `pcod` dataset is available from the `sdmTMB` package and contains the presence/absence records of the Pacific Cod during each surveys along with the biomass density of Pacific cod in the area swept (kg/Km$^2$). The `qcs_grid` data contain the depth values stored as $2\times 2$ km grid for Queen Charlotte Sound.
+
+```{r}
+#| message: false
+#| warning: false
+library(sdmTMB)
+
+pcod_df = sdmTMB::pcod 
+qcs_grid = sdmTMB::qcs_grid
+
+```
+
+### Georeferrenced data
+
+Let's create an initial `sf` spatial object using the standard geographic coordinate system (`EPSG:4326`). This correctly defines the point locations based on latitude and longitude.
+
+```{r}
+#| message: false
+#| warning: false
+library(sf)
+pcod_sf =   st_as_sf(pcod_df, coords = c("lon","lat"), crs = 4326)
+```
+
+Now we can transform to the standard UTM Zone 9N projection (EPSG:32609) which uses meters:
+
+```{r}
+pcod_sf_proj <- st_transform(pcod_sf, crs = 32609)
+st_crs(pcod_sf_proj)$units
+```
+
+We can change the spatial units to *km* to better reflect the scale of our ecological study and to make resulting distance/area values more intuitive to interpret:
+
+```{r}
+pcod_sf_proj = st_transform(pcod_sf_proj,
+                            gsub("units=m","units=km",
+                                 st_crs(pcod_sf_proj)$proj4string)) 
+st_crs(pcod_sf_proj)$units
+```
+
+Instead of first setting an EPSG code and then transforming, we can define the target Coordinate Reference System (CRS) directly using a `proj4string`. This allows us to customize non-standard parameters in a single step, in this case, explicitly setting the projection units to kilometers (`+units=km`).
+
+```{r}
+pcod_sf = st_transform(pcod_sf,
+                       crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
+st_crs(pcod_sf)$units
+
+```
+
+Spatial `sf` objects can be manipulated the same way we manipulate standard data frame objects via the `dplyr` package. For example, you can select a specific year using the `filter` function from `dplyr`. Let's map the present/absence of the Pacific Cod in 2017 using the `mapview` function:
+
+```{r}
+#| fig-width: 4
+#| fig-height: 4
+#| fig-align: center
+#| message: false
+#| warning: false
+#| 
+pcod_sf %>% 
+  filter(year== 2017) %>%
+  mutate(present = as.factor(present)) %>%
+mapview(zcol = "present",
+        layer.name = "Occupancy status of Pacific Cod in 2017")
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Use `ggplot` and the `sf` library to map the biomass density of the pacific cod across years.
+
+`r hide("hint")`
+
+You can plot an`sf` object by adding a `geom_sf` layer to a ggplot object. You can also use the `facet_wrap` argument to plot an arrange of plots according to a grouping variable.
+
+`r unhide()`
+
+```{r}
+#| webex.hide: "Click here to see the solution"  
+#| purl: false   
+#| message: false
+#| warning: false
+#| fig-width: 8 
+#| fig-height: 8
+#| fig-align: center  
+
+ggplot()+ 
+  geom_sf(data=pcod_sf,aes(color=density))+ 
+  facet_wrap(~year)+
+  theme(legend.position = "bottom")
+
+```
+:::
+
+### Raster Data
+
+Environmental data are typically stored in raster format, which represents spatially continuous phenomena by dividing a region into a grid of equally-sized cells, each storing a value for the variable of interest. In R, the `terra` package is a modern and powerful tool for efficiently working with raster data. The function `rast()`, can be used both to read raster files from standard formats (e.g., `.tif` or `.tiff`) and to create a new raster object from a data frame. For instance, the following code creates a raster from the `qcs_grid` grid data for Queen Charlotte Sound.
+
+```{r}
+#| message: false
+#| warning: false
+
+library(terra)
+depth_r <- rast(qcs_grid, type = "xyz")
+depth_r
+```
+
+The raster object contains three layers corresponding to the (i) depth values, (ii) the scaled depth values and (iii) the squared depth values.
+
+Notice that there are no CRS associated with the raster. Thus, we can assign appropriate CRS using the `crs` function. Additionally, we also want the raster CRS to match the CRS in the survey data (recall that we have previously reprojected our data to utm coordinates). We can assign an appropiate CRS that matches the CRS of the `sf` object as follows:
+
+```{r}
+crs(depth_r) <- crs(pcod_sf)
+```
+
+We can use the `tidyterra` package to plot raster data using `ggplot` by adding a `geom_spatraster` function and then select an appropriate `fill` and `color` palettes:
+
+```{r}
+#| fig-width: 8 
+#| fig-height: 8
+#| fig-align: center  
+
+
+library(tidyterra)
+
+ggplot()+ 
+  geom_spatraster(data=depth_r$depth)+
+  geom_sf(data=pcod_sf,aes(color=factor(present))) +
+  facet_wrap(~year)+
+    scale_color_manual(name="Occupancy status for the Pacific Cod",
+                     values = c("black","orange"),
+                     labels= c("Absence","Presence"))+
+  scale_fill_scico(name = "Depth",
+                   palette = "nuuk",
+                   na.value = "transparent" )
+
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Map the scaled depth and the presence/absence records of the Pacific cod for 2003 to 2005 only.
+
+`r hide("hint")`
+
+The different layers of a raster can be accessed using the `$` symbol.
+
+`r unhide()`
+
+```{r}
+#| webex.hide: "Click here to see the solution"  
+#| purl: false   
+#| message: false
+#| warning: false
+#| fig-width: 8 
+#| fig-height: 5
+#| fig-align: center  
+
+
+ggplot()+ 
+  geom_spatraster(data=depth_r$depth_scaled)+
+  geom_sf(data=pcod_sf %>% filter(year %in% 2003:2005),
+          aes(color=factor(present)))+ 
+  facet_wrap(~year)+
+  scale_color_manual(name="Occupancy status for the Pacific Cod",
+                     values = c("black","orange"),
+                     labels= c("Absence","Presence"))+
+    scale_fill_scico(name = "Scaled Depth",
+                     palette = "davos",
+                     na.value = "transparent" )
+
+
+```
+:::
+
+### Autocorrelation and Variograms
+
+Spatial statistics quantifies the fundamental principle that nearby things are closely related. This spatial dependence means that observation are not independent, as assumed by most classical statistical models, but are instead correlated relative to their proximity. While this correlation can be a valuable source of information, it must be explicitly accounted for to avoid wrong inference and incorrect conclusions.
+
+The first step is to assess whether there is any evidence of spatial dependency in our data. Spatial dependence in georeferenced data can be explored by a function known as a variogram $2\gamma(\cdot)$ (or semivariogram $\gamma(\cdot)$). The variogram is similar in many ways to the autocorrelation function used in time series modelling. In simple terms, it is a function which measures the difference in the spatial process between a pair of locations a fixed distance apart.
+
+The variogram measures the variance of the difference in the process $Z(\cdot)$ at two spatial locations $\mathbf{s}$ and $\mathbf{s+h}$ and is defined as :
+
+$$\mathrm{Var}[Z(\mathbf{s}) - Z(\mathbf{s} + \mathbf{h})] = E[(Z(\mathbf{s}) - Z(\mathbf{s} + \mathbf{h}))^2] = 2\gamma_z(\mathbf{h}).$$
+
+Here, $2\gamma_z(\mathbf{h})$ is the variogram, but in practice we use the semi-variogram, $\gamma_z(\mathbf{h})$. We use the semi-variogram because our points come in pairs, and the semi-variance is equivalent to the variance per point at a given lag.
+
+-   When the variance of the difference $Z(\mathbf{s}) - Z(\mathbf{t})$ is relatively small, then $Z(\mathbf{s})$ and $Z(\mathbf{t})$ are similar (spatially correlated).
+
+-   When the variance of the difference $Z(\mathbf{s}) - Z(\mathbf{t})$ is relatively large, then $Z(\mathbf{s})$ and $Z(\mathbf{t})$ are less similar (closer to independence).
+
+The variogram is a function of the underlying geostatistical process $Z$. In practice, we only have access to $m$ realisations of this process, and therefore we have to estimate the variogram. This is known as the empirical variogram.
+
+We obtain this by computing the semi-variance for all possible pairs of observations: $\gamma(\mathbf{s}, \mathbf{t}) = 0.5(Z(\mathbf{s}) - Z(\mathbf{t}))^2$.
+
+::: {.callout-note icon="false"}
+## {{< bi box color=#22697a >}} Example
+
+To illustrate how an empirical variogram is computed, consider the biomass density of the Pacific Cod in 2017 for the two highlighted locations below.
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-width: 7
+#| fig-height: 5
+
+pcod_sf_subset <- pcod_sf %>% filter(year ==2017)
+
+map <- ggplot(pcod_sf_subset) + geom_sf(aes(color = density), size = 2) +
+scale_color_gradient(low = "blue", high = "orange") +
+theme_bw()
+
+
+point_1 <- st_buffer(pcod_sf_subset[1,],10)
+point_2 <- st_buffer(pcod_sf_subset[12,],10)
+# Extract coordinates and values for annotation
+coords <- st_coordinates(pcod_sf_subset[c(1, 12), ])
+values <- pcod_sf_subset$density[c(1, 12)]
+# Offset the labels slightly to the right of the points
+offset_x <- 10  # Adjust for horizontal shift
+offset_y <- 10   # Adjust for vertical shift
+# Create a DataFrame for text labels
+labels_df <- data.frame(
+  x = coords[,1]+ offset_x,
+  y = coords[,2]+ offset_y,
+  label = sprintf("Z(s) = %.2f\n(%.1f, %.1f)", values, coords[,1], coords[,2])
+)
+
+map+
+  geom_sf(data=point_1,col=2,alpha=0.5)+
+  geom_sf(data=point_2,col=4,alpha=0.5)+
+  geom_label(data = labels_df, aes(x = x, y = y, label = label), 
+             fill = "orange", # Soft background color
+             color = "black", # Text color
+             size = 3, 
+             alpha=0.7,
+             fontface = "bold",
+             label.size = 0.3, # Mild border thickness
+             label.r = unit(0.15, "lines"))
+
+
+```
+
+1.  We can first compute the distance between the two locations using the standard Euclidean distance formula as
+
+$$h = \sqrt{(441.6 -481)^2 + (5743.4-5748.2)^2} \approx  39 ~\text{Km}$$
+
+2.  Next, we compute the semi-variance between the points using their observed values as $$\gamma(\mathbf{s}, \mathbf{t}) = 0.5(Z(\mathbf{s}) - Z(\mathbf{t}))^2 = 0.5(149.5 - 40.64)^2 = 5925.25$$
+
+3.  We repeat this process for every possible pair of points, and plot $h$ against $\gamma(\mathbf{s}, \mathbf{t})$ for each.
+:::
+
+To make the variogram easier to use and interpret, we divide the distances into a set of discrete bins, and compute the average semi-variance in each. We compute this binned empirical variogram as:
+
+$$\gamma(\mathbf{h}) = \frac{1}{2N(h_k)}\sum_{(\mathbf{s},\mathbf{t}) \in N(h_k)}[z(\mathbf{s}) - z(\mathbf{t})]^2$$
+
+We can calculate the binned- empirical variogram for the data using `variogram` function from the `gstat` library. This plot shows the semi-variances for each pair of points. Lets compute a variogram for the biomass density of the Pacific Cod in 2017:
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+
+
+library(gstat)
+
+pcod_sf_subset <- pcod_sf %>% filter(year ==2017)
+
+vgm1 <- variogram(density~1, pcod_sf_subset)
+plot(vgm1)
+
+```
+
+**Assessing spatial dependence**
+
+We can construct null envelope based on permutations of the data values across the locations, i.e. envelopes built under the assumption of no spatial correlation. By overlapping these envelopes with the empirical variograms we can determine whether there is some spatial dependence in our data ,e.g. if our observed variograms falls outside of the envelopes constructed under spatial randomness.
+
+We can construct permutation envelopes on the gstat empirical variogram using the `envelope` function from the `variosig` R package. Then we can visualize the results using the `envplot` function:
+
+```{r}
+#| message: false
+#| warning: false
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+
+library(variosig)
+
+varioEnv <- envelope(vgm1,
+                     data = pcod_sf_subset,
+                     locations = st_coordinates(pcod_sf_subset),
+                     formula = density ~ 1,
+                     nsim = 499)
+
+envplot(varioEnv)
+
+```

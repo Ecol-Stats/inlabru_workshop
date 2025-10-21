@@ -32,6 +32,8 @@ In this practical we are going to fit a geostatistical model. We will:
 
 -   Learn how to fit a geostatistical model in `inlabru`
 
+-   Learn how to build a mesh for the SPDE representation
+
 -   Learn how to add spatial covariates to the model
 
 -   Learn how to do predictions
@@ -52,6 +54,7 @@ library(INLA)
 library(inlabru) 
 library(sf)
 library(terra)
+
 
 # load some libraries to generate nice map plots
 library(scico)
@@ -152,16 +155,27 @@ When fitting a geostatistical model we need to fullfill the following tasks:
 
 The first task, when dealing with geostatistical models in `inlabru` is to build the mesh that covers the area of interest. For this purpose we use the function `fm_messh_2d`.
 
-One way to build the mesh is to start from the locations where we have observations, these are contained in the dataset `pcod_sf`
+One way to build the mesh is to start from the locations where we have observations, these are contained in the dataset `pcod_sf`.
+
+```{r}
+
+mesh = fm_mesh_2d(loc = pcod_sf,           # Build the mesh
+                  max.edge = c(10,20),     # The largest allowed triangle edge length.
+                  offset = c(5,50))       # The automatic extension distance
+ggplot() + gg(mesh) + geom_sf(data= pcod_sf, aes(color = factor(present)), size = 0.1) + xlab("") + ylab("")
+
+
+```
+
+As you can see from the plot above, some of the locations are very close to each other, this causes some very small triangles. This can be avoided using the option `cutoff =` which collapses the locations that are closer than a cutoff (those points are collapsed in the mesh construction but, of course, not when it come to estimaation.)
 
 ```{r}
 
 mesh = fm_mesh_2d(loc = pcod_sf,           # Build the mesh
                   cutoff = 2,
-                  max.edge = c(7,20),     # The largest allowed triangle edge length.
+                  max.edge = c(10,20),     # The largest allowed triangle edge length.
                   offset = c(5,50))       # The automatic extension distance
-ggplot() + gg(mesh) + geom_sf(data= pcod_sf, aes(color = factor(present))) + xlab("") + ylab("")
-
+ggplot() + gg(mesh) + geom_sf(data= pcod_sf, aes(color = factor(present)), size = 0.1) + xlab("") + ylab("")
 
 ```
 
