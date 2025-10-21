@@ -203,7 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#schedule-program" id="toc-schedule-program" class="nav-link" data-scroll-target="#schedule-program">Schedule Program</a></li>
   <li><a href="#in-preparation-for-the-workshop" id="toc-in-preparation-for-the-workshop" class="nav-link" data-scroll-target="#in-preparation-for-the-workshop">In preparation for the workshop</a></li>
   </ul>
-</nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF (PrettyPDF)</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -312,7 +312,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"inlabru"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 <li><p>Make sure you have the latest <code>R-INLA</code>, <code>inlabru</code> and <code>R</code> versions installed.</p></li>
-<li><p>Install the following libraries</p></li>
+<li><p>Install the following libraries:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>install.packages(c(
+  "CARBayesdata",
+  "dplyr",
+  "fmesher",
+  "ggplot2",
+  "gt",
+  "lubridate",
+  "mapview",
+  "patchwork",
+  "scico",
+  "sdmTMB",
+  "sf",
+  "spatstat",
+  "spdep",
+  "terra",
+  "tidyr",
+  "tidyterra",
+  "viridis"
+))</code></pre>
+</div>
+</div></li>
 </ol>
 
 

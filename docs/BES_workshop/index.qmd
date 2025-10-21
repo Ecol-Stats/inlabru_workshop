@@ -2,6 +2,11 @@
 title: "BES workshop"
 author: "Jafet Belmont, Sara Martino and Janine Illian"
 subtitle: "British Ecological Society Meeting 2025, Edinburgh"
+format: 
+  html: default
+  PrettyPDF-pdf:
+    keep-tex:  true
+    number-sections: true
 ---
 
 # Welcome to the course!
@@ -34,6 +39,8 @@ At the end of the workshop, participants will be able to:
 
 : {.striped .hover}
 
+\clearpage
+
 # In preparation for the workshop
 
 Participants are required to follow the next steps before the day of the workshop:
@@ -58,34 +65,30 @@ Participants are required to follow the next steps before the day of the worksho
 
 3.  Make sure you have the latest `R-INLA`, `inlabru` and `R` versions installed.
 
-4.  Install the following libraries
+4.  Install the following libraries:
 
     ```{r}
     #| echo: false
     #| warning: false
     #| message: false
 
-    library(DT)  # For interactive tables
-
     if (file.exists("practicals_libraries.rds")) {
       libs_data <- readRDS("practicals_libraries.rds")
       
-      if (nrow(libs_data) > 0) {
-        cat("### Libraries Used in Practicals\n\n")
-        cat("We use **", nrow(libs_data), "** unique libraries across all exercises.\n\n")
+      # Libraries to exclude
+      exclude_libs <- c("webexercises", "INLA", "inlabru", "knitr")
+      
+      # Filter out excluded libraries
+      filtered_libs <- libs_data[!libs_data$Library %in% exclude_libs, ]
+      
+      if (nrow(filtered_libs) > 0) {
+
+        cat("install.packages(c(\n")
+        cat(paste0('  "', filtered_libs$Library, '"', collapse = ",\n"))
+        cat("\n))")
         
-        # Create interactive table
-        datatable(
-          libs_data,
-          options = list(
-            pageLength = 10,
-            dom = 'tip',
-            autoWidth = TRUE
-          ),
-          colnames = c('Library', 'Used In Files'),
-          caption = 'Libraries used in practical exercises'
-        )
+      } else {
+        cat("No libraries found after filtering.\n")
       }
     }
-
     ```
