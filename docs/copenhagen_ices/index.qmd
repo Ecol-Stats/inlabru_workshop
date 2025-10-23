@@ -2,11 +2,18 @@
 title: "`inlabru` Workshop"
 author: "Jafet Belmont, Sara Martino and Janine Illian"
 subtitle: "ICES 2025, Copenhagen"
+format: 
+  html: default
+  PrettyPDF-pdf:
+    keep-tex:  true
+    number-sections: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Welcome to the course!
 
--   Welcome to the `inlabu` workshop!
+-   Welcome to the `inlabru` workshop!
 -   The goal for the workshop is to ...
 -   The workshop is intended for ... No knowledge of `R-INLA` is required.
 -   Workshop materials in the github repository [inlabru-workshop](https://github.com/Ecol-Stats/inlabru_workshop/tree/main/docs/copenague)
@@ -57,17 +64,17 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 
 ### Day 3
 
-|     Time      |                 Topic                  |
-|:-------------:|:--------------------------------------:|
-| 9:00 - 10:00  |     **Session 6**: Areal Processes     |
-| 10:00 - 10:30 |                Snack 🥙                |
-| 10:30 - 11:30 |      **Session 7**: Geostatistics      |
-| 11:30 - 13:00 |          Practical Session 5           |
-| 13:00 - 14:30 |             Lunch break 🍽️             |
-| 14:30 - 15:30 | **Session 8**: Spatial Point processes |
-| 15:35 - 15:45 |            Coffee Break ☕             |
-| 15:45 - 16:45 |          Practical Session 6           |
-| 16:45 - 17:00 |          wrap-up and outlook           |
+|     Time      |                         Topic                         |
+|:-------------:|:-----------------------------------------------------:|
+| 9:00 - 10:00  |            **Session 6**: Areal Processes             |
+| 10:00 - 10:30 |                       Snack 🥙                        |
+| 10:30 - 11:30 |             **Session 7**: Geostatistics              |
+| 11:30 - 13:00 |      [Practical Session 5](day3_practical_5.qmd)      |
+| 13:00 - 14:30 |                    Lunch break 🍽️                     |
+| 14:30 - 15:30 |        **Session 8**: Spatial Point processes         |
+| 15:35 - 15:45 |                    Coffee Break ☕                    |
+| 15:45 - 16:45 | [Practical Session 5 continued](day3_practical_5.qmd) |
+| 16:45 - 17:00 |                  wrap-up and outlook                  |
 
 : {.striped .hover}
 
@@ -77,12 +84,12 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 |:-------------:|:-------------------------------------------------:|
 | 9:00 - 10:00  |       **Session 9**: Spatiotemporal models        |
 | 10:00 - 10:30 |                     Snack 🥙                      |
-| 10:30 - 11:30 | **Session 10**: Multilikelihoods/joint likelihood |
-| 11:30 - 13:00 |                Practical Session 7                |
+| 10:30 - 11:30 |  **Session 10**: Model comparison and evaluation  |
+| 11:30 - 13:00 |   [Practical Session 6](day4_practical_6.qmd)     |
 | 13:00 - 14:30 |                  Lunch break 🍽️                   |
-| 14:30 - 15:30 |         **Session 11**: Non-linear models         |
+| 14:30 - 15:30 | **Session 11**: Multilikelihoods/joint likelihood |
 | 15:35 - 15:45 |                  Coffee Break ☕                  |
-| 15:45 - 16:45 |                Practical Session 8                |
+| 15:45 - 16:45 |                Practical Session 7                |
 | 16:45 - 17:00 |                wrap-up and outlook                |
 
 : {.striped .hover}
@@ -91,15 +98,17 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 
 | Time | Topic |
 |:----------------------------------:|:----------------------------------:|
-| 9:00 - 10:00 | **Session 12**: Complex observational processes: Zero inflated models |
+| 9:00 - 10:00 | **Session 12**: Zero inflated models |
 | 10:00 - 10:30 | Snack 🥙 |
-| 10:30 - 11:30 | **Session 13**: Complex observational processes: Thinned point processes |
-| 11:30 - 13:00 | Practical Session 9 |
+| 10:30 - 11:30 | **Session 13**: Complex observational processes: Distance Sampling |
+| 11:30 - 13:00 | Practical Session 8 |
 | 13:00 - 13:15 | Coffee Break ☕ |
 | 13:15 - 14:00 | Closing session |
 
 : {.striped .hover}
 :::
+
+\clearpage
 
 # In preparation for the workshop
 
@@ -109,4 +118,53 @@ Participants are required to follow the next steps before the day of the worksho
 
 2.  Install `inlabru` (available from CRAN)
 
+```{r}
+#| eval: false
+# Enable universe(s) by inlabru-org
+options(repos = c(
+  inlabruorg = "https://inlabru-org.r-universe.dev",
+  INLA = "https://inla.r-inla-download.org/R/testing",
+  CRAN = "https://cloud.r-project.org"
+))
+
+# Install some packages
+install.packages("inlabru")
+```
+
 3.  Make sure you have the latest `R-INLA`, `inlabru` and `R` versions installed.
+4.  Install the following libraries:
+
+```{r}
+#| results: hide
+#| echo: false
+
+source("extract_practicals_libraries.R")
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+
+    if (file.exists("practicals_libraries.rds")) {
+      libs_data <- readRDS("practicals_libraries.rds")
+      
+      # Libraries to exclude
+      exclude_libs <- c("webexercises", "INLA", "inlabru", "knitr")
+      
+      # Filter out excluded libraries
+      filtered_libs <- libs_data[!libs_data$Library %in% exclude_libs, ]
+      
+      if (nrow(filtered_libs) > 0) {
+
+        cat("install.packages(c(\n")
+        cat(paste0('  "', filtered_libs$Library, '"', collapse = ",\n"))
+        cat("\n))")
+        
+      } else {
+        cat("No libraries found after filtering.\n")
+      }
+    }
+```

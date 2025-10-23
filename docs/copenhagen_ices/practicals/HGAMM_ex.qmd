@@ -1,0 +1,269 @@
+---
+title: ""
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+bibliography: references.bib
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(webexercises)
+
+```
+
+## Hierarchical generalised additive mixed models with `inlabru`
+
+In this excercise we will:
+
+-   Fit an hierarchical generalised additive mixed models
+-   Fit a model with a global smooth term
+-   Fit a model with global and group-level smooth terms
+
+Libraries to load:
+
+```{r}
+#| warning: false
+#| message: false
+
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+
+```
+
+The oceans represent Earth's largest habitat, with life distributed unevenly across depths primarily due to variations in light, temperature, and pressure. Biomass generally decreases with depth, though complex factors like water density layers create non-linear patterns. A significant portion of deep-sea organisms exhibit bioluminescence, which scientists measure using specialized equipment like free-fall camera systems to profile vertical distribution.
+
+In this exercise, we analyze the `ISIT` dataset, which contains bioluminescence measurements from the northeast Atlantic Ocean. This dataset was previously examined in Zuur et al. ([2009](https://doi.org/10.1007/978-0-387-87458-6)) and Gillibrand et al. ([2007](https://doi.org/10.3354/meps341037)) and consists of observations collected across a depth gradient (0–4,800 m) during spring and summer cruises in 2001–2002 using an ISIT free-fall profiler.
+
+{{< downloadthis datasets/ISIT.csv dname="ISIT" label="Download data set" icon="database-fill-down" type="info" >}}
+
+The focus of this excersice will be on characterizing seasonal variation in the relationship between bioluminescent source density (sources m$^{2}$) and depth. We begin by exploring distribution patterns of pelagic bioluminescence through source-depth profiles, with each profile representing measurements from an individual sampling station. These profiles will be grouped by month to examine temporal patterns in the water column's bioluminescent structure.
+
+::: panel-tabset
+# Plot
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-width: 6
+#| fig-height: 6
+#| fig-cap: "Source–depth proﬁles per month. Each line represents a station."
+icit <- read.csv("datasets/ISIT.csv")
+
+icit$Month <- as.factor(icit$Month)
+levels(icit$Month) <- month.abb[unique(icit$Month)]
+icit$Month_id <- as.numeric(icit$Month)
+
+ggplot(icit,aes(x=SampleDepth,y= Sources,group=as.factor(Station),colour=as.factor(Station)))+geom_line()+facet_wrap(~Month)+theme(legend.position = "none")
+```
+
+# R-Code
+
+```{r}
+#| eval: false
+
+icit <- read.csv("datasets/ISIT.csv")
+
+icit$Month <- as.factor(icit$Month)
+levels(icit$Month) <- month.abb[unique(icit$Month)]
+
+ggplot(icit,aes(x=SampleDepth,y= Sources,
+                group=as.factor(Station),
+                colour=as.factor(Station)))+
+  geom_line()+
+  facet_wrap(~Month)+
+  theme(legend.position = "none")
+```
+:::
+
+As expected, there seems to be a non-linear depth effect with some important variability across months.
+
+### Fitting a global smoother
+
+We could begin analysing these data with a global smoother and a random intercept for each month. Thus, a possible model is of the form:
+
+$$
+S_{is} = \beta_0 + f(\text{Depth})_s + \text{Month}_i +  \epsilon_{is} ~~\text{such that}~ \epsilon \sim \mathcal{N}(0,\sigma^2_e);~ \text{Month} \sim \mathrm{N}(0,\sigma^2_m).
+$$
+
+where the source during month $i$ at depth $s$, $S_{is}$, are modelled as smoothing function of depth and a month effect. The model has one smoothing curve for all months and can be fitted in `inlabru` as follows:
+
+```{r}
+
+icit$Month_id <- as.numeric(icit$Month) # numeric index for the i-th month
+
+cmp_g =  ~ -1+ beta_0(1) + 
+  smooth_g(SampleDepth, model = "rw1") + 
+  month_reff(Month_id, model = "iid") 
+
+lik =  bru_obs(formula = Sources ~.,
+               family = "gaussian",
+               data = icit)
+
+fit_g = bru(cmp_g, lik)
+
+summary(fit_g)
+
+```
+
+We can plot the smoother marginal effect as follows:
+
+```{r}
+#| code-summary: "Global smoother marginal effect"
+#| code-fold: true
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+
+data.frame(fit_g$summary.random$smooth_g) %>% 
+  ggplot() + 
+  geom_ribbon(aes(ID,ymin = X0.025quant, ymax= X0.975quant), alpha = 0.5) + 
+  geom_line(aes(ID,mean)) + 
+  xlab("covariate") + ylab("smooth effect")
+```
+
+You might want to have a smoother function by placing a RW2 prior. Unfortunately, this assumes that all the knots are regularly spaced and some depth values are too close to be used for building the RW2 priors. For the case, it is possible to use function `inla.group()` to bin data into groups according to the values of the covariate:
+
+```{r}
+icit$depth_grouped <- inla.group(icit$SampleDepth,n=50)
+
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Re-run the global smoother model using a RW2 prior for the depth smoother and compare your results with the RW1 model.
+
+`r hide("Take hint")`
+
+Use the `depth_grouped` covariate to define the smoother.
+
+`r unhide()`
+
+```{r}
+#| fig-width: 4
+#| fig-align: center
+#| fig-height: 4
+#| purl: false
+#| webex.hide: "Click here to see the solution"
+
+cmp_rw2 =  ~ -1+ beta_0(1) + 
+  smooth_g(depth_grouped, model = "rw2") + 
+  month_reff(Month_id, model = "iid") 
+
+lik =  bru_obs(formula = Sources ~.,
+               family = "gaussian",
+               data = icit)
+
+fit_rw2 = bru(cmp_rw2, lik)
+
+data.frame(fit_rw2$summary.random$smooth_g) %>% 
+  ggplot() + 
+  geom_ribbon(aes(ID,ymin = X0.025quant, ymax= X0.975quant), alpha = 0.5) + 
+  geom_line(aes(ID,mean)) + 
+  xlab("covariate") + ylab("Global smooth effect")
+```
+:::
+
+### Fitting group-level smoothers
+
+Here we fit a model where each month is allowed to have its own smoother for depth, i.e., $f_i(\text{Depth})_s$. The model structure is given by:
+
+$$
+S_{is} = \beta_0 + f_i(\text{Depth})_s + \text{Month}_i +  \epsilon_{is}.
+$$
+
+Notice the only different between the global smoother model (Model G) and the group level model (Model GS) is the indexing of the smooth function for depth. We can fit a group-level smoother using the `group` argument within the model component as follows:
+
+```{r}
+
+cmp_gs =  ~ -1+ beta_0(1) +
+  smooth_g(SampleDepth, model = "rw1") + 
+  month_reff(Month_id, model = "iid")+
+  smooth_loc(SampleDepth, model = "rw1", group = Month_id)
+
+```
+
+Then, we simply run the model (since the observational model has not changed -only the model components have):
+
+```{r}
+
+fit_gs = bru(cmp_gs, lik) 
+
+```
+
+Lastly, we can generate model predictions using the `predict` function.
+
+```{r}
+pred_gs = predict(fit_gs, icit, ~ (beta_0 + smooth_g+month_reff+smooth_loc))
+
+```
+
+Then, we plot the predicted mean values with their corresponding 95% CrIs.
+
+```{r}
+#| code-summary: "Global + group smoother predictions"
+#| code-fold: true
+
+ggplot(pred_gs,aes(y=mean,x=SampleDepth))+
+  geom_ribbon(aes(SampleDepth,ymin = q0.025, ymax= q0.975), alpha = 0.5,fill="tomato") +
+  geom_line()+
+  geom_point(aes(x=SampleDepth,y=Sources ),alpha=0.25,col="grey40")+
+  facet_wrap(~Month)
+
+
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Re-fit the model GS without the global smoother. By omitting the global smoother, we do not longer force group-level smooths to follow a shared pattern, which is useful when groups may differ substantially from a common trend.
+
+`r hide("Take hint")`
+
+You only need to modify the model components in `cmp_gs`
+
+Add hint details here...
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+cmp_s =  ~ -1+ beta_0(1) +
+  month_reff(Month_id, model = "iid")+
+  smooth_loc(SampleDepth, model = "rw1", group = Month_id)
+
+fit_s = bru(cmp_s, lik) 
+
+pred_s = predict(fit_s, icit, ~ (beta_0 +month_reff+smooth_loc))
+
+ggplot(pred_s,aes(y=mean,x=SampleDepth))+
+  geom_ribbon(aes(SampleDepth,ymin = q0.025, ymax= q0.975), alpha = 0.5,fill="tomato") +
+  geom_line()+
+  geom_point(aes(x=SampleDepth,y=Sources ),alpha=0.25,col="grey40")+
+  facet_wrap(~Month)
+
+
+```
+:::

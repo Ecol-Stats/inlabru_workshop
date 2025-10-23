@@ -24,13 +24,11 @@ library(webexercises)
 
 ```
 
-## Models for areal data {#sec-linmodel}
+## Models for areal data 
 
 In this practical we are going to fit an areal model. We will:
 
 -   Learn how to fit an areal model in `inlabru`
-
--   Learn how to add spatial covariates to the model
 
 -   Learn how to do predictions
 
@@ -52,7 +50,7 @@ library(mapview)
 library(scico)
 ```
 
-# The data
+### The data
 
 We consider data on respiratory hospitalizations for Greater Glasgow and Clyde in 2007. The data are available from the `CARBayesdata` R Package:
 
@@ -74,7 +72,7 @@ The `pollutionhealthdata` contains the spatiotemporal data on respiratory hospit
 -   `jsa`: The percentage of working age people who are in receipt of Job Seekers Allowance
 -   `price`: Average property price (divided by 100,000).
 
-The `GGHB.IZ` data are a Simple Features (`sf`) object containing the spatial polygon information for the set of 271 Intermediate Zones (IZ), that make up of the Greater Glasgow and Clyde health board in Scotland ( @fig-GGC ).
+The `GGHB.IZ` data is a Simple Features (`sf`) object containing the spatial polygon information for the set of 271 Intermediate Zones (IZ), that make up of the Greater Glasgow and Clyde health board in Scotland ( @fig-GGC ).
 
 ```{r}
 #| echo: false
@@ -99,7 +97,9 @@ resp_cases <- merge(GGHB.IZ %>%
   filter(year == 2007) %>%
     mutate(SMR = observed/expected)
 
-ggplot() + geom_sf(data = resp_cases, aes(fill = SMR)) + scale_fill_scico(direction = -1)
+ggplot() + 
+  geom_sf(data = resp_cases, aes(fill = SMR)) +
+  scale_fill_scico(direction = -1)
 
 
 ```
@@ -117,7 +117,7 @@ Q = -R
 diag(Q) = diag
 ```
 
-# The model
+### The model
 
 We fit a first model to the data where we consider a Poisson model for the observed cases.
 
@@ -147,7 +147,6 @@ Fit the above model in using `inlabru` by completing the following code:
 ```{r}
 #| echo: true
 #| eval: false
-
 
 cmp = ~ Intercept(1) + space(...) + iid(...)
 
@@ -190,16 +189,10 @@ After fitting the model we want to extract results.
 
 1.  What is the estimated value for $\beta_0$?
 
-2.  Look at the estimated values of the hyperparameters using
-
-```{r}
-#| echo: true
-#| eval: false
-fit$summary.hyperpar
-```
-
-which of the two spatial components (structured or unstructured) explains more of the variability in the counts?
+2.  Look at the estimated values of the hyperparameters using `fit$summary.hyperpar` which of the two spatial components (structured or unstructured) explains more of the variability in the counts?
 :::
+
+
 
 We now look at the predictions over space.
 
@@ -260,7 +253,7 @@ pred$cases %>% ggplot() + geom_point(aes(observed, mean)) +
 
 **Note:** Here we are predicting the *mean* of counts, not the counts!!! Predicting counts is the theme of the next task!
 
-## Getting prediction densities
+### Getting prediction densities
 
 Posterior predictive distributions, that is $\pi(y_i^{\text{new}}|\mathbf{y})$ are of interest in many applied problems. The `bru()` function does not return predictive densities. In the previous step we have computed predictions for the `expected counts` $\pi(E_i\lambda_i|\mathbf{y})$. The predictive distribution is then: $$
 \pi(y_i^{\text{new}}|\mathbf{y}) = \int \pi(y_i|E_i\lambda_i)\pi(E_i\lambda_i|\mathbf{y})\ dE_i\lambda_i

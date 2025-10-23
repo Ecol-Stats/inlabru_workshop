@@ -1,0 +1,526 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{5}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+% load packages
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{eso-pic}
+\usepackage{fancyhdr}
+\usepackage{sectsty}
+\usepackage{fontspec}
+\usepackage{titlesec}
+
+%% Set page size with a wider right margin
+\geometry{a4paper, total={170mm,257mm}, left=20mm, top=20mm, bottom=20mm, right=50mm}
+
+%% Let's define some colours
+\definecolor{light}{HTML}{E6E6FA}
+\definecolor{highlight}{HTML}{800080}
+\definecolor{dark}{HTML}{330033}
+
+%% Let's add the border on the right hand side 
+\AddToShipoutPicture{% 
+    \AtPageLowerLeft{% 
+        \put(\LenToUnit{\dimexpr\paperwidth-3cm},0){% 
+            \color{light}\rule{3cm}{\LenToUnit\paperheight}%
+          }%
+     }%
+     % logo
+    \AtPageLowerLeft{% start the bar at the bottom right of the page
+        \put(\LenToUnit{\dimexpr\paperwidth-2.25cm},27.2cm){% move it to the top right
+            \color{light}\includegraphics[width=1.5cm]{_extensions/nrennie/PrettyPDF/logo.png}
+          }%
+     }%
+}
+
+%% Style the page number
+\fancypagestyle{mystyle}{
+  \fancyhf{}
+  \renewcommand\headrulewidth{0pt}
+  \fancyfoot[R]{\thepage}
+  \fancyfootoffset{3.5cm}
+}
+\setlength{\footskip}{20pt}
+
+%% style the chapter/section fonts
+\chapterfont{\color{dark}\fontsize{20}{16.8}\selectfont}
+\sectionfont{\color{dark}\fontsize{20}{16.8}\selectfont}
+\subsectionfont{\color{dark}\fontsize{14}{16.8}\selectfont}
+\titleformat{\subsection}
+  {\sffamily\Large\bfseries}{\thesection}{1em}{}[{\titlerule[0.8pt]}]
+  
+% left align title
+\makeatletter
+\renewcommand{\maketitle}{\bgroup\setlength{\parindent}{0pt}
+\begin{flushleft}
+  {\sffamily\huge\textbf{\MakeUppercase{\@title}}} \vspace{0.3cm} \newline
+  {\Large {\@subtitle}} \newline
+  \@author
+\end{flushleft}\egroup
+}
+\makeatother
+
+%% Use some custom fonts
+\setsansfont{Ubuntu}[
+    Path=_extensions/nrennie/PrettyPDF/Ubuntu/,
+    Scale=0.9,
+    Extension = .ttf,
+    UprightFont=*-Regular,
+    BoldFont=*-Bold,
+    ItalicFont=*-Italic,
+    ]
+
+\setmainfont{Ubuntu}[
+    Path=_extensions/nrennie/PrettyPDF/Ubuntu/,
+    Scale=0.9,
+    Extension = .ttf,
+    UprightFont=*-Regular,
+    BoldFont=*-Bold,
+    ItalicFont=*-Italic,
+    ]
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\makeatother
+\makeatletter
+\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}{}
+\makeatother
+\makeatletter
+\@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
+\makeatother
+\makeatletter
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, enhanced, boxrule=0pt, colback={codebgcolor}, sharp corners, breakable]}{\end{tcolorbox}}\fi
+\makeatother
+
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={inlabru Workshop},
+  pdfauthor={Jafet Belmont, Sara Martino and Janine Illian},
+  colorlinks=true,
+  linkcolor={highlight},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={highlight},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{\texttt{inlabru} Workshop}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{ICES 2025, Copenhagen}
+\author{Jafet Belmont, Sara Martino and Janine Illian}
+\date{}
+
+\begin{document}
+\maketitle
+
+\pagestyle{mystyle}
+
+
+\section{Welcome to the course!}\label{welcome-to-the-course}
+
+\begin{itemize}
+\tightlist
+\item
+  Welcome to the \texttt{inlabru} workshop!
+\item
+  The goal for the workshop is to \ldots{}
+\item
+  The workshop is intended for \ldots{} No knowledge of \texttt{R-INLA}
+  is required.
+\item
+  Workshop materials in the github repository
+  \href{https://github.com/Ecol-Stats/inlabru_workshop/tree/main/docs/copenague}{inlabru-workshop}
+\end{itemize}
+
+\section{Learning Objectives for the
+workshop}\label{learning-objectives-for-the-workshop}
+
+At the end of the workshop, participants will be able to:
+
+\begin{itemize}
+\tightlist
+\item
+  ILO1
+\item
+  ILO2
+\item
+  ILO3
+\end{itemize}
+
+Intended audience and level: The tutorial is intended for \ldots{} No
+knowledge of \texttt{R-INLA} is required.
+
+\section{Schedule Program}\label{schedule-tabs}
+
+\subsubsection{Day 1}
+
+\begin{longtable}[]{@{}cc@{}}
+\toprule\noalign{}
+Time & Topic \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+10:00 - 10:30 & ICES informative session \\
+10:30 - 11:30 & \textbf{Session 1}: Introduction to \texttt{inlabru} \\
+11:30 - 13:00 & \href{day1_practical.qmd}{Practical Session 1} \\
+13:00 - 14:30 & Lunch break 🍽️ \\
+14:30 - 15:30 & \textbf{Session 2}: Latent Gaussian Models and INLA \\
+15:30 - 15:45 & Coffee Break ☕ \\
+15:45 - 16:45 & \href{day1_practical_2.qmd}{Practical Session 2} \\
+16:45 - 17:00 & wrap-up and outlook \\
+\end{longtable}
+
+\subsubsection{Day 2}
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2113}}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7887}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+Time
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Topic
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+9:00 - 10:00 & \textbf{Session 3}: Temporal modelling and smoothing part
+1 \\
+10:00 - 10:30 & Snack 🥙 \\
+10:30 - 11:30 & \textbf{Session 4}: Temporal modelling and smoothing
+part 2 \\
+11:30 - 13:00 & \href{day2_practical_3.qmd}{Practical Session 3} \\
+13:00 - 14:30 & Lunch break 🍽️ \\
+14:30 - 15:30 & \textbf{Session 5}: Introduction to Spatial
+Statistics \\
+15:35 - 15:45 & Coffee Break ☕ \\
+15:45 - 16:45 & \href{day2_practical_4.qmd}{Practical Session 4} \\
+16:45 - 17:00 & wrap-up and outlook \\
+\end{longtable}
+
+\subsubsection{Day 3}
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2143}}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7857}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+Time
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Topic
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+9:00 - 10:00 & \textbf{Session 6}: Areal Processes \\
+10:00 - 10:30 & Snack 🥙 \\
+10:30 - 11:30 & \textbf{Session 7}: Geostatistics \\
+11:30 - 13:00 & \href{day3_practical_5.qmd}{Practical Session 5} \\
+13:00 - 14:30 & Lunch break 🍽️ \\
+14:30 - 15:30 & \textbf{Session 8}: Spatial Point processes \\
+15:35 - 15:45 & Coffee Break ☕ \\
+15:45 - 16:45 & \href{day3_practical_5.qmd}{Practical Session 5
+continued} \\
+16:45 - 17:00 & wrap-up and outlook \\
+\end{longtable}
+
+\subsubsection{Day 4}
+
+\begin{longtable}[]{@{}cc@{}}
+\toprule\noalign{}
+Time & Topic \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+9:00 - 10:00 & \textbf{Session 9}: Spatiotemporal models \\
+10:00 - 10:30 & Snack 🥙 \\
+10:30 - 11:30 & \textbf{Session 10}: Model comparison and evaluation \\
+11:30 - 13:00 & \href{day4_practical_6.qmd}{Practical Session 6} \\
+13:00 - 14:30 & Lunch break 🍽️ \\
+14:30 - 15:30 & \textbf{Session 11}: Multilikelihoods/joint
+likelihood \\
+15:35 - 15:45 & Coffee Break ☕ \\
+15:45 - 16:45 & Practical Session 7 \\
+16:45 - 17:00 & wrap-up and outlook \\
+\end{longtable}
+
+\subsubsection{Day 5}
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+Time
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Topic
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+9:00 - 10:00 & \textbf{Session 12}: Zero inflated models \\
+10:00 - 10:30 & Snack 🥙 \\
+10:30 - 11:30 & \textbf{Session 13}: Complex observational processes:
+Distance Sampling \\
+11:30 - 13:00 & Practical Session 8 \\
+13:00 - 13:15 & Coffee Break ☕ \\
+13:15 - 14:00 & Closing session \\
+\end{longtable}
+
+\clearpage
+
+\section{In preparation for the
+workshop}\label{in-preparation-for-the-workshop}
+
+Participants are required to follow the next steps before the day of the
+workshop:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Install \href{https://www.r-inla.org/download-install}{R-INLA}
+\item
+  Install \texttt{inlabru} (available from CRAN)
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Enable universe(s) by inlabru{-}org}
+\FunctionTok{options}\NormalTok{(}\AttributeTok{repos =} \FunctionTok{c}\NormalTok{(}
+  \AttributeTok{inlabruorg =} \StringTok{"https://inlabru{-}org.r{-}universe.dev"}\NormalTok{,}
+  \AttributeTok{INLA =} \StringTok{"https://inla.r{-}inla{-}download.org/R/testing"}\NormalTok{,}
+  \AttributeTok{CRAN =} \StringTok{"https://cloud.r{-}project.org"}
+\NormalTok{))}
+
+\CommentTok{\# Install some packages}
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"inlabru"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Make sure you have the latest \texttt{R-INLA}, \texttt{inlabru} and
+  \texttt{R} versions installed.
+\item
+  Install the following libraries:
+\end{enumerate}
+
+\begin{verbatim}
+install.packages(c(
+  "CARBayesdata",
+  "DAAG",
+  "dplyr",
+  "FSAdata",
+  "ggplot2",
+  "gstat",
+  "gt",
+  "lubridate",
+  "mapview",
+  "patchwork",
+  "scico",
+  "sdmTMB",
+  "sf",
+  "spatstat",
+  "spdep",
+  "terra",
+  "tidyr",
+  "tidyterra",
+  "tidyverse",
+  "variosig"
+))
+\end{verbatim}
+
+
+
+
+\end{document}

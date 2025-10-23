@@ -1,4 +1,4 @@
-## ----child="C:/Users/admin/Documents/inlabru_workshop/inlabru_workshop/docs/practicals/Ar1_ex.qmd"----
+## ----child="practicals/Ar1_ex.qmd"--------------------------------------------
 
 ## -----------------------------------------------------------------------------
 #| warning: false
@@ -69,9 +69,6 @@ data.frame(
 
 
 ## -----------------------------------------------------------------------------
-#| fig-align: center
-#| fig-width: 4
-#| fig-height: 4
 pred_ar1 = predict(fit.ar1, ts_dat, ~ alpha + ut)
 
 ggplot(pred_ar1,aes(y=mean,x=x))+
@@ -102,14 +99,9 @@ fit.forecast = bru(cmp, pred_lik)
 
 
 ## -----------------------------------------------------------------------------
-#| fig-align: center
-#| fig-width: 4
-#| fig-height: 4
-
-
 pred_forecast = predict(fit.forecast, ts.forecast, ~ alpha + ut)
 
-ggplot(pred_forecast,aes(y=mean,x=x))+
+p1= ggplot(pred_forecast,aes(y=mean,x=x))+
   geom_line()+
     geom_ribbon(aes(x = x, y = mean, ymin = q0.025, ymax = q0.975),
                 alpha = 0.5) +
@@ -117,7 +109,7 @@ ggplot(pred_forecast,aes(y=mean,x=x))+
 
 
 
-## ----child="C:/Users/admin/Documents/inlabru_workshop/inlabru_workshop/docs/practicals/Ar1_Rw1_ex.qmd"----
+## ----child="practicals/Ar1_Rw1_ex.qmd"----------------------------------------
 
 ## -----------------------------------------------------------------------------
 #| warning: false
@@ -290,49 +282,8 @@ ggplot(pred_ar1.all,aes(y=mean,x=year))+
 
 
 
-## -----------------------------------------------------------------------------
-data("Tokyo")
 
-
-## -----------------------------------------------------------------------------
-
-# define model component
-cmp =  ~ -1 + beta0(1) + time_effect(time, model = "rw2", cyclic = TRUE)
-
-# define model predictor
-eta = y ~ beta0 + time_effect
-
-# build the observation model
-lik = bru_obs(formula = eta,
-              family = "binomial",
-              Ntrials = n,
-              data = Tokyo)
-
-# fit the model
-fit = bru(cmp, lik)
-
-
-## -----------------------------------------------------------------------------
-
-pTokyo = predict(fit, Tokyo, ~ plogis(beta0 + time_effect))
-
-ggplot(data=pTokyo , aes(x= time, y= y) ) +
-  geom_point() + 
-  ylab("") + xlab("") +
-  # Custom the Y scales:
-  scale_y_continuous(
-    # Features of the first axis
-    name = "",
-    # Add a second axis and specify its features
-    sec.axis = sec_axis( transform=~./2, name="Probability")
-  )  + geom_line(aes(y=mean*2,x=time)) +
-  geom_ribbon(aes( ymin = q0.025*2, 
-                             ymax = q0.975*2), alpha = 0.5)
-  
-
-
-
-## ----child="C:/Users/admin/Documents/inlabru_workshop/inlabru_workshop/docs/practicals/Tokyo_rainfall_ex.qmd"----
+## ----child="practicals/Tokyo_rainfall_ex.qmd"---------------------------------
 
 ## -----------------------------------------------------------------------------
 #| message: false

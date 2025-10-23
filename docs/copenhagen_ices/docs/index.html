@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -166,6 +200,18 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Practical 4</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day3_practical_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 5</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day4_practical_6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 6</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -181,7 +227,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#schedule-tabs" id="toc-schedule-tabs" class="nav-link" data-scroll-target="#schedule-tabs">Schedule Program</a></li>
   <li><a href="#in-preparation-for-the-workshop" id="toc-in-preparation-for-the-workshop" class="nav-link" data-scroll-target="#in-preparation-for-the-workshop">In preparation for the workshop</a></li>
   </ul>
-</nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF (PrettyPDF)</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -215,7 +261,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="welcome-to-the-course" class="level1">
 <h1>Welcome to the course!</h1>
 <ul>
-<li>Welcome to the <code>inlabu</code> workshop!</li>
+<li>Welcome to the <code>inlabru</code> workshop!</li>
 <li>The goal for the workshop is to …</li>
 <li>The workshop is intended for … No knowledge of <code>R-INLA</code> is required.</li>
 <li>Workshop materials in the github repository <a href="https://github.com/Ecol-Stats/inlabru_workshop/tree/main/docs/copenague">inlabru-workshop</a></li>
@@ -351,7 +397,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td style="text-align: center;">11:30 - 13:00</td>
-<td style="text-align: center;">Practical Session 5</td>
+<td style="text-align: center;"><a href="./day3_practical_5.html">Practical Session 5</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">13:00 - 14:30</td>
@@ -367,7 +413,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td style="text-align: center;">15:45 - 16:45</td>
-<td style="text-align: center;">Practical Session 6</td>
+<td style="text-align: center;"><a href="./day3_practical_5.html">Practical Session 5 continued</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">16:45 - 17:00</td>
@@ -395,11 +441,11 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="odd">
 <td style="text-align: center;">10:30 - 11:30</td>
-<td style="text-align: center;"><strong>Session 10</strong>: Multilikelihoods/joint likelihood</td>
+<td style="text-align: center;"><strong>Session 10</strong>: Model comparison and evaluation</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">11:30 - 13:00</td>
-<td style="text-align: center;">Practical Session 7</td>
+<td style="text-align: center;"><a href="./day4_practical_6.html">Practical Session 6</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">13:00 - 14:30</td>
@@ -407,7 +453,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td style="text-align: center;">14:30 - 15:30</td>
-<td style="text-align: center;"><strong>Session 11</strong>: Non-linear models</td>
+<td style="text-align: center;"><strong>Session 11</strong>: Multilikelihoods/joint likelihood</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">15:35 - 15:45</td>
@@ -415,7 +461,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td style="text-align: center;">15:45 - 16:45</td>
-<td style="text-align: center;">Practical Session 8</td>
+<td style="text-align: center;">Practical Session 7</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">16:45 - 17:00</td>
@@ -439,7 +485,7 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td style="text-align: center;">9:00 - 10:00</td>
-<td style="text-align: center;"><strong>Session 12</strong>: Complex observational processes: Zero inflated models</td>
+<td style="text-align: center;"><strong>Session 12</strong>: Zero inflated models</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">10:00 - 10:30</td>
@@ -447,11 +493,11 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="odd">
 <td style="text-align: center;">10:30 - 11:30</td>
-<td style="text-align: center;"><strong>Session 13</strong>: Complex observational processes: Thinned point processes</td>
+<td style="text-align: center;"><strong>Session 13</strong>: Complex observational processes: Distance Sampling</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">11:30 - 13:00</td>
-<td style="text-align: center;">Practical Session 9</td>
+<td style="text-align: center;">Practical Session 8</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">13:00 - 13:15</td>
@@ -473,8 +519,48 @@ ul.task-list li input[type="checkbox"] {
 <ol type="1">
 <li><p>Install <a href="https://www.r-inla.org/download-install">R-INLA</a></p></li>
 <li><p>Install <code>inlabru</code> (available from CRAN)</p></li>
-<li><p>Make sure you have the latest <code>R-INLA</code>, <code>inlabru</code> and <code>R</code> versions installed.</p></li>
 </ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Enable universe(s) by inlabru-org</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repos =</span> <span class="fu">c</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">inlabruorg =</span> <span class="st">"https://inlabru-org.r-universe.dev"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">INLA =</span> <span class="st">"https://inla.r-inla-download.org/R/testing"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">CRAN =</span> <span class="st">"https://cloud.r-project.org"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Install some packages</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"inlabru"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li>Make sure you have the latest <code>R-INLA</code>, <code>inlabru</code> and <code>R</code> versions installed.</li>
+<li>Install the following libraries:</li>
+</ol>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>install.packages(c(
+  "CARBayesdata",
+  "DAAG",
+  "dplyr",
+  "FSAdata",
+  "ggplot2",
+  "gstat",
+  "gt",
+  "lubridate",
+  "mapview",
+  "patchwork",
+  "scico",
+  "sdmTMB",
+  "sf",
+  "spatstat",
+  "spdep",
+  "terra",
+  "tidyr",
+  "tidyterra",
+  "tidyverse",
+  "variosig"
+))</code></pre>
+</div>
+</div>
 
 
 </section>
