@@ -27,7 +27,7 @@ library(webexercises)
 In this exercise we will:
 
 -   Learn about some model assessments techniques available in INLA
--   Conduct posterior predictive model checking
+-   Conduct posterior predictive model checking using CPO and PIT
 
 Libraries to load:
 
@@ -129,7 +129,7 @@ $$
 \text{CPO}_i = \pi(y_i| \mathbf{y}{-i})
 $$
 
-The CPO measures the probability of the observed value of $y_i$ when model is fit using all data but $y_i$. CPO provides a measure of how well the model predicts each individual observation while taking into account the rest of the data and the model. *Large values indicate a better fit* of the model to the data, while small values indicate a bad fitting of the model
+The CPO measures the density of the observed value of $y_i$ when model is fit using all data but $y_i$. CPO provides a measure of how well the model predicts each individual observation while taking into account the rest of the data and the model. *Large values indicate a better fit* of the model to the data, while small values indicate a bad fitting of the model
 :::
 
 To compute PIT and CPO we can either:
@@ -194,7 +194,6 @@ qqline(fit_pois$cpo$pit,
 ```
 :::
 
-
 Both Q-Q plots and histogram of the PIT values suggest a not so great model fit. For the CPO values, usually the following summary of the CPO is often used:
 
 $$
@@ -219,7 +218,7 @@ To specify a negative binomial model you only need to change the family distribu
 #| fig-height: 4
 #| fig-align: center
 #| webex.hide: "Click here to see the solution"
-#| code-fold: show
+#| code-fold: false
 #| purl: false
 
 par(mfrow=c(1,2))
@@ -256,5 +255,4 @@ data.frame( CPO = c(-sum(log(fit_pois$cpo$cpo)),
 # Overall, we can see that the negative binomial model provides a better fit to the data.
 
 ```
-
 :::

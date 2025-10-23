@@ -85,7 +85,7 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 | 9:00 - 10:00  |       **Session 9**: Spatiotemporal models        |
 | 10:00 - 10:30 |                     Snack 🥙                      |
 | 10:30 - 11:30 |  **Session 10**: Model comparison and evaluation  |
-| 11:30 - 13:00 |                Practical Session 6                |
+| 11:30 - 13:00 |   [Practical Session 6](day4_practical_6.qmd)     |
 | 13:00 - 14:30 |                  Lunch break 🍽️                   |
 | 14:30 - 15:30 | **Session 11**: Multilikelihoods/joint likelihood |
 | 15:35 - 15:45 |                  Coffee Break ☕                  |
@@ -107,6 +107,8 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 
 : {.striped .hover}
 :::
+
+\clearpage
 
 # In preparation for the workshop
 

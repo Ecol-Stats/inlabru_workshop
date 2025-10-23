@@ -1,0 +1,197 @@
+---
+title: ""
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(webexercises)
+
+```
+
+## Model Checking for Linear Models
+
+In this exercise we will:
+
+-   Learn about some model assessments techniques available in INLA
+-   Conduct posterior predictive model checking
+
+Libraries to load:
+
+```{r}
+#| warning: false
+#| message: false
+
+library(dplyr)
+library(tidyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+```
+
+Recall a simple linear regression model with Gaussian observations
+
+$$
+y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
+$$
+
+where $\sigma^2$ is the observation error, and the mean parameter $\mu_i$ is linked to the linear predictor through an identity function:
+
+$$
+\eta_i = \mu_i = \beta_0 + \beta_1 x_i
+$$ where $x_i$ is a covariate and $\beta_0, \beta_1$ are parameters to be estimated.
+
+### Simulate example data
+
+We simulate data from a simple linear regression model
+
+```{r}
+#| code-fold: show
+beta = c(2,0.5)
+sd_error = 0.1
+
+n = 100
+x = rnorm(n)
+y = beta[1] + beta[2] * x + rnorm(n, sd = sd_error)
+
+df = data.frame(y = y, x = x)  
+
+```
+
+### Fitting the linear regression model with `inlabru`
+
+Now we fit a simple linear regression model in `inalbru` by defining (1) the model components, (2) the linear predictor and (3) the likelihood.
+
+```{r }
+# Model components
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
+# Linear predictor
+formula = y ~ Intercept + beta_1
+# Observational model likelihood
+lik =  bru_obs(formula = y ~.,
+            family = "gaussian",
+            data = df)
+# Fit the Model
+fit.lm = bru(cmp, lik)
+```
+
+### Residuals analysis
+
+A common way for model diagnostics in regression analysis is by checking residual plots. In a Bayesian setting residuals can be defined in multiple ways depending on how you account for posterior uncertainty. Here, we will adopt a Bayesian approach by generating samples from the posterior distribution of the model parameters and then draw samples from the residuals defined as:
+
+$$
+r_i = y_i - x_i^T\beta
+$$
+
+We can use the `predict` function to achieve this:
+
+```{r}
+res_samples <- predict(
+  fit.lm,         # the fitted model
+  df,             # the original data set
+  ~ data.frame(   
+    res = y-(beta_0 + beta_1)  # compute the residuals
+  ),
+  n.samples = 1000   # draw 1000 samples
+)
+
+```
+
+The resulting data frame contains the posterior draw of the residuals mean for which we can produce some diagnostics plots , e.g.
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| fig-cap: "Bayesian residual plots: the left panel is the residual index plot; the right panel is the plot of the residual versus the covariate x"
+#| code-fold: true
+#| code-summary: "Residuals checks for Linear Model"
+
+ggplot(res_samples,aes(y=mean,x=1:100))+geom_point() +
+ggplot(res_samples,aes(y=mean,x=x))+geom_point()
+
+```
+
+We can also compare these against the theoretical quantiles of the Normal distribution as follows:
+
+```{r}
+#| fig-width: 4
+#| fig-height: 4
+#| fig-align: center
+#| code-fold: true
+#| code-summary: "QQPlot for Linear Model"
+
+arrange(res_samples, mean) %>%
+  mutate(theortical_quantiles = qnorm(1:100 / (1+100))) %>%
+  ggplot(aes(x=theortical_quantiles,y= mean)) + 
+  geom_ribbon(aes(ymin = q0.025, ymax = q0.975), fill = "grey70")+
+  geom_abline(intercept = mean(res_samples$mean),
+              slope = sd(res_samples$mean)) +
+  geom_point() +
+  labs(x = "Theoretical Quantiles (Normal)",
+       y= "Sample Quantiles (Residuals)") 
+```
+
+### Posterior Predictive Checks
+
+Now, instead of generating samples from the mean, we will account for the observational process uncertainty by:
+
+1.  Sampling $y^{1k}_i\sim\pi(y_i|\mathbf{y})$ $k = 1,\dots,M;~i = 1,\ldots,100$ using `generate()` (here we will draw $M=500$ samples)
+
+```{r}
+#| warning: false
+#| message: false
+
+samples =  generate(fit.lm, df,
+  formula = ~ {
+    mu <- (beta_0 + beta_1)
+    sd <- sqrt(1 / Precision_for_the_Gaussian_observations)
+    rnorm(100, mean = mu, sd = sd)
+  },
+  n.samples = 500
+) 
+```
+
+2.  Comparing some summaries of the simulated data with the one of the observed one
+
+Here we compare (i) the estimated posterior densities $\hat{\pi}^k(y|\mathbf{y})$ with the estimated data density and (ii) the samples means and 95% credible intervals against the observations.
+
+```{r}
+# Tidy format for plotting
+samples_long = data.frame(samples) %>% 
+  mutate(id = 1:100) %>% # i-th observation
+  pivot_longer(-id)
+
+# compute the mean and quantiles for the samples
+draws_summaries = data.frame(mean_samples = apply(samples,1,mean),
+q25 = apply(samples,1,function(x)quantile(x,0.025)),  
+q975 = apply(samples,1,function(x)quantile(x,0.975)),
+observations = df$y)  
+
+p1 = ggplot() + geom_density(data = samples_long, 
+                        aes(value, group = name),  color = "#E69F00") +
+  geom_density(data = df, aes(y))  +
+  xlab("") + ylab("") 
+
+p2 = ggplot(draws_summaries,aes(y=mean_samples,x=observations))+
+  geom_errorbar(aes(ymin = q25,
+                   ymax = q975), 
+               alpha = 0.5, color = "grey50")+
+geom_point()+geom_abline(slope = 1,intercept = 0,lty=2)+labs()
+
+p1 +p2
+```

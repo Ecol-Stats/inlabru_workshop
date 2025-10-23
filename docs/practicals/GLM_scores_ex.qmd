@@ -27,7 +27,7 @@ library(webexercises)
 In this exercise we will:
 
 -   Learn about some model assessments techniques available in INLA
--   Conduct posterior predictive model checking
+-   Conduct posterior predictive model checking using CPO and PIT
 
 Libraries to load:
 
@@ -129,7 +129,7 @@ $$
 \text{CPO}_i = \pi(y_i| \mathbf{y}{-i})
 $$
 
-The CPO measures the probability of the observed value of $y_i$ when model is fit using all data but $y_i$. CPO provides a measure of how well the model predicts each individual observation while taking into account the rest of the data and the model. *Large values indicate a better fit* of the model to the data, while small values indicate a bad fitting of the model
+The CPO measures the density of the observed value of $y_i$ when model is fit using all data but $y_i$. CPO provides a measure of how well the model predicts each individual observation while taking into account the rest of the data and the model. *Large values indicate a better fit* of the model to the data, while small values indicate a bad fitting of the model
 :::
 
 To compute PIT and CPO we can either:

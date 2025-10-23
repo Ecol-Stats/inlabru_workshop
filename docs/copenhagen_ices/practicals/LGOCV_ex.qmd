@@ -1,0 +1,557 @@
+---
+title: ""
+execute: 
+  warning: false
+  message: false
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+
+# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
+library(webexercises)
+
+```
+
+## Leave-Group-Out Cross validation
+
+In this practical we are going to fit a geostatistical model. We will:
+
+-   Learn how to to compute model comparison in `inlabru` using LGOCV
+
+------------------------------------------------------------------------
+
+Libraries to load:
+
+```{r}
+#| warning: false
+#| message: false
+
+
+library(dplyr)
+library(INLA)
+library(inlabru) 
+library(sf)
+library(terra)
+
+
+# load some libraries to generate nice map plots
+library(scico)
+library(ggplot2)
+library(patchwork)
+library(mapview)
+library(tidyterra)
+
+```
+
+### The data
+
+In this practical, we will revisit the data on the Pacific Cod (*Gadus macrocephalus*) from a trawl survey in Queen Charlotte Sound. The `pcod` dataset is available from the `sdmTMB` package and contains the presence/absence records of the Pacific Cod during each surveys along with the biomass density of Pacific cod in the area swept (kg/Km$^2$). The `qcs_grid` data contain the depth values stored as $2\times 2$ km grid for Queen Charlotte Sound.
+
+The dataset contains presence/absence data from 2003 to 2017. Lets consider year 2003 for now.
+
+We first load the dataset and select the year of interest
+
+```{r}
+#| message: false
+#| warning: false
+library(sdmTMB)
+
+pcod_df = sdmTMB::pcod %>% filter(year==2003)
+qcs_grid = sdmTMB::qcs_grid
+
+```
+
+Then, we create ab `sf` object and assign the rough coordinate reference to it:
+
+```{r}
+#| message: false
+#| warning: false
+#| 
+pcod_sf =   st_as_sf(pcod_df, coords = c("lon","lat"), crs = 4326)
+pcod_sf = st_transform(pcod_sf,
+          crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
+```
+
+We convert the covariate into a raster and assign the same coordinate reference:
+
+```{r}
+
+depth_r <- rast(qcs_grid, type = "xyz")
+crs(depth_r) <- crs(pcod_sf)
+
+```
+
+```{r}
+#| echo: false
+#| purl: false
+#| fig-align: center
+#| fig-width: 8
+#| fig-height: 8
+ggplot()+ 
+  geom_spatraster(data=depth_r$depth)+
+  geom_sf(data=pcod_sf,aes(color=factor(present))) +
+    scale_color_manual(name="Occupancy status for the Pacific Cod",
+                     values = c("black","orange"),
+                     labels= c("Absence","Presence"))+
+  scale_fill_scico(name = "Depth",
+                   palette = "nuuk",
+                   na.value = "transparent" ) + xlab("") + ylab("")
+
+```
+
+### The models
+
+Here, we will model the binary presence-absence data as a Binomial model of the form:
+
+$$
+\begin{aligned}
+y(s)|\eta(s)&\sim\text{Binom}(1, p(s))\\
+\eta(s) &= \text{logit}(p(s)) \\
+\omega(s) &\sim \text{  GF with range } \rho\  \text{ and maginal variance }\ \sigma^2
+\end{aligned}
+$$
+
+We will fit three models. One where we consider the observation as Bernoulli and where the linear predictor contains only one intercept and the GR field $\omega(s)$ defined through the SPDE approach. The other two models will also include depth as a linear and non-linear smoothed covariate in the linear predictor.
+
+**Construct the mesh and the SPDE model**
+
+```{r}
+mesh = fm_mesh_2d(loc = pcod_sf,         
+                  max.edge = c(10,20),     
+                  offset = c(5,50))   
+
+spde_model =  inla.spde2.pcmatern(mesh,
+                                  prior.sigma = c(1, 0.5),
+                                  prior.range = c(100, 0.5))
+```
+
+```{r}
+#| echo: false
+#| purl: false
+#| fig-align: center
+#| fig-width: 5
+#| fig-height: 5
+ggplot() + gg(mesh) + geom_sf(data= pcod_sf, aes(color = factor(present)), size = 0.1) + xlab("") + ylab("")
+
+```
+
+**Model 1 - spatial only**
+
+1.  **Model 1 - spatial only** This is a model with that includes a structured spatial effect only. Here the linear predictor is defined as:
+
+$$
+  \eta(s) = \text{logit}(p(s)) = \beta_0 + \omega(s) 
+$$
+
+```{r}
+# Model 1 components
+cmp_1 = ~ Intercept(1) + space(geometry, model = spde_model)
+
+# Model 1 linear predictor
+formula_1 = present ~ Intercept  + space
+
+# Model 1 observational model
+lik_1 = bru_obs(formula = formula_1, 
+              data = pcod_sf, 
+              family = "binomial")
+# fit Model 1
+fit_spatial = bru(cmp_1,lik_1)
+```
+
+2.  **Model 2 - Depth covariate** The depth enters the model in a linear way. The linear predictor is then defined as:
+
+$$
+  \eta(s) = \text{logit}(p(s)) = \beta_0 + \omega(s) + \beta_1\ \text{depth}(s)
+$$
+
+```{r}
+# Model 2 components
+cmp_2 = ~ Intercept(1) + 
+  space(geometry, model = spde_model)+
+  covariate(depth_r$depth_scaled, model = "linear") 
+
+# Model 2 linear predictor
+formula_2 = present ~ Intercept  + covariate + space
+
+# Model 2 observational model
+lik_2 = bru_obs(formula = formula_2, 
+              data = pcod_sf, 
+              family = "binomial")
+
+# Fit Model 2
+fit_depth_linear = bru(cmp_2,lik_2)
+```
+
+3.  **Model 2 - Smooth depth covariate** The depth enters the model in a non linear way. The linear predictor is then defined as:
+
+$$
+  \eta(s) = \text{logit}(p(s)) = \beta_0 + \omega(s) +  f(\text{depth}(s))
+$$
+
+```{r}
+# create the grouped variable
+depth_r$depth_group = inla.group(values(depth_r$depth_scaled))
+
+# Model 3 components
+cmp_3 = ~ Intercept(1) + 
+  space(geometry, model = spde_model)+
+  covariate(depth_r$depth_group, model = "rw2")
+
+# Model 3 linear predictor
+formula_3 = present ~ Intercept  + covariate + space
+
+# Model 2 observational model
+lik_3 = bru_obs(formula = formula_2, 
+              data = pcod_sf, 
+              family = "binomial")
+
+# Fit Model 2
+fit_depth_smooth = bru(cmp_3,lik_3)
+```
+
+### Model Comparison through LGOCV
+
+Next we illustrate how to implement modelling comparison using leave-out group cross validation (LGOCV). The underlying idea is that of a Bayesian prediction setting where we approximate the posterior predictive density $\pi(\mathbf{\tilde{Y}}|\mathbf{y})$ defined as the integral over the posterior distribution of the parameters, i.e.
+
+$$
+\pi(\mathbf{\tilde{Y}}|\mathbf{y}) = \int_\theta \pi(\mathbf{\tilde{Y}}|\theta,\mathbf{y}) \pi(\theta|\mathbf{y})d\theta
+$$
+
+the LGOCV selects a fixed test point $i$ and remove a certain group of data $\mathbb{I}_i$ according to a specific prediction task. Thus, we are interested in the posterior predictive density
+
+$$
+\pi(Y_i|\mathbf{y}{-\mathcal{I}i}) = \int\theta \pi(Y_i|\theta,\mathbf{y}{-\mathbb{I}_i}) \pi(\theta|\mathbf{y})d\theta
+$$
+
+With this, a point estimate $\tilde{Y_i}$ can be computed based on $\pi(Y_i|\mathbf{y}_{-\mathbb{I}_i})$ and the predictive performance be assessed using an appropriate scoring function $U(\tilde{Y}_i,Y_i)$, for example, the log-score function
+
+$$
+\frac{1}{n}\sum_{i=1}^n \mathrm{log}~ \pi(\mathbf{\tilde{y}}|\mathbf{y}).
+$$
+
+In this example, the LGOCV strategy will be used to compare the previous fitted spatially explicit models. Here, the leave-out group $\mathbb{I}_i$ is manually defined for the $i$th row of the data based on a buffer of size $b=25$ centered at each data point:
+
+```{r}
+# create buffer of size 25 centred at each site
+buffer <- st_buffer(pcod_sf, dist = 25)
+
+# Lists of the indexes of the leave-out-group for each observation i
+Ii <- st_intersects(pcod_sf,buffer)
+```
+
+@fig-cv_ex illustrate the manual construction of the leave-out-group for the 2nd observation in our data.
+
+```{r}
+#| echo: false
+#| purl: false
+#| fig-width: 6
+#| fig-height: 6
+#| fig-align: center
+#| fig-cap: Example of the CV strategy for the 2nd testing point.
+#| label: fig-cv_ex
+
+ggplot()+geom_sf(data=pcod_sf,color="grey60")+
+
+  geom_sf(data=pcod_sf[Ii[[2]],],aes(color="Leave out Group"))+
+
+  geom_sf(data = pcod_sf[2,],aes(colour="Testing point")) +
+
+  geom_sf(data=buffer[2,],aes(color="Buffer"),alpha=0)+
+
+  scale_color_manual(name="", values=c("red","orange","purple"))
+```
+
+We then can use the `inla.group.cv` function to compute the log-scores for Model 3 as follows:
+
+```{r}
+lgocv_depth_smooth = inla.group.cv(result = fit_depth_smooth,
+                                   groups = Ii)
+log_depth_smooth = mean(log(lgocv_depth_smooth$cv),
+                        na.rm=T)
+```
+
+When we do model comparison, we want to have the same groups for different models. We can easily do this by passing an `inla.group.cv` class object to `inla.group.cv`function. If we want to use the groups constructed by model 3 to compute LGOCV, we have the following code:
+
+```{r}
+#| code-fold: false
+#| warning: false
+lgocv_spatial = inla.group.cv(result = fit_spatial, 
+                              group.cv = lgocv_depth_smooth)
+
+lgocv_depth_linear = inla.group.cv(result = fit_depth_linear,
+                                   group.cv = lgocv_depth_smooth)
+
+log_score_spatial<- mean(log(lgocv_spatial$cv),na.rm=T)
+log_depth_linear <-mean(log(lgocv_depth_linear$cv),na.rm=T)
+log_depth_smooth <-mean(log(lgocv_depth_smooth$cv),na.rm=T)
+
+```
+
+In this example, the model that includes the smoothed covariate has the highest log-score and thus it is preferred over the other two "simpler" models.
+
+```{r}
+#| eval: false
+data.frame(logspat= log_score_spatial,
+           logdepthl = log_depth_linear,
+           logdepths = log_depth_smooth )
+```
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+library(gt)
+data.frame(logspat= log_score_spatial, logdepthl = log_depth_linear, logdepths = log_depth_smooth ) %>%
+  gt() %>% tab_header(title= md("Log-Score LGOCV")) %>%  cols_label(
+    logspat = html("Continuous spatial<br> Gaussian field"),
+    logdepthl = html(" Linear <em>depth</em> <br>covariate effect"),
+     logdepths = html(" Smooth <em>depth</em> <br>covariate effect")) %>%
+      cols_align(align = "center") %>%
+      fmt_number(decimals=2)
+
+```
+
+### Spatio-temporal LGOCV comparison
+
+#### Model fitting
+
+Now lets compare two different space-time models using LGOCV and some information criteria metrics. The general model structure is given by:
+
+$$
+\begin{aligned}
+y(s,t)|\eta(s,t)&\sim\text{Binom}(1, p(s,t))\\
+\eta(s,t) &= \text{logit}(p(s,t)) \\
+\end{aligned}
+$$ We begin by loading the data between 2003 and 2011 and convert it to an `sf` object (we will also create a time index for modelling):
+
+```{r}
+pcod_spat = sdmTMB::pcod %>%
+  filter(year %in% 2003:2011) %>%
+  st_as_sf( coords = c("lon","lat"), crs = 4326) %>%
+  st_transform(., crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" ) %>%
+   mutate(time_idx = match(year, c(2003, 2004, 2005, 2007, 2009, 2011, 2013, 2015, 2017)),
+         id = 1:nrow(.)) # Observation id for CV
+```
+
+Now we tell `inlabru` that we want to compute WAIC, DIC and model likelihood as follows:
+
+```{r}
+bru_options_set(control.compute = list(waic = TRUE,dic= TRUE,mlik = TRUE))
+```
+
+1.  **Model 1 - time iid effect** We consider a separable space-time model with a linear predictors given by:
+
+$$
+\eta(s,t) = \beta_0 + f_1(\text{depth}(s)) + f_2(t) + \omega(s)
+$$
+
+-   $f_1(\text{depth}(s))$ is a smooth covariate effect of depth
+
+-   $f_2(t)$ is an IID effect of time
+
+-   $\omega(s)$ is Matérn random field.
+
+```{r}
+#| message: false
+#| warning: false 
+# Model components
+cmp_spat = ~ Intercept(1) + 
+  covariate(depth_r$depth_group, model = "rw2")+
+  trend(time_idx, model = "iid")+
+  space(geometry, model = spde_model)
+
+# Linear predictor
+formula_spat = present ~ Intercept  + covariate  + trend + space
+
+# Observational model
+lik_spat = bru_obs(formula = formula_spat, 
+              data = pcod_spat, 
+              family = "binomial")
+
+# Fit Model 
+fit_spat = bru(cmp_spat,lik_spat)
+
+```
+
+::: callout-note
+Note that there are some survey locations in certain years that fall outside the depth raster region. `inlabru` will input these missing covariate values using the nearest available value. This can be computationally expensive, but you can avoid it by supplying a raster layer that encompasses all of your data points (e.g., by pre-imputing these missing values with your preferred method of choice).
+:::
+
+1.  **Model 2 - spatiotemporal field** We consider a separable space time model with a linear predictor given by:
+
+$$
+\eta(s,t) = \beta_0 + f_1(\text{depth}(s)) + \omega(s,t)
+$$
+
+-   $f_1(\text{depth}(s))$ is a smooth covariate effect of depth
+-   $\omega(s,t)$ is a space-time Matérn spatial field with AR1 time component
+
+Now we fit the model as follows (this might take a couple of minutes to run):
+
+```{r}
+#| eval: false
+# PC prior for AR(1) correlation parameter
+h.spec <- list(rho = list(prior = 'pc.cor0', param = c(0.5, 0.1)))
+
+# Model components
+cmp_spat_ar1 = ~ Intercept(1) + 
+  covariate(depth_r$depth_group, model = "rw2")+
+  space_time(geometry,
+        group = time_idx ,
+        model = spde_model,
+        control.group = list(model = 'ar1',hyper = h.spec))
+
+# Linear predictor
+formula_spat_ar1 = present ~ Intercept  + covariate  + space_time
+
+# Observational model
+lik_spat_ar1 = bru_obs(formula = formula_spat_ar1, 
+              data = pcod_spat, 
+              family = "binomial")
+
+# Fit Model 
+fit_spat_ar1 = bru(cmp_spat_ar1,lik_spat_ar1)
+
+```
+
+#### Model comparison
+
+To manually define the leave-out groups we can apply the buffer approach as before while considering a time window of $t \pm q$. Here we set $q = 2$ as we believe time dependency is weaker after a 2 year period (@fig-lgocv_spat illustrate this strategy for the 750th observation). To compute this we can create a buffer surrounding each location and then loop through every observation to identify the leave-out groups based on those location that are inside the buffer within a 2 year span:
+
+```{r}
+
+# create buffer of size 25  centred at each site
+
+buffer_25 <- st_buffer(pcod_spat, dist = 25) 
+
+
+# empty lists to include the indexes of the leave-out-group for each observation i
+I_i <- list()
+
+# loop though each observation and store the leave-out-group based on the buffer
+for( i in 1:nrow(pcod_spat)){
+  
+  # Temporal filtering of data within a 2 years of span of  observation i
+  df_sf_subset <- pcod_spat %>% 
+    filter( between(time_idx,left = pcod_spat$time_idx[i]-2, 
+                    right = pcod_spat$time_idx[i]+2)) 
+  # Spatial filtering of the observations that are within the buffer of the ith observation
+  Buffer_i <-df_sf_subset %>% st_intersects(buffer_25[i,],sparse = FALSE) %>% # identify 
+    unlist()
+  
+  # obtain the indexes of the leave out group
+  I_i[[i]] <-  df_sf_subset[Buffer_i,] %>%  pull(id)
+  
+}
+
+```
+
+```{r}
+#| echo: false
+#| label: fig-lgocv_spat
+#| fig-cap: Example of the spatiotemporal CV strategy for the 100nd testing point.
+#| message: false
+#| warning: false
+#| purl: false
+## Example for the the 1000th test point  
+ggplot()+geom_sf(data=pcod_spat)+
+  facet_wrap(~year)+
+  geom_sf(data=pcod_spat[I_i[[750]],],color="orange")+
+  geom_sf(data = pcod_spat[750,],colour="purple") +
+  geom_sf(data=buffer_25[750,],color="red",alpha=0)
+
+```
+
+Now that we have the leave-out group indexes for each observation, we can compute the log-score using the `inla.group.cv` function as before:
+
+```{r}
+#| eval: false
+lgocv_spat_ar1 <- inla.group.cv(result = fit_spat_ar1, groups  = I_i)
+logscore_spat_ar1 = mean(log(lgocv_spat_ar1$cv),na.rm=T)
+
+
+lgocv_spat <- inla.group.cv(result = fit_spat, group.cv  = lgocv_spat_ar1)
+logscore_spat = mean(log(lgocv_spat$cv),na.rm=T)
+
+
+```
+
+The following table summarises different model comparison metrics, which favors the model with a spatio-temporal field over the simples *iid* model.
+
+```{r}
+#| eval: false
+table = data.frame( DIC = c(fit_spat_ar1$dic$dic, fit_spat$dic$dic),
+                    WAIC = c(fit_spat_ar1$waic$waic, fit_spat$waic$waic),
+                    mlik = c(fit_spat_ar1$mlik[1,1],fit_spat$mlik[1,1]),
+                    LGOCV = c(logscore_spat_ar1,logscore_spat))
+
+ rownames(table) = c("Model 2 - spatiotemporal field",
+                     "Model 1 - time iid effect")
+
+```
+
+|                                |      DIC |     WAIC |      mlik |      LGOCV |
+|:-------------------------------|---------:|---------:|----------:|-----------:|
+| Model 1 - time iid effect      | 1356.179 | 1351.832 | -763.2828 | -0.5001042 |
+| Model 2 - spatiotemporal field | 1338.464 | 1330.124 | -758.5321 | -0.4985709 |
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Modify **Model 1** so that instead of an $iid$ yearly trend, the $f_2(t)$ trend follow an AR(1) process. Compare this again the the other two models using the LGOCV scores.
+
+`r hide("Take hint")`
+
+You only need to change the model component: `trend(time_idx, model = ???)`. You may also use the PC prior we set for the spatiotemporal field in Model 2.
+
+`r unhide()`
+
+```{r}
+#| purl: false
+#| webex.hide: "Click here to see the solution"
+#| warning: false
+#| message: false
+#| eval: false
+
+# Model components
+cmp_spat_2 = ~ Intercept(1) + 
+  covariate(depth_r$depth_group, model = "rw2")+
+  trend(time_idx, model = "ar1",
+        control.group = list(model = 'ar1',hyper = h.spec))+
+  space(geometry, model = spde_model)
+
+# Linear predictor
+formula_spat_2 = present ~ Intercept  + covariate  + trend + space
+
+# Observational model
+lik_spat_2 = bru_obs(formula = formula_spat, 
+              data = pcod_spat, 
+              family = "binomial")
+
+# Fit Model 
+fit_spat_2 = bru(cmp_spat_2,lik_spat_2)
+
+# Compute log-score
+
+lgocv_spat_2 <- inla.group.cv(result = fit_spat_2, group.cv  = lgocv_spat_ar1)
+mean(log(lgocv_spat_2$cv),na.rm=T) 
+
+
+```
+:::

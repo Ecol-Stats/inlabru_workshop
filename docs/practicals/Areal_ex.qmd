@@ -58,7 +58,7 @@ library(scico)
 
 
 
-# The data
+### The data
 
 
 We consider data on respiratory hospitalizations for Greater Glasgow and Clyde in 2007. The data are available from the `CARBayesdata` R Package:
@@ -128,7 +128,7 @@ diag(Q) = diag
 
 
 
-# The model
+### The model
 
 We fit a first model to the data where we consider a Poisson model for the  observed cases.
 
@@ -292,7 +292,7 @@ pred$cases %>% ggplot() + geom_point(aes(observed, mean)) +
 
 **Note:** Here we are predicting the _mean_ of counts, not the counts!!! Predicting counts is the theme of the next task!
 
-## Getting prediction densities
+### Getting prediction densities
 
 Posterior predictive distributions, that is $\pi(y_i^{\text{new}}|\mathbf{y})$ are of interest in many applied problems. The `bru()` function
 does not return predictive densities. In the previous step we have computed predictions for the `expected counts` $\pi(E_i\lambda_i|\mathbf{y})$. The predictive distribution is then:

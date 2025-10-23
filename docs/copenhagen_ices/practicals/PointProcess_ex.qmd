@@ -26,7 +26,7 @@ library(webexercises)
 
 ```
 
-## Log-Gaussian Cox Processes {#sec-linmodel}
+## Log-Gaussian Cox Processes 
 
 In this practical we will:
 
@@ -70,7 +70,6 @@ This dataset is a record of forest fires in the Castilla-La Mancha region of Spa
 
 We first read the data and transform them into an `sf` object. We also create a polygon that represents the border of the Castilla-La Mancha region. We select the data for year 2004 and only those fires caused by lightning.
 
-
 ```{r}
 #| label: fig-points
 #| fig-cap: "Distribution of the observed forest fires caused by lightning in Castilla-La Mancha in 2004"
@@ -96,30 +95,29 @@ region = poly %>%
 ggplot() + geom_sf(data = region, alpha = 0) + geom_sf(data = pp)  
 ```
 
-## Fit a homogeneous Poisson Process{ #HPP }
+## Fit a homogeneous Poisson Process {#HPP}
 
-As a first exercise we are going to fit a homogeneous Poisson process (HPP) to the data. This is a model that assume constant intensity over the whole space so our liner predictor is  
+As a first exercise we are going to fit a homogeneous Poisson process (HPP) to the data. This is a model that assume constant intensity over the whole space so our liner predictor is\
 $$
 \eta(s) = \log\lambda(s) = \beta_0 , \ \mathbf{s}\in\Omega
-$$ 
-so  the likelihood can be written as: 
+$$ so the likelihood can be written as:
+
 $$
 \begin{aligned}
 p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 & = \exp\left( -\int_{\Omega}\exp(\beta_0)ds\right)\prod_{i=1}^n \lambda(\mathbf{s}_i) \\
-
 \end{aligned}
 $$
-where $|\Omega|$ is the area of the domain of interest. 
 
-We need to approximate the integral using a numerical integration scheme as:
+where $|\Omega|$ is the area of the domain of interest.
+
+We need to approximate the integral using a numerical integration scheme as:\
+
 $$
 \approx\exp\left(-\sum_{k=1}^{N_k}w_k\lambda(s_k)\right)\prod_{i=1}^n \lambda(\mathbf{s}_i)
-$$
-Where $N_k$ is the number of integration points $s_1,\dots,s_{N_k}$ and $w_1,\dots,w_{N_k}$ are the integration weights.
+$$ Where $N_k$ is the number of integration points $s_1,\dots,s_{N_k}$ and $w_1,\dots,w_{N_k}$ are the integration weights.
 
 In this case, since the intensity is constant, the integration scheme is really simple: it is enough to consider one random point inside the domain with weight equal to the area of the domain.
-
 
 ```{r}
 # define integration scheme
@@ -142,9 +140,8 @@ fit1 = bru(cmp, lik)
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
-1. What is the estimated intensity? 
-2. Compare the estimated expected number of fires on the whole domain with the observed ones. 
-`r hide("Take hint")`
+1.  What is the estimated intensity?
+2.  Compare the estimated expected number of fires on the whole domain with the observed ones. `r hide("Take hint")`
 
 Remember that in the `inlabru` framework we model the log intensity $\eta = log(\lambda)$
 
@@ -173,15 +170,11 @@ post_int %>% ggplot() + geom_line(aes(x,y)) +
 ```
 :::
 
+# Inhomogeneous Poisson Process {#NHPP}
 
-
-
-
-
-# Inhomogeneous Poisson Process { #NHPP }
 The model above has the clear disadvantages that assumes a constant intensity and from Figure @fig-points we clearly see that this is not the case.
 
-The library `spatstat` contains also some covariates that can help explain the fires distribution. Figure @fit-altitude shows the location of fires together with the (scaled) altitude. 
+The library `spatstat` contains also some covariates that can help explain the fires distribution. Figure @fit-altitude shows the location of fires together with the (scaled) altitude.
 
 ```{r}
 #| label: fig-altitude
@@ -195,23 +188,20 @@ ggplot() + geom_spatraster(data = elev_raster) + geom_sf(data = pp) + scale_fill
 
 We are now going to use the altitude as a covariate to explain the variability of the intensity $\lambda(s)$ over the domain of interest.
 
-Our model is 
-$$
+Our model is $$
 \log\lambda(s) = \beta_0 + \beta_1x(s)
-$$
-where $x(s)$ is the altitude at location $s$.
+$$ where $x(s)$ is the altitude at location $s$.
 
 The likelihood becomes:
+
 $$
 \begin{aligned}
 p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 & = \exp \left( -\int_\Omega \exp(\beta_0 + \beta_1x(s)) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 \end{aligned}
-$$
-Now we need to choose an integration scheme to solve the integral.
+$$ Now we need to choose an integration scheme to solve the integral.
 
-In this case we will take a simple grid based approach where each quadrature location has an equal weight.
-Our  grid consists of $N_k = 1000$ points and the weights are all  equal to $|\Omega|/N_k$. 
+In this case we will take a simple grid based approach where each quadrature location has an equal weight. Our grid consists of $N_k = 1000$ points and the weights are all equal to $|\Omega|/N_k$.
 
 ```{r}
 #| label: fig-int2
@@ -227,7 +217,7 @@ ggplot() + geom_sf(data = ips, aes(color = weight)) + geom_sf(data= region, alph
 
 ```
 
-**OBS**: The implicit assumption here is that the intensity is constant inside each grid box, _and so is the covariate_!!
+**OBS**: The implicit assumption here is that the intensity is constant inside each grid box, *and so is the covariate*!!
 
 We can now fit the model:
 
@@ -241,7 +231,6 @@ lik = bru_obs(data = pp,
 fit2 = bru(cmp, lik)
 ```
 
-
 ```{r}
 
 est_grid = st_as_sf(data.frame(crds(elev_raster)), coords = c("x","y"))
@@ -253,8 +242,6 @@ preds2 = predict(fit2, est_grid, ~ data.frame(log_scale = Intercept + elev,
 preds2$lin_scale %>% ggplot() + geom_sf(aes(color = mean)) + scale_color_scico()
 
 ```
-
-
 
 ```{r}
 
@@ -280,13 +267,9 @@ ggplot(Lam_df) +
 ```
 
 ::: callout-note
-
-
-
-
 :::
 
-# Log-Gaussian Cox Process 
+# Log-Gaussian Cox Process
 
 ```{r}
 
