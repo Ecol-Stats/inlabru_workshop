@@ -132,7 +132,7 @@ The group variable is indexed by column `j` in the dataset. We have chosen to na
 
 ```{r define_likelihood_lmm}
 # Construct likelihood
-lik =  like(formula = y ~.,
+lik =  bru_obs(formula = y ~.,
             family = "gaussian",
             data = df)
 ```

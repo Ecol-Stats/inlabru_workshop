@@ -30,7 +30,7 @@ At the end of the workshop, participants will be able to:
 | Time | Topic |
 |:----------------------------------:|:----------------------------------:|
 | 13:00 - 14:00 | Workshop registration |
-| 14:00 - 14:45 | [**Session 1**](https://ecol-stats.github.io/inlabru_workshop/BES_workshop/slides/slides_2#/title-slide): Introduction to `inlabru` |
+| 14:00 - 14:45 | [**Session 1**](https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_1): Introduction to `inlabru` |
 | 14:45 - 15:45 | [Practical Session 1](day1_practical.qmd) |
 | 15:45 - 16:00 | Coffee break |
 | 16:00 - 16:45 | [**Session 2**:](https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_2) Spatial Modelling with `inlabru` |
