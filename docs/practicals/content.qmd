@@ -50,6 +50,7 @@ myDT <- read.markdown(
 | Tokyo_rainfall.qmd | Time series ; Smoothing; RW(2) model | Fit a RW(2) model to non-Gaussian data | `Tokyo` rainfall data from `INLA` |
 | Areal_ex.qmd | Discrete space  ; Smoothing; CAR model | Fit a CAR model to non-Gaussian data | `pollutionhealthdata`  data from `CARBayesdata` |
 | Geostat_ex.qmd | Continuous space  ; SPDE; Mesh | Fit a SPDE model to Binomial data | `pcod`  data from `sdmTMB` |
+| PointProcess_ex.qmd | Point process  ; SPDE; Mesh | Fit homogeneous, non homegeneous and  LCGP | `clmfires`  data from `spatstat` |
 '
 )
 
