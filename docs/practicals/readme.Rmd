@@ -9,18 +9,24 @@ date: "2025-06-10"
 Please add any new practical to this list
 
 | File name | Topic/Keywords | Description | Data type |
-|----|----|----|----|
+|------------------|--------------------|------------------|------------------|
 | template.qmd | Template | Template including [webexercises](https://psyteachr.github.io/webexercises/) html widgets , custom .css and reactive download data buttons (pending) | Test Data |
 | LM_ex.qmd | Linear Models | Introductory example to how define linear model components and compute predictions in inlabru | Simulated Data |
 | LMM_ex.qmd | Linear mixed models | Fitting a random intercept model in inlabru and how to write a LMM as a LGM | Simulated Data |
 | GLM_ex.qmd | Generalised Linear Models | Poisson and logistic regression examples. | Simulated Data |
 | GAM_ex.qmd | Generalised additive models; Smoothing | Smooth covariate using a random walk model | Simulated Data |
 | LM_ex_priors.qmd | Linear Models | Setting priors for linear model and plotting posterior marginals | Simulated Data |
+| LM_resids | Linear Models; model checks; model validations; model comparison | Compute different posterior predictive checks fro linear models | Simulated Data |
 | LMM_fish_example | Linear mixed models | Fitting LMM, plotting random effects and computing the posterior marginal variance by sampling from the precision posterior. | Real Data - Pygmy Whitefish data subset from the `FSAdata` R package |
-| GLM_scores.qmd | GLM model validation | Poisson and NegBin model assessment and comparison via CPO and PIT | Real Data - Satellite crabs data set |
+| GLM_scores.qmd | GLM; model checks; model validations; model comparison | Poisson and NegBin model assessment and comparison via CPO and PIT | Real Data - Satellite crabs data set |
 | HGAMM_ex.qmd | Hierarchical GAMMs; Smoothing | Hierarchical GAMMS with global and group-level smoother. | Real Data - bioluminiscence sources in the northeast Atlantic Ocean. |
 | Ar1_ex.qmd | Time series; AR(1) Model | fitting ar1 model, predicting the mean and forecasting. | Simulated Data |
 | Ar1_Rw1_ex.qmd | Time series; Smoothing; AR(1) and RW(1) | fitting an ar and rw models, change prior for Gaussian error and set PC prior for correlation parameter. add group-level correlation. | Real Data - water height levels in `greatlakes` dataset from `DAAG` library. |
 | Tokyo_rainfall.qmd | Time series ; Smoothing; RW(2) model | Fit a RW(2) model to non-Gaussian data | Real Data - `Tokyo` rainfall data from `INLA` |
 | spatial_data_types_areal.qmd | Spatial; Spatiotemporal Areal data; spatial autocorrelation | Visualize and manipulate areal data and compute Moran's I | Real Data - Respiratory hospitalisation & air pollution (`pollutionhealthdata)` for the Greater Glasgow IZ regions (`GGHB.IZ)` from `CARBayesdata` package |
-| spatial_data_types_geostats.qmd |  |  |  |
+| spatial_data_types_geostats.qmd | Spatial; Spatiotemporal geostatistical data; Geostatistics; spatial autocorrelation | Visualize and manipulate geostatistical data and compute variograms | Real Data - Pacific Cod presence/absence records (`pcod`) from the `sdmTMB` package. |
+| spatial_data_types_points.qmd | Spatial; Spatiotemporal point process data | Spatial point pattern data wrangling and visualization | Real Data - BNM ringlett butteflies records in Scotland's Cairngorms National Park (CNP). |
+| Areal_ex.qmd | Discrete space; CAR Model; BYM; spatial autocorrelation; | Fit a CAR model to non-Gaussian data do predictions. Compute posterior draws from expected counts and carry posterior predictive checks using posterior counts draws. | Real Data - Respiratory hospitalisation & air pollution (`pollutionhealthdata)` for the Greater Glasgow IZ regions (`GGHB.IZ)` from `CARBayesdata` package |
+| Geostats_ex.qmd | Continuous space; Geostatistics; SDM; SPDE; Mesh; SPDE; Mesh | Fit a spatially explicit species distribution model and do predictions and obtain posterior samples from the fitted model | Real Data - Pacific Cod presence/absence records (`pcod`) from the `sdmTMB` package. |
+| LGOCV.qmd | Continuous space; model checks; model validations; model comparison; spatiotemporal | Compute LGOCV for geostatistical spatiotemporal data | Real Data - Pacific Cod presence/absence records (`pcod`) from the `sdmTMB` package. |
+| PointProcess_ex.qmd | Spatial; Point Process Model; LGCP; SPDE; Mesh | Fit homogeneous, non homegeneous and LCGP and do predictions. | Real Data - Forest fires in the Castilla-La Mancha region (`clmfires` ) of Spain between 1998 and 2007 from in the `spatstat` package. |
