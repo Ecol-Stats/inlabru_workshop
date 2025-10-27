@@ -4,7 +4,6 @@ project:
   render:
   - index.qmd
   - about.qmd
-  - practical1_compiler.qmd
   - slides/slides_1.qmd
 website:
   title: Tromsø workshop 2025
@@ -20,7 +19,6 @@ website:
     search: true
     contents:
     - index.qmd
-    - practical1_compiler.qmd
   page-navigation: true
 format:
   html:

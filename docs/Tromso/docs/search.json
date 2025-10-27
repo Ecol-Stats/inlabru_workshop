@@ -161,69 +161,6 @@
     "text": "SPDE models\nWe call spatial Markov models defined on a mesh SPDE models.\nSPDE models have 3 parts\n\nA mesh\nA range parameter \\(\\kappa\\)\nA precision parameter \\(\\tau\\)\n\n\n\nWe use the SPDE effect to model the intensity of a point process that represents the locations of animal sightings.\nOften such sightings are made by observers who cannot detect all the animals\nTo accurately estimate abundance, we require an estimate of the number of animals that remained undetected."
   },
   {
-    "objectID": "slides/slides_1.html#thinned-point-process",
-    "href": "slides/slides_1.html#thinned-point-process",
-    "title": "Lecture",
-    "section": "Thinned Point Process",
-    "text": "Thinned Point Process\nThe LGCP is a flexible approach that can include spatial covariates to model the mean intensity and a mean-zero spatiallystructured random effect to account for unexplained heterogeneity not captured by the covariates.\n\nTo account for the imperfect detection of points we specify a thinning probability function \\[g(s) = \\mathbb{P}(\\text{a point at s is detected}|\\text{a point is at s})\\]\nA key property of LGCP is that a realisation of a point process with intensity \\(\\lambda(s)\\) that is thinned by probability function \\(g(s)\\), follows also a LGCP with intensity:\n\n\\[\n\\underbrace{\\tilde{\\lambda}(s)}_{\\text{observed process}} = \\underbrace{\\lambda(s)}_{\\text{true process}} \\times \\underbrace{g(s)}_{\\text{thinning probability}}\n\\]"
-  },
-  {
-    "objectID": "slides/slides_1.html#detection-fucntion",
-    "href": "slides/slides_1.html#detection-fucntion",
-    "title": "Lecture",
-    "section": "Detection Fucntion",
-    "text": "Detection Fucntion\n\n\n\n\nStandard distance sampling approaches specify \\(g(s)\\) as a function that declines with increasing distance\n\nhorizontal distance to the observer for point transects\nperpendicular distance to the transect line for line transects"
-  },
-  {
-    "objectID": "slides/slides_1.html#detection-fucntion-1",
-    "href": "slides/slides_1.html#detection-fucntion-1",
-    "title": "Lecture",
-    "section": "Detection Fucntion",
-    "text": "Detection Fucntion\n\n\n\n\nStandard distance sampling approaches specify \\(g(s)\\) as a function that declines with increasing distance\n\nhorizontal distance to the observer for point transects\nperpendicular distance to the transect line for line transects\n\nThe thinning probability function is specified as a parametric family of functions.\n\nHalf-normal\n\\[\ng(\\mathbf{s}|\\sigma) = \\exp(-0.5 (d(\\mathbf{s})/\\sigma)^2)\n\\]\nHazard-rate\n\\[\ng(\\mathbf{s}|\\sigma) = 1 - \\exp(-(d(\\mathbf{s})/\\sigma)^{-1})\n\\]"
-  },
-  {
-    "objectID": "slides/slides_1.html#detection-function",
-    "href": "slides/slides_1.html#detection-function",
-    "title": "Lecture",
-    "section": "Detection Function",
-    "text": "Detection Function\n\n\n\n\nStandard distance sampling approaches specify \\(g(s)\\) as a function that declines with increasing distance\n\nhorizontal distance to the observer for point transects\nperpendicular distance to the transect line for line transects"
-  },
-  {
-    "objectID": "slides/slides_1.html#detection-function-1",
-    "href": "slides/slides_1.html#detection-function-1",
-    "title": "Lecture",
-    "section": "Detection Function",
-    "text": "Detection Function\n\n\n\n\nStandard distance sampling approaches specify \\(g(s)\\) as a function that declines with increasing distance\n\nhorizontal distance to the observer for point transects\nperpendicular distance to the transect line for line transects"
-  },
-  {
-    "objectID": "slides/slides_1.html#detection-function-.smaller-auto-animatetrue-background-colorffffff",
-    "href": "slides/slides_1.html#detection-function-.smaller-auto-animatetrue-background-colorffffff",
-    "title": "Lecture",
-    "section": "Detection Function {.smaller auto-animate=“true background-color=”#FFFFFF”}",
-    "text": "Detection Function {.smaller auto-animate=“true background-color=”#FFFFFF”}\n\n\n\n\nStandard distance sampling approaches specify \\(g(s)\\) as a function that declines with increasing distance\n\nhorizontal distance to the observer for point transects\nperpendicular distance to the transect line for line transects"
-  },
-  {
-    "objectID": "slides/slides_1.html#detection-function-.smaller-auto-animatetrue-background-colorffffff-1",
-    "href": "slides/slides_1.html#detection-function-.smaller-auto-animatetrue-background-colorffffff-1",
-    "title": "Lecture",
-    "section": "Detection Function {.smaller auto-animate=“true background-color=”#FFFFFF”}",
-    "text": "Detection Function {.smaller auto-animate=“true background-color=”#FFFFFF”}\n\n\n\n\nStandard distance sampling approaches specify \\(g(s)\\) as a function that declines with increasing distance\n\nhorizontal distance to the observer for point transects\nperpendicular distance to the transect line for line transects\n\nThe thinning probability function is specified as a parametric family of functions. E.g.,\n\n\n\nHalf-normal: \\(g(\\mathbf{s}|\\sigma) = \\exp(-0.5 (d(\\mathbf{s})/\\sigma)^2)\\)\nHazard-rate :\\(g(\\mathbf{s}|\\sigma) = 1 - \\exp(-(d(\\mathbf{s})/\\sigma)^{-1})\\)"
-  },
-  {
-    "objectID": "slides/slides_1.html#detection-function-2",
-    "href": "slides/slides_1.html#detection-function-2",
-    "title": "Lecture",
-    "section": "Detection Function",
-    "text": "Detection Function\n\n\n\n\nStandard distance sampling approaches specify \\(g(s)\\) as a function that declines with increasing distance\n\nhorizontal distance to the observer for point transects\nperpendicular distance to the transect line for line transects\n\nThe thinning probability function is specified as a parametric family of functions.\n\n\n\nHalf-normal: \\(g(\\mathbf{s}|\\sigma) = \\exp(-0.5 (d(\\mathbf{s})/\\sigma)^2)\\)\nHazard-rate :\\(g(\\mathbf{s}|\\sigma) = 1 - \\exp(-(d(\\mathbf{s})/\\sigma)^{-1})\\)"
-  },
-  {
-    "objectID": "slides/slides_1.html#detection-function-3",
-    "href": "slides/slides_1.html#detection-function-3",
-    "title": "Lecture",
-    "section": "Detection Function",
-    "text": "Detection Function\n\n\n\n\nStandard distance sampling approaches specify \\(g(s)\\) as a function that declines with increasing distance\n\nhorizontal distance to the observer for point transects\nperpendicular distance to the transect line for line transects\n\nThe thinning probability function is specified as a parametric family of functions.\nThe thinned-LGCP likelihood is given by:\n\n\\[\n\\pi(\\mathbf{s_1},\\ldots,\\mathbf{s_m}) = \\exp\\left( |\\Omega| - \\int_{\\mathbf{s}\\in\\Omega}\\lambda(s)g(s)\\text{d}s \\right) \\prod_{i=1}^m \\lambda(\\mathbf{s}_i)g(\\mathbf{s}_i)\n\\]\n\nTo make \\(g(s)\\) and \\(\\lambda(s)\\) identifiable, we assume intensity is constant with respect to distance from the observer.\n\nIn practice this means we assume animals are uniformly distributed with respect to distance from the line"
-  },
-  {
     "objectID": "slides/slides_1.html#thinned-point-process-1",
     "href": "slides/slides_1.html#thinned-point-process-1",
     "title": "Lecture",
@@ -280,6 +217,41 @@
     "text": "Thinned Point Process"
   },
   {
+    "objectID": "slides/slides_1.html#thinned-point-process-9",
+    "href": "slides/slides_1.html#thinned-point-process-9",
+    "title": "Lecture",
+    "section": "Thinned Point Process",
+    "text": "Thinned Point Process\n\nObservations are from a thinned Poisson process with intensity \\(\\lambda(s) \\color{red}{p(s)}\\)"
+  },
+  {
+    "objectID": "slides/slides_1.html#detection-function",
+    "href": "slides/slides_1.html#detection-function",
+    "title": "Lecture",
+    "section": "Detection Function",
+    "text": "Detection Function\n\n\n\n\nStandard distance sampling approaches specify \\(g(s)\\) as a function that declines with increasing distance\n\nhorizontal distance to the observer for point transects\nperpendicular distance to the transect line for line transects"
+  },
+  {
+    "objectID": "slides/slides_1.html#detection-function-1",
+    "href": "slides/slides_1.html#detection-function-1",
+    "title": "Lecture",
+    "section": "Detection Function",
+    "text": "Detection Function\n\n\n\n\nStandard distance sampling approaches specify \\(g(s)\\) as a function that declines with increasing distance\n\nhorizontal distance to the observer for point transects\nperpendicular distance to the transect line for line transects"
+  },
+  {
+    "objectID": "slides/slides_1.html#detection-function-2",
+    "href": "slides/slides_1.html#detection-function-2",
+    "title": "Lecture",
+    "section": "Detection Function",
+    "text": "Detection Function\n\n\n\n\nStandard distance sampling approaches specify \\(g(s)\\) as a function that declines with increasing distance\n\nhorizontal distance to the observer for point transects\nperpendicular distance to the transect line for line transects\n\nThe thinning probability function is specified as a parametric family of functions.\n\n\n\nHalf-normal: \\(g(\\mathbf{s}|\\sigma) = \\exp(-0.5 (d(\\mathbf{s})/\\sigma)^2)\\)\nHazard-rate :\\(g(\\mathbf{s}|\\sigma) = 1 - \\exp(-(d(\\mathbf{s})/\\sigma)^{-1})\\)"
+  },
+  {
+    "objectID": "slides/slides_1.html#detection-function-3",
+    "href": "slides/slides_1.html#detection-function-3",
+    "title": "Lecture",
+    "section": "Detection Function",
+    "text": "Detection Function\n\n\n\n\nStandard distance sampling approaches specify \\(g(s)\\) as a function that declines with increasing distance\n\nhorizontal distance to the observer for point transects\nperpendicular distance to the transect line for line transects\n\nThe thinning probability function is specified as a parametric family of functions.\nThe thinned-LGCP likelihood is given by:\n\n\\[\n\\pi(\\mathbf{s_1},\\ldots,\\mathbf{s_m}) = \\exp\\left( |\\Omega| - \\int_{\\mathbf{s}\\in\\Omega}\\lambda(s)g(s)\\text{d}s \\right) \\prod_{i=1}^m \\lambda(\\mathbf{s}_i)g(\\mathbf{s}_i)\n\\]\n\nTo make \\(g(s)\\) and \\(\\lambda(s)\\) identifiable, we assume intensity is constant with respect to distance from the observer.\n\nIn practice this means we assume animals are uniformly distributed with respect to distance from the line"
+  },
+  {
     "objectID": "slides/slides_1.html#putting-all-the-pieces-together",
     "href": "slides/slides_1.html#putting-all-the-pieces-together",
     "title": "Lecture",
@@ -301,20 +273,6 @@
     "text": "Putting all the pieces together\n\n\n\n\n\n\n\n\n\nThe true point pattern \\(Y = \\mathbf{s}_1,\\ldots,\\mathbf{s}_n\\) are a realization of a Point process with intensity \\(\\lambda(s)\\)\nWe design a sampling survey to collect the data along transects\ndetected points are generated from the thinned PP with intensity \\(\\color{red}{\\tilde{\\lambda}(s)}= \\lambda(s)\\color{red}{g(d(s))}\\)\n\nThe log intensity \\(\\log \\color{red}{\\tilde{\\lambda}(s)} = \\overbrace{\\log \\lambda (s)}^{\\mathbf{x}'\\beta + \\xi(s)} + \\overbrace{\\log \\color{red}{g(d(s))}}^{-0.5~d(\\mathbf{s})^2\\sigma^{-2}}\\)"
   },
   {
-    "objectID": "slides/slides_1.html#an-approximation-strips-as-lines",
-    "href": "slides/slides_1.html#an-approximation-strips-as-lines",
-    "title": "Lecture",
-    "section": "An approximation: Strips as lines",
-    "text": "An approximation: Strips as lines\n\nIf the strips width ( \\(2W\\) ) is narrow compared to study region (\\(\\Omega\\)) we can treat them as lines.\n\nWe need to adjust the intensity at a point \\(\\mathbf{s}\\) on the line to take account of the actual width of the strip\nAdjust the thinning probability to account for having collapsed all points onto the line."
-  },
-  {
-    "objectID": "slides/slides_1.html#an-approximation-strips-as-lines-1",
-    "href": "slides/slides_1.html#an-approximation-strips-as-lines-1",
-    "title": "Lecture",
-    "section": "An approximation: Strips as lines",
-    "text": "An approximation: Strips as lines\nThe intensity at a point \\(\\mathbf{s}\\) on the line becomes \\(2W\\lambda(s)\\) instead of \\(\\lambda(s)\\).\n\nLet \\(\\pi(d)\\) be the probability that the point is at a distance \\(d\\) from the line.\nLet \\(p(d)\\) be the probability that is detected given it is at \\(d\\).\n\nThen, the thinning probability becomes \\(\\pi(d)\\times p(d)\\), assuming the points are uniformly distributed within the strip then \\(\\pi(d) = 1/W\\) (the density of distances is assumed to be constant on the interval \\([0,W]\\)).\nThis updates our thinning intensity to\n\\[\n\\log \\tilde{\\lambda}(s) = \\underbrace{\\mathbf{x}'\\beta + \\xi(s)}_{\\log \\lambda(s)} + \\log p(d) + \\log (1/W)\n\\]\n\nTypically \\(p(d)\\) is a non-linear function, that is where inlabru can help via a Fixed point iteration scheme (further details available in this vignette)"
-  },
-  {
     "objectID": "slides/slides_1.html#putting-all-the-pieces-together-3",
     "href": "slides/slides_1.html#putting-all-the-pieces-together-3",
     "title": "Lecture",
@@ -329,11 +287,18 @@
     "text": "Putting all the pieces together\n\n\n\n\n\n\n\n\n\nThe true point pattern \\(Y = \\mathbf{s}_1,\\ldots,\\mathbf{s}_n\\) are a realization of a Point process with intensity \\(\\lambda(s)\\)\nWe design a sampling survey to collect the data along transects\ndetected points are generated from the thinned PP with intensity \\(\\color{red}{\\tilde{\\lambda}(s)}= \\lambda(s)\\color{red}{g(d(s))}\\)\n\nThe log intensity \\(\\log \\color{red}{\\tilde{\\lambda}(s)} = \\overbrace{\\log \\lambda (s)}^{\\mathbf{x}'\\beta + \\xi(s)} + \\overbrace{\\log \\color{red}{g(d(s))}}^{-0.5~d(\\mathbf{s})^2\\sigma^{-2}}\\)\nThe encounter rate, i.e. the number of observed animals within a distance \\(W\\) follows \\(m \\sim \\text{Poisson} \\left(\\int_0^W \\tilde{\\lambda}(d)\\text{d}d\\right)\\)\n\n\n\n\nThe pdf of detected distances is \\(\\pi(d_1,\\ldots,d_m|m) \\propto \\prod_{i=1}^m\\dfrac{ g(d_i)}{\\int_o^W g(d) \\text{d}d}\\) if \\(\\color{red}{\\tilde{\\lambda}(d_i)} = \\lambda \\color{red}{g(d_i)}\\)"
   },
   {
-    "objectID": "slides/slides_1.html#thinned-point-process-9",
-    "href": "slides/slides_1.html#thinned-point-process-9",
+    "objectID": "slides/slides_1.html#an-approximation-strips-as-lines",
+    "href": "slides/slides_1.html#an-approximation-strips-as-lines",
     "title": "Lecture",
-    "section": "Thinned Point Process",
-    "text": "Thinned Point Process\n\nObservations are from a thinned Poisson process with intensity \\(\\lambda(s) \\color{red}{p(s)}\\)"
+    "section": "An approximation: Strips as lines",
+    "text": "An approximation: Strips as lines\n\nIf the strips width ( \\(2W\\) ) is narrow compared to study region (\\(\\Omega\\)) we can treat them as lines.\n\nWe need to adjust the intensity at a point \\(\\mathbf{s}\\) on the line to take account of the actual width of the strip\nAdjust the thinning probability to account for having collapsed all points onto the line."
+  },
+  {
+    "objectID": "slides/slides_1.html#an-approximation-strips-as-lines-1",
+    "href": "slides/slides_1.html#an-approximation-strips-as-lines-1",
+    "title": "Lecture",
+    "section": "An approximation: Strips as lines",
+    "text": "An approximation: Strips as lines\nThe intensity at a point \\(\\mathbf{s}\\) on the line becomes \\(2W\\lambda(s)\\) instead of \\(\\lambda(s)\\).\n\nLet \\(\\pi(d)\\) be the probability that the point is at a distance \\(d\\) from the line.\nLet \\(p(d)\\) be the probability that is detected given it is at \\(d\\).\n\nThen, the thinning probability becomes \\(\\pi(d)\\times p(d)\\), assuming the points are uniformly distributed within the strip then \\(\\pi(d) = 1/W\\) (the density of distances is assumed to be constant on the interval \\([0,W]\\)).\nThis updates our thinning intensity to\n\\[\n\\log \\tilde{\\lambda}(s) = \\underbrace{\\mathbf{x}'\\beta + \\xi(s)}_{\\log \\lambda(s)} + \\log p(d) + \\log (1/W)\n\\]\n\nTypically \\(p(d)\\) is a non-linear function, that is where inlabru can help via a Fixed point iteration scheme (further details available in this vignette)"
   },
   {
     "objectID": "slides/slides_1.html#example-dolphins-in-the-gulf-of-mexico",
@@ -392,13 +357,6 @@
     "text": "Step 1: Define the SPDE representation: The SPDE\nWe use the inla.spde2.pcmatern to define the SPDE model using PC priors through the following probability statements\n\n\n\n\\(P(\\rho &lt; 50) = 0.1\\)\n\\(P(\\sigma &gt; 2) = 0.1\\)\n\n\n\nspde_model =  inla.spde2.pcmatern(\n  mexdolphin$mesh,\n  prior.sigma = c(2, 0.1),\n  prior.range = c(50, 0.1)\n)"
   },
   {
-    "objectID": "slides/slides_1.html#example-forest-fires-in-castilla-la-mancha",
-    "href": "slides/slides_1.html#example-forest-fires-in-castilla-la-mancha",
-    "title": "Lecture",
-    "section": "Example: Forest fires in Castilla-La Mancha",
-    "text": "Example: Forest fires in Castilla-La Mancha\n\n\nThe LGCP Model\n\\[\n\\begin{aligned}\np(\\mathbf{y} | \\lambda)  & \\propto \\exp \\left( -\\int_\\Omega \\lambda(\\mathbf{s}) p(\\mathbf{s}) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i) p(\\mathbf{s}_i)) \\\\\n\\eta(s) &  = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{ \\omega(s)}} + \\color{#FF6B6B}{\\boxed{ \\log p(s)}} + \\color{#FF6B6B}{\\boxed{ \\log (1/W)}}\\\\\n\\end{aligned}\n\\]\nThe code\n\n# define model component\ncmp = ~ Intercept(1) + \n  space(main = geometry, model = spde_model) +\n  sigma(1,\n    prec.linear = 1,\n    marginal = bru_mapper_marginal(qexp, pexp, dexp, rate = 1 / 8)\n  ) \n\n# define model predictor\neta  = geometry + distance ~ space +\n  log(hn(distance, sigma)) +\n  Intercept + log(2)\n\n# build the observation model\nlik = bru_obs(\"cp\",\n              formula = eta,\n              data = mexdolphin$points,\n              ips = ips)\n\n\n# fit the model\nfit = bru(cmp, lik)\n\n\n\n# The mesh\nmesh = fm_mesh_2d(boundary = mexdolphin$ppoly,\n                    max.edge = c(30, 150),\n                    cutoff = 15,\n                    crs  = fm_crs(mexdolphin$points))\n\n# The SPDE model\nspde_model =  inla.spde2.pcmatern(mexdolphin$mesh,\n  prior.sigma = c(2, 0.1),\n  prior.range = c(50, 0.1)\n)\n\n# build integration scheme\ndistance_domain &lt;-  fm_mesh_1d(seq(0, 8, length.out = 30))\n\nips = fm_int(list(geometry = mesh,\n                  distance = distance_domain),\n             samplers = mexdolphin$samplers)"
-  },
-  {
     "objectID": "slides/slides_1.html#step-2-define-the-detection-function",
     "href": "slides/slides_1.html#step-2-define-the-detection-function",
     "title": "Lecture",
@@ -441,18 +399,18 @@
     "text": "Results: posterior summaries\n\n\nWe can use the fit$summary.fixed and summary.hyperpar to obtain psoterior summarie sof the mdoel parameters.\n\n\n\n\n\n\n\n\n\nmean\n0.025quant\n0.975quant\n\n\n\n\nIntercept\n−8.41\n−9.47\n−7.62\n\n\nsigma\n−0.05\n−0.46\n0.36\n\n\nRange for space\n131.74\n41.79\n320.28\n\n\nStdev for space\n1.17\n0.72\n1.78\n\n\n\n\n\n\n\n\nThe spde.posterior allow us to plot the posterior density of the Matern field parameters\n\nspde.posterior(fit, \"space\", what = \"range\") %&gt;% plot()"
   },
   {
-    "objectID": "slides/slides_1.html#results-predicted-densities",
-    "href": "slides/slides_1.html#results-predicted-densities",
-    "title": "Lecture",
-    "section": "Results: predicted densities",
-    "text": "Results: predicted densities\n\n\nTo map the spatial intensity we first need to define a grid of points where we want to predict.\n\nWe do this using the function fm_pixel() which creates a regular grid of points covering the mesh\nThen, we use the predict function which takes as input\n\nthe fitted model (fit)\nthe prediction points (pxl)\nthe model components we want to predict (e.g., \\(e^{\\beta_0 + \\xi(s)}\\))\n\nTo plot this you can use ggplot and add a gg() layer with your output of interest (E.g., pr.int$spatial)\n\n\n\nlibrary(patchwork)\npxl &lt;- fm_pixels(mesh, dims = c(200, 100), mask = mexdolphin$ppoly)\npr.int &lt;- predict(fit, pxl, ~ data.frame(spatial = space,\n                                      loglambda = Intercept + space,\n                                      lambda = exp(Intercept + space)))\n\n\nggplot() +\n  gg(pr.int$spatial, geom = \"tile\")"
-  },
-  {
     "objectID": "slides/slides_1.html#results-posterior-summaries-1",
     "href": "slides/slides_1.html#results-posterior-summaries-1",
     "title": "Lecture",
     "section": "Results: posterior summaries",
     "text": "Results: posterior summaries\n\n\nWe can use the fit$summary.fixed and summary.hyperpar to obtain psoterior summarie sof the mdoel parameters.\n\n\n\n\n\n\n\n\n\nmean\n0.025quant\n0.975quant\n\n\n\n\nIntercept\n−8.41\n−9.47\n−7.62\n\n\nsigma\n−0.05\n−0.46\n0.36\n\n\nRange for space\n131.74\n41.79\n320.28\n\n\nStdev for space\n1.17\n0.72\n1.78\n\n\n\n\n\n\n\n\nThe spde.posterior allow us to plot the posterior density of the Matern field parameters\n\nspde.posterior(fit, \"space\", what = \"log.variance\") %&gt;% plot()"
+  },
+  {
+    "objectID": "slides/slides_1.html#results-predicted-densities",
+    "href": "slides/slides_1.html#results-predicted-densities",
+    "title": "Lecture",
+    "section": "Results: predicted densities",
+    "text": "Results: predicted densities\n\n\nTo map the spatial intensity we first need to define a grid of points where we want to predict.\n\nWe do this using the function fm_pixel() which creates a regular grid of points covering the mesh\nThen, we use the predict function which takes as input\n\nthe fitted model (fit)\nthe prediction points (pxl)\nthe model components we want to predict (e.g., \\(e^{\\beta_0 + \\xi(s)}\\))\n\nTo plot this you can use ggplot and add a gg() layer with your output of interest (E.g., pr.int$spatial)\n\n\n\nlibrary(patchwork)\npxl &lt;- fm_pixels(mesh, dims = c(200, 100), mask = mexdolphin$ppoly)\npr.int &lt;- predict(fit, pxl, ~ data.frame(spatial = space,\n                                      loglambda = Intercept + space,\n                                      lambda = exp(Intercept + space)))\n\n\nggplot() +\n  gg(pr.int$spatial, geom = \"tile\")"
   },
   {
     "objectID": "slides/slides_1.html#results-predicted-densities-1",
@@ -466,7 +424,7 @@
     "href": "slides/slides_1.html#results-predicted-expected-counts",
     "title": "Lecture",
     "section": "Results: predicted expected counts",
-    "text": "Results: predicted expected counts\nWe can look at the posterior for the mean expected number of dolphins:\n\npredpts &lt;- fm_int(mexdolphin$mesh, mexdolphin$ppoly)\nLambda &lt;- predict(fit, predpts, ~ sum(weight * exp(space + Intercept)))\nLambda\n\n      mean       sd   q0.025     q0.5   q0.975   median sd.mc_std_err\n1 328.6977 96.05029 197.2152 306.6226 579.0207 306.6226      9.696968\n  mean.mc_std_err\n1        11.54442"
+    "text": "Results: predicted expected counts\nWe can look at the posterior for the mean expected number of dolphins:\n\npredpts &lt;- fm_int(mexdolphin$mesh, mexdolphin$ppoly)\nLambda &lt;- predict(fit, predpts, ~ sum(weight * exp(space + Intercept)))\nLambda\n\n     mean       sd   q0.025     q0.5   q0.975   median sd.mc_std_err\n1 306.061 82.42049 178.2186 294.2737 474.1972 294.2737      9.194074\n  mean.mc_std_err\n1        10.08086"
   },
   {
     "objectID": "slides/slides_1.html#results-predicted-expected-counts-1",
@@ -474,5 +432,16 @@
     "title": "Lecture",
     "section": "Results: predicted expected counts",
     "text": "Results: predicted expected counts\nWe can also get Monte Carlo samples for the expected number of dolphins as follows:\n\n\nNs &lt;- seq(50, 450, by = 1)\n\nNest &lt;- predict(fit, predpts,\n  ~ data.frame(\n    N = Ns,\n    density = dpois(\n      Ns,\n      lambda = sum(weight * exp(space + Intercept))\n    )\n  ),\n  n.samples = 2000\n)\n\nNest &lt;- dplyr::bind_rows(\n  cbind(Nest, Method = \"Posterior\"),\n  data.frame(\n    N = Nest$N,\n    mean = dpois(Nest$N, lambda = Lambda$mean),\n    mean.mc_std_err = 0,\n    Method = \"Plugin\"\n  )\n)\nggplot(data = Nest) +\n  geom_line(aes(x = N, y = mean, colour = Method)) +\n  geom_ribbon(\n    aes(\n      x = N,\n      ymin = mean - 2 * mean.mc_std_err,\n      ymax = mean + 2 * mean.mc_std_err,\n      fill = Method,\n    ),\n    alpha = 0.2\n  ) +\n  geom_line(aes(x = N, y = mean, colour = Method)) +\n  ylab(\"Probability mass function\")"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Spatial and space-time models for whale surveys with complex and non-systematic designs",
+    "section": "",
+    "text": "Welcome to the course!\n\nWelcome to the inlabru workshop!\nThe goal of this workshop is to introduce new users to the inlabru software for Bayesian spatial modelling using the integrated nested Laplace approximation (INLA).\nThe workshop is intended for applied statisticians and quantitative ecologists who are interested in efficiently modelling spatial data- No prior knowledge of R-INLA is required.\n\n\n\nIn preparation for the workshop\nParticipants are required to follow the next steps before the day of the workshop:\n\nInstall R-INLA\nInstall inlabru (available from CRAN)\n\n# Enable universe(s) by inlabru-org\noptions(repos = c(\n  inlabruorg = \"https://inlabru-org.r-universe.dev\",\n  INLA = \"https://inla.r-inla-download.org/R/testing\",\n  CRAN = \"https://cloud.r-project.org\"\n))\n\n# Install some packages\ninstall.packages(\"inlabru\")\n\nMake sure you have the latest R-INLA, inlabru and R versions installed.\nInstall the following libraries:",
+    "crumbs": [
+      "Home",
+      "Spatial and space-time models for whale surveys with complex and non-systematic designs"
+    ]
   }
 ]
