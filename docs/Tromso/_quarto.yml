@@ -1,0 +1,33 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+  - index.qmd
+  - about.qmd
+  - slides/slides_1.qmd
+website:
+  title: Tromsø workshop 2025
+  navbar:
+    logo: INLA_logo.png
+    left:
+    - href: index.qmd
+      text: Home
+    - href: about.qmd
+      text: Slides
+  sidebar:
+    style: docked
+    search: true
+    contents:
+    - index.qmd
+  page-navigation: true
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    css:
+    - styles.css
+    - include/webex.css
+    toc: true
+    include-after-body: include/webex.js
+editor: visual

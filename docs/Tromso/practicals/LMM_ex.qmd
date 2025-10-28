@@ -1,0 +1,224 @@
+---
+title: "LMM"
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+## Linear Mixed Model
+
+In this practical we will:
+
+-   Understand the basic structure of a Linear Mixed Model (LLM)
+-   Simulate data from a LMM
+-   Learn how to fit a LMM with `inlabru` and predict from the model.
+
+Consider the a simple linear regression model except with the addition that the data that comes in groups. Suppose that we want to include a random effect for each group $j$ (equivalent to adding a group random intercept). The model is then: $$
+ y_{ij}  = \beta_0 + \beta_1 x_i + u_j + \epsilon_{ij} ~~~  \text{for}~i = 1,\ldots,N~ \text{and}~ j = 1,\ldots,m.
+$$
+
+Here the random group effect is given by the variable $u_j \sim \mathcal{N}(0, \tau^{-1}_u)$ with $\tau_u = 1/\sigma^2_u$ describing the variability between groups (i.e., how much the group means differ from the overall mean). Then, $\epsilon_j \sim \mathcal{N}(0, \tau^{-1}_\epsilon)$ denotes the residuals of the model and $\tau_\epsilon = 1/\sigma^2_\epsilon$ captures how much individual observations deviate from their group mean (i.e., variability within group).
+
+The model design matrix for the random effect has one row for each observation (this is equivalent to a random intercept model). The row of the design matrix associated with the $ij$-th observation consists of zeros except for the element associated with $u_j$, which has a one.
+
+$$
+\pmb{\eta} = \pmb{A}\pmb{u} = \pmb{A}_1\pmb{u}_1 + \pmb{A}_2\pmb{u}_2 + \pmb{A}_3\pmb{u}_3
+$$
+
+::: {.callout-note icon="false"}
+## Supplementary material: LMM as a LGM
+
+In matrix form, the linear mixed model for the *j*-th group can be written as:
+
+$$ \overbrace{\mathbf{y}_j}^{ N \times 1} = \overbrace{X_j}^{ N \times 2} \underbrace{\beta}_{1\times 1} + \overbrace{Z_j}^{n_j \times 1} \underbrace{u_j}_{1\times1} + \overbrace{\epsilon_j}^{n_j \times 1}, $$
+
+In a latent Gaussian model (LGM) formulation the mixed model predictor for the *i*-th observation can be written as :
+
+$$
+\eta_i = \beta_0 + \beta_1 x_i + \sum_k^K f_k(u_j)
+$$
+
+where $f_k(u_j) = u_j$ since there’s only one random effect per group (i.e., a random intercept for group $j$). The fixed effects $(\beta_0,\beta_1)$ are assigned Gaussian priors (e.g., $\beta \sim \mathcal{N}(0,\tau_\beta^{-1})$). The random effects $\mathbf{u} = (u_1,\ldots,u_m)^T$ follow a Gaussian density $\mathcal{N}(0,\mathbf{Q}_u^{-1})$ where $\mathbf{Q}_u = \tau_u\mathbf{I}_m$ is the precision matrix for the random intercepts. Then, the components for the LGM are the following:
+
+-   Latent field given by
+
+    $$
+    \begin{bmatrix} \beta \\\mathbf{u} 
+    \end{bmatrix} \sim \mathcal{N}\left(\mathbf{0},\begin{bmatrix}\tau_\beta^{-1}\mathbf{I}_2&\mathbf{0}\\\mathbf{0} &\tau_u^{-1}\mathbf{I}_m\end{bmatrix}\right)
+    $$
+
+-   Likelihood:
+
+    $$
+    y_i \sim \mathcal{N}(\eta_i,\tau_{\epsilon}^{-1})
+    $$
+
+-   Hyperparameters:
+
+    -   $\tau_u\sim\mathrm{Gamma}(a,b)$
+    -   $\tau_\epsilon \sim \mathrm{Gamma}(c,d)$
+:::
+
+### **Simulate example data**
+
+```{r}
+#| message: false
+#| warning: false
+#| purl: false
+#| echo: false
+library(inlabru)
+library(INLA)
+library(ggplot2)
+library(dplyr)
+```
+
+```{r }
+#| code-summary: "Simulate data from a LMM"
+#| 
+set.seed(12)
+beta = c(1.5,1)
+sd_error = 1
+tau_group = 1
+
+n = 100
+n.groups = 5
+x = rnorm(n)
+v = rnorm(n.groups, sd = tau_group^{-1/2})
+y = beta[1] + beta[2] * x + rnorm(n, sd = sd_error) +
+  rep(v, each = 20)
+
+df = data.frame(y = y, x = x, j = rep(1:5, each = 20))  
+```
+
+Note that `inlabru` expects an integer indexing variable to label the groups.
+
+```{r plot_data_lmm}
+#| code-fold: true
+#| fig-cap: Data for the linear mixed model example with 5 groups
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+
+ggplot(df) +
+  geom_point(aes(x = x, colour = factor(j), y = y)) +
+  theme_classic() +
+  scale_colour_discrete("Group")
+
+```
+
+### Fitting a LMM in `inlabru`
+
+------------------------------------------------------------------------
+
+**Defining model components and observational model**
+
+In order to specify this model we must use the `group` argument to tell `inlabru` which variable indexes the groups. The `model = "iid"` tells INLA that the groups are independent from one another.
+
+```{r define_components_lmm}
+# Define model components
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear") +
+  u(j, model = "iid")
+```
+
+The group variable is indexed by column `j` in the dataset. We have chosen to name this component `v()` to connect with the mathematical notation that we used above.
+
+```{r define_likelihood_lmm}
+# Construct likelihood
+lik =  bru_obs(formula = y ~.,
+            family = "gaussian",
+            data = df)
+```
+
+**Fitting the model**
+
+The model can be fitted exactly as in the previous examples by using the `bru` function with the components and likelihood objects.
+
+```{r}
+#| collapse: true
+#| code-summary: "Fit a LMM in inlabru"
+fit = bru(cmp, lik)
+summary(fit)
+```
+
+### Model predictions
+
+To compute model predictions we can create a `data.frame` containing a range of values of covariate where we want the response to be predicted for each group. Then we simply call the predict function while spe
+
+```{r}
+#| code-fold: true
+#| code-summary: "LMM fitted values"
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+
+# New data
+xpred = seq(range(x)[1], range(x)[2], length.out = 100)
+j = 1:n.groups
+pred_data = expand.grid(x = xpred, j = j)
+pred = predict(fit, pred_data, formula = ~ beta_0 + beta_1 + u) 
+
+
+pred %>%
+  ggplot(aes(x=x,y=mean,color=factor(j)))+
+  geom_line()+
+  geom_ribbon(aes(x,ymin = q0.025, ymax= q0.975,fill=factor(j)), alpha = 0.5) + 
+  geom_point(data=df,aes(x=x,y=y,colour=factor(j)))+
+  facet_wrap(~j)
+
+```
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+Suppose that we are also interested in including random slopes into our model. Assuming intercept and slopes are independent, can your write down the linear predictor and the components of this model as a LGM?
+
+`r hide("Give me a hint")`
+
+In general, the mixed model predictor can decomposed as:
+
+$$ \pmb{\eta} = X\beta + Z\mathbf{u} $$
+
+Where $X$ is a $n \times p$ design matrix and $\beta$ the corresponding *p*-dimensional vector of fixed effects. Then $Z$ is a $n\times q_J$ design matrix for the $q_J$ random effects and $J$ groups; $\mathbf{v}$ is then a $q_J \times 1$ vector of $q$ random effects for the $J$ groups. In a latent Gaussian model (LGM) formulation this can be written as:
+
+$$ \eta_i = \beta_0 + \sum\beta_j x_{ij} + \sum_k f(k) (u_{ij}) $$
+
+`r unhide()`
+
+`r hide("See Solution")`
+
+-   The linear predictor is given by
+
+    $$
+    \eta_i = \beta_0 + \beta_1x_i + u_{0j} + u_{1j}x_i
+    $$
+
+-   Latent field defined by:
+
+    -   $\beta \sim \mathcal{N}(0,\tau_\beta^{-1})$
+
+    -   $\mathbf{u}_j = \begin{bmatrix}u_{0j} \\ u_{1j}\end{bmatrix}, \mathbf{u}_j \sim \mathcal{N}(\mathbf{0},\mathbf{Q}_u^{-1})$ where the precision matrix is a block-diagonal matrix with entries $\mathbf{Q}_u= \begin{bmatrix}\tau_{u_0} & {0} \\{0} & \tau_{u_1}\end{bmatrix}$
+
+-   The hyperparameters are then:
+
+    -   $\tau_{u_0},\tau_{u_1} \text{and}~\tau_\epsilon$
+
+To fit this model in `inlabru` we can simply modify the model components as follows:
+
+```{r}
+#| eval: false
+#| purl: false
+
+cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear") +
+  u0(j, model = "iid") + u1(j,x, model = "iid")
+```
+
+`r unhide()`
+:::

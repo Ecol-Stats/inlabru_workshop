@@ -673,8 +673,8 @@ This is a new option for cross-validation in `inlabru` . . .
 
 . . .
 
--   One possible solution is to then remove "chunck" of data (for
-    example one stations and all it's nearest neghbours)
+-   One possible solution is to then remove "chunck(s)" of data (for
+    example one station and all its nearest neighbours)
 -   This is the solution implemented in the `inla.group.cv()`
     function[^4]
 
@@ -697,7 +697,7 @@ models:
 . . .
 
 This makes model evaluation especially challenging. Especially
-cross-validation based measures are hard to define....why?
+cross-validation based measures are hard to define... why?
 
 ## Cross validation for point processes
 
@@ -773,8 +773,7 @@ p1 + geom_polygon(data = b1, aes(x,y), fill = "white")
 > Do not use WAIC and DIC as computed *today* by `inlabru` to compare
 > LGCP models
 
--   WAIC is linked to leave-one-out crossvalidation therefore it is ill
-    defined for point processes
+-   WAIC is linked to leave-one-out crossvalidation therefore it is ill-defined for point processes
 -   DIC is ok "in theory" but not the way it is computed today
 
 . . .
@@ -795,7 +794,7 @@ These residuals can be used to evaluate the model.
 . . .
 
 This is still work in progress and at the moment non easily
-available...but it will be :grinning:
+available... but it will be :grinning:
 
 [Here](https://inlabru-org.github.io/inlabru/articles/2d_lgcp_residuals_sf.html)
 you can see some examples of computation and use.
@@ -809,4 +808,4 @@ you can see some examples of computation and use.
     characteristics you are interested in.
 -   `inlabru` provides some easy to compute alternatives
 -   LGCP require own tools to validate the model
-    -   work is ongoing here..stay tuned :grinning:
+    -   work is ongoing here... stay tuned :grinning:
