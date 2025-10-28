@@ -41,8 +41,5 @@ we are going to learn:
 ```{r child="practicals/spatial_data_types_geostats.qmd"}
 ```
 
-
 ```{r child="practicals/spatial_data_types_points.qmd"}
 ```
-
-

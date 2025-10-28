@@ -1,4 +1,4 @@
-## ----child="practicals\\Areal_ex.qmd"-----------------------------------------
+## ----child="practicals/Areal_ex.qmd"------------------------------------------
 
 ## -----------------------------------------------------------------------------
 #| echo: false
@@ -154,7 +154,7 @@ pred_counts = data.frame(observed = resp_cases$observed,
 
 
 
-## ----child="practicals\\Geostat_ex.qmd"---------------------------------------
+## ----child="practicals/Geostat_ex.qmd"----------------------------------------
 
 ## -----------------------------------------------------------------------------
 #| echo: false
@@ -400,7 +400,7 @@ fit3$summary.random$covariate %>% ggplot() + geom_line(aes(ID,mean)) +
 
 
 
-## ----child="practicals\\PointProcess_ex.qmd"----------------------------------
+## ----child="practicals/PointProcess_ex.qmd"-----------------------------------
 
 ## -----------------------------------------------------------------------------
 #| echo: false
