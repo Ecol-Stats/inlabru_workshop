@@ -263,7 +263,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, colback={codebgcolor}, boxrule=0pt, enhanced, sharp corners, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, enhanced, sharp corners, frame hidden, breakable, colback={codebgcolor}]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -271,7 +271,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Spatial and space-time models for whale surveys with complex and non-systematic designs},
+  pdftitle={Spatial models for whale surveys with complex and non-systematic designs},
   pdfauthor={Jafet Belmont, Sara Martino and Janine Illian},
   colorlinks=true,
   linkcolor={highlight},
@@ -281,8 +281,8 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{Spatial and space-time models for whale surveys with complex and
-non-systematic designs}
+\title{Spatial models for whale surveys with complex and non-systematic
+designs}
 \usepackage{etoolbox}
 \makeatletter
 \providecommand{\subtitle}[1]{% add subtitle to \maketitle

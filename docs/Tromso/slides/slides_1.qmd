@@ -637,10 +637,18 @@ Then, the thinning probability becomes $\pi(d)\times p(d)$, assuming the points 
 This updates our thinning intensity to
 
 $$
-\log \tilde{\lambda}(s) = \underbrace{\mathbf{x}'\beta + \xi(s)}_{\log \lambda(s)} + \log p(d) + \log (1/W)
+\log \tilde{\lambda}(s) = \underbrace{\mathbf{x}'\beta + \xi(s)}_{\log \lambda(s)} + \log p(d) + \log \times(2/2W)
 $$
 
 -   Typically $p(d)$ is a non-linear function, that is where `inlabru` can help via a **Fixed point iteration scheme** (further details available in this [vignette](https://cran.r-project.org/web/packages/inlabru/vignettes/method.html))
+
+:::{.notes}
+
+$$
+\mathbb{E}[N_{\text{det}}] = 2W \lambda(s) \times \frac{1}{W} \int_0^W p(r)  dr = 2\lambda(s) \int_0^W p(r)  dr
+$$
+
+:::
 
 # Example
 
@@ -876,7 +884,7 @@ hn <- function(distance, sigma) {
 $$
 \begin{aligned}
 p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) p(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) p(\mathbf{s}_i)) \\
-\eta(s) &  = \color{#FF6B6B}{\boxed{\beta_0}} + \color{#FF6B6B}{\boxed{ \omega(s)}} + \color{#FF6B6B}{\boxed{ \log p(s)}} + \color{#FF6B6B}{\boxed{ \log (1/W)}}\\
+\eta(s) &  = \color{#FF6B6B}{\boxed{\beta_0}} + \color{#FF6B6B}{\boxed{ \omega(s)}} + \color{#FF6B6B}{\boxed{ \log p(s)}} \\
 \end{aligned}
 $$
 
@@ -957,7 +965,7 @@ The `marginal` argument in the sigma component specifies the transformation func
 $$
 \begin{aligned}
 p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) p(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) p(\mathbf{s}_i)) \\
-\color{#FF6B6B}{\boxed{\eta(s)}} &  = \color{#FF6B6B}{\boxed{\beta_0 +  \omega(s) +  \log p(s) + \log (1/W)}}\\
+\color{#FF6B6B}{\boxed{\eta(s)}} &  = \color{#FF6B6B}{\boxed{\beta_0 +  \omega(s) +  \log p(s)}}\\
 \end{aligned}
 $$
 
@@ -1033,7 +1041,7 @@ we need an offset due to the unknown direction of the detections
 $$
 \begin{aligned}
 \color{#FF6B6B}{\boxed{p(\mathbf{y} | \lambda)}} & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) p(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) p(\mathbf{s}_i)) \\
-\eta(s) &  = \beta_0 +  \omega(s) +  \log p(s) + \log (1/W)\\
+\eta(s) &  = \beta_0 +  \omega(s) +  \log p(s) \\
 \end{aligned}
 $$
 
@@ -1105,7 +1113,7 @@ ggplot()  + geom_sf(data = ips, aes(color = weight),size=0.5) +
 $$
 \begin{aligned}
 \color{#FF6B6B}{\boxed{p(\mathbf{y} | \lambda)}} & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) p(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) p(\mathbf{s}_i)) \\
-\eta(s) &  = \beta_0 +  \omega(s) +  \log p(s) + \log (1/W)\\
+\eta(s) &  = \beta_0 +  \omega(s) +  \log p(s) \\
 \end{aligned}
 $$
 

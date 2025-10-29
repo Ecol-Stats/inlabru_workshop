@@ -1,5 +1,5 @@
 ---
-title: "Spatial and space-time models for whale surveys with complex and non-systematic designs"
+title: "Spatial models for whale surveys with complex and non-systematic designs"
 author: "Jafet Belmont, Sara Martino and Janine Illian"
 subtitle: "FRAM – High North Research Centre for Climate and the Environment,Tromsø, Nov. 13 – 15, 2025"
 format: 

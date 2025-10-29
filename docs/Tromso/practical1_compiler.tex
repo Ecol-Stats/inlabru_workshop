@@ -286,7 +286,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, sharp corners, breakable, boxrule=0pt, frame hidden, colback={codebgcolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, colback={codebgcolor}, frame hidden, sharp corners, enhanced, boxrule=0pt]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -318,7 +318,7 @@
 In this first practical we are going to learn how fit a distance
 sampling model using \texttt{inlabru}
 
-\subsection{Distance Sampling}\label{distance-sampling}
+\section{Distance Sampling}\label{distance-sampling}
 
 In this practical we will:
 
@@ -348,7 +348,7 @@ Libraries to load:
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{The data}\label{the-data}
+\subsection{The data}\label{the-data}
 
 In the next exercise, we will explore data from a combination of several
 NOAA shipboard surveys conducted on pan-tropical spotted dolphins in the
@@ -381,12 +381,12 @@ We can load and visualize the data as follows:
 \end{Shaded}
 
 \begin{verbatim}
-file:///C:/Users/admin/AppData/Local/Temp/Rtmp8UFbUc/filee6f45f2354ca/widgete6f49f012de.html screenshot completed
+file:///C:/Users/admin/AppData/Local/Temp/RtmpiuZlr6/filed7e46c917968/widgetd7e41cc54d5.html screenshot completed
 \end{verbatim}
 
 \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-4-1.pdf}}
 
-\subsubsection{The workflow}\label{the-workflow}
+\subsection{The workflow}\label{the-workflow}
 
 To model the density of spotted dolphins we take a thinned point process
 model of the form:
@@ -414,9 +414,7 @@ tasks:
   Run the model using the \texttt{bru()} function
 \end{enumerate}
 
-\subsubsection{1. Building the mesh}\label{building-the-mesh}
-
-\subsection{The mesh}\label{the-mesh}
+\subsubsection{Building the mesh}\label{building-the-mesh}
 
 The first task is to build the mesh that covers the area of interest.
 For this purpose we use the function \texttt{fm\_mesh\_2d}. To do so, we
@@ -462,7 +460,7 @@ maximum triangle edge lengths, \texttt{offset} for inner and outer
 extensions (to prevent edge effects), and cutoff to avoid overly small
 triangles in clustered areas.
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, breakable, opacityback=0, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, opacitybacktitle=0.6, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, left=2mm, colback=white, arc=.35mm, colframe=quarto-callout-note-color-frame, rightrule=.15mm, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, breakable, rightrule=.15mm, left=2mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toptitle=1mm, opacityback=0, coltitle=black, bottomtitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, toprule=.15mm, colframe=quarto-callout-note-color-frame, bottomrule=.15mm, arc=.35mm]
 
 \textbf{General guidelines for creating the mesh}
 
@@ -489,7 +487,7 @@ triangles in clustered areas.
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, breakable, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, opacitybacktitle=0.6, title={Task}, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, left=2mm, colback=white, arc=.35mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, breakable, rightrule=.15mm, left=2mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toptitle=1mm, opacityback=0, coltitle=black, bottomtitle=1mm, titlerule=0mm, title={Task}, toprule=.15mm, colframe=quarto-callout-warning-color-frame, bottomrule=.15mm, arc=.35mm]
 
 Look at the documentation for the \texttt{fm\_mesh\_2d} function typing
 
@@ -520,7 +518,7 @@ The \emph{rule of thumb} is that your mesh should be:
 
 \end{tcolorbox}
 
-\subsubsection{2. Define the SPDE representation of the spatial
+\subsubsection{Define the SPDE representation of the spatial
 GF}\label{define-the-spde-representation-of-the-spatial-gf}
 
 To define the SPDE representation of the spatial GF we use the function
@@ -545,7 +543,7 @@ reasonable that
 P(\sigma>\sigma_0)=p_{\sigma}
 \]
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, breakable, opacityback=0, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, opacitybacktitle=0.6, title={Question}, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, left=2mm, colback=white, arc=.35mm, colframe=quarto-callout-tip-color-frame, rightrule=.15mm, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-tip-color!10!white, breakable, rightrule=.15mm, left=2mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toptitle=1mm, opacityback=0, coltitle=black, bottomtitle=1mm, titlerule=0mm, title={Question}, toprule=.15mm, colframe=quarto-callout-tip-color-frame, bottomrule=.15mm, arc=.35mm]
 
 Take a look at the code below and select which of the following
 statements about the specified Matern PC priors are true.
@@ -600,7 +598,7 @@ statements about the specified Matern PC priors are true.
 
 \end{tcolorbox}
 
-\subsubsection{3. Define the components of the linear
+\subsubsection{Define the components of the linear
 predictor}\label{define-the-components-of-the-linear-predictor}
 
 We have now defined a mesh and a SPDE representation of the spatial GF.
@@ -634,7 +632,7 @@ function parameter \texttt{sigma}.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, breakable, opacityback=0, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, opacitybacktitle=0.6, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, left=2mm, colback=white, arc=.35mm, colframe=quarto-callout-note-color-frame, rightrule=.15mm, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, breakable, rightrule=.15mm, left=2mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toptitle=1mm, opacityback=0, coltitle=black, bottomtitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, toprule=.15mm, colframe=quarto-callout-note-color-frame, bottomrule=.15mm, arc=.35mm]
 
 To control the prior distribution for the \texttt{sigma} parameter, we
 use a transformation mapper that converts a latent variable into an
@@ -649,7 +647,8 @@ the transformation function taking N(0,1) to Exponential(1/8).
 
 The formula, which describes how these components are combined to form
 the linear predictor
-\(\log \color{red}{\tilde{\lambda}(s)} = \overbrace{\log \lambda (s)}^{\beta_0 + \xi(s)} + \overbrace{\log \color{red}{g(d(s))}}^{-0.5~d(\mathbf{s})^2\sigma^{-2}}\):
+
+\[\log \color{red}{\tilde{\lambda}(s)} = \overbrace{\log \lambda (s)}^{\beta_0 + \xi(s)} + \overbrace{\log \color{red}{g(d(s))}}^{-0.5~d(\mathbf{s})^2\sigma^{-2}}\]
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -662,7 +661,7 @@ the linear predictor
 Here, the \texttt{log(2)} offset in the predictor takes care of the
 two-sided detections
 
-\subsubsection{4. Define the observation
+\subsubsection{Define the observation
 model}\label{define-the-observation-model}
 
 \texttt{inlabru} has support for latent Gaussian Cox processes through
@@ -718,7 +717,7 @@ model
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, breakable, opacityback=0, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, opacitybacktitle=0.6, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, left=2mm, colback=white, arc=.35mm, colframe=quarto-callout-note-color-frame, rightrule=.15mm, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, breakable, rightrule=.15mm, left=2mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toptitle=1mm, opacityback=0, coltitle=black, bottomtitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, toprule=.15mm, colframe=quarto-callout-note-color-frame, bottomrule=.15mm, arc=.35mm]
 
 \texttt{inlabru} supports a shortcut for defining the integration points
 using the \texttt{domain} and \texttt{samplers} argument of
@@ -743,9 +742,9 @@ same model as above is:
 
 \end{tcolorbox}
 
-\subsubsection{Visualize model Results}\label{visualize-model-results}
+\subsection{Visualize model Results}\label{visualize-model-results}
 
-\textbf{Posterior summaries}
+\subsubsection{Posterior summaries}\label{posterior-summaries}
 
 We can use the \texttt{fit\$summary.fixed} and \texttt{summary.hyperpar}
 to obtain posterior summaries of the model parameters.
@@ -758,7 +757,7 @@ to obtain posterior summaries of the model parameters.
 \midrule\addlinespace[2.5pt]
 sigma & -0.05 & -0.46 & 0.36 \\ 
 Intercept & -8.16 & -9.29 & -7.34 \\ 
-Range for space & 295.48 & 110.54 & 673.69 \\ 
+Range for space & 295.48 & 110.54 & 673.68 \\ 
 Stdev for space & 0.81 & 0.42 & 1.39 \\ 
 \bottomrule
 \end{tabular*}
@@ -775,7 +774,7 @@ Look at the SPDE parameter posteriors as follows:
 
 \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-18-1.pdf}}
 
-\textbf{Model predictions}
+\subsubsection{Model predictions}\label{model-predictions}
 
 We now want to extract the estimated posterior mean and sd of spatial
 GF. To do this we first need to define a grid of points where we want to
@@ -820,7 +819,7 @@ Finally, we can plot the maps of the spatial effect
 how the posterior sd is inflated around the border, this is the ``border
 effect'' due to the SPDE representation.
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, breakable, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, opacitybacktitle=0.6, title={Task}, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, left=2mm, colback=white, arc=.35mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, breakable, rightrule=.15mm, left=2mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toptitle=1mm, opacityback=0, coltitle=black, bottomtitle=1mm, titlerule=0mm, title={Task}, toprule=.15mm, colframe=quarto-callout-warning-color-frame, bottomrule=.15mm, arc=.35mm]
 
 Using the predictions stored in \texttt{pr.int}, produce a map of the
 posterior mean intensity.
@@ -861,7 +860,9 @@ components that can't be evaluated using the given input data.
 
 \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-23-1.pdf}}
 
-The mean expected number of points can be computed by integrating the
+\subsection{Abundance estimates}\label{abundance-estimates}
+
+The mean expected number of animals can be computed by integrating the
 intensity over the region of interest as follows:
 
 \begin{Shaded}
@@ -874,9 +875,9 @@ intensity over the region of interest as follows:
 
 \begin{verbatim}
      mean       sd   q0.025     q0.5   q0.975   median sd.mc_std_err
-1 247.211 55.10701 155.8758 238.0621 365.6821 238.0621      3.650957
+1 243.357 56.35572 148.8287 232.3588 372.8418 232.3588      3.976313
   mean.mc_std_err
-1        6.240893
+1        6.430835
 \end{verbatim}
 
 To fully propagate the uncertainty on the expected number animals we can
@@ -937,7 +938,7 @@ Then, we can visualize the result as follows:
 
 \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-27-1.pdf}}
 
-\subsubsection{Model checks}\label{model-checks}
+\subsection{Model checks}\label{model-checks}
 
 Lastly, we can assess the goodness-of-fit of the models by comparing the
 observed counts across different distance bins and the expected counts
@@ -957,7 +958,7 @@ and their associated uncertainty:
 
 \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-28-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, breakable, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, opacitybacktitle=0.6, title={Task}, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, left=2mm, colback=white, arc=.35mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, bottomrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, breakable, rightrule=.15mm, left=2mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toptitle=1mm, opacityback=0, coltitle=black, bottomtitle=1mm, titlerule=0mm, title={Task}, toprule=.15mm, colframe=quarto-callout-warning-color-frame, bottomrule=.15mm, arc=.35mm]
 
 Fit a model using a hazard detection function instead and compare the
 GoF of this model with that from the half-normal detection model. Recall

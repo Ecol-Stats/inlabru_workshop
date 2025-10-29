@@ -144,6 +144,7 @@ Look at the documentation for the `fm_mesh_2d` function typing
 
 ```{r}
 #| eval: false
+#| purl: false
 
 ?fm_mesh_2d
 ```
@@ -187,6 +188,7 @@ spde_model <- inla.spde2.pcmatern(mexdolphin$mesh,
 
 ```{r}
 #| echo: false
+#| purl: false
 opts_p <- c(
    "there is probability of 0.01 that the spatial range is greater or equal than 50",
    answer = "the probability that the spatial range is smaller than 50 is very small",
