@@ -845,6 +845,9 @@ We start by plotting the distances and histogram of frequencies in distance inte
 
 ```{r}
 #| echo: false
+#| fig-align: center
+#| fig-height: 4
+#| fig-width: 6
 W <- 8
 ggplot(mexdolphin$points) +
   geom_histogram(aes(x = distance),
@@ -1246,7 +1249,7 @@ fit = bru(cmp, lik)
 
 ::::: columns
 ::: {.column width="40%"}
-We can use the `fit$summary.fixed` and `summary.hyperpar` to obtain psoterior summarie sof the mdoel parameters.
+We can use the `fit$summary.fixed` and `summary.hyperpar` to obtain posterior summaries of the model parameters.
 
 ```{r}
 #| echo: false
@@ -1339,8 +1342,11 @@ Lambda
 
 We can also get Monte Carlo samples for the expected number of dolphins as follows:
 
+
+:::: {.columns}
+
+::: {.column width="60%"}
 ```{r}
-#| output-location: column
 Ns <- seq(50, 450, by = 1)
 
 Nest <- predict(fit, predpts,
@@ -1363,6 +1369,13 @@ Nest <- dplyr::bind_rows(
     Method = "Plugin"
   )
 )
+```
+:::
+
+::: {.column width="40%"}
+
+```{r}
+#| echo: false
 ggplot(data = Nest) +
   geom_line(aes(x = N, y = mean, colour = Method)) +
   geom_ribbon(
@@ -1378,5 +1391,94 @@ ggplot(data = Nest) +
   ylab("Probability mass function")
 
 ```
+:::
 
-# Model comparisson
+::::
+
+
+
+# Model comparison
+
+## Fitting a Model with a hazard detection function
+
+:::: {.columns}
+
+::: {.column width="40%"}
+```{r}
+hr <- function(distance, sigma) {
+  1 - exp(-(distance / sigma)^-1)
+}
+eta_2 <- geometry + distance ~ space +
+  log(hr(distance, sigma)) +
+  Intercept + log(2)
+
+lik_2 = bru_obs("cp",
+              formula = eta_2,
+              data = mexdolphin$points,
+              ips = ips)
+
+# fit the model
+fit_hazard = bru(cmp, lik_2)
+
+```
+:::
+
+::: {.column width="60%"}
+
+```{r}
+pr.int1 <- predict(fit_hazard, pxl, ~ data.frame(spatial = space,
+                                      loglambda = Intercept + space,
+                                      lambda = exp(Intercept + space)))
+distdf <- data.frame(distance = seq(0, 8, length.out = 100))
+dfun1 <- predict(fit_hazard, distdf, ~ hr(distance, sigma))
+
+ggplot() +
+  gg(pr.int1$loglambda, geom = "tile") +
+  scale_fill_scico(palette="imola",name=expression(log(lambda)))+
+  plot(dfun1)+plot_layout(ncol=1)
+
+```
+
+:::
+
+::::
+
+
+
+## Model comparison with GoF
+
+Look at the goodness-of-fit of the two models in the distance dimension
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r}
+bc <- bincount(
+  result = fit,
+  observations = mexdolphin$points$distance,
+  breaks = seq(0, max(mexdolphin$points$distance), length.out = 9),
+  predictor = distance ~ hn(distance, sigma)
+)
+attributes(bc)$ggp
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+bc1 <- bincount(
+  result = fit_hazard,
+  observations = mexdolphin$points$distance,
+  breaks = seq(0, max(mexdolphin$points$distance), length.out = 9),
+  predictor = distance ~ hn(distance, sigma)
+)
+attributes(bc1)$ggp
+```
+:::
+
+::::
+
+
+::: {.notes}
+Compared the observed binned counts against expected number of detections within a given distance
+:::
+

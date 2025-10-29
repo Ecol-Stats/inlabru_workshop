@@ -263,7 +263,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, boxrule=0pt, sharp corners, colback={codebgcolor}, breakable, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, colback={codebgcolor}, boxrule=0pt, enhanced, sharp corners, breakable]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -350,6 +350,18 @@ workshop:
 \item
   Install the following libraries:
 \end{enumerate}
+
+\begin{verbatim}
+install.packages(c(
+  "dplyr",
+  "ggplot2",
+  "gt",
+  "mapview",
+  "patchwork",
+  "scico",
+  "sf"
+))
+\end{verbatim}
 
 
 
