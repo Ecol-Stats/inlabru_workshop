@@ -1,5 +1,5 @@
 ---
-title: "Practical 6"
+title: "Practical - Geostatistics"
 execute: 
   warning: false
   message: false
