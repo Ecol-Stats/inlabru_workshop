@@ -284,7 +284,7 @@ geom_line(data = dens_prior_range(.1,.5), aes(x,y, color = "model3"))
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
-Consider the `pcod_sf`, the spatial extension and type of the data...is some of the previous choices more resonable than other?
+Consider the `pcod_sf`, the spatial extension and type of the data...is some of the previous choices more reasonable than other?
 
 **NOTE** Remember that a prior should be reasonable..but the model should not totally depend on it.
 :::
