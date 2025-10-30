@@ -29,7 +29,7 @@ library(webexercises)
 
 ```
 
-## Log-Gaussian Cox Processes {#sec-linmodel}
+# Log-Gaussian Cox Processes {#sec-linmodel}
 
 In this practical we will:
 
@@ -59,6 +59,8 @@ library(tidyterra)
 ```
 
 ------------------------------------------------------------------------
+
+## The data 
 
 In this practical we consider the data `clmfires` in the `spatstat`
 library.
@@ -117,15 +119,12 @@ $$
 
 so the likelihood can be written as:
 
-\$\$
-
+$$
 \begin{aligned}
 p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 & = \exp\left( -\int_{\Omega}\exp(\beta_0)ds\right)\prod_{i=1}^n \lambda(\mathbf{s}_i) \\
-
 \end{aligned}
-
-\$\$
+$$
 
 where $|\Omega|$ is the area of the domain of interest.
 
@@ -164,7 +163,7 @@ fit1 = bru(cmp, lik)
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
-1.  What is the estimated intensity?
+1.  Plot the estimated posterior distribution of the intensity
 2.  Compare the estimated expected number of fires on the whole domain
     with the observed ones.
 
@@ -199,7 +198,7 @@ post_int %>% ggplot() + geom_line(aes(x,y)) +
 ```
 :::
 
-# Inhomogeneous Poisson Process {#NHPP}
+## Fit an Inhomogeneous Poisson Process {#NHPP}
 
 The model above has the clear disadvantages that assumes a constant
 intensity and from Figure @fig-points we clearly see that this is not
@@ -226,12 +225,16 @@ Our model is $$
 \log\lambda(s) = \beta_0 + \beta_1x(s)
 $$ where $x(s)$ is the altitude at location $s$.
 
-The likelihood becomes: $$
+The likelihood becomes: 
+
+$$
 \begin{aligned}
 p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 & = \exp \left( -\int_\Omega \exp(\beta_0 + \beta_1x(s)) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 \end{aligned}
-$$ Now we need to choose an integration scheme to solve the integral.
+$$ 
+
+Now we need to choose an integration scheme to solve the integral.
 
 In this case we will take a simple grid based approach where each
 quadrature location has an equal weight. Our grid consists of
@@ -279,8 +282,6 @@ You can look at the summary for the fixed effects
 `r unhide()`
 
 ```{r}
-#| fig-width: 6
-#| fig-height: 4
 #| fig-align: center
 #| webex.hide: "Click here to see the solution"
 #| code-fold: show
@@ -290,12 +291,15 @@ fit2$summary.fixed
 ```
 :::
 
+
+::: {.callout-warning}
 ⚠️ **WARNING!!**⚠️ When fitting a Point process, the integration scheme
 has to be fine enough to capture the spatial variability of the
 covariate!!
+:::
+
 
 ::: {.callout-warning icon="false"}
-
 ## {{< bi pencil-square color=#c8793c >}} Task
 
 Rerun the model with the altitude as covariate, but this time change the integration scheme as follows:
@@ -313,7 +317,7 @@ ips2$weight = st_area(region) / n.int2
 What happens to the effect of the covariate?
 
 `r hide("Take hint")`
-Re-run the model chaging the integration scheme in the _ips_ input of the _bru_obs()_ function.
+Re-run the model changing the integration scheme in the _ips_ input of the _bru_obs()_ function.
 
 `r unhide()`
 
@@ -333,8 +337,8 @@ lik_bis = bru_obs(data = pp,
 fit2bis = bru(cmp, lik_bis)
 
 # you can the check the differences between the two models
-# fit2$sumary.fixed
-# fit2bis$sumary.fixed
+fit2$sumary.fixed
+fit2bis$sumary.fixed
 
 ```
 
@@ -370,7 +374,10 @@ preds2 = predict(fit2, est_grid, ~ data.frame(log_scale = Intercept + elev,
 
                                               lin_scale = exp(Intercept + elev)))
 # then visualize it like
-#preds2$log_scale %>% ggplot() + geom_sf(aes(color = mean)) + scale_color_scico()
+preds2$log_scale %>% 
+  ggplot() +
+  geom_sf(aes(color = mean)) +
+  scale_color_scico()
 
 ```
 
@@ -403,18 +410,20 @@ ggplot(data = data.frame(N = as.vector(N_fires))) +
 
 ```
 
-# Log-Gaussian Cox Process{#LGCP}
+## Fit a Log-Gaussian Cox Process{#LGCP}
 
 Finally we want to fit a LGCP with log intensity:
 
 $$
 \log(s) = \beta_0 + \beta_1x + u(s)
 $$
+
 where $\beta_0$ is the intercept, $\beta_1$ the effect of (standarized) altitude $x(s)$ as before and $u(s)$ is a Gaussian Random field defined through the SPDE approach.
 
-## Define the mesh
+### Define the mesh
 
 The first step, as any time we use the SPDE approach is to defie the mesh and the priors for the marginal variance and range:
+
 ```{r}
 mesh = fm_mesh_2d(boundary = region,
                   max.edge = c(5, 10),
@@ -439,7 +448,7 @@ ggplot() + geom_sf(data = ips, aes(color = weight)) +
 ```
 
 
-## Run the model
+### Run the model
 
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
@@ -503,10 +512,29 @@ fit3 = bru(cmp, lik)
 ```
 
 
-It means that the _bru()_ function cannot find the covariate values for some of the mesh nodes. This is  a common situation. As the warning says, the _bru()_ function automatically imputes the value of the covarite using the nearest nodes. This increases the running time of the _bru()_  function, so one solution is to impute the values of the covariate over the whole mesh 'before' running the _bru()_  function. This can be done using the code below:
+It means that the _bru()_ function cannot find the covariate values for some of the mesh nodes. This is  a common situation. As the warning says, the _bru()_ function automatically imputes the value of the covarite using the nearest nodes. This increases the running time of the _bru()_  function, so one solution is to impute the values of the covariate over the whole mesh 'before' running the _bru()_  function. 
+
+Here, we notice that there is a single point for which elevation values are missing (see @fig-points2 the red point that lies outside the raster extension ).
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-width: 4.5
+#| fig-height: 4.5
+#| label: fig-points2
+#| fig-cap: "Integration scheme for numerical approximation of the stochastic integral in La Mancha Region"
+#| purl: false
+ggplot()+tidyterra::geom_spatraster(data=elev_raster)+
+  geom_sf(data=ips,alpha=0.25,col=1)+
+   geom_sf(data=ips[3525,],col=2)
+```
+
+To solve this, we can increase the raster extension so it covers all both data-points and quadrature locations as well. Then, we can use the `bru_fill_missing()` function to input the missing values with the nearest-available-value. We can achieve this using the following code:
 
 
 ```{r}
+#| fig-width: 4.5
+#| fig-height: 4.5
 # Extend raster ext by 30 % of the original raster so it covers the whole mesh
 re <- extend(elev_raster, ext(elev_raster)*1.3)
 # Convert to an sf spatial object
@@ -519,7 +547,9 @@ ggplot() + geom_spatraster(data = elev_rast_p)
 
 ```
 
-**NOTE** The _bru_fill_missing()_ function was added mainly to handle very local infilling on domain boundaries. For properly missing data, one should consider doing a proper model of the spatial field instead.
+::: {.callout-note}
+The _bru_fill_missing()_ function was added mainly to handle very local infilling on domain boundaries. For properly missing data, one should consider doing a proper model of the spatial field instead.
+:::
 
 ## Results
 
@@ -540,6 +570,8 @@ Use the _fm_pixels()_ and _predict()_ functions.
 #| webex.hide: "Click here to see the solution"
 #| code-fold: show
 #| purl: false
+#| message: false
+#| warning: false
 
 
 pxl = fm_pixels(mesh, mask= region, dims = c(200,200))
@@ -547,23 +579,33 @@ preds = predict(fit3, pxl, ~data.frame(spde = space,
                                        log_int = Intercept + space + elev))
 
 #and plot as 
-#library(scico)
-#preds$spde %>% ggplot() + geom_sf(aes(color = mean)) + scale_color_scico() +
-#  ggtitle("spde mean")
-#preds$spde %>% ggplot() + geom_sf(aes(color = sd)) + scale_color_scico() +
-#  ggtitle("spde sd")
+library(scico)
+library(patchwork)
 
-# preds$log_int %>% ggplot() + geom_sf(aes(color = mean)) + scale_color_scico() +
-#  ggtitle("log-int mean")
-# preds$log_int %>% ggplot() + geom_sf(aes(color = sd)) + scale_color_scico() +
-#  ggtitle("log-int sd")
+ggplot(data= preds$spde) + 
+  geom_sf(aes(color = mean)) + 
+  scale_color_scico() +
+ ggtitle("spde mean") +
+ggplot(data=preds$spde ) +
+  geom_sf(aes(color = sd)) +
+  scale_color_scico() +
+ ggtitle("spde sd") +
+
+ggplot(data=preds$log_int) + 
+  geom_sf(aes(color = mean)) + 
+  scale_color_scico() +
+ ggtitle("log-int mean")
+ggplot(data=preds$log_int) + 
+  geom_sf(aes(color = sd)) +
+  scale_color_scico() +
+ ggtitle("log-int sd") +
+  plot_layout(ncol=2)
 
 ```
 :::
 
 
-Instead of just looking at the posterior mean and standard deviation, it can be uselull to look at `simulated fields` from the posterior distribution. This is because the mean field is, by definition, smoother than any realization of the field. So looking at simulation can give us a better idea of how the field might look like. We can do this using the _generate()_ function: 
-
+Instead of just looking at the posterior mean and standard deviation, it can be usefull to look at `simulated fields` from the posterior distribution. This is because the mean field is, by definition, smoother than any realization of the field. So looking at simulation can give us a better idea of how the field might look like. We can do this using the _generate()_ function: 
 
 
 ```{r}
@@ -574,13 +616,15 @@ sim_fields = generate(fit3, pxl, ~data.frame(spde = space,
 cbind(pxl,sapply(sim_fields, function(x) x$spde)) %>%
   pivot_longer(-geometry) %>%
   ggplot() + geom_sf(aes(color = value)) + 
-  facet_wrap(.~name) + scale_color_scico() + ggtitle("simulated spatial fields")
+  facet_wrap(.~name) + scale_color_scico() +
+  ggtitle("simulated spatial fields")
 
 
 cbind(pxl,sapply(sim_fields, function(x) x$log_int)) %>%
   pivot_longer(-geometry) %>%
   ggplot() + geom_sf(aes(color = value)) + 
-  facet_wrap(.~name) + scale_color_scico() + ggtitle("simulated log intensity")
+  facet_wrap(.~name) + scale_color_scico() + 
+  ggtitle("simulated log intensity")
 
 
 ```

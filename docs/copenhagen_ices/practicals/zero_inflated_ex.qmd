@@ -1,0 +1,891 @@
+---
+title: "Practical - Dealing with excess zeros"
+execute: 
+  warning: false
+  message: false
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+number-sections: true
+editor_options: 
+  chunk_output_type: console
+editor: 
+  markdown: 
+    wrap: 72
+# bibliography: zip_zap_models.bib
+---
+
+
+
+```{r}
+#| echo: false
+#| include: false
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = TRUE,
+  dev = "png",
+  dev.args = list(type = "cairo-png"),
+  fig.width = 7,
+  fig.height = 5
+)
+
+# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
+library(webexercises)
+```
+
+
+```{r setup}
+#| eval: true
+#| echo: true
+#| include: true
+#| message: false
+#| warning: false
+#| label: setup
+
+library(dplyr)
+library(ggplot2)
+library(inlabru)
+library(INLA)
+library(terra)
+library(sf)
+library(scico)
+library(magrittr)
+library(patchwork)
+library(tidyterra)
+
+
+# We want to obtain CPO data from the estimations
+bru_options_set(control.compute = list(dic = TRUE,
+                                       waic = TRUE,
+                                       mlik = TRUE,
+                                       cpo = TRUE))
+```
+
+In this practical we are going to work with data with excess zeros. We will
+
+- [Create  count data from a `gorillas` dataset](#sec-prep) 
+
+- Fit a [zero inflated model](#sec-zip)
+
+- Fit a [hurdle model](#sec-zap)
+
+- Fit a [hurdle model using two likelihoods](#sec-two-lik)
+
+- Fit a [hurdle model using two likelihoods and a shared component](#sec-two-lik-share)
+
+
+
+# Data Preparation {#sec-prep}
+
+
+The following example use  the `gorillas` dataset available in the 
+`inlabru` library.  
+
+The data give the locations of Gorilla's nests in an area:
+```{r }
+#| fig-cap: "Location of gorilla nests"
+#| out-width: "80%"
+#| fig-align: 'center'
+#| label: nests_loc
+gorillas_sf <- inlabru::gorillas_sf
+nests <- gorillas_sf$nests
+boundary <- gorillas_sf$boundary
+
+ggplot() + geom_sf(data = nests) +
+  geom_sf(data = boundary, alpha = 0)
+
+```
+
+The dataset also contains covariates in the form or raster data. We consider two of them here:
+```{r}
+gcov = gorillas_sf_gcov()
+elev_cov <- gcov$elevation
+dist_cov <-  gcov$waterdist
+```
+
+```{r}
+#| fig-cap: "Covariates"
+#| out-width: "80%"
+#| fig-align: 'center'
+#| echo: false
+#| 
+theme_map = theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.title.y = element_blank())
+
+p1 = ggplot() + geom_spatraster(data = elev_cov) + ggtitle("Elevation") +
+  scale_fill_scico(direction = -1) + geom_sf(data = boundary, alpha = 0) + theme_map
+p2 = ggplot() + geom_spatraster(data = dist_cov) + ggtitle("Distance to water") +
+  scale_fill_scico(direction = -1) + geom_sf(data = boundary, alpha = 0) +
+  theme_map
+  
+p1 + p2
+```
+
+**Note:** the covariates have been expanded to cover all the nodes in the mesh.
+
+---
+
+To obtain the count data, we rasterize the species counts to match the spatial resolution of the covariates available. Then we aggregate the pixels to a rougher resolution (5x5 pixels in the original covariate raster dimensions). Finally, we mask regions outside the study area.
+
+In addition we compute the area of each grid cell.
+
+```{r}
+#| fig-cap: "Counts of gorilla nests"
+#| out-width: "80%"
+#| fig-align: 'center'
+#| 
+# Rasterize data
+counts_rstr <-
+  terra::rasterize(vect(nests), gcov, fun = sum, background = 0) %>%
+  terra::aggregate(fact = 5, fun = sum) %>%
+  mask(vect(sf::st_geometry(boundary)))
+plot(counts_rstr)
+# compute cell area
+counts_rstr <- counts_rstr %>%
+  cellSize(unit = "km") %>%
+  c(counts_rstr)
+```
+
+To create our dataset of counts, we extract also the coordinate of center point of each raster pixel. In addition we create a column with presences and one with the pixel area
+
+
+```{r}
+#| echo: true
+counts_df <- crds(counts_rstr, df = TRUE, na.rm = TRUE) %>%
+  bind_cols(values(counts_rstr, mat = TRUE, na.rm = TRUE)) %>%
+  rename(count = sum) %>%
+  mutate(present = (count > 0) * 1L) %>%
+  st_as_sf(coords = c("x", "y"), crs = st_crs(nests))
+```
+
+We then aggregate the covariates to the same resolution  as the nest counts and scale them. 
+
+```{r}
+elev_cov1 <- elev_cov %>% 
+  terra::aggregate(fact = 5, fun = mean) %>% scale()
+dist_cov1 <- dist_cov %>% 
+  terra::aggregate(fact = 5, fun = mean) %>% scale()
+```
+
+
+
+
+```{r}
+#| label: fig-covariate-raster
+#| fig-cap: "Covariates "
+#| out-width: "80%"
+#| fig-align: 'center'
+#| echo: false
+
+p1 = ggplot() + geom_spatraster(data = elev_cov1) + ggtitle("Elevation") +
+  scale_fill_scico(direction = -1) + geom_sf(data = boundary, alpha = 0) + theme_map
+p2 = ggplot() + geom_spatraster(data = dist_cov1) + ggtitle("Distance to water") +
+  scale_fill_scico(direction = -1) + geom_sf(data = boundary, alpha = 0) +
+  theme_map
+  
+p1 + p2
+
+```
+
+# Mesh building
+
+We now define the mesh and the spde object.
+
+```{r}
+
+mesh <- fm_mesh_2d(
+  loc = st_as_sfc(counts_df),
+  max.edge = c(0.5, 1),
+  crs = st_crs(counts_df)
+)
+
+matern <- inla.spde2.pcmatern(mesh,
+  prior.sigma = c(1, 0.01),
+  prior.range = c(5, 0.01)
+)
+```
+
+```{r}
+#| fig-cap: "Mesh over the count locations"
+#| fig-align: 'center'
+#| out-width: "80%"
+#| echo: false
+ggplot() +
+  geom_fm(data = mesh) +
+  geom_sf(
+    data = counts_df[counts_df$count > 0, ],
+    aes(color = count),
+    size = 1,
+    pch = 4
+  ) +
+  theme_minimal() + theme_map
+```
+In our dataset, the number of zeros is quite substantial, and our model may
+struggle to account for them adequately. To address this, we should select a
+model capable of handling an "inflated" number of zeros, exceeding what a
+standard Poisson model would imply. For this purpose, we opt for a
+"zero-inflated Poisson model," commonly abbreviated as ZIP.
+
+
+
+
+# Zero-Inflated model (Type1) {#sec-zip}
+
+We fit now a Zero-Inflated model to our data.  
+
+
+The [Type 1 Zero-inflated Poisson model](https://inla.r-inla-download.org/r-inla.org/doc/likelihood/zeroinflated.pdf) is defined as follows:
+
+$$
+\text{Prob}(y\vert\dots)=\pi\times 1_{y=0}+(1-\pi)\times \text{Poisson}(y)
+$$
+
+Here, $\pi=\text{logit}^{-1}(\theta)$
+
+The expected value and variance for the counts are calculated as:
+
+$$
+\begin{gathered}
+E(count)=(1-\pi)\lambda \\
+Var(count)= (1-\pi)(\lambda+\pi \lambda^2)
+\end{gathered}
+$${#eq-mean-zip}
+
+This model has two parameters:
+
+- The probability of excess zero $\pi$ - This is a _hyperparameter_ and therefore it is constant 
+- The mean of the Poisson distribution $\lambda$. This is linked to the linear predictor as:
+$$
+\eta = E\log(\lambda) = \log(E) + \beta_0 + \beta_1\text{Elevation} + \beta_2\text{Distance } + u
+$$
+where $\log(E)$ is an offset (the area of the pixel) that accounts for the size of the cell.
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Fit a zero-inflated model to the data (`zeroinflatedpoisson1`) by completing the following code:
+```{r}
+#| echo: true
+#| eval: false
+
+cmp = ~ Intercept(1) + elevation(...) + distance(...) + space(...)
+
+lik = bru_obs(...,
+    E = area)
+
+fit_zip <- bru(cmp, lik)
+```
+
+`r hide("Take hint")`
+The `E = area` is an offset that adjusts for the size of each cell.
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+
+cmp = ~ Intercept(1) + elevation(elev_cov1, model = "linear") + distance(dist_cov1, model = "linear") + space(geometry, model = matern)
+
+
+
+lik = bru_obs(formula = count ~ .,
+    family = "zeroinflatedpoisson1", 
+    data = counts_df,
+    E = area)
+
+fit_zip <- bru(cmp, lik)
+```
+:::
+
+Once the model is fitted we can look at the results
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Check what the estimated excess zero probaility is. 
+
+Use the `predict()` function to look at the estimated  $\lambda(s)$ and mean count in  @eq-mean-zip
+
+`r hide("Take hint")`
+
+To get the right name for the hyperparameters to use in the `predict()` function, you can use the function `bru_names()`.
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+# to check the estimated excess zero probability:
+# fit_zip$summary.hyperpar
+
+pred_zip <- predict(
+  fit_zip, 
+  counts_df,
+  ~ {
+    pi <- zero_probability_parameter_for_zero_inflated_poisson_1
+    lambda <- area * exp( distance + elevation + space + Intercept)
+    expect <- (1-pi) * lambda
+    variance <- (1-pi) * (lambda + pi * lambda^2)
+    list(
+      lambda = lambda,
+      expect = expect,
+      variance = variance
+    )
+  },
+  n.samples = 2500
+)
+```
+:::
+
+```{r}
+#| fig-cap: "Estimated $\\lambda$ (left) and expected counts (right) with zero inflated model"
+#| fig-align: 'center'
+#| out-width: "80%"
+#| echo: false
+p1 = ggplot() + gg(pred_zip$lambda, aes(fill = mean), geom="tile") + theme_map + scale_fill_scico(direction = -1) + 
+  ggtitle(expression("Posterior mean of " ~lambda)) + theme(legend.position = "bottom")
+p2 = ggplot() + gg(pred_zip$expect, aes(fill = mean), geom="tile") + theme_map + scale_fill_scico(direction = -1)+ 
+  ggtitle(expression("Posterior mean of Expected counts"))+ theme(legend.position = "bottom")
+p1 + p2
+
+```
+
+# Hurdle model (Type0) {#sec-zap}
+
+We now fit a hurdle model to the same data.
+
+In the `zeroinflatedpoisson0` model is defined by the [following
+observation probability
+model](https://inla.r-inla-download.org/r-inla.org/doc/likelihood/zeroinflated.pdf)
+
+$$
+\text{Prob}(y\vert\dots)=\pi\times 1_{y=0}+(1-\pi)\times \text{Poisson}(y\vert y>0)
+$$
+
+where $\pi$ is the probability of zero.  
+
+The expectation and variance of the counts are  as follows:
+
+$$
+\begin{aligned}
+E(\text{count})&=\frac{1}{1-\exp(-\lambda)}\pi\lambda \\
+Var(\text{count})&=  E(\text{count}) \left(1-\exp(-\lambda) E(\text{count})\right)
+\end{aligned}
+$${#eq-mean-zap}
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Fit  a hurdle model to the data using the `zeroinflatedpoisson0` likelihood
+`r hide("Take hint")`
+
+You do not need to redefine the components as the linear predictor is not changing.
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+lik = bru_obs(formula = count ~ .,
+    family = "zeroinflatedpoisson0", 
+    data = counts_df,
+    E = area)
+
+fit_zap <- bru(cmp, lik)
+
+```
+:::
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+As before, check what the estimated probability of zero is and use `predict()` to obtain a map of the estimated mean counts in @eq-mean-zap over the domain.
+
+`r hide("Take hint")`
+
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+
+pred_zap <- predict( fit_zap, counts_df,
+  ~ {
+    pi <- zero_probability_parameter_for_zero_inflated_poisson_0
+    lambda <- area * exp( distance + elevation + space + Intercept)
+    expect <- ((1-exp(-lambda))^(-1) * pi * lambda)
+    list(
+      lambda = lambda,
+      expect = expect
+    )
+  },
+  n.samples = 2500
+)
+
+
+
+```
+:::
+
+
+```{r}
+#| fig-cap: "Estimated $\\lambda$ (left) and expected counts (right) with hurdle model"
+#| fig-align: 'center'
+#| out-width: "80%"
+#| echo: false
+p1 = ggplot() + gg(pred_zap$lambda, aes(fill = mean), geom="tile") + theme_map + scale_fill_scico(direction = -1) + 
+  ggtitle(expression("Posterior mean of " ~lambda)) + theme(legend.position = "bottom")
+p2 = ggplot() + gg(pred_zap$expect, aes(fill = mean), geom="tile") + theme_map + scale_fill_scico(direction = -1)+ 
+  ggtitle(expression("Posterior mean of Expected counts"))+ theme(legend.position = "bottom")
+p1 + p2
+
+```
+
+
+# Hurdle model using two likelihoods {#sec-two-lik}
+
+Here the model is the same as in @sec-zap, but this time we also want to model $\pi$ using covariates and random effects.
+Therefore we define a second linear predictor
+$$
+\eta^2 =\beta_0^2 + \beta_1^2\text{Elevation} +  \beta_2^2\text{Distance} + u^2 
+$$
+**Note** here we have defined the two linear predictor to use the same covariates, but this is not necessary, they can be totally independent.
+
+To fit this model we have to define two likelihoods:
+  - One will account for the presence\absence process and has a Binomial model
+  - One will account for the counts and has a truncated Poisson model 
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Complete the following code to fit a hurdle model based on two likelihoods:
+
+```{r}
+#| echo: true
+#| eval: false
+
+# define components
+cmp <- ~
+  Intercept_count(1) +
+    elev_count(elev_cov1, model = "linear") +
+    dist_count(dist_cov1, model = "linear") +
+    space_count(geometry, model = matern) +
+    Intercept_presence(1) +
+    elev_presence(elev_cov1, model = "linear") +
+    dist_presence(dist_cov1, model = "linear") +
+    space_presence(geometry, model = matern) 
+
+# positive count model
+pos_count_obs <- bru_obs(formula = ...,
+      family = ...,
+      data = counts_df[counts_df$present > 0, ],
+      E = area)
+  
+# presence model
+presence_obs <- bru_obs(formula ...,
+  family = ...,
+  data = counts_df,
+)
+
+# fit the model
+fit_zap2 <- bru(...)
+```
+
+`r hide("Take hint")`
+
+Add hint details here...
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+cmp <- ~
+  Intercept_count(1) +
+    elev_count(elev_cov1, model = "linear") +
+    dist_count(dist_cov1, model = "linear") +
+    space_count(geometry, model = matern) +
+    Intercept_presence(1) +
+    elev_presence(elev_cov1, model = "linear") +
+    dist_presence(dist_cov1, model = "linear") +
+    space_presence(geometry, model = matern) 
+
+
+pos_count_obs <- bru_obs(formula = count ~ Intercept_count + elev_count + 
+                                   dist_count + space_count,
+      family = "nzpoisson",
+      data = counts_df[counts_df$present > 0, ],
+      E = area)
+  
+
+presence_obs <- bru_obs(formula = present ~ Intercept_presence + elev_presence + dist_presence +
+                          space_presence,
+  family = "binomial",
+  data = counts_df,
+)
+
+fit_zap2 <- bru(
+  cmp,
+  presence_obs,
+  pos_count_obs
+)
+
+```
+:::
+
+# Hurdle model using two likelihoods and a shared component {#sec-two-lik-share}
+
+Note that in the model above, there is no direct link between the parameters of the
+two observation parts, and we could estimate them separately.
+However, the two likelihoods could share some of the components; for example the  `space_count` component could be used for both
+predictors. This would be possible using the  `copy` argument.
+
+We would then need to define one component as `space(geometry, model = matern)` and then a copy of it as `space_copy(geometry, copy = "space", fixed = FALSE)`.
+
+The results from the model in @sec-sec-two-lik show that the  estimated
+covariance parameters for the two fields are very different, so it is probably  not
+sensible to share the same component between the two parts. We do it anyway to show an example:
+
+```{r fig-fit-zap}
+#| eval: true
+#| echo: true
+
+cmp <- ~
+  Intercept_count(1) +
+    elev_count(elev_cov1, model = "linear") +
+    dist_count(dist_cov1, model = "linear") +
+    Intercept_presence(1) +
+    elev_presence(elev_cov1, model = "linear") +
+    dist_presence(dist_cov1, model = "linear") +
+    space(geometry, model = matern) +
+  space_copy(geometry, copy = "space", fixed = FALSE)
+
+
+pos_count_obs <- bru_obs(formula = count ~ Intercept_count + elev_count + dist_count + space,
+      family = "nzpoisson",
+      data = counts_df[counts_df$present > 0, ],
+      E = area)
+
+presence_obs <- bru_obs(formula = present ~ Intercept_presence + elev_presence + dist_presence + space_copy,
+  family = "binomial",
+  data = counts_df)
+
+fit_zap3 <- bru(
+  cmp,
+  presence_obs,
+  pos_count_obs)
+```
+
+
+
+# Comparing models
+
+We have fitted four different models. Now we want to compare them and see how they fit the data.
+
+## Comparing model predictions
+
+We first want to compare the estimated surfaces of expected counts.
+To do this we want to produce the estimated expected counts, similar to what we did in  @sec-zip and @sec-zap for all four models and plot them together:
+
+```{r}
+#| fig-cap: "Estimated expected counts for all four models"
+pred_zip <- predict(
+  fit_zip, 
+  counts_df,
+  ~ {
+    pi <- zero_probability_parameter_for_zero_inflated_poisson_1
+    lambda <- area * exp( distance + elevation + space + Intercept)
+    expect <- (1-pi) * lambda
+    variance <- (1-pi) * (lambda + pi * lambda^2)
+    list(
+      expect = expect
+    )
+  },n.samples = 2500)
+
+pred_zap <- predict( fit_zap, counts_df,
+  ~ {
+    pi <- zero_probability_parameter_for_zero_inflated_poisson_0
+    lambda <- area * exp( distance + elevation + space + Intercept)
+    expect <- ((1-exp(-lambda))^(-1) * pi * lambda)
+    list(
+      expect = expect)
+  },n.samples = 2500)
+
+inv.logit = function(x) (exp(x)/(1+exp(x)))
+
+pred_zap2 <- predict( fit_zap2, counts_df,
+  ~ {
+    pi <- inv.logit(Intercept_presence + elev_presence + dist_presence + space_presence)
+    lambda <- area * exp( dist_count + elev_count + space_count + Intercept_count)
+    expect <- ((1-exp(-lambda))^(-1) * pi * lambda)
+    list(
+      expect = expect)
+  },n.samples = 2500)
+
+pred_zap3 <- predict( fit_zap3, counts_df,
+  ~ {
+    pi <- inv.logit(Intercept_presence + elev_presence + dist_presence + space_copy)
+    lambda <- area * exp( dist_count + elev_count + space + Intercept_count)
+    expect <- ((1-exp(-lambda))^(-1) * pi * lambda)
+    list(
+      expect = expect)
+  },n.samples = 2500)
+
+
+
+
+  data.frame(x = st_coordinates(counts_df)[,1],
+             y = st_coordinates(counts_df)[,2],
+    zip = pred_zip$expect$mean,
+         hurdle = pred_zap$expect$mean,
+         hurdle2 = pred_zap2$expect$mean,
+         hurdle3 = pred_zap3$expect$mean)  %>%
+  pivot_longer(-c(x,y)) %>%
+  ggplot() + geom_tile(aes(x,y, fill = value)) + facet_wrap(.~name) +
+    theme_map + scale_fill_scico(direction = -1)
+
+
+
+
+```
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Create plots of the estimated variance of the counts. 
+
+`r hide("Take hint")`
+
+The fomulas for the variances are in @eq-mean-zip and @eq-mean-zap.
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+pred_zip <- predict(
+  fit_zip, 
+  counts_df,
+  ~ {
+    pi <- zero_probability_parameter_for_zero_inflated_poisson_1
+    lambda <- area * exp( distance + elevation + space + Intercept)
+    variance <- (1-pi) * (lambda + pi * lambda^2)
+    list( variance = variance)
+  },n.samples = 2500)
+
+pred_zap <- predict( fit_zap, counts_df,
+  ~ {
+    pi <- zero_probability_parameter_for_zero_inflated_poisson_0
+    lambda <- area * exp( distance + elevation + space + Intercept)
+    expect <- ((1-exp(-lambda))^(-1) * pi * lambda)
+    variance = expect *(1-exp(-lambda) * expect)
+    list(variance = variance)
+  },
+  n.samples = 2500)
+
+inv.logit = function(x) (exp(x)/(1+exp(x)))
+
+pred_zap2 <- predict( fit_zap2, counts_df,
+  ~ {
+    pi <- inv.logit(Intercept_presence + elev_presence + dist_presence + space_presence)
+    lambda <- area * exp( dist_count + elev_count + space_count + Intercept_count)
+    expect <- ((1-exp(-lambda))^(-1) * pi * lambda)
+    variance = expect *(1-exp(-lambda) * expect)
+    list(variance = variance)
+  },
+  n.samples = 2500)
+
+pred_zap3 <- predict( fit_zap3, counts_df,
+  ~ {
+    pi <- inv.logit(Intercept_presence + elev_presence + dist_presence + space_copy)
+    lambda <- area * exp( dist_count + elev_count + space + Intercept_count)
+    expect <- ((1-exp(-lambda))^(-1) * pi * lambda)
+    variance = expect *(1-exp(-lambda) * expect)
+    list(variance = variance)
+  },
+  n.samples = 2500)
+
+
+
+
+  data.frame(x = st_coordinates(counts_df)[,1],
+             y = st_coordinates(counts_df)[,2],
+    zip = pred_zip$variance$mean,
+         hurdle = pred_zap$variance$mean,
+         hurdle2 = pred_zap2$variance$mean,
+         hurdle3 = pred_zap3$variance$mean)  %>%
+  pivot_longer(-c(x,y)) %>%
+  ggplot() + geom_tile(aes(x,y, fill = value)) + facet_wrap(.~name) +
+    theme_map + scale_fill_scico(direction = -1)
+
+
+  
+```
+:::
+
+
+## Model Comparison
+
+We have set `control.compute=list(cpo = T, waic = T, dic = T, mlik = T)` before running the models, therefore we can compare the scores for the four models:
+```{r}
+
+scores = data.frame(
+  names = c("zip", "hurdle", "hurdle2", "hurdle3"),
+  dic = c(fit_zip$dic$dic, fit_zap$dic$dic, fit_zap2$dic$dic, fit_zap3$dic$dic),
+  waic = c(fit_zip$waic$waic, fit_zap$waic$waic, fit_zap2$waic$waic, fit_zap3$waic$waic),
+  mlik = c(fit_zip$mlik[1], fit_zap$mlik[1], fit_zap2$mlik[1], fit_zap3$mlik[1]))
+
+scores  
+  
+
+```
+
+From the table above we see that, when looking at a balance between complexity and fit, the zero inflated model (`zip`) seems to be the best one.
+
+
+The variance in count predictions can be obtained from the posterior predictions
+of expectations and variances that were previously computed for each grid box.
+Let's denote the count expectation in each grid box as $m_i$, and the count
+variance as $s_i^2$, both conditioned on the model predictor $\eta_i$. Then, the
+posterior predictive variance of the count $X_i$ is given by:
+
+$$
+\begin{aligned}
+V(X_i) &= E(V(X_i|\eta_i)) + V(E(X_i|\eta_i)) \\
+&= E(s_i^2) + V(m_i) .
+\end{aligned}
+$$
+
+This equation provides the posterior predictive variance of the count $X_i$
+based on the expectations and variances of the model predictions $m_i$ and
+$s_i^2$ for each grid box, conditioned on the model predictor $\eta_i$.
+
+Predictive Integral Transform (PIT)
+[@marshall2003ApproximateCrossvalidatoryPredictive;@gelman1996PosteriorPredictiveAssessment;@held2010PosteriorCrossvalidatoryPredictive]
+is calculated as the cumulative distribution function (CDF) of the observed data
+at each predicted value from the model. Mathematically, for each observation
+$y_i$ and its corresponding predicted value $\hat{y}_i$ from the model, the PIT
+is calculated as follows:
+
+$$PIT_i=P(Y_i\leq \hat y_i \vert data)$$
+
+where $Y_i$ is a random variable representing the observed data for the $i$th
+observation.
+
+The PIT measures how well the model's predicted values align with the
+distribution of the observed data. Ideally, if the model's predictions are
+perfect, the PIT values should follow a uniform distribution between 0 and 1.
+Deviations from this uniform distribution may indicate issues with model
+calibration or overfitting. It's often used to assess the reliability of model
+predictions and can be visualized through PIT histograms or quantile-quantile
+(Q-Q) plots.
+
+The Conditional Predictive Ordinate (CPO)
+[@pettit1990ConditionalPredictiveOrdinate] is calculated as the posterior
+probability of the observed data at each observation point, conditional on the
+rest of the data and the model. For each observation $y_i$, it is computed as:
+
+$$CPO_i=P(y_i\vert data \setminus y_i, model)$$
+ 
+where $\setminus$ means "other than", so that $P(y_i | \text{data}\setminus y_i,
+\text{model})$ represents the conditional probability given all other observed
+data and the model.
+
+CPO provides a measure of how well the model predicts each individual
+observation while taking into account the rest of the data and the model. A low
+CPO value suggests that the model has difficulty explaining that particular data
+point, whereas a high CPO value indicates a good fit for that observation. In
+practice, CPO values are often used to identify influential observations,
+potential outliers, or model misspecification. When comparing models, the
+following summary of the CPO is often used:
+
+$$-\sum_{i=1}^n\log(CPO_i)$$
+where smaller values indicate a better model fit.
+
+```{r, out.width="100%", fig.width=10, fig.height=5, fig.align='center'}
+#| eval: false
+zap_pit <- rep(NA_real_, nrow(counts_df))
+zap_pit[counts_df$count > 0] <- fit_zap$cpo$pit[-seq_len(nrow(counts_df))]
+
+df <- data.frame(
+  count = rep(counts_df$count, times = 3),
+  pred_mean = c(
+    expect_poi$mean,
+    expect_zip$mean,
+    expect_zap$mean
+  ),
+  pred_var = c(
+    expect_poi$pred_var,
+    expect_zip$pred_var,
+    expect_zap$pred_var
+  ),
+  log_score = c(
+    expect_poi$log_score,
+    expect_zip$log_score,
+    expect_zap$log_score
+  ),
+  pit = c(
+    fit_poi$cpo$pit * c(NA_real_, 1)[1 + (counts_df$count > 0)],
+    fit_zip$cpo$pit * c(NA_real_, 1)[1 + (counts_df$count > 0)],
+    zap_pit
+  ),
+  Model = rep(c("Poisson", "ZIP", "ZAP"), each = nrow(counts_df))
+)
+
+p1 <- ggplot(df) +
+  geom_point(aes(pred_mean, count - pred_mean, color = Model)) +
+  ggtitle("Residuals")
+
+p2 <- ggplot(df) +
+  stat_ecdf(aes(pit, color = Model), na.rm = TRUE) +
+  scale_x_continuous(expand = c(0, 0)) +
+  ggtitle("PIT")
+
+patchwork::wrap_plots(p1, p2, nrow = 1, guides = "collect")
+```
+

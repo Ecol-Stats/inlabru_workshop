@@ -3,7 +3,8 @@ title: "`inlabru` Workshop"
 author: "Jafet Belmont, Sara Martino and Janine Illian"
 subtitle: "ICES 2025, Copenhagen"
 format: 
-  html: default
+  html:
+    mainfont: "12"
   PrettyPDF-pdf:
     keep-tex:  true
     number-sections: true

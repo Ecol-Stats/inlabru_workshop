@@ -1,7 +1,8 @@
 ---
 title: "Practical 1"
 format: 
-  html: default
+  html:
+    mainfont: "12"
   PrettyPDF-pdf:
     keep-tex: true
     number-sections: true
@@ -20,7 +21,9 @@ library(webexercises)
 knitr::purl("day1_practical.qmd")
 ```
 
-<font size="5"> **Aim of this practical:** </font> In this first practical we are going to look at some simple models
+<font size="5"> **Aim of this practical:** </font>
+
+In this first practical we are going to look at some simple models
 
 1.  A Gaussian model with simulated data
 2.  A Linear mixed model

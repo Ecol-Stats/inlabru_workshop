@@ -20,13 +20,14 @@ editor_options:
 #| echo: false
 #| message: false
 #| warning: false
+#| purl: false
 
 # load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
 library(webexercises)
 
 ```
 
-## Geostatistics {#sec-linmodel}
+# Geostatistics 
 
 In this practical we are going to fit a geostatistical model. We will:
 
@@ -65,7 +66,7 @@ library(tidyterra)
 
 ```
 
-### The data
+## The data
 
 In this practical, we will explore data on the Pacific Cod (*Gadus macrocephalus*) from a trawl survey in Queen Charlotte Sound. The `pcod` dataset is available from the `sdmTMB` package and contains the presence/absence records of the Pacific Cod during each surveys along with the biomass density of Pacific cod in the area swept (kg/Km$^2$). The `qcs_grid` data contain the depth values stored as $2\times 2$ km grid for Queen Charlotte Sound.
 
@@ -91,7 +92,7 @@ Then, we create ab `sf` object and assign the rough coordinate reference to it:
 #| 
 pcod_sf =   st_as_sf(pcod_df, coords = c("lon","lat"), crs = 4326)
 pcod_sf = st_transform(pcod_sf,
-                       crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
+crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
 ```
 
 We convert the covariate into a raster and assign the same coordinate reference:
@@ -119,7 +120,7 @@ ggplot()+
 
 ```
 
-### The model
+## The model
 
 We first fit a simple model where we consider the observation as Bernoulli and where the linear predictor contains only one intercept and the GR field defined through the SPDE approach. The model is defined as:
 
@@ -268,23 +269,25 @@ spde_model3 =  inla.spde2.pcmatern(mesh,
 And here we plot the different priors for the range:
 
 ```{r}
-ggplot() + geom_line(data = dens_prior_range(30,.5), aes(x,y, color = "model1")) +
-geom_line(data = dens_prior_range(1000,.5), aes(x,y, color = "model2")) +
-geom_line(data = dens_prior_range(100,.5), aes(x,y, color = "model3")) 
+ggplot() + 
+  geom_line(data = dens_prior_range(30,.5), aes(x,y, color = "model1")) +
+  geom_line(data = dens_prior_range(1000,.5), aes(x,y, color = "model2")) +
+  geom_line(data = dens_prior_range(100,.5), aes(x,y, color = "model3")) 
 ```
 
 and for the sd:
 
 ```{r}
-ggplot() + geom_line(data = dens_prior_range(1,.5), aes(x,y, color = "model1")) +
-geom_line(data = dens_prior_range(10,.5), aes(x,y, color = "model2")) +
-geom_line(data = dens_prior_range(.1,.5), aes(x,y, color = "model3")) 
+ggplot() + 
+  geom_line(data = dens_prior_range(1,.5), aes(x,y, color = "model1")) +
+  geom_line(data = dens_prior_range(10,.5), aes(x,y, color = "model2")) +
+  geom_line(data = dens_prior_range(.1,.5), aes(x,y, color = "model3")) 
 ```
 
-::: {.callout-warning icon="false"}
-## {{< bi pencil-square color=#c8793c >}} Task
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
 
-Consider the `pcod_sf`, the spatial extension and type of the data...is some of the previous choices more reasonable than other?
+Consider the `pcod_sf`, the spatial extension and type of the data...is some of the previous choices more reasonable than other? `mcq(c("spde_model1","spde_model2", answer = "spde_model3"))`
 
 **NOTE** Remember that a prior should be reasonable..but the model should not totally depend on it.
 :::
@@ -302,7 +305,7 @@ cmp = ~ Intercept(1) + space(geometry, model = spde_model3)
 
 ### 4. Define the observation model
 
-Our data are Bernulli distributed so we can define the observation model as:
+Our data are Bernoulli distributed so we can define the observation model as:
 
 ```{r}
 
@@ -322,14 +325,14 @@ Finally we are ready to run the model
 fit1 = bru(cmp,lik)
 ```
 
-### Extract results
+## Extract results
 
-#### Hyperparameters
+### Hyperparameters
 
 ::: {.callout-warning icon="false"}
 ### {{< bi pencil-square color=#c8793c >}} Task
 
-What are the posterior for the range $\rho$ and the standard deviation $\sigma$? Plot the posterior together with the prior for both parameters.
+Plot the posterior densities for the range $\rho$ and the standard deviation $\sigma$ alog with the prior for both parameters.
 
 `r hide("Take hint")`
 
@@ -362,19 +365,22 @@ fit1$marginals.hyperpar$'name of the parameter'
 # Extract marginal for the range
 
 ggplot() + 
-  geom_line(data = fit1$marginals.hyperpar$`Range for space`, aes(x,y, color = "Posterior")) +
-  geom_line(data = dens_prior_range(100,.5), aes(x,y, color = "Prior"))
+  geom_line(data = fit1$marginals.hyperpar$`Range for space`,
+            aes(x,y, color = "Posterior")) +
+  geom_line(data = dens_prior_range(100,.5),
+            aes(x,y, color = "Prior"))
 
 
 ggplot() + 
-  geom_line(data = fit1$marginals.hyperpar$`Stdev for space`, aes(x,y, color = "Posterior")) +
+  geom_line(data = fit1$marginals.hyperpar$`Stdev for space`,
+            aes(x,y, color = "Posterior")) +
   geom_line(data = dens_prior_sd(1,.5), aes(x,y, color = "Prior"))
 
 
 ```
 :::
 
-### Spatial prediction
+## Spatial prediction
 
 We now want to extract the estimated posterior mean and sd of spatial GF. To do this we first need to define a grid of points where we want to predict. We do this using the function `fm_pixel()` which creates a regular grid of points covering the mesh
 
@@ -456,7 +462,7 @@ pp %>% select(-depth) %>%
         ggtitle("Sample from the fitted model")
 ```
 
-### An alternative model
+## An alternative model
 
 We now want to check if the `depth` covatiate has an influende on the probability of presence. We do this in two different models
 
@@ -533,7 +539,8 @@ fit3 = bru(cmp, lik)
 
 # plot the estimated effect of depth
 
-fit3$summary.random$covariate %>% ggplot() + geom_line(aes(ID,mean)) + 
+fit3$summary.random$covariate %>% 
+  ggplot() + geom_line(aes(ID,mean)) + 
                                   geom_ribbon(aes(ID, ymin = `0.025quant`, 
                                                       ymax = `0.975quant`), alpha = 0.5)
 ```

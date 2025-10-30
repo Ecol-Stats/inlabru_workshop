@@ -279,7 +279,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, frame hidden, colback={codebgcolor}, breakable, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, sharp corners, breakable, boxrule=0pt, colback={codebgcolor}, frame hidden]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -311,13 +311,15 @@
 In this first practical we are going to fit spatial modes for Areal,
 Geostatistical and Point-Process Data.
 
-\subsection{Models for areal data}\label{models-for-areal-data}
+\section{Models for areal data}\label{models-for-areal-data}
 
 In this practical we are going to fit an areal model. We will:
 
 \begin{itemize}
 \item
   Learn how to fit an areal model in \texttt{inlabru}
+\item
+  Learn how to add spatial covariates to the model
 \item
   Learn how to do predictions
 \item
@@ -342,7 +344,7 @@ Libraries to load:
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{The data}\label{the-data}
+\subsection{The data}\label{the-data}
 
 We consider data on respiratory hospitalizations for Greater Glasgow and
 Clyde in 2007. The data are available from the \texttt{CARBayesdata} R
@@ -417,9 +419,7 @@ the SME and plot the observed
   \FunctionTok{filter}\NormalTok{(year }\SpecialCharTok{==} \DecValTok{2007}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
     \FunctionTok{mutate}\NormalTok{(}\AttributeTok{SMR =}\NormalTok{ observed}\SpecialCharTok{/}\NormalTok{expected)}
 
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
-  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ resp\_cases, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ SMR)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_fill\_scico}\NormalTok{(}\AttributeTok{direction =} \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ resp\_cases, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ SMR)) }\SpecialCharTok{+} \FunctionTok{scale\_fill\_scico}\NormalTok{(}\AttributeTok{direction =} \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -444,7 +444,7 @@ diagonal the number of e
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{The model}\label{the-model}
+\subsection{The model}\label{the-model}
 
 We fit a first model to the data where we consider a Poisson model for
 the observed cases.
@@ -476,7 +476,7 @@ The hyperparameters of the model are \(\tau_1\) and \(\tau_2\)
 \textbf{NOTE} In this case the linear predictor \(\eta\) consists of
 three components!!
 
-\begin{tcolorbox}[enhanced jigsaw, title={Question}, bottomtitle=1mm, arc=.35mm, titlerule=0mm, opacityback=0, rightrule=.15mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, bottomrule=.15mm, coltitle=black, left=2mm, colframe=quarto-callout-tip-color-frame, toptitle=1mm, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
 
 Fit the above model in using \texttt{inlabru} by completing the
 following code:
@@ -518,24 +518,35 @@ Answer
 
 After fitting the model we want to extract results.
 
-\begin{tcolorbox}[enhanced jigsaw, title={Question}, bottomtitle=1mm, arc=.35mm, titlerule=0mm, opacityback=0, rightrule=.15mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, bottomrule=.15mm, coltitle=black, left=2mm, colframe=quarto-callout-tip-color-frame, toptitle=1mm, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-tip-color-frame, rightrule=.15mm, toprule=.15mm, title={Question}, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
   What is the estimated value for \(\beta_0\)?
+  \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 \item
-  Look at the estimated values of the hyperparameters using
-  \texttt{fit\$summary.hyperpar} which of the two spatial components
-  (structured or unstructured) explains more of the variability in the
-  counts?
+  Look at the estimated values of the hyperparameters using :::
+  \{.cell\}
 \end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit}\SpecialCharTok{$}\NormalTok{summary.hyperpar}
+\end{Highlighting}
+\end{Shaded}
 
 \end{tcolorbox}
 
+which of the two spatial components (structured or unstructured)
+explains more of the variability in the counts?
+\texttt{mcq(c("structured",\ answer\ =\ "unstructured"))}
+
+:::
+
 We now look at the predictions over space.
 
-\begin{tcolorbox}[enhanced jigsaw, title={Question}, bottomtitle=1mm, arc=.35mm, titlerule=0mm, opacityback=0, rightrule=.15mm, breakable, colback=white, colbacktitle=quarto-callout-tip-color!10!white, bottomrule=.15mm, coltitle=black, left=2mm, colframe=quarto-callout-tip-color-frame, toptitle=1mm, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
 
 Complete the code below to produce prediction of the linear predictor
 \(\eta_i\) and of the risk \(\lambda_i\) and of the expected cases
@@ -570,7 +581,7 @@ Answer
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-10-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-11-1.pdf}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -580,7 +591,7 @@ Answer
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-10-2.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-11-2.pdf}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -590,7 +601,7 @@ Answer
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-10-3.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-11-3.pdf}}
 
 \end{tcolorbox}
 
@@ -605,12 +616,12 @@ means of the Poisson distribution \(E_i\exp(\lambda_i)\)
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-11-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-12-1.pdf}}
 
 \textbf{Note:} Here we are predicting the \emph{mean} of counts, not the
 counts!!! Predicting counts is the theme of the next task!
 
-\subsubsection{Getting prediction
+\subsection{Getting prediction
 densities}\label{getting-prediction-densities}
 
 Posterior predictive distributions, that is
@@ -662,7 +673,7 @@ Here is the code:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, title={Task}, bottomtitle=1mm, arc=.35mm, titlerule=0mm, opacityback=0, rightrule=.15mm, breakable, colback=white, colbacktitle=quarto-callout-warning-color!10!white, bottomrule=.15mm, coltitle=black, left=2mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
 
 Plot the observations against the predicted new counts and the predicted
 expected counts. Include the uncertainty and compare the two.
@@ -684,12 +695,12 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-13-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-14-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
 
-\subsection{Geostatistics}\label{sec-linmodel}
+\section{Geostatistics}\label{geostatistics}
 
 In this practical we are going to fit a geostatistical model. We will:
 
@@ -728,7 +739,7 @@ Libraries to load:
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{The data}\label{the-data-1}
+\subsection{The data}\label{the-data-1}
 
 In this practical, we will explore data on the Pacific Cod (\emph{Gadus
 macrocephalus}) from a trawl survey in Queen Charlotte Sound. The
@@ -759,7 +770,7 @@ reference to it:
 \begin{Highlighting}[]
 \NormalTok{pcod\_sf }\OtherTok{=}   \FunctionTok{st\_as\_sf}\NormalTok{(pcod\_df, }\AttributeTok{coords =} \FunctionTok{c}\NormalTok{(}\StringTok{"lon"}\NormalTok{,}\StringTok{"lat"}\NormalTok{), }\AttributeTok{crs =} \DecValTok{4326}\NormalTok{)}
 \NormalTok{pcod\_sf }\OtherTok{=} \FunctionTok{st\_transform}\NormalTok{(pcod\_sf,}
-                       \AttributeTok{crs =} \StringTok{"+proj=utm +zone=9 +datum=WGS84 +no\_defs +type=crs +units=km"}\NormalTok{ )}
+\AttributeTok{crs =} \StringTok{"+proj=utm +zone=9 +datum=WGS84 +no\_defs +type=crs +units=km"}\NormalTok{ )}
 \end{Highlighting}
 \end{Shaded}
 
@@ -790,9 +801,9 @@ upload also the \texttt{tidyterra} library.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-34-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-36-1.pdf}}
 
-\subsubsection{The model}\label{the-model-1}
+\subsection{The model}\label{the-model-1}
 
 We first fit a simple model where we consider the observation as
 Bernoulli and where the linear predictor contains only one intercept and
@@ -860,7 +871,7 @@ observations, these are contained in the dataset \texttt{pcod\_sf}.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-35-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-37-1.pdf}}
 
 As you can see from the plot above, some of the locations are very close
 to each other, this causes some very small triangles. This can be
@@ -878,9 +889,9 @@ the mesh construction but, of course, not when it come to estimaation.)
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-36-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-38-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, title={Task}, bottomtitle=1mm, arc=.35mm, titlerule=0mm, opacityback=0, rightrule=.15mm, breakable, colback=white, colbacktitle=quarto-callout-warning-color!10!white, bottomrule=.15mm, coltitle=black, left=2mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
 
 Look at the documentation for the \texttt{fm\_mesh\_2d} function typing
 
@@ -985,30 +996,33 @@ And here we plot the different priors for the range:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(}\DecValTok{30}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"model1"}\NormalTok{)) }\SpecialCharTok{+}
-\FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(}\DecValTok{1000}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"model2"}\NormalTok{)) }\SpecialCharTok{+}
-\FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(}\DecValTok{100}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"model3"}\NormalTok{)) }
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(}\DecValTok{30}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"model1"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(}\DecValTok{1000}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"model2"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(}\DecValTok{100}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"model3"}\NormalTok{)) }
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-40-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-42-1.pdf}}
 
 and for the sd:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(}\DecValTok{1}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"model1"}\NormalTok{)) }\SpecialCharTok{+}
-\FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(}\DecValTok{10}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"model2"}\NormalTok{)) }\SpecialCharTok{+}
-\FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(.}\DecValTok{1}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"model3"}\NormalTok{)) }
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(}\DecValTok{1}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"model1"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(}\DecValTok{10}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"model2"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(.}\DecValTok{1}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"model3"}\NormalTok{)) }
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-41-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-43-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, title={Task}, bottomtitle=1mm, arc=.35mm, titlerule=0mm, opacityback=0, rightrule=.15mm, breakable, colback=white, colbacktitle=quarto-callout-warning-color!10!white, bottomrule=.15mm, coltitle=black, left=2mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-tip-color-frame, rightrule=.15mm, toprule=.15mm, title={Question}, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
 
 Consider the \texttt{pcod\_sf}, the spatial extension and type of the
-data\ldots is some of the previous choices more resonable than other?
+data\ldots is some of the previous choices more reasonable than other?
+\texttt{mcq(c("spde\_model1","spde\_model2",\ answer\ =\ "spde\_model3"))}
 
 \textbf{NOTE} Remember that a prior should be reasonable..but the model
 should not totally depend on it.
@@ -1034,8 +1048,8 @@ geometry of the dataset.
 \subsubsection{4. Define the observation
 model}\label{define-the-observation-model}
 
-Our data are Bernulli distributed so we can define the observation model
-as:
+Our data are Bernoulli distributed so we can define the observation
+model as:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1057,15 +1071,14 @@ Finally we are ready to run the model
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{Extract results}\label{extract-results}
+\subsection{Extract results}\label{extract-results}
 
-\paragraph{Hyperparameters}\label{hyperparameters}
+\subsubsection{Hyperparameters}\label{hyperparameters}
 
-\begin{tcolorbox}[enhanced jigsaw, title={Task}, bottomtitle=1mm, arc=.35mm, titlerule=0mm, opacityback=0, rightrule=.15mm, breakable, colback=white, colbacktitle=quarto-callout-warning-color!10!white, bottomrule=.15mm, coltitle=black, left=2mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
 
-What are the posterior for the range \(\rho\) and the standard deviation
-\(\sigma\)? Plot the posterior together with the prior for both
-parameters.
+Plot the posterior densities for the range \(\rho\) and the standard
+deviation \(\sigma\) alog with the prior for both parameters.
 
 Take hint
 
@@ -1087,19 +1100,22 @@ Click here to see the solution
 \CommentTok{\# Extract marginal for the range}
 
 \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
-  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fit1}\SpecialCharTok{$}\NormalTok{marginals.hyperpar}\SpecialCharTok{$}\StringTok{\textasciigrave{}}\AttributeTok{Range for space}\StringTok{\textasciigrave{}}\NormalTok{, }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"Posterior"}\NormalTok{)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(}\DecValTok{100}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"Prior"}\NormalTok{))}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fit1}\SpecialCharTok{$}\NormalTok{marginals.hyperpar}\SpecialCharTok{$}\StringTok{\textasciigrave{}}\AttributeTok{Range for space}\StringTok{\textasciigrave{}}\NormalTok{,}
+            \FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"Posterior"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_range}\NormalTok{(}\DecValTok{100}\NormalTok{,.}\DecValTok{5}\NormalTok{),}
+            \FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"Prior"}\NormalTok{))}
 
 
 \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
-  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fit1}\SpecialCharTok{$}\NormalTok{marginals.hyperpar}\SpecialCharTok{$}\StringTok{\textasciigrave{}}\AttributeTok{Stdev for space}\StringTok{\textasciigrave{}}\NormalTok{, }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"Posterior"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =}\NormalTok{ fit1}\SpecialCharTok{$}\NormalTok{marginals.hyperpar}\SpecialCharTok{$}\StringTok{\textasciigrave{}}\AttributeTok{Stdev for space}\StringTok{\textasciigrave{}}\NormalTok{,}
+            \FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"Posterior"}\NormalTok{)) }\SpecialCharTok{+}
   \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{data =} \FunctionTok{dens\_prior\_sd}\NormalTok{(}\DecValTok{1}\NormalTok{,.}\DecValTok{5}\NormalTok{), }\FunctionTok{aes}\NormalTok{(x,y, }\AttributeTok{color =} \StringTok{"Prior"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
 \end{tcolorbox}
 
-\subsubsection{Spatial prediction}\label{spatial-prediction}
+\subsection{Spatial prediction}\label{spatial-prediction}
 
 We now want to extract the estimated posterior mean and sd of spatial
 GF. To do this we first need to define a grid of points where we want to
@@ -1130,7 +1146,7 @@ Finally, we can plot the maps
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-49-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-51-1.pdf}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1138,7 +1154,7 @@ Finally, we can plot the maps
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-49-2.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-51-2.pdf}}
 
 \textbf{Note} The posterior sd is lowest at the observation points. Note
 how the posterior sd is inflated around the border, this is the ``border
@@ -1158,7 +1174,7 @@ this by defining a \texttt{sf} object using coordinates in the object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, title={Task}, bottomtitle=1mm, arc=.35mm, titlerule=0mm, opacityback=0, rightrule=.15mm, breakable, colback=white, colbacktitle=quarto-callout-warning-color!10!white, bottomrule=.15mm, coltitle=black, left=2mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
 
 Produce prediction over \texttt{pxl1} unsing the same techniques as
 before. Plot your results.
@@ -1179,7 +1195,7 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-51-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-53-1.pdf}}
 \end{center}
 
 \begin{Shaded}
@@ -1189,7 +1205,7 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-51-2.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-53-2.pdf}}
 \end{center}
 
 \end{tcolorbox}
@@ -1218,9 +1234,9 @@ realized surfaces one can expect. We can do this using the function
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-52-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-54-1.pdf}}
 
-\subsubsection{An alternative model}\label{an-alternative-model}
+\subsection{An alternative model}\label{an-alternative-model}
 
 We now want to check if the \texttt{depth} covatiate has an influende on
 the probability of presence. We do this in two different models
@@ -1251,7 +1267,7 @@ the probability of presence. We do this in two different models
 \] where \(f(.)\) is a smooth function. We will use a RW2 model for
 this.
 
-\begin{tcolorbox}[enhanced jigsaw, title={Task}, bottomtitle=1mm, arc=.35mm, titlerule=0mm, opacityback=0, rightrule=.15mm, breakable, colback=white, colbacktitle=quarto-callout-warning-color!10!white, bottomrule=.15mm, coltitle=black, left=2mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
 
 Fit model 1. Define components, observation model and use the
 \texttt{bru()} function to estimate the parameters.
@@ -1311,15 +1327,16 @@ fit the model as usual
 
 \CommentTok{\# plot the estimated effect of depth}
 
-\NormalTok{fit3}\SpecialCharTok{$}\NormalTok{summary.random}\SpecialCharTok{$}\NormalTok{covariate }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID,mean)) }\SpecialCharTok{+} 
+\NormalTok{fit3}\SpecialCharTok{$}\NormalTok{summary.random}\SpecialCharTok{$}\NormalTok{covariate }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID,mean)) }\SpecialCharTok{+} 
                                   \FunctionTok{geom\_ribbon}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID, }\AttributeTok{ymin =} \StringTok{\textasciigrave{}}\AttributeTok{0.025quant}\StringTok{\textasciigrave{}}\NormalTok{, }
                                                       \AttributeTok{ymax =} \StringTok{\textasciigrave{}}\AttributeTok{0.975quant}\StringTok{\textasciigrave{}}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-54-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-56-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, title={Task}, bottomtitle=1mm, arc=.35mm, titlerule=0mm, opacityback=0, rightrule=.15mm, breakable, colback=white, colbacktitle=quarto-callout-warning-color!10!white, bottomrule=.15mm, coltitle=black, left=2mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
 
 Create a map of predicted \emph{probability} from Model 3. You can use a
 inverse logit function defined as
@@ -1351,13 +1368,12 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-56-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-58-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
 
-\subsection{Log-Gaussian Cox
-Processes}\label{log-gaussian-cox-processes}
+\section{Log-Gaussian Cox Processes}\label{sec-linmodel}
 
 In this practical we will:
 
@@ -1368,7 +1384,7 @@ In this practical we will:
 \item
   Fit a \hyperref[NHPP]{non-homogeneous Point Process}
 \item
-  Fit a LGCP (log-Gaussian Cox Process)
+  Fit a \hyperref[LGCP]{LGCP (log-Gaussian Cox Process)}
 \end{itemize}
 
 Libraries to load:
@@ -1391,6 +1407,8 @@ Libraries to load:
 \end{Shaded}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection{The data}\label{the-data-2}
 
 In this practical we consider the data \texttt{clmfires} in the
 \texttt{spatstat} library.
@@ -1452,10 +1470,13 @@ caused by lightning in Castilla-La Mancha in 2004}
 
 As a first exercise we are going to fit a homogeneous Poisson process
 (HPP) to the data. This is a model that assume constant intensity over
-the whole space so our liner predictor is\\
+the whole space so our linear predictor is then:
+
 \[
 \eta(s) = \log\lambda(s) = \beta_0 , \ \mathbf{s}\in\Omega
-\] so the likelihood can be written as:
+\]
+
+so the likelihood can be written as:
 
 \[
 \begin{aligned}
@@ -1467,13 +1488,14 @@ p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) 
 where \(|\Omega|\) is the area of the domain of interest.
 
 We need to approximate the integral using a numerical integration scheme
-as:\\
+as:
 
 \[
 \approx\exp\left(-\sum_{k=1}^{N_k}w_k\lambda(s_k)\right)\prod_{i=1}^n \lambda(\mathbf{s}_i)
-\] Where \(N_k\) is the number of integration points
-\(s_1,\dots,s_{N_k}\) and \(w_1,\dots,w_{N_k}\) are the integration
-weights.
+\]
+
+Where \(N_k\) is the number of integration points \(s_1,\dots,s_{N_k}\)
+and \(w_1,\dots,w_{N_k}\) are the integration weights.
 
 In this case, since the intensity is constant, the integration scheme is
 really simple: it is enough to consider one random point inside the
@@ -1499,22 +1521,22 @@ domain with weight equal to the area of the domain.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, title={Task}, bottomtitle=1mm, arc=.35mm, titlerule=0mm, opacityback=0, rightrule=.15mm, breakable, colback=white, colbacktitle=quarto-callout-warning-color!10!white, bottomrule=.15mm, coltitle=black, left=2mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  What is the estimated intensity?
+  Plot the estimated posterior distribution of the intensity
 \item
   Compare the estimated expected number of fires on the whole domain
   with the observed ones.
-
-  Take hint
 \end{enumerate}
 
-Remember that in the \texttt{inlabru} framework we model the log
-intensity \(\eta = log(\lambda)\)
+Take hint
+
+Remember that in the \emph{inlabru} framework we model the log intensity
+\(\eta = log(\lambda)\)
 
 Click here to see the solution
 
@@ -1528,13 +1550,13 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-91-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-93-1.pdf}}
 \end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# 2) To compute the expected number of points in the area we need to multiply the }
-\CommentTok{\# estimated intensity by the area of the domain. }
+\CommentTok{\# 2) To compute the expected number of points in the area we need to multiply the}
+\CommentTok{\# estimated intensity by the area of the domain.}
 \CommentTok{\# In the same plot we also show the number of observed fires as a vertical line.}
 
 \NormalTok{post\_int }\OtherTok{=} \FunctionTok{inla.tmarginal}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{st\_area}\NormalTok{(region)}\SpecialCharTok{*} \FunctionTok{exp}\NormalTok{(x), fit1}\SpecialCharTok{$}\NormalTok{marginals.fixed}\SpecialCharTok{$}\NormalTok{beta\_0)}
@@ -1544,12 +1566,12 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-91-2.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-93-2.pdf}}
 \end{center}
 
 \end{tcolorbox}
 
-\section{Inhomogeneous Poisson Process}\label{NHPP}
+\subsection{Fit an Inhomogeneous Poisson Process}\label{NHPP}
 
 The model above has the clear disadvantages that assumes a constant
 intensity and from Figure Figure~\ref{fig-points} we clearly see that
@@ -1561,6 +1583,7 @@ location of fires together with the (scaled) altitude.
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\#|}
 \NormalTok{elev\_raster }\OtherTok{=} \FunctionTok{rast}\NormalTok{(clmfires.extra[[}\DecValTok{2}\NormalTok{]]}\SpecialCharTok{$}\NormalTok{elevation)}
 \NormalTok{elev\_raster }\OtherTok{=} \FunctionTok{scale}\NormalTok{(elev\_raster)}
 \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_spatraster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ elev\_raster) }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ pp) }\SpecialCharTok{+} \FunctionTok{scale\_fill\_scico}\NormalTok{()}
@@ -1594,7 +1617,9 @@ The likelihood becomes:
 p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 & = \exp \left( -\int_\Omega \exp(\beta_0 + \beta_1x(s)) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 \end{aligned}
-\] Now we need to choose an integration scheme to solve the integral.
+\]
+
+Now we need to choose an integration scheme to solve the integral.
 
 In this case we will take a simple grid based approach where each
 quadrature location has an equal weight. Our grid consists of
@@ -1602,6 +1627,7 @@ quadrature location has an equal weight. Our grid consists of
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\#|}
 \NormalTok{n.int }\OtherTok{=} \DecValTok{1000}
 \NormalTok{ips }\OtherTok{=} \FunctionTok{st\_sf}\NormalTok{(}\AttributeTok{geometry =} \FunctionTok{st\_sample}\NormalTok{(region,}
             \AttributeTok{size =}\NormalTok{ n.int,}
@@ -1641,32 +1667,157 @@ We can now fit the model:
 \end{Highlighting}
 \end{Shaded}
 
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
+
+What is the effect of the altitude on the (log) intensity of the
+process?
+
+Take hint
+
+You can look at the summary for the fixed effects
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit2}\SpecialCharTok{$}\NormalTok{summary.fixed}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                mean         sd 0.025quant   0.5quant 0.975quant       mode kld
+Intercept -6.6028574 0.10187055 -6.8025201 -6.6028574 -6.4031948 -6.6028574   0
+elev       0.6556288 0.06921672  0.5199666  0.6556288  0.7912911  0.6556288   0
+\end{verbatim}
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{Warning}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
+
+⚠️ \textbf{WARNING!!}⚠️ When fitting a Point process, the integration
+scheme has to be fine enough to capture the spatial variability of the
+covariate!!
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
+
+Rerun the model with the altitude as covariate, but this time change the
+integration scheme as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n.int2 }\OtherTok{=} \DecValTok{50}
+
+\NormalTok{ips2 }\OtherTok{=} \FunctionTok{st\_sf}\NormalTok{(}\AttributeTok{geometry =} \FunctionTok{st\_sample}\NormalTok{(region,}
+            \AttributeTok{size =}\NormalTok{ n.int2,}
+            \AttributeTok{type =} \StringTok{"regular"}\NormalTok{))}
+\NormalTok{ips2}\SpecialCharTok{$}\NormalTok{weight }\OtherTok{=} \FunctionTok{st\_area}\NormalTok{(region) }\SpecialCharTok{/}\NormalTok{ n.int2}
+\end{Highlighting}
+\end{Shaded}
+
+What happens to the effect of the covariate?
+
+Take hint
+
+Re-run the model changing the integration scheme in the \emph{ips} input
+of the \emph{bru\_obs()} function.
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lik\_bis }\OtherTok{=} \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{data =}\NormalTok{ pp,}
+              \AttributeTok{family =} \StringTok{"cp"}\NormalTok{,}
+              \AttributeTok{formula =}\NormalTok{ formula,}
+              \AttributeTok{ips =}\NormalTok{ ips2)}
+
+\NormalTok{fit2bis }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp, lik\_bis)}
+
+\CommentTok{\# you can the check the differences between the two models}
+\NormalTok{fit2}\SpecialCharTok{$}\NormalTok{sumary.fixed}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit2bis}\SpecialCharTok{$}\NormalTok{sumary.fixed}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+NULL
+\end{verbatim}
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
+
+Now we want to predict the log-intensity over the whole domain.
+
+Use the grid from the elevation raster ::: \{.cell\}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{est\_grid }\OtherTok{=} \FunctionTok{st\_as\_sf}\NormalTok{(}\FunctionTok{data.frame}\NormalTok{(}\FunctionTok{crds}\NormalTok{(elev\_raster)), }\AttributeTok{coords =} \FunctionTok{c}\NormalTok{(}\StringTok{"x"}\NormalTok{,}\StringTok{"y"}\NormalTok{))}
 \NormalTok{est\_grid  }\OtherTok{=} \FunctionTok{st\_intersection}\NormalTok{(est\_grid, region)}
-
-\NormalTok{preds2 }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit2, est\_grid, }\SpecialCharTok{\textasciitilde{}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{log\_scale =}\NormalTok{ Intercept }\SpecialCharTok{+}\NormalTok{ elev,}
-                                              \AttributeTok{lin\_scale =} \FunctionTok{exp}\NormalTok{(Intercept }\SpecialCharTok{+}\NormalTok{ elev)))}
-
-\NormalTok{preds2}\SpecialCharTok{$}\NormalTok{lin\_scale }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ mean)) }\SpecialCharTok{+} \FunctionTok{scale\_color\_scico}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-93-1.pdf}}
+\end{tcolorbox}
+
+to predict the intensity over the domain.
+
+Take hint
+
+Use the \emph{predict()} function.
+
+Click here to see the solution
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{Lam\_samps2 }\OtherTok{=} \FunctionTok{generate}\NormalTok{(fit2, ips, }\SpecialCharTok{\textasciitilde{}} \FunctionTok{sum}\NormalTok{(weight }\SpecialCharTok{*} \FunctionTok{exp}\NormalTok{(elev }\SpecialCharTok{+}\NormalTok{ Intercept)),}
+\NormalTok{preds2 }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit2, est\_grid, }\SpecialCharTok{\textasciitilde{}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{log\_scale =}\NormalTok{ Intercept }\SpecialCharTok{+}\NormalTok{ elev,}
+
+                                              \AttributeTok{lin\_scale =} \FunctionTok{exp}\NormalTok{(Intercept }\SpecialCharTok{+}\NormalTok{ elev)))}
+\CommentTok{\# then visualize it like}
+\NormalTok{preds2}\SpecialCharTok{$}\NormalTok{log\_scale }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ mean)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_scico}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-99-1.pdf}}
+\end{center}
+
+:::
+
+Finally, we want to use the fitted model to estimate the total number of
+fires over the whole region. To do this we first have to fine the
+expected number of fires as:
+
+\[
+E(N_{\Omega}) = \int_{\Omega}\exp(\lambda(s))\ ds
+\]
+
+Then simulate possible realizations of \(N_{\Omega}\) to include also
+the likelihood variability in our estimate:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{N\_fires }\OtherTok{=} \FunctionTok{generate}\NormalTok{(fit2, ips,}
+                      \AttributeTok{formula =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ \{}
+\NormalTok{                        lambda }\OtherTok{=} \FunctionTok{sum}\NormalTok{(weight }\SpecialCharTok{*} \FunctionTok{exp}\NormalTok{(elev }\SpecialCharTok{+}\NormalTok{ Intercept))}
+                        \FunctionTok{rpois}\NormalTok{(}\DecValTok{1}\NormalTok{, lambda)\},}
                     \AttributeTok{n.samples =} \DecValTok{2000}\NormalTok{)}
 
-
-
-\NormalTok{Lam\_df }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}
-  \AttributeTok{Lam =} \FunctionTok{as.numeric}\NormalTok{(Lam\_samps2))}
-
-\FunctionTok{ggplot}\NormalTok{(Lam\_df) }\SpecialCharTok{+}
-  \FunctionTok{geom\_histogram}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Lam),}
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{N =} \FunctionTok{as.vector}\NormalTok{(N\_fires))) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ N),}
                  \AttributeTok{colour =} \StringTok{"blue"}\NormalTok{,}
                  \AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{,}
                  \AttributeTok{bins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+}
@@ -1677,40 +1828,91 @@ We can now fit the model:
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-94-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-100-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, bottomtitle=1mm, arc=.35mm, titlerule=0mm, opacityback=0, rightrule=.15mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, bottomrule=.15mm, coltitle=black, left=2mm, colframe=quarto-callout-note-color-frame, toptitle=1mm, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm]
+\subsection{Fit a Log-Gaussian Cox Process}\label{LGCP}
 
-\end{tcolorbox}
+Finally we want to fit a LGCP with log intensity:
 
-\section{Log-Gaussian Cox Process}\label{log-gaussian-cox-process}
+\[
+\log(s) = \beta_0 + \beta_1x + u(s)
+\]
+
+where \(\beta_0\) is the intercept, \(\beta_1\) the effect of
+(standarized) altitude \(x(s)\) as before and \(u(s)\) is a Gaussian
+Random field defined through the SPDE approach.
+
+\subsubsection{Define the mesh}\label{define-the-mesh}
+
+The first step, as any time we use the SPDE approach is to defie the
+mesh and the priors for the marginal variance and range:
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{mesh }\OtherTok{=} \FunctionTok{fm\_mesh\_2d}\NormalTok{(}\AttributeTok{boundary =}\NormalTok{ region,}
                   \AttributeTok{max.edge =} \FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{),}
                   \AttributeTok{cutoff =} \DecValTok{4}\NormalTok{, }\AttributeTok{crs =} \ConstantTok{NA}\NormalTok{)}
+
 \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{gg}\NormalTok{(mesh) }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ pp)}
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-95-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-101-1.pdf}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{spde\_model }\OtherTok{=}  \FunctionTok{inla.spde2.pcmatern}\NormalTok{(mesh,}
                                   \AttributeTok{prior.sigma =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FloatTok{0.5}\NormalTok{),}
                                   \AttributeTok{prior.range =} \FunctionTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
 
+We can then define the integration weight. Here we use the same points
+to \texttt{define\ the\ SPDE\ approximation} and to
+\texttt{approximate\ the\ integral} in the likelihood. We will see later
+that this does not have to be like this, BUT integration weight and SPDE
+weights have to be consistent with each other!
 
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{ips }\OtherTok{=} \FunctionTok{fm\_int}\NormalTok{(mesh, }\AttributeTok{samplers =}\NormalTok{ region)}
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ ips, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ weight)) }\SpecialCharTok{+} 
-  \FunctionTok{gg}\NormalTok{(mesh) }\SpecialCharTok{+} 
+
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ ips, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ weight)) }\SpecialCharTok{+}
+  \FunctionTok{gg}\NormalTok{(mesh) }\SpecialCharTok{+}
    \FunctionTok{scale\_color\_scico}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-95-2.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-102-1.pdf}}
+
+\subsubsection{Run the model}\label{run-the-model-1}
+
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
+
+Set up the components and the formula for the model above by completing
+the code below and run the model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cmp }\OtherTok{=} \ErrorTok{\textasciitilde{}}\NormalTok{ ...}
+
+\NormalTok{formula }\OtherTok{=}\NormalTok{ geometry }\SpecialCharTok{\textasciitilde{}}\NormalTok{ ...}
+
+\NormalTok{lik }\OtherTok{=} \FunctionTok{bru\_obs}\NormalTok{(}\StringTok{"cp"}\NormalTok{,}
+              \AttributeTok{formula =}\NormalTok{ formula,}
+              \AttributeTok{data =}\NormalTok{ pp,}
+              \AttributeTok{ips =}\NormalTok{ ...)}
+
+\NormalTok{fit3 }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp, lik)}
+\end{Highlighting}
+\end{Shaded}
+
+Take hint
+
+The model has three components: intercept, linear effect of altitude and
+the spatial GRF
+
+Click here to see the solution
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1718,39 +1920,173 @@ We can now fit the model:
 
 \NormalTok{formula }\OtherTok{=}\NormalTok{ geometry }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Intercept }\SpecialCharTok{+}\NormalTok{ space }\SpecialCharTok{+}\NormalTok{ elev}
 
-
 \NormalTok{lik }\OtherTok{=} \FunctionTok{bru\_obs}\NormalTok{(}\StringTok{"cp"}\NormalTok{,}
               \AttributeTok{formula =}\NormalTok{ formula,}
               \AttributeTok{data =}\NormalTok{ pp,}
               \AttributeTok{ips =}\NormalTok{ ips)}
 
-
 \NormalTok{fit3 }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp, lik)}
-
-
-\NormalTok{Lam\_samps3 }\OtherTok{=} \FunctionTok{generate}\NormalTok{(fit3, ips, }\SpecialCharTok{\textasciitilde{}} \FunctionTok{sum}\NormalTok{(weight }\SpecialCharTok{*} \FunctionTok{exp}\NormalTok{(space }\SpecialCharTok{+}\NormalTok{ Intercept }\SpecialCharTok{+}\NormalTok{ elev)),}
-                    \AttributeTok{n.samples =} \DecValTok{2000}\NormalTok{)}
-
-
-
-
-
-\NormalTok{Lam\_df3 }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}
-  \AttributeTok{Lam =} \FunctionTok{as.numeric}\NormalTok{(Lam\_samps3))}
-
-\FunctionTok{ggplot}\NormalTok{(Lam\_df3) }\SpecialCharTok{+}
-  \FunctionTok{geom\_histogram}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Lam),}
-                 \AttributeTok{colour =} \StringTok{"blue"}\NormalTok{,}
-                 \AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{,}
-                 \AttributeTok{bins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\AttributeTok{xintercept =} \FunctionTok{nrow}\NormalTok{(pp),}
-             \AttributeTok{colour =} \StringTok{"red"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{xlab}\NormalTok{(}\FunctionTok{expression}\NormalTok{(Lambda))}
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-95-3.pdf}}
+\end{tcolorbox}
+
+\textbf{Note} when running the model above you will get a warning:
+
+\begin{verbatim}
+Warning in bru_log_warn(msg): Model input 'elev_raster' for 'elev' returned some NA values.
+Attempting to fill in spatially by nearest available value.
+To avoid this basic covariate imputation, supply complete data.
+\end{verbatim}
+
+It means that the \emph{bru()} function cannot find the covariate values
+for some of the mesh nodes. This is a common situation. As the warning
+says, the \emph{bru()} function automatically imputes the value of the
+covarite using the nearest nodes. This increases the running time of the
+\emph{bru()} function, so one solution is to impute the values of the
+covariate over the whole mesh `before' running the \emph{bru()}
+function.
+
+Here, we notice that there is a single point for which elevation values
+are missing (see Figure~\ref{fig-points2} the red point that lies
+outside the raster extension ).
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/fig-points2-1.pdf}}
+
+}
+
+\caption{\label{fig-points2}Integration scheme for numerical
+approximation of the stochastic integral in La Mancha Region}
+
+\end{figure}%
+
+To solve this, we can increase the raster extension so it covers all
+both data-points and quadrature locations as well. Then, we can use the
+\texttt{bru\_fill\_missing()} function to input the missing values with
+the nearest-available-value. We can achieve this using the following
+code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extend raster ext by 30 \% of the original raster so it covers the whole mesh}
+\NormalTok{re }\OtherTok{\textless{}{-}} \FunctionTok{extend}\NormalTok{(elev\_raster, }\FunctionTok{ext}\NormalTok{(elev\_raster)}\SpecialCharTok{*}\FloatTok{1.3}\NormalTok{)}
+\CommentTok{\# Convert to an sf spatial object}
+\NormalTok{re\_df }\OtherTok{\textless{}{-}}\NormalTok{ re }\SpecialCharTok{\%\textgreater{}\%}\NormalTok{ stars}\SpecialCharTok{::}\FunctionTok{st\_as\_stars}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}  \FunctionTok{st\_as\_sf}\NormalTok{(}\AttributeTok{na.rm=}\NormalTok{F)}
+\CommentTok{\# fill in missing values using the original raster }
+\NormalTok{re\_df}\SpecialCharTok{$}\NormalTok{lyr}\FloatTok{.1} \OtherTok{\textless{}{-}} \FunctionTok{bru\_fill\_missing}\NormalTok{(elev\_raster,re\_df,re\_df}\SpecialCharTok{$}\NormalTok{lyr}\FloatTok{.1}\NormalTok{)}
+\CommentTok{\# rasterize}
+\NormalTok{elev\_rast\_p }\OtherTok{\textless{}{-}}\NormalTok{ stars}\SpecialCharTok{::}\FunctionTok{st\_rasterize}\NormalTok{(re\_df) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{rast}\NormalTok{()}
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_spatraster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ elev\_rast\_p) }
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-106-1.pdf}}
+
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, rightrule=.15mm, toprule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
+
+The \emph{bru\_fill\_missing()} function was added mainly to handle very
+local infilling on domain boundaries. For properly missing data, one
+should consider doing a proper model of the spatial field instead.
+
+\end{tcolorbox}
+
+\subsection{Results}\label{results}
+
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, opacitybacktitle=0.6, titlerule=0mm, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toprule=.15mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, breakable, arc=.35mm, toptitle=1mm, coltitle=black]
+
+Plot the estimated mean and standard deviation of the spatial GF and the
+log-intensity over the domain of interest
+
+Take hint
+
+Use the \emph{fm\_pixels()} and \emph{predict()} functions.
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pxl }\OtherTok{=} \FunctionTok{fm\_pixels}\NormalTok{(mesh, }\AttributeTok{mask=}\NormalTok{ region, }\AttributeTok{dims =} \FunctionTok{c}\NormalTok{(}\DecValTok{200}\NormalTok{,}\DecValTok{200}\NormalTok{))}
+\NormalTok{preds }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit3, pxl, }\SpecialCharTok{\textasciitilde{}}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{spde =}\NormalTok{ space,}
+                                       \AttributeTok{log\_int =}\NormalTok{ Intercept }\SpecialCharTok{+}\NormalTok{ space }\SpecialCharTok{+}\NormalTok{ elev))}
+
+\CommentTok{\#and plot as }
+\FunctionTok{library}\NormalTok{(scico)}
+\FunctionTok{library}\NormalTok{(patchwork)}
+
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data=}\NormalTok{ preds}\SpecialCharTok{$}\NormalTok{spde) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_sf}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ mean)) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_color\_scico}\NormalTok{() }\SpecialCharTok{+}
+ \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"spde mean"}\NormalTok{) }\SpecialCharTok{+}
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data=}\NormalTok{preds}\SpecialCharTok{$}\NormalTok{spde ) }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ sd)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_scico}\NormalTok{() }\SpecialCharTok{+}
+ \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"spde sd"}\NormalTok{) }\SpecialCharTok{+}
+
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data=}\NormalTok{preds}\SpecialCharTok{$}\NormalTok{log\_int) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_sf}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ mean)) }\SpecialCharTok{+} 
+  \FunctionTok{scale\_color\_scico}\NormalTok{() }\SpecialCharTok{+}
+ \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"log{-}int mean"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-107-1.pdf}}
+\end{center}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data=}\NormalTok{preds}\SpecialCharTok{$}\NormalTok{log\_int) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_sf}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ sd)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_scico}\NormalTok{() }\SpecialCharTok{+}
+ \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"log{-}int sd"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{plot\_layout}\NormalTok{(}\AttributeTok{ncol=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-107-2.pdf}}
+\end{center}
+
+\end{tcolorbox}
+
+Instead of just looking at the posterior mean and standard deviation, it
+can be usefull to look at \texttt{simulated\ fields} from the posterior
+distribution. This is because the mean field is, by definition, smoother
+than any realization of the field. So looking at simulation can give us
+a better idea of how the field might look like. We can do this using the
+\emph{generate()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sim\_fields }\OtherTok{=} \FunctionTok{generate}\NormalTok{(fit3, pxl, }\SpecialCharTok{\textasciitilde{}}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{spde =}\NormalTok{ space,}
+                                       \AttributeTok{log\_int =}\NormalTok{ Intercept }\SpecialCharTok{+}\NormalTok{ space }\SpecialCharTok{+}\NormalTok{ elev),}
+                     \AttributeTok{n.samples =} \DecValTok{4}\NormalTok{)}
+
+\FunctionTok{cbind}\NormalTok{(pxl,}\FunctionTok{sapply}\NormalTok{(sim\_fields, }\ControlFlowTok{function}\NormalTok{(x) x}\SpecialCharTok{$}\NormalTok{spde)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{geometry) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ value)) }\SpecialCharTok{+} 
+  \FunctionTok{facet\_wrap}\NormalTok{(.}\SpecialCharTok{\textasciitilde{}}\NormalTok{name) }\SpecialCharTok{+} \FunctionTok{scale\_color\_scico}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"simulated spatial fields"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-108-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cbind}\NormalTok{(pxl,}\FunctionTok{sapply}\NormalTok{(sim\_fields, }\ControlFlowTok{function}\NormalTok{(x) x}\SpecialCharTok{$}\NormalTok{log\_int)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{geometry) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ value)) }\SpecialCharTok{+} 
+  \FunctionTok{facet\_wrap}\NormalTok{(.}\SpecialCharTok{\textasciitilde{}}\NormalTok{name) }\SpecialCharTok{+} \FunctionTok{scale\_color\_scico}\NormalTok{() }\SpecialCharTok{+} 
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"simulated log intensity"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-108-2.pdf}}
 
 
 

@@ -1,7 +1,8 @@
 ---
 title: "Practical 2"
 format: 
-  html: default
+  html:
+    mainfont: "12"
   PrettyPDF-pdf:
     keep-tex: true
     number-sections: true
@@ -21,7 +22,7 @@ library(webexercises)
 knitr::purl("day1_practical_2.qmd")
 ```
 
-<font size="5"> **Aim of this practical:**
+<font size="5"> **Aim of this practical:** </font>
 
 1.  Set priors for different linear models
 2.  Compute and visualize posterior densities and summaries for marginal effects
@@ -35,8 +36,11 @@ we are going to learn:
 
 {{< downloadthis day1_practical_2.R dname="practical_2.R" label="Download Practical 2 R script" icon="database-fill-down" type="success" >}}
 
-{r child="practicals\\LM_ex_priors.qmd"}
+```{r child="practicals/LM_ex_priors.qmd"}
+```
 
-{r child="practicals\\LMM_fish_example.qmd"}
+```{r child="practicals/LMM_fish_example.qmd"}
+```
 
-{r child="practicals\\HGAMM_ex.qmd"}
+```{r child="practicals/HGAMM_ex.qmd"}
+```

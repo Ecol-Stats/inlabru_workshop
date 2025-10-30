@@ -14,6 +14,9 @@ format:
 embed-resources: true
 editor_options: 
   chunk_output_type: console
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r}
@@ -26,13 +29,13 @@ library(webexercises)
 
 ```
 
-## Log-Gaussian Cox Processes 
+# Log-Gaussian Cox Processes {#sec-linmodel}
 
 In this practical we will:
 
 -   Fit a [homogeneous Point Process](#HPP)
 -   Fit a [non-homogeneous Point Process](#NHPP)
--   Fit a LGCP (log-Gaussian Cox Process)
+-   Fit a [LGCP (log-Gaussian Cox Process)](#LGCP)
 
 Libraries to load:
 
@@ -57,9 +60,15 @@ library(tidyterra)
 
 ------------------------------------------------------------------------
 
-In this practical we consider the data `clmfires` in the `spatstat` library.
+## The data 
 
-This dataset is a record of forest fires in the Castilla-La Mancha region of Spain between 1998 and 2007. This region is approximately 400 by 400 kilometres. The coordinates are recorded in kilometres. For more info about the data you can type:
+In this practical we consider the data `clmfires` in the `spatstat`
+library.
+
+This dataset is a record of forest fires in the Castilla-La Mancha
+region of Spain between 1998 and 2007. This region is approximately 400
+by 400 kilometres. The coordinates are recorded in kilometres. For more
+info about the data you can type:
 
 ```{r}
 #| echo: true
@@ -68,7 +77,10 @@ This dataset is a record of forest fires in the Castilla-La Mancha region of Spa
 ?clmfires
 ```
 
-We first read the data and transform them into an `sf` object. We also create a polygon that represents the border of the Castilla-La Mancha region. We select the data for year 2004 and only those fires caused by lightning.
+We first read the data and transform them into an `sf` object. We also
+create a polygon that represents the border of the Castilla-La Mancha
+region. We select the data for year 2004 and only those fires caused by
+lightning.
 
 ```{r}
 #| label: fig-points
@@ -97,10 +109,15 @@ ggplot() + geom_sf(data = region, alpha = 0) + geom_sf(data = pp)
 
 ## Fit a homogeneous Poisson Process {#HPP}
 
-As a first exercise we are going to fit a homogeneous Poisson process (HPP) to the data. This is a model that assume constant intensity over the whole space so our liner predictor is\
+As a first exercise we are going to fit a homogeneous Poisson process
+(HPP) to the data. This is a model that assume constant intensity over
+the whole space so our linear predictor is then:
+
 $$
 \eta(s) = \log\lambda(s) = \beta_0 , \ \mathbf{s}\in\Omega
-$$ so the likelihood can be written as:
+$$
+
+so the likelihood can be written as:
 
 $$
 \begin{aligned}
@@ -111,13 +128,19 @@ $$
 
 where $|\Omega|$ is the area of the domain of interest.
 
-We need to approximate the integral using a numerical integration scheme as:\
+We need to approximate the integral using a numerical integration scheme
+as:
 
 $$
 \approx\exp\left(-\sum_{k=1}^{N_k}w_k\lambda(s_k)\right)\prod_{i=1}^n \lambda(\mathbf{s}_i)
-$$ Where $N_k$ is the number of integration points $s_1,\dots,s_{N_k}$ and $w_1,\dots,w_{N_k}$ are the integration weights.
+$$
 
-In this case, since the intensity is constant, the integration scheme is really simple: it is enough to consider one random point inside the domain with weight equal to the area of the domain.
+Where $N_k$ is the number of integration points $s_1,\dots,s_{N_k}$ and
+$w_1,\dots,w_{N_k}$ are the integration weights.
+
+In this case, since the intensity is constant, the integration scheme is
+really simple: it is enough to consider one random point inside the
+domain with weight equal to the area of the domain.
 
 ```{r}
 # define integration scheme
@@ -140,10 +163,14 @@ fit1 = bru(cmp, lik)
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
-1.  What is the estimated intensity?
-2.  Compare the estimated expected number of fires on the whole domain with the observed ones. `r hide("Take hint")`
+1.  Plot the estimated posterior distribution of the intensity
+2.  Compare the estimated expected number of fires on the whole domain
+    with the observed ones.
 
-Remember that in the `inlabru` framework we model the log intensity $\eta = log(\lambda)$
+`r hide("Take hint")`
+
+Remember that in the *inlabru* framework we model the log intensity
+$\eta = log(\lambda)$
 
 `r unhide()`
 
@@ -160,53 +187,63 @@ Remember that in the `inlabru` framework we model the log intensity $\eta = log(
 post_int = inla.tmarginal(function(x) exp(x), fit1$marginals.fixed$beta_0)
 post_int %>% ggplot() + geom_line(aes(x,y))
 
-# 2) To compute the expected number of points in the area we need to multiply the 
-# estimated intensity by the area of the domain. 
+# 2) To compute the expected number of points in the area we need to multiply the
+# estimated intensity by the area of the domain.
 # In the same plot we also show the number of observed fires as a vertical line.
 
 post_int = inla.tmarginal(function(x) st_area(region)* exp(x), fit1$marginals.fixed$beta_0)
 post_int %>% ggplot() + geom_line(aes(x,y)) +
   geom_vline(xintercept = dim(pp)[1])
+
 ```
 :::
 
-# Inhomogeneous Poisson Process {#NHPP}
+## Fit an Inhomogeneous Poisson Process {#NHPP}
 
-The model above has the clear disadvantages that assumes a constant intensity and from Figure @fig-points we clearly see that this is not the case.
+The model above has the clear disadvantages that assumes a constant
+intensity and from Figure @fig-points we clearly see that this is not
+the case.
 
-The library `spatstat` contains also some covariates that can help explain the fires distribution. Figure @fit-altitude shows the location of fires together with the (scaled) altitude.
+The library `spatstat` contains also some covariates that can help
+explain the fires distribution. Figure @fit-altitude shows the location
+of fires together with the (scaled) altitude.
 
 ```{r}
 #| label: fig-altitude
 #| fig-cap: "Distribution of the observed forest fires and scaled altitude"
-#| 
+#|
 elev_raster = rast(clmfires.extra[[2]]$elevation)
 elev_raster = scale(elev_raster)
 ggplot() + geom_spatraster(data = elev_raster) + geom_sf(data = pp) + scale_fill_scico()
 
 ```
 
-We are now going to use the altitude as a covariate to explain the variability of the intensity $\lambda(s)$ over the domain of interest.
+We are now going to use the altitude as a covariate to explain the
+variability of the intensity $\lambda(s)$ over the domain of interest.
 
 Our model is $$
 \log\lambda(s) = \beta_0 + \beta_1x(s)
 $$ where $x(s)$ is the altitude at location $s$.
 
-The likelihood becomes:
+The likelihood becomes: 
 
 $$
 \begin{aligned}
 p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 & = \exp \left( -\int_\Omega \exp(\beta_0 + \beta_1x(s)) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 \end{aligned}
-$$ Now we need to choose an integration scheme to solve the integral.
+$$ 
 
-In this case we will take a simple grid based approach where each quadrature location has an equal weight. Our grid consists of $N_k = 1000$ points and the weights are all equal to $|\Omega|/N_k$.
+Now we need to choose an integration scheme to solve the integral.
+
+In this case we will take a simple grid based approach where each
+quadrature location has an equal weight. Our grid consists of
+$N_k = 1000$ points and the weights are all equal to $|\Omega|/N_k$.
 
 ```{r}
 #| label: fig-int2
 #| fig-cap: "Integration scheme."
-#| 
+#|
 n.int = 1000
 ips = st_sf(geometry = st_sample(region,
             size = n.int,
@@ -217,7 +254,8 @@ ggplot() + geom_sf(data = ips, aes(color = weight)) + geom_sf(data= region, alph
 
 ```
 
-**OBS**: The implicit assumption here is that the intensity is constant inside each grid box, *and so is the covariate*!!
+**OBS**: The implicit assumption here is that the intensity is constant
+inside each grid box, *and so is the covariate*!!
 
 We can now fit the model:
 
@@ -231,30 +269,137 @@ lik = bru_obs(data = pp,
 fit2 = bru(cmp, lik)
 ```
 
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+What is the effect of the altitude on the (log) intensity of the
+process?
+
+`r hide("Take hint")`
+
+You can look at the summary for the fixed effects
+
+`r unhide()`
+
+```{r}
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+fit2$summary.fixed
+```
+:::
+
+
+::: {.callout-warning}
+⚠️ **WARNING!!**⚠️ When fitting a Point process, the integration scheme
+has to be fine enough to capture the spatial variability of the
+covariate!!
+:::
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Rerun the model with the altitude as covariate, but this time change the integration scheme as follows:
+
 ```{r}
 
-est_grid = st_as_sf(data.frame(crds(elev_raster)), coords = c("x","y"))
-est_grid  = st_intersection(est_grid, region)
+n.int2 = 50
 
-preds2 = predict(fit2, est_grid, ~ data.frame(log_scale = Intercept + elev,
-                                              lin_scale = exp(Intercept + elev)))
+ips2 = st_sf(geometry = st_sample(region,
+            size = n.int2,
+            type = "regular"))
+ips2$weight = st_area(region) / n.int2
+```
 
-preds2$lin_scale %>% ggplot() + geom_sf(aes(color = mean)) + scale_color_scico()
+What happens to the effect of the covariate?
+
+`r hide("Take hint")`
+Re-run the model changing the integration scheme in the _ips_ input of the _bru_obs()_ function.
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+lik_bis = bru_obs(data = pp,
+              family = "cp",
+              formula = formula,
+              ips = ips2)
+
+fit2bis = bru(cmp, lik_bis)
+
+# you can the check the differences between the two models
+fit2$sumary.fixed
+fit2bis$sumary.fixed
 
 ```
 
-```{r}
+:::
 
-Lam_samps2 = generate(fit2, ips, ~ sum(weight * exp(elev + Intercept)),
+::: {.callout-warning icon="false"}
+
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Now we want to predict the log-intensity over the whole domain.
+
+Use the  grid from the elevation raster
+```{r}
+est_grid = st_as_sf(data.frame(crds(elev_raster)), coords = c("x","y"))
+est_grid  = st_intersection(est_grid, region)
+```
+to predict the intensity over the domain. 
+
+`r hide("Take hint")`
+Use the _predict()_ function.
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+preds2 = predict(fit2, est_grid, ~ data.frame(log_scale = Intercept + elev,
+
+                                              lin_scale = exp(Intercept + elev)))
+# then visualize it like
+preds2$log_scale %>% 
+  ggplot() +
+  geom_sf(aes(color = mean)) +
+  scale_color_scico()
+
+```
+
+:::
+
+Finally, we want to use the fitted model to estimate the total  number of fires over the whole region. To do this we first have to fine the expected number of fires as:
+
+$$
+E(N_{\Omega}) = \int_{\Omega}\exp(\lambda(s))\ ds
+$$
+
+Then simulate possible realizations of $N_{\Omega}$ to include also the likelihood variability in our estimate:
+
+```{r}
+N_fires = generate(fit2, ips,
+                      formula = ~ {
+                        lambda = sum(weight * exp(elev + Intercept))
+                        rpois(1, lambda)},
                     n.samples = 2000)
 
-
-
-Lam_df = data.frame(
-  Lam = as.numeric(Lam_samps2))
-
-ggplot(Lam_df) +
-  geom_histogram(aes(x = Lam),
+ggplot(data = data.frame(N = as.vector(N_fires))) +
+  geom_histogram(aes(x = N),
                  colour = "blue",
                  alpha = 0.5,
                  bins = 20) +
@@ -263,334 +408,225 @@ ggplot(Lam_df) +
   theme_minimal() +
   xlab(expression(Lambda))
 
-
 ```
 
-::: callout-note
-:::
+## Fit a Log-Gaussian Cox Process{#LGCP}
 
-# Log-Gaussian Cox Process
+Finally we want to fit a LGCP with log intensity:
+
+$$
+\log(s) = \beta_0 + \beta_1x + u(s)
+$$
+
+where $\beta_0$ is the intercept, $\beta_1$ the effect of (standarized) altitude $x(s)$ as before and $u(s)$ is a Gaussian Random field defined through the SPDE approach.
+
+### Define the mesh
+
+The first step, as any time we use the SPDE approach is to defie the mesh and the priors for the marginal variance and range:
 
 ```{r}
-
 mesh = fm_mesh_2d(boundary = region,
                   max.edge = c(5, 10),
                   cutoff = 4, crs = NA)
+
 ggplot() + gg(mesh) + geom_sf(data = pp)
-
-
 
 spde_model =  inla.spde2.pcmatern(mesh,
                                   prior.sigma = c(1, 0.5),
                                   prior.range = c(100, 0.5))
 
+```
 
+We can then define the integration weight. Here we use the same points to `define the SPDE approximation` and to `approximate the integral` in the likelihood. We will see later that this does not have to be like this, BUT integration weight and SPDE weights have to be consistent with each other!
+
+```{r}
 ips = fm_int(mesh, samplers = region)
-ggplot() + geom_sf(data = ips, aes(color = weight)) + 
-  gg(mesh) + 
+
+ggplot() + geom_sf(data = ips, aes(color = weight)) +
+  gg(mesh) +
    scale_color_scico()
+```
+
+
+### Run the model
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Set up the components and  the formula for the model above by completing the code below and run the model.
+
+```{r}
+#| echo: true
+#| eval: false
+
+
+cmp = ~ ...
+
+formula = geometry ~ ...
+
+lik = bru_obs("cp",
+              formula = formula,
+              data = pp,
+              ips = ...)
+
+fit3 = bru(cmp, lik)
+
+```
+
+`r hide("Take hint")`
+
+The model has three components: intercept, linear effect of altitude and the spatial GRF
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
 
 cmp = ~ Intercept(1) + space(geometry, model = spde_model) + elev(elev_raster, model = "linear")
 
 formula = geometry ~ Intercept + space + elev
-
 
 lik = bru_obs("cp",
               formula = formula,
               data = pp,
               ips = ips)
 
+fit3 = bru(cmp, lik)
+```
+:::
+
+
+**Note** when running the model above you will get a warning:
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: true
 
 fit3 = bru(cmp, lik)
 
-
-Lam_samps3 = generate(fit3, ips, ~ sum(weight * exp(space + Intercept + elev)),
-                    n.samples = 2000)
+```
 
 
+It means that the _bru()_ function cannot find the covariate values for some of the mesh nodes. This is  a common situation. As the warning says, the _bru()_ function automatically imputes the value of the covarite using the nearest nodes. This increases the running time of the _bru()_  function, so one solution is to impute the values of the covariate over the whole mesh 'before' running the _bru()_  function. 
+
+Here, we notice that there is a single point for which elevation values are missing (see @fig-points2 the red point that lies outside the raster extension ).
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-width: 4.5
+#| fig-height: 4.5
+#| label: fig-points2
+#| fig-cap: "Integration scheme for numerical approximation of the stochastic integral in La Mancha Region"
+#| purl: false
+ggplot()+tidyterra::geom_spatraster(data=elev_raster)+
+  geom_sf(data=ips,alpha=0.25,col=1)+
+   geom_sf(data=ips[3525,],col=2)
+```
+
+To solve this, we can increase the raster extension so it covers all both data-points and quadrature locations as well. Then, we can use the `bru_fill_missing()` function to input the missing values with the nearest-available-value. We can achieve this using the following code:
 
 
+```{r}
+#| fig-width: 4.5
+#| fig-height: 4.5
+# Extend raster ext by 30 % of the original raster so it covers the whole mesh
+re <- extend(elev_raster, ext(elev_raster)*1.3)
+# Convert to an sf spatial object
+re_df <- re %>% stars::st_as_stars() %>%  st_as_sf(na.rm=F)
+# fill in missing values using the original raster 
+re_df$lyr.1 <- bru_fill_missing(elev_raster,re_df,re_df$lyr.1)
+# rasterize
+elev_rast_p <- stars::st_rasterize(re_df) %>% rast()
+ggplot() + geom_spatraster(data = elev_rast_p) 
 
-Lam_df3 = data.frame(
-  Lam = as.numeric(Lam_samps3))
+```
 
-ggplot(Lam_df3) +
-  geom_histogram(aes(x = Lam),
-                 colour = "blue",
-                 alpha = 0.5,
-                 bins = 20) +
-  geom_vline(xintercept = nrow(pp),
-             colour = "red") +
-  theme_minimal() +
-  xlab(expression(Lambda))
+::: {.callout-note}
+The _bru_fill_missing()_ function was added mainly to handle very local infilling on domain boundaries. For properly missing data, one should consider doing a proper model of the spatial field instead.
+:::
+
+## Results
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Plot the estimated mean and standard deviation of the spatial GF and the log-intensity over the domain of interest
+`r hide("Take hint")`
+
+Use the _fm_pixels()_ and _predict()_ functions.
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+#| message: false
+#| warning: false
 
 
+pxl = fm_pixels(mesh, mask= region, dims = c(200,200))
+preds = predict(fit3, pxl, ~data.frame(spde = space,
+                                       log_int = Intercept + space + elev))
+
+#and plot as 
+library(scico)
+library(patchwork)
+
+ggplot(data= preds$spde) + 
+  geom_sf(aes(color = mean)) + 
+  scale_color_scico() +
+ ggtitle("spde mean") +
+ggplot(data=preds$spde ) +
+  geom_sf(aes(color = sd)) +
+  scale_color_scico() +
+ ggtitle("spde sd") +
+
+ggplot(data=preds$log_int) + 
+  geom_sf(aes(color = mean)) + 
+  scale_color_scico() +
+ ggtitle("log-int mean")
+ggplot(data=preds$log_int) + 
+  geom_sf(aes(color = sd)) +
+  scale_color_scico() +
+ ggtitle("log-int sd") +
+  plot_layout(ncol=2)
+
+```
+:::
+
+
+Instead of just looking at the posterior mean and standard deviation, it can be usefull to look at `simulated fields` from the posterior distribution. This is because the mean field is, by definition, smoother than any realization of the field. So looking at simulation can give us a better idea of how the field might look like. We can do this using the _generate()_ function: 
+
+
+```{r}
+sim_fields = generate(fit3, pxl, ~data.frame(spde = space,
+                                       log_int = Intercept + space + elev),
+                     n.samples = 4)
+
+cbind(pxl,sapply(sim_fields, function(x) x$spde)) %>%
+  pivot_longer(-geometry) %>%
+  ggplot() + geom_sf(aes(color = value)) + 
+  facet_wrap(.~name) + scale_color_scico() +
+  ggtitle("simulated spatial fields")
+
+
+cbind(pxl,sapply(sim_fields, function(x) x$log_int)) %>%
+  pivot_longer(-geometry) %>%
+  ggplot() + geom_sf(aes(color = value)) + 
+  facet_wrap(.~name) + scale_color_scico() + 
+  ggtitle("simulated log intensity")
 
 
 ```
 
-<!-- #covars = st_as_sf(clmfires.extra[[1]][[1]])  -->
 
-<!-- pp %>%  -->
-
-<!--   st_drop_geometry() %>% -->
-
-<!--   mutate(yy = year(date)) %>% -->
-
-<!--   group_by(yy, cause )%>% -->
-
-<!--   summarise(n = n()) %>% -->
-
-<!--   ggplot() + geom_line(aes(yy, n, group = cause, color = cause)) -->
-
-<!-- pp %>%  -->
-
-<!--   st_drop_geometry() %>% -->
-
-<!--   mutate(yy = month(date)) %>% -->
-
-<!--   group_by(yy, cause )%>% -->
-
-<!--   summarise(n = n()) %>% -->
-
-<!--   ggplot() + geom_line(aes(yy, n, group = cause, color = cause)) -->
-
-<!-- pp %>%  -->
-
-<!--   mutate(yy = year(date)) %>% -->
-
-<!--   filter(yy %in% c( 2004, 2005), -->
-
-<!--          cause == "lightning") %>% -->
-
-<!--   ggplot() +  -->
-
-<!--   geom_sf(aes(color = cause), alpha = 0.3)  +  -->
-
-<!--   geom_sf(data = region, alpha = 0) + -->
-
-<!--   facet_wrap(~year(date)) -->
-
-<!-- pp1 = pp %>% filter(year(date)==2004, cause == "lightning") -->
-
-<!-- ggplot() + geom_sf(data = region) + geom_sf(data = pp1) -->
-
-<!-- summary(fit) -->
-
-<!-- pred_grid = fm_pixels(mesh, mask = region) -->
-
-<!-- preds = predict(fit, pred_grid, ~   data.frame( logscale = Intercept + space, -->
-
-<!--                                                 expscale = exp(Intercept + space))) -->
-
-<!-- preds$expscale %>% ggplot() + geom_sf(aes(color = median)) + scale_color_scico() + -->
-
-<!--   geom_sf(data = pp1, size = 0.3) -->
-
-<!-- preds %>% ggplot() + geom_sf(aes(color = sd)) + scale_color_scico() -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- data(gorillas_sf, package = "inlabru") -->
-
-<!-- matern <- inla.spde2.pcmatern(gorillas_sf$mesh, -->
-
-<!--   prior.range = c(0.1, 0.01), -->
-
-<!--   prior.sigma = c(1, 0.01) -->
-
-<!-- ) -->
-
-<!-- cmp <- ~ -->
-
-<!--   Common(geometry, model = matern) + -->
-
-<!--     Difference(geometry, model = matern) + -->
-
-<!--     Intercept(1) -->
-
-<!-- fml.major <- geometry ~ Intercept + Common + Difference / 2 -->
-
-<!-- fml.minor <- geometry ~ Intercept + Common - Difference / 2 -->
-
-<!-- lik_minor <- bru_obs("cp", -->
-
-<!--   formula = fml.major, -->
-
-<!--   data = gorillas_sf$nests[gorillas_sf$nests$group == "major", ], -->
-
-<!--   samplers = gorillas_sf$boundary, -->
-
-<!--   domain = list(geometry = gorillas_sf$mesh) -->
-
-<!-- ) -->
-
-<!-- lik_major <- bru_obs("cp", -->
-
-<!--   formula = fml.minor, -->
-
-<!--   data = gorillas_sf$nests[gorillas_sf$nests$group == "minor", ], -->
-
-<!--   samplers = gorillas_sf$boundary, -->
-
-<!--   domain = list(geometry = gorillas_sf$mesh) -->
-
-<!-- ) -->
-
-<!-- jfit <- bru(cmp, lik_major, lik_minor, -->
-
-<!--   options = list( -->
-
-<!--     control.inla = list( -->
-
-<!--       int.strategy = "eb" -->
-
-<!--     ), -->
-
-<!--     bru_max_iter = 1 -->
-
-<!--   ) -->
-
-<!-- ) -->
-
-<!-- ``` -->
-
-<!-- Some equations: -->
-
-<!-- $$ -->
-
-<!-- \begin{aligned} -->
-
-<!-- y_i&\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N \\ -->
-
-<!-- \eta_i &= \mu_i = \beta_0 + \beta_1 x_i -->
-
-<!-- \end{aligned} -->
-
-<!-- $$ -->
-
-<!-- ::: {.callout-tip icon="false"} -->
-
-<!-- ## {{< bi question-octagon color=#6dc83c >}} Question -->
-
-<!-- This is a Question -->
-
-<!-- `r hide("Answer")` -->
-
-<!-- Show the written answer -->
-
-<!-- `r unhide()` -->
-
-<!-- ::: -->
-
-<!-- ::: callout-note -->
-
-<!-- This is a Note -->
-
-<!-- ::: -->
-
-<!-- ### **Section of the exercise** -->
-
-<!-- Some R Code -->
-
-<!-- ```{r} -->
-
-<!-- #| code-fold: show -->
-
-<!-- beta = c(2,0.5) -->
-
-<!-- sd_error = 0.1 -->
-
-<!-- n = 100 -->
-
-<!-- x = rnorm(n) -->
-
-<!-- y = beta[1] + beta[2] * x + rnorm(n, sd = sd_error) -->
-
-<!-- df = data.frame(y = y, x = x)   -->
-
-<!-- ``` -->
-
-<!-- **sub section heading** -->
-
-<!-- ::: callout-note -->
-
-<!-- Note with R chunk that is neither evaluate or purled -->
-
-<!-- ```{r} -->
-
-<!-- #| eval: false -->
-
-<!-- #| purl: false -->
-
-<!-- cmp =  ~ -1 + myIntercept(1) + beta_1(x, model = "linear") -->
-
-<!-- ``` -->
-
-<!-- ::: -->
-
-<!-- ::: {.callout-warning icon="false"} -->
-
-<!-- ## {{< bi pencil-square color=#c8793c >}} Task -->
-
-<!-- This is a Task.. -->
-
-<!-- `r hide("Take hint")` -->
-
-<!-- Add hint details here... -->
-
-<!-- `r unhide()` -->
-
-<!-- ```{r} -->
-
-<!-- #| fig-width: 6 -->
-
-<!-- #| fig-height: 4 -->
-
-<!-- #| fig-align: center -->
-
-<!-- #| webex.hide: "Click here to see the solution" -->
-
-<!-- #| code-fold: show -->
-
-<!-- #| purl: false -->
-
-<!-- plot(y~x,data = df)  -->
-
-<!-- ``` -->
-
-<!-- ::: -->
-
-<!-- ### Download data Example -->
-
-<!-- 1.  First we need to write the data set on the datasets file (this could be a `.tiff`, `.RData`, `.csv`,etc.) -->
-
-<!--     ```{r} -->
-
-<!--     iris_subset <- iris %>%  -->
-
-<!--       dplyr::select(starts_with("S")) %>% -->
-
-<!--       filter(Species=="virginica") -->
-
-<!--     write.csv(iris_subset,file = "datasets/iris_subset.csv",row.names = F) -->
-
-<!--     ``` -->
-
-<!-- 2.  Then we need to add the following widget based on this quarto [extension](https://github.com/shafayetShafee/downloadthis) -->
-
-<!--     {{< downloadthis datasets/iris_subset.csv dname="PygmyWFBC.csv" label="Download data set" icon="database-fill-down" type="info" >}} -->
-
-<!-- The controls are: -->
-
-<!-- -   The files path (e.g., datasets/iris_subset.csv) -->
-
-<!-- -   The name of the file (As downloaded) -->
-
-<!-- -   The label of the button -->
-
-<!-- -   the icon of the button -->
-
-<!-- -   the type of button -->

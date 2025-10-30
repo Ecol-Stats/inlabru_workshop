@@ -13,6 +13,14 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r}
+#| warning: false
+#| message: false
+#| purl: false
+
+library(webexercises)
+```
+
 ## AR(1) models in `inlabru`
 
 In this exercise we will:

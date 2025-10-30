@@ -25,7 +25,7 @@ library(webexercises)
 
 ```
 
-## Models for areal data {#sec-linmodel}
+# Models for areal data 
 
 
 In this practical we are going to fit an areal model. We will: 
@@ -58,7 +58,7 @@ library(scico)
 
 
 
-### The data
+## The data
 
 
 We consider data on respiratory hospitalizations for Greater Glasgow and Clyde in 2007. The data are available from the `CARBayesdata` R Package:
@@ -128,7 +128,7 @@ diag(Q) = diag
 
 
 
-### The model
+## The model
 
 We fit a first model to the data where we consider a Poisson model for the  observed cases.
 
@@ -158,8 +158,8 @@ The hyperparameters of the model are $\tau_1$ and $\tau_2$
 **NOTE** In this case the linear predictor $\eta$ consists of three components!!
 
 
-::: {.callout-tip icon="false"}
-## {{< bi question-octagon color=#6dc83c >}} Question
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
 
 Fit the above model in using `inlabru` by completing the following code:
 
@@ -210,7 +210,7 @@ After fitting the model we want to extract results.
 ::: {.callout-tip icon="false"}
 ## {{< bi question-octagon color=#6dc83c >}} Question
 
-1. What is the estimated value for $\beta_0$?
+1. What is the estimated value for $\beta_0$? `r fitb(fit$summary.fixed[1], num = TRUE, tol = .001)`
 
 2. Look at the estimated values of the hyperparameters using
 ```{r}
@@ -219,15 +219,15 @@ After fitting the model we want to extract results.
 fit$summary.hyperpar
 ```
 
-which of the two spatial components (structured or unstructured) explains more of the variability in the counts?
+which of the two spatial components (structured or unstructured) explains more of the variability in the counts? `mcq(c("structured", answer = "unstructured"))`
 
 :::
 
 
 We now look at the predictions over space.
 
-::: {.callout-tip icon="false"}
-## {{< bi question-octagon color=#6dc83c >}} Question
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
 
 Complete the code below to produce prediction of the linear predictor $\eta_i$ and of the risk $\lambda_i$ and of the expected cases $E_i\exp(\lambda_i)$ over the whole space of interest. Then plot the mean and sd of the resulting surfaces.
 
@@ -292,7 +292,7 @@ pred$cases %>% ggplot() + geom_point(aes(observed, mean)) +
 
 **Note:** Here we are predicting the _mean_ of counts, not the counts!!! Predicting counts is the theme of the next task!
 
-### Getting prediction densities
+## Getting prediction densities
 
 Posterior predictive distributions, that is $\pi(y_i^{\text{new}}|\mathbf{y})$ are of interest in many applied problems. The `bru()` function
 does not return predictive densities. In the previous step we have computed predictions for the `expected counts` $\pi(E_i\lambda_i|\mathbf{y})$. The predictive distribution is then:

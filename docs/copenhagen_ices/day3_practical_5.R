@@ -38,9 +38,7 @@ resp_cases <- merge(GGHB.IZ %>%
   filter(year == 2007) %>%
     mutate(SMR = observed/expected)
 
-ggplot() + 
-  geom_sf(data = resp_cases, aes(fill = SMR)) +
-  scale_fill_scico(direction = -1)
+ggplot() + geom_sf(data = resp_cases, aes(fill = SMR)) + scale_fill_scico(direction = -1)
 
 
 
@@ -87,6 +85,12 @@ lik = bru_obs(formula = formula,
 
 fit = bru(cmp, lik)
 
+
+
+## -----------------------------------------------------------------------------
+#| echo: true
+#| eval: false
+# fit$summary.hyperpar
 
 
 ## -----------------------------------------------------------------------------
@@ -157,16 +161,6 @@ pred_counts = data.frame(observed = resp_cases$observed,
 ## ----child="practicals/Geostat_ex.qmd"----------------------------------------
 
 ## -----------------------------------------------------------------------------
-#| echo: false
-#| message: false
-#| warning: false
-
-# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
-library(webexercises)
-
-
-
-## -----------------------------------------------------------------------------
 #| warning: false
 #| message: false
 
@@ -203,7 +197,7 @@ qcs_grid = sdmTMB::qcs_grid
 #| 
 pcod_sf =   st_as_sf(pcod_df, coords = c("lon","lat"), crs = 4326)
 pcod_sf = st_transform(pcod_sf,
-                       crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
+crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
 
 
 ## -----------------------------------------------------------------------------
@@ -292,15 +286,17 @@ spde_model3 =  inla.spde2.pcmatern(mesh,
 
 
 ## -----------------------------------------------------------------------------
-ggplot() + geom_line(data = dens_prior_range(30,.5), aes(x,y, color = "model1")) +
-geom_line(data = dens_prior_range(1000,.5), aes(x,y, color = "model2")) +
-geom_line(data = dens_prior_range(100,.5), aes(x,y, color = "model3")) 
+ggplot() + 
+  geom_line(data = dens_prior_range(30,.5), aes(x,y, color = "model1")) +
+  geom_line(data = dens_prior_range(1000,.5), aes(x,y, color = "model2")) +
+  geom_line(data = dens_prior_range(100,.5), aes(x,y, color = "model3")) 
 
 
 ## -----------------------------------------------------------------------------
-ggplot() + geom_line(data = dens_prior_range(1,.5), aes(x,y, color = "model1")) +
-geom_line(data = dens_prior_range(10,.5), aes(x,y, color = "model2")) +
-geom_line(data = dens_prior_range(.1,.5), aes(x,y, color = "model3")) 
+ggplot() + 
+  geom_line(data = dens_prior_range(1,.5), aes(x,y, color = "model1")) +
+  geom_line(data = dens_prior_range(10,.5), aes(x,y, color = "model2")) +
+  geom_line(data = dens_prior_range(.1,.5), aes(x,y, color = "model3")) 
 
 
 ## -----------------------------------------------------------------------------
@@ -388,7 +384,8 @@ fit3 = bru(cmp, lik)
 
 # plot the estimated effect of depth
 
-fit3$summary.random$covariate %>% ggplot() + geom_line(aes(ID,mean)) + 
+fit3$summary.random$covariate %>% 
+  ggplot() + geom_line(aes(ID,mean)) + 
                                   geom_ribbon(aes(ID, ymin = `0.025quant`, 
                                                       ymax = `0.975quant`), alpha = 0.5)
 
@@ -481,7 +478,7 @@ fit1 = bru(cmp, lik)
 ## -----------------------------------------------------------------------------
 #| label: fig-altitude
 #| fig-cap: "Distribution of the observed forest fires and scaled altitude"
-#| 
+#|
 elev_raster = rast(clmfires.extra[[2]]$elevation)
 elev_raster = scale(elev_raster)
 ggplot() + geom_spatraster(data = elev_raster) + geom_sf(data = pp) + scale_fill_scico()
@@ -491,7 +488,7 @@ ggplot() + geom_spatraster(data = elev_raster) + geom_sf(data = pp) + scale_fill
 ## -----------------------------------------------------------------------------
 #| label: fig-int2
 #| fig-cap: "Integration scheme."
-#| 
+#|
 n.int = 1000
 ips = st_sf(geometry = st_sample(region,
             size = n.int,
@@ -512,30 +509,36 @@ lik = bru_obs(data = pp,
 fit2 = bru(cmp, lik)
 
 
+
+
 ## -----------------------------------------------------------------------------
 
+n.int2 = 50
+
+ips2 = st_sf(geometry = st_sample(region,
+            size = n.int2,
+            type = "regular"))
+ips2$weight = st_area(region) / n.int2
+
+
+
+
+## -----------------------------------------------------------------------------
 est_grid = st_as_sf(data.frame(crds(elev_raster)), coords = c("x","y"))
 est_grid  = st_intersection(est_grid, region)
 
-preds2 = predict(fit2, est_grid, ~ data.frame(log_scale = Intercept + elev,
-                                              lin_scale = exp(Intercept + elev)))
-
-preds2$lin_scale %>% ggplot() + geom_sf(aes(color = mean)) + scale_color_scico()
 
 
 
 ## -----------------------------------------------------------------------------
-
-Lam_samps2 = generate(fit2, ips, ~ sum(weight * exp(elev + Intercept)),
+N_fires = generate(fit2, ips,
+                      formula = ~ {
+                        lambda = sum(weight * exp(elev + Intercept))
+                        rpois(1, lambda)},
                     n.samples = 2000)
 
-
-
-Lam_df = data.frame(
-  Lam = as.numeric(Lam_samps2))
-
-ggplot(Lam_df) +
-  geom_histogram(aes(x = Lam),
+ggplot(data = data.frame(N = as.vector(N_fires))) +
+  geom_histogram(aes(x = N),
                  colour = "blue",
                  alpha = 0.5,
                  bins = 20) +
@@ -546,61 +549,92 @@ ggplot(Lam_df) +
 
 
 
-
 ## -----------------------------------------------------------------------------
-
 mesh = fm_mesh_2d(boundary = region,
                   max.edge = c(5, 10),
                   cutoff = 4, crs = NA)
+
 ggplot() + gg(mesh) + geom_sf(data = pp)
-
-
 
 spde_model =  inla.spde2.pcmatern(mesh,
                                   prior.sigma = c(1, 0.5),
                                   prior.range = c(100, 0.5))
 
 
+
+## -----------------------------------------------------------------------------
 ips = fm_int(mesh, samplers = region)
-ggplot() + geom_sf(data = ips, aes(color = weight)) + 
-  gg(mesh) + 
+
+ggplot() + geom_sf(data = ips, aes(color = weight)) +
+  gg(mesh) +
    scale_color_scico()
 
-cmp = ~ Intercept(1) + space(geometry, model = spde_model) + elev(elev_raster, model = "linear")
 
-formula = geometry ~ Intercept + space + elev
+## -----------------------------------------------------------------------------
+#| echo: true
+#| eval: false
+
+# 
+# cmp = ~ ...
+# 
+# formula = geometry ~ ...
+# 
+# lik = bru_obs("cp",
+#               formula = formula,
+#               data = pp,
+#               ips = ...)
+# 
+# fit3 = bru(cmp, lik)
+# 
 
 
-lik = bru_obs("cp",
-              formula = formula,
-              data = pp,
-              ips = ips)
 
+
+## -----------------------------------------------------------------------------
+#| echo: false
+#| eval: true
+#| warning: true
 
 fit3 = bru(cmp, lik)
 
 
-Lam_samps3 = generate(fit3, ips, ~ sum(weight * exp(space + Intercept + elev)),
-                    n.samples = 2000)
+
+
+
+## -----------------------------------------------------------------------------
+#| fig-width: 4.5
+#| fig-height: 4.5
+# Extend raster ext by 30 % of the original raster so it covers the whole mesh
+re <- extend(elev_raster, ext(elev_raster)*1.3)
+# Convert to an sf spatial object
+re_df <- re %>% stars::st_as_stars() %>%  st_as_sf(na.rm=F)
+# fill in missing values using the original raster 
+re_df$lyr.1 <- bru_fill_missing(elev_raster,re_df,re_df$lyr.1)
+# rasterize
+elev_rast_p <- stars::st_rasterize(re_df) %>% rast()
+ggplot() + geom_spatraster(data = elev_rast_p) 
 
 
 
 
 
-Lam_df3 = data.frame(
-  Lam = as.numeric(Lam_samps3))
+## -----------------------------------------------------------------------------
+sim_fields = generate(fit3, pxl, ~data.frame(spde = space,
+                                       log_int = Intercept + space + elev),
+                     n.samples = 4)
 
-ggplot(Lam_df3) +
-  geom_histogram(aes(x = Lam),
-                 colour = "blue",
-                 alpha = 0.5,
-                 bins = 20) +
-  geom_vline(xintercept = nrow(pp),
-             colour = "red") +
-  theme_minimal() +
-  xlab(expression(Lambda))
+cbind(pxl,sapply(sim_fields, function(x) x$spde)) %>%
+  pivot_longer(-geometry) %>%
+  ggplot() + geom_sf(aes(color = value)) + 
+  facet_wrap(.~name) + scale_color_scico() +
+  ggtitle("simulated spatial fields")
 
 
+cbind(pxl,sapply(sim_fields, function(x) x$log_int)) %>%
+  pivot_longer(-geometry) %>%
+  ggplot() + geom_sf(aes(color = value)) + 
+  facet_wrap(.~name) + scale_color_scico() + 
+  ggtitle("simulated log intensity")
 
 
 

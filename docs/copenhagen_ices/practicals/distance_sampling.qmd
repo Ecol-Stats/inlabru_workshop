@@ -1,0 +1,524 @@
+---
+title: "Practical"
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+
+# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
+library(webexercises)
+
+```
+
+# Distance Sampling
+
+In this practical we will:
+
+-   Fit a spatial distance sampling model
+-   Estimate animal abundance
+-   Compare models that use different detection functions
+
+Libraries to load:
+
+```{r}
+#| warning: false
+#| message: false
+
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+library(sf)
+# load some libraries to generate nice map plots
+library(scico)
+library(mapview)
+```
+
+## The data
+
+In the next exercise, we will explore data from a combination of several NOAA shipboard surveys conducted on pan-tropical spotted dolphins in the Gulf of Mexico. The data set is available in `inlabru` (originally obtianed from the `dsm` R package) and contains the following information:
+
+-   A total of 47 observations of groups of dolphins were detected. The group size was recorded, as well as the Beaufort sea state at the time of the observation.
+
+-   Transect width is 16 km, i.e. maximal detection distance 8 km (transect half-width 8 km).
+
+We can load and visualize the data as follows:
+
+```{r}
+mexdolphin <- mexdolphin_sf
+mexdolphin$depth <- mexdolphin$depth %>% mutate(depth=scale(depth)%>%c())
+mapviewOptions(basemaps = c( "OpenStreetMap.DE"))
+
+mapview(mexdolphin$points,zcol="size")+
+  mapview(mexdolphin$samplers)+
+ mapview(mexdolphin$ppoly )
+
+
+
+```
+
+## The workflow
+
+To model the density of spotted dolphins we take a thinned point process model of the form:
+
+$$
+p(\mathbf{y} | \lambda)  \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) p(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) p(\mathbf{s}_i)) 
+$$ {#eq-thinned_pp}
+
+When fitting a distance sampling model we need to fulfill the following tasks:
+
+1.  Build the mesh
+
+2.  Define the SPDE representation of the spatial GF. This includes defining the priors for the range and sd of the spatial GF
+
+3.  Define the *components* of the linear predictor. This includes the spatial GF and all eventual covariates
+
+4.  Define the observation model using the `bru_obs()` function
+
+5.  Run the model using the `bru()` function
+
+###  Building the mesh
+
+
+
+The first task is to build the mesh that covers the area of interest. For this purpose we use the function `fm_mesh_2d`. To do so, we need to define the area of interest. We can either use a predefined boundary or create a non convex hull surrounding the location of the specie sightseeings
+
+::: panel-tabset
+## non-covex hull
+
+```{r}
+boundary0 = fm_nonconvex_hull(mexdolphin$points,convex = -0.1)
+
+mesh_0 = fm_mesh_2d(boundary = boundary0,
+                          max.edge = c(30, 150), # The largest allowed triangle edge length.
+                          cutoff = 15,
+                          crs = fm_crs(mexdolphin$points))
+ggplot() + gg(mesh_0)
+```
+
+## domain boundary
+
+The `mexdolphin` object contains a predefined region of interest which can be accessed through `mexdolphin$ppoly`
+
+```{r}
+mesh_1 = fm_mesh_2d(boundary = mexdolphin$ppoly,
+                    max.edge = c(30, 150),
+                    cutoff = 15,
+                    crs = fm_crs(mexdolphin$points))
+ggplot() + gg(mesh_1)
+```
+:::
+
+Key parameters in mesh construction include: `max.edge` for maximum triangle edge lengths, `offset` for inner and outer extensions (to prevent edge effects), and cutoff to avoid overly small triangles in clustered areas.
+
+::: callout-note
+**General guidelines for creating the mesh**
+
+1.  Create triangulation meshes with `fm_mesh_2d()`
+2.  Move undesired boundary effects away from the domain of interest by extending to a smooth external boundary
+3.  Use a coarser resolution in the extension to reduce computational cost (`max.edge=c(inner, outer)`)
+4.  Use a fine resolution (subject to available computational resources) for the domain of interest (inner correlation range) and filter out small input point clusters (0 \< `cutoff` \< inner)
+5.  Coastlines and similar can be added to the domain specification in `fm_mesh_2d()` through the `boundary` argument.
+:::
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Look at the documentation for the `fm_mesh_2d` function typing
+
+```{r}
+#| eval: false
+#| purl: false
+
+?fm_mesh_2d
+```
+
+play around with the different options and create different meshes. You can compare these against a pre-computed mesh available by typing `plot(mexdolphin$mesh)`
+
+The *rule of thumb* is that your mesh should be:
+
+-   fine enough to well represent the spatial variability of your process, but not too fine in order to avoid computation burden
+-   the triangles should be regular, avoid long and thin triangles.
+-   The mesh should contain a buffer around your area of interest (this is what is defined in the `offset` option) in order to avoid boundary artefact in the estimated variance.
+:::
+
+###  Define the SPDE representation of the spatial GF
+
+To define the SPDE representation of the spatial GF we use the function `inla.spde2.pcmatern`. This takes as input the mesh we have defined and the PC-priors definition for $\rho$ and $\sigma$ (the range and the marginal standard deviation of the field).
+
+PC priors Gaussian Random field are defined in (Fuglstad et al. 2018). From a practical perspective for the range $\rho$ you need to define two paramters $\rho_0$ and $p_{\rho}$ such that you believe it is reasonable that
+
+$$
+P(\rho<\rho_0)=p_{\rho}
+$$
+
+while for the marginal variance $\sigma$ you need to define two parameters $\sigma_0$ and $p_{\sigma}$ such that you believe it is reasonable that
+
+$$
+P(\sigma>\sigma_0)=p_{\sigma}
+$$
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+Take a look at the code below and select which of the following statements about the specified Matern PC priors are true.
+
+```{r}
+spde_model <- inla.spde2.pcmatern(mexdolphin$mesh,
+  prior.sigma = c(2, 0.01),
+  prior.range = c(50, 0.01)
+)
+```
+
+```{r}
+#| echo: false
+#| purl: false
+opts_p <- c(
+   "there is probability of 0.01 that the spatial range is greater or equal than 50",
+   answer = "the probability that the spatial range is smaller than 50 is very small",
+   "the probability that the marginal standard deviation is smaller than 2 is very small",
+   answer = "there is probability of 0.99 that the marginal standard deviation is less or equal than 2"
+)
+```
+
+`r longmcq(opts_p)`
+:::
+
+###  Define the components of the linear predictor
+
+We have now defined a mesh and a SPDE representation of the spatial GF. We now need to define the model components.
+
+First, we need to define the detection function. Here, we will define a half-normal detection probability function. This must take distance as its first argument and the linear predictor of the sigma parameter as its second:
+
+```{r}
+hn <- function(distance, sigma) {
+  exp(-0.5 * (distance / sigma)^2)
+}
+```
+
+We need to now separately define the components of the model including the SPDE model, the Intercept, the effect of depth and the detection function parameter `sigma`.
+
+```{r}
+cmp <- ~ space(main = geometry, model = spde_model) +
+  sigma(1,
+    prec.linear = 1,
+    marginal = bm_marginal(qexp, pexp, dexp, rate = 1 / 8)
+  ) +
+  Intercept(1)
+```
+
+::: callout-note
+To control the prior distribution for the `sigma` parameter, we use a transformation mapper that converts a latent variable into an exponentially distributed variable with expectation 8 (this is a somewhat arbitrary value, but motivated by the maximum observation distance W)
+
+The `marginal` argument in the `sigma` component specifies the transformation function taking N(0,1) to Exponential(1/8).
+:::
+
+The formula, which describes how these components are combined to form the linear predictor 
+
+$$\log \color{red}{\tilde{\lambda}(s)} = \overbrace{\log \lambda (s)}^{\beta_0 + \xi(s)} + \overbrace{\log \color{red}{g(d(s))}}^{-0.5~d(\mathbf{s})^2\sigma^{-2}}$$
+
+```{r}
+eta <- geometry + distance ~ space +
+  log(hn(distance, sigma)) +
+  Intercept + log(2) 
+```
+
+Here, the `log(2)` offset in the predictor takes care of the two-sided detections
+
+
+###  Define the observation model
+
+`inlabru` has support for latent Gaussian Cox processes through the `cp` likelihood family. To fit a point process model recall that we need to approximate the integral in using a numerical integration scheme as:
+
+$$
+\approx\exp\left(-\sum_{k=1}^{N_k}w_k\lambda(s_k)\right)\prod_{i=1}^n \lambda(\mathbf{s}_i)
+$$ 
+
+Thus, we first create our integration scheme using the `fm_int` function by specifying integration domains for the spatial and distance dimensions.
+
+Here we use the same points to define the SPDE approximation and to approximate the integral in @eq-thinned_pp, so that the integration weight and SPDE weights are consistent with each other. We also need to explicitly integrate over the distance dimension so we use the `fm_mesh_1d()` to create mesh over the samplers (which are the transect lines in this dataset, so we need to tell `inlabru` about the strip half-width).
+
+```{r}
+# build integration scheme
+distance_domain <-  fm_mesh_1d(seq(0, 8,
+                              length.out = 30))
+ips = fm_int(list(geometry = mexdolphin$mesh,
+                  distance = distance_domain),
+             samplers = mexdolphin$samplers)
+```
+
+
+Now, we just need to supply the `sf` object as our data and the integration scheme `ips`:
+
+```{r}
+lik = bru_obs("cp",
+              formula = eta,
+              data = mexdolphin$points,
+              ips = ips)
+```
+
+Then we fit the model, passing both the components and the observaional model
+
+```{r}
+fit = bru(cmp, lik)
+```
+
+
+::: callout-note
+`inlabru` supports a shortcut for defining the integration points using the `domain` and `samplers` argument of `bru_obs()`. This `domain` argument expects a list of named domains with inputs that are then internally passed to `fm_int()` to build the integration scheme. The `samplers` argument is used to define subsets of the domain over which the integral should be computed. An equivalent way to define the same model as above is:
+
+```{r}
+#| eval: false
+#| purl: false
+
+lik = bru_obs(formula = eta, 
+              data = mexdolphin$points, 
+              family = "cp",
+              domain = list(
+                geometry = mesh,
+                distance = fm_mesh_1d(seq(0, 8, length.out = 30))),
+              samplers = mexdolphin$samplers)
+
+```
+:::
+
+## Visualize model Results
+
+
+### Posterior summaries
+
+We can use the `fit$summary.fixed` and `summary.hyperpar` to obtain posterior summaries of the model parameters.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+
+library(gt)
+rbind(fit$summary.fixed[,c(1,3,5)],
+      fit$summary.hyperpar[,c(1,3,5)]) %>% gt(rownames_to_stub = TRUE) %>% fmt_number(decimals=2)
+
+```
+
+
+Look at the SPDE parameter posteriors as follows:
+
+```{r}
+plot( spde.posterior(fit, "space", what = "range")) +
+plot( spde.posterior(fit, "space", what = "log.variance"))  
+```
+
+###  Model predictions
+
+We now want to extract the estimated posterior mean and sd of spatial GF. To do this we first need to define a grid of points where we want to predict. We do this using the function `fm_pixel()` which creates a regular grid of points covering the mesh
+
+```{r}
+pxl <- fm_pixels(mexdolphin$mesh, dims = c(200, 100), mask = mexdolphin$ppoly)
+```
+
+then compute the prediction for both the spatial GF and the linear predictor (spatial GF + intercept)
+
+```{r}
+pr.int = predict(fit, pxl, ~data.frame(spatial = space,
+                                      lambda = exp(Intercept + space)))
+```
+
+Finally, we can plot the maps of the spatial effect
+
+```{r}
+ggplot() + geom_sf(data = pr.int$spatial,aes(color = mean)) + scale_color_scico() + ggtitle("Posterior mean")
+
+ggplot() + geom_sf(data = pr.int$spatial,aes(color = sd)) + scale_color_scico() + ggtitle("Posterior sd")
+```
+
+**Note** The posterior sd is lowest at the observation points. Note how the posterior sd is inflated around the border, this is the "border effect" due to the SPDE representation.
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Using the predictions stored in `pr.int`, produce a map of the posterior mean intensity.
+
+`r hide("Take hint")`
+
+Recall that the predicted intensity is given by $\lambda(s) = \exp(\beta_0+\xi(s))$
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+ggplot() + 
+  geom_sf(data = pr.int$lambda,aes(color = mean)) +
+  scale_color_scico(palette = "imola") +
+  ggtitle("Posterior mean")
+```
+:::
+
+
+We can predict the detection function in a similar fashion.Here, we should make sure that it doesn’t try to evaluate the effects of components that can’t be evaluated using the given input data. 
+
+```{r}
+distdf <- data.frame(distance = seq(0, 8, length.out = 100))
+dfun <- predict(fit, distdf, ~ hn(distance, sigma))
+plot(dfun)
+```
+
+## Abundance estimates
+
+The mean expected number of animals can be computed  by integrating the intensity over the region of interest as follows:
+
+```{r}
+predpts <- fm_int(mexdolphin$mesh, mexdolphin$ppoly)
+Lambda <- predict(fit, predpts, ~ sum(weight * exp(space + Intercept)))
+Lambda
+```
+
+
+
+To fully propagate the uncertainty on the expected number animals we can draw Monte Carlo samples from the fitted model as follows (this could take a couple of minutes):
+
+
+```{r}
+Ns <- seq(50, 450, by = 1)
+Nest <- predict(fit, predpts,
+  ~ data.frame(
+    N = Ns,
+    density = dpois(
+      Ns,
+      lambda = sum(weight * exp(space + Intercept))
+    )
+  ),
+  n.samples = 2000
+)
+```
+
+
+We can compare this with a simpler "plug-in" approximation:
+
+```{r}
+Nest <- dplyr::bind_rows(
+  cbind(Nest, Method = "Posterior"),
+  data.frame(
+    N = Nest$N,
+    mean = dpois(Nest$N, lambda = Lambda$mean),
+    mean.mc_std_err = 0,
+    Method = "Plugin"
+  )
+)
+```
+
+Then, we can visualize the result as follows:
+
+```{r}
+ggplot(data = Nest) +
+  geom_line(aes(x = N, y = mean, colour = Method)) +
+  geom_ribbon(
+    aes(
+      x = N,
+      ymin = mean - 2 * mean.mc_std_err,
+      ymax = mean + 2 * mean.mc_std_err,
+      fill = Method,
+    ),
+    alpha = 0.2
+  ) +
+  geom_line(aes(x = N, y = mean, colour = Method)) +
+  ylab("Probability mass function")
+```
+
+## Model checks 
+
+Lastly, we can assess the goodness-of-fit of the models by comparing the observed counts across different distance bins and the expected counts and their associated uncertainty:
+
+```{r}
+bc <- bincount(
+  result = fit,
+  observations = mexdolphin$points$distance,
+  breaks = seq(0, max(mexdolphin$points$distance), length.out = 9),
+  predictor = distance ~ hn(distance, sigma)
+)
+attributes(bc)$ggp
+```
+
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Fit a model using a hazard detection function instead and compare the GoF of this model with that from the half-normal detection model. Recall that the hazard detection function is given by:
+
+$$
+g(\mathbf{s}|\sigma) = 1 - \exp(-(d(\mathbf{s})/\sigma)^{-1})
+$$
+
+`r hide("Take hint")`
+
+The hazard function can be codes as:
+
+```{r}
+hr <- function(distance, sigma) {
+  1 - exp(-(distance / sigma)^-1)
+}
+```
+
+You can use the same prior for the `sigma` parameter as for the half-Normal model (such parameters aren’t always comparable, but in this example it’s a reasonable choice). You can also use the `lgcp` function as a shortcut to fit the model (type `?lgcp` for further details).
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+formula1 <- geometry + distance ~ space +
+  log(hr(distance, sigma)) +
+  Intercept + log(2)
+
+# here we use the shorcut to specify the model
+fit1 <- lgcp(
+  components = cmp,
+  mexdolphin$points,
+  samplers = mexdolphin$samplers,
+  domain = list(
+    geometry = mexdolphin$mesh,
+    distance = fm_mesh_1d(seq(0, 8, length.out = 30))
+  ),
+  formula = formula1
+)
+
+bc1 <- bincount(
+  result = fit1,
+  observations = mexdolphin$points$distance,
+  breaks = seq(0, max(mexdolphin$points$distance), length.out = 9),
+  predictor = distance ~ hn(distance, sigma)
+)
+attributes(bc1)$ggp
+```
+:::
+
+

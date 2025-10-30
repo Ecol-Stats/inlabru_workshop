@@ -1,7 +1,8 @@
 ---
 title: "Practical 3"
 format: 
-  html: default
+  html: 
+    mainfont: "12"
   PrettyPDF-pdf:
     keep-tex: true
     number-sections: true
@@ -21,7 +22,7 @@ library(webexercises)
 knitr::purl("day2_practical_3.qmd")
 ```
 
-<font size="5"> **Aim of this practical:**
+<font size="5"> **Aim of this practical:** </font> 
 
 1.  Fit temporal models for discrete time points using `inlabru`
 2.  Forecasting for future observations
