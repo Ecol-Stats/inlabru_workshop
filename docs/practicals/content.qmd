@@ -56,6 +56,7 @@ myDT <- read.markdown(
 | Geostats_ex.qmd | Continuous space; Geostatistics; SDM; SPDE; Mesh; SPDE; Mesh | Fit a spatially explicit species distribution model and do predictions and obtain posterior samples from the fitted model | Real Data - Pacific Cod presence/absence records (`pcod`) from the `sdmTMB` package. |
 | LGOCV.qmd | Continuous space; model checks; model validations; model comparison; spatiotemporal | Compute LGOCV for geostatistical spatiotemporal data | Real Data - Pacific Cod presence/absence records (`pcod`) from the `sdmTMB` package. |
 | PointProcess_ex.qmd | Spatial; Point Process Model; LGCP; SPDE; Mesh | Fit homogeneous, non homegeneous and LCGP and do predictions. | Real Data - Forest fires in the Castilla-La Mancha region (`clmfires` ) of Spain between 1998 and 2007 from in the `spatstat` package. |
+| zero_inflated_ex.qmd | zip, hurdle, joint likelihood  SPDE; Mesh | Fit models with excess of zero | Real Data - gorilla data  (`gorilla` )  in the `inlabru` package. |
 '
 )
 
