@@ -486,7 +486,7 @@ $$
 **Note** here we have defined the two linear predictor to use the same covariates, but this is not necessary, they can be totally independent.
 
 To fit this model we have to define two likelihoods:
-  - One will account for the presence\absence process and has a Binomial model
+  - One will account for the presence-absence process and has a Binomial model
   - One will account for the counts and has a truncated Poisson model 
 
 ::: {.callout-warning icon="false"}
