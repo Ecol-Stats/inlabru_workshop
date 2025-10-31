@@ -10,6 +10,7 @@ project:
   - day2_practical_4.qmd
   - day3_practical_5.qmd
   - day4_practical_6.qmd
+  - day5_practical_8.qmd
   - slides/slides_1.qmd
   - slides/slides_2.qmd
 website:
@@ -32,6 +33,7 @@ website:
     - day2_practical_4.qmd
     - day3_practical_5.qmd
     - day4_practical_6.qmd
+    - day5_practical_8.qmd
   page-navigation: true
 format:
   html:

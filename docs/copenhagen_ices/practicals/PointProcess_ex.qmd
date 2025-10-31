@@ -305,7 +305,6 @@ covariate!!
 Rerun the model with the altitude as covariate, but this time change the integration scheme as follows:
 
 ```{r}
-
 n.int2 = 50
 
 ips2 = st_sf(geometry = st_sample(region,
@@ -328,6 +327,7 @@ Re-run the model changing the integration scheme in the _ips_ input of the _bru_
 #| webex.hide: "Click here to see the solution"
 #| code-fold: show
 #| purl: false
+#| eval: false
 
 lik_bis = bru_obs(data = pp,
               family = "cp",
@@ -337,30 +337,23 @@ lik_bis = bru_obs(data = pp,
 fit2bis = bru(cmp, lik_bis)
 
 # you can the check the differences between the two models
-fit2$sumary.fixed
-fit2bis$sumary.fixed
+rbind(fit2$summary.fixed,
+fit2bis$summary.fixed)
 
 ```
 
 :::
 
 ::: {.callout-warning icon="false"}
-
 ## {{< bi pencil-square color=#c8793c >}} Task
 
-Now we want to predict the log-intensity over the whole domain.
+Now we want to predict the log-intensity over the whole domain. Use the  grid from the elevation raster to predict the intensity over the domain. 
 
-Use the  grid from the elevation raster
 ```{r}
 est_grid = st_as_sf(data.frame(crds(elev_raster)), coords = c("x","y"))
 est_grid  = st_intersection(est_grid, region)
 ```
-to predict the intensity over the domain. 
 
-`r hide("Take hint")`
-Use the _predict()_ function.
-
-`r unhide()`
 
 ```{r}
 #| fig-width: 6
@@ -535,6 +528,7 @@ To solve this, we can increase the raster extension so it covers all both data-p
 ```{r}
 #| fig-width: 4.5
 #| fig-height: 4.5
+#| fig-align: center
 # Extend raster ext by 30 % of the original raster so it covers the whole mesh
 re <- extend(elev_raster, ext(elev_raster)*1.3)
 # Convert to an sf spatial object

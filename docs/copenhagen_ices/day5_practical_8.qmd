@@ -31,5 +31,4 @@ In this practical we are going to look at some model comparison and validation t
 ```{r child="practicals/distance_sampling.qmd"}
 ```
 
-```{r child="practicals/zero_inflated_ex.qmd"}
-```
+
