@@ -769,123 +769,48 @@ pred_zap3 <- predict( fit_zap3, counts_df,
 :::
 
 
-## Model Comparison
+## Using scores
 
-We have set `control.compute=list(cpo = T, waic = T, dic = T, mlik = T)` before running the models, therefore we can compare the scores for the four models:
+We can compare model using the scores that the _bru()_ function computes since we have set, at the beginning. the options to 
 ```{r}
-
-scores = data.frame(
-  names = c("zip", "hurdle", "hurdle2", "hurdle3"),
-  dic = c(fit_zip$dic$dic, fit_zap$dic$dic, fit_zap2$dic$dic, fit_zap3$dic$dic),
-  waic = c(fit_zip$waic$waic, fit_zap$waic$waic, fit_zap2$waic$waic, fit_zap3$waic$waic),
-  mlik = c(fit_zip$mlik[1], fit_zap$mlik[1], fit_zap2$mlik[1], fit_zap3$mlik[1]))
-
-scores  
-  
-
-```
-
-From the table above we see that, when looking at a balance between complexity and fit, the zero inflated model (`zip`) seems to be the best one.
-
-
-The variance in count predictions can be obtained from the posterior predictions
-of expectations and variances that were previously computed for each grid box.
-Let's denote the count expectation in each grid box as $m_i$, and the count
-variance as $s_i^2$, both conditioned on the model predictor $\eta_i$. Then, the
-posterior predictive variance of the count $X_i$ is given by:
-
-$$
-\begin{aligned}
-V(X_i) &= E(V(X_i|\eta_i)) + V(E(X_i|\eta_i)) \\
-&= E(s_i^2) + V(m_i) .
-\end{aligned}
-$$
-
-This equation provides the posterior predictive variance of the count $X_i$
-based on the expectations and variances of the model predictions $m_i$ and
-$s_i^2$ for each grid box, conditioned on the model predictor $\eta_i$.
-
-Predictive Integral Transform (PIT)
-[@marshall2003ApproximateCrossvalidatoryPredictive;@gelman1996PosteriorPredictiveAssessment;@held2010PosteriorCrossvalidatoryPredictive]
-is calculated as the cumulative distribution function (CDF) of the observed data
-at each predicted value from the model. Mathematically, for each observation
-$y_i$ and its corresponding predicted value $\hat{y}_i$ from the model, the PIT
-is calculated as follows:
-
-$$PIT_i=P(Y_i\leq \hat y_i \vert data)$$
-
-where $Y_i$ is a random variable representing the observed data for the $i$th
-observation.
-
-The PIT measures how well the model's predicted values align with the
-distribution of the observed data. Ideally, if the model's predictions are
-perfect, the PIT values should follow a uniform distribution between 0 and 1.
-Deviations from this uniform distribution may indicate issues with model
-calibration or overfitting. It's often used to assess the reliability of model
-predictions and can be visualized through PIT histograms or quantile-quantile
-(Q-Q) plots.
-
-The Conditional Predictive Ordinate (CPO)
-[@pettit1990ConditionalPredictiveOrdinate] is calculated as the posterior
-probability of the observed data at each observation point, conditional on the
-rest of the data and the model. For each observation $y_i$, it is computed as:
-
-$$CPO_i=P(y_i\vert data \setminus y_i, model)$$
- 
-where $\setminus$ means "other than", so that $P(y_i | \text{data}\setminus y_i,
-\text{model})$ represents the conditional probability given all other observed
-data and the model.
-
-CPO provides a measure of how well the model predicts each individual
-observation while taking into account the rest of the data and the model. A low
-CPO value suggests that the model has difficulty explaining that particular data
-point, whereas a high CPO value indicates a good fit for that observation. In
-practice, CPO values are often used to identify influential observations,
-potential outliers, or model misspecification. When comparing models, the
-following summary of the CPO is often used:
-
-$$-\sum_{i=1}^n\log(CPO_i)$$
-where smaller values indicate a better model fit.
-
-```{r, out.width="100%", fig.width=10, fig.height=5, fig.align='center'}
+#| echo: true
 #| eval: false
-zap_pit <- rep(NA_real_, nrow(counts_df))
-zap_pit[counts_df$count > 0] <- fit_zap$cpo$pit[-seq_len(nrow(counts_df))]
 
-df <- data.frame(
-  count = rep(counts_df$count, times = 3),
-  pred_mean = c(
-    expect_poi$mean,
-    expect_zip$mean,
-    expect_zap$mean
-  ),
-  pred_var = c(
-    expect_poi$pred_var,
-    expect_zip$pred_var,
-    expect_zap$pred_var
-  ),
-  log_score = c(
-    expect_poi$log_score,
-    expect_zip$log_score,
-    expect_zap$log_score
-  ),
-  pit = c(
-    fit_poi$cpo$pit * c(NA_real_, 1)[1 + (counts_df$count > 0)],
-    fit_zip$cpo$pit * c(NA_real_, 1)[1 + (counts_df$count > 0)],
-    zap_pit
-  ),
-  Model = rep(c("Poisson", "ZIP", "ZAP"), each = nrow(counts_df))
-)
+bru_options_set(control.compute = list(dic = TRUE,
+                                       waic = TRUE,
+                                       mlik = TRUE,
+                                       cpo = TRUE))
 
-p1 <- ggplot(df) +
-  geom_point(aes(pred_mean, count - pred_mean, color = Model)) +
-  ggtitle("Residuals")
-
-p2 <- ggplot(df) +
-  stat_ecdf(aes(pit, color = Model), na.rm = TRUE) +
-  scale_x_continuous(expand = c(0, 0)) +
-  ggtitle("PIT")
-
-patchwork::wrap_plots(p1, p2, nrow = 1, guides = "collect")
 ```
+
+
+Lets use these scores to compare the models.
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Extract the DIC, WAIC and MLIK values for the four models and compare them
+
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+data.frame( Model = c("ZIP", "HURDLE", "HURDLE_2","HURDLE_3" ),
+  DIC = c(fit_zip$dic$dic, fit_zap$dic$dic, WAIC = fit_zap2$dic$dic, fit_zap3$dic$dic),
+            WAIC = c(fit_zip$waic$waic, fit_zap$waic$waic, fit_zap2$waic$waic, fit_zap3$waic$waic),
+            MLIK = c(fit_zip$mlik[1], fit_zap$mlik[1], fit_zap2$mlik[1], fit_zap3$mlik[1]))
+            
+
+
+```
+:::
+
+
+
+From the table above we can see that the model that best balances complexity and fit is the zero inflated one (ZIP).
 
