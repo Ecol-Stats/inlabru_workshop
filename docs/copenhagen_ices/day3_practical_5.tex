@@ -279,7 +279,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, colback={codebgcolor}, sharp corners, frame hidden, enhanced, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, sharp corners, boxrule=0pt, breakable, colback={codebgcolor}, frame hidden]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -476,7 +476,7 @@ The hyperparameters of the model are \(\tau_1\) and \(\tau_2\)
 \textbf{NOTE} In this case the linear predictor \(\eta\) consists of
 three components!!
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Fit the above model in using \texttt{inlabru} by completing the
 following code:
@@ -518,7 +518,7 @@ Answer
 
 After fitting the model we want to extract results.
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-tip-color-frame, colbacktitle=quarto-callout-tip-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Question}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, opacityback=0, left=2mm, title={Question}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -555,7 +555,7 @@ After fitting the model we want to extract results.
 
 We now look at the predictions over space.
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Complete the code below to produce prediction of the linear predictor
 \(\eta_i\) and of the risk \(\lambda_i\) and of the expected cases
@@ -682,7 +682,7 @@ Here is the code:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Plot the observations against the predicted new counts and the predicted
 expected counts. Include the uncertainty and compare the two.
@@ -900,7 +900,7 @@ the mesh construction but, of course, not when it come to estimaation.)
 
 \pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-36-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Look at the documentation for the \texttt{fm\_mesh\_2d} function typing
 
@@ -1027,7 +1027,7 @@ and for the sd:
 
 \pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-41-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-tip-color-frame, colbacktitle=quarto-callout-tip-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Question}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame, opacityback=0, left=2mm, title={Question}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Consider the \texttt{pcod\_sf}, the spatial extension and type of the
 data\ldots is some of the previous choices more reasonable than other?
@@ -1110,7 +1110,7 @@ Finally we are ready to run the model
 
 \subsubsection{Hyperparameters}\label{hyperparameters}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Plot the posterior densities for the range \(\rho\) and the standard
 deviation \(\sigma\) alog with the prior for both parameters.
@@ -1209,7 +1209,7 @@ this by defining a \texttt{sf} object using coordinates in the object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Produce prediction over \texttt{pxl1} unsing the same techniques as
 before. Plot your results.
@@ -1302,7 +1302,7 @@ the probability of presence. We do this in two different models
 \] where \(f(.)\) is a smooth function. We will use a RW2 model for
 this.
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Fit model 1. Define components, observation model and use the
 \texttt{bru()} function to estimate the parameters.
@@ -1371,7 +1371,7 @@ fit the model as usual
 
 \pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-54-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Create a map of predicted \emph{probability} from Model 3. You can use a
 inverse logit function defined as
@@ -1556,7 +1556,7 @@ domain with weight equal to the area of the domain.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1688,7 +1688,7 @@ We can now fit the model:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 What is the effect of the altitude on the (log) intensity of the
 process?
@@ -1707,13 +1707,13 @@ Click here to see the solution
 
 \begin{verbatim}
                 mean         sd 0.025quant   0.5quant 0.975quant       mode kld
-Intercept -6.5913959 0.10110609 -6.7895602 -6.5913959 -6.3932316 -6.5913959   0
-elev       0.6417548 0.06771751  0.5090309  0.6417548  0.7744786  0.6417548   0
+Intercept -6.5941345 0.10118400 -6.7924515 -6.5941345 -6.3958175 -6.5941345   0
+elev       0.6308716 0.06787128  0.4978463  0.6308716  0.7638968  0.6308716   0
 \end{verbatim}
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{Warning}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{Warning}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 ⚠️ \textbf{WARNING!!}⚠️ When fitting a Point process, the integration
 scheme has to be fine enough to capture the spatial variability of the
@@ -1721,7 +1721,7 @@ covariate!!
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Rerun the model with the altitude as covariate, but this time change the
 integration scheme as follows:
@@ -1763,10 +1763,10 @@ Click here to see the solution
 
 \begin{verbatim}
                  mean         sd 0.025quant   0.5quant 0.975quant       mode
-Intercept  -6.5913959 0.10110609 -6.7895602 -6.5913959 -6.3932316 -6.5913959
-elev        0.6417548 0.06771751  0.5090309  0.6417548  0.7744786  0.6417548
-Intercept1 -6.4836954 0.09723156 -6.6742658 -6.4836954 -6.2931251 -6.4836954
-elev1       0.4526015 0.05974057  0.3355121  0.4526015  0.5696908  0.4526015
+Intercept  -6.5941345 0.10118400 -6.7924515 -6.5941345 -6.3958175 -6.5941345
+elev        0.6308716 0.06787128  0.4978463  0.6308716  0.7638968  0.6308716
+Intercept1 -6.5891594 0.09821404 -6.7816554 -6.5891594 -6.3966634 -6.5891594
+elev1       0.5819111 0.06183045  0.4607256  0.5819111  0.7030965  0.5819111
            kld
 Intercept    0
 elev         0
@@ -1776,7 +1776,7 @@ elev1        0
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Now we want to predict the log-intensity over the whole domain. Use the
 grid from the elevation raster to predict the intensity over the domain.
@@ -1899,7 +1899,7 @@ weights have to be consistent with each other!
 
 \subsubsection{Run the model}\label{run-the-model-1}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Set up the components and the formula for the model above by completing
 the code below and run the model.
@@ -2000,7 +2000,7 @@ code:
 \pandocbounded{\includegraphics[keepaspectratio]{day3_practical_5_files/figure-pdf/unnamed-chunk-106-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-note-color-frame, colbacktitle=quarto-callout-note-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, opacityback=0, left=2mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 The \texttt{bru\_fill\_missing()} function was added mainly to handle
 very local infilling on domain boundaries. For properly missing data,
@@ -2010,7 +2010,7 @@ one should consider doing a proper model of the spatial field instead.
 
 \subsection{Results}\label{results}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, bottomtitle=1mm, bottomrule=.15mm, leftrule=.75mm, coltitle=black, rightrule=.15mm, titlerule=0mm, toprule=.15mm, opacitybacktitle=0.6, title={Task}, breakable, arc=.35mm, toptitle=1mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, title={Task}, colback=white, bottomtitle=1mm, breakable, toptitle=1mm, bottomrule=.15mm, titlerule=0mm, leftrule=.75mm, arc=.35mm, toprule=.15mm, rightrule=.15mm]
 
 Plot the estimated mean and standard deviation of the spatial GF and the
 log-intensity over the domain of interest

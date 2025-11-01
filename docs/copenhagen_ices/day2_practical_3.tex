@@ -279,7 +279,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, colback={codebgcolor}, enhanced, sharp corners, breakable, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, frame hidden, colback={codebgcolor}, breakable, sharp corners, enhanced]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -681,7 +681,7 @@ First we make a subset of the dataset and create a time index \(T\):
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, arc=.35mm, breakable, opacitybacktitle=0.6, toptitle=1mm, coltitle=black, toprule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, bottomtitle=1mm, titlerule=0mm, bottomrule=.15mm, title={Task}, opacityback=0, rightrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, titlerule=0mm, colback=white, breakable, leftrule=.75mm, coltitle=black, opacityback=0, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, toprule=.15mm, title={Task}, bottomrule=.15mm, rightrule=.15mm, left=2mm]
 
 Fit an AR(1) model to the Erie lake data using \texttt{inlabru}, then
 plot the model fitted values showing 95\% credible intervals.
@@ -730,7 +730,7 @@ Click here to see the solution
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-tip-color-frame, arc=.35mm, breakable, opacitybacktitle=0.6, toptitle=1mm, coltitle=black, toprule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, colback=white, bottomtitle=1mm, titlerule=0mm, bottomrule=.15mm, title={Question}, opacityback=0, rightrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, titlerule=0mm, colback=white, breakable, leftrule=.75mm, coltitle=black, opacityback=0, opacitybacktitle=0.6, colframe=quarto-callout-tip-color-frame, arc=.35mm, colbacktitle=quarto-callout-tip-color!10!white, bottomtitle=1mm, toprule=.15mm, title={Question}, bottomrule=.15mm, rightrule=.15mm, left=2mm]
 
 Are there any issues with the fitted model, and if so, how do you think
 we should address them?
@@ -763,7 +763,7 @@ values set to 4 in each case. Then, Gaussian priors
 \(\theta_\phi \sim \mathcal{N}(0, \tau_y= 0.15)\) are used for the
 intercept and correlation parameter respectively.
 
-\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, arc=.35mm, breakable, opacitybacktitle=0.6, toptitle=1mm, coltitle=black, toprule=.15mm, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, colback=white, bottomtitle=1mm, titlerule=0mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacityback=0, rightrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, titlerule=0mm, colback=white, breakable, leftrule=.75mm, coltitle=black, opacityback=0, opacitybacktitle=0.6, colframe=quarto-callout-note-color-frame, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, toprule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, bottomrule=.15mm, rightrule=.15mm, left=2mm]
 
 Specifically for AR(1) correlation parameter \(\phi\), INLA uses the
 following logit transformation on \(\theta_\phi\):
@@ -814,14 +814,14 @@ standard deviation \(\sigma_u = \tau_u^{-1/2}\)
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-tip-color-frame, arc=.35mm, breakable, opacitybacktitle=0.6, toptitle=1mm, coltitle=black, toprule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, colback=white, bottomtitle=1mm, titlerule=0mm, bottomrule=.15mm, title={Question}, opacityback=0, rightrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, titlerule=0mm, colback=white, breakable, leftrule=.75mm, coltitle=black, opacityback=0, opacitybacktitle=0.6, colframe=quarto-callout-tip-color-frame, arc=.35mm, colbacktitle=quarto-callout-tip-color!10!white, bottomtitle=1mm, toprule=.15mm, title={Question}, bottomrule=.15mm, rightrule=.15mm, left=2mm]
 
 What is the posterior mean for the correlation parameter \(\rho\)?
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, arc=.35mm, breakable, opacitybacktitle=0.6, toptitle=1mm, coltitle=black, toprule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, bottomtitle=1mm, titlerule=0mm, bottomrule=.15mm, title={Task}, opacityback=0, rightrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, titlerule=0mm, colback=white, breakable, leftrule=.75mm, coltitle=black, opacityback=0, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, toprule=.15mm, title={Task}, bottomrule=.15mm, rightrule=.15mm, left=2mm]
 
 Plot the fitted values of the model, has the overfitting problem being
 alleviated?
@@ -908,7 +908,7 @@ predicted values
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_3_files/figure-pdf/unnamed-chunk-33-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-tip-color-frame, arc=.35mm, breakable, opacitybacktitle=0.6, toptitle=1mm, coltitle=black, toprule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, colback=white, bottomtitle=1mm, titlerule=0mm, bottomrule=.15mm, title={Question}, opacityback=0, rightrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, titlerule=0mm, colback=white, breakable, leftrule=.75mm, coltitle=black, opacityback=0, opacitybacktitle=0.6, colframe=quarto-callout-tip-color-frame, arc=.35mm, colbacktitle=quarto-callout-tip-color!10!white, bottomtitle=1mm, toprule=.15mm, title={Question}, bottomrule=.15mm, rightrule=.15mm, left=2mm]
 
 Take a look at the model summaries using the \texttt{summary} function,
 do you see anything odd?
@@ -932,7 +932,7 @@ ensure identifiability of \(\alpha\)
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, arc=.35mm, breakable, opacitybacktitle=0.6, toptitle=1mm, coltitle=black, toprule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, colback=white, bottomtitle=1mm, titlerule=0mm, bottomrule=.15mm, title={Task}, opacityback=0, rightrule=.15mm, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, titlerule=0mm, colback=white, breakable, leftrule=.75mm, coltitle=black, opacityback=0, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, toprule=.15mm, title={Task}, bottomrule=.15mm, rightrule=.15mm, left=2mm]
 
 Fit an RW(1) model to the Erie data but now set \texttt{constr=TRUE} to
 impose a sum-to-zero constraint on the random effect. Then compare your
@@ -958,7 +958,7 @@ Click here to see the solution
 
 \begin{verbatim}
           mean         sd 0.025quant 0.5quant 0.975quant     mode          kld
-alpha 174.1381 0.02383785   174.0913 174.1381    174.185 174.1381 1.440666e-08
+alpha 174.1381 0.02379181   174.0913 174.1381   174.1849 174.1381 1.928332e-08
 \end{verbatim}
 
 \end{tcolorbox}

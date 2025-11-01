@@ -3,7 +3,6 @@ project:
   output-dir: docs
   render:
   - index.qmd
-  - slides.qmd
   - day1_practical.qmd
   - day1_practical_2.qmd
   - day2_practical_3.qmd
@@ -13,6 +12,11 @@ project:
   - day5_practical_8.qmd
   - slides/slides_1.qmd
   - slides/slides_2.qmd
+  - slides/slides_3.qmd
+  - slides/slides_5.qmd
+  - slides/slides_10.qmd
+  - slides/slides_12.qmd
+  - slides/slides_13.qmd
 website:
   title: inlabru workshop
   navbar:
@@ -20,8 +24,6 @@ website:
     left:
     - href: index.qmd
       text: Home
-    - href: slides.qmd
-      text: Slides
   sidebar:
     style: docked
     search: true

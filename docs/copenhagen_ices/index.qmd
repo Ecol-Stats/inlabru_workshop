@@ -34,32 +34,32 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 ::: panel-tabset
 ### Day 1
 
-|     Time      |                     Topic                      |
-|:-------------:|:----------------------------------------------:|
-| 10:00 - 10:30 |            ICES informative session            |
-| 10:30 - 11:30 |    **Session 1**: Introduction to `inlabru`    |
-| 11:30 - 13:00 |   [Practical Session 1](day1_practical.qmd)    |
-| 13:00 - 14:30 |                 Lunch break 🍽️                 |
-| 14:30 - 15:30 | **Session 2**: Latent Gaussian Models and INLA |
-| 15:30 - 15:45 |                Coffee Break ☕                 |
-| 15:45 - 16:45 |  [Practical Session 2](day1_practical_2.qmd)   |
-| 16:45 - 17:00 |              wrap-up and outlook               |
+| Time | Topic |
+|:--:|:--:|
+| 10:00 - 10:30 | ICES informative session |
+| 10:30 - 11:30 | [**Session 1**: Introduction to `inlabru`](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_2.html) |
+| 11:30 - 13:00 | [Practical Session 1](day1_practical.qmd) |
+| 13:00 - 14:30 | Lunch break 🍽️ |
+| 14:30 - 15:30 | [**Session 2**: Latent Gaussian Models and INLA](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_3.html) |
+| 15:30 - 15:45 | Coffee Break ☕ |
+| 15:45 - 16:45 | [Practical Session 2](day1_practical_2.qmd) |
+| 16:45 - 17:00 | wrap-up and outlook |
 
 : {.striped .hover}
 
 ### Day 2
 
-|     Time      |                         Topic                          |
-|:-------------:|:------------------------------------------------------:|
-| 9:00 - 10:00  | **Session 3**: Temporal modelling and smoothing part 1 |
-| 10:00 - 10:30 |                        Snack 🥙                        |
+| Time | Topic |
+|:---------------:|:-----------------------------------------------------:|
+| 9:00 - 10:00 | **Session 3**: Temporal modelling and smoothing part 1 |
+| 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | **Session 4**: Temporal modelling and smoothing part 2 |
-| 11:30 - 13:00 |      [Practical Session 3](day2_practical_3.qmd)       |
-| 13:00 - 14:30 |                     Lunch break 🍽️                     |
-| 14:30 - 15:30 |   **Session 5**: Introduction to Spatial Statistics    |
-| 15:35 - 15:45 |                    Coffee Break ☕                     |
-| 15:45 - 16:45 |      [Practical Session 4](day2_practical_4.qmd)       |
-| 16:45 - 17:00 |                  wrap-up and outlook                   |
+| 11:30 - 13:00 | [Practical Session 3](day2_practical_3.qmd) |
+| 13:00 - 14:30 | Lunch break 🍽️ |
+| 14:30 - 15:30 | [**Session 5**: Introduction to Spatial Statistics](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_5.html) |
+| 15:35 - 15:45 | Coffee Break ☕ |
+| 15:45 - 16:45 | [Practical Session 4](day2_practical_4.qmd) |
+| 16:45 - 17:00 | wrap-up and outlook |
 
 : {.striped .hover}
 
@@ -81,17 +81,17 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 
 ### Day 4
 
-|     Time      |                       Topic                       |
-|:-------------:|:-------------------------------------------------:|
-| 9:00 - 10:00  |       **Session 9**: Spatiotemporal models        |
-| 10:00 - 10:30 |                     Snack 🥙                      |
-| 10:30 - 11:30 |  **Session 10**: Model comparison and evaluation  |
-| 11:30 - 13:00 |   [Practical Session 6](day4_practical_6.qmd)     |
-| 13:00 - 14:30 |                  Lunch break 🍽️                   |
+| Time | Topic |
+|:--:|:--:|
+| 9:00 - 10:00 | **Session 9**: Spatiotemporal models |
+| 10:00 - 10:30 | Snack 🥙 |
+| 10:30 - 11:30 | [**Session 10**: Model comparison and evaluation](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_10.html) |
+| 11:30 - 13:00 | [Practical Session 6](day4_practical_6.qmd) |
+| 13:00 - 14:30 | Lunch break 🍽️ |
 | 14:30 - 15:30 | **Session 11**: Multilikelihoods/joint likelihood |
-| 15:35 - 15:45 |                  Coffee Break ☕                  |
-| 15:45 - 16:45 |                Practical Session 7                |
-| 16:45 - 17:00 |                wrap-up and outlook                |
+| 15:35 - 15:45 | Coffee Break ☕ |
+| 15:45 - 16:45 | Practical Session 7 |
+| 16:45 - 17:00 | wrap-up and outlook |
 
 : {.striped .hover}
 
@@ -99,9 +99,9 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 
 | Time | Topic |
 |:----------------------------------:|:----------------------------------:|
-| 9:00 - 10:00 | **Session 12**: Zero inflated models |
+| 9:00 - 10:00 | [**Session 12**: Zero inflated models](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_12.html) |
 | 10:00 - 10:30 | Snack 🥙 |
-| 10:30 - 11:30 | **Session 13**: Complex observational processes: Distance Sampling |
+| 10:30 - 11:30 | [**Session 13**: Complex observational processes: Distance Sampling](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_13.html) |
 | 11:30 - 13:00 | [Practical Session 8](day5_practical_8.qmd) |
 | 13:00 - 13:15 | Coffee Break ☕ |
 | 13:15 - 14:00 | Closing session |
