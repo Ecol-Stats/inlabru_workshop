@@ -14,8 +14,9 @@ editor_options:
 
 # Welcome to the course!
 
+
 -   Welcome to the `inlabru` workshop!
--   The goal for the workshop is to ...
+-   The goal for the workshop is to introduce Bayesian statistics implemented using the `inlabru` package.
 -   The workshop is intended for ... No knowledge of `R-INLA` is required.
 -   Workshop materials in the github repository [inlabru-workshop](https://github.com/Ecol-Stats/inlabru_workshop/tree/main/docs/copenague)
 
@@ -23,7 +24,7 @@ editor_options:
 
 At the end of the workshop, participants will be able to:
 
--   ILO1
+-   TEST
 -   ILO2
 -   ILO3
 
@@ -50,7 +51,7 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 ### Day 2
 
 | Time | Topic |
-|:----------------:|:----------------------------------------------------:|
+|:-----------------:|:---------------------------------------------------:|
 | 9:00 - 10:00 | **Session 3**: Temporal modelling and smoothing part 1 |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | **Session 4**: Temporal modelling and smoothing part 2 |
