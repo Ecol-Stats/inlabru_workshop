@@ -26,6 +26,7 @@ editor:
 ```{r}
 #| echo: false
 #| include: false
+#| purl: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -40,6 +41,7 @@ knitr::opts_chunk$set(
 library(webexercises)
 ```
 
+# ZIP/ZAP and Hurdle Models
 
 ```{r setup}
 #| eval: true
@@ -82,7 +84,7 @@ In this practical we are going to work with data with excess zeros. We will
 
 
 
-# Data Preparation {#sec-prep}
+## Data Preparation {#sec-prep}
 
 
 The following example use  the `gorillas` dataset available in the 
@@ -198,7 +200,7 @@ p1 + p2
 
 ```
 
-# Mesh building
+### Mesh building
 
 We now define the mesh and the spde object.
 
@@ -240,7 +242,7 @@ standard Poisson model would imply. For this purpose, we opt for a
 
 
 
-# Zero-Inflated model (Type1) {#sec-zip}
+## Zero-Inflated model (Type1) {#sec-zip}
 
 We fit now a Zero-Inflated model to our data.  
 
@@ -372,7 +374,7 @@ p1 + p2
 
 ```
 
-# Hurdle model (Type0) {#sec-zap}
+## Hurdle model (Type0) {#sec-zap}
 
 We now fit a hurdle model to the same data.
 
@@ -476,7 +478,7 @@ p1 + p2
 ```
 
 
-# Hurdle model using two likelihoods {#sec-two-lik}
+## Hurdle model using two likelihoods {#sec-two-lik}
 
 Here the model is the same as in @sec-zap, but this time we also want to model $\pi$ using covariates and random effects.
 Therefore we define a second linear predictor
@@ -486,7 +488,7 @@ $$
 **Note** here we have defined the two linear predictor to use the same covariates, but this is not necessary, they can be totally independent.
 
 To fit this model we have to define two likelihoods:
-  - One will account for the presence\absence process and has a Binomial model
+  - One will account for the presence-absence process and has a Binomial model
   - One will account for the counts and has a truncated Poisson model 
 
 ::: {.callout-warning icon="false"}
@@ -572,7 +574,7 @@ fit_zap2 <- bru(
 ```
 :::
 
-# Hurdle model using two likelihoods and a shared component {#sec-two-lik-share}
+## Hurdle model using two likelihoods and a shared component {#sec-two-lik-share}
 
 Note that in the model above, there is no direct link between the parameters of the
 two observation parts, and we could estimate them separately.
@@ -617,11 +619,11 @@ fit_zap3 <- bru(
 
 
 
-# Comparing models
+## Comparing models
 
 We have fitted four different models. Now we want to compare them and see how they fit the data.
 
-## Comparing model predictions
+### Comparing model predictions
 
 We first want to compare the estimated surfaces of expected counts.
 To do this we want to produce the estimated expected counts, similar to what we did in  @sec-zip and @sec-zap for all four models and plot them together:
@@ -769,7 +771,7 @@ pred_zap3 <- predict( fit_zap3, counts_df,
 :::
 
 
-## Using scores
+### Using scores
 
 We can compare model using the scores that the _bru()_ function computes since we have set, at the beginning. the options to 
 ```{r}

@@ -263,7 +263,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, sharp corners, colback={codebgcolor}, breakable, boxrule=0pt, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, frame hidden, boxrule=0pt, enhanced, colback={codebgcolor}, breakable]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -336,18 +336,28 @@ knowledge of \texttt{R-INLA} is required.
 
 \subsubsection{Day 1}
 
-\begin{longtable}[]{@{}cc@{}}
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
 \toprule\noalign{}
-Time & Topic \\
+\begin{minipage}[b]{\linewidth}\centering
+Time
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Topic
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
 10:00 - 10:30 & ICES informative session \\
-10:30 - 11:30 & \textbf{Session 1}: Introduction to \texttt{inlabru} \\
+10:30 - 11:30 &
+\href{https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_2.html}{\textbf{Session
+1}: Introduction to \texttt{inlabru}} \\
 11:30 - 13:00 & \href{day1_practical.qmd}{Practical Session 1} \\
 13:00 - 14:30 & Lunch break 🍽️ \\
-14:30 - 15:30 & \textbf{Session 2}: Latent Gaussian Models and INLA \\
+14:30 - 15:30 &
+\href{https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_3.html}{\textbf{Session
+2}: Latent Gaussian Models and INLA} \\
 15:30 - 15:45 & Coffee Break ☕ \\
 15:45 - 16:45 & \href{day1_practical_2.qmd}{Practical Session 2} \\
 16:45 - 17:00 & wrap-up and outlook \\
@@ -356,8 +366,8 @@ Time & Topic \\
 \subsubsection{Day 2}
 
 \begin{longtable}[]{@{}
-  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2113}}
-  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7887}}@{}}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2361}}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7639}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\centering
 Time
@@ -375,8 +385,9 @@ Topic
 part 2 \\
 11:30 - 13:00 & \href{day2_practical_3.qmd}{Practical Session 3} \\
 13:00 - 14:30 & Lunch break 🍽️ \\
-14:30 - 15:30 & \textbf{Session 5}: Introduction to Spatial
-Statistics \\
+14:30 - 15:30 &
+\href{https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_5.html}{\textbf{Session
+5}: Introduction to Spatial Statistics} \\
 15:35 - 15:45 & Coffee Break ☕ \\
 15:45 - 16:45 & \href{day2_practical_4.qmd}{Practical Session 4} \\
 16:45 - 17:00 & wrap-up and outlook \\
@@ -411,16 +422,24 @@ continued} \\
 
 \subsubsection{Day 4}
 
-\begin{longtable}[]{@{}cc@{}}
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
 \toprule\noalign{}
-Time & Topic \\
+\begin{minipage}[b]{\linewidth}\centering
+Time
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Topic
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
 9:00 - 10:00 & \textbf{Session 9}: Spatiotemporal models \\
 10:00 - 10:30 & Snack 🥙 \\
-10:30 - 11:30 & \textbf{Session 10}: Model comparison and evaluation \\
+10:30 - 11:30 &
+\href{https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_10.html}{\textbf{Session
+10}: Model comparison and evaluation} \\
 11:30 - 13:00 & \href{day4_practical_6.qmd}{Practical Session 6} \\
 13:00 - 14:30 & Lunch break 🍽️ \\
 14:30 - 15:30 & \textbf{Session 11}: Multilikelihoods/joint
@@ -445,11 +464,14 @@ Topic
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-9:00 - 10:00 & \textbf{Session 12}: Zero inflated models \\
+9:00 - 10:00 &
+\href{https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_12.html}{\textbf{Session
+12}: Zero inflated models} \\
 10:00 - 10:30 & Snack 🥙 \\
-10:30 - 11:30 & \textbf{Session 13}: Complex observational processes:
-Distance Sampling \\
-11:30 - 13:00 & Practical Session 8 \\
+10:30 - 11:30 &
+\href{https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_13.html}{\textbf{Session
+13}: Complex observational processes: Distance Sampling} \\
+11:30 - 13:00 & \href{day5_practical_8.qmd}{Practical Session 8} \\
 13:00 - 13:15 & Coffee Break ☕ \\
 13:15 - 14:00 & Closing session \\
 \end{longtable}

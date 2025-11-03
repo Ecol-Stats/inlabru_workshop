@@ -1,0 +1,208 @@
+---
+title: "Lecture 5"
+from: markdown+emoji
+subtitle: "Introduction to spatial modelling -- spatial data types" 
+format:
+   metropolis-beamer-revealjs
+#     logo:  images/logo_white.png
+#     theme: style.scss
+# header-logo: images/logo_white.png
+slide-number: "c/t"
+title-slide-attributes:
+#    data-background-image: images/trondheim3.png
+    data-background-size: cover
+    data-background-opacity: "0.55"
+author:
+  - name: Janine Illian
+    #orcid: 0000-0002-6879-4412
+    email: janine.illian@glasgow.ac.uk
+    affiliations: University of Glasgow
+# date: May 22, 2025
+# bibliography: references.bib
+embed-resources: true
+editor: 
+  markdown: 
+    wrap: 72
+execute:
+  allow-html: true
+#nocite: |
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup}
+#| include: false
+#| eval: false
+
+
+knitr::opts_chunk$set(echo = FALSE,  
+                      message=FALSE, 
+                      warning=FALSE, 
+                      strip.white=TRUE, 
+                      prompt=FALSE,
+                      fig.align="center",
+                       out.width = "60%")
+
+library(knitr)    # For knitting document and include_graphics function
+library(ggplot2)  # For plotting
+library(png) 
+library(tidyverse)
+library(INLA)
+library(BAS)
+library(patchwork)
+library(inlabru)
+
+```
+
+## Outline
+
+- Why spatial modelling?
+- Why is spatial modelling computationally expensive?
+- Different data types?
+- Modelling in discrete space -- areal data
+- Modelling in continuous space -- geo-referenced data
+- Modelling continuous space -- spatial point process data
+
+## Spatial modelling
+many natural processes take place in space
+large amounts of data collected in space; increased resolution large, complex data sets
+
+HOWEVER: 
+
+- spatial statistical analysis is often not complex enough 
+- inaccessible to practitioners as literature written for statisticians
+- development of methodology often not linked to applications (unrealistic assumptions)
+- difficult to apply (unless you are an expert statistician and programmer)
+
+we will see that inlabru can help with this...
+\pause
+why do we need spatial models in the first place?
+
+
+## an example
+
+**global pm 2.5**
+
+exposure to air pollution; particulate matter < 2.5 microns in diameter (PM 2.5)
+
+- linked to poor health outcomes
+- responsible for three million deaths worldwide each year
+- maybe observations not independent?
+- sparsely measured
+- heterogeneous spatial coverage
+
+We need to take account of spatial dependence... i.e.\ account for autocorrelation... and complexity
+
+## Spatial modelling
+accounting for spatial dependence
+
+- standard statistical modelling usually assumes  _independent observations_
+- distributional assumptions that are made are only true if the independence assumption hold 
+
+- spatio-temporal data, however, are often not independent, but are spatially _auto correlated_ 
+- independence assumptions are violated here 
+- two observations taken in close proximity are very similar 
+- do not provide two (independent) pieces of information 
+
+## Spatial modelling
+accounting for spatial dependence
+- ignoring this = pretend we have as much independent information as we have observations 
+- pretend we have  more information than we actually have 
+- spurious inference and ultimately wrong conclusions...
+
+spatio-temporal models have special _model components_ that explicitly  model the dependence structure we need to:
+
+* say what the dependence in our data looks like in general: choose a specific class of spatial models, and 
+* estimate its specific properties for a specific dataset 
+
+
+## Spatial modelling -- computations
+- computationally expensive
+- in the past: often MCMC, takes forever
+
+## Types of spatial data
+
+We can distinguish three types of spatial data 
+
+Discrete space:
+- data on a spatial grid (areal data)
+
+Continuous space:
+- geostatistical (geo-referenced) data 
+- spatial point data
+
+## Discrete space: areal data
+
+- data on a (regular or irregular) spatial grid
+- examples: number of individuals in a region, average rainfall in a province
+
+- (originally geostatistical or point data; gridded for practical reasons)
+
+**Observed response(s):**
+Measurement over each grid cell (e.g.\ number of individuals in cell; rainfall in province)
+
+## Continuous space: geostatistical data 
+
+- phenomenon that is continuous in space
+- examples: nutrient levels in soil, salinity in the sea
+measurements at a given set of locations that are determined by surveyor
+
+**Observed response(s):**
+measurement(s) taken at given locations
+
+## Continuous space: spatial point patterns
+- patterns formed by locations of objects (individuals) in space (typically 2D)
+- examples: locations of trees in a forest, groups of animals, earthquakes
+
+**Observed response(s):**
+x,y coordinates of points (individuals/groups)
+sometimes also properties of individuals/groups (“marks")
+
+## point patterns vs. geostatistical data
+
+**point patterns:**
+- data format : x,y coordinates
+optional : properties of objects represented by the points (“marks”)
+
+**geostatistical data:**
+- data format : x,y coordinates
+not optional : measurement taken in these locations 
+
+These seem rather similar...
+
+## point patterns vs. geostatistical data
+
+point patterns :
+- data format : x,y coordinates
+
+optional : properties of objects represented by the points (“marks”)
+
+-  aim : modelling the locations of objects in continuous space
+
+- locations are being modelled and are considered random
+
+- marks only take values in locations where there is a point
+
+geostatistical data :
+- data format : x,y coordinates
+
+not optional : measurement taken in these locations
+
+- aim : modelling continuous process observed in finite number of locations
+
+- locations have typically been deliberately chosen and are fixed
+
+- continuous spatial field takes on values in whole subset of $\mathbf R^ 2$
+
+
+
+
+## Take home message!
+
+- all spatial models we discuss here are also special cases of the large class of Latent Gaussian models
+
+- to account for spatial dependence in the data, different types of spatial terms have to be included in the model for different spatial data structures, but they are all approximated by an SPDE model  
+
+- _inlabru_ provides an efficient and  unified  way to fit all these models!
+

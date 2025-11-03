@@ -279,15 +279,15 @@ and for the sd:
 
 ```{r}
 ggplot() + 
-  geom_line(data = dens_prior_range(1,.5), aes(x,y, color = "model1")) +
-  geom_line(data = dens_prior_range(10,.5), aes(x,y, color = "model2")) +
-  geom_line(data = dens_prior_range(.1,.5), aes(x,y, color = "model3")) 
+  geom_line(data = dens_prior_sd(1,.5), aes(x,y, color = "model1")) +
+  geom_line(data = dens_prior_sd(10,.5), aes(x,y, color = "model2")) +
+  geom_line(data = dens_prior_sd(.1,.5), aes(x,y, color = "model3")) 
 ```
 
 ::: {.callout-tip icon="false"}
 ## {{< bi question-octagon color=#6dc83c >}} Question
 
-Consider the `pcod_sf`, the spatial extension and type of the data...is some of the previous choices more reasonable than other? `mcq(c("spde_model1","spde_model2", answer = "spde_model3"))`
+Consider the `pcod_sf`, the spatial extension and type of the data...is some of the previous choices more reasonable than other? `r mcq(c("spde_model1","spde_model2", answer = "spde_model3"))`
 
 **NOTE** Remember that a prior should be reasonable..but the model should not totally depend on it.
 :::

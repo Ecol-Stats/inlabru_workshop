@@ -294,9 +294,9 @@ ggplot() +
 
 ## -----------------------------------------------------------------------------
 ggplot() + 
-  geom_line(data = dens_prior_range(1,.5), aes(x,y, color = "model1")) +
-  geom_line(data = dens_prior_range(10,.5), aes(x,y, color = "model2")) +
-  geom_line(data = dens_prior_range(.1,.5), aes(x,y, color = "model3")) 
+  geom_line(data = dens_prior_dens_prior_sdrange(1,.5), aes(x,y, color = "model1")) +
+  geom_line(data = dens_prior_sd(10,.5), aes(x,y, color = "model2")) +
+  geom_line(data = dens_prior_sd(.1,.5), aes(x,y, color = "model3")) 
 
 
 ## -----------------------------------------------------------------------------
