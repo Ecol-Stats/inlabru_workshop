@@ -97,8 +97,7 @@ lik = bru_obs(formula = Erie~.,
 out = bru(cmp, lik)
 pred = predict(out, lakes, ~ Intercept + time)
 
-pred %>% ggplot() + geom_line(aes(year, mean)) +
-  geom_ribbon(aes(year, ymin = q0.025, ymax = q0.975), alpha = 0.4 ) + 
+pred %>% ggplot() + 
   geom_point(data = lakes, aes(year, Erie)) + ylab("") + xlab("")
 ```
 
@@ -113,6 +112,8 @@ pred %>% ggplot() + geom_line(aes(year, mean)) +
   geom_ribbon(aes(year, ymin = q0.025, ymax = q0.975), alpha = 0.4 ) + 
   geom_point(data = lakes, aes(year, Erie)) + ylab("") + xlab("")
 ```
+
+. . .
 
 **Note:** We can use the same model to smooth covariate effects!
 
@@ -156,7 +157,7 @@ Time can be indexed over a
     
   - Main models:  RW1,  RW2 and AR1
   
-  - **NB** RW1 and RW2  are also used for smoothing
+  - **Note:** RW1 and RW2  are also used for smoothing covariates
     
 - Continuous domain
   
@@ -167,7 +168,6 @@ Time can be indexed over a
 
 ## Example - (log) Number of Air Passengers in time
 ```{r}
-
 
 data("AirPassengers")
 df = data.frame(y = log(as.numeric(AirPassengers)),
@@ -230,7 +230,7 @@ ppreds %>%
 
 **Goal** we want understand the pattern and predict into the future
     
-## Random Walk models 
+## Random Walk models {.smaller}
 
 
 Random walk models  encourage the mean of the linear predictor 
@@ -292,37 +292,387 @@ ggplot(dd, aes(time, y)) +
  
  
  
-## Random walks of order 1{.smaller}
+## Random walks of order 1{auto-animate="true"}
+**Idea:** $\longrightarrow\ u_t = \text{mean}(u_{t-1} , u_{t+1}) + \text{Gaussian error with precision  } \tau$
+
+. . .
 
 **Definition**
 
 $$
-\begin{aligned}
-  \pi(\mathbf{u} \mid \sigma^2) & \;\propto\;
+  \pi(\mathbf{u} \mid \tau) \propto
   \exp\!\left(
-     -\frac{1}{2\sigma^2} \sum_{t=1}^{T-1} (u_{t+1} - u_t)^2
-  \right)\\
-   & \;=\; \exp\!\left(
-     -\frac{1}{2\sigma^2} \sum_{t \sim t'} ({u_t - u_{t'}})^2
-  \right)
-  = \exp\!\left(-\tfrac{1}{2} \, \mathbf{u}^{\top} \mathbf{Q}\ \mathbf{u}\right)
-\end{aligned}
+     -\frac{\tau}{2} \sum_{t=1}^{T-1} (u_{t+1} - u_t)^2
+  \right) = \exp\!\left(-\tfrac{1}{2} \, \mathbf{u}^{\top} \mathbf{Q}\ \mathbf{u}\right)
 $$
-where $t \sim t'$ indicates $t$ is a **neighbor** of $t'$,  and the precision is
-$\mathbf{Q} = \mathbf{R}/\sigma^2$ with
+where  the precision is
+$\mathbf{Q} = \tau\mathbf{R}$ with
 
 $$
     \mathbf{R} =
     \begin{bmatrix}
       1 & -1 &  &        &        &   \\
       -1 & 2 & -1 &        &        &   \\
-         & -1 & 2 & -1     &        &   \\
          &    & \ddots & \ddots & \ddots &   \\
          &    &        & -1     & 2 & -1 \\
          &    &        &        & -1 & 1
     \end{bmatrix}
 $$
 
+
+## Random walks of order 1{auto-animate="true"}
+**Idea:** $\longrightarrow\ u_t = \text{mean}(u_{t-1} , u_{t+1}) + \text{Gaussian error with precision  } \tau$
+
+
+**Definition**
+
+$$
+  \pi(\mathbf{u} \mid \tau) \propto
+  \exp\!\left(
+     -\frac{\tau}{2} \sum_{t=1}^{T-1} (u_{t+1} - u_t)^2
+  \right) = \exp\!\left(-\tfrac{1}{2} \, \mathbf{u}^{\top} \mathbf{Q}\ \mathbf{u}\right)
+$$
+
+  1. Role of the precision parameter $\tau$ and prior distribution
+  2. RW as intrinsic model
+
+
+
 ## What is the role of the precision parameter?
 
+- $\tau$ says how much $u_t$ can vary around its mean
 
+  - Small $\tau$ $\rightarrow$ large variation $\rightarrow$ less smooth effect
+  - Large $\tau$ $\rightarrow$ small variation $\rightarrow$ smoother effect
+  
+. . .  
+
+```{r}
+#| fig-align: center
+#| out-width: 40%
+
+cmp = ~ -1 +  time(year, model = "rw2", constr = FALSE,
+                            hyper = list(prec = list(initial = 0, fixed = T)))
+cmp2 = ~ -1 +  time(year, model = "rw2", constr = FALSE,
+                            hyper = list(prec = list(initial = 20, fixed = T)))
+                                        
+
+lik = bru_obs(formula = Erie~.,
+              data = lakes)
+out = bru(cmp, lik)
+out2=bru(cmp2, lik)
+ggplot() + geom_point(data = lakes, aes(year, Erie)) +
+  geom_line(data= out$summary.random$time, aes(ID, mean, color = "small precision")) +
+  geom_line(data= out2$summary.random$time, aes(ID, mean, color = "large precision")) +
+  ylab("") + xlab("") + theme(legend.title = element_blank())
+
+```
+
+. . .
+
+We need to set a _prior distribution_ for $\tau$.
+
+A common option is the so called _PC-priors_
+
+
+## Penalized Complexity (PC) priors{ auto-animate="true"}
+
+- PC prior are easily available in `inlabru` for many model parameters
+
+. . . 
+
+
+- They are build with two principle in mind:
+
+   1. The prior discourage overdispersion by penalizing distance from a _base model_
+
+::::: columns
+::: {.column width="60%"}
+
+```{r precs}
+#| out-width: 100%
+cmp = ~ -1 +  time(year, model = "rw2", constr = FALSE,
+                            hyper = list(prec = list(initial = 10, fixed = T)))
+cmp2 = ~ -1 +  time(year, model = "rw2", constr = FALSE,
+                            hyper = list(prec = list(initial = 20, fixed = T)))
+                                        
+
+lik = bru_obs(formula = Erie~.,
+              data = lakes)
+out = bru(cmp, lik)
+out2=bru(cmp2, lik)
+ggplot() + geom_point(data = lakes, aes(year, Erie)) +
+  geom_line(data= out$summary.random$time, aes(ID, mean, color = "small precision")) +
+  geom_line(data= out2$summary.random$time, aes(ID, mean, color = "large precision")) +
+  ylab("") + xlab("") + theme(legend.title = element_blank(), legend.position = "none")
+
+```
+
+
+:::
+::: {.column width="40%"}
+
+- A line is the _base model_
+
+- We want to penalize more complex models
+
+:::
+:::::
+
+   
+
+
+
+
+  
+
+
+## Penalized Complexity (PC) priors{ auto-animate="true"}
+
+- PC prior are easily available in `inlabru` for many model parameters
+
+- They are build with two principle in mind:
+
+   1. The prior discourage overdispersion by penalizing distance from a _base model_
+   2. User-defined scaling
+   
+$$
+\text{Prob}\left(\sqrt{\frac{1}{\tau}}>U\right) = \text{Prob}(\sigma>U) = \alpha; \qquad U>0, \ \alpha \in (0,1)
+$$
+
+  - $U$  an upper limit for the standard deviation and $\alpha$  a small probability.
+
+  - $U$  a likely value for the standard deviation and $\alpha=0.5$.
+
+
+  
+
+
+
+## Example
+
+::: columns
+::: {.column width="50%"}
+**The Model**
+$$
+\begin{aligned}
+y_i|\eta_i, \sigma^2 & \sim \mathcal{N}(\eta_i,\sigma^2)\\
+\eta_i & = \beta_0 + f(t_i)\\
+f(t_1),f(t_2),\dots,f(t_n) &\sim \text{RW2}(\tau)
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| out-width: 100%
+
+lakes %>% ggplot() + geom_point(aes(year, Erie)) + xlab("") + ylab("")
+
+```
+:::
+:::
+
+::: columns
+::: {.column width="60%"}
+**The code**
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+
+cmp = ~ Intercept(1) + 
+  time(year, model = "rw1",
+       hyper = list(prec = 
+                      list(prior = "pc.prec",
+                           param = c(0.5, 0.5))))
+```
+:::
+::: {.column width="40%"}
+
+```{r}
+#| fig-align: center
+#| out-width: 100%
+#| eval: true
+
+cmp0 = ~ -1 +  time(year, model = "rw2", constr = FALSE,
+                   scale.model = TRUE, 
+                    hyper = list(prec = list(prior = "pc.prec", param = c(0.3,0.5))))
+lik = bru_obs(formula = Erie~.,
+              data = lakes)
+out_pc0 = bru(cmp0, lik)
+
+
+prior = data.frame(x = seq(0,9,0.01),
+                   y = INLA::inla.pc.dprec(seq(0,9,0.01), 
+                                           u  = 0.3, alpha = 0.5))
+posterior = inla.tmarginal(function(x)1/sqrt(x),
+                           out_pc0$marginals.hyperpar$`Precision for time`)
+
+ggplot() + geom_line(data = prior, aes(x,y, color = "prior")) +
+  geom_line(data = posterior, aes(x,y, color = "posterior"))
+
+```
+:::
+:::
+
+
+## RW as intrinsic models{.smaller}
+
+RW1 defines differences, not absolute levels:
+
+- Only the *changes* between neighboring terms are modeled.
+
+- The model has no information about the global mean (intercept).
+
+- Mathematically,
+$$
+(u_1,\dots,u_n)\text{ and }(u_1+a,\dots,u_n+a)
+$$
+produce identical likelihoods — they’re indistinguishable.
+
+. . .
+
+This means:
+
+- The precision matrix $\mathbf{Q}$ is singular.
+
+- Posterior inference is not well-defined unless we fix the overall level.
+
+. . .
+
+
+ Solution:
+  
+  - Sum to zero constraint $\sum_{i = 1}^n u_i = 0$
+  - This is be default included in the model
+  
+
+## Random walks of order 2
+
+- Just like RW1, but now we consider 4 neighbours instead of 2
+$$
+u_t = \text{mean}(u_{t-2} ,u_{t-1} , u_{t+1}, u_{t+2} ) + \text{some Gaussian error with precision  } \tau
+$$
+- RW2 are smoother than RW1
+
+- The precision has the same role as for RW1
+
+# Example
+
+::: columns
+::: {.column width="60%"}
+```{r}
+#| echo: true
+cmp1 = ~ Intercept(1) + 
+  time(year, model = "rw1", 
+       scale.model = T,
+       hyper = list(prec = 
+                      list(prior = "pc.prec",
+                           param = c(0.3,0.5))))
+
+cmp2 = ~ Intercept(1) + 
+  time(year, model = "rw2",
+       scale.model = T,
+       hyper = list(prec = 
+                      list(prior = "pc.prec", 
+                           param = c(0.3,0.5))))
+
+
+lik = bru_obs(formula = Erie~ ., 
+              data = lakes)
+
+fit1 = bru(cmp1, lik)
+fit2 = bru(cmp2, lik)
+
+
+```
+
+:::
+::: {.column width="40%"}
+```{r}
+#| echo: false
+#| out-width: 100%
+pred1 = predict(fit1, lakes, ~ Intercept + time)
+pred2 = predict(fit2, lakes, ~ Intercept + time)
+
+ggplot()+ geom_line(data = pred1, aes(year, mean, color = "rw1")) +
+  geom_line(data = pred2, aes(year, mean, color = "rw2")) + ylab("") + xlab("") +
+  theme(legend.title = element_blank(), legend.position = "bottom")
+
+```
+
+:::
+:::
+
+. . .
+
+**NOTE:** the `scale.model = TRUE` option scales the $\mathbf{Q}$ matrix so the precision parameter has the same interpretation in both models. 
+
+## Summary RW (1 and 2) models
+
+- Latent effects suitable for smoothing and modeling temporal data.
+
+- Has one hyperparameter: the precision $\tau$
+  
+  - Use PC prior for $\tau$  
+
+- It is an _intrinsic_ model
+
+  - The precision matrix $\mathbf{Q}$ is rank deficient
+  
+  - A sum-to-zero constraint is added to make the model identifiable!
+
+- RW2 models are smoother than RW1
+
+## Auto Regressive Models of order 1 (AR1)
+
+**Definition**
+
+$$
+u_t = \phi u_{t-i} + \epsilon_t; \qquad \phi\in(-1,1), \ \epsilon_t\sim\mathcal{N}(0,\tau^{-1})
+$$
+$$
+\pi(\mathbf{u}|\tau)\propto\exp\left(-\frac{\tau}{2}\mathbf{u}^T\mathbf{Q}\mathbf{u}\right)
+$$
+with 
+$$
+    \mathbf{Q} =
+    \begin{bmatrix}
+      1 & -\phi &  &        &        &   \\
+      -\phi & (1+\phi^2) & -\phi &        &        &   \\
+         &    & \ddots & \ddots & \ddots &   \\
+         &    &        & -\phi     & (1+\phi^2) & -\phi \\
+         &    &        &        & -\phi & 1
+    \end{bmatrix}
+$$
+
+## AR1: Hyperparameters and prior{auto-animate="true"}
+
+The AR1 model has two parameters
+
+  - The precision $\tau$
+  - The autocorrelation (or persistence) parameter $\phi\in(0,1)$
+  
+## AR1: Hyperparameters and prior{auto-animate="true"}
+
+The AR1 model has two parameters
+
+  - The precision $\tau$
+    - PC prior as before - Baseline $\tau=0$
+$$
+\text{Prob}(\sigma > u) = \alpha
+$$
+    
+    
+  - The autocorrelation (or persistence) parameter $\phi\in(-1,1)$
+  
+    - PC prior 0 - Baseline $\phi = 0$
+$$
+
+$$
+  
+  
+  
