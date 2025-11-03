@@ -1,5 +1,7 @@
 ---
 title: "Practical 3"
+execute: 
+  freeze: true
 format: 
   html: 
     mainfont: "12"
@@ -22,7 +24,7 @@ library(webexercises)
 knitr::purl("day2_practical_3.qmd")
 ```
 
-<font size="5"> **Aim of this practical:** </font> 
+<font size="5"> **Aim of this practical:** </font>
 
 1.  Fit temporal models for discrete time points using `inlabru`
 2.  Forecasting for future observations

@@ -1,5 +1,7 @@
 ---
 title: "Practical 6"
+execute: 
+  freeze: true
 format: 
   html:
     mainfont: "12"
@@ -32,7 +34,4 @@ In this practical we are going to look at some model comparison and validation t
 ```
 
 ```{r child="practicals/GLM_scores_ex.qmd"}
-```
-
-```{r child="practicals/LGOCV_ex.qmd"}
 ```

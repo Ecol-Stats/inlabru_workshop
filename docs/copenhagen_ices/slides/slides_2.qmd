@@ -215,7 +215,7 @@ In this course we embrace the Bayesian perspective
 ```{r}
 temp <-expression(y == paste(beta[0], " + ", beta[1], "x"))
 p2 = p1 +  annotate(geom="text", x=120, y=20, parse = T, label = as.character(temp),
-              size=12) 
+              size=12)
 
 p2
 ```
@@ -234,7 +234,7 @@ b1 = rnorm(100, 0.25, 0.01)
 
 
 temp <-expression(y == paste(alpha, " + ", beta, "x"))
-p3 = p2  +  geom_abline( slope = b1, intercept = b0, color = "grey", alpha = 0.5) + geom_point(aes(tl,w)) 
+p3 = p2  +  geom_abline( slope = b1, intercept = b0, color = "grey", alpha = 0.5) + geom_point(aes(tl,w))
 p3
 
 ```
@@ -283,7 +283,7 @@ dist_data <- lapply(seq_along(x_vals), function(i) {
   y_seq <- seq(y_hat - 3 * sigma, y_hat + 3 * sigma, length.out = 100)
   dens <- dnorm(y_seq, mean = y_hat, sd = sigma)
   scaled_dens <- dens / max(dens) * 0.4  # Controls width of the curves
-  
+
   data.frame(
     x = x0 + scaled_dens,
     x_mirror = x0 - scaled_dens,
@@ -314,23 +314,23 @@ p1 = ggplot() +
   # Left and right sides of the Gaussian "violins"
   #geom_path(data = dist_data, aes(x = x, y = y, group = group), color = "steelblue", linewidth = 0.6) +
   geom_path(data = dist_data, aes(x = x_mirror, y = y, group = group), color = "steelblue", linewidth = 0.6) +
-  
+
   # Dashed regression line
   geom_abline(intercept = intercept, slope = slope, linetype = "dashed") +
-  
-  geom_vline(xintercept = x_vals) + 
-  
+
+  geom_vline(xintercept = x_vals) +
+
   geom_point(data = data.frame(x = runif(50,0,4)) %>%
                mutate(y = intercept + slope * x + rnorm(50)),
-             aes(x,y), alpha = 0.3) + 
-  
+             aes(x,y), alpha = 0.3) +
+
   # Red points at mean
   geom_point(data = means_df, aes(x = x0, y = y), color = "darkred", size = 3) +
-  
+
   # Red horizontal segments from point to left tail of density
   geom_segment(data = means_df, aes(x = x0 - 0.4, xend = x0, y = y, yend = y),
                color = "darkred", linewidth = 0.7) +
-  
+
   # X-axis labels
   scale_x_continuous(breaks = x_vals, labels = parse(text = x_labels), expand = expansion(mult = c(0.1, 0.1))) +
   labs(x = "x", y = "y") +
@@ -342,7 +342,7 @@ p1 = ggplot() +
     panel.grid = element_blank()
   ) +
   geom_segment(data = means_df,
-               aes(x = x0 + 0.6, xend = x0 + 0.05, 
+               aes(x = x0 + 0.6, xend = x0 + 0.05,
                    y = y - 0.8, yend = y + 0.05),
                arrow = arrow(length = unit(0.2, "cm")),
                color = "black",
@@ -384,7 +384,7 @@ dist_data <- lapply(seq_along(x_vals), function(i) {
   y_seq <- seq(y_hat - 3 * sigma, y_hat + 3 * sigma, length.out = 100)
   dens <- dnorm(y_seq, mean = y_hat, sd = sigma)
   scaled_dens <- dens / max(dens) * 0.4  # Controls width of the curves
-  
+
   data.frame(
     x = x0 + scaled_dens,
     x_mirror = x0 - scaled_dens,
@@ -415,23 +415,23 @@ p1 = ggplot() +
   # Left and right sides of the Gaussian "violins"
   #geom_path(data = dist_data, aes(x = x, y = y, group = group), color = "steelblue", linewidth = 0.6) +
   geom_path(data = dist_data, aes(x = x_mirror, y = y, group = group), color = "steelblue", linewidth = 0.6) +
-  
+
   # Dashed regression line
   geom_abline(intercept = intercept, slope = slope, linetype = "dashed") +
-  
-  geom_vline(xintercept = x_vals) + 
-  
+
+  geom_vline(xintercept = x_vals) +
+
   geom_point(data = data.frame(x = runif(50,0,4)) %>%
                mutate(y = intercept + slope * x + rnorm(50)),
-             aes(x,y), alpha = 0.3) + 
-  
+             aes(x,y), alpha = 0.3) +
+
   # Red points at mean
   geom_point(data = means_df, aes(x = x0, y = y), color = "darkred", size = 3) +
-  
+
   # Red horizontal segments from point to left tail of density
   geom_segment(data = means_df, aes(x = x0 - 0.4, xend = x0, y = y, yend = y),
                color = "darkred", linewidth = 0.7) +
-  
+
   # X-axis labels
   scale_x_continuous(breaks = x_vals, labels = parse(text = x_labels), expand = expansion(mult = c(0.1, 0.1))) +
   labs(x = "x", y = "y") +
@@ -443,7 +443,7 @@ p1 = ggplot() +
     panel.grid = element_blank()
   ) +
   geom_segment(data = means_df,
-               aes(x = x0 + 0.6, xend = x0 + 0.05, 
+               aes(x = x0 + 0.6, xend = x0 + 0.05,
                    y = y - 0.8, yend = y + 0.05),
                arrow = arrow(length = unit(0.2, "cm")),
                color = "black",
@@ -484,7 +484,7 @@ inflection_points = inflection_points %>%
   mutate(arrow_tips = arrow_tip_labels)
 
 p1 + geom_segment(data = inflection_points,
-                  aes(x = x0 - 0.6, xend = x_inflect, 
+                  aes(x = x0 - 0.6, xend = x_inflect,
                       y = y + 1.5, yend = y_inflect),
                   arrow = arrow(length = unit(0.2, "cm")),
                   color = "steelblue",
@@ -496,8 +496,6 @@ p1 + geom_segment(data = inflection_points,
             nudge_x = -0.05,
             color = "steelblue",
             size = 6)
-
-
 ```
 
 This means that **all dependencies** in the observations are accounted
@@ -524,7 +522,7 @@ inflection_points = inflection_points %>%
   mutate(arrow_tips = arrow_tip_labels)
 
 p1 + geom_segment(data = inflection_points,
-                  aes(x = x0 - 0.6, xend = x_inflect, 
+                  aes(x = x0 - 0.6, xend = x_inflect,
                       y = y + 1.5, yend = y_inflect),
                   arrow = arrow(length = unit(0.2, "cm")),
                   color = "steelblue",
@@ -536,11 +534,10 @@ p1 + geom_segment(data = inflection_points,
             nudge_x = -0.05,
             color = "steelblue",
             size = 6)
-
-
 ```
 
-The observation model (likelihood) can be written as: $$
+The observation model (likelihood) can be written as: 
+$$
 \pi(\mathbf{y}|\eta,\sigma^2) = \prod_{i = 1}^n\pi(y_i|\eta_i,\sigma^2)
 $$
 
@@ -564,9 +561,10 @@ The elements of a `inlabru` friendly statistical model are:
 1.  The observational model
     $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
 
-2.  A model for the *linear predictor* $$
-    E(y_i|\eta_i,\sigma^2) = \eta_i = \beta_0 + \beta_1x_i 
-    $$
+2.  A model for the *linear predictor* 
+$$
+    E(y_i|\eta_i,\sigma^2) = \eta_i = \beta_0 + \beta_1x_i
+$$
 
 ## Let's formalize this a bit... {auto-animate="true"}
 
@@ -618,7 +616,7 @@ The elements of a `inlabru` friendly statistical model are:
 
 ## Latent Gaussian Models (LGM) {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 1.  [The observation model: $$
     \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
@@ -634,11 +632,11 @@ The elements of a `inlabru` friendly statistical model are:
 ::: {.column width="50%"}
 -   [**Stage 1** The data generating process]{style="color: red;"}
 :::
-:::
+:::::
 
 ## Latent Gaussian Models (LGM) {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 1.  The observation model: $$
     \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
@@ -658,11 +656,11 @@ The elements of a `inlabru` friendly statistical model are:
 
 -   [**Stage 2** The dependence structure]{style="color: red;"}
 :::
-:::
+:::::
 
 ## Latent Gaussian Models (LGM) {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 1.  The observation model: $$
     \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
@@ -682,12 +680,12 @@ The elements of a `inlabru` friendly statistical model are:
 
 -   [**Stage 3** The hyperparameters]{style="color: red;"}
 :::
-:::
+:::::
 
 ## Latent Gaussian Models (LGM) {auto-animate="true"}
 
-::: columns
-::: {.column width="50%"}
+::::::: columns
+:::: {.column width="50%"}
 ::: {.r-stack .smaller style="font-size: 0.9em;"}
 1.  The observation model: $$
     \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
@@ -699,9 +697,9 @@ The elements of a `inlabru` friendly statistical model are:
 
 4.  The hyperparameters: $\pi(\theta)$
 :::
-:::
+::::
 
-::: {.column width="50%"}
+:::: {.column width="50%"}
 ::: {.r-stack .smaller style="font-size: 0.9em;"}
 -   **Stage 1** The data generating process
 
@@ -709,8 +707,8 @@ The elements of a `inlabru` friendly statistical model are:
 
 -   **Stage 3** The hyperparameters
 :::
-:::
-:::
+::::
+:::::::
 
 ::: {.r-stack .larger style="font-size: 1.5em;"}
 **Q**: What are we interested in?
@@ -722,9 +720,9 @@ The elements of a `inlabru` friendly statistical model are:
 //| fig-width: 4
 
 digraph posterior {
-    
+
     node[style = filled]
-    
+
     A[label="Prior\l belief\l" fillcolor = green fontcolor = white]
     B[label="Observation\l model\l" fillcolor = blue fontcolor = white]
     C[label="Bayes Theorem\n &\n Bayesian Computations\n" ]
@@ -745,7 +743,7 @@ $$
 //| fig-height: 4
 
 digraph posterior {
-    
+
     node[style = filled]
      { rank=same C E }
     A[label="Prior\l belief\l" fillcolor = green fontcolor = white]
@@ -761,7 +759,7 @@ digraph posterior {
 
 ## `inlabru` for linear regression {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model** $$
 \begin{aligned}
@@ -778,7 +776,7 @@ library(inlabru)
 Pallid[1:3,c("w","tl")]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -806,7 +804,7 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for linear regression {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model** $$
 \begin{aligned}
@@ -822,7 +820,7 @@ $$
 Pallid[1:3,c("w","tl")]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -849,7 +847,7 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for linear regression {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model** $$
 \begin{aligned}
@@ -866,7 +864,7 @@ library(inlabru)
 Pallid[1:3,c("w","tl")]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -895,7 +893,7 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for linear regression {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model** $$
 \begin{aligned}
@@ -912,7 +910,7 @@ library(inlabru)
 Pallid[1:3,c("w","tl")]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -941,7 +939,7 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for linear regression {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model** $$
 \begin{aligned}
@@ -958,7 +956,7 @@ library(inlabru)
 Pallid[1:3,c("w","tl")]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1026,14 +1024,14 @@ p_cov = fit$marginals.fixed$beta1 %>% ggplot() + geom_line(aes(x,y)) +
 preds = predict(fit, data.frame(tl = seq(90,165)), ~ beta0 + beta1)
 
 
-p_pred = preds %>% ggplot() + 
-  geom_point(data = Pallid, aes(tl, w)) + 
+p_pred = preds %>% ggplot() +
+  geom_point(data = Pallid, aes(tl, w)) +
   geom_line(aes(tl, mean), color = "blue") +
   geom_ribbon(aes(tl, ymin = q0.025, ymax = q0.975), alpha = 0.5, fill = "blue")
 
 
-ff = generate(fit, 
-        data.frame(tl = seq(90,165)), 
+ff = generate(fit,
+        data.frame(tl = seq(90,165)),
         ~ data.frame(mean = beta0 + beta1,
                      sd = sqrt(1/Precision_for_the_Gaussian_observations)),
         n.samples = 5000)
@@ -1046,14 +1044,14 @@ pred_int = data.frame(tl = seq(90,165),
                       q1 = apply(ff1, 1, quantile,probs =  0.025),
                       q2 = apply(ff1, 1, quantile, 0.975)
                       )
-p3 = p_pred + 
+p3 = p_pred +
    geom_ribbon(data = pred_int, aes(tl, ymin = q1, ymax = q2), alpha = 0.5, fill = "red") + ggtitle("Credible and Prediction Interval") + labs(y="Weight (Kg)",x="Total Length (cm)")
 ```
 
 ```{r}
 #| echo: false
 #| eval: true
- 
+
 (p_int | p_cov) / p3
 
 ```
@@ -1187,11 +1185,11 @@ No matter how complicated is your model, the `inlabru` workflow is
 
 
 # Define model components
-comps <- component_1(...) + 
+comps <- component_1(...) +
   component_2(...) + ...
 
 # Define the model predictor
-pred <- linear_function(component_1, 
+pred <- linear_function(component_1,
                             component_2, ...)
 
 # Build the observation model
@@ -1218,11 +1216,11 @@ No matter how complicated is your model, the `inlabru` workflow is
 
 
 # Define model components
-comps <- component_1(...) + 
+comps <- component_1(...) +
   component_2(...) + ...
 
 # Define the model predictor
-pred <- linear_function(component_1, 
+pred <- linear_function(component_1,
                             component_2, ...)
 
 # Build the observation model
@@ -1273,7 +1271,7 @@ pTokyo +
     # Add a second axis and specify its features
     sec.axis = sec_axis( transform=~./2, name="Probability")
   )  + geom_line(data = dd, aes(ii, mean*2)) +
-  geom_ribbon(data = dd, aes(ii, ymin = X0.025quant*2, 
+  geom_ribbon(data = dd, aes(ii, ymin = X0.025quant*2,
                              ymax = 2 *X0.975quant), alpha = 0.5)
 
 ```
@@ -1339,7 +1337,7 @@ $$
 
 ## `inlabru` for time series {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1357,7 +1355,7 @@ $$
 Tokyo[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1387,7 +1385,7 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for time series {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1405,7 +1403,7 @@ $$
 Tokyo[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1435,7 +1433,7 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for time series {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1453,7 +1451,7 @@ $$
 Tokyo[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1483,7 +1481,7 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for time series {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1501,7 +1499,7 @@ $$
 Tokyo[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1534,7 +1532,7 @@ fit = bru(cmp, lik)
 We observed larynx cancer mortality counts for males in 544 district of
 Germany from 1986 to 1990 and want to make a model.
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 -   $y_i$: The count at location $i$.
 
@@ -1560,16 +1558,16 @@ my.germany.map = function(data, cutpoints=seq(min(data),max(data),length=256), a
     data = (data-min(data))/(max(data)-min(data)+1e-8)
   }
   #cutpoints = c(-1e9,cutpoints, 1e9)
-  
+
   # farben <- rainbow(as.numeric(cut(data,cutpoints,include.lowest=T))/length(cutpoints))
   cols =  hcl.colors(256)
   farben <- cols[as.numeric(cut(data,cutpoints,include.lowest=T))]
-  
+
   xmin <- 1:length(germany)
   xmax <- 1:length(germany)
   ymin <- 1:length(germany)
   ymax <- 1:length(germany)
-  
+
   for(i in 1:length(germany))
   {
     xmin[i] <- min(germany[[i]][,2],na.rm=T)
@@ -1577,19 +1575,19 @@ my.germany.map = function(data, cutpoints=seq(min(data),max(data),length=256), a
     ymin[i] <- min(germany[[i]][,3],na.rm=T)
     ymax[i] <- max(germany[[i]][,3],na.rm=T)
   }
-  
+
   breite <- c(min(xmin),max(xmax))
   hoehe <- c(min(ymin),max(ymax))
-  
+
   if (!append) plot(breite,hoehe,type="n",axes=F, xlab=" ", ylab=" ", asp = 1)
-  
-  
+
+
   for(k in length(germany):1)
   {
     polygon(germany[[k]][,2],germany[[k]][,3],col=farben[k])
   }
-  
-  
+
+
 }
 source(system.file("demodata/Bym-map.R", package="INLA"))
 data(Germany)
@@ -1599,23 +1597,23 @@ g <- system.file("demodata/germany.graph" , package = "INLA")
 my.germany.map(Germany$Y/Germany$E, autoscale = F)
 ```
 :::
-:::
+:::::
 
 ## Bayesian disease mapping {.small}
 
-> -   **Stage 1:** We assume the responses are Poisson distributed:
->     $$          
->     y_i \mid \eta_i \sim \text{Poisson}(E_i\exp(\eta_i)))
->     $$
+ -   **Stage 1:** We assume the responses are Poisson distributed:
+     $$
+     y_i \mid \eta_i \sim \text{Poisson}(E_i\exp(\eta_i)))
+     $$
 
-> -   **Stage 2:** $\eta_i$ is a linear function of three components: an
->     intercept, a covariate $c_i$, a spatially structured effect
->     $\omega$ likelihood by $$
->     \eta_i = \beta_0 + \beta_1\ c_i + \omega_i
->     $$
+ -   **Stage 2:** $\eta_i$ is a linear function of three components: an
+     intercept, a covariate $c_i$, a spatially structured effect
+     $\omega$ likelihood by $$
+     \eta_i = \beta_0 + \beta_1\ c_i + \omega_i
+     $$
 
-> -   **Stage 3:**
->     -   $\tau_{\omega}$: Precisions parameter for the random effects
+ -   **Stage 3:**
+     -   $\tau_{\omega}$: Precisions parameter for the random effects
 
 . . .
 
@@ -1626,7 +1624,7 @@ must be given a prior.
 
 ## `inlabru` for disease mapping {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1646,7 +1644,7 @@ g = system.file("demodata/germany.graph",
 Germany[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1677,7 +1675,7 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for disease mapping {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1697,7 +1695,7 @@ g = system.file("demodata/germany.graph",
 Germany[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1728,7 +1726,7 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for disease mapping {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1748,7 +1746,7 @@ g = system.file("demodata/germany.graph",
 Germany[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1840,7 +1838,7 @@ library(mapview)
 
 
 
-df = sdmTMB::pcod 
+df = sdmTMB::pcod
 qcs_grid = sdmTMB::qcs_grid
 df =   st_as_sf(df, coords = c("lon","lat"), crs = 4326)
 df = st_transform(df, crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
@@ -1855,7 +1853,7 @@ mapview(df, zcol = "present")
 ```{r}
 #| echo: false
 
-mesh = fm_mesh_2d(df, 
+mesh = fm_mesh_2d(df,
                   cutoff = 2,
                   max.edge = c(7,20),
                   offset = c(5,50))
@@ -1868,19 +1866,19 @@ spde_model =  inla.spde2.pcmatern(mesh,
 )
 
 depth_mapper <- bru_mapper(inla.mesh.1d(sort(unique(inla.group(log(depth_sf$depth),
-                                                                   method = "quantile", n=25)))), 
+                                                                   method = "quantile", n=25)))),
                            indexed = FALSE)
-cmp = ~ -1 + Intercept(1) + 
-  depth_smooth(log(depth), model='rw2', 
-               mapper = depth_mapper, 
+cmp = ~ -1 + Intercept(1) +
+  depth_smooth(log(depth), model='rw2',
+               mapper = depth_mapper,
                scale.model=TRUE,
-               hyper = list(prec = list(prior='pc.prec', param=c(1, 0.01))) ) + 
+               hyper = list(prec = list(prior='pc.prec', param=c(1, 0.01))) ) +
   space(geometry, model = spde_model)
 
 formula = present ~ Intercept + depth_smooth + space
 
-lik = bru_obs(formula = formula, 
-              data = df, 
+lik = bru_obs(formula = formula,
+              data = df,
               family = "binomial")
 
 fit = bru(cmp, lik)
@@ -1931,20 +1929,17 @@ $y(s)$ Presence of absence in location $s$
 
 ## `inlabru` for geostatistics {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
-\$\$
-
-```{=tex}
+$$
 \begin{aligned}
 y(s)|\eta(s) & \sim\text{Binom}(1, p(s))\\
 \eta(s) &  = \color{red}{\boxed{\beta_0}} + \color{red}{\boxed{ f(x(s))}} + \color{red}{\boxed{ \omega(s)}}\\
-
 \end{aligned}
-```
-\$\$
+$$
+
 :::
 
 ::: {.column width="50%"}
@@ -1953,7 +1948,7 @@ y(s)|\eta(s) & \sim\text{Binom}(1, p(s))\\
 df %>% select(depth, present) %>% print(n = 3)
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1965,7 +1960,7 @@ df %>% select(depth, present) %>% print(n = 3)
 #| code-line-numbers: "1-3"
 
 # define model component
-cmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + 
+cmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') +
   space(geometry, model = spde_model)
 
 # define model predictor
@@ -1982,20 +1977,17 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for geostatistics {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
-\$\$
-
-```{=tex}
+$$
 \begin{aligned}
 y(s)|\eta(s) & \sim\text{Binom}(1, p(s))\\
 \color{red}{\boxed{\eta(s)}} &  = \color{red}{\boxed{\beta_0 +  f(x(s)) +  \omega(s)}}\\
-
 \end{aligned}
-```
-\$\$
+$$
+
 :::
 
 ::: {.column width="50%"}
@@ -2004,7 +1996,7 @@ y(s)|\eta(s) & \sim\text{Binom}(1, p(s))\\
 df %>% select(depth, present) %>% print(n = 3)
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -2016,7 +2008,7 @@ df %>% select(depth, present) %>% print(n = 3)
 #| code-line-numbers: "5-6"
 
 # define model component
-cmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + 
+cmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') +
   space(geometry, model = spde_model)
 
 # define model predictor
@@ -2033,20 +2025,17 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for geostatistics {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
-\$\$
-
-```{=tex}
+$$
 \begin{aligned}
 \color{red}{\boxed{y(s)|\eta(s)}} & \sim \color{red}{\boxed{\text{Binom}(1, p(s))}}\\
 \eta(s) &  = \beta_0 +  f(x(s)) +  \omega(s)\\
-
 \end{aligned}
-```
-\$\$
+$$
+
 :::
 
 ::: {.column width="50%"}
@@ -2055,7 +2044,7 @@ fit = bru(cmp, lik)
 df %>% select(depth, present) %>% print(n = 3)
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -2067,7 +2056,7 @@ df %>% select(depth, present) %>% print(n = 3)
 #| code-line-numbers: "8-11|13-14"
 
 # define model component
-cmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + 
+cmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') +
   space(geometry, model = spde_model)
 
 # define model predictor
@@ -2100,8 +2089,8 @@ preds = predict(fit, depth_sf, ~ data.frame(cov = depth_smooth,
                                             lp = Intercept + space + depth_smooth,
                                             prob = inla.link.logit(Intercept + space + depth_smooth,
                                                                    inverse = T)))
-  
-ggplot() + 
+
+ggplot() +
   geom_tile(data = preds$prob, aes(x = st_coordinates(depth_sf)[,1],
                             y = st_coordinates(depth_sf)[,2],
                             fill = mean))+ scale_fill_scico(direction = -1)+

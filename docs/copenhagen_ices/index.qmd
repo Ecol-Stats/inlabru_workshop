@@ -35,7 +35,7 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 ### Day 1
 
 | Time | Topic |
-|:--:|:--:|
+|:----------------------------------:|:----------------------------------:|
 | 10:00 - 10:30 | ICES informative session |
 | 10:30 - 11:30 | [**Session 1**: Introduction to `inlabru`](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_2.html) |
 | 11:30 - 13:00 | [Practical Session 1](day1_practical.qmd) |
@@ -50,7 +50,7 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 ### Day 2
 
 | Time | Topic |
-|:---------------:|:-----------------------------------------------------:|
+|:----------------:|:----------------------------------------------------:|
 | 9:00 - 10:00 | **Session 3**: Temporal modelling and smoothing part 1 |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | **Session 4**: Temporal modelling and smoothing part 2 |
@@ -82,7 +82,7 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 ### Day 4
 
 | Time | Topic |
-|:--:|:--:|
+|:----------------------------------:|:----------------------------------:|
 | 9:00 - 10:00 | **Session 9**: Spatiotemporal models |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | [**Session 10**: Model comparison and evaluation](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_10.html) |

@@ -22,7 +22,12 @@ author:
   - name: Janine Illian
     #orcid: 0000-0002-6879-4412
     email: Janine.Illian@glasgow.ac.uk
-    affiliations: University of Glasgow     
+    affiliations: University of Glasgow 
+  - name: Jafet Belmont
+    #orcid: 0000-0002-6879-4412
+    email: Janine.Illian@glasgow.ac.uk
+    affiliations: University of Glasgow   
+        
 # date: May 22, 2025
 # bibliography: references.bib
 embed-resources: true
@@ -661,18 +666,108 @@ The AR1 model has two parameters
 The AR1 model has two parameters
 
   - The precision $\tau$
-    - PC prior as before - Baseline $\tau=0$
+    - PC prior as before - Baseline $\tau=0$ `pc.prec`
 $$
 \text{Prob}(\sigma > u) = \alpha
 $$
     
     
-  - The autocorrelation (or persistence) parameter $\phi\in(-1,1)$
-  
-    - PC prior 0 - Baseline $\phi = 0$
-$$
+  - The autocorrelation (or persistence) parameter $\phi\in(-1,1)
+    
+    - Two choices of PC priors
+
+::::: columns
+::: {.column width="50%"}  
+
+Baseline $\phi = 0$ `pc.cor0`
 
 $$
-  
+\begin{eqnarray}
+\text{Prob}(|\rho| > u) = \alpha;\\
+-1<u<1;\ 0<\alpha<1
+\end{eqnarray}
+$$
+
+:::
+::: {.column width="50%"}  
+
+```{r}
+#| out-width: 100%
+#| fig-align: "center"
+data.frame(xx = seq(-1,1,0.001)) %>%
+  mutate(yy1 = inla.pc.dcor0(xx, u = 0.07, alpha= 0.5),
+  yy2 = inla.pc.dcor0(xx, u = 0.4, alpha= 0.5),
+  yy3 = inla.pc.dcor0(xx, u = 0.7, alpha= 0.5)) %>%
+  pivot_longer(-xx)%>%
+  ggplot()  + geom_line(aes(xx,value, group = name, color = name)) + 
+  xlab("") + ylab("")+ 
+  scale_color_discrete(name="",
+                         breaks=c("yy1", "yy2", "yy3"),
+                         labels = list(
+      expression(u == 0.07 ~ "," ~ alpha == 0.5),
+      expression(u == 0.4~ "," ~ alpha == 0.5),
+      expression(u == 0.7~ "," ~ alpha == 0.5)))+
+  ylim(c(0,5))
+
+
+```
+:::
+::::::
+
+
+## AR1: Hyperparameters and prior{auto-animate="true"}
+
+The AR1 model has two parameters
+
+  - The precision $\tau$
+    - PC prior as before - Baseline $\tau=0$ `pc.prec`
+$$
+\text{Prob}(\sigma > u) = \alpha
+$$
+    
+    
+    
+ - The autocorrelation (or persistence) parameter $\phi\in(-1,1)
+    
+    - Two choices of PC priors
+
+::::: columns
+::: {.column width="50%"}  
+
+Baseline $\phi = 1$ `pc.cor1`
+
+
+$$
+\begin{eqnarray}
+\text{Prob}(\rho > u) = \alpha;&\\
+-1<u<1;\qquad &\sqrt{\frac{1-u}{2}}<\alpha<1
+\end{eqnarray}
+$$
+:::
+::: {.column width="50%"}  
+
+```{r}
+#| out-width: 100%
+#| fig-align: "center"
+pp = data.frame(xx = seq(-1,1,0.001)) %>%
+  mutate(yy1 = inla.pc.dcor1(xx, u = 0.07, alpha= 0.7),
+  yy2 = inla.pc.dcor1(xx, u = 0.4, alpha= 0.8),
+  yy3 = inla.pc.dcor1(xx, u = 0.2, alpha= 0.7)) %>%
+  pivot_longer(-xx)
+pp %>%
+  ggplot()  + geom_line(aes(xx,value, group = name, color = name)) + 
+  xlab("") + ylab("")+ scale_color_discrete(name="",
+                         breaks=c("yy1", "yy2", "yy3"),
+                         labels = list(
+      expression(u == 0.07 ~ "," ~ alpha == 0.7),
+      expression(u == 0.4~ "," ~ alpha == 0.8),
+      expression(u == 0.7~ "," ~ alpha == 0.7)))+
+  ylim(c(0,5))
+
+
+```
+:::
+::::::
+
   
   

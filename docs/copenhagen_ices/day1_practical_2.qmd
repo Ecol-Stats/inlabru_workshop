@@ -1,5 +1,7 @@
 ---
 title: "Practical 2"
+execute: 
+  freeze: true
 format: 
   html:
     mainfont: "12"
