@@ -90,12 +90,6 @@ fit = bru(cmp, lik)
 ## -----------------------------------------------------------------------------
 #| echo: true
 #| eval: false
-# fit$summary.hyperpar
-
-
-## -----------------------------------------------------------------------------
-#| echo: true
-#| eval: false
 
 # pred = predict(fit, resp_cases, ~data.frame(log_risk = ...,
 #                                              risk = exp(...),
@@ -294,7 +288,7 @@ ggplot() +
 
 ## -----------------------------------------------------------------------------
 ggplot() + 
-  geom_line(data = dens_prior_dens_prior_sdrange(1,.5), aes(x,y, color = "model1")) +
+  geom_line(data = dens_prior_sd(1,.5), aes(x,y, color = "model1")) +
   geom_line(data = dens_prior_sd(10,.5), aes(x,y, color = "model2")) +
   geom_line(data = dens_prior_sd(.1,.5), aes(x,y, color = "model3")) 
 
@@ -476,19 +470,22 @@ fit1 = bru(cmp, lik)
 
 
 ## -----------------------------------------------------------------------------
-#| label: fig-altitude
-#| fig-cap: "Distribution of the observed forest fires and scaled altitude"
-#|
+#|label: fig-altitude
+#|fig-cap: "Distribution of the observed forest fires and scaled altitude"
+#| 
 elev_raster = rast(clmfires.extra[[2]]$elevation)
 elev_raster = scale(elev_raster)
-ggplot() + geom_spatraster(data = elev_raster) + geom_sf(data = pp) + scale_fill_scico()
+ggplot() + 
+  geom_spatraster(data = elev_raster) + 
+  geom_sf(data = pp) +
+  scale_fill_scico()
 
 
 
 ## -----------------------------------------------------------------------------
-#| label: fig-int2
-#| fig-cap: "Integration scheme."
-#|
+#|label: fig-int2
+#|fig-cap: "Integration scheme."
+
 n.int = 1000
 ips = st_sf(geometry = st_sample(region,
             size = n.int,
@@ -512,7 +509,6 @@ fit2 = bru(cmp, lik)
 
 
 ## -----------------------------------------------------------------------------
-
 n.int2 = 50
 
 ips2 = st_sf(geometry = st_sample(region,
@@ -604,6 +600,7 @@ fit3 = bru(cmp, lik)
 ## -----------------------------------------------------------------------------
 #| fig-width: 4.5
 #| fig-height: 4.5
+#| fig-align: center
 # Extend raster ext by 30 % of the original raster so it covers the whole mesh
 re <- extend(elev_raster, ext(elev_raster)*1.3)
 # Convert to an sf spatial object

@@ -263,7 +263,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, frame hidden, boxrule=0pt, enhanced, colback={codebgcolor}, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[colback={codebgcolor}, enhanced, breakable, frame hidden, boxrule=0pt, sharp corners]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -305,7 +305,8 @@
 \item
   Welcome to the \texttt{inlabru} workshop!
 \item
-  The goal for the workshop is to \ldots{}
+  The goal for the workshop is to introduce Bayesian statistics
+  implemented using the \texttt{inlabru} package.
 \item
   The workshop is intended for \ldots{} No knowledge of \texttt{R-INLA}
   is required.
@@ -322,7 +323,7 @@ At the end of the workshop, participants will be able to:
 \begin{itemize}
 \tightlist
 \item
-  ILO1
+  TEST
 \item
   ILO2
 \item
@@ -366,8 +367,8 @@ Topic
 \subsubsection{Day 2}
 
 \begin{longtable}[]{@{}
-  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2361}}
-  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7639}}@{}}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2639}}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7361}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\centering
 Time

@@ -198,23 +198,6 @@ hr <- function(distance, sigma) {
 
 ## ----child="practicals/zero_inflated_ex.qmd"----------------------------------
 
-## -----------------------------------------------------------------------------
-#| echo: false
-#| include: false
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  eval = TRUE,
-  dev = "png",
-  dev.args = list(type = "cairo-png"),
-  fig.width = 7,
-  fig.height = 5
-)
-
-# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
-library(webexercises)
-
-
 ## ----setup--------------------------------------------------------------------
 #| eval: true
 #| echo: true
