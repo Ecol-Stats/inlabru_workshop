@@ -1,10 +1,8 @@
 # Quarto build output
+
 _site/
-_files/
 site_libs/
-
-
-# Quarto cache
+*.tex
 .quarto/
 *_freeze/
 *_files/
@@ -15,10 +13,9 @@ slides/*_freeze/
 slides/*_files/
 slides/*_cache/
 
-docs/*_cache/
-
-docs/slides/*_cache/
-docs/slides/*_files/
+#docs/*_cache/
+#docs/slides/*_cache/
+#docs/slides/*_files/
 
 
 
@@ -34,7 +31,6 @@ Thumbs.db
 
 /.quarto/
 
-*.tex
 
 
 
