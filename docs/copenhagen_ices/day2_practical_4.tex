@@ -1,4 +1,5 @@
 % Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
@@ -7,21 +8,22 @@
   letterpaper,
   DIV=11,
   numbers=noendperiod]{scrartcl}
-
+\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -39,9 +41,6 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
 \makeatletter
 \ifx\paragraph\undefined\else
@@ -107,8 +106,7 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -133,6 +131,20 @@
 % Set default figure placement to htbp
 \def\fps@figure{htbp}
 \makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
 
 % load packages
 \usepackage{geometry}
@@ -279,13 +291,11 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, breakable, sharp corners, enhanced, colback={codebgcolor}, boxrule=0pt]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, breakable, colback={codebgcolor}, sharp corners, frame hidden, enhanced]}{\end{tcolorbox}}\fi
 \makeatother
-
 \usepackage{bookmark}
-
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
   pdftitle={Practical 4},
   colorlinks=true,
@@ -299,7 +309,6 @@
 \title{Practical 4}
 \author{}
 \date{}
-
 \begin{document}
 \maketitle
 
@@ -343,7 +352,7 @@ In this practical we will:
   Compute Morans'I to identify spatial autocorrelation in our data.
 \end{itemize}
 
-\subsection{Areal (lattice) data}\label{sec-areal_data}
+\section{Areal (lattice) data}\label{sec-areal_data}
 
 Areal data our measurements are summarised across a set of discrete,
 non-overlapping spatial units such as postcode areas, health board or
@@ -483,7 +492,7 @@ a layer per year and chose an appropriate color palette using the
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-7-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacityback=0, bottomrule=.15mm, left=2mm, titlerule=0mm, colback=white, opacitybacktitle=0.6, toprule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, rightrule=.15mm, breakable, toptitle=1mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, coltitle=black]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colback=white, leftrule=.75mm, left=2mm, opacityback=0, rightrule=.15mm, coltitle=black, opacitybacktitle=0.6, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, breakable, title={Task}, arc=.35mm, toprule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame]
 
 Produce a map that shows the spatial distribution of each of the
 following variables for the year 2011:
@@ -539,9 +548,7 @@ Click here to see the solution
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-8-1.pdf}}
-\end{center}
 
 \end{tcolorbox}
 
@@ -724,7 +731,7 @@ Moran I statistic       Expectation          Variance
       0.439899780      -0.003703704       0.001508809 
 \end{verbatim}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacityback=0, bottomrule=.15mm, left=2mm, titlerule=0mm, colback=white, opacitybacktitle=0.6, toprule=.15mm, arc=.35mm, colframe=quarto-callout-tip-color-frame, bottomtitle=1mm, rightrule=.15mm, breakable, toptitle=1mm, title={Question}, colbacktitle=quarto-callout-tip-color!10!white, coltitle=black]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colback=white, leftrule=.75mm, left=2mm, opacityback=0, rightrule=.15mm, coltitle=black, opacitybacktitle=0.6, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, breakable, title={Question}, arc=.35mm, toprule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, colframe=quarto-callout-tip-color-frame]
 
 What do we conclude from the Moran's I test?
 
@@ -818,7 +825,7 @@ visualization
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Georeferenced data}\label{georeferenced-data}
+\section{Georeferenced data}\label{georeferenced-data}
 
 Tobler's first law of geography states that:
 
@@ -873,7 +880,7 @@ values stored as \(2\times 2\) km grid for Queen Charlotte Sound.
 \end{Highlighting}
 \end{Shaded}
 
-\subsubsection{Georeferrenced data}\label{georeferrenced-data}
+\subsection{Georeferrenced data}\label{georeferrenced-data}
 
 Let's create an initial \texttt{sf} spatial object using the standard
 geographic coordinate system (\texttt{EPSG:4326}). This correctly
@@ -955,7 +962,7 @@ Pacific Cod in 2017 using the \texttt{mapview} function:
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-43-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacityback=0, bottomrule=.15mm, left=2mm, titlerule=0mm, colback=white, opacitybacktitle=0.6, toprule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, rightrule=.15mm, breakable, toptitle=1mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, coltitle=black]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colback=white, leftrule=.75mm, left=2mm, opacityback=0, rightrule=.15mm, coltitle=black, opacitybacktitle=0.6, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, breakable, title={Task}, arc=.35mm, toprule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame]
 
 Use \texttt{ggplot} and the \texttt{sf} library to map the biomass
 density of the pacific cod across years.
@@ -977,13 +984,11 @@ Click here to see the solution
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-44-1.pdf}}
-\end{center}
 
 \end{tcolorbox}
 
-\subsubsection{Raster Data}\label{raster-data}
+\subsection{Raster Data}\label{raster-data}
 
 Environmental data are typically stored in raster format, which
 represents spatially continuous phenomena by dividing a region into a
@@ -1071,7 +1076,7 @@ The following object is masked from 'package:stats':
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-47-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacityback=0, bottomrule=.15mm, left=2mm, titlerule=0mm, colback=white, opacitybacktitle=0.6, toprule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, rightrule=.15mm, breakable, toptitle=1mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, coltitle=black]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colback=white, leftrule=.75mm, left=2mm, opacityback=0, rightrule=.15mm, coltitle=black, opacitybacktitle=0.6, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, breakable, title={Task}, arc=.35mm, toprule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame]
 
 Map the scaled depth and the presence/absence records of the Pacific cod
 for 2003 to 2005 only.
@@ -1099,13 +1104,11 @@ Click here to see the solution
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-48-1.pdf}}
-\end{center}
 
 \end{tcolorbox}
 
-\subsubsection{Autocorrelation and
+\subsection{Autocorrelation and
 Variograms}\label{autocorrelation-and-variograms}
 
 Spatial statistics quantifies the fundamental principle that nearby
@@ -1155,15 +1158,18 @@ We obtain this by computing the semi-variance for all possible pairs of
 observations:
 \(\gamma(\mathbf{s}, \mathbf{t}) = 0.5(Z(\mathbf{s}) - Z(\mathbf{t}))^2\).
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacityback=0, bottomrule=.15mm, left=2mm, titlerule=0mm, colback=white, opacitybacktitle=0.6, toprule=.15mm, arc=.35mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, rightrule=.15mm, breakable, toptitle=1mm, title={Example}, colbacktitle=quarto-callout-note-color!10!white, coltitle=black]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colback=white, leftrule=.75mm, left=2mm, opacityback=0, rightrule=.15mm, coltitle=black, opacitybacktitle=0.6, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, breakable, title={Example}, arc=.35mm, toprule=.15mm, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame]
 
 To illustrate how an empirical variogram is computed, consider the
 biomass density of the Pacific Cod in 2017 for the two highlighted
 locations below.
 
-\begin{center}
+\begin{verbatim}
+Warning: The `label.size` argument of `geom_label()` is deprecated as of ggplot2 3.5.0.
+i Please use the `linewidth` argument instead.
+\end{verbatim}
+
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-49-1.pdf}}
-\end{center}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -1273,7 +1279,7 @@ First, lets load some useful libraries:
 \end{Highlighting}
 \end{Shaded}
 
-\subsection{Spatial Point processes
+\section{Spatial Point processes
 data}\label{spatial-point-processes-data}
 
 In point processes we measure the locations where events occur and the
@@ -1310,7 +1316,7 @@ In the next example, we will explore tools for visualizing spatial point
 patterns. Specifically, we will map the spatial distribution of the
 Ringlet butterfly in Scotland's Cairngorms National Park (CNP).
 
-\subsubsection{BNM citizen science
+\subsection{BNM citizen science
 program}\label{bnm-citizen-science-program}
 
 Citizen science initiatives have become an important source of
@@ -1421,7 +1427,7 @@ contain the spatial coordinates:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacityback=0, bottomrule=.15mm, left=2mm, titlerule=0mm, colback=white, opacitybacktitle=0.6, toprule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, rightrule=.15mm, breakable, toptitle=1mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, coltitle=black]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colback=white, leftrule=.75mm, left=2mm, opacityback=0, rightrule=.15mm, coltitle=black, opacitybacktitle=0.6, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, breakable, title={Task}, arc=.35mm, toprule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame]
 
 We have set standard WGS84 coordinates for the Ringlet butterfly
 occurrence records. Set the CRS to match the CRS used in shapefile.
@@ -1447,9 +1453,7 @@ Click here to see the solution
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-77-1.pdf}}
-\end{center}
 
 \end{tcolorbox}
 
@@ -1527,7 +1531,7 @@ interest. Let's crop the elevation raster to the CNP area using the
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-82-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacityback=0, bottomrule=.15mm, left=2mm, titlerule=0mm, colback=white, opacitybacktitle=0.6, toprule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, rightrule=.15mm, breakable, toptitle=1mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, coltitle=black]
+\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, colback=white, leftrule=.75mm, left=2mm, opacityback=0, rightrule=.15mm, coltitle=black, opacitybacktitle=0.6, titlerule=0mm, toptitle=1mm, bottomtitle=1mm, breakable, title={Task}, arc=.35mm, toprule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame]
 
 Using \texttt{tidyterra} and \texttt{ggplot}, produce a map of the
 elevation profile in the CNP and overlay the spatial point pattern of
@@ -1557,9 +1561,7 @@ Click here to see the solution
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-83-1.pdf}}
-\end{center}
 
 \end{tcolorbox}
 
