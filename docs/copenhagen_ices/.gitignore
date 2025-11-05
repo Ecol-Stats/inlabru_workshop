@@ -1,17 +1,39 @@
+# Quarto build output
+_site/
+_files/
+site_libs/
+
+
+# Quarto cache
+.quarto/
+_freeze/
+
+slides/_freeze
+slides/_files
+slides/slides_2_cache
+
+docs/_files
+docs/_cache
+
+docs/slides/_cache
+docs/slides/_files
+
+
+
+# RStudio / local files
+.Rproj.user/
+.Rhistory
+.RData
+
+# System files
+.DS_Store
+Thumbs.db
+
+
 /.quarto/
 
 *.tex
-_freeze/
-_site/
-
-*_files/
 
 
-
-slides/*_cache
-slides/*_files
-
-slides_files/
-site_libs/
 
 **/*.quarto_ipynb

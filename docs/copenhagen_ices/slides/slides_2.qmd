@@ -25,6 +25,7 @@ editor:
     wrap: 72
 execute:
   allow-html: true
+  freeze: true
 #nocite: |
 editor_options: 
   chunk_output_type: console
@@ -536,8 +537,7 @@ p1 + geom_segment(data = inflection_points,
             size = 6)
 ```
 
-The observation model (likelihood) can be written as: 
-$$
+The observation model (likelihood) can be written as: $$
 \pi(\mathbf{y}|\eta,\sigma^2) = \prod_{i = 1}^n\pi(y_i|\eta_i,\sigma^2)
 $$
 
@@ -561,10 +561,9 @@ The elements of a `inlabru` friendly statistical model are:
 1.  The observational model
     $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
 
-2.  A model for the *linear predictor* 
-$$
+2.  A model for the *linear predictor* $$
     E(y_i|\eta_i,\sigma^2) = \eta_i = \beta_0 + \beta_1x_i
-$$
+    $$
 
 ## Let's formalize this a bit... {auto-animate="true"}
 
@@ -1117,7 +1116,7 @@ cases of the same model structure!! :smiley:
     -   We assume data to be *conditionally* independent given the model
         components and some hyperparameters
     -   This means that all dependencies in data are explained in Stage
-        2.
+        2.  
 
 -   **Stage 2**: What are the model components? and what is their
     distribution?
@@ -1601,19 +1600,19 @@ my.germany.map(Germany$Y/Germany$E, autoscale = F)
 
 ## Bayesian disease mapping {.small}
 
- -   **Stage 1:** We assume the responses are Poisson distributed:
-     $$
-     y_i \mid \eta_i \sim \text{Poisson}(E_i\exp(\eta_i)))
-     $$
+-   **Stage 1:** We assume the responses are Poisson distributed: $$
+    y_i \mid \eta_i \sim \text{Poisson}(E_i\exp(\eta_i)))
+    $$
 
- -   **Stage 2:** $\eta_i$ is a linear function of three components: an
-     intercept, a covariate $c_i$, a spatially structured effect
-     $\omega$ likelihood by $$
-     \eta_i = \beta_0 + \beta_1\ c_i + \omega_i
-     $$
+-   **Stage 2:** $\eta_i$ is a linear function of three components: an
+    intercept, a covariate $c_i$, a spatially structured effect $\omega$
+    likelihood by $$
+    \eta_i = \beta_0 + \beta_1\ c_i + \omega_i
+    $$
 
- -   **Stage 3:**
-     -   $\tau_{\omega}$: Precisions parameter for the random effects
+-   **Stage 3:**
+
+    -   $\tau_{\omega}$: Precisions parameter for the random effects
 
 . . .
 
@@ -1939,7 +1938,6 @@ y(s)|\eta(s) & \sim\text{Binom}(1, p(s))\\
 \eta(s) &  = \color{red}{\boxed{\beta_0}} + \color{red}{\boxed{ f(x(s))}} + \color{red}{\boxed{ \omega(s)}}\\
 \end{aligned}
 $$
-
 :::
 
 ::: {.column width="50%"}
@@ -1987,7 +1985,6 @@ y(s)|\eta(s) & \sim\text{Binom}(1, p(s))\\
 \color{red}{\boxed{\eta(s)}} &  = \color{red}{\boxed{\beta_0 +  f(x(s)) +  \omega(s)}}\\
 \end{aligned}
 $$
-
 :::
 
 ::: {.column width="50%"}
@@ -2035,7 +2032,6 @@ $$
 \eta(s) &  = \beta_0 +  f(x(s)) +  \omega(s)\\
 \end{aligned}
 $$
-
 :::
 
 ::: {.column width="50%"}
