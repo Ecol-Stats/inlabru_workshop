@@ -2,5 +2,15 @@
 
 *.tex
 _freeze/
+_site/
 day1_practical_files/
+day1_practical_2_files/
+day2_practical_3_files/
+day2_practical_4_files/
+day3_practical_5_files/
+day5_practical_8_files/
+
+slides_files/
+site_lib/
+
 **/*.quarto_ipynb
