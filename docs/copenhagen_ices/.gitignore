@@ -10,6 +10,10 @@ day2_practical_4_files/
 day3_practical_5_files/
 day5_practical_8_files/
 
+
+slides/*_cache
+slides/*_files
+
 slides_files/
 site_libs/
 

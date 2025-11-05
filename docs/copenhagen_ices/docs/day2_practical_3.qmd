@@ -1,0 +1,49 @@
+---
+title: "Practical 3"
+execute: 
+  freeze: true
+format: 
+  html: 
+    mainfont: "12"
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+#| results: hide
+#| eval: true
+library(webexercises)
+knitr::purl("day2_practical_3.qmd")
+```
+
+<font size="5"> **Aim of this practical:** </font>
+
+1.  Fit temporal models for discrete time points using `inlabru`
+2.  Forecasting for future observations
+3.  Set penalized complexity (PC) priors
+4.  Fit temporal models to non-Gaussian data
+
+we are going to learn:
+
+-   How to fit autoregressive and random walk models for time series data
+-   How to set PC priors in `inlabru`
+-   Forecast future observations using the posterior predictive density
+
+{{< downloadthis day2_practical_3.R dname="practical_3.R" label="Download Practical 3 R script" icon="database-fill-down" type="success" >}}
+
+```{r child="practicals/Ar1_ex.qmd"}
+```
+
+```{r child="practicals/Ar1_Rw1_ex.qmd"}
+```
+
+```{r child="practicals/Tokyo_rainfall_ex.qmd"}
+```

@@ -1,0 +1,37 @@
+---
+title: "Practical 6"
+execute: 
+  freeze: true
+format: 
+  html:
+    mainfont: "12"
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+#| results: hide
+
+library(webexercises)
+knitr::purl("day4_practical_6.qmd")
+```
+
+<font size="5"> **Aim of this practical:** </font>
+
+In this practical we are going to look at some model comparison and validation techniques.
+
+{{< downloadthis day4_practical_6.R dname="day4_practical_6.R" label="Download Practical 6 R script" icon="database-fill-down" type="success" >}}
+
+```{r child="practicals/LM_resids.qmd"}
+```
+
+```{r child="practicals/GLM_scores_ex.qmd"}
+```
