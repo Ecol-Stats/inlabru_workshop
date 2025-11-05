@@ -1,4 +1,5 @@
 % Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
@@ -7,21 +8,22 @@
   letterpaper,
   DIV=11,
   numbers=noendperiod]{scrartcl}
-
+\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -39,9 +41,6 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
 \makeatletter
 \ifx\paragraph\undefined\else
@@ -107,8 +106,7 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -133,6 +131,20 @@
 % Set default figure placement to htbp
 \def\fps@figure{htbp}
 \makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
 
 % load packages
 \usepackage{geometry}
@@ -279,13 +291,11 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, colback={codebgcolor}, enhanced, frame hidden, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, boxrule=0pt, breakable, enhanced, sharp corners, colback={codebgcolor}]}{\end{tcolorbox}}\fi
 \makeatother
-
 \usepackage{bookmark}
-
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
   pdftitle={Practical 6},
   colorlinks=true,
@@ -299,7 +309,6 @@
 \title{Practical 6}
 \author{}
 \date{}
-
 \begin{document}
 \maketitle
 
@@ -639,24 +648,25 @@ Then we can fit the model in \texttt{inlabru} as follows:
 \end{Shaded}
 
 \begin{verbatim}
-inlabru version: 2.13.0
-INLA version: 25.08.21-1
-Components:
-beta0: main = linear(1), group = exchangeable(1L), replicate = iid(1L), NULL
-colordarker: main = linear(colordarker), group = exchangeable(1L), replicate = iid(1L), NULL
-colorlight: main = linear(colorlight), group = exchangeable(1L), replicate = iid(1L), NULL
-colormedium: main = linear(colormedium), group = exchangeable(1L), replicate = iid(1L), NULL
-w: main = linear(weight), group = exchangeable(1L), replicate = iid(1L), NULL
-Observation models:
+inlabru version: 2.13.0.9011 
+INLA version: 25.09.19 
+Components: 
+Latent components:
+beta0: main = linear(1)
+colordarker: main = linear(colordarker)
+colorlight: main = linear(colorlight)
+colormedium: main = linear(colormedium)
+w: main = linear(weight)
+Observation models: 
   Family: 'poisson'
     Tag: <No tag>
     Data class: 'data.frame'
     Response class: 'integer'
     Predictor: satell ~ .
     Additive/Linear: TRUE/TRUE
-    Used components: effects[beta0, colordarker, colorlight, colormedium, w], latent[]
+    Used components: effects[beta0, colordarker, colorlight, colormedium, w], latent[] 
 Time used:
-    Pre = 0.425, Running = 0.312, Post = 0.0672, Total = 0.804 
+    Pre = 0.848, Running = 0.189, Post = 0.00686, Total = 1.04 
 Fixed effects:
               mean    sd 0.025quant 0.5quant 0.975quant   mode kld
 beta0       -0.501 0.196     -0.885   -0.501     -0.117 -0.501   0
@@ -680,7 +690,7 @@ predictive checks. To do so, we will use the CPO and PIT - two commonly
 used Bayesian model assessment criteria based on the \textbf{posterior
 predictive distribution}.
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacitybacktitle=0.6, colback=white, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Posterior predictive model checking}, left=2mm, toptitle=1mm, bottomtitle=1mm, opacityback=0, colframe=quarto-callout-note-color-frame, rightrule=.15mm, breakable, arc=.35mm, coltitle=black, titlerule=0mm, bottomrule=.15mm, toprule=.15mm, colbacktitle=quarto-callout-note-color!10!white]
+\begin{tcolorbox}[enhanced jigsaw, colback=white, breakable, toprule=.15mm, colframe=quarto-callout-note-color-frame, bottomrule=.15mm, bottomtitle=1mm, coltitle=black, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, toptitle=1mm, opacityback=0, left=2mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Posterior predictive model checking}, rightrule=.15mm, titlerule=0mm]
 
 The posterior predictive distribution for a predicted value \(\hat{y}\)
 is
@@ -783,7 +793,7 @@ This quantities is useful when comparing different models - a smaller
 values indicate a better model fit. CPO values can be accessed by typing
 \texttt{inlabru\_model\$cpo\$cpo}.
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacitybacktitle=0.6, colback=white, title={Task}, left=2mm, toptitle=1mm, bottomtitle=1mm, opacityback=0, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, breakable, arc=.35mm, coltitle=black, titlerule=0mm, bottomrule=.15mm, toprule=.15mm, colbacktitle=quarto-callout-warning-color!10!white]
+\begin{tcolorbox}[enhanced jigsaw, colback=white, breakable, toprule=.15mm, colframe=quarto-callout-warning-color-frame, bottomrule=.15mm, bottomtitle=1mm, coltitle=black, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, arc=.35mm, opacitybacktitle=0.6, toptitle=1mm, opacityback=0, left=2mm, title={Task}, rightrule=.15mm, titlerule=0mm]
 
 The model assessment above suggests that a Poisson model might not be
 the most appropriate model, likely due to the overdispersion we detected
@@ -828,9 +838,7 @@ Click here to see the solution
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}
 \pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-29-1.pdf}}
-\end{center}
 
 \begin{Shaded}
 \begin{Highlighting}[]

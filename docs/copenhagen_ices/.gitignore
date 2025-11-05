@@ -6,13 +6,15 @@ site_libs/
 
 # Quarto cache
 .quarto/
-_freeze/
+*_freeze/
+*_files/
+*_cache/
+
 
 slides/*_freeze/
 slides/*_files/
 slides/*_cache/
 
-docs/*_files/
 docs/*_cache/
 
 docs/slides/*_cache/
