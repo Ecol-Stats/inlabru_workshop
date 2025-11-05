@@ -3,7 +3,7 @@ project:
   output-dir: docs
   render:
   - index.qmd
-  # - day1_practical.qmd
+  - day1_practical.qmd
   # - day1_practical_2.qmd
   # - day2_practical_3.qmd
   # - day2_practical_4.qmd
