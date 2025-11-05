@@ -291,7 +291,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, enhanced, colback={codebgcolor}, boxrule=0pt, breakable, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, enhanced, colback={codebgcolor}, sharp corners, frame hidden, breakable]}{\end{tcolorbox}}\fi
 \makeatother
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -394,7 +394,7 @@ is
 
 \[ \log(\tau) \sim \mathrm{logGamma}(1,5 \times 10^{-5}) \]
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, coltitle=black, arc=.35mm, breakable, colback=white, bottomrule=.15mm, leftrule=.75mm, left=2mm, opacitybacktitle=0.6, colframe=quarto-callout-note-color-frame, rightrule=.15mm, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, bottomtitle=1mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, bottomrule=.15mm, toptitle=1mm, rightrule=.15mm, colback=white, left=2mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacitybacktitle=0.6, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, arc=.35mm, toprule=.15mm, leftrule=.75mm]
 
 If your model uses the default intercept construction (i.e.,
 \texttt{Intercept(1)} in the linear predictor) INLA will assign a
@@ -497,7 +497,7 @@ define the relative components as:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, opacityback=0, coltitle=black, arc=.35mm, breakable, colback=white, bottomrule=.15mm, leftrule=.75mm, left=2mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toptitle=1mm, titlerule=0mm, title={Task}, bottomtitle=1mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, bottomrule=.15mm, toptitle=1mm, rightrule=.15mm, colback=white, left=2mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, titlerule=0mm, coltitle=black, title={Task}, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, opacityback=0, arc=.35mm, toprule=.15mm, leftrule=.75mm]
 
 Run the model again using 0.1 as default precision for both the
 intercept and the slope parameter.
@@ -563,7 +563,7 @@ posterior density of the intercept \(\beta_0\) we can type:
 \pandocbounded{\includegraphics[keepaspectratio]{day1_practical_2_files/figure-pdf/unnamed-chunk-10-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, opacityback=0, coltitle=black, arc=.35mm, breakable, colback=white, bottomrule=.15mm, leftrule=.75mm, left=2mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toptitle=1mm, titlerule=0mm, title={Task}, bottomtitle=1mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, bottomrule=.15mm, toptitle=1mm, rightrule=.15mm, colback=white, left=2mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, titlerule=0mm, coltitle=black, title={Task}, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, opacityback=0, arc=.35mm, toprule=.15mm, leftrule=.75mm]
 
 Plot the posterior marginals for \(\beta_1\) and for the precision of
 the observation error \(\pi(\tau|y)\)
@@ -804,7 +804,7 @@ std.dev      0.1981639            0.4161419
 97.5%        2.5404660            1.7488296
 \end{verbatim}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, opacityback=0, coltitle=black, arc=.35mm, breakable, colback=white, bottomrule=.15mm, leftrule=.75mm, left=2mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toptitle=1mm, titlerule=0mm, title={Task}, bottomtitle=1mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, bottomrule=.15mm, toptitle=1mm, rightrule=.15mm, colback=white, left=2mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, titlerule=0mm, coltitle=black, title={Task}, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, opacityback=0, arc=.35mm, toprule=.15mm, leftrule=.75mm]
 
 Another useful quantity we can compute is the intraclass correlation
 coefﬁcient (ICC) which help us determine how much the response varies
@@ -839,7 +839,7 @@ Click here to see the solution
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, coltitle=black, arc=.35mm, breakable, colback=white, bottomrule=.15mm, leftrule=.75mm, left=2mm, opacitybacktitle=0.6, colframe=quarto-callout-note-color-frame, rightrule=.15mm, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Supplementary Material}, bottomtitle=1mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, bottomrule=.15mm, toptitle=1mm, rightrule=.15mm, colback=white, left=2mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, titlerule=0mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Supplementary Material}, opacitybacktitle=0.6, colbacktitle=quarto-callout-note-color!10!white, opacityback=0, arc=.35mm, toprule=.15mm, leftrule=.75mm]
 
 The marginal densities for the hyper parameters can be also found by
 calling\texttt{inlabru\_model\$marginals.hyperpar}. We can then apply a
@@ -1075,7 +1075,7 @@ bin data into groups according to the values of the covariate:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, opacityback=0, coltitle=black, arc=.35mm, breakable, colback=white, bottomrule=.15mm, leftrule=.75mm, left=2mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toptitle=1mm, titlerule=0mm, title={Task}, bottomtitle=1mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, bottomrule=.15mm, toptitle=1mm, rightrule=.15mm, colback=white, left=2mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, titlerule=0mm, coltitle=black, title={Task}, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, opacityback=0, arc=.35mm, toprule=.15mm, leftrule=.75mm]
 
 Re-run the global smoother model using a RW2 prior for the depth
 smoother and compare your results with the RW1 model.
@@ -1168,7 +1168,7 @@ CrIs.
 
 \pandocbounded{\includegraphics[keepaspectratio]{day1_practical_2_files/figure-pdf/unnamed-chunk-58-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, opacityback=0, coltitle=black, arc=.35mm, breakable, colback=white, bottomrule=.15mm, leftrule=.75mm, left=2mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, rightrule=.15mm, toptitle=1mm, titlerule=0mm, title={Task}, bottomtitle=1mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, bottomrule=.15mm, toptitle=1mm, rightrule=.15mm, colback=white, left=2mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, titlerule=0mm, coltitle=black, title={Task}, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, opacityback=0, arc=.35mm, toprule=.15mm, leftrule=.75mm]
 
 Re-fit the model GS without the global smoother. By omitting the global
 smoother, we do not longer force group-level smooths to follow a shared

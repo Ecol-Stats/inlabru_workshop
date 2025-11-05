@@ -8,15 +8,15 @@ site_libs/
 .quarto/
 _freeze/
 
-slides/_freeze
-slides/_files
-slides/slides_2_cache
+slides/*_freeze/
+slides/*_files/
+slides/*_cache/
 
-docs/_files
-docs/_cache
+docs/*_files/
+docs/*_cache/
 
-docs/slides/_cache
-docs/slides/_files
+docs/slides/*_cache/
+docs/slides/*_files/
 
 
 
