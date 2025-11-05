@@ -3,14 +3,14 @@ project:
   output-dir: docs
   render:
   - index.qmd
-  - day1_practical.qmd
-  - day1_practical_2.qmd
-  - day2_practical_3.qmd
-  - day2_practical_4.qmd
-  - day3_practical_5.qmd
-  - day4_practical_6.qmd
-  - day5_practical_8.qmd
-  - slides/slides_1.qmd
+  # - day1_practical.qmd
+  # - day1_practical_2.qmd
+  # - day2_practical_3.qmd
+  # - day2_practical_4.qmd
+  # - day3_practical_5.qmd
+  # - day4_practical_6.qmd
+  # - day5_practical_8.qmd
+  # - slides/slides_1.qmd
   # - slides/slides_2.qmd
   # - slides/slides_3.qmd
   # - slides/slides_4.qmd
