@@ -10,7 +10,7 @@ project:
   # - day3_practical_5.qmd
   # - day4_practical_6.qmd
   # - day5_practical_8.qmd
-  # - slides/slides_1.qmd
+  - slides/slides_1.qmd
   # - slides/slides_2.qmd
   # - slides/slides_3.qmd
   # - slides/slides_4.qmd
