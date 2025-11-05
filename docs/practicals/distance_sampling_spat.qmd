@@ -79,7 +79,7 @@ $$ {#eq-thinned_pp}
 
 
 ```{r}
-bru_options_set(verbose=1)
+bru_options_set(verbose=2)
 
 load("datasets\\mexdolphins-extra.rda")
 # create raster
@@ -163,7 +163,7 @@ matern <- inla.spde2.pcmatern(mrsea$mesh,
   prior.range = c(10, 0.01)
 )
 
-cmp <- ~ Intercept(1) +
+cmp <- ~ Intercept(1) + 
   space(
     geometry,
     model = matern,
@@ -172,8 +172,7 @@ cmp <- ~ Intercept(1) +
   ) + depth(depth_rast_p$depth ,model="linear")
 
 eta <- geometry + season ~ space +
-  depth +
-  Intercept
+  Intercept + depth
 
 ips <- fm_int(
   domain = list(geometry = mrsea$mesh, season = 1:4),
