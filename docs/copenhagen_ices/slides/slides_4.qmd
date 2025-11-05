@@ -589,6 +589,20 @@ ggplot()+ geom_line(data = pred1, aes(year, mean, color = "rw1")) +
 :::
 :::::
 
+
+## RW models as smoothers for covariates
+
+- RW models are discrete models
+
+- Covariates are often recorded as continuous values
+
+- The function `inla.group()` will bin covariate values into groups (default 25 groups)
+
+`inla.group(x, n = 25, method = c("cut", "quantile"), idx.only = FALSE)`
+
+<!-- Note that this assumes that all the knots are regularly spaced. For the case of irregularly placed data, it is possible to use function inla.group() to bin data into groups according to the values of the covariate. The way in which values are grouped can be set with the method argument, that can be either "cut" (the default) or "quantile". Option "cut" splits the data using equal length intervals, while option "quantile" uses equidistant quantiles in the probability space.  -->
+
+
 ## Summary RW (1 and 2) models
 
 -   Latent effects suitable for smoothing and modeling temporal data.
