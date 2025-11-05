@@ -1,5 +1,201 @@
 [
   {
+    "objectID": "slides/slides_10.html#motivation",
+    "href": "slides/slides_10.html#motivation",
+    "title": "Lecture ??",
+    "section": "Motivation",
+    "text": "Motivation\n\n“All models are wrong, some models are useful” — George Box\n\n\n\nHow do we check that our model fits our data? - Model Validation\n\n\n\n\nHow do we choose the best model? - Model Comparison\n\n\n\nBut..it is not always easy to distinguish between the two!"
+  },
+  {
+    "objectID": "slides/slides_10.html#bayesian-model-comparison-1",
+    "href": "slides/slides_10.html#bayesian-model-comparison-1",
+    "title": "Lecture ??",
+    "section": "Bayesian Model Comparison",
+    "text": "Bayesian Model Comparison\n\nThere is no golden standard\nIt really depends what you want to do!\nBasically two types\n\nOnes that look at the posterior probability of the data under the model\nOnes that look at how model the data fits the data\n\nIn general it is not an easy task\ninlabru provides some options available"
+  },
+  {
+    "objectID": "slides/slides_10.html#model-comparisonvalidation-in-inlabru",
+    "href": "slides/slides_10.html#model-comparisonvalidation-in-inlabru",
+    "title": "Lecture ??",
+    "section": "Model Comparison/Validation in inlabru",
+    "text": "Model Comparison/Validation in inlabru\n\nCriteria of fit\n\nMarginal likelihood ⇒Bayes factors\nDeviance information criterion (DIC)\nWidely applicable information criterion (WAIC)\n\nThere are also some predictive checks for the model:\n\nConditional predictive ordinate (CPO)\nProbability integral transform (PIT)\n\nYou can sample from the posterior using generate() and compute\n\nlog-scores\nCRPS\n…"
+  },
+  {
+    "objectID": "slides/slides_10.html#marginal-likelihood",
+    "href": "slides/slides_10.html#marginal-likelihood",
+    "title": "Lecture ??",
+    "section": "Marginal likelihood",
+    "text": "Marginal likelihood\n\n# tell inlabru you want to compute mlik\nbru_options_set(control.compute = list(mlik = TRUE))\nfit = bru(cmp, lik)\n# see the results\nfit$mlik\n\n                                           [,1]\nlog marginal-likelihood (integration) -162.7781\nlog marginal-likelihood (Gaussian)    -163.1629\n\n\n\n\nCalculates \\(\\log(\\pi(\\mathbf{y}))\\)\nCan calculate Bayes factors through differences in value\nNB: Problematic for intrinsic models"
+  },
+  {
+    "objectID": "slides/slides_10.html#deviance-information-criteria-dic",
+    "href": "slides/slides_10.html#deviance-information-criteria-dic",
+    "title": "Lecture ??",
+    "section": "Deviance Information Criteria (DIC)",
+    "text": "Deviance Information Criteria (DIC)\n\n# tell inlabru you want to compute DIC\nbru_options_set(control.compute = list(dic = TRUE))\nfit = bru(cmp, lik)\n# see the results\nfit$dic$dic\n\n[1] 287.3209\n\n\n\n\nMeasure of complexity and fit.\nDefined as: \\(\\text{DIC} = \\bar{D} + p_D\\)\n\n\\(\\bar{D}\\) is the posterior mean of the deviance\n\\(p_D\\) is the effective number of parameters.\n\nSmaller values indicate better trade-off between complexity and fit."
+  },
+  {
+    "objectID": "slides/slides_10.html#widely-applicable-information-criterion-waic",
+    "href": "slides/slides_10.html#widely-applicable-information-criterion-waic",
+    "title": "Lecture ??",
+    "section": "Widely applicable information criterion (WAIC)",
+    "text": "Widely applicable information criterion (WAIC)\nalso known as Watanabe–Akaike information criterion.\n\n# tell inlabru you want to compute WAIC\nbru_options_set(control.compute = list(waic = TRUE))\nfit = bru(cmp, lik)\n# see the results\nfit$waic$waic\n\n[1] 287.3617\n\n\n\n\nsimilar to the DIC…but maybe better1\nLinked to the leave-one-out crossvalidation\nSmaller values indicate better trade-off between complexity and fit\n\nSee “Understanding predictive information criteria for Bayesian models” (2013) by Andrew Gelman, Jessica Hwang, and Aki Vehtari"
+  },
+  {
+    "objectID": "slides/slides_10.html#posterior-predictive-distribution",
+    "href": "slides/slides_10.html#posterior-predictive-distribution",
+    "title": "Lecture ??",
+    "section": "Posterior predictive distribution",
+    "text": "Posterior predictive distribution\nRemember: Our GLM is defined as: \\[\n\\begin{eqnarray}\n\\pi(\\mathbf{y}|\\mathbf{u},\\theta) & =\\prod_i \\pi(y_i|\\mathbf{u},\\theta)& \\ \\text{  likelihood}\\\\\n\\pi(\\mathbf{u}|\\theta)& &\\ \\text{  LGM}\\\\\n\\pi(\\theta )& &\\ \\text{  hyperprior}\\\\\n\\end{eqnarray}\n\\] using inlabru we estimate the posterior distribution \\(\\pi(\\mathbf{u},\\theta|\\mathbf{y})\\).\nThe posterior predictive distribution for a new data \\(\\hat{y}\\) is then: \\[\n\\pi(\\hat{y}|\\mathbf{y}) = \\int\\pi(y_i|\\mathbf{u},\\theta)\\pi(\\mathbf{u},\\theta|\\mathbf{y})\\ d\\mathbf{u}\\ d\\theta\n\\]\nThis ditribution can be used to check the model fit!"
+  },
+  {
+    "objectID": "slides/slides_10.html#posterior-predictive-distribution-1",
+    "href": "slides/slides_10.html#posterior-predictive-distribution-1",
+    "title": "Lecture ??",
+    "section": "Posterior predictive distribution",
+    "text": "Posterior predictive distribution\n\\[\n\\pi(\\hat{y}|\\mathbf{y}) = \\int\\pi(y_i|\\mathbf{u},\\theta)\\pi(\\mathbf{u},\\theta|\\mathbf{y})\\ d\\mathbf{u}\\ d\\theta\n\\]\nNOTE: In general this is NOT computed by inlabru but needs to be approximated\n\nUse generate to sample from the posterior \\((\\mathbf{u}^*_i,\\theta^*_i)\\sim\\pi(\\mathbf{u},\\theta|\\mathbf{y})\\)\nSimulate a new datapoint \\(y^*_i\\sim(y_i|\\mathbf{u}^*_i,\\theta^*_i)\\)\nUse \\(y^*_1,\\dots, y^*_N\\) to approximate the posterior predictive distribution.\n\n\nBUT inlabru computes automatically two quantities that are useful for model check!\n\nConditional predictive ordinate (CPO)\nProbability integral transform (PIT)"
+  },
+  {
+    "objectID": "slides/slides_10.html#conditional-predictive-ordinate-cpo",
+    "href": "slides/slides_10.html#conditional-predictive-ordinate-cpo",
+    "title": "Lecture ??",
+    "section": "Conditional predictive ordinate (CPO)",
+    "text": "Conditional predictive ordinate (CPO)\nDefinition: \\[\ncpo_i = \\pi(y^{obs}_i|\\mathbf{y}_{-i})\n\\]\n\nIntroduced in Pettit (1990)1\nMeasures fit through the predictive density\nCan be used to compute the log-score as \\[\n\\text{Score} = -\\sum \\log(cpo_i)\n\\] lower score correspond to better models\n\nPettit, L. I. 1990. “The Conditional Predictive Ordinate for the Normal Distribution.” Journal of the Royal Statistical Society. Series B (Methodological)"
+  },
+  {
+    "objectID": "slides/slides_10.html#probability-integral-transform-pit",
+    "href": "slides/slides_10.html#probability-integral-transform-pit",
+    "title": "Lecture ??",
+    "section": "Probability integral transform (PIT)",
+    "text": "Probability integral transform (PIT)\nHow to compute:\n\n# tell inlabru you want to compute DIC\nbru_options_set(control.compute = list(cpo = TRUE))\nfit = bru(cmp, lik)\n# see the results\nhead(fit$cpo$cpo)\n\n[1] 0.26117584 0.38159530 0.39597371 0.39128682 0.02311577 0.28390602\n\n\nNote it is possible to check for possible fails in computed CPOs\n\nhead(fit$cpo$failure)\n\n[1] 0 0 0 0 0 0"
+  },
+  {
+    "objectID": "slides/slides_10.html#probability-integral-transform-pit-1",
+    "href": "slides/slides_10.html#probability-integral-transform-pit-1",
+    "title": "Lecture ??",
+    "section": "Probability integral transform (PIT)",
+    "text": "Probability integral transform (PIT)\nDefinition: \\[\npit_i = \\text{Prob}(\\hat{y}_i&lt;y_i|\\mathbf{y}_{-i})\n\\]\n\nLinked to leave-one-out cross-validation\n\\(pit_i\\) shows how well the ith data point is predicted by the rest of the data\nVery small values indicate “suprising” observation under the model\nFor well-calibrated, the PIT values should be approximately uniformly distributed."
+  },
+  {
+    "objectID": "slides/slides_10.html#probability-integral-transform-pit-2",
+    "href": "slides/slides_10.html#probability-integral-transform-pit-2",
+    "title": "Lecture ??",
+    "section": "Probability integral transform (PIT)",
+    "text": "Probability integral transform (PIT)\nHow to compute:\n\n# tell inlabru you want to compute DIC\nbru_options_set(control.compute = list(cpo = TRUE))\nfit = bru(cmp, lik)\n# see the results\nhead(fit$cpo$pit)\n\n[1] 0.1793125 0.6178745 0.5146385 0.4324744 0.9925937 0.7946069"
+  },
+  {
+    "objectID": "slides/slides_10.html#good-and-bad-pit-plots",
+    "href": "slides/slides_10.html#good-and-bad-pit-plots",
+    "title": "Lecture ??",
+    "section": "Good and Bad PIT plots",
+    "text": "Good and Bad PIT plots"
+  },
+  {
+    "objectID": "slides/slides_10.html#other-scores",
+    "href": "slides/slides_10.html#other-scores",
+    "title": "Lecture ??",
+    "section": "Other scores",
+    "text": "Other scores\nIn the literature there are many proposed scores for evaluate predictions. For example:\n\nDawid-Sebastian score\nLog-score\nContinuous rank probility score (CRPS)\nBrier score\n…\n\nThey all have their strength and wakness and which one is better depends on the goals of the model.\ninlabru does not provide such scores automatcally, but they can be computed using simulations from the posterior distribution."
+  },
+  {
+    "objectID": "slides/slides_10.html#example-crps-for-poisson-data",
+    "href": "slides/slides_10.html#example-crps-for-poisson-data",
+    "title": "Lecture ??",
+    "section": "Example: CRPS for Poisson data",
+    "text": "Example: CRPS for Poisson data\nOur model: \\[\n\\begin{eqnarray}\ny_i|\\lambda_i & \\sim \\text{Poisson}(\\lambda_i),&\\ i = 1,\\dots,N_{\\text{data}}\\\\\n\\log(\\lambda_i)  = \\eta_i &= \\beta_0 + \\beta_1 x_i\n\\end{eqnarray}\n\\]\nSimulate data and fit the model:\n\ndf_pois &lt;- data.frame(\n  x = rnorm(50),\n  y = rpois(length(x), exp(2 + 1 * x))\n)\ncmp = ~ Intercept(1) + cov(x, model = \"linear\")\nlik = bru_obs(formula = y~.,\n              family = \"poisson\",\n              data = df_pois)\nfit_pois &lt;- bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_10.html#example-crps-for-poisson-data-1",
+    "href": "slides/slides_10.html#example-crps-for-poisson-data-1",
+    "title": "Lecture ??",
+    "section": "Example: CRPS for Poisson data",
+    "text": "Example: CRPS for Poisson data\nThe CRPS score is defined as: \\[\n\\text{S}_{\\text{CRPS}}(F_i, y_i) = \\sum_{k=0}^\\infty\\left[\\text{Prob}(Y_i\\leq k|\\mathbf{y})-I(y_i\\leq k)\\right]^2\n\\]\nComputational algorithm:\n\nSimulate \\(\\lambda^{(j)}\\sim p(\\lambda|\\text{data}), j = 1,\\dots, N_{\\text{samples}}\\) using generate() (size \\(N\\times N_\\text{samples}\\)).\nFor each \\(i=1,\\dots,N_{\\text{data}}\\), estimate \\(r_{ik}=\\text{Prob}(Y\\leq k|\\text{data})-I(y_i\\leq k)\\) as \\[\n  \\hat{r}_{ik} = \\frac{1}{N_\\text{samples}} \\sum_{j=1}^{N_\\text{samples}}\n  \\{\n  \\text{Prob}(Y\\leq k|\\lambda^{(j)}_i)-I(y_i\\leq k)\n  \\} .\n\\]\nCompute \\[\n  S_\\text{CRPS}(F_i,y_i) = \\sum_{k=0}^{K} \\hat{r}_{ik}^2\n\\]"
+  },
+  {
+    "objectID": "slides/slides_10.html#example-crps-for-poisson-data-2",
+    "href": "slides/slides_10.html#example-crps-for-poisson-data-2",
+    "title": "Lecture ??",
+    "section": "Example: CRPS for Poisson data",
+    "text": "Example: CRPS for Poisson data\nImplementation:\n\n# some large value, so that 1-F(K) is small\nmax_K &lt;- ceiling(max(df_pois$y) + 4 * sqrt(max(df_pois$y)))\nk &lt;- seq(0, max_K)\nkk &lt;- rep(k, times = length(df_pois$y))\ni &lt;- seq_along(df_pois$y)\npred_pois &lt;- generate(fit_pois, df_pois,\n  formula = ~ {\n    lambda &lt;- exp(Intercept + x)\n    ppois(kk, lambda = rep(lambda, each = length(k)))\n  },\n  n.samples = 2000\n)\nresults &lt;- data.frame(\n  i = rep(i, each = length(k)),\n  k = kk,\n  Fpred = rowMeans(pred_pois),\n  residuals =\n    rowMeans(pred_pois) - (rep(df_pois$y, each = length(k)) &lt;= kk)\n)\n\ncrps_scores &lt;-\n  (results %&gt;%\n    group_by(i) %&gt;%\n    summarise(crps = sum(residuals^2), .groups = \"drop\") %&gt;%\n    pull(crps))\nsummary(crps_scores)\n\n    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. \n  0.4933   2.3921   6.2946  13.6441  16.6938 106.1881"
+  },
+  {
+    "objectID": "slides/slides_10.html#residuals-frequentist-vs-bayesian",
+    "href": "slides/slides_10.html#residuals-frequentist-vs-bayesian",
+    "title": "Lecture ??",
+    "section": "Residuals: Frequentist vs Bayesian",
+    "text": "Residuals: Frequentist vs Bayesian\n\n\n🎯 Frequentist View\n\nModel parameters are fixed but unknown.\nFitted values (predictions): \\(\\hat{y}_i\\) are point estimates\nResiduals:\n\\[\nr_i = y_i - \\hat{y}_i\n\\]\nSingle number per data point.\nUsed for:\n\nChecking model fit / outliers\n\n\n\n🔮 Bayesian View"
+  },
+  {
+    "objectID": "slides/slides_10.html#residuals-frequentist-vs-bayesian-1",
+    "href": "slides/slides_10.html#residuals-frequentist-vs-bayesian-1",
+    "title": "Lecture ??",
+    "section": "Residuals: Frequentist vs Bayesian",
+    "text": "Residuals: Frequentist vs Bayesian\n\n\n🎯 Frequentist View\n\nModel parameters are fixed but unknown.\nFitted values (predictions): \\(\\hat{y}_i\\) are point estimates\nResiduals:\n\\[\nr_i = y_i - \\hat{y}_i\n\\]\nSingle number per data point.\nUsed for:\n\nChecking model fit / outliers\n\n\n\n🔮 Bayesian View\n\nParameters are random variables with posterior \\(\\pi(\\theta \\mid y)\\).\nPredictions \\(\\tilde{y}_i\\) also have a posterior distribution.\nNo single “true” fitted value → residuals are not uniquely defined.\n\n\\(r_i^{(\\text{mean})} = (y_i - E[\\tilde{y}_i \\mid y])\\) (mean residual)\n\n\\(r_i^{(\\text{sample})} = (y_i - \\tilde{y}^s)\\) for posterior sample \\(s\\)\nDistribution of \\(y_i - \\tilde{y}_i^{(s)}\\) (posterior residuals)\n\n\n\n\n\nA better option is to use posterior predictive checks1\n\nSee Gelman et. al (2020) “Bayesian Workflow”"
+  },
+  {
+    "objectID": "slides/slides_10.html#one-example-of-posterior-predictive-checks",
+    "href": "slides/slides_10.html#one-example-of-posterior-predictive-checks",
+    "title": "Lecture ??",
+    "section": "One example of posterior predictive checks",
+    "text": "One example of posterior predictive checks\n\n\n\\[\ny_i|\\eta_i\\sim\\mathcal{N}(\\eta_i, \\sigma^2)\n\\]\n\nModel 1 \\[\n\\eta_i = \\beta_0 + \\beta_1 x_i\n\\]\nModel 2 \\[\n\\eta_i = \\beta_0 +  f(x_i)\n\\]"
+  },
+  {
+    "objectID": "slides/slides_10.html#one-example-of-posterior-predictive-checks-1",
+    "href": "slides/slides_10.html#one-example-of-posterior-predictive-checks-1",
+    "title": "Lecture ??",
+    "section": "One example of posterior predictive checks",
+    "text": "One example of posterior predictive checks\n\nSample \\(y^{1k}_i\\sim\\pi(y_i|\\mathbf{y})\\) \\(k = 1,\\dots,M\\) using generate()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSamples\n\n\n\n\n1\n2\n3\n4\n...\nM\n\n\n\n\n$y_1$\n2.49\n4.81\n4.16\n6.08\n...\n4.58\n\n\n$y_3$\n3.37\n2.66\n3.54\n3.78\n...\n2.14\n\n\n...\n...\n...\n...\n...\n...\n...\n\n\n$y_N$\n3.62\n4.62\n3.59\n3.44\n...\n3.88\n\n\n\n\n\n\nCompare some summaries of the simulated data with the one of the observed one"
+  },
+  {
+    "objectID": "slides/slides_10.html#one-example-of-posterior-predictive-checks-2",
+    "href": "slides/slides_10.html#one-example-of-posterior-predictive-checks-2",
+    "title": "Lecture ??",
+    "section": "One example of posterior predictive checks",
+    "text": "One example of posterior predictive checks\nHere we compare the estimated posterior densities \\(\\hat{\\pi}^k(y|\\mathbf{y})\\) with the estimated data density\n\n\nThis is just a simple example, but more complex checks can be computed with the same idea!"
+  },
+  {
+    "objectID": "slides/slides_10.html#leave-group-our-cross-validation",
+    "href": "slides/slides_10.html#leave-group-our-cross-validation",
+    "title": "Lecture ??",
+    "section": "Leave Group Our Cross-Validation",
+    "text": "Leave Group Our Cross-Validation\nThis is a new option for cross-validation in inlabru . . .\n\nLeave-one-out cross-validation (LOOCV) is a very common technique to evaluate predictions from models\nWhen data are correlated (as in spatial statistics) LOOCV might be too optimistic and overestimate model performances.\n\n\n\nOne possible solution is to then remove “chunck(s)” of data (for example one station and all its nearest neighbours)\nThis is the solution implemented in the inla.group.cv() function1\n\n\nAdin & al (2024) Automatic cross-validation in structured models: Is it time to leave out leave-one-out?, Spat. Statistics and Liu & al. (2022) Leave-group-out cross-validation for latent Gaussian models"
+  },
+  {
+    "objectID": "slides/slides_10.html#model-validation-for-lgcp-1",
+    "href": "slides/slides_10.html#model-validation-for-lgcp-1",
+    "title": "Lecture ??",
+    "section": "Model validation for LGCP",
+    "text": "Model validation for LGCP\nPoint processes (and so LGCP) are different from all other spatial models:\n\nThe data are presence and absence of points\nThe likelihood depends on the data location and the integrated intensity over the whole domain\n\n\nThis makes model evaluation especially challenging. Especially cross-validation based measures are hard to define… why?"
+  },
+  {
+    "objectID": "slides/slides_10.html#cross-validation-for-point-processes",
+    "href": "slides/slides_10.html#cross-validation-for-point-processes",
+    "title": "Lecture ??",
+    "section": "Cross validation for point processes",
+    "text": "Cross validation for point processes\n\n\n\nIn a Point process also empty areas are “data”\nWe cannot just remove points as this will change the underlying intensity\nWe need to remove a whole subdomain in order to cross-validate"
+  },
+  {
+    "objectID": "slides/slides_10.html#a-warning-note",
+    "href": "slides/slides_10.html#a-warning-note",
+    "title": "Lecture ??",
+    "section": "A warning note!",
+    "text": "A warning note!\nWarning⚠️\n\nDo not use WAIC and DIC as computed today by inlabru to compare LGCP models\n\n\nWAIC is linked to leave-one-out crossvalidation therefore it is ill-defined for point processes\nDIC is ok “in theory” but not the way it is computed today\n\n\nWork is going on about this and measures of fit for LGCP will soon be available in inlabru"
+  },
+  {
+    "objectID": "slides/slides_10.html#some-ideas-on-what-one-can-do",
+    "href": "slides/slides_10.html#some-ideas-on-what-one-can-do",
+    "title": "Lecture ??",
+    "section": "Some ideas on what one can do",
+    "text": "Some ideas on what one can do\n\nIt is possible to define residuals for PP, for example as: \\[\n\\hat{R}_B = n(B)- \\int_B\\hat{\\lambda}(s)\\ ds\n\\] where\n\\(n(B)\\) is the number of observed points in \\(B\\)\n\\(\\hat{\\lambda}(s)\\) is the estimated intensity\n\nThese residuals can be used to evaluate the model.\n\nThis is still work in progress and at the moment non easily available… but it will be 😀\nHere you can see some examples of computation and use."
+  },
+  {
+    "objectID": "slides/slides_10.html#take-home-messages",
+    "href": "slides/slides_10.html#take-home-messages",
+    "title": "Lecture ??",
+    "section": "Take home messages",
+    "text": "Take home messages\n\nModel check and model comparison are complex topics\nThere are no universal solutions, it all depends on which model characteristics you are interested in.\ninlabru provides some easy to compute alternatives\nLGCP require own tools to validate the model\n\nwork is ongoing here… stay tuned 😀"
+  },
+  {
     "objectID": "slides/slides_3.html#outline",
     "href": "slides/slides_3.html#outline",
     "title": "Lecture 2",
@@ -901,5 +1097,96 @@
     "title": "Lecture 1",
     "section": "Take home message!",
     "text": "Take home message!\n\nMany of the model you have used (and some you have never used but will learn about) are just special cases of the large class of Latent Gaussian models\ninlabru provides an efficient and unified way to fit all these models!"
+  },
+  {
+    "objectID": "slides/slides_5.html#outline",
+    "href": "slides/slides_5.html#outline",
+    "title": "Lecture 5",
+    "section": "Outline",
+    "text": "Outline\n\nWhy spatial modelling?\nWhy is spatial modelling computationally expensive?\nDifferent data types?\nModelling in discrete space – areal data\nModelling in continuous space – geo-referenced data\nModelling continuous space – spatial point process data"
+  },
+  {
+    "objectID": "slides/slides_5.html#spatial-modelling",
+    "href": "slides/slides_5.html#spatial-modelling",
+    "title": "Lecture 5",
+    "section": "Spatial modelling",
+    "text": "Spatial modelling\nmany natural processes take place in space large amounts of data collected in space; increased resolution large, complex data sets\nHOWEVER:\n\nspatial statistical analysis is often not complex enough\ninaccessible to practitioners as literature written for statisticians\ndevelopment of methodology often not linked to applications (unrealistic assumptions)\ndifficult to apply (unless you are an expert statistician and programmer)\n\nwe will see that inlabru can help with this… why do we need spatial models in the first place?"
+  },
+  {
+    "objectID": "slides/slides_5.html#an-example",
+    "href": "slides/slides_5.html#an-example",
+    "title": "Lecture 5",
+    "section": "an example",
+    "text": "an example\nglobal pm 2.5\nexposure to air pollution; particulate matter &lt; 2.5 microns in diameter (PM 2.5)\n\nlinked to poor health outcomes\nresponsible for three million deaths worldwide each year\nmaybe observations not independent?\nsparsely measured\nheterogeneous spatial coverage\n\nWe need to take account of spatial dependence… i.e. account for autocorrelation… and complexity"
+  },
+  {
+    "objectID": "slides/slides_5.html#spatial-modelling-1",
+    "href": "slides/slides_5.html#spatial-modelling-1",
+    "title": "Lecture 5",
+    "section": "Spatial modelling",
+    "text": "Spatial modelling\naccounting for spatial dependence\n\nstandard statistical modelling usually assumes independent observations\ndistributional assumptions that are made are only true if the independence assumption hold\nspatio-temporal data, however, are often not independent, but are spatially auto correlated\nindependence assumptions are violated here\ntwo observations taken in close proximity are very similar\ndo not provide two (independent) pieces of information"
+  },
+  {
+    "objectID": "slides/slides_5.html#spatial-modelling-2",
+    "href": "slides/slides_5.html#spatial-modelling-2",
+    "title": "Lecture 5",
+    "section": "Spatial modelling",
+    "text": "Spatial modelling\naccounting for spatial dependence - ignoring this = pretend we have as much independent information as we have observations - pretend we have more information than we actually have - spurious inference and ultimately wrong conclusions…\nspatio-temporal models have special model components that explicitly model the dependence structure we need to:\n\nsay what the dependence in our data looks like in general: choose a specific class of spatial models, and\nestimate its specific properties for a specific dataset"
+  },
+  {
+    "objectID": "slides/slides_5.html#spatial-modelling-computations",
+    "href": "slides/slides_5.html#spatial-modelling-computations",
+    "title": "Lecture 5",
+    "section": "Spatial modelling – computations",
+    "text": "Spatial modelling – computations\n\ncomputationally expensive\nin the past: often MCMC, takes forever"
+  },
+  {
+    "objectID": "slides/slides_5.html#types-of-spatial-data",
+    "href": "slides/slides_5.html#types-of-spatial-data",
+    "title": "Lecture 5",
+    "section": "Types of spatial data",
+    "text": "Types of spatial data\nWe can distinguish three types of spatial data\nDiscrete space: - data on a spatial grid (areal data)\nContinuous space: - geostatistical (geo-referenced) data - spatial point data"
+  },
+  {
+    "objectID": "slides/slides_5.html#discrete-space-areal-data",
+    "href": "slides/slides_5.html#discrete-space-areal-data",
+    "title": "Lecture 5",
+    "section": "Discrete space: areal data",
+    "text": "Discrete space: areal data\n\ndata on a (regular or irregular) spatial grid\nexamples: number of individuals in a region, average rainfall in a province\n(originally geostatistical or point data; gridded for practical reasons)\n\nObserved response(s): Measurement over each grid cell (e.g. number of individuals in cell; rainfall in province)"
+  },
+  {
+    "objectID": "slides/slides_5.html#continuous-space-geostatistical-data",
+    "href": "slides/slides_5.html#continuous-space-geostatistical-data",
+    "title": "Lecture 5",
+    "section": "Continuous space: geostatistical data",
+    "text": "Continuous space: geostatistical data\n\nphenomenon that is continuous in space\nexamples: nutrient levels in soil, salinity in the sea measurements at a given set of locations that are determined by surveyor\n\nObserved response(s): measurement(s) taken at given locations"
+  },
+  {
+    "objectID": "slides/slides_5.html#continuous-space-spatial-point-patterns",
+    "href": "slides/slides_5.html#continuous-space-spatial-point-patterns",
+    "title": "Lecture 5",
+    "section": "Continuous space: spatial point patterns",
+    "text": "Continuous space: spatial point patterns\n\npatterns formed by locations of objects (individuals) in space (typically 2D)\nexamples: locations of trees in a forest, groups of animals, earthquakes\n\nObserved response(s): x,y coordinates of points (individuals/groups) sometimes also properties of individuals/groups (“marks”)"
+  },
+  {
+    "objectID": "slides/slides_5.html#point-patterns-vs.-geostatistical-data",
+    "href": "slides/slides_5.html#point-patterns-vs.-geostatistical-data",
+    "title": "Lecture 5",
+    "section": "point patterns vs. geostatistical data",
+    "text": "point patterns vs. geostatistical data\npoint patterns: - data format : x,y coordinates optional : properties of objects represented by the points (“marks”)\ngeostatistical data: - data format : x,y coordinates not optional : measurement taken in these locations\nThese seem rather similar…"
+  },
+  {
+    "objectID": "slides/slides_5.html#point-patterns-vs.-geostatistical-data-1",
+    "href": "slides/slides_5.html#point-patterns-vs.-geostatistical-data-1",
+    "title": "Lecture 5",
+    "section": "point patterns vs. geostatistical data",
+    "text": "point patterns vs. geostatistical data\npoint patterns : - data format : x,y coordinates\noptional : properties of objects represented by the points (“marks”)\n\naim : modelling the locations of objects in continuous space\nlocations are being modelled and are considered random\nmarks only take values in locations where there is a point\n\ngeostatistical data : - data format : x,y coordinates\nnot optional : measurement taken in these locations\n\naim : modelling continuous process observed in finite number of locations\nlocations have typically been deliberately chosen and are fixed\ncontinuous spatial field takes on values in whole subset of \\(\\mathbf R^ 2\\)"
+  },
+  {
+    "objectID": "slides/slides_5.html#take-home-message",
+    "href": "slides/slides_5.html#take-home-message",
+    "title": "Lecture 5",
+    "section": "Take home message!",
+    "text": "Take home message!\n\nall spatial models we discuss here are also special cases of the large class of Latent Gaussian models\nto account for spatial dependence in the data, different types of spatial terms have to be included in the model for different spatial data structures, but they are all approximated by an SPDE model\ninlabru provides an efficient and unified way to fit all these models!"
   }
 ]

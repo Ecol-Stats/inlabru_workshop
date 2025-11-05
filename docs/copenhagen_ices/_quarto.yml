@@ -13,9 +13,9 @@ project:
   - slides/slides_1.qmd
   - slides/slides_2.qmd
   - slides/slides_3.qmd
-  # - slides/slides_4.qmd
-  # - slides/slides_5.qmd
-  # - slides/slides_10.qmd
+  - slides/slides_4.qmd
+  - slides/slides_5.qmd
+  - slides/slides_10.qmd
   # - slides/slides_12.qmd
   # - slides/slides_13.qmd
 website:
