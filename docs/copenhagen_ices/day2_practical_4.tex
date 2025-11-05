@@ -291,7 +291,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, colback={codebgcolor}, boxrule=0pt, enhanced, breakable, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, sharp corners, boxrule=0pt, breakable, enhanced, colback={codebgcolor}]}{\end{tcolorbox}}\fi
 \makeatother
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -492,7 +492,7 @@ a layer per year and chose an appropriate color palette using the
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-7-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, title={Task}, toprule=.15mm, bottomrule=.15mm, opacitybacktitle=0.6, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, arc=.35mm, coltitle=black, colback=white, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, rightrule=.15mm, breakable, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, left=2mm, titlerule=0mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, colback=white, leftrule=.75mm, opacityback=0, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, opacitybacktitle=0.6, coltitle=black, toprule=.15mm, bottomrule=.15mm, rightrule=.15mm, arc=.35mm]
 
 Produce a map that shows the spatial distribution of each of the
 following variables for the year 2011:
@@ -731,7 +731,7 @@ Moran I statistic       Expectation          Variance
       0.439899780      -0.003703704       0.001508809 
 \end{verbatim}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, title={Question}, toprule=.15mm, bottomrule=.15mm, opacitybacktitle=0.6, bottomtitle=1mm, colframe=quarto-callout-tip-color-frame, arc=.35mm, coltitle=black, colback=white, titlerule=0mm, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, toptitle=1mm, rightrule=.15mm, breakable, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, left=2mm, titlerule=0mm, toptitle=1mm, colframe=quarto-callout-tip-color-frame, bottomtitle=1mm, colback=white, leftrule=.75mm, opacityback=0, title={Question}, colbacktitle=quarto-callout-tip-color!10!white, opacitybacktitle=0.6, coltitle=black, toprule=.15mm, bottomrule=.15mm, rightrule=.15mm, arc=.35mm]
 
 What do we conclude from the Moran's I test?
 
@@ -962,7 +962,7 @@ Pacific Cod in 2017 using the \texttt{mapview} function:
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-43-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, title={Task}, toprule=.15mm, bottomrule=.15mm, opacitybacktitle=0.6, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, arc=.35mm, coltitle=black, colback=white, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, rightrule=.15mm, breakable, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, left=2mm, titlerule=0mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, colback=white, leftrule=.75mm, opacityback=0, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, opacitybacktitle=0.6, coltitle=black, toprule=.15mm, bottomrule=.15mm, rightrule=.15mm, arc=.35mm]
 
 Use \texttt{ggplot} and the \texttt{sf} library to map the biomass
 density of the pacific cod across years.
@@ -1076,7 +1076,7 @@ The following object is masked from 'package:stats':
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-47-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, title={Task}, toprule=.15mm, bottomrule=.15mm, opacitybacktitle=0.6, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, arc=.35mm, coltitle=black, colback=white, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, rightrule=.15mm, breakable, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, left=2mm, titlerule=0mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, colback=white, leftrule=.75mm, opacityback=0, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, opacitybacktitle=0.6, coltitle=black, toprule=.15mm, bottomrule=.15mm, rightrule=.15mm, arc=.35mm]
 
 Map the scaled depth and the presence/absence records of the Pacific cod
 for 2003 to 2005 only.
@@ -1158,7 +1158,7 @@ We obtain this by computing the semi-variance for all possible pairs of
 observations:
 \(\gamma(\mathbf{s}, \mathbf{t}) = 0.5(Z(\mathbf{s}) - Z(\mathbf{t}))^2\).
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, title={Example}, toprule=.15mm, bottomrule=.15mm, opacitybacktitle=0.6, bottomtitle=1mm, colframe=quarto-callout-note-color-frame, arc=.35mm, coltitle=black, colback=white, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, toptitle=1mm, rightrule=.15mm, breakable, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, left=2mm, titlerule=0mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, colback=white, leftrule=.75mm, opacityback=0, title={Example}, colbacktitle=quarto-callout-note-color!10!white, opacitybacktitle=0.6, coltitle=black, toprule=.15mm, bottomrule=.15mm, rightrule=.15mm, arc=.35mm]
 
 To illustrate how an empirical variogram is computed, consider the
 biomass density of the Pacific Cod in 2017 for the two highlighted
@@ -1427,7 +1427,7 @@ contain the spatial coordinates:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, title={Task}, toprule=.15mm, bottomrule=.15mm, opacitybacktitle=0.6, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, arc=.35mm, coltitle=black, colback=white, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, rightrule=.15mm, breakable, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, left=2mm, titlerule=0mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, colback=white, leftrule=.75mm, opacityback=0, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, opacitybacktitle=0.6, coltitle=black, toprule=.15mm, bottomrule=.15mm, rightrule=.15mm, arc=.35mm]
 
 We have set standard WGS84 coordinates for the Ringlet butterfly
 occurrence records. Set the CRS to match the CRS used in shapefile.
@@ -1531,7 +1531,7 @@ interest. Let's crop the elevation raster to the CNP area using the
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-82-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, title={Task}, toprule=.15mm, bottomrule=.15mm, opacitybacktitle=0.6, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, arc=.35mm, coltitle=black, colback=white, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, rightrule=.15mm, breakable, left=2mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, left=2mm, titlerule=0mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, colback=white, leftrule=.75mm, opacityback=0, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, opacitybacktitle=0.6, coltitle=black, toprule=.15mm, bottomrule=.15mm, rightrule=.15mm, arc=.35mm]
 
 Using \texttt{tidyterra} and \texttt{ggplot}, produce a map of the
 elevation profile in the CNP and overlay the spatial point pattern of

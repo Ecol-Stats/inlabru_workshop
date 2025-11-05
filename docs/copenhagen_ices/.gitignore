@@ -1,7 +1,7 @@
 # Quarto build output
 
 _site/
-site_libs/
+#site_libs/
 *.tex
 .quarto/
 *_freeze/
@@ -13,9 +13,6 @@ slides/*_freeze/
 slides/*_files/
 slides/*_cache/
 
-#docs/*_cache/
-#docs/slides/*_cache/
-#docs/slides/*_files/
 
 
 

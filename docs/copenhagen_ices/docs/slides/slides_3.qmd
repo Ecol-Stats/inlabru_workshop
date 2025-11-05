@@ -1,0 +1,112 @@
+---
+title: "Lecture 2"
+from: markdown+emoji
+subtitle: "Latent Gaussian Models and INLA" 
+format:
+   metropolis-beamer-revealjs
+#     logo:  images/logo_white.png
+#     theme: style.scss
+# header-logo: images/logo_white.png
+slide-number: "c/t"
+title-slide-attributes:
+#    data-background-image: images/trondheim3.png
+    data-background-size: cover
+    data-background-opacity: "0.55"
+author:
+  - name: Sara Martino
+    #orcid: 0000-0002-6879-4412
+    email: sara.martino@ntnu.no
+    affiliations: Dept. of Mathematical Science, NTNU
+# date: May 22, 2025
+# bibliography: references.bib
+embed-resources: true
+editor: 
+  markdown: 
+    wrap: 72
+execute:
+  allow-html: true
+  freeze: true
+---
+
+```{r setup}
+# #| include: false
+
+knitr::opts_chunk$set(echo = FALSE,
+                      message=FALSE,
+                      warning=FALSE,
+                      strip.white=TRUE,
+                      prompt=FALSE,
+                      fig.align="center",
+                       out.width = "60%")
+
+library(knitr)    # For knitting document and include_graphics function
+library(ggplot2)  # For plotting
+library(png)
+library(tidyverse)
+library(INLA)
+library(BAS)
+library(patchwork)
+
+```
+
+## Outline
+
+-   Latent Gaussian Models
+-   
+
+## Repetition
+
+Everything in R-INLA is based on so-called **latent Gaussian models**
+
+::: incremental
+— A few hyperparameters $\theta\sim\pi(\theta)$ control variances, range
+and so on
+
+— Given these hyperparameters we have an underlying Gaussian
+distribution
+$\mathbf{u}|\theta\sim\mathcal{N}(\mathbf{0},\mathbf{Q}^{-1}(\theta))$
+that we cannot directly observe
+
+— Instead we make indirect observations
+$\mathbf{y}|\mathbf{u},\theta\sim\pi(\mathbf{y}|\mathbf{u},\theta)$ of
+the underlying latent Gaussian field
+:::
+
+## Repetition
+
+Models of this kind: $$
+\begin{aligned}
+\mathbf{y}|\mathbf{x},\theta &\sim \prod_i \pi(y_i|\eta_i,\theta)\\
+\mathbf{\eta} & = A_1\mathbf{u}_1 + A_2\mathbf{u}_2+\dots + A_k\mathbf{u}_k\\
+\mathbf{u},\theta &\sim \mathcal{N}(0,\mathbf{Q}(θ)^{−1})\\
+\theta & \sim \pi(\theta)
+\end{aligned}
+$$
+
+occurs in many, seemingly unrelated, statistical models.
+
+## Examples
+
+-   Generalised linear (mixed) models
+-   Stochastic volatility
+-   Generalised additive (mixed) models
+-   Measurement error models
+-   Spline smoothing
+-   Semiparametric regression
+-   Space-varying (semiparametric) regression models
+-   Disease mapping
+-   Log-Gaussian Cox-processes
+-   Model-based geostatistics (\*)
+-   Spatio-temporal models
+-   Survival analysis
+-   +++
+
+## Main Characteristics
+
+1.  Latent **Gaussian** model
+2.  The data are *conditionally independent* given the latent field
+3.  The predictor is linear[^1]
+4.  The dimension of $\mathbf{u}$ can be big ($10^3-10^6$)
+5.  The dimension of $\theta$ should be not too big.
+
+[^1]: we will see that this can be partly relaxed :smiley:
