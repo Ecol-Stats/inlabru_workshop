@@ -606,7 +606,7 @@
     "href": "slides/slides_4.html#rw-as-intrinsic-models-1",
     "title": "Lecture 3",
     "section": "RW as intrinsic models",
-    "text": "RW as intrinsic models\n\ncmp1 = ~ Intercept(1) + time(year, model = \"rw1\", constr = TRUE)\ncmp2 = ~ Intercept(1) + time(year, model = \"rw1\", constr = FALSE)\nlik = bru_obs(formula = Erie~.,\n              data = lakes)\n\nfit1 = bru(cmp1,lik)\nfit2 = bru(cmp2,lik)\n\n\n\n[1] \"FIT1 - Intercept\"\n\n\n             mean    sd 0.025quant 0.5quant 0.975quant    mode kld\nIntercept 174.138 0.002    174.135  174.138    174.142 174.138   0\n\n\n[1] \"FIT2 - Intercept\"\n\n\n          mean     sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0 31.623    -62.009        0     62.009    0   0\n\n\n[1] \"FIT1 - RW1 effect\"\n\n\n    ID   mean    sd 0.025quant 0.5quant 0.975quant   mode kld\n1 1918 -0.122 0.016     -0.154   -0.122     -0.087 -0.122   0\n2 1919  0.039 0.016      0.000    0.040      0.068  0.042   0\n\n\n[1] \"FIT2 - RW1 effect\"\n\n\n    ID    mean     sd 0.025quant 0.5quant 0.975quant    mode kld\n1 1918 174.017 31.623    112.008  174.017    236.025 174.017   0\n2 1919 174.177 31.623    112.168  174.177    236.185 174.177   0"
+    "text": "RW as intrinsic models\n\ncmp1 = ~ Intercept(1) + time(year, model = \"rw1\", constr = TRUE)\ncmp2 = ~ Intercept(1) + time(year, model = \"rw1\", constr = FALSE)\nlik = bru_obs(formula = Erie~.,\n              data = lakes)\n\nfit1 = bru(cmp1,lik)\nfit2 = bru(cmp2,lik)\n\n\n\n[1] \"FIT1 - Intercept\"\n\n\n             mean    sd 0.025quant 0.5quant 0.975quant    mode   kld\nIntercept 174.138 0.002    174.135  174.138    174.142 174.138 0.001\n\n\n[1] \"FIT2 - Intercept\"\n\n\n          mean     sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0 31.623    -62.009        0     62.009    0   0\n\n\n[1] \"FIT1 - RW1 effect\"\n\n\n    ID   mean    sd 0.025quant 0.5quant 0.975quant   mode   kld\n1 1918 -0.122 0.016     -0.154   -0.122     -0.086 -0.122 0.001\n2 1919  0.039 0.016     -0.001    0.040      0.068  0.042 0.001\n\n\n[1] \"FIT2 - RW1 effect\"\n\n\n    ID    mean     sd 0.025quant 0.5quant 0.975quant    mode kld\n1 1918 174.016 31.623    112.007  174.016    236.024 174.016   0\n2 1919 174.179 31.623    112.170  174.179    236.187 174.179   0"
   },
   {
     "objectID": "slides/slides_4.html#random-walks-of-order-2",
@@ -1944,5 +1944,12 @@
     "title": "Lecture 12",
     "section": "Summary - Treating many zero with inlabru",
     "text": "Summary - Treating many zero with inlabru\nThere are mainly two types of models to treat excess of zeros\n\nZero inflated models\nHurdle models\n\nOnly one source of zeros\nPositive values can be both discrete and continuous\nTwo ways to imlement in inlabru\n\nUse the implemented Type0 likelihoods\n\n\n\nProbability of zero is constant\n\n\nUse the “two-likelihood” approach\n\n\nProbability of zero can be modelled"
+  },
+  {
+    "objectID": "slides/slides_4.html#rw-models-as-smoothers-for-covariates",
+    "href": "slides/slides_4.html#rw-models-as-smoothers-for-covariates",
+    "title": "Lecture 3",
+    "section": "RW models as smoothers for covariates",
+    "text": "RW models as smoothers for covariates\n\nRW models are discrete models\nCovariates are often recorded as continuous values\nThe function inla.group() will bin covariate values into groups (default 25 groups)\n\n\ninla.group(x, n = 25, method = c(\"cut\", \"quantile\"))\n\n\nTwo ways to bin\n\ncut (default) splits the data using equal length intervals\nquantile uses equidistant quantiles in the probability space."
   }
 ]
