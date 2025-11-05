@@ -1,7 +1,7 @@
 ---
-title: "Lecture ??"
+title: "Lecture 12"
 from: markdown+emoji
-subtitle: "Dealing with many zeros" 
+subtitle:  "Dealing with many zeros" 
 format:
   revealjs:
     margin: 0
@@ -22,15 +22,18 @@ author:
   - name: Janine Illian
     #orcid: 0000-0002-6879-4412
     email: Janine.Illian@glasgow.ac.uk
-    affiliations: University of Glasgow     
+    affiliations: University of Glasgow 
+  - name: Jafet Belmont
+    #orcid: 0000-0002-6879-4412
+    email: Jafet.Belmont@glasgow.ac.uk
+    affiliations: University of Glasgow   
+        
 # date: May 22, 2025
 # bibliography: references.bib
 embed-resources: true
 execute:
   allow-html: true
-editor: 
-  markdown: 
-    wrap: 72
+  freeze: true
 ---
 
 ```{r setup}

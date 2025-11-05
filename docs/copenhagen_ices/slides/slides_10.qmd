@@ -1,5 +1,5 @@
 ---
-title: "Lecture ??"
+title: "Lecture 10"
 from: markdown+emoji
 subtitle: "Model Comparison and Model evaluation" 
 format:
@@ -22,16 +22,20 @@ author:
   - name: Janine Illian
     #orcid: 0000-0002-6879-4412
     email: Janine.Illian@glasgow.ac.uk
-    affiliations: University of Glasgow     
+    affiliations: University of Glasgow 
+  - name: Jafet Belmont
+    #orcid: 0000-0002-6879-4412
+    email: Jafet.Belmont@glasgow.ac.uk
+    affiliations: University of Glasgow   
+        
 # date: May 22, 2025
 # bibliography: references.bib
 embed-resources: true
 execute:
   allow-html: true
-editor: 
-  markdown: 
-    wrap: 72
+  freeze: true
 ---
+
 
 ```{r setup}
 # #| include: false
@@ -773,7 +777,8 @@ p1 + geom_polygon(data = b1, aes(x,y), fill = "white")
 > Do not use WAIC and DIC as computed *today* by `inlabru` to compare
 > LGCP models
 
--   WAIC is linked to leave-one-out crossvalidation therefore it is ill-defined for point processes
+-   WAIC is linked to leave-one-out crossvalidation therefore it is
+    ill-defined for point processes
 -   DIC is ok "in theory" but not the way it is computed today
 
 . . .
@@ -793,8 +798,8 @@ These residuals can be used to evaluate the model.
 
 . . .
 
-This is still work in progress and at the moment non easily
-available... but it will be :grinning:
+This is still work in progress and at the moment non easily available...
+but it will be :grinning:
 
 [Here](https://inlabru-org.github.io/inlabru/articles/2d_lgcp_residuals_sf.html)
 you can see some examples of computation and use.
