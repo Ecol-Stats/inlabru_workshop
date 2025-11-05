@@ -1,4 +1,6 @@
 /.quarto/
+
+*.tex
 _freeze/
 day1_practical_files/
 **/*.quarto_ipynb
