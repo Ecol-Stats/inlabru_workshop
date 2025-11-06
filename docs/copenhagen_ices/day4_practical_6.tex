@@ -279,7 +279,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[colback={codebgcolor}, breakable, sharp corners, boxrule=0pt, enhanced, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, breakable, sharp corners, enhanced, boxrule=0pt, colback={codebgcolor}]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -680,7 +680,7 @@ predictive checks. To do so, we will use the CPO and PIT - two commonly
 used Bayesian model assessment criteria based on the \textbf{posterior
 predictive distribution}.
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, opacityback=0, rightrule=.15mm, colframe=quarto-callout-note-color-frame, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Posterior predictive model checking}, arc=.35mm, colback=white, breakable, opacitybacktitle=0.6, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white, left=2mm, toprule=.15mm, bottomtitle=1mm, leftrule=.75mm, coltitle=black, toptitle=1mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, breakable, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Posterior predictive model checking}, toprule=.15mm, colback=white, coltitle=black, bottomrule=.15mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, titlerule=0mm, left=2mm, rightrule=.15mm, arc=.35mm, opacitybacktitle=0.6, opacityback=0]
 
 The posterior predictive distribution for a predicted value \(\hat{y}\)
 is
@@ -783,7 +783,7 @@ This quantities is useful when comparing different models - a smaller
 values indicate a better model fit. CPO values can be accessed by typing
 \texttt{inlabru\_model\$cpo\$cpo}.
 
-\begin{tcolorbox}[enhanced jigsaw, bottomrule=.15mm, opacityback=0, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, title={Task}, arc=.35mm, colback=white, breakable, opacitybacktitle=0.6, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, toprule=.15mm, bottomtitle=1mm, leftrule=.75mm, coltitle=black, toptitle=1mm]
+\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, breakable, title={Task}, toprule=.15mm, colback=white, coltitle=black, bottomrule=.15mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, titlerule=0mm, left=2mm, rightrule=.15mm, arc=.35mm, opacitybacktitle=0.6, opacityback=0]
 
 The model assessment above suggests that a Poisson model might not be
 the most appropriate model, likely due to the overdispersion we detected

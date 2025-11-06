@@ -39,7 +39,7 @@ A generalised linear model allows for the data likelihood to be non-Gaussian. In
 y_i \sim \text{Poisson}(\lambda_i)
 $$ with rate parameter $\lambda_i$ which, using a log link, has associated predictor $$
 \eta_i = \log \lambda_i = \beta_0 + \beta_1 x_i 
-$$ with parameters $\beta_0$ and $\beta_1$, and covariate $x$. This is identical in form to the predictor in @sec-linmodel. The only difference is now we must specify a different data likelihood.
+$$ with parameters $\beta_0$ and $\beta_1$, and covariate $x$.
 
 ### **Simulate example data**
 
@@ -60,29 +60,63 @@ df = data.frame(y = y, x = x)
 
 ------------------------------------------------------------------------
 
-**Define model components and likelihood**
+**Define model components**
 
-Since the predictor is the same as @sec-linmodel, we can use the same component definition:
+The predictor here only contains only 2 components (Intercept and Slope).
+
+
+:::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}}Task
+
+Define an object called `cmp` that includes and (i) intercept `beta_0` and (ii) a covariate `x` linear effect `beta_1`.
+
 
 ```{r}
-#| code-summary: "GLM components"
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
 
 cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
-```
 
-However, when building the observation model likelihood we must now specify the Poisson likelihood using the `family` argument (the default link function for this family is the $\log$ link).
+```
+::::
+
+**Define linear predictor**
+
+:::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}}Task
+
+Define a linear predictor `eta` using the component labels you have defined on the previous task.
+
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+eta = y ~ beta_0 + beta_1
+
+```
+::::
+
+
+
+**Build observational model**
+
+
+When building the observation model likelihood we must now specify the Poisson likelihood using the `family` argument (the default link function for this family is the $\log$ link).
 
 ```{r}
 #| code-summary: "GLM likelihood"
 
-lik =  bru_obs(formula = y ~.,
+lik =  bru_obs(formula = eta,
             family = "poisson",
             data = df)
 ```
 
 **Fit the model**
 
-Once the likelihood object is constructed, fitting the model is exactly the same process as in @sec-linmodel.
+Once the likelihood object is constructed, fitting the model is exactly the same process, we just need to specify the model components and the observational model, and pass this on to the `bru` function:
 
 ```{r}
 #| code-summary: "Fit a GLM"
@@ -163,7 +197,7 @@ pred_glm %>% ggplot() +
 ```
 :::
 
-::: {.callout-warning icon="false"}
+:::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}}Task
 
 Suppose a binary response such that
@@ -235,4 +269,4 @@ pred_logis %>% ggplot() +
   xlab("Covariate") + ylab("Observations")
 
 ```
-:::
+::::

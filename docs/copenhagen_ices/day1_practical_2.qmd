@@ -1,7 +1,7 @@
 ---
 title: "Practical 2"
 execute: 
-  freeze: true
+  freeze: false
 format: 
   html:
     mainfont: "12"
@@ -42,7 +42,4 @@ we are going to learn:
 ```
 
 ```{r child="practicals/LMM_fish_example.qmd"}
-```
-
-```{r child="practicals/HGAMM_ex.qmd"}
 ```

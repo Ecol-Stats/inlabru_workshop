@@ -1,5 +1,4 @@
 % Options for packages loaded elsewhere
-% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
@@ -8,22 +7,21 @@
   letterpaper,
   DIV=11,
   numbers=noendperiod]{scrartcl}
-\usepackage{xcolor}
+
 \usepackage{amsmath,amssymb}
-\setcounter{secnumdepth}{5}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math} % this also loads fontspec
+  \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\ifPDFTeX\else
-  % xetex/luatex font selection
+\ifPDFTeX\else  
+    % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -41,6 +39,9 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
 \makeatletter
 \ifx\paragraph\undefined\else
@@ -106,7 +107,8 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
-\usepackage{longtable,booktabs,array}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -131,20 +133,6 @@
 % Set default figure placement to htbp
 \def\fps@figure{htbp}
 \makeatother
-
-
-
-
-
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-
-
-
- 
-
 
 % load packages
 \usepackage{geometry}
@@ -223,13 +211,6 @@
     BoldFont=*-Bold,
     ItalicFont=*-Italic,
     ]
-\usepackage{booktabs}
-\usepackage{caption}
-\usepackage{longtable}
-\usepackage{colortbl}
-\usepackage{array}
-\usepackage{anyfontsize}
-\usepackage{multirow}
 \KOMAoption{captions}{tableheading}
 \makeatletter
 \@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
@@ -298,13 +279,15 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[colback={codebgcolor}, enhanced, breakable, frame hidden, sharp corners, boxrule=0pt]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, enhanced, boxrule=0pt, breakable, frame hidden, colback={codebgcolor}]}{\end{tcolorbox}}\fi
 \makeatother
+
 \usepackage{bookmark}
+
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same}
+\urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Practical 8},
+  pdftitle={Practical 8: Zero-inflation},
   colorlinks=true,
   linkcolor={highlight},
   filecolor={Maroon},
@@ -313,9 +296,10 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{Practical 8}
+\title{Practical 8: Zero-inflation}
 \author{}
 \date{}
+
 \begin{document}
 \maketitle
 
@@ -326,706 +310,6 @@
 
 In this practical we are going to look at some model comparison and
 validation techniques.
-
-\section{Distance Sampling}\label{distance-sampling}
-
-In this practical we will:
-
-\begin{itemize}
-\tightlist
-\item
-  Fit a spatial distance sampling model
-\item
-  Estimate animal abundance
-\item
-  Compare models that use different detection functions
-\end{itemize}
-
-Libraries to load:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(dplyr)}
-\FunctionTok{library}\NormalTok{(INLA)}
-\FunctionTok{library}\NormalTok{(ggplot2)}
-\FunctionTok{library}\NormalTok{(patchwork)}
-\FunctionTok{library}\NormalTok{(inlabru)     }
-\FunctionTok{library}\NormalTok{(sf)}
-\CommentTok{\# load some libraries to generate nice map plots}
-\FunctionTok{library}\NormalTok{(scico)}
-\FunctionTok{library}\NormalTok{(mapview)}
-\end{Highlighting}
-\end{Shaded}
-
-\subsection{The data}\label{the-data}
-
-In the next exercise, we will explore data from a combination of several
-NOAA shipboard surveys conducted on pan-tropical spotted dolphins in the
-Gulf of Mexico. The data set is available in \texttt{inlabru}
-(originally obtianed from the \texttt{dsm} R package) and contains the
-following information:
-
-\begin{itemize}
-\item
-  A total of 47 observations of groups of dolphins were detected. The
-  group size was recorded, as well as the Beaufort sea state at the time
-  of the observation.
-\item
-  Transect width is 16 km, i.e.~maximal detection distance 8 km
-  (transect half-width 8 km).
-\end{itemize}
-
-We can load and visualize the data as follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{mexdolphin }\OtherTok{\textless{}{-}}\NormalTok{ mexdolphin\_sf}
-\NormalTok{mexdolphin}\SpecialCharTok{$}\NormalTok{depth }\OtherTok{\textless{}{-}}\NormalTok{ mexdolphin}\SpecialCharTok{$}\NormalTok{depth }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{depth=}\FunctionTok{scale}\NormalTok{(depth)}\SpecialCharTok{\%\textgreater{}\%}\FunctionTok{c}\NormalTok{())}
-\FunctionTok{mapviewOptions}\NormalTok{(}\AttributeTok{basemaps =} \FunctionTok{c}\NormalTok{( }\StringTok{"OpenStreetMap.DE"}\NormalTok{))}
-
-\FunctionTok{mapview}\NormalTok{(mexdolphin}\SpecialCharTok{$}\NormalTok{points,}\AttributeTok{zcol=}\StringTok{"size"}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{mapview}\NormalTok{(mexdolphin}\SpecialCharTok{$}\NormalTok{samplers)}\SpecialCharTok{+}
- \FunctionTok{mapview}\NormalTok{(mexdolphin}\SpecialCharTok{$}\NormalTok{ppoly )}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-file:////private/var/folders/66/sbcktl916ln9wbwvt5hnfw0h0000gn/T/Rtmp2q9qzz/file8467466973dd/widget84673535d648.html screenshot completed
-\end{verbatim}
-
-\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-4-1.pdf}}
-
-\subsection{The workflow}\label{the-workflow}
-
-To model the density of spotted dolphins we take a thinned point process
-model of the form:
-
-\begin{equation}\phantomsection\label{eq-thinned_pp}{
-p(\mathbf{y} | \lambda)  \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) p(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) p(\mathbf{s}_i)) 
-}\end{equation}
-
-When fitting a distance sampling model we need to fulfill the following
-tasks:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  Build the mesh
-\item
-  Define the SPDE representation of the spatial GF. This includes
-  defining the priors for the range and sd of the spatial GF
-\item
-  Define the \emph{components} of the linear predictor. This includes
-  the spatial GF and all eventual covariates
-\item
-  Define the observation model using the \texttt{bru\_obs()} function
-\item
-  Run the model using the \texttt{bru()} function
-\end{enumerate}
-
-\subsubsection{Building the mesh}\label{building-the-mesh}
-
-The first task is to build the mesh that covers the area of interest.
-For this purpose we use the function \texttt{fm\_mesh\_2d}. To do so, we
-need to define the area of interest. We can either use a predefined
-boundary or create a non convex hull surrounding the location of the
-specie sightseeings
-
-\subsection{non-covex hull}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{boundary0 }\OtherTok{=} \FunctionTok{fm\_nonconvex\_hull}\NormalTok{(mexdolphin}\SpecialCharTok{$}\NormalTok{points,}\AttributeTok{convex =} \SpecialCharTok{{-}}\FloatTok{0.1}\NormalTok{)}
-
-\NormalTok{mesh\_0 }\OtherTok{=} \FunctionTok{fm\_mesh\_2d}\NormalTok{(}\AttributeTok{boundary =}\NormalTok{ boundary0,}
-                          \AttributeTok{max.edge =} \FunctionTok{c}\NormalTok{(}\DecValTok{30}\NormalTok{, }\DecValTok{150}\NormalTok{), }\CommentTok{\# The largest allowed triangle edge length.}
-                          \AttributeTok{cutoff =} \DecValTok{15}\NormalTok{,}
-                          \AttributeTok{crs =} \FunctionTok{fm\_crs}\NormalTok{(mexdolphin}\SpecialCharTok{$}\NormalTok{points))}
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{gg}\NormalTok{(mesh\_0)}
-\end{Highlighting}
-\end{Shaded}
-
-\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-5-1.pdf}}
-
-\subsection{domain boundary}
-
-The \texttt{mexdolphin} object contains a predefined region of interest
-which can be accessed through \texttt{mexdolphin\$ppoly}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{mesh\_1 }\OtherTok{=} \FunctionTok{fm\_mesh\_2d}\NormalTok{(}\AttributeTok{boundary =}\NormalTok{ mexdolphin}\SpecialCharTok{$}\NormalTok{ppoly,}
-                    \AttributeTok{max.edge =} \FunctionTok{c}\NormalTok{(}\DecValTok{30}\NormalTok{, }\DecValTok{150}\NormalTok{),}
-                    \AttributeTok{cutoff =} \DecValTok{15}\NormalTok{,}
-                    \AttributeTok{crs =} \FunctionTok{fm\_crs}\NormalTok{(mexdolphin}\SpecialCharTok{$}\NormalTok{points))}
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{gg}\NormalTok{(mesh\_1)}
-\end{Highlighting}
-\end{Shaded}
-
-\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-6-1.pdf}}
-
-Key parameters in mesh construction include: \texttt{max.edge} for
-maximum triangle edge lengths, \texttt{offset} for inner and outer
-extensions (to prevent edge effects), and cutoff to avoid overly small
-triangles in clustered areas.
-
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-note-color-frame, toptitle=1mm, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
-
-\textbf{General guidelines for creating the mesh}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Create triangulation meshes with \texttt{fm\_mesh\_2d()}
-\item
-  Move undesired boundary effects away from the domain of interest by
-  extending to a smooth external boundary
-\item
-  Use a coarser resolution in the extension to reduce computational cost
-  (\texttt{max.edge=c(inner,\ outer)})
-\item
-  Use a fine resolution (subject to available computational resources)
-  for the domain of interest (inner correlation range) and filter out
-  small input point clusters (0 \textless{} \texttt{cutoff} \textless{}
-  inner)
-\item
-  Coastlines and similar can be added to the domain specification in
-  \texttt{fm\_mesh\_2d()} through the \texttt{boundary} argument.
-\end{enumerate}
-
-\end{tcolorbox}
-
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title={Task}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
-
-Look at the documentation for the \texttt{fm\_mesh\_2d} function typing
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{?fm\_mesh\_2d}
-\end{Highlighting}
-\end{Shaded}
-
-play around with the different options and create different meshes. You
-can compare these against a pre-computed mesh available by typing
-\texttt{plot(mexdolphin\$mesh)}
-
-The \emph{rule of thumb} is that your mesh should be:
-
-\begin{itemize}
-\tightlist
-\item
-  fine enough to well represent the spatial variability of your process,
-  but not too fine in order to avoid computation burden
-\item
-  the triangles should be regular, avoid long and thin triangles.
-\item
-  The mesh should contain a buffer around your area of interest (this is
-  what is defined in the \texttt{offset} option) in order to avoid
-  boundary artefact in the estimated variance.
-\end{itemize}
-
-\end{tcolorbox}
-
-\subsubsection{Define the SPDE representation of the spatial
-GF}\label{define-the-spde-representation-of-the-spatial-gf}
-
-To define the SPDE representation of the spatial GF we use the function
-\texttt{inla.spde2.pcmatern}. This takes as input the mesh we have
-defined and the PC-priors definition for \(\rho\) and \(\sigma\) (the
-range and the marginal standard deviation of the field).
-
-PC priors Gaussian Random field are defined in (Fuglstad et al.~2018).
-From a practical perspective for the range \(\rho\) you need to define
-two paramters \(\rho_0\) and \(p_{\rho}\) such that you believe it is
-reasonable that
-
-\[
-P(\rho<\rho_0)=p_{\rho}
-\]
-
-while for the marginal variance \(\sigma\) you need to define two
-parameters \(\sigma_0\) and \(p_{\sigma}\) such that you believe it is
-reasonable that
-
-\[
-P(\sigma>\sigma_0)=p_{\sigma}
-\]
-
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-tip-color-frame, toptitle=1mm, colbacktitle=quarto-callout-tip-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title={Question}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
-
-Take a look at the code below and select which of the following
-statements about the specified Matern PC priors are true.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{spde\_model }\OtherTok{\textless{}{-}} \FunctionTok{inla.spde2.pcmatern}\NormalTok{(mexdolphin}\SpecialCharTok{$}\NormalTok{mesh,}
-  \AttributeTok{prior.sigma =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\FloatTok{0.01}\NormalTok{),}
-  \AttributeTok{prior.range =} \FunctionTok{c}\NormalTok{(}\DecValTok{50}\NormalTok{, }\FloatTok{0.01}\NormalTok{)}
-\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{itemize}
-\tightlist
-\item
-  \begin{enumerate}
-  \def\labelenumi{(\Alph{enumi})}
-  \tightlist
-  \item
-    there is probability of 0.01 that the spatial range is greater or
-    equal than 50\\
-  \end{enumerate}
-\item
-  \begin{enumerate}
-  \def\labelenumi{(\Alph{enumi})}
-  \setcounter{enumi}{1}
-  \tightlist
-  \item
-    the probability that the spatial range is smaller than 50 is very
-    small\\
-  \end{enumerate}
-\item
-  \begin{enumerate}
-  \def\labelenumi{(\Alph{enumi})}
-  \setcounter{enumi}{2}
-  \tightlist
-  \item
-    the probability that the marginal standard deviation is smaller than
-    2 is very small\\
-  \end{enumerate}
-\item
-  \begin{enumerate}
-  \def\labelenumi{(\Alph{enumi})}
-  \setcounter{enumi}{3}
-  \tightlist
-  \item
-    there is probability of 0.99 that the marginal standard deviation is
-    less or equal than 2
-  \end{enumerate}
-\end{itemize}
-
-\end{tcolorbox}
-
-\subsubsection{Define the components of the linear
-predictor}\label{define-the-components-of-the-linear-predictor}
-
-We have now defined a mesh and a SPDE representation of the spatial GF.
-We now need to define the model components.
-
-First, we need to define the detection function. Here, we will define a
-half-normal detection probability function. This must take distance as
-its first argument and the linear predictor of the sigma parameter as
-its second:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{hn }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(distance, sigma) \{}
-  \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.5} \SpecialCharTok{*}\NormalTok{ (distance }\SpecialCharTok{/}\NormalTok{ sigma)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-We need to now separately define the components of the model including
-the SPDE model, the Intercept, the effect of depth and the detection
-function parameter \texttt{sigma}.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{cmp }\OtherTok{\textless{}{-}} \ErrorTok{\textasciitilde{}} \FunctionTok{space}\NormalTok{(}\AttributeTok{main =}\NormalTok{ geometry, }\AttributeTok{model =}\NormalTok{ spde\_model) }\SpecialCharTok{+}
-  \FunctionTok{sigma}\NormalTok{(}\DecValTok{1}\NormalTok{,}
-    \AttributeTok{prec.linear =} \DecValTok{1}\NormalTok{,}
-    \AttributeTok{marginal =} \FunctionTok{bm\_marginal}\NormalTok{(qexp, pexp, dexp, }\AttributeTok{rate =} \DecValTok{1} \SpecialCharTok{/} \DecValTok{8}\NormalTok{)}
-\NormalTok{  ) }\SpecialCharTok{+}
-  \FunctionTok{Intercept}\NormalTok{(}\DecValTok{1}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-note-color-frame, toptitle=1mm, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
-
-To control the prior distribution for the \texttt{sigma} parameter, we
-use a transformation mapper that converts a latent variable into an
-exponentially distributed variable with expectation 8 (this is a
-somewhat arbitrary value, but motivated by the maximum observation
-distance W)
-
-The \texttt{marginal} argument in the \texttt{sigma} component specifies
-the transformation function taking N(0,1) to Exponential(1/8).
-
-\end{tcolorbox}
-
-The formula, which describes how these components are combined to form
-the linear predictor
-
-\[\log \color{red}{\tilde{\lambda}(s)} = \overbrace{\log \lambda (s)}^{\beta_0 + \xi(s)} + \overbrace{\log \color{red}{g(d(s))}}^{-0.5~d(\mathbf{s})^2\sigma^{-2}}\]
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{eta }\OtherTok{\textless{}{-}}\NormalTok{ geometry }\SpecialCharTok{+}\NormalTok{ distance }\SpecialCharTok{\textasciitilde{}}\NormalTok{ space }\SpecialCharTok{+}
-  \FunctionTok{log}\NormalTok{(}\FunctionTok{hn}\NormalTok{(distance, sigma)) }\SpecialCharTok{+}
-\NormalTok{  Intercept }\SpecialCharTok{+} \FunctionTok{log}\NormalTok{(}\DecValTok{2}\NormalTok{) }
-\end{Highlighting}
-\end{Shaded}
-
-Here, the \texttt{log(2)} offset in the predictor takes care of the
-two-sided detections
-
-\subsubsection{Define the observation
-model}\label{define-the-observation-model}
-
-\texttt{inlabru} has support for latent Gaussian Cox processes through
-the \texttt{cp} likelihood family. To fit a point process model recall
-that we need to approximate the integral in using a numerical
-integration scheme as:
-
-\[
-\approx\exp\left(-\sum_{k=1}^{N_k}w_k\lambda(s_k)\right)\prod_{i=1}^n \lambda(\mathbf{s}_i)
-\]
-
-Thus, we first create our integration scheme using the \texttt{fm\_int}
-function by specifying integration domains for the spatial and distance
-dimensions.
-
-Here we use the same points to define the SPDE approximation and to
-approximate the integral in Equation~\ref{eq-thinned_pp}, so that the
-integration weight and SPDE weights are consistent with each other. We
-also need to explicitly integrate over the distance dimension so we use
-the \texttt{fm\_mesh\_1d()} to create mesh over the samplers (which are
-the transect lines in this dataset, so we need to tell \texttt{inlabru}
-about the strip half-width).
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# build integration scheme}
-\NormalTok{distance\_domain }\OtherTok{\textless{}{-}}  \FunctionTok{fm\_mesh\_1d}\NormalTok{(}\FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{8}\NormalTok{,}
-                              \AttributeTok{length.out =} \DecValTok{30}\NormalTok{))}
-\NormalTok{ips }\OtherTok{=} \FunctionTok{fm\_int}\NormalTok{(}\FunctionTok{list}\NormalTok{(}\AttributeTok{geometry =}\NormalTok{ mexdolphin}\SpecialCharTok{$}\NormalTok{mesh,}
-                  \AttributeTok{distance =}\NormalTok{ distance\_domain),}
-             \AttributeTok{samplers =}\NormalTok{ mexdolphin}\SpecialCharTok{$}\NormalTok{samplers)}
-\end{Highlighting}
-\end{Shaded}
-
-Now, we just need to supply the \texttt{sf} object as our data and the
-integration scheme \texttt{ips}:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{lik }\OtherTok{=} \FunctionTok{bru\_obs}\NormalTok{(}\StringTok{"cp"}\NormalTok{,}
-              \AttributeTok{formula =}\NormalTok{ eta,}
-              \AttributeTok{data =}\NormalTok{ mexdolphin}\SpecialCharTok{$}\NormalTok{points,}
-              \AttributeTok{ips =}\NormalTok{ ips)}
-\end{Highlighting}
-\end{Shaded}
-
-Then we fit the model, passing both the components and the observaional
-model
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{fit }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp, lik)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-note-color-frame, toptitle=1mm, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
-
-\texttt{inlabru} supports a shortcut for defining the integration points
-using the \texttt{domain} and \texttt{samplers} argument of
-\texttt{bru\_obs()}. This \texttt{domain} argument expects a list of
-named domains with inputs that are then internally passed to
-\texttt{fm\_int()} to build the integration scheme. The
-\texttt{samplers} argument is used to define subsets of the domain over
-which the integral should be computed. An equivalent way to define the
-same model as above is:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{lik }\OtherTok{=} \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ eta, }
-              \AttributeTok{data =}\NormalTok{ mexdolphin}\SpecialCharTok{$}\NormalTok{points, }
-              \AttributeTok{family =} \StringTok{"cp"}\NormalTok{,}
-              \AttributeTok{domain =} \FunctionTok{list}\NormalTok{(}
-                \AttributeTok{geometry =}\NormalTok{ mesh,}
-                \AttributeTok{distance =} \FunctionTok{fm\_mesh\_1d}\NormalTok{(}\FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{8}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{30}\NormalTok{))),}
-              \AttributeTok{samplers =}\NormalTok{ mexdolphin}\SpecialCharTok{$}\NormalTok{samplers)}
-\end{Highlighting}
-\end{Shaded}
-
-\end{tcolorbox}
-
-\subsection{Visualize model Results}\label{visualize-model-results}
-
-\subsubsection{Posterior summaries}\label{posterior-summaries}
-
-We can use the \texttt{fit\$summary.fixed} and \texttt{summary.hyperpar}
-to obtain posterior summaries of the model parameters.
-
-\begin{table}
-\fontsize{12.0pt}{14.0pt}\selectfont
-\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l|rrr}
-\toprule
- & mean & 0.025quant & 0.975quant \\ 
-\midrule\addlinespace[2.5pt]
-sigma & -0.05 & -0.46 & 0.36 \\ 
-Intercept & -8.16 & -9.29 & -7.34 \\ 
-Range for space & 295.48 & 110.54 & 673.68 \\ 
-Stdev for space & 0.81 & 0.42 & 1.39 \\ 
-\bottomrule
-\end{tabular*}
-\end{table}
-
-Look at the SPDE parameter posteriors as follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{plot}\NormalTok{( }\FunctionTok{spde.posterior}\NormalTok{(fit, }\StringTok{"space"}\NormalTok{, }\AttributeTok{what =} \StringTok{"range"}\NormalTok{)) }\SpecialCharTok{+}
-\FunctionTok{plot}\NormalTok{( }\FunctionTok{spde.posterior}\NormalTok{(fit, }\StringTok{"space"}\NormalTok{, }\AttributeTok{what =} \StringTok{"log.variance"}\NormalTok{))  }
-\end{Highlighting}
-\end{Shaded}
-
-\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-18-1.pdf}}
-
-\subsubsection{Model predictions}\label{model-predictions}
-
-We now want to extract the estimated posterior mean and sd of spatial
-GF. To do this we first need to define a grid of points where we want to
-predict. We do this using the function \texttt{fm\_pixel()} which
-creates a regular grid of points covering the mesh
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{pxl }\OtherTok{\textless{}{-}} \FunctionTok{fm\_pixels}\NormalTok{(mexdolphin}\SpecialCharTok{$}\NormalTok{mesh, }\AttributeTok{dims =} \FunctionTok{c}\NormalTok{(}\DecValTok{200}\NormalTok{, }\DecValTok{100}\NormalTok{), }\AttributeTok{mask =}\NormalTok{ mexdolphin}\SpecialCharTok{$}\NormalTok{ppoly)}
-\end{Highlighting}
-\end{Shaded}
-
-then compute the prediction for both the spatial GF and the linear
-predictor (spatial GF + intercept)
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{pr.int }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit, pxl, }\SpecialCharTok{\textasciitilde{}}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{spatial =}\NormalTok{ space,}
-                                      \AttributeTok{lambda =} \FunctionTok{exp}\NormalTok{(Intercept }\SpecialCharTok{+}\NormalTok{ space)))}
-\end{Highlighting}
-\end{Shaded}
-
-Finally, we can plot the maps of the spatial effect
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ pr.int}\SpecialCharTok{$}\NormalTok{spatial,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ mean)) }\SpecialCharTok{+} \FunctionTok{scale\_color\_scico}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Posterior mean"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-21-1.pdf}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ pr.int}\SpecialCharTok{$}\NormalTok{spatial,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ sd)) }\SpecialCharTok{+} \FunctionTok{scale\_color\_scico}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Posterior sd"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-21-2.pdf}}
-
-\textbf{Note} The posterior sd is lowest at the observation points. Note
-how the posterior sd is inflated around the border, this is the ``border
-effect'' due to the SPDE representation.
-
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title={Task}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
-
-Using the predictions stored in \texttt{pr.int}, produce a map of the
-posterior mean intensity.
-
-Take hint
-
-Recall that the predicted intensity is given by
-\(\lambda(s) = \exp(\beta_0+\xi(s))\)
-
-Click here to see the solution
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
-  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ pr.int}\SpecialCharTok{$}\NormalTok{lambda,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ mean)) }\SpecialCharTok{+}
-  \FunctionTok{scale\_color\_scico}\NormalTok{(}\AttributeTok{palette =} \StringTok{"imola"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Posterior mean"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-22-1.pdf}}
-
-\end{tcolorbox}
-
-We can predict the detection function in a similar fashion.Here, we
-should make sure that it doesn't try to evaluate the effects of
-components that can't be evaluated using the given input data.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{distdf }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{distance =} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{8}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{100}\NormalTok{))}
-\NormalTok{dfun }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(fit, distdf, }\SpecialCharTok{\textasciitilde{}} \FunctionTok{hn}\NormalTok{(distance, sigma))}
-\FunctionTok{plot}\NormalTok{(dfun)}
-\end{Highlighting}
-\end{Shaded}
-
-\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-23-1.pdf}}
-
-\subsection{Abundance estimates}\label{abundance-estimates}
-
-The mean expected number of animals can be computed by integrating the
-intensity over the region of interest as follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{predpts }\OtherTok{\textless{}{-}} \FunctionTok{fm\_int}\NormalTok{(mexdolphin}\SpecialCharTok{$}\NormalTok{mesh, mexdolphin}\SpecialCharTok{$}\NormalTok{ppoly)}
-\NormalTok{Lambda }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(fit, predpts, }\SpecialCharTok{\textasciitilde{}} \FunctionTok{sum}\NormalTok{(weight }\SpecialCharTok{*} \FunctionTok{exp}\NormalTok{(space }\SpecialCharTok{+}\NormalTok{ Intercept)))}
-\NormalTok{Lambda}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-      mean       sd   q0.025     q0.5   q0.975   median sd.mc_std_err
-1 241.5439 46.10094 172.2497 235.4688 345.2491 235.4688      3.473381
-  mean.mc_std_err
-1        5.304771
-\end{verbatim}
-
-To fully propagate the uncertainty on the expected number animals we can
-draw Monte Carlo samples from the fitted model as follows (this could
-take a couple of minutes):
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{Ns }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{50}\NormalTok{, }\DecValTok{450}\NormalTok{, }\AttributeTok{by =} \DecValTok{1}\NormalTok{)}
-\NormalTok{Nest }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(fit, predpts,}
-  \SpecialCharTok{\textasciitilde{}} \FunctionTok{data.frame}\NormalTok{(}
-    \AttributeTok{N =}\NormalTok{ Ns,}
-    \AttributeTok{density =} \FunctionTok{dpois}\NormalTok{(}
-\NormalTok{      Ns,}
-      \AttributeTok{lambda =} \FunctionTok{sum}\NormalTok{(weight }\SpecialCharTok{*} \FunctionTok{exp}\NormalTok{(space }\SpecialCharTok{+}\NormalTok{ Intercept))}
-\NormalTok{    )}
-\NormalTok{  ),}
-  \AttributeTok{n.samples =} \DecValTok{2000}
-\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-We can compare this with a simpler ``plug-in'' approximation:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{Nest }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{bind\_rows}\NormalTok{(}
-  \FunctionTok{cbind}\NormalTok{(Nest, }\AttributeTok{Method =} \StringTok{"Posterior"}\NormalTok{),}
-  \FunctionTok{data.frame}\NormalTok{(}
-    \AttributeTok{N =}\NormalTok{ Nest}\SpecialCharTok{$}\NormalTok{N,}
-    \AttributeTok{mean =} \FunctionTok{dpois}\NormalTok{(Nest}\SpecialCharTok{$}\NormalTok{N, }\AttributeTok{lambda =}\NormalTok{ Lambda}\SpecialCharTok{$}\NormalTok{mean),}
-    \AttributeTok{mean.mc\_std\_err =} \DecValTok{0}\NormalTok{,}
-    \AttributeTok{Method =} \StringTok{"Plugin"}
-\NormalTok{  )}
-\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-Then, we can visualize the result as follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ Nest) }\SpecialCharTok{+}
-  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ N, }\AttributeTok{y =}\NormalTok{ mean, }\AttributeTok{colour =}\NormalTok{ Method)) }\SpecialCharTok{+}
-  \FunctionTok{geom\_ribbon}\NormalTok{(}
-    \FunctionTok{aes}\NormalTok{(}
-      \AttributeTok{x =}\NormalTok{ N,}
-      \AttributeTok{ymin =}\NormalTok{ mean }\SpecialCharTok{{-}} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ mean.mc\_std\_err,}
-      \AttributeTok{ymax =}\NormalTok{ mean }\SpecialCharTok{+} \DecValTok{2} \SpecialCharTok{*}\NormalTok{ mean.mc\_std\_err,}
-      \AttributeTok{fill =}\NormalTok{ Method,}
-\NormalTok{    ),}
-    \AttributeTok{alpha =} \FloatTok{0.2}
-\NormalTok{  ) }\SpecialCharTok{+}
-  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ N, }\AttributeTok{y =}\NormalTok{ mean, }\AttributeTok{colour =}\NormalTok{ Method)) }\SpecialCharTok{+}
-  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Probability mass function"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-27-1.pdf}}
-
-\subsection{Model checks}\label{model-checks}
-
-Lastly, we can assess the goodness-of-fit of the models by comparing the
-observed counts across different distance bins and the expected counts
-and their associated uncertainty:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{bc }\OtherTok{\textless{}{-}} \FunctionTok{bincount}\NormalTok{(}
-  \AttributeTok{result =}\NormalTok{ fit,}
-  \AttributeTok{observations =}\NormalTok{ mexdolphin}\SpecialCharTok{$}\NormalTok{points}\SpecialCharTok{$}\NormalTok{distance,}
-  \AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FunctionTok{max}\NormalTok{(mexdolphin}\SpecialCharTok{$}\NormalTok{points}\SpecialCharTok{$}\NormalTok{distance), }\AttributeTok{length.out =} \DecValTok{9}\NormalTok{),}
-  \AttributeTok{predictor =}\NormalTok{ distance }\SpecialCharTok{\textasciitilde{}} \FunctionTok{hn}\NormalTok{(distance, sigma)}
-\NormalTok{)}
-\FunctionTok{attributes}\NormalTok{(bc)}\SpecialCharTok{$}\NormalTok{ggp}
-\end{Highlighting}
-\end{Shaded}
-
-\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-28-1.pdf}}
-
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title={Task}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
-
-Fit a model using a hazard detection function instead and compare the
-GoF of this model with that from the half-normal detection model. Recall
-that the hazard detection function is given by:
-
-\[
-g(\mathbf{s}|\sigma) = 1 - \exp(-(d(\mathbf{s})/\sigma)^{-1})
-\]
-
-Take hint
-
-The hazard function can be codes as:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{hr }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(distance, sigma) \{}
-  \DecValTok{1} \SpecialCharTok{{-}} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{(distance }\SpecialCharTok{/}\NormalTok{ sigma)}\SpecialCharTok{\^{}{-}}\DecValTok{1}\NormalTok{)}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-You can use the same prior for the \texttt{sigma} parameter as for the
-half-Normal model (such parameters aren't always comparable, but in this
-example it's a reasonable choice). You can also use the \texttt{lgcp}
-function as a shortcut to fit the model (type \texttt{?lgcp} for further
-details).
-
-Click here to see the solution
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{formula1 }\OtherTok{\textless{}{-}}\NormalTok{ geometry }\SpecialCharTok{+}\NormalTok{ distance }\SpecialCharTok{\textasciitilde{}}\NormalTok{ space }\SpecialCharTok{+}
-  \FunctionTok{log}\NormalTok{(}\FunctionTok{hr}\NormalTok{(distance, sigma)) }\SpecialCharTok{+}
-\NormalTok{  Intercept }\SpecialCharTok{+} \FunctionTok{log}\NormalTok{(}\DecValTok{2}\NormalTok{)}
-
-\CommentTok{\# here we use the shorcut to specify the model}
-\NormalTok{fit1 }\OtherTok{\textless{}{-}} \FunctionTok{lgcp}\NormalTok{(}
-  \AttributeTok{components =}\NormalTok{ cmp,}
-\NormalTok{  mexdolphin}\SpecialCharTok{$}\NormalTok{points,}
-  \AttributeTok{samplers =}\NormalTok{ mexdolphin}\SpecialCharTok{$}\NormalTok{samplers,}
-  \AttributeTok{domain =} \FunctionTok{list}\NormalTok{(}
-    \AttributeTok{geometry =}\NormalTok{ mexdolphin}\SpecialCharTok{$}\NormalTok{mesh,}
-    \AttributeTok{distance =} \FunctionTok{fm\_mesh\_1d}\NormalTok{(}\FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{8}\NormalTok{, }\AttributeTok{length.out =} \DecValTok{30}\NormalTok{))}
-\NormalTok{  ),}
-  \AttributeTok{formula =}\NormalTok{ formula1}
-\NormalTok{)}
-
-\NormalTok{bc1 }\OtherTok{\textless{}{-}} \FunctionTok{bincount}\NormalTok{(}
-  \AttributeTok{result =}\NormalTok{ fit1,}
-  \AttributeTok{observations =}\NormalTok{ mexdolphin}\SpecialCharTok{$}\NormalTok{points}\SpecialCharTok{$}\NormalTok{distance,}
-  \AttributeTok{breaks =} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FunctionTok{max}\NormalTok{(mexdolphin}\SpecialCharTok{$}\NormalTok{points}\SpecialCharTok{$}\NormalTok{distance), }\AttributeTok{length.out =} \DecValTok{9}\NormalTok{),}
-  \AttributeTok{predictor =}\NormalTok{ distance }\SpecialCharTok{\textasciitilde{}} \FunctionTok{hn}\NormalTok{(distance, sigma)}
-\NormalTok{)}
-\FunctionTok{attributes}\NormalTok{(bc1)}\SpecialCharTok{$}\NormalTok{ggp}
-\end{Highlighting}
-\end{Shaded}
-
-\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-30-1.pdf}}
-
-\end{tcolorbox}
 
 \section{ZIP/ZAP and Hurdle Models}\label{zipzap-and-hurdle-models}
 
@@ -1074,7 +358,8 @@ will
 The following example use the \texttt{gorillas} dataset available in the
 \texttt{inlabru} library.
 
-The data give the locations of Gorilla's nests in an area:
+The data give the locations of Gorilla's nests in an area: ::: \{.cell
+layout-align=``center''\}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1097,8 +382,10 @@ The data give the locations of Gorilla's nests in an area:
 
 \end{figure}%
 
+:::
+
 The dataset also contains covariates in the form or raster data. We
-consider two of them here:
+consider two of them here: ::: \{.cell\}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1108,9 +395,11 @@ consider two of them here:
 \end{Highlighting}
 \end{Shaded}
 
+:::
+
 \begin{figure}[H]
 
-{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-64-1.png}
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-4-1.png}
 
 }
 
@@ -1143,7 +432,7 @@ In addition we compute the area of each grid cell.
 
 \begin{figure}[H]
 
-{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-65-1.png}
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-5-1.png}
 
 }
 
@@ -1220,7 +509,7 @@ We now define the mesh and the spde object.
 
 \begin{figure}[H]
 
-{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-69-1.png}
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-9-1.png}
 
 }
 
@@ -1273,10 +562,10 @@ This model has two parameters:
   accounts for the size of the cell.
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title={Task}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
 
 Fit a zero-inflated model to the data (\texttt{zeroinflatedpoisson1}) by
-completing the following code:
+completing the following code: ::: \{.cell\}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1288,6 +577,8 @@ completing the following code:
 \NormalTok{fit\_zip }\OtherTok{\textless{}{-}} \FunctionTok{bru}\NormalTok{(cmp, lik)}
 \end{Highlighting}
 \end{Shaded}
+
+\end{tcolorbox}
 
 Take hint
 
@@ -1312,11 +603,11 @@ Click here to see the solution
 \end{Highlighting}
 \end{Shaded}
 
-\end{tcolorbox}
+:::
 
 Once the model is fitted we can look at the results
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title={Task}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
 
 Check what the estimated excess zero probaility is.
 
@@ -1359,7 +650,7 @@ Click here to see the solution
 
 \begin{figure}[H]
 
-{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-73-1.png}
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-13-1.png}
 
 }
 
@@ -1391,7 +682,7 @@ Var(\text{count})&=  E(\text{count}) \left(1-\exp(-\lambda) E(\text{count})\righ
 \end{aligned}
 }\end{equation}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title={Task}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
 
 Fit a hurdle model to the data using the \texttt{zeroinflatedpoisson0}
 likelihood
@@ -1416,7 +707,7 @@ Click here to see the solution
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title={Task}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
 
 As before, check what the estimated probability of zero is and use
 \texttt{predict()} to obtain a map of the estimated mean counts in
@@ -1448,7 +739,7 @@ Click here to see the solution
 
 \begin{figure}[H]
 
-{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-76-1.png}
+{\centering \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-16-1.png}
 
 }
 
@@ -1471,7 +762,7 @@ To fit this model we have to define two likelihoods: - One will account
 for the presence-absence process and has a Binomial model - One will
 account for the counts and has a truncated Poisson model
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title={Task}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
 
 Complete the following code to fit a hurdle model based on two
 likelihoods:
@@ -1593,10 +884,6 @@ two parts. We do it anyway to show an example:
 \NormalTok{  cmp,}
 \NormalTok{  presence\_obs,}
 \NormalTok{  pos\_count\_obs)}
-\CommentTok{\#\textgreater{} }
-\CommentTok{\#\textgreater{}  *** inla.core.safe:  The inla program failed, but will rerun in case better initial values may help. try=1/1 }
-\CommentTok{\#\textgreater{} }
-\CommentTok{\#\textgreater{}  *** inla.core.safe:  rerun with improved initial values}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1674,7 +961,7 @@ four models and plot them together:
 
 \begin{figure}[H]
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-79-1.png}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-19-1.png}}
 
 }
 
@@ -1682,7 +969,7 @@ four models and plot them together:
 
 \end{figure}%
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title={Task}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
 
 Create plots of the estimated variance of the counts.
 
@@ -1752,14 +1039,17 @@ Click here to see the solution
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-80-1.png}}
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-20-1.png}}
+\end{center}
 
 \end{tcolorbox}
 
 \subsubsection{Using scores}\label{using-scores}
 
 We can compare model using the scores that the \emph{bru()} function
-computes since we have set, at the beginning. the options to
+computes since we have set, at the beginning. the options to :::
+\{.cell\}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1770,9 +1060,11 @@ computes since we have set, at the beginning. the options to
 \end{Highlighting}
 \end{Shaded}
 
+:::
+
 Lets use these scores to compare the models.
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, opacitybacktitle=0.6, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, left=2mm, leftrule=.75mm, titlerule=0mm, title={Task}, rightrule=.15mm, toprule=.15mm, coltitle=black, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
 
 Extract the DIC, WAIC and MLIK values for the four models and compare
 them
@@ -1786,10 +1078,10 @@ Click here to see the solution
             \AttributeTok{WAIC =} \FunctionTok{c}\NormalTok{(fit\_zip}\SpecialCharTok{$}\NormalTok{waic}\SpecialCharTok{$}\NormalTok{waic, fit\_zap}\SpecialCharTok{$}\NormalTok{waic}\SpecialCharTok{$}\NormalTok{waic, fit\_zap2}\SpecialCharTok{$}\NormalTok{waic}\SpecialCharTok{$}\NormalTok{waic, fit\_zap3}\SpecialCharTok{$}\NormalTok{waic}\SpecialCharTok{$}\NormalTok{waic),}
             \AttributeTok{MLIK =} \FunctionTok{c}\NormalTok{(fit\_zip}\SpecialCharTok{$}\NormalTok{mlik[}\DecValTok{1}\NormalTok{], fit\_zap}\SpecialCharTok{$}\NormalTok{mlik[}\DecValTok{1}\NormalTok{], fit\_zap2}\SpecialCharTok{$}\NormalTok{mlik[}\DecValTok{1}\NormalTok{], fit\_zap3}\SpecialCharTok{$}\NormalTok{mlik[}\DecValTok{1}\NormalTok{]))}
 \CommentTok{\#\textgreater{}      Model      DIC     WAIC      MLIK}
-\CommentTok{\#\textgreater{} 1      ZIP 1214.130 1223.707 {-}686.9501}
+\CommentTok{\#\textgreater{} 1      ZIP 1214.135 1223.715 {-}686.9500}
 \CommentTok{\#\textgreater{} 2   HURDLE 1886.066 1909.722 {-}994.3807}
-\CommentTok{\#\textgreater{} 3 HURDLE\_2 1268.307 1285.508 {-}734.3704}
-\CommentTok{\#\textgreater{} 4 HURDLE\_3 1828.409 1836.830 {-}986.9465}
+\CommentTok{\#\textgreater{} 3 HURDLE\_2 1268.319 1285.522 {-}734.3697}
+\CommentTok{\#\textgreater{} 4 HURDLE\_3 1886.196 3914.442 {-}858.1400}
 \end{Highlighting}
 \end{Shaded}
 

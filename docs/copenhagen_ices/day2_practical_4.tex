@@ -279,7 +279,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, frame hidden, sharp corners, boxrule=0pt, colback={codebgcolor}, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[colback={codebgcolor}, breakable, enhanced, boxrule=0pt, sharp corners, frame hidden]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -310,7 +310,6 @@
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   Work with different types of spatial data types including: Areal,
   Geostatistical and Spatial Point process data.
@@ -322,25 +321,12 @@
   Manipulate and visualize raster data in R.
 \end{enumerate}
 
-we are going to learn:
-
-\begin{itemize}
-\tightlist
-\item
-  Explore tools for spatial data wrangling and visualization.
-\item
-  Use some commonly used metrics to assess spatial autocorrelation in
-  our data.
-\end{itemize}
-
 In this practical we will:
 
 \begin{itemize}
 \tightlist
 \item
   Explore tools for areal spatial data wrangling and visualization.
-\item
-  Compute Morans'I to identify spatial autocorrelation in our data.
 \end{itemize}
 
 \subsection{Areal (lattice) data}\label{sec-areal_data}
@@ -483,7 +469,7 @@ a layer per year and chose an appropriate color palette using the
 \pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-7-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, opacityback=0, toprule=.15mm, colframe=quarto-callout-warning-color-frame, colback=white, breakable, toptitle=1mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, titlerule=0mm, coltitle=black, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, colback=white, titlerule=0mm, coltitle=black, toptitle=1mm, bottomtitle=1mm, breakable, rightrule=.15mm, title={Task}, bottomrule=.15mm, left=2mm]
 
 Produce a map that shows the spatial distribution of each of the
 following variables for the year 2011:
@@ -545,253 +531,6 @@ Click here to see the solution
 
 \end{tcolorbox}
 
-As with the other types of spatial modelling, our goal is to observe and
-explain spatial variation in our data. Generally, we are aiming to
-produce a smoothed map which summarises the spatial patterns we observe
-in our data.
-
-A key aspect of any spatial analysis is that observations closer
-together in space are likely to have more in common than those further
-apart. This can lead us towards approaches similar to those used in time
-series, where we consider the spatial \emph{closeness} of our regions in
-terms of a \emph{neighbourhood structure}.
-
-The function
-\href{https://r-spatial.github.io/spdep/reference/poly2nb.html}{\texttt{poly2nb()}}
-of the \texttt{spdep} package can be used to construct a list of
-neighbors based on areas with contiguous boundaries (e.g., using Queen
-contiguity).
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(spdep)}
-
-\NormalTok{W.nb }\OtherTok{\textless{}{-}} \FunctionTok{poly2nb}\NormalTok{(GGHB.IZ,}\AttributeTok{queen =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{W.nb}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Neighbour list object:
-Number of regions: 271 
-Number of nonzero links: 1424 
-Percentage nonzero weights: 1.938971 
-Average number of links: 5.254613 
-2 disjoint connected subgraphs
-\end{verbatim}
-
-The warning tell us that the neighbourhood is comprised of two
-interconnected regions. By looking at the neighbourhood graph below, we
-can see that these are the North and South Glasgow regions which are
-separated by the River Clyde.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{plot}\NormalTok{(}\FunctionTok{st\_geometry}\NormalTok{(GGHB.IZ), }\AttributeTok{border =} \StringTok{"lightgray"}\NormalTok{)}
-\FunctionTok{plot.nb}\NormalTok{(W.nb, }\FunctionTok{st\_geometry}\NormalTok{(GGHB.IZ), }\AttributeTok{add =} \ConstantTok{TRUE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-10-1.pdf}}
-\end{center}
-
-You could use the \texttt{snap} argument within \texttt{poly2nb} to set
-a distance at which the different regions centroids are consider
-neighbours. To do so we first need to be aware about the spatial units
-of the spatial coordinate reference system (CRS). We can check this as
-follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{st\_crs}\NormalTok{(GGHB.IZ)}\SpecialCharTok{$}\NormalTok{units}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] "m"
-\end{verbatim}
-
-Then, we could set a distance of 250m to join the IZ centroids that are
-are less than 250m apart.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{W.nb250 }\OtherTok{\textless{}{-}} \FunctionTok{poly2nb}\NormalTok{(GGHB.IZ,}\AttributeTok{snap=}\DecValTok{250}\NormalTok{)}
-\NormalTok{W.nb250}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Neighbour list object:
-Number of regions: 271 
-Number of nonzero links: 1758 
-Percentage nonzero weights: 2.393758 
-Average number of links: 6.487085 
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{plot}\NormalTok{(}\FunctionTok{st\_geometry}\NormalTok{(GGHB.IZ), }\AttributeTok{border =} \StringTok{"lightgray"}\NormalTok{)}
-\FunctionTok{plot.nb}\NormalTok{(W.nb250, }\FunctionTok{st\_geometry}\NormalTok{(GGHB.IZ), }\AttributeTok{add =} \ConstantTok{TRUE}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-13-1.pdf}}
-\end{center}
-
-Once we have identified a set of neighbours using our chosen method, we
-can use this to account for correlation.
-
-Moran's \(I\) is a measure of global spatial autocorrelation, and can be
-considered an extension of the Pearson correlation coefficient. For a
-set of data \(Z_1, \ldots, Z_m\) measured on regions
-\(B_1, \ldots B_m\), with neighbourhood matrix \(W\), we can compute
-Moran's I as:
-
-\[
-I = \frac{m}{\sum_{i=1}^m \sum_{j=1}^m w_{ij}}\frac{\sum_{i=1}^m \sum_{j=1}^m w_{ij} (Z_i - \bar{Z})(Z_j - \bar{Z})}{\sum_{i=1}^m (Z_i - \bar{Z})^2}
-\]
-
-This is basically a function of differences in values between
-neighbouring areas. By far the most common approach is to use a binary
-neighbourhood matrix, \(W\), denoted by
-
-\[ w_{ij} = \begin{cases} 1 & \text{if areas } (B_i, B_j) \text{ are neighbours.}\\ 0 & \text{otherwise.} \end{cases} \]
-
-Binary matrices are used for their simplicity. Fitting spatial models
-often requires us to invert \(W\), and this is less computationally
-intensive for sparse matrices.
-
-Moran's \(I\) ranges between -1 and 1, and can be interpreted in a
-similar way to a standard correlation coefficient.
-
-\begin{itemize}
-\item
-  \(I=1\) implies that we have \textbf{perfect spatial correlation}.
-\item
-  \(I=0\) implies that we have \textbf{complete spatial randomness}.
-\item
-  \(I=-1\) implies that we have \textbf{perfect dispersion} (negative
-  correlation).
-\end{itemize}
-
-Our observed \(I\) is a point estimate, and we may also wish to assess
-whether it is significantly different from zero. We can test for a
-statistically significant spatial correlation using a permutation test,
-with hypotheses:
-
-\[
-\begin{aligned}
-H_0&: \text{ negative or no spatial association } (I \leq 0)\\
-H_1&: \text{ positive spatial association } (I > 0)
-\end{aligned}
-\]
-
-We can use \texttt{moran.test()} to test this hypothesis by setting
-\texttt{alternative\ =\ "greater"}. To do so, we need to supply list
-containing the neighbors via the \texttt{nb2listw()} function from the
-\texttt{spdep} package. Lets assess now the spatial autocorrelation of
-the SMR in 2011:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# subset the data}
-\NormalTok{resp\_cases\_2011 }\OtherTok{\textless{}{-}}\NormalTok{ resp\_cases }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(year }\SpecialCharTok{==}\DecValTok{2011}\NormalTok{)}
-
-\CommentTok{\# neighbors list }
-\NormalTok{nbw }\OtherTok{\textless{}{-}} \FunctionTok{nb2listw}\NormalTok{(W.nb, }\AttributeTok{style =} \StringTok{"W"}\NormalTok{)}
-
-\CommentTok{\# Global Moran\textquotesingle{}s I}
-\NormalTok{gmoran }\OtherTok{\textless{}{-}} \FunctionTok{moran.test}\NormalTok{(resp\_cases\_2011}\SpecialCharTok{$}\NormalTok{SMR, nbw,}
-                     \AttributeTok{alternative =} \StringTok{"greater"}\NormalTok{)}
-\NormalTok{gmoran}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-
-    Moran I test under randomisation
-
-data:  resp_cases_2011$SMR  
-weights: nbw    
-
-Moran I statistic standard deviate = 11.42, p-value < 2.2e-16
-alternative hypothesis: greater
-sample estimates:
-Moran I statistic       Expectation          Variance 
-      0.439899780      -0.003703704       0.001508809 
-\end{verbatim}
-
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, opacityback=0, toprule=.15mm, colframe=quarto-callout-tip-color-frame, colback=white, breakable, toptitle=1mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, title={Question}, colbacktitle=quarto-callout-tip-color!10!white, bottomtitle=1mm, titlerule=0mm, coltitle=black, rightrule=.15mm]
-
-What do we conclude from the Moran's I test?
-
-Answer
-
-Since have set the alternative hypothesis to be \$ I \textgreater{} 0 \$
-and have a \emph{p}-value \(<0.05\), we then reject the null hypothesis
-and conclude there is evidence for positive spatial autocorrelation.
-
-\end{tcolorbox}
-
-A local version of Moran's I can also be used to measure the similarity
-between each IZ via the \texttt{localmoran} function:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{lmoran }\OtherTok{\textless{}{-}} \FunctionTok{localmoran}\NormalTok{(resp\_cases\_2011}\SpecialCharTok{$}\NormalTok{SMR, nbw, }\AttributeTok{alternative =} \StringTok{"two.sided"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-In this case we set \texttt{alternative\ =\ "two.sided"} to test whether
-there is any evidence of spatial autocorrelation in our data:
-
-\[
-\begin{aligned}
-H_0&: \text{ no spatial association } (I=0)\\
-H_1&: \text{ some spatial association } (I \neq 0)
-\end{aligned}
-\]
-
-We can obtain the \(Z\)-scores from the test (\texttt{Z.Ii}) where any
-values smaller than --1.96 indicate negative spatial autocorrelation,
-and z-score values greater than 1.96 indicate positive spatial
-autocorrelation:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{resp\_cases\_2011\_m }\OtherTok{\textless{}{-}}\NormalTok{ resp\_cases\_2011 }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Zscores =}\NormalTok{ lmoran[,}\StringTok{"Z.Ii"}\NormalTok{])}
-
-\NormalTok{resp\_cases\_2011\_m }\OtherTok{\textless{}{-}}\NormalTok{ resp\_cases\_2011\_m }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{mutate}\NormalTok{ (}\AttributeTok{SAC =} \FunctionTok{case\_when}\NormalTok{(}
-\NormalTok{  Zscores }\SpecialCharTok{\textgreater{}} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \StringTok{" M \textgreater{} 1"}\NormalTok{ ,}
-\NormalTok{  Zscores }\SpecialCharTok{\textless{}} \SpecialCharTok{{-}}\DecValTok{1}\SpecialCharTok{*}\FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{) }\SpecialCharTok{\textasciitilde{}} \StringTok{" M \textless{} 1"}\NormalTok{,}
-  \AttributeTok{.default =} \StringTok{"M = 0"}\NormalTok{),}
-  \AttributeTok{SAC=}\FunctionTok{as.factor}\NormalTok{(SAC)}
-\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-We can visualize these results using either \texttt{ggplot} as we did
-before, or via the \texttt{mapview} library which contains interactive
-features:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(mapview)}
-\FunctionTok{mapview}\NormalTok{(resp\_cases\_2011\_m, }
-        \AttributeTok{zcol =} \StringTok{"SAC"}\NormalTok{,}
-        \AttributeTok{layer.name =} \StringTok{"SAC"}\NormalTok{,}
-        \AttributeTok{col.regions=}\FunctionTok{c}\NormalTok{(}\StringTok{"turquoise"}\NormalTok{,}\StringTok{"orange"}\NormalTok{,}\StringTok{"grey40"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-17-1.pdf}}
-\end{center}
-
 In this practical we will:
 
 \begin{itemize}
@@ -799,8 +538,6 @@ In this practical we will:
 \item
   Explore tools for geostatistical spatial data wrangling and
   visualization.
-\item
-  Compute a variogram to assess for spatial autocorrelation in our data.
 \end{itemize}
 
 First, lets load some useful libraries for data wrangling and
@@ -952,10 +689,10 @@ Pacific Cod in 2017 using the \texttt{mapview} function:
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-43-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-26-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, opacityback=0, toprule=.15mm, colframe=quarto-callout-warning-color-frame, colback=white, breakable, toptitle=1mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, titlerule=0mm, coltitle=black, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, colback=white, titlerule=0mm, coltitle=black, toptitle=1mm, bottomtitle=1mm, breakable, rightrule=.15mm, title={Task}, bottomrule=.15mm, left=2mm]
 
 Use \texttt{ggplot} and the \texttt{sf} library to map the biomass
 density of the pacific cod across years.
@@ -978,7 +715,7 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-44-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-27-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
@@ -1068,10 +805,10 @@ The following object is masked from 'package:stats':
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-47-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-30-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, opacityback=0, toprule=.15mm, colframe=quarto-callout-warning-color-frame, colback=white, breakable, toptitle=1mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, titlerule=0mm, coltitle=black, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, colback=white, titlerule=0mm, coltitle=black, toptitle=1mm, bottomtitle=1mm, breakable, rightrule=.15mm, title={Task}, bottomrule=.15mm, left=2mm]
 
 Map the scaled depth and the presence/absence records of the Pacific cod
 for 2003 to 2005 only.
@@ -1100,156 +837,12 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-48-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-31-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
 
-\subsubsection{Autocorrelation and
-Variograms}\label{autocorrelation-and-variograms}
-
-Spatial statistics quantifies the fundamental principle that nearby
-things are closely related. This spatial dependence means that
-observation are not independent, as assumed by most classical
-statistical models, but are instead correlated relative to their
-proximity. While this correlation can be a valuable source of
-information, it must be explicitly accounted for to avoid wrong
-inference and incorrect conclusions.
-
-The first step is to assess whether there is any evidence of spatial
-dependency in our data. Spatial dependence in georeferenced data can be
-explored by a function known as a variogram \(2\gamma(\cdot)\) (or
-semivariogram \(\gamma(\cdot)\)). The variogram is similar in many ways
-to the autocorrelation function used in time series modelling. In simple
-terms, it is a function which measures the difference in the spatial
-process between a pair of locations a fixed distance apart.
-
-The variogram measures the variance of the difference in the process
-\(Z(\cdot)\) at two spatial locations \(\mathbf{s}\) and
-\(\mathbf{s+h}\) and is defined as :
-
-\[\mathrm{Var}[Z(\mathbf{s}) - Z(\mathbf{s} + \mathbf{h})] = E[(Z(\mathbf{s}) - Z(\mathbf{s} + \mathbf{h}))^2] = 2\gamma_z(\mathbf{h}).\]
-
-Here, \(2\gamma_z(\mathbf{h})\) is the variogram, but in practice we use
-the semi-variogram, \(\gamma_z(\mathbf{h})\). We use the semi-variogram
-because our points come in pairs, and the semi-variance is equivalent to
-the variance per point at a given lag.
-
-\begin{itemize}
-\item
-  When the variance of the difference \(Z(\mathbf{s}) - Z(\mathbf{t})\)
-  is relatively small, then \(Z(\mathbf{s})\) and \(Z(\mathbf{t})\) are
-  similar (spatially correlated).
-\item
-  When the variance of the difference \(Z(\mathbf{s}) - Z(\mathbf{t})\)
-  is relatively large, then \(Z(\mathbf{s})\) and \(Z(\mathbf{t})\) are
-  less similar (closer to independence).
-\end{itemize}
-
-The variogram is a function of the underlying geostatistical process
-\(Z\). In practice, we only have access to \(m\) realisations of this
-process, and therefore we have to estimate the variogram. This is known
-as the empirical variogram.
-
-We obtain this by computing the semi-variance for all possible pairs of
-observations:
-\(\gamma(\mathbf{s}, \mathbf{t}) = 0.5(Z(\mathbf{s}) - Z(\mathbf{t}))^2\).
-
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, opacityback=0, toprule=.15mm, colframe=quarto-callout-note-color-frame, colback=white, breakable, toptitle=1mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, title={Example}, colbacktitle=quarto-callout-note-color!10!white, bottomtitle=1mm, titlerule=0mm, coltitle=black, rightrule=.15mm]
-
-To illustrate how an empirical variogram is computed, consider the
-biomass density of the Pacific Cod in 2017 for the two highlighted
-locations below.
-
-\begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-49-1.pdf}}
-\end{center}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  We can first compute the distance between the two locations using the
-  standard Euclidean distance formula as
-\end{enumerate}
-
-\[h = \sqrt{(441.6 -481)^2 + (5743.4-5748.2)^2} \approx  39 ~\text{Km}\]
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{1}
-\item
-  Next, we compute the semi-variance between the points using their
-  observed values as
-  \[\gamma(\mathbf{s}, \mathbf{t}) = 0.5(Z(\mathbf{s}) - Z(\mathbf{t}))^2 = 0.5(149.5 - 40.64)^2 = 5925.25\]
-\item
-  We repeat this process for every possible pair of points, and plot
-  \(h\) against \(\gamma(\mathbf{s}, \mathbf{t})\) for each.
-\end{enumerate}
-
-\end{tcolorbox}
-
-To make the variogram easier to use and interpret, we divide the
-distances into a set of discrete bins, and compute the average
-semi-variance in each. We compute this binned empirical variogram as:
-
-\[\gamma(\mathbf{h}) = \frac{1}{2N(h_k)}\sum_{(\mathbf{s},\mathbf{t}) \in N(h_k)}[z(\mathbf{s}) - z(\mathbf{t})]^2\]
-
-We can calculate the binned- empirical variogram for the data using
-\texttt{variogram} function from the \texttt{gstat} library. This plot
-shows the semi-variances for each pair of points. Lets compute a
-variogram for the biomass density of the Pacific Cod in 2017:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(gstat)}
-
-\NormalTok{pcod\_sf\_subset }\OtherTok{\textless{}{-}}\NormalTok{ pcod\_sf }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(year }\SpecialCharTok{==}\DecValTok{2017}\NormalTok{)}
-
-\NormalTok{vgm1 }\OtherTok{\textless{}{-}} \FunctionTok{variogram}\NormalTok{(density}\SpecialCharTok{\textasciitilde{}}\DecValTok{1}\NormalTok{, pcod\_sf\_subset)}
-\FunctionTok{plot}\NormalTok{(vgm1)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-50-1.pdf}}
-\end{center}
-
-\textbf{Assessing spatial dependence}
-
-We can construct null envelope based on permutations of the data values
-across the locations, i.e.~envelopes built under the assumption of no
-spatial correlation. By overlapping these envelopes with the empirical
-variograms we can determine whether there is some spatial dependence in
-our data ,e.g.~if our observed variograms falls outside of the envelopes
-constructed under spatial randomness.
-
-We can construct permutation envelopes on the gstat empirical variogram
-using the \texttt{envelope} function from the \texttt{variosig} R
-package. Then we can visualize the results using the \texttt{envplot}
-function:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(variosig)}
-
-\NormalTok{varioEnv }\OtherTok{\textless{}{-}} \FunctionTok{envelope}\NormalTok{(vgm1,}
-                     \AttributeTok{data =}\NormalTok{ pcod\_sf\_subset,}
-                     \AttributeTok{locations =} \FunctionTok{st\_coordinates}\NormalTok{(pcod\_sf\_subset),}
-                     \AttributeTok{formula =}\NormalTok{ density }\SpecialCharTok{\textasciitilde{}} \DecValTok{1}\NormalTok{,}
-                     \AttributeTok{nsim =} \DecValTok{499}\NormalTok{)}
-
-\FunctionTok{envplot}\NormalTok{(varioEnv)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-51-1.pdf}}
-\end{center}
-
-\begin{verbatim}
-[1] "There are 1 out of 15 variogram estimates outside the 95% envelope."
-\end{verbatim}
+\subsubsection{}\label{section}
 
 In this practical we will:
 
@@ -1385,7 +978,7 @@ We can then plot the CNP boundary as follows:
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-74-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-52-1.pdf}}
 \end{center}
 
 \textbf{Creating sf spatial objects in R}
@@ -1421,7 +1014,7 @@ contain the spatial coordinates:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, opacityback=0, toprule=.15mm, colframe=quarto-callout-warning-color-frame, colback=white, breakable, toptitle=1mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, titlerule=0mm, coltitle=black, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, colback=white, titlerule=0mm, coltitle=black, toptitle=1mm, bottomtitle=1mm, breakable, rightrule=.15mm, title={Task}, bottomrule=.15mm, left=2mm]
 
 We have set standard WGS84 coordinates for the Ringlet butterfly
 occurrence records. Set the CRS to match the CRS used in shapefile.
@@ -1448,7 +1041,7 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-77-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-55-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
@@ -1477,7 +1070,7 @@ the park:
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-79-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-57-1.pdf}}
 \end{center}
 
 \textbf{Reading Raster Data}
@@ -1500,7 +1093,7 @@ we assign the same CRS as our data.
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-80-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-58-1.pdf}}
 \end{center}
 
 We can apply different R functions to our rasters. For example, we can
@@ -1524,10 +1117,10 @@ interest. Let's crop the elevation raster to the CNP area using the
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-82-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-60-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, bottomrule=.15mm, opacityback=0, toprule=.15mm, colframe=quarto-callout-warning-color-frame, colback=white, breakable, toptitle=1mm, arc=.35mm, left=2mm, opacitybacktitle=0.6, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, bottomtitle=1mm, titlerule=0mm, coltitle=black, rightrule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, toprule=.15mm, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, colback=white, titlerule=0mm, coltitle=black, toptitle=1mm, bottomtitle=1mm, breakable, rightrule=.15mm, title={Task}, bottomrule=.15mm, left=2mm]
 
 Using \texttt{tidyterra} and \texttt{ggplot}, produce a map of the
 elevation profile in the CNP and overlay the spatial point pattern of
@@ -1558,7 +1151,7 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-83-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day2_practical_4_files/figure-pdf/unnamed-chunk-61-1.pdf}}
 \end{center}
 
 \end{tcolorbox}

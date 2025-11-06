@@ -279,7 +279,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, boxrule=0pt, colback={codebgcolor}, enhanced, breakable, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, colback={codebgcolor}, enhanced, boxrule=0pt, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -385,11 +385,11 @@ is
 
 \[ \log(\tau) \sim \mathrm{logGamma}(1,5 \times 10^{-5}) \]
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, bottomtitle=1mm, breakable, colframe=quarto-callout-note-color-frame, arc=.35mm, opacityback=0, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, toptitle=1mm, titlerule=0mm, left=2mm, rightrule=.15mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, bottomrule=.15mm, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, rightrule=.15mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, colback=white, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, bottomrule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, coltitle=black, toprule=.15mm, titlerule=0mm, left=2mm, opacityback=0, arc=.35mm, opacitybacktitle=0.6]
 
 If your model uses the default intercept construction (i.e.,
-\texttt{Intercept(1)} in the linear predictor) INLA will assign a
-default \(\mathcal{N} (0,0)\) prior to it.
+\texttt{Intercept(1)} in the linear predictor) \texttt{inlabru} will
+assign a default \(\mathcal{N} (0,0)\) prior to it.
 
 \end{tcolorbox}
 
@@ -417,7 +417,7 @@ We simulate data from a simple linear regression model
 with
 \texttt{inlabru}}}{Fitting the linear regression model with inlabru}}\label{fitting-the-linear-regression-model-with-inlabru}
 
-Now we fit a simple linear regression model in \texttt{inalbru} by
+Now we fit a simple linear regression model in \texttt{inlabru} by
 defining (1) the model components, (2) the linear predictor and (3) the
 likelihood.
 
@@ -488,7 +488,7 @@ define the relative components as:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, bottomtitle=1mm, breakable, colframe=quarto-callout-warning-color-frame, arc=.35mm, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, titlerule=0mm, left=2mm, rightrule=.15mm, coltitle=black, title={Task}, bottomrule=.15mm, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, colback=white, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, bottomrule=.15mm, leftrule=.75mm, title={Task}, coltitle=black, toprule=.15mm, titlerule=0mm, left=2mm, opacityback=0, arc=.35mm, opacitybacktitle=0.6]
 
 Run the model again using 0.1 as default precision for both the
 intercept and the slope parameter.
@@ -554,7 +554,7 @@ posterior density of the intercept \(\beta_0\) we can type:
 \pandocbounded{\includegraphics[keepaspectratio]{day1_practical_2_files/figure-pdf/unnamed-chunk-10-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, bottomtitle=1mm, breakable, colframe=quarto-callout-warning-color-frame, arc=.35mm, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, titlerule=0mm, left=2mm, rightrule=.15mm, coltitle=black, title={Task}, bottomrule=.15mm, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, colback=white, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, bottomrule=.15mm, leftrule=.75mm, title={Task}, coltitle=black, toprule=.15mm, titlerule=0mm, left=2mm, opacityback=0, arc=.35mm, opacitybacktitle=0.6]
 
 Plot the posterior marginals for \(\beta_1\) and for the precision of
 the observation error \(\pi(\tau|y)\)
@@ -691,7 +691,10 @@ Now we can define the model component, the likelihood and fit the model.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{cmp }\OtherTok{=}  \ErrorTok{\textasciitilde{}} \SpecialCharTok{{-}}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ sex\_M }\SpecialCharTok{+}  \FunctionTok{beta\_0}\NormalTok{(}\DecValTok{1}\NormalTok{)  }\SpecialCharTok{+} \FunctionTok{beta\_1}\NormalTok{(tl, }\AttributeTok{model =} \StringTok{"linear"}\NormalTok{) }\SpecialCharTok{+}   \FunctionTok{net\_eff}\NormalTok{(net\_no, }\AttributeTok{model =} \StringTok{"iid"}\NormalTok{)}
+\NormalTok{cmp }\OtherTok{=}  \ErrorTok{\textasciitilde{}} \SpecialCharTok{{-}}\DecValTok{1} \SpecialCharTok{+}\NormalTok{ sex\_M }\SpecialCharTok{+} 
+  \FunctionTok{beta\_0}\NormalTok{(}\DecValTok{1}\NormalTok{)  }\SpecialCharTok{+} 
+  \FunctionTok{beta\_1}\NormalTok{(tl, }\AttributeTok{model =} \StringTok{"linear"}\NormalTok{) }\SpecialCharTok{+}  
+  \FunctionTok{net\_eff}\NormalTok{(net\_no, }\AttributeTok{model =} \StringTok{"iid"}\NormalTok{)}
 
 \NormalTok{lik }\OtherTok{=}  \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ wt }\SpecialCharTok{\textasciitilde{}}\NormalTok{ .,}
             \AttributeTok{family =} \StringTok{"gaussian"}\NormalTok{,}
@@ -704,27 +707,28 @@ Now we can define the model component, the likelihood and fit the model.
 \end{Shaded}
 
 \begin{verbatim}
-inlabru version: 2.13.0
-INLA version: 25.08.21-1
-Components:
-sex_M: main = linear(sex_M), group = exchangeable(1L), replicate = iid(1L), NULL
-beta_0: main = linear(1), group = exchangeable(1L), replicate = iid(1L), NULL
-beta_1: main = linear(tl), group = exchangeable(1L), replicate = iid(1L), NULL
-net_eff: main = iid(net_no), group = exchangeable(1L), replicate = iid(1L), NULL
-Observation models:
+inlabru version: 2.13.0.9016 
+INLA version: 25.08.21-1 
+Components: 
+Latent components:
+sex_M: main = linear(sex_M)
+beta_0: main = linear(1)
+beta_1: main = linear(tl)
+net_eff: main = iid(net_no)
+Observation models: 
   Family: 'gaussian'
     Tag: <No tag>
     Data class: 'data.frame'
     Response class: 'numeric'
     Predictor: wt ~ .
     Additive/Linear: TRUE/TRUE
-    Used components: effects[sex_M, beta_0, beta_1, net_eff], latent[]
+    Used components: effects[sex_M, beta_0, beta_1, net_eff], latent[] 
 Time used:
-    Pre = 0.326, Running = 0.339, Post = 0.188, Total = 0.853 
+    Pre = 0.352, Running = 0.33, Post = 0.196, Total = 0.877 
 Fixed effects:
           mean    sd 0.025quant 0.5quant 0.975quant    mode kld
 sex_M   -1.106 0.218     -1.534   -1.106     -0.678  -1.106   0
-beta_0 -15.816 0.870    -17.515  -15.819    -14.099 -15.819   0
+beta_0 -15.817 0.870    -17.517  -15.820    -14.100 -15.820   0
 beta_1   2.555 0.072      2.414    2.555      2.696   2.555   0
 
 Random effects:
@@ -733,13 +737,13 @@ Random effects:
 
 Model hyperparameters:
                                          mean    sd 0.025quant 0.5quant
-Precision for the Gaussian observations 0.475 0.044      0.392    0.473
-Precision for net_eff                   2.148 1.319      0.565    1.838
-                                        0.975quant mode
-Precision for the Gaussian observations      0.567 0.47
-Precision for net_eff                        5.546 1.32
+Precision for the Gaussian observations 0.475 0.044      0.393    0.473
+Precision for net_eff                   2.148 1.319      0.559    1.839
+                                        0.975quant  mode
+Precision for the Gaussian observations      0.568 0.469
+Precision for net_eff                        5.542 1.317
 
-Marginal log-Likelihood:  -467.54 
+Marginal log-Likelihood:  -467.53 
  is computed 
 Posterior summaries for the linear predictor and the fitted values are computed
 (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')
@@ -767,36 +771,55 @@ for the precision while back-transforming the samples and then computing
 the summary statistics. Transforming the samples is necessary because
 some quantities such as the mean and mode are not invariant to monotone
 transformation; alternatively we can use some of the in-built
-\texttt{R-INLA} functions to achieve this (see supplementary note).
+\texttt{inlabru} functions to achieve this (see supplementary note).
 
-We use the \texttt{inla.hyperpar.sample} function to draw samples from
-the approximated joint posterior for the hyperparameters, then invert
-them to get variances and lastly compute the mean, std. dev., quantiles,
-etc.
+We use the \texttt{predict} function to draw samples from the
+approximated joint posterior for the hyperparameters, then invert them
+to get variances and lastly compute the mean, std. dev., quantiles, etc.
+
+\begin{tcolorbox}[enhanced jigsaw, breakable, rightrule=.15mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, colback=white, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, bottomrule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, coltitle=black, toprule=.15mm, titlerule=0mm, left=2mm, opacityback=0, arc=.35mm, opacitybacktitle=0.6]
+
+To get the right name for the hyperparameters to use in the
+\texttt{predict()} function, you can use the function
+\texttt{bru\_names()}.
+
+\end{tcolorbox}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{sampvars }\OtherTok{\textless{}{-}} \DecValTok{1}\SpecialCharTok{/}\FunctionTok{inla.hyperpar.sample}\NormalTok{(}\DecValTok{1000}\NormalTok{,fit,}\AttributeTok{improve.marginals =}\NormalTok{ T)}
+\NormalTok{sampvars }\OtherTok{\textless{}{-}}  \FunctionTok{predict}\NormalTok{(fit,PygmyWFBC, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ \{}
+\NormalTok{   tau\_e }\OtherTok{\textless{}{-}}\NormalTok{ Precision\_for\_the\_Gaussian\_observations}
+\NormalTok{   tau\_u }\OtherTok{\textless{}{-}}\NormalTok{ Precision\_for\_net\_eff}
+   \FunctionTok{list}\NormalTok{(}\AttributeTok{sigma\_u =} \DecValTok{1}\SpecialCharTok{/}\NormalTok{tau\_u,}
+        \AttributeTok{sigma\_e =} \DecValTok{1}\SpecialCharTok{/}\NormalTok{tau\_e)}
+\NormalTok{   \},}
+   \AttributeTok{n.samples =} \DecValTok{1000}
+\NormalTok{  )}
 
-\FunctionTok{colnames}\NormalTok{(sampvars) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Error variance"}\NormalTok{,}\StringTok{"Between{-}net Variance"}\NormalTok{)}
+\FunctionTok{names}\NormalTok{(sampvars) }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"Error variance"}\NormalTok{,}\StringTok{"Between{-}net Variance"}\NormalTok{)}
 
-\FunctionTok{apply}\NormalTok{(sampvars,}\DecValTok{2}\NormalTok{,}
-      \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{c}\NormalTok{(}\StringTok{"mean"}\OtherTok{=}\FunctionTok{mean}\NormalTok{(x),}
-                    \StringTok{"std.dev"} \OtherTok{=} \FunctionTok{sd}\NormalTok{(x),}
-                    \FunctionTok{quantile}\NormalTok{(x,}\FunctionTok{c}\NormalTok{(}\FloatTok{0.025}\NormalTok{,}\FloatTok{0.5}\NormalTok{,}\FloatTok{0.975}\NormalTok{))))}
+\NormalTok{sampvars}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-        Error variance Between-net Variance
-mean          2.125184            0.6507595
-std.dev       0.198276            0.4146888
-2.5%          1.768161            0.1829537
-50%           2.114126            0.5433970
-97.5%         2.542805            1.7436208
+$`Error variance`
+      mean        sd    q0.025      q0.5   q0.975    median sd.mc_std_err
+1 0.649658 0.5237088 0.1797024 0.5158626 1.729942 0.5158626    0.04401733
+  mean.mc_std_err
+1      0.01934503
+
+$`Between-net Variance`
+      mean       sd   q0.025     q0.5   q0.975   median sd.mc_std_err
+1 2.123141 0.190993 1.764145 2.111346 2.543088 2.111346   0.004775347
+  mean.mc_std_err
+1     0.006341749
+
+attr(,"class")
+[1] "bru_prediction" "list"          
 \end{verbatim}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, bottomtitle=1mm, breakable, colframe=quarto-callout-warning-color-frame, arc=.35mm, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, titlerule=0mm, left=2mm, rightrule=.15mm, coltitle=black, title={Task}, bottomrule=.15mm, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, bottomtitle=1mm, colback=white, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, bottomrule=.15mm, leftrule=.75mm, title={Task}, coltitle=black, toprule=.15mm, titlerule=0mm, left=2mm, opacityback=0, arc=.35mm, opacitybacktitle=0.6]
 
 Another useful quantity we can compute is the intraclass correlation
 coefﬁcient (ICC) which help us determine how much the response varies
@@ -807,31 +830,29 @@ coefﬁcient is defined as:
 \text{ICC} = \frac{\sigma^2_u}{\sigma^2_u + \sigma^2_e}
 \]
 
-Compute the median, and quantiles for the ICC using the posterior
-samples we draw for \(\sigma^2_e\) and \(\sigma^2_u\).
-
-Take hint
-
-The \texttt{rowSums} function can be used to compute
-\(\sigma^2_{u,s} + \sigma^2_{e,s}\) for the \(s\)th posterior draw.
+Compute the mean, median, and quantiles for the ICC by drawing posterior
+samples for \(\sigma^2_e\) and \(\sigma^2_u\) using the \texttt{predict}
+function.
 
 Click here to see the solution
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{sampicc }\OtherTok{\textless{}{-}}\NormalTok{ sampvars[,}\DecValTok{2}\NormalTok{]}\SpecialCharTok{/}\NormalTok{(}\FunctionTok{rowSums}\NormalTok{(sampvars))}
-\FunctionTok{quantile}\NormalTok{(sampicc, }\FunctionTok{c}\NormalTok{(}\FloatTok{0.025}\NormalTok{,}\FloatTok{0.5}\NormalTok{,}\FloatTok{0.975}\NormalTok{))}
+\NormalTok{ICC }\OtherTok{\textless{}{-}}  \FunctionTok{predict}\NormalTok{(fit,PygmyWFBC, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ \{}
+\NormalTok{   tau\_e }\OtherTok{\textless{}{-}}\NormalTok{ Precision\_for\_the\_Gaussian\_observations}
+\NormalTok{   tau\_u }\OtherTok{\textless{}{-}}\NormalTok{ Precision\_for\_net\_eff}
+\NormalTok{   sigma\_u }\OtherTok{=} \DecValTok{1}\SpecialCharTok{/}\NormalTok{tau\_u}
+\NormalTok{   sigma\_e }\OtherTok{=} \DecValTok{1}\SpecialCharTok{/}\NormalTok{tau\_e}
+   \FunctionTok{list}\NormalTok{(}\AttributeTok{ICC =}\NormalTok{ sigma\_u}\SpecialCharTok{/}\NormalTok{ (sigma\_u}\SpecialCharTok{+}\NormalTok{sigma\_e))}
+\NormalTok{   \},}
+   \AttributeTok{n.samples =} \DecValTok{1000}
+\NormalTok{  )}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-      2.5%        50%      97.5% 
-0.07626407 0.20394043 0.45340960 
-\end{verbatim}
-
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, bottomtitle=1mm, breakable, colframe=quarto-callout-note-color-frame, arc=.35mm, opacityback=0, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, toptitle=1mm, titlerule=0mm, left=2mm, rightrule=.15mm, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Supplementary Material}, bottomrule=.15mm, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, breakable, rightrule=.15mm, colframe=quarto-callout-note-color-frame, bottomtitle=1mm, colback=white, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, bottomrule=.15mm, leftrule=.75mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Supplementary Material}, coltitle=black, toprule=.15mm, titlerule=0mm, left=2mm, opacityback=0, arc=.35mm, opacitybacktitle=0.6]
 
 The marginal densities for the hyper parameters can be also found by
 calling\texttt{inlabru\_model\$marginals.hyperpar}. We can then apply a
@@ -865,338 +886,14 @@ summaries using \texttt{inla.zmarginal} function as follows:
 
 \begin{verbatim}
            sigma_e   sigma_u  
-mean       2.124765  0.6500926
-sd         0.1981884 0.4149986
-quant0.025 1.766167  0.1808078
-quant0.25  1.985455  0.3686775
-quant0.5   2.113383  0.5417237
-quant0.75  2.252011  0.8071535
-quant0.975 2.543963  1.749887 
+mean       2.124289  0.652038 
+sd         0.1980793 0.4200759
+quant0.025 1.76335   0.1808913
+quant0.25  1.985307  0.3681548
+quant0.5   2.113994  0.5413117
+quant0.75  2.252065  0.8088243
+quant0.975 2.540765  1.767461 
 \end{verbatim}
-
-\end{tcolorbox}
-
-\subsection{\texorpdfstring{Hierarchical generalised additive mixed
-models with
-\texttt{inlabru}}{Hierarchical generalised additive mixed models with inlabru}}\label{hierarchical-generalised-additive-mixed-models-with-inlabru}
-
-In this excercise we will:
-
-\begin{itemize}
-\tightlist
-\item
-  Fit an hierarchical generalised additive mixed models
-\item
-  Fit a model with a global smooth term
-\item
-  Fit a model with global and group-level smooth terms
-\end{itemize}
-
-Libraries to load:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(dplyr)}
-\FunctionTok{library}\NormalTok{(INLA)}
-\FunctionTok{library}\NormalTok{(ggplot2)}
-\FunctionTok{library}\NormalTok{(patchwork)}
-\FunctionTok{library}\NormalTok{(inlabru)     }
-\end{Highlighting}
-\end{Shaded}
-
-The oceans represent Earth's largest habitat, with life distributed
-unevenly across depths primarily due to variations in light,
-temperature, and pressure. Biomass generally decreases with depth,
-though complex factors like water density layers create non-linear
-patterns. A significant portion of deep-sea organisms exhibit
-bioluminescence, which scientists measure using specialized equipment
-like free-fall camera systems to profile vertical distribution.
-
-In this exercise, we analyze the \texttt{ISIT} dataset, which contains
-bioluminescence measurements from the northeast Atlantic Ocean. This
-dataset was previously examined in Zuur et
-al.~(\href{https://doi.org/10.1007/978-0-387-87458-6}{2009}) and
-Gillibrand et al.~(\href{https://doi.org/10.3354/meps341037}{2007}) and
-consists of observations collected across a depth gradient (0--4,800 m)
-during spring and summer cruises in 2001--2002 using an ISIT free-fall
-profiler.
-
-The focus of this excersice will be on characterizing seasonal variation
-in the relationship between bioluminescent source density (sources
-m\(^{2}\)) and depth. We begin by exploring distribution patterns of
-pelagic bioluminescence through source-depth profiles, with each profile
-representing measurements from an individual sampling station. These
-profiles will be grouped by month to examine temporal patterns in the
-water column's bioluminescent structure.
-
-\section{Plot}
-
-\begin{figure}[H]
-
-{\centering \pandocbounded{\includegraphics[keepaspectratio]{day1_practical_2_files/figure-pdf/unnamed-chunk-49-1.pdf}}
-
-}
-
-\caption{Source--depth proﬁles per month. Each line represents a
-station.}
-
-\end{figure}%
-
-\section{R-Code}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{icit }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"datasets/ISIT.csv"}\NormalTok{)}
-
-\NormalTok{icit}\SpecialCharTok{$}\NormalTok{Month }\OtherTok{\textless{}{-}} \FunctionTok{as.factor}\NormalTok{(icit}\SpecialCharTok{$}\NormalTok{Month)}
-\FunctionTok{levels}\NormalTok{(icit}\SpecialCharTok{$}\NormalTok{Month) }\OtherTok{\textless{}{-}}\NormalTok{ month.abb[}\FunctionTok{unique}\NormalTok{(icit}\SpecialCharTok{$}\NormalTok{Month)]}
-
-\FunctionTok{ggplot}\NormalTok{(icit,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{SampleDepth,}\AttributeTok{y=}\NormalTok{ Sources,}
-                \AttributeTok{group=}\FunctionTok{as.factor}\NormalTok{(Station),}
-                \AttributeTok{colour=}\FunctionTok{as.factor}\NormalTok{(Station)))}\SpecialCharTok{+}
-  \FunctionTok{geom\_line}\NormalTok{()}\SpecialCharTok{+}
-  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{Month)}\SpecialCharTok{+}
-  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-As expected, there seems to be a non-linear depth effect with some
-important variability across months.
-
-\subsubsection{Fitting a global
-smoother}\label{fitting-a-global-smoother}
-
-We could begin analysing these data with a global smoother and a random
-intercept for each month. Thus, a possible model is of the form:
-
-\[
-S_{is} = \beta_0 + f(\text{Depth})_s + \text{Month}_i +  \epsilon_{is} ~~\text{such that}~ \epsilon \sim \mathcal{N}(0,\sigma^2_e);~ \text{Month} \sim \mathrm{N}(0,\sigma^2_m).
-\]
-
-where the source during month \(i\) at depth \(s\), \(S_{is}\), are
-modelled as smoothing function of depth and a month effect. The model
-has one smoothing curve for all months and can be fitted in
-\texttt{inlabru} as follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{icit}\SpecialCharTok{$}\NormalTok{Month\_id }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(icit}\SpecialCharTok{$}\NormalTok{Month) }\CommentTok{\# numeric index for the i{-}th month}
-
-\NormalTok{cmp\_g }\OtherTok{=}  \ErrorTok{\textasciitilde{}} \SpecialCharTok{{-}}\DecValTok{1}\SpecialCharTok{+} \FunctionTok{beta\_0}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+} 
-  \FunctionTok{smooth\_g}\NormalTok{(SampleDepth, }\AttributeTok{model =} \StringTok{"rw1"}\NormalTok{) }\SpecialCharTok{+} 
-  \FunctionTok{month\_reff}\NormalTok{(Month\_id, }\AttributeTok{model =} \StringTok{"iid"}\NormalTok{) }
-
-\NormalTok{lik }\OtherTok{=}  \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ Sources }\SpecialCharTok{\textasciitilde{}}\NormalTok{.,}
-               \AttributeTok{family =} \StringTok{"gaussian"}\NormalTok{,}
-               \AttributeTok{data =}\NormalTok{ icit)}
-
-\NormalTok{fit\_g }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp\_g, lik)}
-
-\FunctionTok{summary}\NormalTok{(fit\_g)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-inlabru version: 2.13.0
-INLA version: 25.08.21-1
-Components:
-beta_0: main = linear(1), group = exchangeable(1L), replicate = iid(1L), NULL
-smooth_g: main = rw1(SampleDepth), group = exchangeable(1L), replicate = iid(1L), NULL
-month_reff: main = iid(Month_id), group = exchangeable(1L), replicate = iid(1L), NULL
-Observation models:
-  Family: 'gaussian'
-    Tag: <No tag>
-    Data class: 'data.frame'
-    Response class: 'numeric'
-    Predictor: Sources ~ .
-    Additive/Linear: TRUE/TRUE
-    Used components: effects[beta_0, smooth_g, month_reff], latent[]
-Time used:
-    Pre = 0.32, Running = 0.545, Post = 0.187, Total = 1.05 
-Fixed effects:
-         mean    sd 0.025quant 0.5quant 0.975quant   mode kld
-beta_0 10.014 1.678      6.552   10.023     13.421 10.021   0
-
-Random effects:
-  Name    Model
-    smooth_g RW1 model
-   month_reff IID model
-
-Model hyperparameters:
-                                          mean    sd 0.025quant 0.5quant
-Precision for the Gaussian observations  0.024 0.001      0.021    0.024
-Precision for smooth_g                  21.217 5.543     12.453   20.503
-Precision for month_reff                 0.143 0.112      0.027    0.113
-                                        0.975quant   mode
-Precision for the Gaussian observations      0.026  0.024
-Precision for smooth_g                      34.120 19.126
-Precision for month_reff                     0.438  0.068
-
-Marginal log-Likelihood:  -2217.15 
- is computed 
-Posterior summaries for the linear predictor and the fitted values are computed
-(Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')
-\end{verbatim}
-
-We can plot the smoother marginal effect as follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{data.frame}\NormalTok{(fit\_g}\SpecialCharTok{$}\NormalTok{summary.random}\SpecialCharTok{$}\NormalTok{smooth\_g) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
-  \FunctionTok{geom\_ribbon}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID,}\AttributeTok{ymin =}\NormalTok{ X0}\FloatTok{.025}\NormalTok{quant, }\AttributeTok{ymax=}\NormalTok{ X0}\FloatTok{.975}\NormalTok{quant), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+} 
-  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID,mean)) }\SpecialCharTok{+} 
-  \FunctionTok{xlab}\NormalTok{(}\StringTok{"covariate"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{ylab}\NormalTok{(}\StringTok{"smooth effect"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day1_practical_2_files/figure-pdf/unnamed-chunk-52-1.pdf}}
-\end{center}
-
-You might want to have a smoother function by placing a RW2 prior.
-Unfortunately, this assumes that all the knots are regularly spaced and
-some depth values are too close to be used for building the RW2 priors.
-For the case, it is possible to use function~\texttt{inla.group()}~to
-bin data into groups according to the values of the covariate:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{icit}\SpecialCharTok{$}\NormalTok{depth\_grouped }\OtherTok{\textless{}{-}} \FunctionTok{inla.group}\NormalTok{(icit}\SpecialCharTok{$}\NormalTok{SampleDepth,}\AttributeTok{n=}\DecValTok{50}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{tcolorbox}[enhanced jigsaw, colback=white, bottomtitle=1mm, breakable, colframe=quarto-callout-warning-color-frame, arc=.35mm, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, titlerule=0mm, left=2mm, rightrule=.15mm, coltitle=black, title={Task}, bottomrule=.15mm, opacitybacktitle=0.6, toprule=.15mm]
-
-Re-run the global smoother model using a RW2 prior for the depth
-smoother and compare your results with the RW1 model.
-
-Take hint
-
-Use the \texttt{depth\_grouped} covariate to define the smoother.
-
-Click here to see the solution
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{cmp\_rw2 }\OtherTok{=}  \ErrorTok{\textasciitilde{}} \SpecialCharTok{{-}}\DecValTok{1}\SpecialCharTok{+} \FunctionTok{beta\_0}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+} 
-  \FunctionTok{smooth\_g}\NormalTok{(depth\_grouped, }\AttributeTok{model =} \StringTok{"rw2"}\NormalTok{) }\SpecialCharTok{+} 
-  \FunctionTok{month\_reff}\NormalTok{(Month\_id, }\AttributeTok{model =} \StringTok{"iid"}\NormalTok{) }
-
-\NormalTok{lik }\OtherTok{=}  \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ Sources }\SpecialCharTok{\textasciitilde{}}\NormalTok{.,}
-               \AttributeTok{family =} \StringTok{"gaussian"}\NormalTok{,}
-               \AttributeTok{data =}\NormalTok{ icit)}
-
-\NormalTok{fit\_rw2 }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp\_rw2, lik)}
-
-\FunctionTok{data.frame}\NormalTok{(fit\_rw2}\SpecialCharTok{$}\NormalTok{summary.random}\SpecialCharTok{$}\NormalTok{smooth\_g) }\SpecialCharTok{\%\textgreater{}\%} 
-  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} 
-  \FunctionTok{geom\_ribbon}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID,}\AttributeTok{ymin =}\NormalTok{ X0}\FloatTok{.025}\NormalTok{quant, }\AttributeTok{ymax=}\NormalTok{ X0}\FloatTok{.975}\NormalTok{quant), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+} 
-  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID,mean)) }\SpecialCharTok{+} 
-  \FunctionTok{xlab}\NormalTok{(}\StringTok{"covariate"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{ylab}\NormalTok{(}\StringTok{"Global smooth effect"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day1_practical_2_files/figure-pdf/unnamed-chunk-54-1.pdf}}
-\end{center}
-
-\end{tcolorbox}
-
-\subsubsection{Fitting group-level
-smoothers}\label{fitting-group-level-smoothers}
-
-Here we fit a model where each month is allowed to have its own smoother
-for depth, i.e., \(f_i(\text{Depth})_s\). The model structure is given
-by:
-
-\[
-S_{is} = \beta_0 + f_i(\text{Depth})_s + \text{Month}_i +  \epsilon_{is}.
-\]
-
-Notice the only different between the global smoother model (Model G)
-and the group level model (Model GS) is the indexing of the smooth
-function for depth. We can fit a group-level smoother using the
-\texttt{group} argument within the model component as follows:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{cmp\_gs }\OtherTok{=}  \ErrorTok{\textasciitilde{}} \SpecialCharTok{{-}}\DecValTok{1}\SpecialCharTok{+} \FunctionTok{beta\_0}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{smooth\_g}\NormalTok{(SampleDepth, }\AttributeTok{model =} \StringTok{"rw1"}\NormalTok{) }\SpecialCharTok{+} 
-  \FunctionTok{month\_reff}\NormalTok{(Month\_id, }\AttributeTok{model =} \StringTok{"iid"}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{smooth\_loc}\NormalTok{(SampleDepth, }\AttributeTok{model =} \StringTok{"rw1"}\NormalTok{, }\AttributeTok{group =}\NormalTok{ Month\_id)}
-\end{Highlighting}
-\end{Shaded}
-
-Then, we simply run the model (since the observational model has not
-changed -only the model components have):
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{fit\_gs }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp\_gs, lik) }
-\end{Highlighting}
-\end{Shaded}
-
-Lastly, we can generate model predictions using the \texttt{predict}
-function.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{pred\_gs }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit\_gs, icit, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ (beta\_0 }\SpecialCharTok{+}\NormalTok{ smooth\_g}\SpecialCharTok{+}\NormalTok{month\_reff}\SpecialCharTok{+}\NormalTok{smooth\_loc))}
-\end{Highlighting}
-\end{Shaded}
-
-Then, we plot the predicted mean values with their corresponding 95\%
-CrIs.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(pred\_gs,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y=}\NormalTok{mean,}\AttributeTok{x=}\NormalTok{SampleDepth))}\SpecialCharTok{+}
-  \FunctionTok{geom\_ribbon}\NormalTok{(}\FunctionTok{aes}\NormalTok{(SampleDepth,}\AttributeTok{ymin =}\NormalTok{ q0}\FloatTok{.025}\NormalTok{, }\AttributeTok{ymax=}\NormalTok{ q0}\FloatTok{.975}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{,}\AttributeTok{fill=}\StringTok{"tomato"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_line}\NormalTok{()}\SpecialCharTok{+}
-  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{SampleDepth,}\AttributeTok{y=}\NormalTok{Sources ),}\AttributeTok{alpha=}\FloatTok{0.25}\NormalTok{,}\AttributeTok{col=}\StringTok{"grey40"}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{Month)}
-\end{Highlighting}
-\end{Shaded}
-
-\pandocbounded{\includegraphics[keepaspectratio]{day1_practical_2_files/figure-pdf/unnamed-chunk-58-1.pdf}}
-
-\begin{tcolorbox}[enhanced jigsaw, colback=white, bottomtitle=1mm, breakable, colframe=quarto-callout-warning-color-frame, arc=.35mm, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, titlerule=0mm, left=2mm, rightrule=.15mm, coltitle=black, title={Task}, bottomrule=.15mm, opacitybacktitle=0.6, toprule=.15mm]
-
-Re-fit the model GS without the global smoother. By omitting the global
-smoother, we do not longer force group-level smooths to follow a shared
-pattern, which is useful when groups may differ substantially from a
-common trend.
-
-Take hint
-
-You only need to modify the model components in \texttt{cmp\_gs}
-
-Add hint details here\ldots{}
-
-Click here to see the solution
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{cmp\_s }\OtherTok{=}  \ErrorTok{\textasciitilde{}} \SpecialCharTok{{-}}\DecValTok{1}\SpecialCharTok{+} \FunctionTok{beta\_0}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{month\_reff}\NormalTok{(Month\_id, }\AttributeTok{model =} \StringTok{"iid"}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{smooth\_loc}\NormalTok{(SampleDepth, }\AttributeTok{model =} \StringTok{"rw1"}\NormalTok{, }\AttributeTok{group =}\NormalTok{ Month\_id)}
-
-\NormalTok{fit\_s }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp\_s, lik) }
-
-\NormalTok{pred\_s }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit\_s, icit, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ (beta\_0 }\SpecialCharTok{+}\NormalTok{month\_reff}\SpecialCharTok{+}\NormalTok{smooth\_loc))}
-
-\FunctionTok{ggplot}\NormalTok{(pred\_s,}\FunctionTok{aes}\NormalTok{(}\AttributeTok{y=}\NormalTok{mean,}\AttributeTok{x=}\NormalTok{SampleDepth))}\SpecialCharTok{+}
-  \FunctionTok{geom\_ribbon}\NormalTok{(}\FunctionTok{aes}\NormalTok{(SampleDepth,}\AttributeTok{ymin =}\NormalTok{ q0}\FloatTok{.025}\NormalTok{, }\AttributeTok{ymax=}\NormalTok{ q0}\FloatTok{.975}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{,}\AttributeTok{fill=}\StringTok{"tomato"}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{geom\_line}\NormalTok{()}\SpecialCharTok{+}
-  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{SampleDepth,}\AttributeTok{y=}\NormalTok{Sources ),}\AttributeTok{alpha=}\FloatTok{0.25}\NormalTok{,}\AttributeTok{col=}\StringTok{"grey40"}\NormalTok{)}\SpecialCharTok{+}
-  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{Month)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day1_practical_2_files/figure-pdf/unnamed-chunk-59-1.pdf}}
-\end{center}
 
 \end{tcolorbox}
 
