@@ -1,0 +1,274 @@
+---
+title: "Lecture 9"
+from: markdown+emoji
+subtitle: "Spatio-temporal models" 
+format:
+  revealjs:
+    margin: 0
+    logo:  NTNU_UofG.png
+    theme: uofg_theme.scss
+    header-includes: |
+      <script src="custom.js" type="application/javascript"></script>
+slide-number: "c/t"
+title-slide-attributes:
+#    data-background-image: images/trondheim3.png
+    data-background-size: cover
+    data-background-opacity: "0.55"
+author:
+  - name: Sara Martino
+    #orcid: 0000-0002-6879-4412
+    email: sara.martino@ntnu.no
+    affiliations: Dept. of Mathematical Science, NTNU
+  - name: Janine Illian
+    #orcid: 0000-0002-6879-4412
+    email: Janine.Illian@glasgow.ac.uk
+    affiliations: University of Glasgow 
+  - name: Jafet Belmont
+    #orcid: 0000-0002-6879-4412
+    email: Jafet.Belmont@glasgow.ac.uk
+    affiliations: University of Glasgow   
+        
+# date: May 22, 2025
+# bibliography: references.bib
+embed-resources: true
+execute:
+  allow-html: true
+  freeze: true
+---
+
+```{r setup}
+# #| include: false
+
+knitr::opts_chunk$set(echo = FALSE,
+                      message=FALSE,
+                      warning=FALSE,
+                      strip.white=TRUE,
+                      prompt=FALSE,
+                      fig.align="center",
+                       out.width = "60%")
+
+library(knitr)    # For knitting document and include_graphics function
+library(ggplot2)  # For plotting
+library(png)
+library(tidyverse)
+library(INLA)
+library(BAS)
+library(patchwork)
+library(DAAG)
+library(inlabru)
+library(sf)
+library(cowplot) # needs install.packages("magick") to draw images
+library(gghighlight)
+
+```
+
+## Motivation
+
+-   Many real-world data sets vary in both **space** and **time**.
+
+    - Examples: rainfall, temperature, air pollution, crop yield, disease spread.
+
+-   We often want to model **how similarity (correlation)** changes across both dimensions.
+
+. . .
+
+**The good news** :thumbsup:
+
+  - the framework works with spatio-temporal data as well
+  
+**The bad news** :thumbsdown:
+
+  - fully spatio-temporal models are complex
+  
+  -  model fitting can take a long time
+  
+  - different types of spatio-temporal data structures lead to
+different types of complexities
+
+
+## Complexity of spatio-temporal models
+
+- additional dependencies: in space and time
+
+- spatial and temporal behaviour can be _independent_ on each other, or  _dependent_: i.e. properties of the spatial structure
+vary through time (or vice versa)
+
+. . . 
+
+Several options are available in `inlabru`
+
+ - Areal Model
+ 
+ - Geostatistical and Point Process models
+ 
+## Spatio temporal models for areal data
+
+$\frac{\text{Number of cases } Y_{st}}{\text{Expected numer of cases }E_{st}}$ in Ohio
+from 1968 to 1988
+
+
+Space
+```{r}
+
+# Load data
+d_ohio <- read_csv(file = "Data/data_ohio.csv", show_col_types = FALSE)
+m_ohio <- read_sf(dsn = "Data/ohio_shapefile/", layer = "fe_2007_39_county")
+
+
+# Extracted from `SpatialEpi`
+expected <- function (population, cases, n.strata, ...) {
+  
+  n <- length(population) / n.strata
+  E <- rep(0, n)
+  qNum <- rep(0, n.strata)
+  qDenom <- rep(0, n.strata)
+  q <- rep(0, n.strata)
+  
+  # Compute strata-specific rates
+  for (i in 1:n.strata) {
+    indices <- rep(i, n) + seq(0, (n - 1)) * n.strata
+    qNum[i] <- qNum[i] + sum(cases[indices])
+    qDenom[i] <- qDenom[i] + sum(population[indices])
+  }
+  q <- qNum / qDenom
+  
+  # Compute expected counts
+  for (i in 1:n) {
+    indices <- (1:n.strata) + (i - 1) * n.strata
+    E[i] <- sum(population[indices] * q)
+  }
+  
+  E
+}
+
+################
+# Process data #
+################
+
+# Observed number of cases
+d <- d_ohio %>% group_by(NAME, year) %>% summarise(Y = sum(y)) %>% ungroup() %>% rename(county = NAME) %>% arrange(county, year)
+
+# Expected cases 
+d_ohio <- d_ohio %>% arrange(county, year, gender, race)
+n.strata <- 4 # 2 genders x 2 races 
+E <- expected(population = d_ohio$n, cases = d_ohio$y, n.strata = n.strata)
+
+# Compute SIR
+n_years    <- length(unique(d_ohio$year))
+n_counties <- length(unique(d_ohio$NAME))
+
+counties_E <- rep(unique(d_ohio$NAME), each = n_years)
+years_E    <- rep(unique(d_ohio$year), times = n_counties)
+
+d_E <- data.frame(county = counties_E, year = years_E, E = E)
+
+d <- d %>% left_join(y = d_E, by = c("county", "year"))
+d <- d %>% mutate(SIR = Y / E)
+
+# Link map  information
+d_wide <- d %>% pivot_wider(names_from = year, values_from = c(Y, E, SIR), names_glue = "{.value}.{year}") # `wide` format
+m_ohio <- m_ohio %>% rename(county = NAME) %>% left_join(y = d_wide, by = c("county")) %>% dplyr::select(c(colnames(d_wide), "geometry"))
+
+s_cols <- setdiff(colnames(m_ohio), c("county", "geometry")) # to `long` format
+m_ohio <- m_ohio %>% 
+          pivot_longer(cols = all_of(s_cols), names_to = c(".value", "year"), names_sep = "\\.") %>% 
+          dplyr::select(county, year, Y, E, SIR, geometry) %>%
+          mutate(year = as.numeric(year)) %>% 
+          arrange(county, year)
+
+pal <- c("#00008FFF", "#0000F2FF", "#0063FFFF", "#00D4FFFF", "#46FFB8FF", "#B8FF46FF", "#FFD400FF", "#FF6300FF", "#F00000FF", "#800000FF")
+
+custom_theme <-  theme_bw() + theme(legend.position = "right", 
+                              text = element_text(size = 14),
+                              plot.title = element_text(size = 16),
+                              legend.title = element_text(size = 12))
+```
+```{r}
+ggplot(m_ohio) + 
+  geom_sf(aes(fill = SIR)) +
+  facet_wrap(~ year, ncol = 7) +
+  scale_fill_gradient2(name = "SIR", midpoint = 1, low = "blue", mid = "white", high = "red") + 
+  labs(x = "", y = "") +
+  custom_theme + 
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks  = element_blank())
+```
+ 
+ 
+## Spatio temporal models for areal data
+
+$\frac{\text{Number of cases } Y_{st}}{\text{Expected numer of cases }E_{st}}$ in Ohio
+from 1968 to 1988
+
+
+
+Time
+
+```{r}
+g <- ggplot(d, aes(x = year, y = SIR, 
+                   group = county, color = county)) +
+  geom_line() + geom_point(size = 2) + theme_bw() + theme(legend.position = "none")
+g
+```
+
+ 
+## Spatio temporal models for areal data
+
+$\frac{\text{Number of cases } Y_{st}}{\text{Expected numer of cases }E_{st}}$ in Ohio
+from 1968 to 1988
+
+
+
+Time
+
+
+```{r}
+g + gghighlight(county %in% c ("Adams", "Harrison" ))
+```
+
+## Spatio temporal models for areal data
+
+The observation model
+$$
+Y_{st}|\lambda_{st}\sim\text{Poisson}(E_{st}\lambda_{st})
+$$
+
+We are going to see different models for the linear predictor $\eta_{st} = \log \lambda_{st}$
+
+1. $\eta_{st} = \beta_0 + u_s + v_t$
+
+```{r}
+#nb <- spdep::poly2nb(m_ohio)
+#spdep::nb2INLA("Data/map_ohio.adj", nb)
+g = inla.read.graph(filename = "Data/map_ohio.adj")
+
+m_ohio = m_ohio %>% mutate(id_area = as.numeric(as.factor(county)))
+cmp_1 = ~ Intercept(1) + space(id_area, model = "besag", graph = g, scale.model = T) +
+  time(year, model  = "rw2", scale.model = T)
+lik = bru_obs(formula = Y~.,
+              data = m_ohio,
+              family = "poisson",
+              E = E )
+fit_1 = bru(cmp_1, lik)
+
+pred_1 = predict(fit_1, m_ohio, ~ data.frame(sp = space,
+                                        lambda = Intercept + space + time))
+
+
+ggplot(pred_1$lambda) + 
+  geom_sf(aes(fill = mean)) +
+  facet_wrap(~ year, ncol = 7) +
+  scale_fill_gradient2(name = "mean", midpoint = 1, low = "blue", mid = "white", high = "red") + 
+  labs(x = "", y = "") +
+  custom_theme + 
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks  = element_blank())
+
+ggplot(pred_1$lambda, aes(x = year, y = mean, 
+                   group = county, color = county)) +
+  geom_line() + geom_point(size = 2) + theme_bw() + theme(legend.position = "none") + gghighlight(county %in% c ("Adams", "Harrison" ))
+
+```
+

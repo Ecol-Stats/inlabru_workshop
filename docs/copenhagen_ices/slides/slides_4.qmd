@@ -605,7 +605,78 @@ ggplot()+ geom_line(data = pred1, aes(year, mean, color = "rw1")) +
   - `cut` (default) splits the data using equal length intervals
   - `quantile` uses equidistant quantiles in the probability space.
 
+## RW models as smoothers for covariates - Example
 
+::::: columns
+::: {.column width="50%"}
+
+The data are derived from an anthropometric study of 892 females under 50 years in three Gambian villages in West Africa.
+
+
+`Age` - Age of respondent (continuous)
+
+`triceps` -  Triceps skinfold thickness.
+
+```{r}
+triceps = read_csv("Data/triceps.csv")
+triceps$age_group = inla.group(triceps$age, n = 30)
+
+# Description
+# The data are derived from an anthropometric study of 892 females under 50 years in three Gambian villages in West Africa.
+# 
+# Format
+# A data frame with 892 observations on the following 3 variables:
+# 
+# age Age of respondents.
+# lntriceps Log of the triceps skinfold thickness.
+# triceps Triceps skinfold thickness.
+```
+
+
+:::
+::: {.column width="50%"}
+
+```{r}
+#| eval: true
+#| out-width: 100%
+
+triceps %>% ggplot() + geom_point(aes(age, triceps, color = "original") ) +
+  geom_point(aes(age_group, triceps, color = "grouped")) + theme(legend.title =  element_blank())
+
+```
+
+:::
+:::::
+
+
+```{r}
+#| echo: true
+#| eval: false
+triceps$age_group = inla.group(triceps$age, n = 30)
+```
+
+
+##  Model fit and results
+
+
+
+```{r}
+#| echo: true
+cmp = ~ Intercept(1) + cov(age_group, model = "rw2", scale.model =T)
+lik = bru_obs(formula = triceps ~.,
+              data = triceps)
+
+fit = bru(cmp, lik)
+pred = predict(fit, triceps, ~ Intercept + cov)
+```
+
+```{r}
+
+pred %>% ggplot() +
+  geom_point(aes(age, triceps), alpha = 0.4)+ geom_line(aes(age_group, mean), color = "red") +
+  geom_ribbon(aes(age_group, ymin = q0.025, ymax = q0.975), alpha = 0.5, fill = "red") 
+
+```
 
 
 ## Summary RW (1 and 2) models
