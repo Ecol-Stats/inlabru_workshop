@@ -291,7 +291,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, boxrule=0pt, frame hidden, colback={codebgcolor}, enhanced, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, breakable, enhanced, boxrule=0pt, colback={codebgcolor}, sharp corners]}{\end{tcolorbox}}\fi
 \makeatother
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -394,7 +394,7 @@ is
 
 \[ \log(\tau) \sim \mathrm{logGamma}(1,5 \times 10^{-5}) \]
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, leftrule=.75mm, rightrule=.15mm, opacityback=0, toprule=.15mm, coltitle=black, titlerule=0mm, left=2mm, colbacktitle=quarto-callout-note-color!10!white, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, bottomtitle=1mm, toptitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, breakable, rightrule=.15mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, arc=.35mm, bottomtitle=1mm, colback=white, toprule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, toptitle=1mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6]
 
 If your model uses the default intercept construction (i.e.,
 \texttt{Intercept(1)} in the linear predictor) \texttt{inlabru} will
@@ -497,7 +497,7 @@ define the relative components as:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, leftrule=.75mm, rightrule=.15mm, opacityback=0, toprule=.15mm, coltitle=black, titlerule=0mm, left=2mm, colbacktitle=quarto-callout-warning-color!10!white, title={Task}, bottomtitle=1mm, toptitle=1mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, breakable, rightrule=.15mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, coltitle=black, left=2mm, arc=.35mm, bottomtitle=1mm, colback=white, toprule=.15mm, titlerule=0mm, title={Task}, toptitle=1mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6]
 
 Run the model again using 0.1 as default precision for both the
 intercept and the slope parameter.
@@ -563,7 +563,7 @@ posterior density of the intercept \(\beta_0\) we can type:
 \pandocbounded{\includegraphics[keepaspectratio]{day1_practical_2_files/figure-pdf/unnamed-chunk-10-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, leftrule=.75mm, rightrule=.15mm, opacityback=0, toprule=.15mm, coltitle=black, titlerule=0mm, left=2mm, colbacktitle=quarto-callout-warning-color!10!white, title={Task}, bottomtitle=1mm, toptitle=1mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, breakable, rightrule=.15mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, coltitle=black, left=2mm, arc=.35mm, bottomtitle=1mm, colback=white, toprule=.15mm, titlerule=0mm, title={Task}, toptitle=1mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6]
 
 Plot the posterior marginals for \(\beta_1\) and for the precision of
 the observation error \(\pi(\tau|y)\)
@@ -731,11 +731,11 @@ Observation models:
     Additive/Linear: TRUE/TRUE
     Used components: effects[sex_M, beta_0, beta_1, net_eff], latent[] 
 Time used:
-    Pre = 0.918, Running = 0.188, Post = 0.0324, Total = 1.14 
+    Pre = 0.97, Running = 0.213, Post = 0.0351, Total = 1.22 
 Fixed effects:
           mean    sd 0.025quant 0.5quant 0.975quant    mode kld
 sex_M   -1.106 0.218     -1.534   -1.106     -0.678  -1.106   0
-beta_0 -15.816 0.871    -17.516  -15.819    -14.098 -15.819   0
+beta_0 -15.816 0.870    -17.516  -15.819    -14.099 -15.819   0
 beta_1   2.555 0.072      2.414    2.555      2.696   2.555   0
 
 Random effects:
@@ -745,12 +745,12 @@ Random effects:
 Model hyperparameters:
                                          mean    sd 0.025quant 0.5quant
 Precision for the Gaussian observations 0.475 0.044      0.393    0.473
-Precision for net_eff                   2.150 1.326      0.563    1.837
-                                        0.975quant  mode
-Precision for the Gaussian observations      0.568 0.469
-Precision for net_eff                        5.568 1.316
+Precision for net_eff                   2.147 1.316      0.565    1.839
+                                        0.975quant mode
+Precision for the Gaussian observations      0.568 0.47
+Precision for net_eff                        5.535 1.32
 
-Marginal log-Likelihood:  -467.53 
+Marginal log-Likelihood:  -467.54 
  is computed 
 Posterior summaries for the linear predictor and the fitted values are computed
 (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')
@@ -784,7 +784,7 @@ We use the \texttt{predict} function to draw samples from the
 approximated joint posterior for the hyperparameters, then invert them
 to get variances and lastly compute the mean, std. dev., quantiles, etc.
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, leftrule=.75mm, rightrule=.15mm, opacityback=0, toprule=.15mm, coltitle=black, titlerule=0mm, left=2mm, colbacktitle=quarto-callout-note-color!10!white, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, bottomtitle=1mm, toptitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, breakable, rightrule=.15mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, arc=.35mm, bottomtitle=1mm, colback=white, toprule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, toptitle=1mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6]
 
 To get the right name for the hyperparameters to use in the
 \texttt{predict()} function, you can use the function
@@ -812,21 +812,21 @@ To get the right name for the hyperparameters to use in the
 \begin{verbatim}
 $`Error variance`
        mean        sd    q0.025      q0.5   q0.975    median sd.mc_std_err
-1 0.6425266 0.4935532 0.1793128 0.5202356 1.723548 0.5202356    0.03776007
+1 0.6051069 0.4206798 0.1802413 0.5186719 1.715676 0.5186719    0.03257448
   mean.mc_std_err
-1      0.01799568
+1      0.01536326
 
 $`Between-net Variance`
-      mean        sd   q0.025     q0.5  q0.975   median sd.mc_std_err
-1 2.131441 0.1847844 1.764094 2.111245 2.54298 2.111245   0.005025127
+      mean        sd   q0.025     q0.5   q0.975   median sd.mc_std_err
+1 2.124922 0.1982613 1.764501 2.110354 2.543287 2.110354   0.005646714
   mean.mc_std_err
-1     0.006161214
+1     0.006626701
 
 attr(,"class")
 [1] "bru_prediction" "list"          
 \end{verbatim}
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, leftrule=.75mm, rightrule=.15mm, opacityback=0, toprule=.15mm, coltitle=black, titlerule=0mm, left=2mm, colbacktitle=quarto-callout-warning-color!10!white, title={Task}, bottomtitle=1mm, toptitle=1mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, breakable, rightrule=.15mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, coltitle=black, left=2mm, arc=.35mm, bottomtitle=1mm, colback=white, toprule=.15mm, titlerule=0mm, title={Task}, toptitle=1mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6]
 
 Another useful quantity we can compute is the intraclass correlation
 coefﬁcient (ICC) which help us determine how much the response varies
@@ -859,7 +859,7 @@ Click here to see the solution
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, leftrule=.75mm, rightrule=.15mm, opacityback=0, toprule=.15mm, coltitle=black, titlerule=0mm, left=2mm, colbacktitle=quarto-callout-note-color!10!white, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Supplementary Material}, bottomtitle=1mm, toptitle=1mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, colback=white, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, breakable, rightrule=.15mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, arc=.35mm, bottomtitle=1mm, colback=white, toprule=.15mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Supplementary Material}, toptitle=1mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6]
 
 The marginal densities for the hyper parameters can be also found by
 calling\texttt{inlabru\_model\$marginals.hyperpar}. We can then apply a
@@ -892,14 +892,14 @@ summaries using \texttt{inla.zmarginal} function as follows:
 \end{Shaded}
 
 \begin{verbatim}
-           sigma_e   sigma_u  
-mean       2.124206  0.6509293
-sd         0.1980611 0.4169733
-quant0.025 1.763308  0.180072 
-quant0.25  1.985235  0.3682855
-quant0.5   2.113908  0.5419161
-quant0.75  2.251968  0.8084173
-quant0.975 2.540652  1.75623  
+           sigma_e  sigma_u  
+mean       2.124343 0.6500226
+sd         0.198064 0.4150232
+quant0.025 1.763947 0.1811544
+quant0.25  1.985321 0.3687274
+quant0.5   2.113829 0.5415058
+quant0.75  2.251987 0.8068167
+quant0.975 2.541297 1.750182 
 \end{verbatim}
 
 \end{tcolorbox}

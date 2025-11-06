@@ -102,7 +102,7 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 | 9:00 - 10:00 | [**Session 12**: Zero inflated models](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_12.html) |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | [**Session 13**: Complex observational processes: Distance Sampling](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_13.html) |
-| 11:30 - 13:00 | [Practical Session 8](day5_practical_8.qmd) |
+| 11:30 - 13:00 | Practical Session 8: [Zero Inflated models](day5_practical_8.qmd)  -  [Distance sampling](day5_practical_9.qmd) |
 | 13:00 - 13:15 | Coffee Break ☕ |
 | 13:15 - 14:00 | Closing session |
 

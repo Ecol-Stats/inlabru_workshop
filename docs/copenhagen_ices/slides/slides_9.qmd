@@ -660,9 +660,9 @@ st_crs(border) ="EPSG:4326"
 border = st_transform(border, crs = ("+proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs +type=crs"))
 
 
-mesh = fm_mesh_2d(boundary = st_simplify(border, dTolerance = 25),
-  max.edge = c(30, 90), cutoff = 15,
-   offset = c(-0.05, -0.25),
+mesh_sim = fm_mesh_2d(boundary = st_simplify(border, dTolerance = 25),
+  max.edge = c(5, 20), cutoff = 2,
+   offset = c(-0.05, -0.15),
   crs = st_crs(border))
 
 
@@ -678,9 +678,10 @@ theta <- c(-0.5*log(4*pi*variance*kappa^2), log(kappa))
 
 spde <- inla.spde2.matern(mesh)
 Q <- inla.spde2.precision(spde, theta=theta)
-fields = inla.qsample(k, Q)
+ff = inla.qsample(k, Q)
+fields = ff
 for(i in 2:k)
-  fields[,i] =    rho * fields[, i - 1] + sqrt(1 - rho^2) * fields[, i]
+  fields[,i] =    rho * fields[, i - 1] + sqrt(1 - rho^2) * ff[, i]
 
 t = seq(from = -1, to = 1, length.out = 12)
 v = scale(t^3+cos(t))/3
@@ -996,6 +997,20 @@ pred_3 = predict(fit_3, pxl_time, ~ data.frame(mu = Intercept + space + time,
 
 ## Adding covariates to space-time models
 
+```{r}
+alpha = 2
+range =400
+variance = 1
+
+kappa = sqrt(8*(alpha-1))/range
+theta <- c(-0.5*log(4*pi*variance*kappa^2), log(kappa))
+
+spde <- inla.spde2.matern(mesh)
+Q <- inla.spde2.precision(spde, theta=theta)
+ff = inla.qsample(k, Q)
+
+
+```
 
 
 

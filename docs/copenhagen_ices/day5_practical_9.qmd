@@ -1,7 +1,7 @@
 ---
 title: "Practical 8: Distance Sampling"
 execute: 
-  freeze: false
+  freeze: true
 format: 
   html:
     mainfont: "12"
@@ -26,11 +26,9 @@ knitr::purl("day5_practical_9.qmd")
 
 <font size="5"> **Aim of this practical:** </font>
 
-In this practical we are going to look at some model comparison and validation techniques.
+In this practical we are going to look at distance sampling.
 
-{{< downloadthis day5_practical_9.R dname="day5_practical_9.R" label="Download Practical 8 R script" icon="database-fill-down" type="success" >}}
+{{< downloadthis day5_practical_9.R dname="day5_practical_9.R" label="Download Practical 9 R script" icon="database-fill-down" type="success" >}}
 
 ```{r child="practicals/distance_sampling.qmd"}
 ```
-
-

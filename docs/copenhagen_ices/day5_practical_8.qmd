@@ -1,7 +1,7 @@
 ---
 title: "Practical 8: Zero-inflation"
 execute: 
-  freeze: false
+  freeze: true
 format: 
   html:
     mainfont: "12"

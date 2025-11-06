@@ -27,7 +27,7 @@ library(webexercises)
 
 ```
 
-# Geostatistics 
+# Geostatistics
 
 In this practical we are going to fit a geostatistical model. We will:
 
@@ -124,17 +124,17 @@ ggplot()+
 
 We first fit a simple model where we consider the observation as Bernoulli and where the linear predictor contains only one intercept and the GR field defined through the SPDE approach. The model is defined as:
 
-**Stage 1** Model for the response 
+**Stage 1** Model for the response
 
 $$
 y(s)|\eta(s)\sim\text{Binom}(1, p(s))
-$$ **Stage 2** Latent field model 
+$$ **Stage 2** Latent field model
 
 $$
 \eta(s) = \text{logit}(p(s)) = \beta_0 + \omega(s)
-$$ 
+$$
 
-with 
+with
 
 $$
 \omega(s)\sim \text{  GF with range } \rho\  \text{ and maginal variance }\ \sigma^2
@@ -188,6 +188,20 @@ ggplot() + gg(mesh) + geom_sf(data= pcod_sf, aes(color = factor(present)), size 
 
 ```
 
+
+Key parameters in mesh construction include: `max.edge` for maximum triangle edge lengths, `offset` for inner and outer extensions (to prevent edge effects), and cutoff to avoid overly small triangles in clustered areas.
+
+::: callout-note
+**General guidelines for creating the mesh**
+
+1.  Create triangulation meshes with `fm_mesh_2d()`
+2.  Move undesired boundary effects away from the domain of interest by extending to a smooth external boundary
+3.  Use a coarser resolution in the extension to reduce computational cost (`max.edge=c(inner, outer)`)
+4.  Use a fine resolution (subject to available computational resources) for the domain of interest (inner correlation range) and filter out small input point clusters (0 \< `cutoff` \< inner)
+5.  Coastlines and similar can be added to the domain specification in `fm_mesh_2d()` through the `boundary` argument.
+:::
+
+
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
@@ -212,11 +226,11 @@ The *rule of thumb* is that your mesh should be:
 
 To define the SPDE representation of the spatial GF we use the function `inla.spde2.pcmatern`. This takes as input the mesh we have defined and the PC-priors definition for $\rho$ and $\sigma$ (the range and the marginal standard deviation of the field).
 
-PC priors Gaussian Random field are defined in (Fuglstad et al. 2018). From a practical perspective for the range $\rho$ you need to define two paramters $\rho_0$ and $p_{\rho}$ such that you believe it is reasonable that 
+PC priors Gaussian Random field are defined in (Fuglstad et al. 2018). From a practical perspective for the range $\rho$ you need to define two paramters $\rho_0$ and $p_{\rho}$ such that you believe it is reasonable that
 
 $$
 P(\rho<\rho_0)=p_{\rho}
-$$ 
+$$
 
 while for the margianal variance $\sigma$ you need to define two parameters $\sigma_0$ and $p_{\sigma}$ such that you believe it is reasonable that
 
