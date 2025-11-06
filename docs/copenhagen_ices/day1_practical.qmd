@@ -1,7 +1,7 @@
 ---
 title: "Practical 1"
 execute: 
-  freeze: true
+  freeze: false
 format: 
   html:
     mainfont: "12"
@@ -46,7 +46,4 @@ we are going to learn:
 ```
 
 ```{r child="practicals/GLM_ex.qmd"}
-```
-
-```{r child="practicals/GAM_ex.qmd"}
 ```

@@ -1,7 +1,7 @@
 ---
-title: "Practical 8"
+title: "Practical 8: Zero-inflation"
 execute: 
-  freeze: true
+  freeze: false
 format: 
   html:
     mainfont: "12"
@@ -29,9 +29,6 @@ knitr::purl("day5_practical_8.qmd")
 In this practical we are going to look at some model comparison and validation techniques.
 
 {{< downloadthis day5_practical_8.R dname="day5_practical_8.R" label="Download Practical 8 R script" icon="database-fill-down" type="success" >}}
-
-```{r child="practicals/distance_sampling.qmd"}
-```
 
 ```{r child="practicals/zero_inflated_ex.qmd"}
 ```
