@@ -275,7 +275,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, frame hidden, sharp corners, colback={codebgcolor}, enhanced, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, colback={codebgcolor}, breakable, enhanced, sharp corners, boxrule=0pt]}{\end{tcolorbox}}\fi
 \makeatother
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -535,7 +535,6 @@ install.packages(c(
   "dplyr",
   "FSAdata",
   "ggplot2",
-  "gstat",
   "gt",
   "lubridate",
   "magrittr",
@@ -549,8 +548,7 @@ install.packages(c(
   "terra",
   "tidyr",
   "tidyterra",
-  "tidyverse",
-  "variosig"
+  "tidyverse"
 ))
 \end{verbatim}
 

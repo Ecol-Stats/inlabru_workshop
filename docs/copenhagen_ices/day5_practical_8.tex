@@ -1,4 +1,5 @@
 % Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
@@ -7,21 +8,22 @@
   letterpaper,
   DIV=11,
   numbers=noendperiod]{scrartcl}
-
+\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -39,9 +41,6 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
 \makeatletter
 \ifx\paragraph\undefined\else
@@ -107,8 +106,7 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -133,6 +131,20 @@
 % Set default figure placement to htbp
 \def\fps@figure{htbp}
 \makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
 
 % load packages
 \usepackage{geometry}
@@ -279,13 +291,11 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, enhanced, boxrule=0pt, breakable, frame hidden, colback={codebgcolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, colback={codebgcolor}, breakable, boxrule=0pt, sharp corners, frame hidden]}{\end{tcolorbox}}\fi
 \makeatother
-
 \usepackage{bookmark}
-
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
   pdftitle={Practical 8: Zero-inflation},
   colorlinks=true,
@@ -299,7 +309,6 @@
 \title{Practical 8: Zero-inflation}
 \author{}
 \date{}
-
 \begin{document}
 \maketitle
 
@@ -358,8 +367,7 @@ will
 The following example use the \texttt{gorillas} dataset available in the
 \texttt{inlabru} library.
 
-The data give the locations of Gorilla's nests in an area: ::: \{.cell
-layout-align=``center''\}
+The data give the locations of Gorilla's nests in an area:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -382,10 +390,8 @@ layout-align=``center''\}
 
 \end{figure}%
 
-:::
-
 The dataset also contains covariates in the form or raster data. We
-consider two of them here: ::: \{.cell\}
+consider two of them here:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -394,8 +400,6 @@ consider two of them here: ::: \{.cell\}
 \NormalTok{dist\_cov }\OtherTok{\textless{}{-}}\NormalTok{  gcov}\SpecialCharTok{$}\NormalTok{waterdist}
 \end{Highlighting}
 \end{Shaded}
-
-:::
 
 \begin{figure}[H]
 
@@ -562,10 +566,10 @@ This model has two parameters:
   accounts for the size of the cell.
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, bottomrule=.15mm, left=2mm, colback=white, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, title={Task}, rightrule=.15mm, opacitybacktitle=0.6, breakable, toprule=.15mm, arc=.35mm]
 
 Fit a zero-inflated model to the data (\texttt{zeroinflatedpoisson1}) by
-completing the following code: ::: \{.cell\}
+completing the following code:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -577,8 +581,6 @@ completing the following code: ::: \{.cell\}
 \NormalTok{fit\_zip }\OtherTok{\textless{}{-}} \FunctionTok{bru}\NormalTok{(cmp, lik)}
 \end{Highlighting}
 \end{Shaded}
-
-\end{tcolorbox}
 
 Take hint
 
@@ -603,11 +605,11 @@ Click here to see the solution
 \end{Highlighting}
 \end{Shaded}
 
-:::
+\end{tcolorbox}
 
 Once the model is fitted we can look at the results
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, bottomrule=.15mm, left=2mm, colback=white, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, title={Task}, rightrule=.15mm, opacitybacktitle=0.6, breakable, toprule=.15mm, arc=.35mm]
 
 Check what the estimated excess zero probaility is.
 
@@ -682,7 +684,7 @@ Var(\text{count})&=  E(\text{count}) \left(1-\exp(-\lambda) E(\text{count})\righ
 \end{aligned}
 }\end{equation}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, bottomrule=.15mm, left=2mm, colback=white, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, title={Task}, rightrule=.15mm, opacitybacktitle=0.6, breakable, toprule=.15mm, arc=.35mm]
 
 Fit a hurdle model to the data using the \texttt{zeroinflatedpoisson0}
 likelihood
@@ -707,7 +709,7 @@ Click here to see the solution
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, bottomrule=.15mm, left=2mm, colback=white, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, title={Task}, rightrule=.15mm, opacitybacktitle=0.6, breakable, toprule=.15mm, arc=.35mm]
 
 As before, check what the estimated probability of zero is and use
 \texttt{predict()} to obtain a map of the estimated mean counts in
@@ -762,7 +764,7 @@ To fit this model we have to define two likelihoods: - One will account
 for the presence-absence process and has a Binomial model - One will
 account for the counts and has a truncated Poisson model
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, bottomrule=.15mm, left=2mm, colback=white, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, title={Task}, rightrule=.15mm, opacitybacktitle=0.6, breakable, toprule=.15mm, arc=.35mm]
 
 Complete the following code to fit a hurdle model based on two
 likelihoods:
@@ -969,7 +971,7 @@ four models and plot them together:
 
 \end{figure}%
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, bottomrule=.15mm, left=2mm, colback=white, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, title={Task}, rightrule=.15mm, opacitybacktitle=0.6, breakable, toprule=.15mm, arc=.35mm]
 
 Create plots of the estimated variance of the counts.
 
@@ -1039,17 +1041,14 @@ Click here to see the solution
 \end{Highlighting}
 \end{Shaded}
 
-\begin{center}
 \pandocbounded{\includegraphics[keepaspectratio]{day5_practical_8_files/figure-pdf/unnamed-chunk-20-1.png}}
-\end{center}
 
 \end{tcolorbox}
 
 \subsubsection{Using scores}\label{using-scores}
 
 We can compare model using the scores that the \emph{bru()} function
-computes since we have set, at the beginning. the options to :::
-\{.cell\}
+computes since we have set, at the beginning. the options to
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1060,11 +1059,9 @@ computes since we have set, at the beginning. the options to :::
 \end{Highlighting}
 \end{Shaded}
 
-:::
-
 Lets use these scores to compare the models.
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, left=2mm, bottomtitle=1mm, rightrule=.15mm, coltitle=black, arc=.35mm, opacitybacktitle=0.6, colframe=quarto-callout-warning-color-frame, toprule=.15mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, breakable, bottomrule=.15mm, leftrule=.75mm, colback=white]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, bottomrule=.15mm, left=2mm, colback=white, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, title={Task}, rightrule=.15mm, opacitybacktitle=0.6, breakable, toprule=.15mm, arc=.35mm]
 
 Extract the DIC, WAIC and MLIK values for the four models and compare
 them
@@ -1078,10 +1075,10 @@ Click here to see the solution
             \AttributeTok{WAIC =} \FunctionTok{c}\NormalTok{(fit\_zip}\SpecialCharTok{$}\NormalTok{waic}\SpecialCharTok{$}\NormalTok{waic, fit\_zap}\SpecialCharTok{$}\NormalTok{waic}\SpecialCharTok{$}\NormalTok{waic, fit\_zap2}\SpecialCharTok{$}\NormalTok{waic}\SpecialCharTok{$}\NormalTok{waic, fit\_zap3}\SpecialCharTok{$}\NormalTok{waic}\SpecialCharTok{$}\NormalTok{waic),}
             \AttributeTok{MLIK =} \FunctionTok{c}\NormalTok{(fit\_zip}\SpecialCharTok{$}\NormalTok{mlik[}\DecValTok{1}\NormalTok{], fit\_zap}\SpecialCharTok{$}\NormalTok{mlik[}\DecValTok{1}\NormalTok{], fit\_zap2}\SpecialCharTok{$}\NormalTok{mlik[}\DecValTok{1}\NormalTok{], fit\_zap3}\SpecialCharTok{$}\NormalTok{mlik[}\DecValTok{1}\NormalTok{]))}
 \CommentTok{\#\textgreater{}      Model      DIC     WAIC      MLIK}
-\CommentTok{\#\textgreater{} 1      ZIP 1214.135 1223.715 {-}686.9500}
+\CommentTok{\#\textgreater{} 1      ZIP 1214.133 1223.711 {-}686.9499}
 \CommentTok{\#\textgreater{} 2   HURDLE 1886.066 1909.722 {-}994.3807}
-\CommentTok{\#\textgreater{} 3 HURDLE\_2 1268.319 1285.522 {-}734.3697}
-\CommentTok{\#\textgreater{} 4 HURDLE\_3 1886.196 3914.442 {-}858.1400}
+\CommentTok{\#\textgreater{} 3 HURDLE\_2 1268.307 1285.508 {-}734.3704}
+\CommentTok{\#\textgreater{} 4 HURDLE\_3 1885.496 3904.425 {-}858.1401}
 \end{Highlighting}
 \end{Shaded}
 
