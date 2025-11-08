@@ -77,7 +77,9 @@ ggplot() + geom_sf(data = mexdolphin$points, color = "red" ) +
 To model the density of spotted dolphins we take a thinned point process model of the form:
 
 <!-- $$ -->
+
 <!-- p(\mathbf{y} | \lambda)  \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) p(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) p(\mathbf{s}_i)) -->
+
 <!-- $$ {#eq-thinned_pp} -->
 
 When fitting a distance sampling model we need to fulfill the following tasks:
@@ -92,12 +94,11 @@ When fitting a distance sampling model we need to fulfill the following tasks:
 
 5.  Run the model using the `bru()` function
 
-###  Building the mesh
+### Building the mesh
 
 The first task is to build the mesh that covers the area of interest. For this purpose we use the function `fm_mesh_2d`. To do so, we need to define the area of interest. We can either use a predefined boundary or create a non convex hull surrounding the location of the specie sightseeings
 
 ::: panel-tabset
-
 ## non-covex hull
 
 ```{r}
@@ -125,11 +126,9 @@ mesh_1 = fm_mesh_2d(boundary = mexdolphin$ppoly,
 ggplot() + gg(mesh_1)
 
 ```
-
 :::
 
 ::: {.callout-warning icon="false"}
-
 ## {{< bi pencil-square color=#c8793c >}} Task
 
 Look at the documentation for the `fm_mesh_2d` function typing
@@ -151,10 +150,9 @@ The *rule of thumb* is that your mesh should be:
 -   the triangles should be regular, avoid long and thin triangles.
 
 -   The mesh should contain a buffer around your area of interest (this is what is defined in the `offset` option) in order to avoid boundary artefact in the estimated variance.
-
 :::
 
-###  Define the SPDE representation of the spatial GF
+### Define the SPDE representation of the spatial GF
 
 To define the SPDE representation of the spatial GF we use the function `inla.spde2.pcmatern`. This takes as input the mesh we have defined and the PC-priors definition for $\rho$ and $\sigma$ (the range and the marginal standard deviation of the field).
 
@@ -171,7 +169,6 @@ P(\sigma>\sigma_0)=p_{\sigma}
 $$
 
 ::: {.callout-tip icon="false"}
-
 ## {{< bi question-octagon color=#6dc83c >}} Question
 
 Take a look at the code below and select which of the following statements about the specified Matern PC priors are true.
@@ -204,10 +201,9 @@ opts_p <- c(
 ```
 
 `r longmcq(opts_p)`
-
 :::
 
-###  Define the components of the linear predictor
+### Define the components of the linear predictor
 
 We have now defined a mesh and a SPDE representation of the spatial GF. We now need to define the model components.
 
@@ -236,11 +232,9 @@ cmp <- ~ space(main = geometry, model = spde_model) +
 ```
 
 ::: callout-note
-
 To control the prior distribution for the `sigma` parameter, we use a transformation mapper that converts a latent variable into an exponentially distributed variable with expectation 8 (this is a somewhat arbitrary value, but motivated by the maximum observation distance W)
 
 The `marginal` argument in the `sigma` component specifies the transformation function taking N(0,1) to Exponential(1/8).
-
 :::
 
 The formula, which describes how these components are combined to form the linear predictor
@@ -250,7 +244,6 @@ $$
 $$
 
 ::: {.callout-warning icon="false"}
-
 ## {{< bi pencil-square color=#c8793c >}} Task
 
 Complete the code below to define the formula
@@ -278,12 +271,11 @@ eta <- geometry + distance ~ space +
   Intercept + log(2)
 
 ```
-
 :::
 
 Here, the `log(2)` offset in the predictor takes care of the two-sided detections
 
-###  Define the observation model
+### Define the observation model
 
 `inlabru` has support for latent Gaussian Cox processes through the `cp` likelihood family. To fit a point process model recall that we need to approximate the integral in using a numerical integration scheme as:
 
@@ -325,7 +317,6 @@ fit = bru(cmp, lik)
 ```
 
 ::: callout-note
-
 `inlabru` supports a shortcut for defining the integration points using the `domain` and `samplers` argument of `bru_obs()`. This `domain` argument expects a list of named domains with inputs that are then internally passed to `fm_int()` to build the integration scheme. The `samplers` argument is used to define subsets of the domain over which the integral should be computed. An equivalent way to define the same model as above is:
 
 ```{r}
@@ -341,7 +332,6 @@ lik = bru_obs(formula = eta,
               samplers = mexdolphin$samplers)
 
 ```
-
 :::
 
 ## Visualize model Results
@@ -370,12 +360,11 @@ plot( spde.posterior(fit, "space", what = "log.variance"))
 
 ```
 
-###  Model predictions
+### Model predictions
 
 We now want to extract the estimated posterior mean and sd of spatial GF.
 
 ::: {.callout-warning icon="false"}
-
 ## {{< bi pencil-square color=#c8793c >}} Task
 
 Define a prediction grid using function `fm_pixel()`. Then compute the prediction for both the spatial GF and the linear predictor (spatial GF + intercept)
@@ -395,7 +384,6 @@ pr.int = predict(fit, pxl, ~data.frame(spatial = space,
                                       lambda = exp(Intercept + space)))
 
 ```
-
 :::
 
 Finally, we can plot the maps of the spatial effect
@@ -411,7 +399,6 @@ ggplot() + geom_sf(data = pr.int$spatial,aes(color = sd)) + scale_color_scico() 
 **Note** The posterior sd is lowest at the observation points. Note how the posterior sd is inflated around the border, this is the "border effect" due to the SPDE representation.
 
 ::: {.callout-warning icon="false"}
-
 ## {{< bi pencil-square color=#c8793c >}} Task
 
 Using the predictions stored in `pr.int`, produce a map of the posterior mean intensity.
@@ -439,7 +426,6 @@ ggplot() +
   ggtitle("Posterior mean")
 
 ```
-
 :::
 
 We can predict the detection function in a similar fashion.Here, we should make sure that it doesn’t try to evaluate the effects of components that can’t be evaluated using the given input data.
@@ -456,7 +442,7 @@ plot(dfun)
 
 ## Abundance estimates
 
-The mean expected number of animals can be computed  by integrating the intensity over the region of interest as follows:
+The mean expected number of animals can be computed by integrating the intensity over the region of interest as follows:
 
 ```{r}
 

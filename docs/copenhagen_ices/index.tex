@@ -275,7 +275,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, breakable, colback={codebgcolor}, boxrule=0pt, frame hidden, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, breakable, boxrule=0pt, sharp corners, colback={codebgcolor}, frame hidden]}{\end{tcolorbox}}\fi
 \makeatother
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -317,9 +317,6 @@
   The goal for the workshop is to introduce Bayesian statistics
   implemented using the \texttt{inlabru} package.
 \item
-  The workshop is intended for \ldots{} No knowledge of \texttt{R-INLA}
-  is required.
-\item
   Workshop materials in the github repository
   \href{https://github.com/Ecol-Stats/inlabru_workshop/tree/main/docs/copenague}{inlabru-workshop}
 \end{itemize}
@@ -332,15 +329,31 @@ At the end of the workshop, participants will be able to:
 \begin{itemize}
 \tightlist
 \item
-  TEST
+  Understand the motivation and challenges linked to spatial data
 \item
-  ILO2
+  Understand the statistical models used to analyse spatial and
+  spatio-temporal data
 \item
-  ILO3
+  Understand how to implement such models using the \texttt{inlabru}
+  library
+\item
+  Independently analyse spatial data collected at sea using
+  \texttt{inlabru}
 \end{itemize}
 
-Intended audience and level: The tutorial is intended for \ldots{} No
-knowledge of \texttt{R-INLA} is required.
+\section{Intended audience}\label{intended-audience}
+
+The tutorial is intended for anyone who desires to improve their
+analyses of data collected at sea, including those data that are used as
+inputs to fishery stock assessments.
+
+\section{Level}\label{level}
+
+Participants should be familiar with the R environment, and general
+statistical approaches for modelling such as regression, analysis of
+covariance, and general linear models.\hspace{0pt}
+
+No knowledge of \texttt{R-INLA} is required.
 
 \section{Schedule Program}\label{schedule-tabs}
 
@@ -446,7 +459,9 @@ Topic
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-9:00 - 10:00 & \textbf{Session 9}: Spatiotemporal models \\
+9:00 - 10:00 &
+\href{https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_9.html}{\textbf{Session
+9}: Spatiotemporal models} \\
 10:00 - 10:30 & Snack 🥙 \\
 10:30 - 11:30 &
 \href{https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_10.html}{\textbf{Session

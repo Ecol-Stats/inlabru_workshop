@@ -16,18 +16,29 @@ editor_options:
 
 -   Welcome to the `inlabru` workshop!
 -   The goal for the workshop is to introduce Bayesian statistics implemented using the `inlabru` package.
--   The workshop is intended for ... No knowledge of `R-INLA` is required.
 -   Workshop materials in the github repository [inlabru-workshop](https://github.com/Ecol-Stats/inlabru_workshop/tree/main/docs/copenague)
 
 # Learning Objectives for the workshop
 
 At the end of the workshop, participants will be able to:
 
--   TEST
--   ILO2
--   ILO3
 
-Intended audience and level: The tutorial is intended for ... No knowledge of `R-INLA` is required.
+-   Understand the motivation and challenges linked to spatial data
+-   Understand the statistical models used to analyse spatial and spatio-temporal data
+-   Understand how to implement such models using the `inlabru` library
+-   Independently analyse spatial data collected at sea using `inlabru`
+
+
+
+# Intended audience 
+
+The tutorial is intended for anyone who desires to improve their analyses of data collected at sea, including those data that are used as inputs to fishery stock assessments. 
+
+# Level
+
+Participants should be familiar with the R environment, and general statistical approaches for modelling such as regression, analysis of covariance, and general linear models.​
+
+No knowledge of `R-INLA` is required.
 
 # Schedule Program {#schedule-tabs}
 
@@ -83,7 +94,7 @@ Intended audience and level: The tutorial is intended for ... No knowledge of `R
 
 | Time | Topic |
 |:----------------------------------:|:----------------------------------:|
-| 9:00 - 10:00 | **Session 9**: Spatiotemporal models |
+| 9:00 - 10:00 | [**Session 9**: Spatiotemporal models](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_9.html) |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | [**Session 10**: Model comparison and evaluation](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_10.html) |
 | 11:30 - 13:00 | [Practical Session 6](day4_practical_6.qmd) |

@@ -1,28 +1,65 @@
 ---
-title: "`inlabru` workshop"
-format: revealjs
-author: S. Martino
-toc: true
+title: "Lecture 1"
+from: markdown+emoji
+subtitle: "Introduction" 
+format:
+  revealjs:
+    margin: 0
+    logo:  NTNU_UofG.png
+    theme: uofg_theme.scss
+    header-includes: |
+      <script src="custom.js" type="application/javascript"></script>
+  pdf:
+    output-file: slides_1.pdf   # name of the generated PDF
+    toc: false                  # optional: no TOC in PDF
+    papersize: a4               # optional
+    from: revealjs              # tells Quarto to print slides to PDF
+
+slide-number: "c/t"
+title-slide-attributes:
+#    data-background-image: images/trondheim3.png
+    data-background-size: cover
+    data-background-opacity: "0.55"
+author:
+  - name: Sara Martino
+    #orcid: 0000-0002-6879-4412
+    email: sara.martino@ntnu.no
+    affiliations: Dept. of Mathematical Science, NTNU
+  - name: Janine Illian
+    #orcid: 0000-0002-6879-4412
+    email: Janine.Illian@glasgow.ac.uk
+    affiliations: University of Glasgow 
+  - name: Jafet Belmont
+    #orcid: 0000-0002-6879-4412
+    email: Jafet.Belmont@glasgow.ac.uk
+    affiliations: University of Glasgow   
+        
+# date: May 22, 2025
+# bibliography: references.bib
 embed-resources: true
+execute:
+  allow-html: true
+  freeze: auto
 ---
+
 
 # Welcome to the course
 
 ## Course Structure: Day 1 {.smaller}
 
-+-------------+---------------------+----------------------------+-------------+
-| Time        | Topic               | Content                    | Excercises  |
-+=============+=====================+============================+=============+
-| **XXXX am** | **Core concepts**   | -   LGM and INLA           |             |
-|             |                     |                            |             |
-|             |                     | -   inlabru workflow       |             |
-|             |                     |                            |             |
-|             |                     | -   Model selection        |             |
-+-------------+---------------------+----------------------------+-------------+
-| XXXX am     | **Temporal Models** | -   Discrete time models   |             |
-|             |                     |                            |             |
-|             |                     | -   Continuous time models |             |
-+-------------+---------------------+----------------------------+-------------+
++--------------+---------------------+----------------------------+--------------+
+| Time         | Topic               | Content                    | Excercises   |
++==============+=====================+============================+==============+
+| **XXXX am**  | **Core concepts**   | -   LGM and INLA           |              |
+|              |                     |                            |              |
+|              |                     | -   inlabru workflow       |              |
+|              |                     |                            |              |
+|              |                     | -   Model selection        |              |
++--------------+---------------------+----------------------------+--------------+
+| XXXX am      | **Temporal Models** | -   Discrete time models   |              |
+|              |                     |                            |              |
+|              |                     | -   Continuous time models |              |
++--------------+---------------------+----------------------------+--------------+
 
 ## Course Structure: Day 2 {.smaller}
 
