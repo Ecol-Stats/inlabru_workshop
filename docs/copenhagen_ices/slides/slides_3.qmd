@@ -33,10 +33,8 @@ author:
 embed-resources: true
 execute:
   allow-html: true
-  freeze: true
+  freeze: auto
 ---
-
-
 
 ```{r setup}
 # #| include: false
@@ -69,17 +67,11 @@ library(patchwork)
 Everything in R-INLA is based on so-called **latent Gaussian models**
 
 ::: incremental
-— A few hyperparameters $\theta\sim\pi(\theta)$ control variances, range
-and so on
+— A few hyperparameters $\theta\sim\pi(\theta)$ control variances, range and so on
 
-— Given these hyperparameters we have an underlying Gaussian
-distribution
-$\mathbf{u}|\theta\sim\mathcal{N}(\mathbf{0},\mathbf{Q}^{-1}(\theta))$
-that we cannot directly observe
+— Given these hyperparameters we have an underlying Gaussian distribution $\mathbf{u}|\theta\sim\mathcal{N}(\mathbf{0},\mathbf{Q}^{-1}(\theta))$ that we cannot directly observe
 
-— Instead we make indirect observations
-$\mathbf{y}|\mathbf{u},\theta\sim\pi(\mathbf{y}|\mathbf{u},\theta)$ of
-the underlying latent Gaussian field
+— Instead we make indirect observations $\mathbf{y}|\mathbf{u},\theta\sim\pi(\mathbf{y}|\mathbf{u},\theta)$ of the underlying latent Gaussian field
 :::
 
 ## Repetition

@@ -33,7 +33,7 @@ author:
 embed-resources: true
 execute:
   allow-html: true
-  freeze: true
+  freeze: auto
   cache: true
 ---
 

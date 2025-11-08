@@ -33,7 +33,7 @@ author:
 embed-resources: true
 execute:
   allow-html: true
-  freeze: true
+  freeze: auto
 ---
 
 ```{r setup}
@@ -63,15 +63,13 @@ library(cowplot) # needs install.packages("magick") to draw images
 ## Motivation
 
 ::: incremental
--   Count data are often modeled with **Poisson** or **Negative
-    Binomial** models.\
+-   Count data are often modeled with **Poisson** or **Negative Binomial** models.\
 
 -   These assume zeros occur naturally from the count process.
 
     -   Example: for Poisson is $P(Y=0) = \exp(\lambda)$
 
--   But in real data, we often see **too many zeros** → *zero
-    inflation*.
+-   But in real data, we often see **too many zeros** → *zero inflation*.
 
 -   Examples:
 
@@ -82,8 +80,7 @@ library(cowplot) # needs install.packages("magick") to draw images
 
 ## Two main solutions
 
-Both handle excess zeros but use **different assumptions** about how
-zeros are generated.
+Both handle excess zeros but use **different assumptions** about how zeros are generated.
 
 -   **Zero-Inflated** Models
 
@@ -91,8 +88,7 @@ zeros are generated.
 
 ## Two main solutions
 
-Both handle excess zeros but use **different assumptions** about how
-zeros are generated.
+Both handle excess zeros but use **different assumptions** about how zeros are generated.
 
 -   **Zero-Inflated** Models
 
@@ -102,8 +98,7 @@ zeros are generated.
 
 ## Two main solutions
 
-Both handle excess zeros but use **different assumptions** about how
-zeros are generated:
+Both handle excess zeros but use **different assumptions** about how zeros are generated:
 
 -   **Zero-Inflated** Models
 
@@ -130,15 +125,13 @@ $$
 
 . . .
 
-**Note** In zero-inflated models $f(y)$ is typically discrete (ex
-Poisson, Binomial, ...)
+**Note** In zero-inflated models $f(y)$ is typically discrete (ex Poisson, Binomial, ...)
 
 ## Hurdle Models {.smaller}
 
 Also have two parts, but different logic:
 
--   A binary model determines if the observation crosses the hurdle
-    (i.e. zero vs. positive).
+-   A binary model determines if the observation crosses the hurdle (i.e. zero vs. positive).
 
 -   A **truncated** count model models only positive counts.
 
@@ -153,8 +146,7 @@ $$
 
 . . .
 
-**Note** In hurdle models $f_Y(y)$ can also be continuous (f.ex Gamma).
-In these cases: $$
+**Note** In hurdle models $f_Y(y)$ can also be continuous (f.ex Gamma). In these cases: $$
 \begin{aligned}
 \text{P}(Y=0) & = \pi & \\
 f_Y(y) & = f(y)& y>0
@@ -164,7 +156,7 @@ $$ where $f(y)$ is scaled so that it integrates to $1-\pi$
 ## Comparison: Zero-Inflated vs. Hurdle Models
 
 | Feature | Zero-Inflated | Hurdle |
-|:-----------------------|:-----------------------|:-----------------------|
+|:---|:---|:---|
 | **Zeros come from** | Two sources (inflation + count) | One source (hurdle only) |
 | **Positive part** | Includes zeros | Truncated at zero |
 | **Can use continuous distributions?** | :x: Typically count only | :white_check_mark: Yes (Gamma, Lognormal) |
@@ -189,8 +181,7 @@ INLA::inla.doc("zero inflated")
 
 . . .
 
-The probability of the inflation process $\pi$ is a *hyperparameter*
-therefore cannot be modeled with covariates
+The probability of the inflation process $\pi$ is a *hyperparameter* therefore cannot be modeled with covariates
 
 ## Example: number of fishes caught by fishermen at a state park.
 
@@ -446,8 +437,7 @@ dd
 ```
 
 ::: notes
-There seems to be more overdispersion than excess zero..the negative
-binomial model better fits the data estimateing a small excess of zero.
+There seems to be more overdispersion than excess zero..the negative binomial model better fits the data estimateing a small excess of zero.
 :::
 
 ## Comparing estimated distribution for a specific data point
@@ -521,8 +511,7 @@ prob_nbin = predict(fit_nbin, df_pred,
 
 ## Comparing estimated distribution - Implementation
 
-Note: To get the names to input in `predict` use the
-`bru_standardise_names()` function:
+Note: To get the names to input in `predict` use the `bru_standardise_names()` function:
 
 ```{r}
 #| echo: true
@@ -536,8 +525,7 @@ inlabru::bru_standardise_names(fit_pois)
 
 There are two ways to implement hurdle models in `inlabru`
 
--   **Strategy 1** Use a modified version of the same distributions
-    defined for the zero-inflated models
+-   **Strategy 1** Use a modified version of the same distributions defined for the zero-inflated models
 
 -   **Strategy 2** Use a "two-likelihood" trick
 
@@ -671,21 +659,17 @@ rbind(prob_pois$prob %>% mutate(y = 0:20, model= "Poisson", type = "zero-inflate
 
 ## Hurdle models com
 
-The Hurdle Model handles this by splitting the data-generating process
-into two parts:
+The Hurdle Model handles this by splitting the data-generating process into two parts:
 
-1.  **Zero-hurdle component**: This part is a binary model that
-    estimates the probability of a zero count versus a non-zero count.
-2.  **Positive component**: This part models the distribution of the
-    positive (non-zero) values.
+1.  **Zero-hurdle component**: This part is a binary model that estimates the probability of a zero count versus a non-zero count.
+2.  **Positive component**: This part models the distribution of the positive (non-zero) values.
 
 . . .
 
 This idea can be used in `inlabru` by using two likelihood
 
 -   A binomial likelihood to model the 0/1 process
--   A continuous **positive** density or a **truncated** count
-    distribution for the positive part
+-   A continuous **positive** density or a **truncated** count distribution for the positive part
 
 ## Example - Gamma-Hurdle model {.smaller}
 
@@ -834,13 +818,11 @@ We can:
 
 -   use other components in both linear predictors $\eta^1$ and $\eta^2$
 -   have shared components between the two linear predictor
--   use other positive-continuous distribution instead of the Gamma (for
-    example log-Normal, Weibull, etc.)
+-   use other positive-continuous distribution instead of the Gamma (for example log-Normal, Weibull, etc.)
 
 ## Example - Poisson- Hurdle model
 
-Let's look again at the fishes examples. We now want to include
-covariates also in the model for the zero probability:
+Let's look again at the fishes examples. We now want to include covariates also in the model for the zero probability:
 
 $$
 \begin{eqnarray}
@@ -852,8 +834,7 @@ $$ We use the same "trick" as before and we now have $$
 z\sim\text{Binomial}(\pi,n); &\qquad \eta_1 = \text{logit}(\pi) = \beta^1X\\
 z\sim\text{Truncated Poisson}(\lambda); &\qquad \eta_2 =\log(\lambda) =  \beta^2X\\
 \end{eqnarray}
-$$ In `inlabru` the **truncated Poisson distribution** is called
-`nzpoisson`
+$$ In `inlabru` the **truncated Poisson distribution** is called `nzpoisson`
 
 ## Example - Poisson- Hurdle model
 
@@ -900,14 +881,11 @@ round(fit$summary.fixed,2)
 
 ## Example: Binomial-Hurdle model
 
--   In `inlabru` there is no implementation for the *truncated binomial*
-    (or negative binomial) distribution
+-   In `inlabru` there is no implementation for the *truncated binomial* (or negative binomial) distribution
 
--   We can "trick" `inlabru` by using one of the implemented **Type 0**
-    models $$
+-   We can "trick" `inlabru` by using one of the implemented **Type 0** models $$
     y_i|\eta_i  \sim \pi1_{(y=0)} + (1-\pi)\frac{f(y)}{f(0)}
-    $$ with a *fixed* and small $\pi$ thus creating a *truncated*
-    distribution!
+    $$ with a *fixed* and small $\pi$ thus creating a *truncated* distribution!
 
 ## Example: Binomial-Hurdle model {.smaller}
 

@@ -33,9 +33,8 @@ author:
 embed-resources: true
 execute:
   allow-html: true
-  freeze: true
+  freeze: auto
 ---
-
 
 ```{r setup}
 # #| include: false
@@ -88,8 +87,7 @@ But..it is not always easy to distinguish between the two!
 -   There is *no golden standard*
 -   It really depends what you want to do!
 -   Basically two types
-    -   Ones that look at the posterior probability of the data under
-        the model
+    -   Ones that look at the posterior probability of the data under the model
     -   Ones that look at how model the data fits the data
 -   In general *it is not an easy task*
 -   `inlabru` provides some options available
@@ -190,8 +188,7 @@ fit$waic$waic
 -   Linked to the leave-one-out crossvalidation
 -   Smaller values indicate better trade-off between complexity and fit
 
-[^1]: See "Understanding predictive information criteria for Bayesian
-    models" (2013) by Andrew Gelman, Jessica Hwang, and Aki Vehtari
+[^1]: See "Understanding predictive information criteria for Bayesian models" (2013) by Andrew Gelman, Jessica Hwang, and Aki Vehtari
 
 # Posterior predictive checks
 
@@ -203,11 +200,9 @@ fit$waic$waic
 \pi(\mathbf{u}|\theta)& &\ \text{  LGM}\\
 \pi(\theta )& &\ \text{  hyperprior}\\
 \end{eqnarray}
-$$ using `inlabru` we estimate the *posterior distribution*
-$\pi(\mathbf{u},\theta|\mathbf{y})$.
+$$ using `inlabru` we estimate the *posterior distribution* $\pi(\mathbf{u},\theta|\mathbf{y})$.
 
-The *posterior predictive distribution* for a new data $\hat{y}$ is
-then: $$
+The *posterior predictive distribution* for a new data $\hat{y}$ is then: $$
 \pi(\hat{y}|\mathbf{y}) = \int\pi(y_i|\mathbf{u},\theta)\pi(\mathbf{u},\theta|\mathbf{y})\ d\mathbf{u}\ d\theta
 $$
 
@@ -219,21 +214,17 @@ $$
 \pi(\hat{y}|\mathbf{y}) = \int\pi(y_i|\mathbf{u},\theta)\pi(\mathbf{u},\theta|\mathbf{y})\ d\mathbf{u}\ d\theta
 $$
 
-**NOTE:** In general this is NOT computed by `inlabru` but needs to be
-approximated
+**NOTE:** In general this is NOT computed by `inlabru` but needs to be approximated
 
--   Use generate to sample from the posterior
-    $(\mathbf{u}^*_i,\theta^*_i)\sim\pi(\mathbf{u},\theta|\mathbf{y})$
+-   Use generate to sample from the posterior $(\mathbf{u}^*_i,\theta^*_i)\sim\pi(\mathbf{u},\theta|\mathbf{y})$
 
 -   Simulate a new datapoint $y^*_i\sim(y_i|\mathbf{u}^*_i,\theta^*_i)$
 
--   Use $y^*_1,\dots, y^*_N$ to approximate the posterior predictive
-    distribution.
+-   Use $y^*_1,\dots, y^*_N$ to approximate the posterior predictive distribution.
 
 . . .
 
-**BUT** `inlabru` computes automatically two quantities that are useful
-for model check!
+**BUT** `inlabru` computes automatically two quantities that are useful for model check!
 
 -   Conditional predictive ordinate (CPO)
 -   Probability integral transform (PIT)
@@ -250,9 +241,7 @@ $$
     \text{Score} = -\sum \log(cpo_i)
     $$ lower score correspond to better models
 
-[^2]: Pettit, L. I. 1990. “The Conditional Predictive Ordinate for the
-    Normal Distribution.” Journal of the Royal Statistical Society.
-    Series B (Methodological)
+[^2]: Pettit, L. I. 1990. “The Conditional Predictive Ordinate for the Normal Distribution.” Journal of the Royal Statistical Society. Series B (Methodological)
 
 ## Probability integral transform (PIT)
 
@@ -287,13 +276,11 @@ $$
 
 -   Linked to leave-one-out cross-validation
 
--   $pit_i$ shows how well the ith data point is predicted by the rest
-    of the data
+-   $pit_i$ shows how well the ith data point is predicted by the rest of the data
 
 -   Very small values indicate "suprising" observation under the model
 
--   For well-calibrated, the PIT values should be approximately
-    uniformly distributed.
+-   For well-calibrated, the PIT values should be approximately uniformly distributed.
 
 ## Probability integral transform (PIT)
 
@@ -334,8 +321,7 @@ df %>%
 
 ## Other scores {.smaller}
 
-In the literature there are many proposed scores for evaluate
-predictions. For example:
+In the literature there are many proposed scores for evaluate predictions. For example:
 
 -   Dawid-Sebastian score
 -   Log-score
@@ -343,11 +329,9 @@ predictions. For example:
 -   Brier score
 -   ...
 
-They all have their strength and wakness and which one is better depends
-on the goals of the model.
+They all have their strength and wakness and which one is better depends on the goals of the model.
 
-`inlabru` does not provide such scores automatcally, but they can be
-computed using simulations from the posterior distribution.
+`inlabru` does not provide such scores automatcally, but they can be computed using simulations from the posterior distribution.
 
 ## Example: CRPS for Poisson data
 
@@ -384,12 +368,9 @@ $$
 
 Computational algorithm:
 
-1.  Simulate
-    $\lambda^{(j)}\sim p(\lambda|\text{data}), j = 1,\dots, N_{\text{samples}}$
-    using `generate()` (size $N\times N_\text{samples}$).
+1.  Simulate $\lambda^{(j)}\sim p(\lambda|\text{data}), j = 1,\dots, N_{\text{samples}}$ using `generate()` (size $N\times N_\text{samples}$).
 
-2.  For each $i=1,\dots,N_{\text{data}}$, estimate
-    $r_{ik}=\text{Prob}(Y\leq k|\text{data})-I(y_i\leq k)$ as $$
+2.  For each $i=1,\dots,N_{\text{data}}$, estimate $r_{ik}=\text{Prob}(Y\leq k|\text{data})-I(y_i\leq k)$ as $$
       \hat{r}_{ik} = \frac{1}{N_\text{samples}} \sum_{j=1}^{N_\text{samples}}
       \{
       \text{Prob}(Y\leq k|\lambda^{(j)}_i)-I(y_i\leq k)
@@ -480,15 +461,11 @@ summary(crps_scores)
 ::: {.column width="50%"}
 ### :crystal_ball: Bayesian View
 
--   Parameters are **random variables** with posterior
-    $\pi(\theta \mid y)$.
+-   Parameters are **random variables** with posterior $\pi(\theta \mid y)$.
 -   Predictions $\tilde{y}_i$ also have a **posterior distribution**.
--   No single “true” fitted value → residuals are **not uniquely
-    defined**.
-    -   $r_i^{(\text{mean})} = (y_i - E[\tilde{y}_i \mid y])$ (mean
-        residual)\
-    -   $r_i^{(\text{sample})} = (y_i - \tilde{y}^s)$ for posterior
-        sample $s$
+-   No single “true” fitted value → residuals are **not uniquely defined**.
+    -   $r_i^{(\text{mean})} = (y_i - E[\tilde{y}_i \mid y])$ (mean residual)\
+    -   $r_i^{(\text{sample})} = (y_i - \tilde{y}^s)$ for posterior sample $s$
     -   Distribution of $y_i - \tilde{y}_i^{(s)}$ (posterior residuals)
 :::
 :::::
@@ -574,8 +551,7 @@ df %>% ggplot() + geom_point(aes(x,y)) +
 
 ## One example of posterior predictive checks
 
-1.  Sample $y^{1k}_i\sim\pi(y_i|\mathbf{y})$ $k = 1,\dots,M$ using
-    `generate()`
+1.  Sample $y^{1k}_i\sim\pi(y_i|\mathbf{y})$ $k = 1,\dots,M$ using `generate()`
 
 ```{r}
 preds =  generate(fit, df,
@@ -623,13 +599,11 @@ knitr::kable(
 
 ```
 
-2.  Compare some summaries of the simulated data with the one of the
-    observed one
+2.  Compare some summaries of the simulated data with the one of the observed one
 
 ## One example of posterior predictive checks
 
-Here we compare the estimated posterior densities
-$\hat{\pi}^k(y|\mathbf{y})$ with the estimated data density
+Here we compare the estimated posterior densities $\hat{\pi}^k(y|\mathbf{y})$ with the estimated data density
 
 ```{r}
 preds = data.frame(preds) %>% 
@@ -663,53 +637,41 @@ p1 + p2
 
 . . .
 
-This is just a simple example, but more complex checks can be computed
-with the same idea!
+This is just a simple example, but more complex checks can be computed with the same idea!
 
 ## Leave Group Our Cross-Validation
 
 This is a new option for cross-validation in `inlabru` . . .
 
--   Leave-one-out cross-validation (LOOCV) is a very common technique to
-    evaluate predictions from models
--   When data are correlated (as in spatial statistics) LOOCV might be
-    too optimistic and overestimate model performances.
+-   Leave-one-out cross-validation (LOOCV) is a very common technique to evaluate predictions from models
+-   When data are correlated (as in spatial statistics) LOOCV might be too optimistic and overestimate model performances.
 
 . . .
 
--   One possible solution is to then remove "chunck(s)" of data (for
-    example one station and all its nearest neighbours)
--   This is the solution implemented in the `inla.group.cv()`
-    function[^4]
+-   One possible solution is to then remove "chunck(s)" of data (for example one station and all its nearest neighbours)
+-   This is the solution implemented in the `inla.group.cv()` function[^4]
 
-[^4]: Adin & al (2024) Automatic cross-validation in structured models:
-    Is it time to leave out leave-one-out?, Spat. Statistics and Liu &
-    al. (2022) Leave-group-out cross-validation for latent Gaussian
-    models
+[^4]: Adin & al (2024) Automatic cross-validation in structured models: Is it time to leave out leave-one-out?, Spat. Statistics and Liu & al. (2022) Leave-group-out cross-validation for latent Gaussian models
 
 # Model validation for LGCP
 
 ## Model validation for LGCP
 
-Point processes (and so LGCP) are different from all other spatial
-models:
+Point processes (and so LGCP) are different from all other spatial models:
 
 -   The data are *presence* **and** *absence* of points
--   The likelihood depends on the data location **and** the integrated
-    intensity over the whole domain
+-   The likelihood depends on the data location **and** the integrated intensity over the whole domain
 
 . . .
 
-This makes model evaluation especially challenging. Especially
-cross-validation based measures are hard to define... why?
+This makes model evaluation especially challenging. Especially cross-validation based measures are hard to define... why?
 
 ## Cross validation for point processes
 
 ::::: columns
 ::: {.column width="50%"}
 -   In a Point process also empty areas are "data"
--   We cannot just remove points as this will change the underlying
-    intensity
+-   We cannot just remove points as this will change the underlying intensity
 -   We need to remove a whole subdomain in order to cross-validate
 :::
 
@@ -774,17 +736,14 @@ p1 + geom_polygon(data = b1, aes(x,y), fill = "white")
 
 **Warning**:warning:
 
-> Do not use WAIC and DIC as computed *today* by `inlabru` to compare
-> LGCP models
+> Do not use WAIC and DIC as computed *today* by `inlabru` to compare LGCP models
 
--   WAIC is linked to leave-one-out crossvalidation therefore it is
-    ill-defined for point processes
+-   WAIC is linked to leave-one-out crossvalidation therefore it is ill-defined for point processes
 -   DIC is ok "in theory" but not the way it is computed today
 
 . . .
 
-Work is going on about this and measures of fit for LGCP will soon be
-available in `inlabru`
+Work is going on about this and measures of fit for LGCP will soon be available in `inlabru`
 
 ## Some ideas on what one can do
 
@@ -798,19 +757,16 @@ These residuals can be used to evaluate the model.
 
 . . .
 
-This is still work in progress and at the moment non easily available...
-but it will be :grinning:
+This is still work in progress and at the moment non easily available... but it will be :grinning:
 
-[Here](https://inlabru-org.github.io/inlabru/articles/2d_lgcp_residuals_sf.html)
-you can see some examples of computation and use.
+[Here](https://inlabru-org.github.io/inlabru/articles/2d_lgcp_residuals_sf.html) you can see some examples of computation and use.
 
 # Conclusion
 
 ## Take home messages
 
 -   Model check and model comparison are complex topics
--   There are no universal solutions, it all depends on which model
-    characteristics you are interested in.
+-   There are no universal solutions, it all depends on which model characteristics you are interested in.
 -   `inlabru` provides some easy to compute alternatives
 -   LGCP require own tools to validate the model
     -   work is ongoing here... stay tuned :grinning:

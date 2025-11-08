@@ -291,7 +291,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[colback={codebgcolor}, enhanced, frame hidden, boxrule=0pt, sharp corners, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, boxrule=0pt, colback={codebgcolor}, frame hidden, enhanced, breakable]}{\end{tcolorbox}}\fi
 \makeatother
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -666,7 +666,7 @@ Observation models:
     Additive/Linear: TRUE/TRUE
     Used components: effects[beta0, colordarker, colorlight, colormedium, w], latent[] 
 Time used:
-    Pre = 0.848, Running = 0.189, Post = 0.00686, Total = 1.04 
+    Pre = 0.937, Running = 0.196, Post = 0.00719, Total = 1.14 
 Fixed effects:
               mean    sd 0.025quant 0.5quant 0.975quant   mode kld
 beta0       -0.501 0.196     -0.885   -0.501     -0.117 -0.501   0
@@ -690,7 +690,7 @@ predictive checks. To do so, we will use the CPO and PIT - two commonly
 used Bayesian model assessment criteria based on the \textbf{posterior
 predictive distribution}.
 
-\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, arc=.35mm, leftrule=.75mm, colbacktitle=quarto-callout-note-color!10!white, toprule=.15mm, bottomtitle=1mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, colback=white, titlerule=0mm, coltitle=black, left=2mm, opacityback=0, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Posterior predictive model checking}, bottomrule=.15mm, opacitybacktitle=0.6, breakable]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, colframe=quarto-callout-note-color-frame, toprule=.15mm, colback=white, bottomrule=.15mm, opacityback=0, leftrule=.75mm, arc=.35mm, bottomtitle=1mm, opacitybacktitle=0.6, breakable, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Posterior predictive model checking}, colbacktitle=quarto-callout-note-color!10!white, left=2mm, coltitle=black]
 
 The posterior predictive distribution for a predicted value \(\hat{y}\)
 is
@@ -793,7 +793,7 @@ This quantities is useful when comparing different models - a smaller
 values indicate a better model fit. CPO values can be accessed by typing
 \texttt{inlabru\_model\$cpo\$cpo}.
 
-\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, arc=.35mm, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, toprule=.15mm, bottomtitle=1mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, colback=white, titlerule=0mm, coltitle=black, left=2mm, opacityback=0, title={Task}, bottomrule=.15mm, opacitybacktitle=0.6, breakable]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, toprule=.15mm, colback=white, bottomrule=.15mm, opacityback=0, leftrule=.75mm, arc=.35mm, bottomtitle=1mm, opacitybacktitle=0.6, breakable, toptitle=1mm, titlerule=0mm, title={Task}, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, coltitle=black]
 
 The model assessment above suggests that a Poisson model might not be
 the most appropriate model, likely due to the overdispersion we detected

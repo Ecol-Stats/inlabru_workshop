@@ -33,6 +33,7 @@ author:
 embed-resources: true
 execute:
   allow-html: true
+  freeze: auto
 ---
 
 ```{r setup}
@@ -589,33 +590,30 @@ ggplot()+ geom_line(data = pred1, aes(year, mean, color = "rw1")) +
 :::
 :::::
 
+## RW models as smoothers for covariates {.smaller}
 
-## RW models as smoothers for covariates{.smaller}
+-   RW models are discrete models
 
-- RW models are discrete models
+-   Covariates are often recorded as continuous values
 
-- Covariates are often recorded as continuous values
-
-- The function `inla.group()` will bin covariate values into groups (default 25 groups)
+-   The function `inla.group()` will bin covariate values into groups (default 25 groups)
 
 > `inla.group(x, n = 25, method = c("cut", "quantile"))`
 
-- Two ways to bin
-  
-  - `cut` (default) splits the data using equal length intervals
-  - `quantile` uses equidistant quantiles in the probability space.
+-   Two ways to bin
+
+    -   `cut` (default) splits the data using equal length intervals
+    -   `quantile` uses equidistant quantiles in the probability space.
 
 ## RW models as smoothers for covariates - Example
 
 ::::: columns
 ::: {.column width="50%"}
-
 The data are derived from an anthropometric study of 892 females under 50 years in three Gambian villages in West Africa.
-
 
 `Age` - Age of respondent (continuous)
 
-`triceps` -  Triceps skinfold thickness.
+`triceps` - Triceps skinfold thickness.
 
 ```{r}
 triceps = read_csv("Data/triceps.csv")
@@ -631,11 +629,9 @@ triceps$age_group = inla.group(triceps$age, n = 30)
 # lntriceps Log of the triceps skinfold thickness.
 # triceps Triceps skinfold thickness.
 ```
-
-
 :::
-::: {.column width="50%"}
 
+::: {.column width="50%"}
 ```{r}
 #| eval: true
 #| out-width: 100%
@@ -644,10 +640,8 @@ triceps %>% ggplot() + geom_point(aes(age, triceps, color = "original") ) +
   geom_point(aes(age_group, triceps, color = "grouped")) + theme(legend.title =  element_blank())
 
 ```
-
 :::
 :::::
-
 
 ```{r}
 #| echo: true
@@ -655,10 +649,7 @@ triceps %>% ggplot() + geom_point(aes(age, triceps, color = "original") ) +
 triceps$age_group = inla.group(triceps$age, n = 30)
 ```
 
-
-##  Model fit and results
-
-
+## Model fit and results
 
 ```{r}
 #| echo: true
@@ -677,7 +668,6 @@ pred %>% ggplot() +
   geom_ribbon(aes(age_group, ymin = q0.025, ymax = q0.975), alpha = 0.5, fill = "red") 
 
 ```
-
 
 ## Summary RW (1 and 2) models
 

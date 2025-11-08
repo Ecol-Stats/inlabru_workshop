@@ -1,12 +1,12 @@
 ---
 title: "Practical 3"
 execute: 
-  freeze: true
+  freeze: auto
 format: 
   html: 
     mainfont: "12"
   PrettyPDF-pdf:
-    keep-tex: true
+    keep-tex: false
     number-sections: true
 embed-resources: true
 editor_options: 

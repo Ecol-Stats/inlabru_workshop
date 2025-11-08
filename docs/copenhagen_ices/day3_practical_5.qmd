@@ -4,13 +4,13 @@ format:
   html:
     mainfont: "12"
   PrettyPDF-pdf:
-    keep-tex: true
+    keep-tex: false
     number-sections: true
 embed-resources: true
 execute: 
   warning: false
   message: false
-  freeze: true
+  freeze: auto
 editor_options: 
   chunk_output_type: console
 ---
