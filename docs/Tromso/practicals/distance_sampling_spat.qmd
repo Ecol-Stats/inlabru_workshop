@@ -1,0 +1,188 @@
+---
+title: "Practical"
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+
+# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
+library(webexercises)
+
+```
+
+# Distance Sampling
+
+In this practical we will:
+
+-   Fit a spatio-temporal model to distance sampled data
+
+
+Libraries to load:
+
+```{r}
+#| warning: false
+#| message: false
+
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+library(sf)
+# load some libraries to generate nice map plots
+library(scico)
+library(mapview)
+```
+
+## The data
+
+In the next exercise, we will work with simulate spatiotemporal transect survey data from the `MRSea` package which is available on `inlabru`.
+
+We can load and visualize the data as follows:
+
+```{r}
+
+mrsea <- inlabru::mrsea
+
+ggplot() +
+  geom_fm(data = mrsea$mesh) +
+  gg(mrsea$boundary) +
+  gg(mrsea$samplers) +
+  gg(mrsea$points, size = 0.5) +
+  facet_wrap(~season) +
+  ggtitle("MRSea observation seasons")
+```
+
+## The workflow
+
+For computational purposes we will assume perfect detection along the transects and thus, the spatiotemporal animal density is modelled using a point process model of the form:
+
+$$
+p(\mathbf{y} | \lambda)  \propto \exp \left( -\int_\Omega \lambda(\mathbf{s,t}) \mathrm{d}\mathbf{s,t} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i,t)) 
+$$
+### The SPDE mode
+
+First, we define the SPDE model:
+
+```{r}
+matern <- inla.spde2.pcmatern(mrsea$mesh,
+  prior.sigma = c(0.1, 0.01),
+  prior.range = c(10, 0.01)
+)
+```
+
+
+
+### Model components
+
+In this example we will employ a spatio-temporal SPDE component. Note how the `group` and `ngroup` parameters are employed to let the SPDE model know about the name of the time dimension (season) and the total number of distinct points in time. Further control of the spatio-temporal filed can be passed as a list through the the `control.group` argument. In this case, we specify an `iid` effect to describe how the spatial field evolves in time  (this could be change to accommodate a time dependent structure such as an AR(1) model).
+
+```{r}
+cmp <- ~ Intercept(1) + 
+  space_time(
+    geometry,
+    model = matern,
+    group = season,
+    ngroup = 4,
+    control.group = list(model="iid")
+  )
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Complete the following code to define the linear predictor:
+
+```{r}
+#| eval: false
+eta <- ... + ... ~ ... + ...
+```
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+eta <- geometry + season ~ space_time +
+  Intercept 
+```
+
+:::
+
+
+### Build the observational model
+
+We can now build the integration scheme using the  `fm_int()` function by specifying the domain and samplers arguments. Note that omitting the season dimension from domain would lead to aggregation of all sampling regions over time.
+
+```{r}
+ips <- fm_int(
+  domain = list(geometry = mrsea$mesh, season = 1:4),
+  samplers = mrsea$samplers
+)
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Complete the following arguments to construct the observational model and the fit the model using the `bru` function
+
+```{r}
+#| eval: false
+lik = bru_obs(formula = ...,
+    family = ...,
+    data = ...,
+    ips  = ...)
+fit = bru(..., ...)
+
+```
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+lik = bru_obs(formula = eta,
+    family = "cp",
+    data = mrsea$points,
+    ips  = ips)
+fit = bru(cmp, lik)
+
+```
+
+:::
+
+Once the model is fitted we can predict and plot the intensity for all seasons:
+
+```{r}
+ppxl <- fm_pixels(mrsea$mesh, mask = mrsea$boundary, format = "sf")
+ppxl_all <- fm_cprod(ppxl, data.frame(season = seq_len(4)))
+
+lambda1 <- predict(
+  fit,
+  ppxl_all,
+  ~ data.frame(season = season, lambda = exp(space_time + Intercept))
+)
+
+pl1 <- ggplot() +
+  gg(lambda1, geom = "tile", aes(fill = q0.5)) +
+  gg(mrsea$points, size = 0.3) +
+  facet_wrap(~season) +
+  coord_sf()
+pl1
+```
+

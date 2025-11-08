@@ -47,10 +47,42 @@ mesh_1 = fm_mesh_2d(boundary = mexdolphin$ppoly,
 ggplot() + gg(mesh_1)
 
 
-## -----------------------------------------------------------------------------
-#| eval: false
 
-# ?fm_mesh_2d
+
+## -----------------------------------------------------------------------------
+#| message: false
+#| warning: false
+library(terra)
+library(stars)
+# Convert sf to stars raster
+stars_raster <- st_rasterize(mexdolphin$depth[, "depth"])
+# Convert stars to terra raster if needed
+terra_raster <- rast(stars_raster)
+
+
+## -----------------------------------------------------------------------------
+# Extend raster ext by 5 % of the original raster
+re <- extend(terra_raster, ext(terra_raster)*2.1)
+# Convert to an sf spatial object
+re_df <- re %>% stars::st_as_stars() %>%  st_as_sf(na.rm=F)
+# fill in missing values using the original raster 
+re_df$depth <- bru_fill_missing(terra_raster,re_df,re_df$depth)
+# store the projectes values as a raster
+depth_rast_p <- stars::st_rasterize(re_df) %>% rast()
+
+
+## -----------------------------------------------------------------------------
+#| echo: false
+#| fig-align: center
+#| fig-height: 5
+#| fig-width: 8
+#| message: false
+#| warning: false
+library(tidyterra)
+
+ggplot()+geom_sf(data=mexdolphin$depth,aes(color=depth))+scale_color_scico(palette = "roma")+ggtitle("Depth sf object") +gg(mexdolphin$mesh) + 
+ggplot()+tidyterra::geom_spatraster(data=depth_rast_p)+scale_fill_scico(palette = "roma")+ggtitle("Depth raster object")+gg(mexdolphin$mesh)
+
 
 
 ## -----------------------------------------------------------------------------
@@ -60,14 +92,6 @@ spde_model <- inla.spde2.pcmatern(mexdolphin$mesh,
 )
 
 
-## -----------------------------------------------------------------------------
-#| echo: false
-opts_p <- c(
-   "there is probability of 0.01 that the spatial range is greater or equal than 50",
-   answer = "the probability that the spatial range is smaller than 50 is very small",
-   "the probability that the marginal standard deviation is smaller than 2 is very small",
-   answer = "there is probability of 0.99 that the marginal standard deviation is less or equal than 2"
-)
 
 
 ## -----------------------------------------------------------------------------
@@ -82,13 +106,17 @@ cmp <- ~ space(main = geometry, model = spde_model) +
     prec.linear = 1,
     marginal = bm_marginal(qexp, pexp, dexp, rate = 1 / 8)
   ) +
+  depth(depth_rast_p$depth,model="linear")+
   Intercept(1)
 
 
 ## -----------------------------------------------------------------------------
-eta <- geometry + distance ~ space +
-  log(hn(distance, sigma)) +
-  Intercept + log(2) 
+#| echo: true
+#| eval: false
+#| 
+# eta <- ... + log(2)
+
+
 
 
 ## -----------------------------------------------------------------------------
@@ -126,7 +154,7 @@ pxl <- fm_pixels(mexdolphin$mesh, dims = c(200, 100), mask = mexdolphin$ppoly)
 
 ## -----------------------------------------------------------------------------
 pr.int = predict(fit, pxl, ~data.frame(spatial = space,
-                                      lambda = exp(Intercept + space)))
+                                      lambda = exp(Intercept + depth + space)))
 
 
 ## -----------------------------------------------------------------------------
@@ -205,5 +233,99 @@ attributes(bc)$ggp
 hr <- function(distance, sigma) {
   1 - exp(-(distance / sigma)^-1)
 }
+
+
+
+## ----child="practicals/distance_sampling_spat.qmd"----------------------------
+
+## -----------------------------------------------------------------------------
+#| warning: false
+#| message: false
+
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+library(sf)
+# load some libraries to generate nice map plots
+library(scico)
+library(mapview)
+
+
+## -----------------------------------------------------------------------------
+
+mrsea <- inlabru::mrsea
+
+ggplot() +
+  geom_fm(data = mrsea$mesh) +
+  gg(mrsea$boundary) +
+  gg(mrsea$samplers) +
+  gg(mrsea$points, size = 0.5) +
+  facet_wrap(~season) +
+  ggtitle("MRSea observation seasons")
+
+
+## -----------------------------------------------------------------------------
+matern <- inla.spde2.pcmatern(mrsea$mesh,
+  prior.sigma = c(0.1, 0.01),
+  prior.range = c(10, 0.01)
+)
+
+
+## -----------------------------------------------------------------------------
+cmp <- ~ Intercept(1) + 
+  space_time(
+    geometry,
+    model = matern,
+    group = season,
+    ngroup = 4,
+    control.group = list(model="iid")
+  )
+
+
+## -----------------------------------------------------------------------------
+#| eval: false
+# eta <- ... + ... ~ ... + ...
+
+
+
+
+## -----------------------------------------------------------------------------
+ips <- fm_int(
+  domain = list(geometry = mrsea$mesh, season = 1:4),
+  samplers = mrsea$samplers
+)
+
+
+## -----------------------------------------------------------------------------
+#| eval: false
+# lik = bru_obs(formula = ...,
+#     family = ...,
+#     data = ...,
+#     ips  = ...)
+# fit = bru(..., ...)
+# 
+
+
+
+
+## -----------------------------------------------------------------------------
+ppxl <- fm_pixels(mrsea$mesh, mask = mrsea$boundary, format = "sf")
+ppxl_all <- fm_cprod(ppxl, data.frame(season = seq_len(4)))
+
+lambda1 <- predict(
+  fit,
+  ppxl_all,
+  ~ data.frame(season = season, lambda = exp(space_time + Intercept))
+)
+
+pl1 <- ggplot() +
+  gg(lambda1, geom = "tile", aes(fill = q0.5)) +
+  gg(mrsea$points, size = 0.3) +
+  facet_wrap(~season) +
+  coord_sf()
+pl1
 
 

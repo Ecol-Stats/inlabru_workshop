@@ -13,20 +13,17 @@ library(inlabru)
 library(sf)
 # load some libraries to generate nice map plots
 library(scico)
-library(mapview)
 
 
 ## -----------------------------------------------------------------------------
 mexdolphin <- mexdolphin_sf
 mexdolphin$depth <- mexdolphin$depth %>% mutate(depth=scale(depth)%>%c())
-mapviewOptions(basemaps = c( "OpenStreetMap.DE"))
 
-mapview(mexdolphin$points,zcol="size")+
-  mapview(mexdolphin$samplers)+
- mapview(mexdolphin$ppoly )
+ggplot() + geom_sf(data = mexdolphin$points, color = "red" ) +
+  geom_sf(data = mexdolphin$samplers) +
+  geom_sf(data = mexdolphin$ppoly, alpha = 0)
 
-
-
+ 
 
 
 ## -----------------------------------------------------------------------------
@@ -74,9 +71,13 @@ cmp <- ~ space(main = geometry, model = spde_model) +
 
 
 ## -----------------------------------------------------------------------------
-eta <- geometry + distance ~ space +
-  log(hn(distance, sigma)) +
-  Intercept + log(2) 
+#| echo: true
+#| eval: false
+
+# eta <- ... + log(2)
+# 
+
+
 
 
 ## -----------------------------------------------------------------------------
@@ -108,13 +109,6 @@ plot( spde.posterior(fit, "space", what = "range")) +
 plot( spde.posterior(fit, "space", what = "log.variance"))  
 
 
-## -----------------------------------------------------------------------------
-pxl <- fm_pixels(mexdolphin$mesh, dims = c(200, 100), mask = mexdolphin$ppoly)
-
-
-## -----------------------------------------------------------------------------
-pr.int = predict(fit, pxl, ~data.frame(spatial = space,
-                                      lambda = exp(Intercept + space)))
 
 
 ## -----------------------------------------------------------------------------
@@ -177,21 +171,5 @@ ggplot(data = Nest) +
   ) +
   geom_line(aes(x = N, y = mean, colour = Method)) +
   ylab("Probability mass function")
-
-
-## -----------------------------------------------------------------------------
-bc <- bincount(
-  result = fit,
-  observations = mexdolphin$points$distance,
-  breaks = seq(0, max(mexdolphin$points$distance), length.out = 9),
-  predictor = distance ~ hn(distance, sigma)
-)
-attributes(bc)$ggp
-
-
-## -----------------------------------------------------------------------------
-hr <- function(distance, sigma) {
-  1 - exp(-(distance / sigma)^-1)
-}
 
 
