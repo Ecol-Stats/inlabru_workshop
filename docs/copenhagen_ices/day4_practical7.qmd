@@ -31,4 +31,3 @@ In this first practical we are going to look multiple likelihood models
 
 ```{r child="practicals/Multiple_likelihood.qmd"}
 ```
-

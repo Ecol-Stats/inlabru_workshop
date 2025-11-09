@@ -27,8 +27,6 @@ library(webexercises)
 
 ```
 
-
-
 ------------------------------------------------------------------------
 
 Libraries to load:
@@ -59,7 +57,6 @@ library(tidyterra)
 In this practical, we will revisit the data on the Pacific Cod (*Gadus macrocephalus*) from a trawl survey in Queen Charlotte Sound. The `pcod` dataset is available from the `sdmTMB` package and contains the presence/absence records of the Pacific Cod during each surveys along with the biomass density of Pacific cod in the area swept (kg/Km$^2$). The `qcs_grid` data contain the depth values stored as $2\times 2$ km grid for Queen Charlotte Sound.
 
 The dataset contains presence/absence data from 2003 to 2017. To make computations faster we only consider the first 3 years.
-
 
 ```{r}
 #| message: false
@@ -117,8 +114,7 @@ ggplot()+
 
 ```
 
-
-### Spatio-temporal  modeling
+### Spatio-temporal modeling
 
 #### Model fitting
 
@@ -129,8 +125,7 @@ $$
 y(s,t)|\eta(s,t)&\sim\text{Binom}(1, p(s,t))\\
 \eta(s,t) &= \text{logit}(p(s,t)) \\
 \end{aligned}
-$$ 
-We also want to compare the models using WAIC, DIC and marginal likelihood:
+$$ We also want to compare the models using WAIC, DIC and marginal likelihood:
 
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
@@ -162,7 +157,6 @@ $$
 
 -   $\omega(s)$ is Matérn random field.
 
-
 The first step is to define the mesh and the spde model
 
 **Construct the mesh and the SPDE model**
@@ -189,10 +183,10 @@ ggplot() + gg(mesh) + geom_sf(data= pcod_sf, aes(color = factor(present)), size 
 
 ```
 
-
 **create time index and the grouped variable**
 
 To use the RW2 model the covariate has to be groupes:
+
 ```{r}
 depth_r$depth_group = inla.group(values(depth_r$depth_scaled))
 
@@ -206,17 +200,15 @@ pcod_sf = pcod_sf %>%
          id = 1:nrow(.)) # Observation id for CV
 ```
 
-
-
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
 Implement the model in `inlabru`
 
-1. Define the components
-2. Define the formula
-3. Define the likelihood model using the `bru_obs()` function
-4. Run the model
+1.  Define the components
+2.  Define the formula
+3.  Define the likelihood model using the `bru_obs()` function
+4.  Run the model
 
 ```{r}
 #| purl: false
@@ -246,7 +238,6 @@ fit_spat = bru(cmp_spat,lik_spat)
 ```
 :::
 
-
 ::: callout-note
 Note that there are some survey locations in certain years that fall outside the depth raster region. `inlabru` will input these missing covariate values using the nearest available value. This can be computationally expensive, but you can avoid it by supplying a raster layer that encompasses all of your data points (e.g., by pre-imputing these missing values with your preferred method of choice).
 
@@ -264,30 +255,25 @@ re_df$depth_group =  bru_fill_missing(depth_orig,re_df,re_df$depth_group)
 depth_filled <- stars::st_rasterize(re_df) %>% rast()
 plot(depth_filled)
 ```
-
-
-
 :::
 
-
 We have now fit the model and want to check the results.
-
 
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
 Is the effect of depth significant? Does it seem important to have a non-linear model?
 
-Inspect the estimated time effect and 
+Inspect the estimated time effect and
 
 Use the `predict` function to inspect the estimated spatial effect.
 
 Use the `depth_r` raster to define the points in space where to predict
+
 ```{r}
 pxl = st_as_sf(data.frame(crds(depth_r)), coords = c("x","y") ,
                crs  = st_crs(pcod_sf))
 ```
-
 
 ```{r}
 #| purl: false
@@ -316,9 +302,6 @@ p_space_sd = ggplot() + gg(pred_space, aes(color = sd))
 ```
 :::
 
-
-
-
 #### Model 2
 
 1.  **Model 2 - spatiotemporal field** We consider a separable space time model with a linear predictor given by:
@@ -328,32 +311,25 @@ $$
 $$
 
 -   $f_1(\text{depth}(s))$ is a smooth covariate effect of depth (RW2)
--   $\omega(s,t)$ is a space-time Matérn spatial field with AR1 time component
-$$
-\omega(s,t) = \phi\ \omega(s,t-1) + \epsilon(s),\qquad \epsilon(s)\sim\text{GF}(\sigma_{\epsilon},\rho_{\epsilon})
-$$
-
-
-
+-   $\omega(s,t)$ is a space-time Matérn spatial field with AR1 time component $$
+    \omega(s,t) = \phi\ \omega(s,t-1) + \epsilon(s),\qquad \epsilon(s)\sim\text{GF}(\sigma_{\epsilon},\rho_{\epsilon})
+    $$
 
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
-Implement this second  model in `inlabru`
+Implement this second model in `inlabru`
 
-1. Define the components
-  For the AR1 model use this following PC prior for the correlation parameter $\phi$
+1.  Define the components For the AR1 model use this following PC prior for the correlation parameter $\phi$
+
 ```{r}
 # PC prior for AR(1) correlation parameter
 h.spec <- list(rho = list(prior = 'pc.cor0', param = c(0.5, 0.1)))
 ```
-  
-2. Define the formula
-3. Define the likelihood model using the `bru_obs()` function
-4. Run the model
-  (This model can take a couple of minutes to run)
 
-
+2.  Define the formula
+3.  Define the likelihood model using the `bru_obs()` function
+4.  Run the model (This model can take a couple of minutes to run)
 
 ```{r}
 #| purl: false
@@ -384,10 +360,7 @@ fit_spat_ar1 = bru(cmp_spat_ar1,lik_spat_ar1)
 ```
 :::
 
-
 Now we want to check the results
-
-
 
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
@@ -396,11 +369,7 @@ What is the estimated parameter $phi$ in the auto-regressive part of the model?
 
 Check the effect of the covariate.
 
-
-Use the `predict` function to inspect the estimated  probability of presence. Use the same prediction points as before, but here you also need to use the `
-
-
-
+Use the `predict` function to inspect the estimated probability of presence. Use the same prediction points as before, but here you also need to use the \`
 
 ```{r}
 #| purl: false
@@ -440,12 +409,9 @@ p_ar1 = pred_space_ar1$prob %>% ggplot() + geom_sf(aes(color = mean)) +
 ```
 :::
 
-### Model Comparison 
+### Model Comparison
 
 Now we want to use the WAIC, DIC and MLIK to compare the models
-
-
-
 
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
@@ -466,6 +432,3 @@ out= data.frame(Model = c("Model 1", "Model 2"),
 
 ```
 :::
-
-
-
