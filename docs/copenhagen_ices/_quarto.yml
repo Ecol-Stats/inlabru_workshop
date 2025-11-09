@@ -38,7 +38,7 @@ website:
       - section: "Slides"
         contents:
           - href: slides/slides_2.html
-            text: Lecture 1 
+            text: Lecture 1
           - href: slides/slides_3.html
             text: Lecture 2
           - href: slides/slides_4.html
@@ -67,7 +67,7 @@ website:
           - href: day4_practical_6.html
             text: Practical 6
           - text: Practical 7
-            href: day5_practical_7.html
+            href: day4_practical_7.html
           - text: Practical 8
             href: day5_practical_8.html
             external: true
@@ -75,7 +75,7 @@ website:
             href: day5_practical_9.html
             external: true
 
-   
+
   page-navigation: true
 
 format:

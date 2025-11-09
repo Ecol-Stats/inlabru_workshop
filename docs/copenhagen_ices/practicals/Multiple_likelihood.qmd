@@ -8,9 +8,9 @@ format:
     theme:
       light: flatly
       dark: darkly
-  # PrettyPDF-pdf:
-  #   keep-tex: true
-  #   number-sections: true
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
 embed-resources: true
 editor_options: 
   chunk_output_type: console
@@ -314,7 +314,7 @@ ggplot() +
 
 Define one `spde` object that contains information about priors for the range and the standard deviation.
 
-Use the same priors for both ${\bf z}_1$ and ${\bf z}_2$ so we create only one `spde` object. 
+Use the same priors for both ${ z}_1$ and ${ z}_2$ so we create only one `spde` object. 
 
 $$
 \begin{aligned}
@@ -493,7 +493,7 @@ p4 = ggplot() + gg(pred2, aes(color = sd)) +
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
- Use the function `generate()` to create 4 simulations from $\widetilde{\pi}(\omega_1(s)|{\bf y}_1,{\bf y}_2)$  and $\widetilde{\pi}(\omega_2(s)|{\bf y}_1,{\bf y}_2)$ 
+ Use the function `generate()` to create 4 simulations from $\widetilde{\pi}(\omega_1(s)|{ y}_1,{ y}_2)$  and $\widetilde{\pi}(\omega_2(s)|{ y}_1,{ y}_2)$ 
  
 
 ```{r}

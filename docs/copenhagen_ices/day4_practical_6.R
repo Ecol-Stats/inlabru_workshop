@@ -26,7 +26,7 @@ library(tidyterra)
 #| warning: false
 library(sdmTMB)
 
-pcod_df = sdmTMB::pcod 
+pcod_df = sdmTMB::pcod  %>% filter(year<=2005)
 qcs_grid = sdmTMB::qcs_grid
 
 
@@ -44,6 +44,8 @@ pcod_sf = st_transform(pcod_sf,
 
 depth_r <- rast(qcs_grid, type = "xyz")
 crs(depth_r) <- crs(pcod_sf)
+
+
 
 
 
@@ -70,7 +72,7 @@ depth_r$depth_group = inla.group(values(depth_r$depth_scaled))
 
 ## -----------------------------------------------------------------------------
 pcod_sf = pcod_sf %>%
-     mutate(time_idx = match(year, c(2003, 2004, 2005, 2007, 2009, 2011, 2013, 2015, 2017)),
+     mutate(time_idx = match(year, c(2003, 2004, 2005)),
          id = 1:nrow(.)) # Observation id for CV
 
 

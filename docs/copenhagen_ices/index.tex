@@ -275,7 +275,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, frame hidden, enhanced, colback={codebgcolor}, breakable, boxrule=0pt]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, enhanced, colback={codebgcolor}, sharp corners, breakable, frame hidden]}{\end{tcolorbox}}\fi
 \makeatother
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -389,8 +389,8 @@ Topic
 \subsubsection{Day 2}
 
 \begin{longtable}[]{@{}
-  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3194}}
-  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6806}}@{}}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3239}}
+  >{\centering\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6761}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\centering
 Time
@@ -471,7 +471,7 @@ Topic
 14:30 - 15:30 & \textbf{Session 11}: Multilikelihoods/joint
 likelihood \\
 15:35 - 15:45 & Coffee Break ☕ \\
-15:45 - 16:45 & Practical Session 7 \\
+15:45 - 16:45 & \href{day4_practical_7.qmd}{Practical Session 7} \\
 16:45 - 17:00 & wrap-up and outlook \\
 \end{longtable}
 

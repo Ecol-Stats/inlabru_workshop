@@ -6,7 +6,7 @@ format:
   PrettyPDF-pdf:
     keep-tex: false
     number-sections: true
-embed-resources: true
+embed-resources: false
 execute: 
   warning: false
   message: false
