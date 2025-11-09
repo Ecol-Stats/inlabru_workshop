@@ -1,14 +1,14 @@
 ---
 title: "Practical 8 - Distance Sampling"
 execute: 
-  freeze: false
+  freeze: auto
 format: 
   html:
     mainfont: "12"
   PrettyPDF-pdf:
     keep-tex:  false 
     number-sections: true
-embed-resources: true
+embed-resources: false
 editor_options: 
   chunk_output_type: console
 ---
