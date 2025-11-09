@@ -1,0 +1,1403 @@
+---
+title: "Lecture 9"
+from: markdown+emoji
+subtitle: "Spatio-temporal models" 
+format:
+  revealjs:
+    margin: 0
+    logo:  NTNU_UofG.png
+    theme: uofg_theme.scss
+    header-includes: |
+      <script src="custom.js" type="application/javascript"></script>
+slide-number: "c/t"
+title-slide-attributes:
+#    data-background-image: images/trondheim3.png
+    data-background-size: cover
+    data-background-opacity: "0.55"
+author:
+  - name: Sara Martino
+    #orcid: 0000-0002-6879-4412
+    email: sara.martino@ntnu.no
+    affiliations: Dept. of Mathematical Science, NTNU
+  - name: Janine Illian
+    #orcid: 0000-0002-6879-4412
+    email: Janine.Illian@glasgow.ac.uk
+    affiliations: University of Glasgow 
+  - name: Jafet Belmont
+    #orcid: 0000-0002-6879-4412
+    email: Jafet.Belmont@glasgow.ac.uk
+    affiliations: University of Glasgow   
+        
+# date: May 22, 2025
+# bibliography: references.bib
+embed-resources: true
+execute:
+  allow-html: true
+  freeze: auto
+---
+
+```{r setup}
+#| include: false
+
+knitr::opts_chunk$set(echo = FALSE,
+                      message=FALSE,
+                      warning=FALSE,
+                      strip.white=TRUE,
+                      prompt=FALSE,
+                      fig.align="center",
+                       out.width = "60%")
+
+library(knitr)    # For knitting document and include_graphics function
+library(ggplot2)  # For plotting
+library(png)
+library(tidyverse)
+library(INLA)
+library(BAS)
+library(patchwork)
+library(DAAG)
+library(inlabru)
+library(sf)
+library(cowplot) # needs install.packages("magick") to draw images
+library(gghighlight)
+library(scico)
+library(terra)
+
+```
+
+## Motivation {.smaller}
+
+-   Many real-world data sets vary in both **space** and **time**.
+
+    -   Examples: rainfall, temperature, air pollution, crop yield, disease spread.
+
+-   We often want to model **how similarity (correlation)** changes across both dimensions.
+
+. . .
+
+**The good news** :thumbsup:
+
+-   the framework works with spatio-temporal data as well
+
+**The bad news** :thumbsdown:
+
+-   fully spatio-temporal models are complex
+
+-   model fitting can take a long time
+
+-   different types of spatio-temporal data structures lead to different types of complexities
+
+## Complexity of spatio-temporal models
+
+-   additional dependencies: in space and time
+
+-   spatial and temporal behaviour can be *independent* on each other, or *dependent*: i.e. properties of the spatial structure vary through time (or vice versa)
+
+. . .
+
+Several options are available in `inlabru`
+
+-   Areal Model
+
+-   Geostatistical and Point Process models
+
+## The Spatio-Temporal Framework
+
+We define a stochastic process:
+
+$$
+Z(s,t), \quad s \in \mathcal{S} \subset \mathbb{R}^d, \quad t \in \mathcal{T}
+$$
+
+The covariance function:
+
+$$
+C((s_1,t_1),(s_2,t_2)) = \text{Cov}[Z(s_1,t_1), Z(s_2,t_2)]
+$$
+
+Our goal: specify $C(\cdot)$ to capture **spatial**, **temporal**, and **joint** dependencies.
+
+## Separable and non-separable models {.smaller}
+
+::::: columns
+::: {.column width="50%"}
+**Separable models** 
+$$
+C((s_1,t_1),(s_2,t_2)) = C_S(s_1,s_2) \times C_T(t_1,t_2)
+$$
+
+**Interpretation:**
+
+-   Space and time act *independently*.
+
+-   Spatial correlation not dependent on time lag.
+
+**Advantages:** :grinning:
+
+-   Simpler estimation.
+
+-   Fewer parameters $\rightarrow$ Easier computation.
+
+**Disadvantages:** :pensive:
+
+-   Unrealistic for evolving or propagating phenomena.
+:::
+
+::: {.column width="50%"}
+**Non-Separable models**
+:::
+:::::
+
+## Separable and non-separable models {.smaller}
+
+::::: columns
+::: {.column width="50%"}
+**Separable models** 
+$$
+C((s_1,t_1),(s_2,t_2)) = C_S(s_1,s_2) \times C_T(t_1,t_2)
+$$
+
+**Interpretation:**
+
+-   Space and time act *independently*.
+
+-   Spatial correlation not dependent on time lag.
+
+**Advantages:** :grinning:
+
+-   Simpler estimation.
+
+-   Fewer parameters $\rightarrow$ Easier computation.
+
+**Disadvantages:** :pensive:
+
+-   Unrealistic for evolving or propagating phenomena.
+:::
+
+::: {.column width="50%"}
+**Non-Separable models**
+
+$$
+C((s_1,t_1),(s_2,t_2)) = f(|s_2-s_1|,|t_2-t_1|)
+$$ **Advantages:** :grinning:
+
+-   More realistic for dynamic physical processes.
+
+-   Can model propagation or decay that varies over time.
+
+**Disadvantages:** :pensive:
+
+-   More parameters → complex estimation.
+
+-   Need more data for estimation
+
+-   Interpretation may be less straightforward.
+:::
+:::::
+
+. . .
+
+We here focus on **separable models**
+
+# Areal Data
+
+## Spatio temporal models for areal data
+
+$\frac{\text{Number of cases } Y_{st}}{\text{Expected numer of cases }E_{st}}$ in Ohio from 1968 to 1988 (simulated data!)
+
+Space
+
+```{r}
+
+# Load data
+d_ohio <- read_csv(file = "Data/data_ohio.csv", show_col_types = FALSE)
+m_ohio <- read_sf(dsn = "Data/ohio_shapefile/", layer = "fe_2007_39_county")
+#nb <- spdep::poly2nb(m_ohio)
+#spdep::nb2INLA("Data/map_ohio.adj", nb)
+g = inla.read.graph(filename = "Data/map_ohio.adj")
+R = as.matrix(inla.graph2matrix(g))
+diag(R) = 0
+Q = 2.5 * (diag(apply(R,1,sum))-R)
+
+library(mvtnorm)
+u = rmvnorm(n = 21, sigma = solve((Q + diag(0.1,88))))
+u = apply(u,1,function(x)x-mean(x))
+
+phi = 0.9
+
+u1 = u
+for(i in 2:21)
+  u1[,i] = phi * u1[,i-1] + u[,i]
+
+u1 = u1/3
+t = seq(-1,1,length.out = 21)
+
+v = scale(t^3+cos(t))/3
+
+# Extracted from `SpatialEpi`
+expected <- function (population, cases, n.strata, ...) {
+  
+  n <- length(population) / n.strata
+  E <- rep(0, n)
+  qNum <- rep(0, n.strata)
+  qDenom <- rep(0, n.strata)
+  q <- rep(0, n.strata)
+  
+  # Compute strata-specific rates
+  for (i in 1:n.strata) {
+    indices <- rep(i, n) + seq(0, (n - 1)) * n.strata
+    qNum[i] <- qNum[i] + sum(cases[indices])
+    qDenom[i] <- qDenom[i] + sum(population[indices])
+  }
+  q <- qNum / qDenom
+  
+  # Compute expected counts
+  for (i in 1:n) {
+    indices <- (1:n.strata) + (i - 1) * n.strata
+    E[i] <- sum(population[indices] * q)
+  }
+  
+  E
+}
+
+################
+# Process data #
+################
+
+# Observed number of cases
+d <- d_ohio %>% group_by(NAME, year) %>% summarise(Y = sum(y)) %>% ungroup() %>% rename(county = NAME) %>% arrange(county, year)
+
+
+# Expected cases 
+d_ohio <- d_ohio %>% arrange(county, year, gender, race)
+n.strata <- 4 # 2 genders x 2 races 
+E <- expected(population = d_ohio$n, cases = d_ohio$y, n.strata = n.strata)
+
+# Compute SIR
+n_years    <- length(unique(d_ohio$year))
+n_counties <- length(unique(d_ohio$NAME))
+
+counties_E <- rep(unique(d_ohio$NAME), each = n_years)
+years_E    <- rep(unique(d_ohio$year), times = n_counties)
+
+set.seed(1212)
+d_E <- data.frame(county = counties_E, year = years_E, E = E, U = c(t(u1)), beta0 = 0,
+                  V = rep(v, 88)) %>%
+  mutate(lambda = beta0 + U + V) %>%
+  mutate(Y = rpois(88*21, E * exp(lambda))) %>%
+  mutate(SIR = Y/E)
+```
+
+```{r}
+out= left_join(d_E, m_ohio %>% select(NAME, geometry), by = join_by("county"=="NAME"))
+
+
+
+
+pal <- c("#00008FFF", "#0000F2FF", "#0063FFFF", "#00D4FFFF", "#46FFB8FF", "#B8FF46FF", "#FFD400FF", "#FF6300FF", "#F00000FF", "#800000FF")
+
+custom_theme <-  theme_bw() + theme(legend.position = "right", 
+                              text = element_text(size = 14),
+                              plot.title = element_text(size = 16),
+                              legend.title = element_text(size = 12))
+
+ggplot(st_as_sf(out)) + 
+  geom_sf(aes(fill = SIR)) +
+  facet_wrap(~ year, ncol = 7) +
+  scale_fill_gradient2(name = "SIR", midpoint = 1, low = "blue", mid = "white", high = "red") + 
+  labs(x = "", y = "") +
+  custom_theme + 
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks  = element_blank())
+```
+
+## Spatio temporal models for areal data
+
+$\frac{\text{Number of cases } Y_{st}}{\text{Expected numer of cases }E_{st}}$ in Ohio from 1968 to 1988
+
+Time
+
+```{r}
+gg <- ggplot(out, aes(x = year, y = SIR, 
+                   group = county, color = county)) +
+  geom_line() + geom_point(size = 2) + theme_bw() + theme(legend.position = "none")
+gg
+```
+
+## Spatio temporal models for areal data
+
+$\frac{\text{Number of cases } Y_{st}}{\text{Expected numer of cases }E_{st}}$ in Ohio from 1968 to 1988
+
+Time
+
+```{r}
+sel = out %>% filter(SIR==max(SIR))
+gg + gghighlight(county %in% c ("Adams", sel$county ))
+
+
+g = inla.read.graph(filename = "Data/map_ohio.adj")
+
+out = out %>% mutate(id_area = as.numeric(as.factor(county)),
+                           id_time = year - 1967)
+out = st_as_sf(out)
+
+bru_options_set(control.compute = list(waic = TRUE, cpo = T, dic = T))
+
+
+```
+
+## Spatio temporal models for areal data {.smaller}
+
+The observation model
+
+$$
+Y_{st}|\lambda_{st}\sim\text{Poisson}(E_{st}\lambda_{st})
+$$
+
+We are going to see **3 different models for the linear predictor** $\eta_{st} = \log \lambda_{st}$
+
+1.  **Model 1**: $\eta_{st} = \beta_0 + u_s + v_t$ with $u_s\sim\text{CAR}(\tau)$
+
+    Here the time effect $v_t$ is constant w.r.t. space and the space effect $u_t$ is constant w.r.t. time.
+
+## Model 1 - Implementation
+
+```{r}
+#| echo: true
+
+cmp_1 = ~ Intercept(1) +
+  space(id_area, model = "besag", graph = g, scale.model = T) +
+  time(year, model  = "rw2", scale.model = T)
+
+lik = bru_obs(formula = Y~.,
+              data = out,
+              family = "poisson",
+              E = E )
+fit_1 = bru(cmp_1, lik)
+```
+
+```{r}
+pred_1 = predict(fit_1, out, ~ data.frame(a =  Intercept + space + time,
+                                          b = space))
+
+
+ggplot(pred_1$a) + 
+  geom_sf(aes(fill = mean)) +
+  facet_wrap(~ year, ncol = 7) +
+  scale_fill_gradient2(name = "log lambda", midpoint = 0, low = "blue", mid = "white", high = "red") + 
+  labs(x = "", y = "") +
+  custom_theme + 
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks  = element_blank()) 
+```
+
+## Model 1 - Implementation
+
+```{r}
+#| echo: true
+#| eval: false
+
+
+cmp_1 = ~ Intercept(1) +
+  space(id_area, model = "besag", graph = g, scale.model = T) +
+  time(year, model  = "rw2", scale.model = T)
+
+lik = bru_obs(formula = Y~.,
+              data = out,
+              family = "poisson",
+              E = E )
+fit_1 = bru(cmp_1, lik)
+```
+
+```{r}
+ggplot(pred_1$a, aes(x = year, y = mean, 
+                   group = county, color = county)) +
+  geom_line() + geom_point(size = 2) + theme_bw() + theme(legend.position = "none") + gghighlight(county %in% c ("Adams", sel$county ))
+
+```
+
+## Spatio temporal models for areal data {.smaller}
+
+The observation model 
+$$
+Y_{st}|\lambda_{st}\sim\text{Poisson}(E_{st}\lambda_{st})
+$$
+
+We are going to see **3 different models for the linear predictor** $\eta_{st} = \log \lambda_{st}$
+
+1.  **Model 1**: $\eta_{st} = \beta_0 + u_s + v_t$ with $u_s\sim\text{CAR}(\tau)$
+
+    Here the time effect $v_t$ is constant w.r.t. space and the space effect $u_t$ is constant w.r.t. time.
+
+2.  **Model 2**: $\eta_{st} = \beta_0 + u_{st} + v_t$ with $u_{st}\sim\text{CAR}(\tau),\ i = 1,\dots,T$
+
+    Here the spatial fields are different for each year, they are independent on each other.
+
+## Model 2 - Implementation
+
+```{r}
+#| echo: true
+#| code-line-numbers: "2-3"
+
+cmp_2 = ~ Intercept(1) + 
+  space(id_area, model = "besag", graph = g, scale.model = T,
+                               replicate = id_time) +
+  time(year, model  = "rw2", scale.model = T)
+
+fit_2 = bru(cmp_2, lik)
+```
+
+```{r}
+pred_2 = predict(fit_2, out, ~ data.frame(a =  Intercept + space + time,
+                                          b = space))
+
+ggplot(pred_2$a) +
+  geom_sf(aes(fill = mean)) +
+  facet_wrap(~ year, ncol = 7) +
+  scale_fill_scico(direction = -1) +
+  labs(x = "", y = "") +
+  custom_theme +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks  = element_blank())
+```
+
+## Model 2 - Implementation
+
+```{r}
+#| echo: true
+#| eval: false
+#| code-line-numbers: "2-3"
+
+cmp_2 = ~ Intercept(1) + 
+  space(id_area, model = "besag", graph = g, scale.model = T,
+                               replicate = id_time) +
+  time(year, model  = "rw2", scale.model = T)
+
+fit_2 = bru(cmp_2, lik)
+```
+
+```{r}
+ggplot(pred_2$a, aes(x = year, y = mean,
+                   group = county, color = county)) +
+  geom_line() + geom_point(size = 2) + theme_bw() + theme(legend.position = "none") + gghighlight(county %in% c ("Adams", sel$county ))
+
+```
+
+## Spatio temporal models for areal data {.smaller}
+
+The observation model
+
+$$
+Y_{st}|\lambda_{st}\sim\text{Poisson}(E_{st}\lambda_{st})
+$$
+
+We are going to see **3 different models for the linear predictor** $\eta_{st} = \log \lambda_{st}$
+
+1.  **Model 1**: $\eta_{st} = \beta_0 + u_s + v_t$ with $u_s\sim\text{CAR}(\tau)$
+
+    Here the time effect $v_t$ is constant w.r.t. space and the space effect $u_t$ is constant w.r.t. time.
+
+2.  **Model 2**: $\eta_{st} = \beta_0 + u_{st} + v_t$ with $u_{st}\sim\text{CAR}(\tau),\ i = 1,\dots,T$
+
+    Here the spatial fields are different for each year, they are independent on each other.
+
+3.  **Model 3**: $\eta_{st} = \beta_0 + u_{st} + v_t$ with 
+$$
+    u_{st} = \phi u_{st-1} + w_{st}, \text{ with } w_{st}\sim\text{CAR}(\tau),\ i = 1,\dots,T
+$$ 
+
+Here we are adding more temporal dependence in the spatial term, using a AR1 type model Here the spatial fields are different for each year, they are independent on each other.
+
+## Model 3 - Implementation
+
+```{r}
+#| echo: true
+#| code-line-numbers: "2-3"
+
+cmp_3 = ~ Intercept(1) + 
+  space(id_area, model = "besag", graph = g, scale.model = T,
+                               group = id_time, control.group = list(model = "ar1")) +
+  time(year, model  = "rw2", scale.model = T)
+
+fit_3 = bru(cmp_3, lik)
+```
+
+```{r}
+
+pred_3 = predict(fit_3, out, ~ data.frame(a =  Intercept + space + time,
+                                          b = space))
+
+ggplot(pred_3$a ) +
+  geom_sf(aes(fill = mean)) +
+  facet_wrap(~ year, ncol = 7) +
+  scale_fill_scico(direction = -1) +
+  labs(x = "", y = "") +
+  custom_theme +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks  = element_blank())
+
+```
+
+## Model 3 - Implementation
+
+```{r}
+#| echo: true
+#| eval: false
+#| code-line-numbers: "2-3"
+
+cmp_3 = ~ Intercept(1) + 
+  space(id_area, model = "besag", graph = g, scale.model = T,
+                               group = id_time, control.group = list(model = "ar1")) +
+  time(year, model  = "rw2", scale.model = T)
+
+fit_3 = bru(cmp_3, lik)
+```
+
+```{r}
+ggplot(pred_2$a, aes(x = year, y = mean,
+                   group = county, color = county)) +
+  geom_line() + geom_point(size = 2) + theme_bw() + theme(legend.position = "none") + gghighlight(county %in% c ("Adams", sel$county  ))
+
+```
+
+## Spatio temporal models for areal data {.smaller}
+
+The observation model
+
+$$
+Y_{st}|\lambda_{st}\sim\text{Poisson}(E_{st}\lambda_{st})
+$$
+
+1.  **Model 1**: $\eta_{st} = \beta_0 + u_s + v_t$ with $u_s\sim\text{CAR}(\tau)$
+
+2.  **Model 2**: $\eta_{st} = \beta_0 + u_{st} + v_t$ with $u_{st}\sim\text{CAR}(\tau),\ i = 1,\dots,T$
+
+3.  **Model 3**: $\eta_{st} = \beta_0 + u_{st} + v_t$ with $$
+    u_{st} = \phi u_{st-1} + w_{st}, \text{ with } w_{st}\sim\text{CAR}(\tau),\ i = 1,\dots,T
+    $$
+
+**Compare**
+
+-   Differences between Model 2 and 3 are not evident when estimating the past, but they would give different predictions
+
+-   Model 3 in this case seem to better fit the data (*more about these measures later*)
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+#| eval: true
+
+data.frame(model = c("Model 1", "Model 2", "Model 3"),
+           DIC = c(fit_1$dic$dic, fit_2$dic$dic, fit_3$dic$dic),
+           WAIC = c(fit_1$waic$waic, fit_2$waic$waic, fit_3$waic$waic))
+
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| eval: true
+
+
+round(fit_3$summary.hyperpar[,c(1,2, 3,5)],2)
+```
+:::
+:::::
+
+## Spatio temporal models for areal data in `inlabru` {.smaller}
+
+-   Models can be stuck together using either
+
+    -   `replicate` - the different *slices* are independent but share the hyperparameter
+    -   `group` - different dependence structures are implemented
+
+**Types of `group` model**
+
+```{r}
+#| echo: true
+names(inla.models()$group)
+```
+
+<br>
+
+**Note** The `group` and `replicate` features can be used for more than space-time modeling!
+
+# Continuous space models
+
+## Continuous space models
+
+(Simulated data)
+
+```{r}
+data(PRborder)
+data("PRprec")
+coords = st_as_sf(PRprec[,c(1,2)],
+                  coords = c("Longitude", "Latitude"),
+                  crs = "EPSG:4326") %>%
+  st_transform(crs = ("+proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs +type=crs"))
+
+polygon_coords <- PRborder
+sfg_polygon <- st_polygon(list(polygon_coords))
+sfc_polygon <- st_sfc(sfg_polygon)
+border <- st_sf(data.frame(id = 1), geometry = sfc_polygon)
+st_crs(border) ="EPSG:4326"
+
+
+border = st_transform(border, crs = ("+proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs +type=crs"))
+
+
+
+
+
+k <- 12 # time steps
+
+mesh_sim = fm_mesh_2d(boundary = st_simplify(border, dTolerance = 25),
+                        max.edge = c(5, 20), cutoff = 2,
+                         offset = c(-0.05, -0.15),
+                        crs = st_crs(border))
+
+simulate_spde_field = function(n_sim, range = 100, variance  = 1 )
+  # this function is only for this specific case...not a generic one!
+{
+  mesh_sim = fm_mesh_2d(boundary = st_simplify(border, dTolerance = 25),
+                        max.edge = c(5, 20), cutoff = 2,
+                         offset = c(-0.05, -0.15),
+                        crs = st_crs(border))
+  alpha = 2
+
+
+  kappa = sqrt(8*(alpha-1))/range
+  theta <- c(-0.5*log(4*pi*variance*kappa^2), log(kappa))
+  
+  spde <- inla.spde2.matern(mesh_sim)
+  Q <- inla.spde2.precision(spde, theta=theta)
+  ff = inla.qsample(n_sim, Q)
+  return(ff)
+}
+# add ar1 dependence
+rho = 0.7
+ff = simulate_spde_field(k)
+fields = ff
+for(i in 2:k)
+  fields[,i] =    rho * fields[, i - 1] + sqrt(1 - rho^2) * ff[, i]
+
+t = seq(from = -1, to = 1, length.out = 12)
+v = scale(t^3+cos(t))/3
+proj  = fm_evaluator(mesh_sim, loc= coords) 
+dd = cbind(st_coordinates(coords), fm_evaluate(proj, fields)) %>% 
+    as.data.frame() %>%
+  pivot_longer(-c("X","Y")) %>%
+  st_as_sf(coords = c("X","Y"),
+           crs = st_crs(border)) %>%
+  mutate(time = as.numeric(as.factor(name))) %>%
+  mutate(t_effect = rep(v, 616)) %>%
+  mutate(mm = value + t_effect) %>%
+  mutate(Y = rnorm(7392, mean = mm, sd = 0.1)) 
+
+  
+
+
+
+theme_map  = theme(axis.title.x=element_blank(), axis.text.x=element_blank(),
+                      axis.ticks.x=element_blank()) +
+  theme(axis.title.y=element_blank(), axis.text.y=element_blank(),
+                      axis.ticks.y=element_blank()) 
+
+
+ggplot() + geom_sf(data = dd,aes(color = Y), size = 0.5) + facet_wrap(.~time) + 
+  
+  scale_color_scico() + theme_map
+
+
+```
+
+## Spatio temporal models for areal data {.smaller}
+
+The observation model
+
+$$
+Y_t(s)|\mu_t(s)\sim\mathcal{N}(\mu_t(s),\sigma_y^2); \qquad \eta_t(s) =  \mu_t(s)
+$$
+
+We are going to see **3 different models for the linear predictor** $\eta_{st}$
+
+1.  **Model 1**: $\eta_t(s) = \beta_0 + u(s) + v_t$ with $u(s)\sim\text{GF}(\rho,\sigma_u)$
+
+    Here the time effect $v_t$ is constant w.r.t. space and the space effect $u(s)$ is constant w.r.t. time.
+
+## Model 1 - Implementation
+
+Define mesh and spde model
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: true
+border_simplified = st_simplify(border, dTolerance = 25)
+
+mesh = fm_mesh_2d(boundary = border_simplified,
+  max.edge = c(30, 90), cutoff = 15,
+   offset = c(-0.05, -0.25),
+  crs = st_crs(border))
+
+spde = inla.spde2.pcmatern(mesh = mesh, 
+  prior.range = c(200, 0.5), # P(range < 100) = 0.5
+  prior.sigma = c(1, 0.5)) # P(sigma > 1) = 0.5
+
+
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| out-width: 100%
+ggplot() + gg(mesh) + geom_sf(data = dd, size = 0.2) +
+  xlab("") + ylab("")
+```
+:::
+:::::
+
+**Note**
+
+-   Coordinate system is in Km (this is recommended always!)
+
+-   The size of the domain is ca $630\times488 \text{ Km}^2$ we use this as a guideline to define the prior for the range.
+
+## Model 1 - Implementation
+
+Fit the model
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: true
+#| 
+cmp = ~ Intercept(1) + 
+  time(time, model = "rw2") +
+  space(geometry, model = spde)
+
+lik = bru_obs(formula =  Y~ .,
+              data = dd)
+
+fit_1 = bru(cmp, lik)
+
+# plot time effect
+
+p = fit_1$summary.random$time %>% 
+  ggplot() + 
+  geom_ribbon(aes(ID, 
+                  ymin = `0.025quant`,
+                  ymax = `0.975quant`), 
+              alpha = 0.5) +
+  geom_line(aes(ID, mean))
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+p
+```
+:::
+:::::
+
+## Model 1 - Implementation {.smaller}
+
+Space-time Predictions
+
+```{r}
+#| echo: true
+pxl = fm_pixels(mesh, mask = border)
+
+pxl_time = fm_cprod(pxl, data.frame(time = seq(1,12)))
+
+pred_1 = predict(fit_1, pxl_time, ~ data.frame(mu = Intercept + space + time,
+                                      time_effect = time,
+                                      space_effect = space))
+
+```
+
+
+
+```{r}
+ ggplot() +
+  gg(pred_1$mu, geom = "tile", aes(fill = mean)) +
+  facet_wrap(~time) +
+  coord_sf() + theme_map + scale_fill_scico()
+```
+
+
+## Spatio temporal models for areal data {.smaller}
+
+The observation model
+
+$$
+Y_t(s)|\mu_t(s)\sim\mathcal{N}(\mu_t(s),\sigma_y^2); \qquad \eta_t(s) =  \mu_t(s)
+$$
+
+We are going to see **3 different models for the linear predictor** $\eta_{st}$
+
+1.  **Model 1**: $\eta_t(s) = \beta_0 + u(s) + v_t$ with $u(s)\sim\text{GF}(\rho,\sigma_u)$
+
+    Here the time effect $v_t$ is constant w.r.t. space and the space effect $u(s)$ is constant w.r.t. time.
+
+2.  **Model 2**: $\eta_t(s) = \beta_0 + u_t(s) + v_t$ with $u_t(s)\sim\text{GF}(\rho,\sigma_u),\ t = 1,\dots,T$
+
+    Here spatial fields are different for each year, are independent and share range and sd.
+
+## Model 2 - Implementation
+
+Fit the model
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: true
+#| 
+cmp = ~ Intercept(1) + 
+  time(time, model = "rw2") +
+  space(geometry, model = spde, 
+        replicate = time)
+
+lik = bru_obs(formula =  Y~ .,
+              data = dd)
+
+fit_2 = bru(cmp, lik)
+
+# plot time effect
+
+p = fit_2$summary.random$time %>% 
+  ggplot() + 
+  geom_ribbon(aes(ID, 
+                  ymin = `0.025quant`,
+                  ymax = `0.975quant`), 
+              alpha = 0.5) +
+  geom_line(aes(ID, mean))
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+p
+
+
+```
+:::
+:::::
+
+## Model 2 - Implementation {.smaller}
+
+Space-time Predictions
+
+```{r}
+#| echo: true
+
+
+pred_2 = predict(fit_2, pxl_time, ~ data.frame(mu = Intercept + space + time,
+                                      time_effect = time,
+                                      space_effect = space))
+
+```
+
+```{r}
+ ggplot() +
+  gg(pred_2$mu, geom = "tile", aes(fill = mean)) +
+  facet_wrap(~time) +
+  coord_sf() + theme_map + scale_fill_scico()
+```
+
+## Spatio temporal models for areal data {.smaller}
+
+The observation model
+
+$$
+Y_t(s)|\mu_t(s)\sim\mathcal{N}(\mu_t(s),\sigma_y^2); \qquad \eta_t(s) =  \mu_t(s)
+$$
+
+We are going to see **3 different models for the linear predictor** $\eta_{st}$
+
+1.  **Model 1**: $\eta_t(s) = \beta_0 + u(s) + v_t$ with $u(s)\sim\text{GF}(\rho,\sigma_u)$
+
+    Here the time effect $v_t$ is constant w.r.t. space and the space effect $u(s)$ is constant w.r.t. time.
+
+2.  **Model 2**: $\eta_t(s) = \beta_0 + u_t(s) + v_t$ with $u_t(s)\sim\text{GF}(\rho,\sigma_u),\ t = 1,\dots,T$
+
+    Here spatial fields are different for each year, are independent and share range and sd.
+
+3.  **Model 3**: $\eta_t(s) = \beta_0 + u_t(s) + v_t$ with $$
+    u_t(s) = \phi\ u_{t-1}(s)  + \omega(s),\text{ with }  \omega(s)\sim\text{GF}(\rho,\sigma_u)
+    $$
+
+    Here we are adding more temporal dependence in the spatial term, using a AR1 type model Here the spatial fields are different for each year, they are independent on each other.
+
+## Model 3 - Implementation {.smaller}
+
+Fit the model
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+#| echo: true
+
+h.spec <- list(rho = list(prior = 'pc.cor1', 
+                          param = c(0, 0.9)))
+cmp = ~ Intercept(1) + 
+  time(time, model = "rw2") +
+  space(geometry, model = spde, 
+        group = time,
+        control.group = list(model = 'ar1', 
+                             hyper = h.spec))
+
+lik = bru_obs(formula =  Y~ .,
+              data = dd)
+
+fit_3 = bru(cmp, lik)
+
+# plot time effect
+
+p = fit_3$summary.random$time %>% 
+  ggplot() + 
+  geom_ribbon(aes(ID, 
+                  ymin = `0.025quant`,
+                  ymax = `0.975quant`), 
+              alpha = 0.5) +
+  geom_line(aes(ID, mean))
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+p
+```
+:::
+:::::
+
+## Model 3 - Implementation {.smaller}
+
+Space-time Predictions
+
+```{r}
+#| echo: true
+
+
+pred_3 = predict(fit_3, pxl_time, ~ data.frame(mu = Intercept + space + time,
+                                      time_effect = time,
+                                      space_effect = space))
+
+```
+
+```{r}
+ ggplot() +
+  gg(pred_3$mu, geom = "tile", aes(fill = mean)) +
+  facet_wrap(~time) +
+  coord_sf() + theme_map + scale_fill_scico()
+```
+
+## Adding covariates to space-time models
+
+-   Covariates that only vary in space
+
+    -   Altitude, bathimetry,...
+
+-   Covariates that vary in space *and* time
+
+    -   Temperature, precipitation, ...
+
+
+```{r}
+
+cov = simulate_spde_field(n_sim = 12, range = 400, variance = 1)
+proj_cov  = fm_evaluator(mesh_sim, loc= pxl) 
+
+
+# create raster with covariates
+points_sf = cbind(pxl,fm_evaluate(proj_cov, cov)) %>%
+  pivot_longer(-geometry) %>%
+  separate(name, c("A", "time")) %>%
+  select(-A)
+  
+
+
+points_vect <- vect(points_sf)
+res = c(diff(sort(unique(st_coordinates(points_sf)[,1])))[1],
+        diff(sort(unique(st_coordinates(points_sf)[,2])))[1])
+# --- 3. Create a raster template (based on extent & resolution) ---
+
+r_template <- rast(points_vect, resolution = res)
+
+
+```
+
+
+
+## Space covariates
+
+-   They should be stored in a `terra`, `SpatRaster` object.
+
+```{r}
+#| echo: true
+#| eval: true
+library(terra)
+library(tidyterra)
+```
+
+```{r}
+pts_t <- points_vect[points_vect$time == 1, ]
+cov_space =  rasterize(pts_t, r_template, field = "value")
+```
+
+```{r}
+#| echo: true
+#| out-width: 70%
+cov_space
+
+ggplot()  + geom_spatraster(data = cov_space) + geom_sf(data = dd) + scale_fill_scico()
+
+```
+
+
+
+## Space covariates - Implementation
+
+```{r}
+cov_data = rep(fm_evaluate(proj, cov[,1]), each = 12)
+
+dd_1 = dd %>% mutate(covariate = cov_data) %>%
+  mutate(mm = value + t_effect - 1.5 * cov_data) %>%
+  mutate(Y = rnorm(7392, mean = mm, sd = 0.1))
+```
+
+Setting up and running the model
+
+```{r}
+#| echo: true
+cmp1 = ~ Intercept(1) +
+  time(time, model = "rw2") +
+  space(geometry, model = spde) +
+  cov(cov_space,  model = "linear")
+
+lik1 = bru_obs(formula =  Y~ .,
+              data = dd_1)
+
+fit_cov1 = bru(cmp1, lik1)
+```
+
+Look at the results
+
+```{r}
+#| echo: true
+round(fit_cov1$summary.fixed,2)
+```
+
+## Space-time covariates
+
+Some covariates change in both space and time.
+
+There are several ways of doing this....many quite confusing :zany_face:
+
+Here is one recipe !
+
+
+
+```{r}
+#| out-width: 50%
+# --- 4. Rasterize each time slice and stack them ---
+unique_times <- sort(unique(points_vect$time))
+
+r_list <- lapply(unique_times, function(ti) {
+  pts_t <- points_vect[points_vect$time == ti, ]
+  rasterize(pts_t, r_template, field = "value")
+})
+
+# Combine all into one multilayer SpatRaster
+cov_space_time <- rast(r_list)
+names(cov_space_time) = 1:12
+```
+
+
+```{r}
+#| out-width: 50%
+
+ggplot() + geom_spatraster(data = cov_space_time) +
+  facet_wrap(.~lyr) + scale_fill_scico() +theme_map
+
+```
+
+
+
+
+
+
+## Space-time covariates{.smaller}
+
+```{r}
+cov_data = fm_evaluate(proj, cov) %>%
+  data.frame() %>%
+  mutate(id = seq_along(sample.1)) %>%
+  pivot_longer(-id) %>% pull(value)
+
+dd_2 = dd %>% mutate(covariate = cov_data) %>%
+  mutate(mm = value + t_effect - 1.5 * cov_data) %>%
+  mutate(Y = rnorm(7392, mean = mm, sd = 0.1))
+
+dd_1 = dd_2 %>% select(Y, time)
+```
+
+
+
+- Have the covariate as a multilier `spatraster` object
+```{r}
+#| echo: true
+# The covariate
+cov_space_time
+```
+
+```{r}
+#| echo: true
+# The data frame
+dd_1[1:3,]
+```
+
+**Note** The layers names in the raster are the same as the elements of the column `time` in the data.
+
+
+## Space-time covariates
+
+Implementation
+
+```{r}
+#| echo: true
+#| code-line-numbers: "4"
+
+cmp1 = ~ Intercept(1) +
+  time(time, model = "rw2") +
+  space(geometry, model = spde) +
+  cov(eval_spatial(cov_space_time, .data.,  time),  model = "linear")
+
+lik1 = bru_obs(formula =  Y~ .,
+              data = dd_1)
+
+fit_cov1 = bru(cmp1, lik1)
+
+round(fit_cov1$summary.fixed)
+```
+
+
+The `.data.` indicates the data that are input in the `bru_obs()` function
+
+# Point Processes
+
+## Space-time Point Processes
+
+- For space-time point processes one can also use the `group` and `replicate` features
+
+- The one difference is that one has to define the integration scheme in both space and time!
+
+```{r}
+mrsea <- inlabru::mrsea
+
+
+ggplot() +
+  geom_fm(data = mrsea$mesh) +
+  gg(mrsea$boundary, alpha  = 0) +
+  gg(mrsea$points, size = 0.5) +
+  facet_wrap(~season) +
+  gg(mrsea$samplers) +
+  ggtitle("MRSea observation seasons") + theme_map
+
+
+```
+## Space-time Point Processes{auto-animate="true"}
+
+```{r}
+matern <- inla.spde2.pcmatern(mrsea$mesh,
+  prior.sigma = c(0.1, 0.01),
+  prior.range = c(10, 0.01))
+```
+
+
+
+1. Define the component (with the `group` feature)
+```{r}
+#| echo: true
+#| code-line-numbers: "1-5"
+cmp <- ~ Intercept(1) +
+  space_time(geometry,
+             model = matern,
+    group = season,
+    ngroup = 4 )
+
+lik =  bru_obs(
+    geometry + season ~ .,
+    family = "cp",
+    data = mrsea$points,
+    samplers = mrsea$samplers,
+    domain = list(
+      geometry = mrsea$mesh,
+      season = seq_len(4)
+    ))
+
+fit <- bru(cmp, lik)
+```
+
+
+## Space-time Point Processes{auto-animate="true"}
+
+1. Define the component (with the `group` feature)
+2. Define the likelihood model
+```{r}
+#| echo: true
+#| code-line-numbers: "7-15"
+#| eval: false
+cmp <- ~ Intercept(1) +
+  space_time(geometry,
+             model = matern,
+    group = season,
+    ngroup = 4 )
+
+lik =  bru_obs(
+    geometry + season ~ .,
+    family = "cp",
+    data = mrsea$points,
+    samplers = mrsea$samplers,
+    domain = list(
+      geometry = mrsea$mesh,
+      season = seq_len(4)
+    ))
+
+fit <- bru(cmp, lik)
+```
+
+
+## Space-time Point Processes{auto-animate="true"}
+
+1. Define the component (with the `group` feature)
+2. Define the likelihood model
+  
+  - Where is our process defined (space and time)
+```{r}
+#| echo: true
+#| code-line-numbers: "8"
+#| eval: false
+cmp <- ~ Intercept(1) +
+  space_time(geometry,
+             model = matern,
+    group = season,
+    ngroup = 4 )
+
+lik =  bru_obs(
+    geometry + season ~ .,
+    family = "cp",
+    data = mrsea$points,
+    samplers = mrsea$samplers,
+    domain = list(
+      geometry = mrsea$mesh,
+      season = seq_len(4)
+    ))
+
+fit <- bru(cmp, lik)
+```
+
+
+
+
+
+## Space-time Point Processes{auto-animate="true"}
+
+1. Define the component (with the `group` feature)
+2. Define the likelihood model
+  
+  - Where is our process defined (space and time)
+  
+  - Domain of integration
+```{r}
+#| echo: true
+#| code-line-numbers: "12-14"
+#| eval: false
+cmp <- ~ Intercept(1) +
+  space_time(geometry,
+             model = matern,
+    group = season,
+    ngroup = 4 )
+
+lik =  bru_obs(
+    geometry + season ~ .,
+    family = "cp",
+    data = mrsea$points,
+    samplers = mrsea$samplers,
+    domain = list(
+      geometry = mrsea$mesh,
+      season = seq_len(4)))
+
+fit <- bru(cmp, lik)
+```
+
+
+
+## Space-time Point Processes{auto-animate="true"}
+
+1. Define the component (with the `group` feature)
+2. Define the likelihood model
+3. Run the model (as usual)
+```{r}
+#| echo: true
+#| code-line-numbers: "16"
+#| eval: false
+cmp <- ~ Intercept(1) +
+  space_time(geometry,
+             model = matern,
+    group = season,
+    ngroup = 4 )
+
+lik =  bru_obs(
+    geometry + season ~ .,
+    family = "cp",
+    data = mrsea$points,
+    samplers = mrsea$samplers,
+    domain = list(
+      geometry = mrsea$mesh,
+      season = seq_len(4)))
+
+fit <- bru(cmp, lik)
+```
+
+
+
+## Space-time Point Processes
+
+Results
+
+```{r}
+#| echo: true
+
+ppxl <- fm_pixels(mrsea$mesh, mask = mrsea$boundary, format = "sf")
+ppxl_all <- fm_cprod(ppxl, data.frame(season = seq_len(4)))
+
+lambda1 <- predict( fit,ppxl_all,
+  ~ data.frame(season = season, lambda = exp(space_time + Intercept)))
+```
+
+```{r}
+pl1 <- ggplot() +
+  gg(lambda1, geom = "tile", aes(fill = q0.5)) +
+  gg(mrsea$points, size = 0.3) +
+  facet_wrap(~season) +
+  coord_sf() + scale_fill_scico(direction = -1)
+pl1
+```
+
+
+
+## Non-separable models in `inlabru`
+
+- Some noo-separable models are implemented in `inlabru`. See
+
+> Lindgrenn et al., A diffusion-based spatio-temporal extension of Gaussian Matern > fields (2024) SORT 48
+
+- 
+## Summary
+
+-   Separable models are easily implemented using the `replicate` and `group` features
+

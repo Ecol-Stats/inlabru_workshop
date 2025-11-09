@@ -1,7 +1,7 @@
 ---
 title: "Practical 6"
 execute: 
-  freeze: true
+  freeze: auto
 format: 
   html:
     mainfont: "12"

@@ -3,6 +3,8 @@
 _site/
 #site_libs/
 *.tex
+.tex
+
 .quarto/
 *_freeze/
 *_files/
