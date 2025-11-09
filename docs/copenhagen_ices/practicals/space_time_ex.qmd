@@ -1,0 +1,471 @@
+---
+title: "Space-time modeling"
+execute: 
+  warning: false
+  message: false
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+
+# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
+library(webexercises)
+
+```
+
+
+
+------------------------------------------------------------------------
+
+Libraries to load:
+
+```{r}
+#| warning: false
+#| message: false
+
+
+library(dplyr)
+library(INLA)
+library(inlabru) 
+library(sf)
+library(terra)
+
+
+# load some libraries to generate nice map plots
+library(scico)
+library(ggplot2)
+library(patchwork)
+library(mapview)
+library(tidyterra)
+
+```
+
+### The data
+
+In this practical, we will revisit the data on the Pacific Cod (*Gadus macrocephalus*) from a trawl survey in Queen Charlotte Sound. The `pcod` dataset is available from the `sdmTMB` package and contains the presence/absence records of the Pacific Cod during each surveys along with the biomass density of Pacific cod in the area swept (kg/Km$^2$). The `qcs_grid` data contain the depth values stored as $2\times 2$ km grid for Queen Charlotte Sound.
+
+The dataset contains presence/absence data from 2003 to 2017. To make computations faster we only consider the first 3 years.
+
+
+```{r}
+#| message: false
+#| warning: false
+library(sdmTMB)
+
+pcod_df = sdmTMB::pcod  %>% filter(year<=2005)
+qcs_grid = sdmTMB::qcs_grid
+
+```
+
+Then, we create a `sf` object and assign the right coordinate reference to it:
+
+```{r}
+#| message: false
+#| warning: false
+#| 
+pcod_sf =   st_as_sf(pcod_df, coords = c("lon","lat"), crs = 4326)
+pcod_sf = st_transform(pcod_sf,
+          crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
+```
+
+We convert the covariates into a raster and assign the same coordinate reference:
+
+```{r}
+
+depth_r <- rast(qcs_grid, type = "xyz")
+crs(depth_r) <- crs(pcod_sf)
+
+```
+
+```{r}
+#| echo: false
+#| purl: false
+#| fig-align: center
+#| fig-width: 8
+#| fig-height: 8
+
+theme_map = theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.title.y = element_blank())
+
+ggplot()+ 
+  geom_spatraster(data=depth_r$depth)+
+  geom_sf(data=pcod_sf,aes(color=factor(present))) +
+    scale_color_manual(name="Occupancy status for the Pacific Cod",
+                     values = c("black","orange"),
+                     labels= c("Absence","Presence"))+
+  scale_fill_scico(name = "Depth",
+                   palette = "nuuk",
+                   na.value = "transparent" ) + xlab("") + ylab("") + facet_wrap(~year) + theme_map
+
+```
+
+
+### Spatio-temporal  modeling
+
+#### Model fitting
+
+Now lets compare two different space-time models using LGOCV and some information criteria metrics. The general model structure is given by:
+
+$$
+\begin{aligned}
+y(s,t)|\eta(s,t)&\sim\text{Binom}(1, p(s,t))\\
+\eta(s,t) &= \text{logit}(p(s,t)) \\
+\end{aligned}
+$$ 
+We also want to compare the models using WAIC, DIC and marginal likelihood:
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Set the `bru_options` so that the quantities of interest are computed
+
+```{r}
+#| purl: false
+#| webex.hide: "Click here to see the solution"
+#| warning: false
+#| message: false
+#| eval: true
+#| 
+bru_options_set(control.compute = list(waic = TRUE,dic= TRUE,mlik = TRUE))
+```
+:::
+
+#### Model 1
+
+1.  **Model 1 - time iid effect** We consider a separable space-time model with a linear predictors given by:
+
+$$
+\eta(s,t) = \beta_0 + f_1(\text{depth}(s)) + f_2(t) + \omega(s)
+$$
+
+-   $f_1(\text{depth}(s))$ is a smooth covariate effect of depth (modeled using a RW2 model)
+
+-   $f_2(t)$ is an IID effect of time
+
+-   $\omega(s)$ is Matérn random field.
+
+
+The first step is to define the mesh and the spde model
+
+**Construct the mesh and the SPDE model**
+
+```{r}
+mesh = fm_mesh_2d(loc = pcod_sf,    
+                  cutoff = 1,
+                  max.edge = c(10,20),     
+                  offset = c(5,50),
+                  crs = st_crs(pcod_df))   
+
+spde_model =  inla.spde2.pcmatern(mesh,
+                                  prior.sigma = c(1, 0.5),
+                                  prior.range = c(100, 0.5))
+```
+
+```{r}
+#| echo: false
+#| purl: false
+#| fig-align: center
+#| fig-width: 5
+#| fig-height: 5
+ggplot() + gg(mesh) + geom_sf(data= pcod_sf, aes(color = factor(present)), size = 0.1) + xlab("") + ylab("")
+
+```
+
+
+**create time index and the grouped variable**
+
+To use the RW2 model the covariate has to be groupes:
+```{r}
+depth_r$depth_group = inla.group(values(depth_r$depth_scaled))
+
+```
+
+we also define a time index from 1 to in the data frame
+
+```{r}
+pcod_sf = pcod_sf %>%
+     mutate(time_idx = match(year, c(2003, 2004, 2005)),
+         id = 1:nrow(.)) # Observation id for CV
+```
+
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Implement the model in `inlabru`
+
+1. Define the components
+2. Define the formula
+3. Define the likelihood model using the `bru_obs()` function
+4. Run the model
+
+```{r}
+#| purl: false
+#| webex.hide: "Click here to see the solution"
+#| warning: false
+#| message: false
+#| eval: true
+
+# Model components
+cmp_spat = ~ Intercept(1) + 
+  covariate(depth_r$depth_group, model = "rw2", scale.model = TRUE)+
+  trend(time_idx, model = "iid")+
+  space(geometry, model = spde_model)
+
+# Linear predictor
+formula_spat = present ~ Intercept  + trend + space + covariate
+
+# Observational model
+lik_spat = bru_obs(formula = formula_spat, 
+              data = pcod_sf, 
+              family = "binomial")
+
+# Fit Model 
+fit_spat = bru(cmp_spat,lik_spat)
+
+
+```
+:::
+
+
+::: callout-note
+Note that there are some survey locations in certain years that fall outside the depth raster region. `inlabru` will input these missing covariate values using the nearest available value. This can be computationally expensive, but you can avoid it by supplying a raster layer that encompasses all of your data points (e.g., by pre-imputing these missing values with your preferred method of choice).
+
+One way of doing this in the `inlabru` framework is to use the `bru_fill_missing()` function:
+
+```{r}
+# Select the raster of interest
+depth_orig = depth_r$depth_group
+re <- extend(depth_orig, ext(depth_orig)*1.05)
+# Convert to an sf spatial object
+re_df <- re %>% stars::st_as_stars() %>%  st_as_sf(na.rm=F)
+# fill in missing values using the original raster 
+re_df$depth_group =  bru_fill_missing(depth_orig,re_df,re_df$depth_group)
+# rasterize
+depth_filled <- stars::st_rasterize(re_df) %>% rast()
+plot(depth_filled)
+```
+
+
+
+:::
+
+
+We have now fit the model and want to check the results.
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Is the effect of depth significant? Does it seem important to have a non-linear model?
+
+Inspect the estimated time effect and 
+
+Use the `predict` function to inspect the estimated spatial effect.
+
+Use the `depth_r` raster to define the points in space where to predict
+```{r}
+pxl = st_as_sf(data.frame(crds(depth_r)), coords = c("x","y") ,
+               crs  = st_crs(pcod_sf))
+```
+
+
+```{r}
+#| purl: false
+#| webex.hide: "Click here to see the solution"
+#| warning: false
+#| message: false
+#| eval: true
+
+# covariate effect
+
+p_cov = fit_spat$summary.random$covariate %>%
+  ggplot() + geom_ribbon(aes(ID, ymin = `0.025quant`, ymax = `0.975quant` )) +
+  geom_line(aes(ID,mean)) + ggtitle("Covariate effect")
+
+# time effect
+p_time = fit_spat$summary.random$trend %>%
+  ggplot() + geom_errorbar(aes(ID, ymin = `0.025quant`, ymax = `0.975quant` )) +
+  geom_point(aes(ID,mean)) + ggtitle("Time effect")
+
+#space effect
+pred_space = predict(fit_spat, pxl, ~ space)
+
+p_space_mean = ggplot() + gg(pred_space, aes(color = mean))
+p_space_sd = ggplot() + gg(pred_space, aes(color = sd))
+
+```
+:::
+
+
+
+
+#### Model 2
+
+1.  **Model 2 - spatiotemporal field** We consider a separable space time model with a linear predictor given by:
+
+$$
+\eta(s,t) = \beta_0 + f_1(\text{depth}(s)) + \omega(s,t)
+$$
+
+-   $f_1(\text{depth}(s))$ is a smooth covariate effect of depth (RW2)
+-   $\omega(s,t)$ is a space-time Matérn spatial field with AR1 time component
+$$
+\omega(s,t) = \phi\ \omega(s,t-1) + \epsilon(s),\qquad \epsilon(s)\sim\text{GF}(\sigma_{\epsilon},\rho_{\epsilon})
+$$
+
+
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Implement this second  model in `inlabru`
+
+1. Define the components
+  For the AR1 model use this following PC prior for the correlation parameter $\phi$
+```{r}
+# PC prior for AR(1) correlation parameter
+h.spec <- list(rho = list(prior = 'pc.cor0', param = c(0.5, 0.1)))
+```
+  
+2. Define the formula
+3. Define the likelihood model using the `bru_obs()` function
+4. Run the model
+  (This model can take a couple of minutes to run)
+
+
+
+```{r}
+#| purl: false
+#| webex.hide: "Click here to see the solution"
+#| warning: false
+#| message: false
+#| eval: true
+
+# Model components
+cmp_spat_ar1 = ~ Intercept(1) + 
+  covariate(depth_filled$depth_group, model = "rw2", scale.model = TRUE)+
+  space_time(geometry,
+        group = time_idx ,
+        model = spde_model,
+        control.group = list(model = 'ar1',hyper = h.spec))
+
+# Linear predictor
+formula_spat_ar1 = present ~ .
+
+# Observational model
+lik_spat_ar1 = bru_obs(formula = formula_spat_ar1, 
+              data = pcod_sf, 
+              family = "binomial")
+
+# Fit Model 
+fit_spat_ar1 = bru(cmp_spat_ar1,lik_spat_ar1)
+
+```
+:::
+
+
+Now we want to check the results
+
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+What is the estimated parameter $phi$ in the auto-regressive part of the model?
+
+Check the effect of the covariate.
+
+
+Use the `predict` function to inspect the estimated  probability of presence. Use the same prediction points as before, but here you also need to use the `
+
+
+
+
+```{r}
+#| purl: false
+#| webex.hide: "Click here to see the solution"
+#| warning: false
+#| message: false
+#| eval: true
+
+# autoregressive effect
+
+#fit_spat_ar1$summary.hyperpar
+
+#covariate
+p_cov_ar1 = fit_spat_ar1$summary.random$covariate %>%
+  ggplot() + geom_ribbon(aes(ID, ymin = `0.025quant`, ymax = `0.975quant` )) +
+  geom_line(aes(ID,mean)) + ggtitle("Covariate effect")
+
+
+#space-time effect
+
+inv_logit = function(x){ exp(x) / (1 + exp(x))}
+
+pxl_all = fm_cprod(pxl, data.frame(time_idx = 1:3))
+pred_space_ar1 = predict(fit_spat_ar1, pxl_all, ~data.frame(logit_prob = Intercept  + 
+                                                               covariate  + 
+                                                               space_time ,
+                                                            prob = inv_logit(Intercept  + 
+                                                               covariate  + 
+                                                               space_time)))
+
+
+p_ar1 = pred_space_ar1$prob %>% ggplot() + geom_sf(aes(color = mean)) + 
+  facet_wrap(.~time_idx) + scale_color_scico(direction = -1) +
+  theme_map
+
+
+```
+:::
+
+### Model Comparison 
+
+Now we want to use the WAIC, DIC and MLIK to compare the models
+
+
+
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Compare the scores, what is your conclusion?
+
+```{r}
+#| purl: false
+#| webex.hide: "Click here to see the solution"
+#| warning: false
+#| message: false
+#| eval: true
+
+out= data.frame(Model = c("Model 1", "Model 2"),
+  DIC = c(fit_spat$dic$dic, fit_spat_ar1$dic$dic),
+  WAIC = c(fit_spat$waic$waic, fit_spat_ar1$waic$waic),
+  MLIK = c(fit_spat$mlik[1], fit_spat_ar1$mlik[1]))
+
+```
+:::
+
+
+

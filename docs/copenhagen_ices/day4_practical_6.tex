@@ -291,7 +291,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[colback={codebgcolor}, sharp corners, enhanced, boxrule=0pt, breakable, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, breakable, colback={codebgcolor}, enhanced, frame hidden, boxrule=0pt]}{\end{tcolorbox}}\fi
 \makeatother
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -317,8 +317,450 @@
 
 \textbf{Aim of this practical:}
 
-In this practical we are going to look at some model comparison and
-validation techniques.
+In this practical we are going to look at space-time model and model
+comparison and validation techniques.
+
+\subsection{Space time models}\label{space-time-models}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Libraries to load:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(INLA)}
+\FunctionTok{library}\NormalTok{(inlabru) }
+\FunctionTok{library}\NormalTok{(sf)}
+\FunctionTok{library}\NormalTok{(terra)}
+
+
+\CommentTok{\# load some libraries to generate nice map plots}
+\FunctionTok{library}\NormalTok{(scico)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(patchwork)}
+\FunctionTok{library}\NormalTok{(mapview)}
+\FunctionTok{library}\NormalTok{(tidyterra)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{The data}\label{the-data}
+
+In this practical, we will revisit the data on the Pacific Cod
+(\emph{Gadus macrocephalus}) from a trawl survey in Queen Charlotte
+Sound. The \texttt{pcod} dataset is available from the \texttt{sdmTMB}
+package and contains the presence/absence records of the Pacific Cod
+during each surveys along with the biomass density of Pacific cod in the
+area swept (kg/Km\(^2\)). The \texttt{qcs\_grid} data contain the depth
+values stored as \(2\times 2\) km grid for Queen Charlotte Sound.
+
+The dataset contains presence/absence data from 2003 to 2017. To make
+computations faster we only consider the first 3 years.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(sdmTMB)}
+
+\NormalTok{pcod\_df }\OtherTok{=}\NormalTok{ sdmTMB}\SpecialCharTok{::}\NormalTok{pcod  }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(year}\SpecialCharTok{\textless{}=}\DecValTok{2005}\NormalTok{)}
+\NormalTok{qcs\_grid }\OtherTok{=}\NormalTok{ sdmTMB}\SpecialCharTok{::}\NormalTok{qcs\_grid}
+\end{Highlighting}
+\end{Shaded}
+
+Then, we create a \texttt{sf} object and assign the right coordinate
+reference to it:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pcod\_sf }\OtherTok{=}   \FunctionTok{st\_as\_sf}\NormalTok{(pcod\_df, }\AttributeTok{coords =} \FunctionTok{c}\NormalTok{(}\StringTok{"lon"}\NormalTok{,}\StringTok{"lat"}\NormalTok{), }\AttributeTok{crs =} \DecValTok{4326}\NormalTok{)}
+\NormalTok{pcod\_sf }\OtherTok{=} \FunctionTok{st\_transform}\NormalTok{(pcod\_sf,}
+          \AttributeTok{crs =} \StringTok{"+proj=utm +zone=9 +datum=WGS84 +no\_defs +type=crs +units=km"}\NormalTok{ )}
+\end{Highlighting}
+\end{Shaded}
+
+We convert the covariates into a raster and assign the same coordinate
+reference:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{depth\_r }\OtherTok{\textless{}{-}} \FunctionTok{rast}\NormalTok{(qcs\_grid, }\AttributeTok{type =} \StringTok{"xyz"}\NormalTok{)}
+\FunctionTok{crs}\NormalTok{(depth\_r) }\OtherTok{\textless{}{-}} \FunctionTok{crs}\NormalTok{(pcod\_sf)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-7-1.pdf}}
+\end{center}
+
+\subsubsection{Spatio-temporal modeling}\label{spatio-temporal-modeling}
+
+\paragraph{Model fitting}\label{model-fitting}
+
+Now lets compare two different space-time models using LGOCV and some
+information criteria metrics. The general model structure is given by:
+
+\[
+\begin{aligned}
+y(s,t)|\eta(s,t)&\sim\text{Binom}(1, p(s,t))\\
+\eta(s,t) &= \text{logit}(p(s,t)) \\
+\end{aligned}
+\] We also want to compare the models using WAIC, DIC and marginal
+likelihood:
+
+\begin{tcolorbox}[enhanced jigsaw, title={Task}, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, rightrule=.15mm, titlerule=0mm, colback=white, breakable, bottomtitle=1mm, bottomrule=.15mm, opacityback=0, colframe=quarto-callout-warning-color-frame, arc=.35mm, opacitybacktitle=0.6, toptitle=1mm, left=2mm, toprule=.15mm, coltitle=black]
+
+Set the \texttt{bru\_options} so that the quantities of interest are
+computed
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{bru\_options\_set}\NormalTok{(}\AttributeTok{control.compute =} \FunctionTok{list}\NormalTok{(}\AttributeTok{waic =} \ConstantTok{TRUE}\NormalTok{,}\AttributeTok{dic=} \ConstantTok{TRUE}\NormalTok{,}\AttributeTok{mlik =} \ConstantTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\end{tcolorbox}
+
+\paragraph{Model 1}\label{model-1}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Model 1 - time iid effect} We consider a separable space-time
+  model with a linear predictors given by:
+\end{enumerate}
+
+\[
+\eta(s,t) = \beta_0 + f_1(\text{depth}(s)) + f_2(t) + \omega(s)
+\]
+
+\begin{itemize}
+\item
+  \(f_1(\text{depth}(s))\) is a smooth covariate effect of depth
+  (modeled using a RW2 model)
+\item
+  \(f_2(t)\) is an IID effect of time
+\item
+  \(\omega(s)\) is Matérn random field.
+\end{itemize}
+
+The first step is to define the mesh and the spde model
+
+\textbf{Construct the mesh and the SPDE model}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mesh }\OtherTok{=} \FunctionTok{fm\_mesh\_2d}\NormalTok{(}\AttributeTok{loc =}\NormalTok{ pcod\_sf,    }
+                  \AttributeTok{cutoff =} \DecValTok{1}\NormalTok{,}
+                  \AttributeTok{max.edge =} \FunctionTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DecValTok{20}\NormalTok{),     }
+                  \AttributeTok{offset =} \FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{50}\NormalTok{),}
+                  \AttributeTok{crs =} \FunctionTok{st\_crs}\NormalTok{(pcod\_df))   }
+
+\NormalTok{spde\_model }\OtherTok{=}  \FunctionTok{inla.spde2.pcmatern}\NormalTok{(mesh,}
+                                  \AttributeTok{prior.sigma =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FloatTok{0.5}\NormalTok{),}
+                                  \AttributeTok{prior.range =} \FunctionTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\FloatTok{0.5}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-10-1.pdf}}
+\end{center}
+
+\textbf{create time index and the grouped variable}
+
+To use the RW2 model the covariate has to be groupes:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{depth\_r}\SpecialCharTok{$}\NormalTok{depth\_group }\OtherTok{=} \FunctionTok{inla.group}\NormalTok{(}\FunctionTok{values}\NormalTok{(depth\_r}\SpecialCharTok{$}\NormalTok{depth\_scaled))}
+\end{Highlighting}
+\end{Shaded}
+
+we also define a time index from 1 to in the data frame
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pcod\_sf }\OtherTok{=}\NormalTok{ pcod\_sf }\SpecialCharTok{\%\textgreater{}\%}
+     \FunctionTok{mutate}\NormalTok{(}\AttributeTok{time\_idx =} \FunctionTok{match}\NormalTok{(year, }\FunctionTok{c}\NormalTok{(}\DecValTok{2003}\NormalTok{, }\DecValTok{2004}\NormalTok{, }\DecValTok{2005}\NormalTok{)),}
+         \AttributeTok{id =} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(.)) }\CommentTok{\# Observation id for CV}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tcolorbox}[enhanced jigsaw, title={Task}, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, rightrule=.15mm, titlerule=0mm, colback=white, breakable, bottomtitle=1mm, bottomrule=.15mm, opacityback=0, colframe=quarto-callout-warning-color-frame, arc=.35mm, opacitybacktitle=0.6, toptitle=1mm, left=2mm, toprule=.15mm, coltitle=black]
+
+Implement the model in \texttt{inlabru}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Define the components
+\item
+  Define the formula
+\item
+  Define the likelihood model using the \texttt{bru\_obs()} function
+\item
+  Run the model
+\end{enumerate}
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Model components}
+\NormalTok{cmp\_spat }\OtherTok{=} \ErrorTok{\textasciitilde{}} \FunctionTok{Intercept}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{covariate}\NormalTok{(depth\_r}\SpecialCharTok{$}\NormalTok{depth\_group, }\AttributeTok{model =} \StringTok{"rw2"}\NormalTok{, }\AttributeTok{scale.model =} \ConstantTok{TRUE}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{trend}\NormalTok{(time\_idx, }\AttributeTok{model =} \StringTok{"iid"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{space}\NormalTok{(geometry, }\AttributeTok{model =}\NormalTok{ spde\_model)}
+
+\CommentTok{\# Linear predictor}
+\NormalTok{formula\_spat }\OtherTok{=}\NormalTok{ present }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Intercept  }\SpecialCharTok{+}\NormalTok{ trend }\SpecialCharTok{+}\NormalTok{ space }\SpecialCharTok{+}\NormalTok{ covariate}
+
+\CommentTok{\# Observational model}
+\NormalTok{lik\_spat }\OtherTok{=} \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ formula\_spat, }
+              \AttributeTok{data =}\NormalTok{ pcod\_sf, }
+              \AttributeTok{family =} \StringTok{"binomial"}\NormalTok{)}
+
+\CommentTok{\# Fit Model }
+\NormalTok{fit\_spat }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp\_spat,lik\_spat)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, leftrule=.75mm, colbacktitle=quarto-callout-note-color!10!white, rightrule=.15mm, titlerule=0mm, colback=white, breakable, bottomtitle=1mm, bottomrule=.15mm, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, opacitybacktitle=0.6, toptitle=1mm, left=2mm, toprule=.15mm, coltitle=black]
+
+Note that there are some survey locations in certain years that fall
+outside the depth raster region. \texttt{inlabru} will input these
+missing covariate values using the nearest available value. This can be
+computationally expensive, but you can avoid it by supplying a raster
+layer that encompasses all of your data points (e.g., by pre-imputing
+these missing values with your preferred method of choice).
+
+One way of doing this in the \texttt{inlabru} framework is to use the
+\texttt{bru\_fill\_missing()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Select the raster of interest}
+\NormalTok{depth\_orig }\OtherTok{=}\NormalTok{ depth\_r}\SpecialCharTok{$}\NormalTok{depth\_group}
+\NormalTok{re }\OtherTok{\textless{}{-}} \FunctionTok{extend}\NormalTok{(depth\_orig, }\FunctionTok{ext}\NormalTok{(depth\_orig)}\SpecialCharTok{*}\FloatTok{1.05}\NormalTok{)}
+\CommentTok{\# Convert to an sf spatial object}
+\NormalTok{re\_df }\OtherTok{\textless{}{-}}\NormalTok{ re }\SpecialCharTok{\%\textgreater{}\%}\NormalTok{ stars}\SpecialCharTok{::}\FunctionTok{st\_as\_stars}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}  \FunctionTok{st\_as\_sf}\NormalTok{(}\AttributeTok{na.rm=}\NormalTok{F)}
+\CommentTok{\# fill in missing values using the original raster }
+\NormalTok{re\_df}\SpecialCharTok{$}\NormalTok{depth\_group }\OtherTok{=}  \FunctionTok{bru\_fill\_missing}\NormalTok{(depth\_orig,re\_df,re\_df}\SpecialCharTok{$}\NormalTok{depth\_group)}
+\CommentTok{\# rasterize}
+\NormalTok{depth\_filled }\OtherTok{\textless{}{-}}\NormalTok{ stars}\SpecialCharTok{::}\FunctionTok{st\_rasterize}\NormalTok{(re\_df) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{rast}\NormalTok{()}
+\FunctionTok{plot}\NormalTok{(depth\_filled)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-14-1.pdf}}
+
+\end{tcolorbox}
+
+We have now fit the model and want to check the results.
+
+\begin{tcolorbox}[enhanced jigsaw, title={Task}, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, rightrule=.15mm, titlerule=0mm, colback=white, breakable, bottomtitle=1mm, bottomrule=.15mm, opacityback=0, colframe=quarto-callout-warning-color-frame, arc=.35mm, opacitybacktitle=0.6, toptitle=1mm, left=2mm, toprule=.15mm, coltitle=black]
+
+Is the effect of depth significant? Does it seem important to have a
+non-linear model?
+
+Inspect the estimated time effect and
+
+Use the \texttt{predict} function to inspect the estimated spatial
+effect.
+
+Use the \texttt{depth\_r} raster to define the points in space where to
+predict
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pxl }\OtherTok{=} \FunctionTok{st\_as\_sf}\NormalTok{(}\FunctionTok{data.frame}\NormalTok{(}\FunctionTok{crds}\NormalTok{(depth\_r)), }\AttributeTok{coords =} \FunctionTok{c}\NormalTok{(}\StringTok{"x"}\NormalTok{,}\StringTok{"y"}\NormalTok{) ,}
+               \AttributeTok{crs  =} \FunctionTok{st\_crs}\NormalTok{(pcod\_sf))}
+\end{Highlighting}
+\end{Shaded}
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# covariate effect}
+
+\NormalTok{p\_cov }\OtherTok{=}\NormalTok{ fit\_spat}\SpecialCharTok{$}\NormalTok{summary.random}\SpecialCharTok{$}\NormalTok{covariate }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_ribbon}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID, }\AttributeTok{ymin =} \StringTok{\textasciigrave{}}\AttributeTok{0.025quant}\StringTok{\textasciigrave{}}\NormalTok{, }\AttributeTok{ymax =} \StringTok{\textasciigrave{}}\AttributeTok{0.975quant}\StringTok{\textasciigrave{}}\NormalTok{ )) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID,mean)) }\SpecialCharTok{+} \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Covariate effect"}\NormalTok{)}
+
+\CommentTok{\# time effect}
+\NormalTok{p\_time }\OtherTok{=}\NormalTok{ fit\_spat}\SpecialCharTok{$}\NormalTok{summary.random}\SpecialCharTok{$}\NormalTok{trend }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_errorbar}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID, }\AttributeTok{ymin =} \StringTok{\textasciigrave{}}\AttributeTok{0.025quant}\StringTok{\textasciigrave{}}\NormalTok{, }\AttributeTok{ymax =} \StringTok{\textasciigrave{}}\AttributeTok{0.975quant}\StringTok{\textasciigrave{}}\NormalTok{ )) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID,mean)) }\SpecialCharTok{+} \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Time effect"}\NormalTok{)}
+
+\CommentTok{\#space effect}
+\NormalTok{pred\_space }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit\_spat, pxl, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ space)}
+
+\NormalTok{p\_space\_mean }\OtherTok{=} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{gg}\NormalTok{(pred\_space, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ mean))}
+\NormalTok{p\_space\_sd }\OtherTok{=} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{gg}\NormalTok{(pred\_space, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ sd))}
+\end{Highlighting}
+\end{Shaded}
+
+\end{tcolorbox}
+
+\paragraph{Model 2}\label{model-2}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Model 2 - spatiotemporal field} We consider a separable space
+  time model with a linear predictor given by:
+\end{enumerate}
+
+\[
+\eta(s,t) = \beta_0 + f_1(\text{depth}(s)) + \omega(s,t)
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \(f_1(\text{depth}(s))\) is a smooth covariate effect of depth (RW2)
+\item
+  \(\omega(s,t)\) is a space-time Matérn spatial field with AR1 time
+  component \[
+  \omega(s,t) = \phi\ \omega(s,t-1) + \epsilon(s),\qquad \epsilon(s)\sim\text{GF}(\sigma_{\epsilon},\rho_{\epsilon})
+  \]
+\end{itemize}
+
+\begin{tcolorbox}[enhanced jigsaw, title={Task}, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, rightrule=.15mm, titlerule=0mm, colback=white, breakable, bottomtitle=1mm, bottomrule=.15mm, opacityback=0, colframe=quarto-callout-warning-color-frame, arc=.35mm, opacitybacktitle=0.6, toptitle=1mm, left=2mm, toprule=.15mm, coltitle=black]
+
+Implement this second model in \texttt{inlabru}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Define the components For the AR1 model use this following PC prior
+  for the correlation parameter \(\phi\)
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# PC prior for AR(1) correlation parameter}
+\NormalTok{h.spec }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\AttributeTok{rho =} \FunctionTok{list}\NormalTok{(}\AttributeTok{prior =} \StringTok{\textquotesingle{}pc.cor0\textquotesingle{}}\NormalTok{, }\AttributeTok{param =} \FunctionTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\FloatTok{0.1}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Define the formula
+\item
+  Define the likelihood model using the \texttt{bru\_obs()} function
+\item
+  Run the model (This model can take a couple of minutes to run)
+\end{enumerate}
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Model components}
+\NormalTok{cmp\_spat\_ar1 }\OtherTok{=} \ErrorTok{\textasciitilde{}} \FunctionTok{Intercept}\NormalTok{(}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{covariate}\NormalTok{(depth\_filled}\SpecialCharTok{$}\NormalTok{depth\_group, }\AttributeTok{model =} \StringTok{"rw2"}\NormalTok{, }\AttributeTok{scale.model =} \ConstantTok{TRUE}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{space\_time}\NormalTok{(geometry,}
+        \AttributeTok{group =}\NormalTok{ time\_idx ,}
+        \AttributeTok{model =}\NormalTok{ spde\_model,}
+        \AttributeTok{control.group =} \FunctionTok{list}\NormalTok{(}\AttributeTok{model =} \StringTok{\textquotesingle{}ar1\textquotesingle{}}\NormalTok{,}\AttributeTok{hyper =}\NormalTok{ h.spec))}
+
+\CommentTok{\# Linear predictor}
+\NormalTok{formula\_spat\_ar1 }\OtherTok{=}\NormalTok{ present }\SpecialCharTok{\textasciitilde{}}\NormalTok{ .}
+
+\CommentTok{\# Observational model}
+\NormalTok{lik\_spat\_ar1 }\OtherTok{=} \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ formula\_spat\_ar1, }
+              \AttributeTok{data =}\NormalTok{ pcod\_sf, }
+              \AttributeTok{family =} \StringTok{"binomial"}\NormalTok{)}
+
+\CommentTok{\# Fit Model }
+\NormalTok{fit\_spat\_ar1 }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp\_spat\_ar1,lik\_spat\_ar1)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{tcolorbox}
+
+Now we want to check the results
+
+\begin{tcolorbox}[enhanced jigsaw, title={Task}, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, rightrule=.15mm, titlerule=0mm, colback=white, breakable, bottomtitle=1mm, bottomrule=.15mm, opacityback=0, colframe=quarto-callout-warning-color-frame, arc=.35mm, opacitybacktitle=0.6, toptitle=1mm, left=2mm, toprule=.15mm, coltitle=black]
+
+What is the estimated parameter \(phi\) in the auto-regressive part of
+the model?
+
+Check the effect of the covariate.
+
+Use the \texttt{predict} function to inspect the estimated probability
+of presence. Use the same prediction points as before, but here you also
+need to use the `
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# autoregressive effect}
+
+\CommentTok{\#fit\_spat\_ar1$summary.hyperpar}
+
+\CommentTok{\#covariate}
+\NormalTok{p\_cov\_ar1 }\OtherTok{=}\NormalTok{ fit\_spat\_ar1}\SpecialCharTok{$}\NormalTok{summary.random}\SpecialCharTok{$}\NormalTok{covariate }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_ribbon}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID, }\AttributeTok{ymin =} \StringTok{\textasciigrave{}}\AttributeTok{0.025quant}\StringTok{\textasciigrave{}}\NormalTok{, }\AttributeTok{ymax =} \StringTok{\textasciigrave{}}\AttributeTok{0.975quant}\StringTok{\textasciigrave{}}\NormalTok{ )) }\SpecialCharTok{+}
+  \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(ID,mean)) }\SpecialCharTok{+} \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Covariate effect"}\NormalTok{)}
+
+
+\CommentTok{\#space{-}time effect}
+
+\NormalTok{inv\_logit }\OtherTok{=} \ControlFlowTok{function}\NormalTok{(x)\{ }\FunctionTok{exp}\NormalTok{(x) }\SpecialCharTok{/}\NormalTok{ (}\DecValTok{1} \SpecialCharTok{+} \FunctionTok{exp}\NormalTok{(x))\}}
+
+\NormalTok{pxl\_all }\OtherTok{=} \FunctionTok{fm\_cprod}\NormalTok{(pxl, }\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{time\_idx =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{))}
+\NormalTok{pred\_space\_ar1 }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit\_spat\_ar1, pxl\_all, }\SpecialCharTok{\textasciitilde{}}\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{logit\_prob =}\NormalTok{ Intercept  }\SpecialCharTok{+} 
+\NormalTok{                                                               covariate  }\SpecialCharTok{+} 
+\NormalTok{                                                               space\_time ,}
+                                                            \AttributeTok{prob =} \FunctionTok{inv\_logit}\NormalTok{(Intercept  }\SpecialCharTok{+} 
+\NormalTok{                                                               covariate  }\SpecialCharTok{+} 
+\NormalTok{                                                               space\_time)))}
+
+
+\NormalTok{p\_ar1 }\OtherTok{=}\NormalTok{ pred\_space\_ar1}\SpecialCharTok{$}\NormalTok{prob }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_sf}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ mean)) }\SpecialCharTok{+} 
+  \FunctionTok{facet\_wrap}\NormalTok{(.}\SpecialCharTok{\textasciitilde{}}\NormalTok{time\_idx) }\SpecialCharTok{+} \FunctionTok{scale\_color\_scico}\NormalTok{(}\AttributeTok{direction =} \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+\NormalTok{  theme\_map}
+\end{Highlighting}
+\end{Shaded}
+
+\end{tcolorbox}
+
+\subsubsection{Model Comparison}\label{model-comparison}
+
+Now we want to use the WAIC, DIC and MLIK to compare the models
+
+\begin{tcolorbox}[enhanced jigsaw, title={Task}, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, rightrule=.15mm, titlerule=0mm, colback=white, breakable, bottomtitle=1mm, bottomrule=.15mm, opacityback=0, colframe=quarto-callout-warning-color-frame, arc=.35mm, opacitybacktitle=0.6, toptitle=1mm, left=2mm, toprule=.15mm, coltitle=black]
+
+Compare the scores, what is your conclusion?
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{out}\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Model =} \FunctionTok{c}\NormalTok{(}\StringTok{"Model 1"}\NormalTok{, }\StringTok{"Model 2"}\NormalTok{),}
+  \AttributeTok{DIC =} \FunctionTok{c}\NormalTok{(fit\_spat}\SpecialCharTok{$}\NormalTok{dic}\SpecialCharTok{$}\NormalTok{dic, fit\_spat\_ar1}\SpecialCharTok{$}\NormalTok{dic}\SpecialCharTok{$}\NormalTok{dic),}
+  \AttributeTok{WAIC =} \FunctionTok{c}\NormalTok{(fit\_spat}\SpecialCharTok{$}\NormalTok{waic}\SpecialCharTok{$}\NormalTok{waic, fit\_spat\_ar1}\SpecialCharTok{$}\NormalTok{waic}\SpecialCharTok{$}\NormalTok{waic),}
+  \AttributeTok{MLIK =} \FunctionTok{c}\NormalTok{(fit\_spat}\SpecialCharTok{$}\NormalTok{mlik[}\DecValTok{1}\NormalTok{], fit\_spat\_ar1}\SpecialCharTok{$}\NormalTok{mlik[}\DecValTok{1}\NormalTok{]))}
+\end{Highlighting}
+\end{Shaded}
+
+\end{tcolorbox}
+
+\subsection{Model check and
+comparison}\label{model-check-and-comparison}
 
 \subsection{Model Checking for Linear
 Models}\label{model-checking-for-linear-models}
@@ -440,7 +882,7 @@ mean for which we can produce some diagnostics plots , e.g.
 
 \begin{figure}[H]
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-7-1.pdf}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-47-1.pdf}}
 
 }
 
@@ -468,7 +910,7 @@ Normal distribution as follows:
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-8-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-48-1.pdf}}
 \end{center}
 
 \subsubsection{Posterior Predictive
@@ -540,7 +982,7 @@ the samples means and 95\% credible intervals against the observations.
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-10-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-50-1.pdf}}
 
 \subsection{GLM model checking}\label{sec-linmodel}
 
@@ -666,7 +1108,7 @@ Observation models:
     Additive/Linear: TRUE/TRUE
     Used components: effects[beta0, colordarker, colorlight, colormedium, w], latent[] 
 Time used:
-    Pre = 0.937, Running = 0.196, Post = 0.00719, Total = 1.14 
+    Pre = 0.852, Running = 0.187, Post = 0.00791, Total = 1.05 
 Fixed effects:
               mean    sd 0.025quant 0.5quant 0.975quant   mode kld
 beta0       -0.501 0.196     -0.885   -0.501     -0.117 -0.501   0
@@ -674,6 +1116,13 @@ colordarker -0.008 0.180     -0.362   -0.008      0.345 -0.008   0
 colorlight   0.445 0.176      0.101    0.445      0.790  0.445   0
 colormedium  0.248 0.118      0.017    0.248      0.479  0.248   0
 w            0.001 0.000      0.000    0.001      0.001  0.001   0
+
+Deviance Information Criterion (DIC) ...............: 917.12
+Deviance Information Criterion (DIC, saturated) ....: 561.74
+Effective number of parameters .....................: 5.01
+
+Watanabe-Akaike information criterion (WAIC) ...: 929.70
+Effective number of parameters .................: 16.51
 
 Marginal log-Likelihood:  -489.43 
  is computed 
@@ -690,7 +1139,7 @@ predictive checks. To do so, we will use the CPO and PIT - two commonly
 used Bayesian model assessment criteria based on the \textbf{posterior
 predictive distribution}.
 
-\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, breakable, coltitle=black, left=2mm, opacityback=0, bottomtitle=1mm, titlerule=0mm, toptitle=1mm, colback=white, leftrule=.75mm, toprule=.15mm, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Posterior predictive model checking}]
+\begin{tcolorbox}[enhanced jigsaw, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Posterior predictive model checking}, leftrule=.75mm, colbacktitle=quarto-callout-note-color!10!white, rightrule=.15mm, titlerule=0mm, colback=white, breakable, bottomtitle=1mm, bottomrule=.15mm, opacityback=0, colframe=quarto-callout-note-color-frame, arc=.35mm, opacitybacktitle=0.6, toptitle=1mm, left=2mm, toprule=.15mm, coltitle=black]
 
 The posterior predictive distribution for a predicted value \(\hat{y}\)
 is
@@ -759,7 +1208,7 @@ the PIT values which can be accessed through
 \section{Plot}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-27-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-67-1.pdf}}
 \end{center}
 
 \section{R Code}
@@ -793,7 +1242,7 @@ This quantities is useful when comparing different models - a smaller
 values indicate a better model fit. CPO values can be accessed by typing
 \texttt{inlabru\_model\$cpo\$cpo}.
 
-\begin{tcolorbox}[enhanced jigsaw, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, colframe=quarto-callout-warning-color-frame, breakable, coltitle=black, left=2mm, opacityback=0, bottomtitle=1mm, titlerule=0mm, toptitle=1mm, colback=white, leftrule=.75mm, toprule=.15mm, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, title={Task}]
+\begin{tcolorbox}[enhanced jigsaw, title={Task}, leftrule=.75mm, colbacktitle=quarto-callout-warning-color!10!white, rightrule=.15mm, titlerule=0mm, colback=white, breakable, bottomtitle=1mm, bottomrule=.15mm, opacityback=0, colframe=quarto-callout-warning-color-frame, arc=.35mm, opacitybacktitle=0.6, toptitle=1mm, left=2mm, toprule=.15mm, coltitle=black]
 
 The model assessment above suggests that a Poisson model might not be
 the most appropriate model, likely due to the overdispersion we detected
@@ -838,7 +1287,7 @@ Click here to see the solution
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-29-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{day4_practical_6_files/figure-pdf/unnamed-chunk-69-1.pdf}}
 
 \begin{Shaded}
 \begin{Highlighting}[]

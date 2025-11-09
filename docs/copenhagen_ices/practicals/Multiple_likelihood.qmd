@@ -1,0 +1,29 @@
+---
+title: "Practical - Multiple likelihood Models"
+execute: 
+  warning: false
+  message: false
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+
+# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
+library(webexercises)
+
+```
+
