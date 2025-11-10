@@ -58,7 +58,7 @@ library(inlabru)
 
 - What are INLA and `inlabru`?
 - Why the Bayesian framework?
-- Which model are `inlabru`-friendly?
+- Which models are `inlabru`-friendly?
 - What are Latent Gaussian Models?
 - How are they implemented in `inlabru`?
 
