@@ -2,30 +2,22 @@
 title: "Practicals"
 ---
 
-<iframe class="slide-deck" src="day1_practical.html">
 
-</iframe>
+[Practical 1](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day1_practical.html)
 
-<iframe class="slide-deck" src="day1_practical_2.html">
+[Practical 2](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day1_practical_2.html)
 
-</iframe>
+[Practical 3](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day2_practical_3.html)
 
-<iframe class="slide-deck" src="day2_practical_3.html">
+[Practical 4](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day2_practical_4.html)
 
-</iframe>
+[Practical 5](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day3_practical_5.html)
 
-<iframe class="slide-deck" src="day2_practical_4.html">
+[Practical 6](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day4_practical_6.html)
 
-</iframe>
+[Practical 7](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day4_practical_7.html)
 
-<iframe class="slide-deck" src="day3_practical_5.html">
+[Practical 8](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day5_practical_8.html)
 
-</iframe>
+[Practical 9](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day5_practical_9.html)
 
-<iframe class="slide-deck" src="day4_practical_6.html">
-
-</iframe>
-
-<iframe class="slide-deck" src="day4_practical_7.html">
-
-</iframe>
