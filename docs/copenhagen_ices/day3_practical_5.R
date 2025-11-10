@@ -390,4 +390,3 @@ fit3$summary.random$covariate %>%
 # inv_logit = function(x) (1+exp(-x))^(-1)
 
 
-
