@@ -21,6 +21,8 @@ project:
     - slides/slides_12.qmd
     - slides/slides_13.qmd
     - about.qmd
+    - about_practical.qmd
+
 website:
   title: inlabru workshop
   navbar:
@@ -30,6 +32,8 @@ website:
       text: Home
     - href: about.qmd
       text: Slides
+    - href: about_practical.qmd
+      text: Practicals  
   sidebar:
     style: docked
     search: true
@@ -55,25 +59,25 @@ website:
 
       - section: "Practicals"
         contents:
-          - href: day1_practical.html
+          - href: https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day1_practical.html
             text: Practical 1
-          - href: day1_practical_2.html
+          - href: https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day1_practical_2.html
             text: Practical 2
-          - href: day2_practical_3.html
+          - href: https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day2_practical_3.html
             text: Practical 3
-          - href: day2_practical_4.html
+          - href: https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day2_practical_4.html
             text: Practical 4
-          - href: day3_practical_5.html
+          - href: https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day3_practical_5.html
             text: Practical 5
-          - href: day4_practical_6.html
+          - href: https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day4_practical_6.html
             text: Practical 6
           - text: Practical 7
-            href: day4_practical_7.html
+            href: https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day4_practical_7.html
           - text: Practical 8
-            href: day5_practical_8.html
+            href: https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day5_practical_8.html
             external: true
           - text: Practical 9
-            href: day5_practical_9.html
+            href: https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day5_practical_9.html
             external: true
   page-navigation: true
 
