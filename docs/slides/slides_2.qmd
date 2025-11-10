@@ -260,7 +260,7 @@ p3 + geom_smooth(aes(tl, w), method = "lm", fill = "red")
 
 ## Some more details I{.smaller auto-animate="true} 
 
-We define `linear predictor` the mean (or a function of the mean) of our observations `given` the model components.
+We define as the `linear predictor` the mean (or a function of the mean) of our observations `given` the model components.
 
 
 ```{r}
