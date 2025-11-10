@@ -22,17 +22,14 @@ editor_options:
 
 At the end of the workshop, participants will be able to:
 
-
 -   Understand the motivation and challenges linked to spatial data
 -   Understand the statistical models used to analyse spatial and spatio-temporal data
 -   Understand how to implement such models using the `inlabru` library
 -   Independently analyse spatial data collected at sea using `inlabru`
 
+# Intended audience
 
-
-# Intended audience 
-
-The tutorial is intended for anyone who desires to improve their analyses of data collected at sea, including those data that are used as inputs to fishery stock assessments. 
+The tutorial is intended for anyone who desires to improve their analyses of data collected at sea, including those data that are used as inputs to fishery stock assessments.
 
 # Level
 
@@ -61,7 +58,7 @@ No knowledge of `R-INLA` is required.
 ### Day 2
 
 | Time | Topic |
-|:---------------------:|:-----------------------------------------------:|
+|:---------------------:|:----------------------------------------------:|
 | 9:00 - 10:00 | [**Session 3**: Temporal modelling and smoothing part 1](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_4.html) |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | **Session 4**: Temporal modelling and smoothing part 2 |
@@ -101,7 +98,7 @@ No knowledge of `R-INLA` is required.
 | 13:00 - 14:30 | Lunch break 🍽️ |
 | 14:30 - 15:30 | **Session 11**: Multilikelihoods/joint likelihood |
 | 15:35 - 15:45 | Coffee Break ☕ |
-| 15:45 - 16:45 | Practical Session 7 |
+| 15:45 - 16:45 | [Practical Session 7](day4_practical_7.qmd) |
 | 16:45 - 17:00 | wrap-up and outlook |
 
 : {.striped .hover}

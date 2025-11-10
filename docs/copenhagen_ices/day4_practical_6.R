@@ -1,3 +1,110 @@
+
+## ----child="practicals/space_time_ex.qmd"-------------------------------------
+
+## -----------------------------------------------------------------------------
+#| warning: false
+#| message: false
+
+
+library(dplyr)
+library(INLA)
+library(inlabru) 
+library(sf)
+library(terra)
+
+
+# load some libraries to generate nice map plots
+library(scico)
+library(ggplot2)
+library(patchwork)
+library(mapview)
+library(tidyterra)
+
+
+
+## -----------------------------------------------------------------------------
+#| message: false
+#| warning: false
+library(sdmTMB)
+
+pcod_df = sdmTMB::pcod  %>% filter(year<=2005)
+qcs_grid = sdmTMB::qcs_grid
+
+
+
+## -----------------------------------------------------------------------------
+#| message: false
+#| warning: false
+#| 
+pcod_sf =   st_as_sf(pcod_df, coords = c("lon","lat"), crs = 4326)
+pcod_sf = st_transform(pcod_sf,
+          crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
+
+
+## -----------------------------------------------------------------------------
+
+depth_r <- rast(qcs_grid, type = "xyz")
+crs(depth_r) <- crs(pcod_sf)
+
+
+
+
+
+
+
+## -----------------------------------------------------------------------------
+mesh = fm_mesh_2d(loc = pcod_sf,    
+                  cutoff = 1,
+                  max.edge = c(10,20),     
+                  offset = c(5,50),
+                  crs = st_crs(pcod_df))   
+
+spde_model =  inla.spde2.pcmatern(mesh,
+                                  prior.sigma = c(1, 0.5),
+                                  prior.range = c(100, 0.5))
+
+
+
+
+## -----------------------------------------------------------------------------
+depth_r$depth_group = inla.group(values(depth_r$depth_scaled))
+
+
+
+## -----------------------------------------------------------------------------
+pcod_sf = pcod_sf %>%
+     mutate(time_idx = match(year, c(2003, 2004, 2005)),
+         id = 1:nrow(.)) # Observation id for CV
+
+
+
+
+## -----------------------------------------------------------------------------
+# Select the raster of interest
+depth_orig = depth_r$depth_group
+re <- extend(depth_orig, ext(depth_orig)*1.05)
+# Convert to an sf spatial object
+re_df <- re %>% stars::st_as_stars() %>%  st_as_sf(na.rm=F)
+# fill in missing values using the original raster 
+re_df$depth_group =  bru_fill_missing(depth_orig,re_df,re_df$depth_group)
+# rasterize
+depth_filled <- stars::st_rasterize(re_df) %>% rast()
+plot(depth_filled)
+
+
+## -----------------------------------------------------------------------------
+pxl = st_as_sf(data.frame(crds(depth_r)), coords = c("x","y") ,
+               crs  = st_crs(pcod_sf))
+
+
+
+
+## -----------------------------------------------------------------------------
+# PC prior for AR(1) correlation parameter
+h.spec <- list(rho = list(prior = 'pc.cor0', param = c(0.5, 0.1)))
+
+
+
 ## ----child="practicals/LM_resids.qmd"-----------------------------------------
 
 ## -----------------------------------------------------------------------------

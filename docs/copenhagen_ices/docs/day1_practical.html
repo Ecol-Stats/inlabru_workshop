@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Practical 1 – inlabru workshop</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./day1_practical_2.html" rel="next">
+<link href="./slides/slides_13.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-02bc17c6550519fb281f2cc46da73859.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-e687ad03c4740c0784da0e53b5ccae62.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-02bc17c6550519fb281f2cc46da73859.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/quarto-contrib/downloadthis-1.9.1/downloadthis.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/bootstrap-icons-1.11.1/all.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="include/webex.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./INLA_logo.png" alt="" class="navbar-logo light-content">
+    <img src="./INLA_logo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">inlabru workshop</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./day1_practical.html">Practicals</a></li><li class="breadcrumb-item"><a href="./day1_practical.html">Practical 1</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Slides</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 9</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 11</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 12</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Practicals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day1_practical.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Practical 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day1_practical_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day2_practical_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day2_practical_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day3_practical_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 5</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day4_practical_6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 6</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day4_practical_7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 7</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day5_practical_8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 8</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day5_practical_9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 9</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#sec-linmodel" id="toc-sec-linmodel" class="nav-link active" data-scroll-target="#sec-linmodel">Linear Model</a>
+  <ul class="collapse">
+  <li><a href="#simulate-example-data" id="toc-simulate-example-data" class="nav-link" data-scroll-target="#simulate-example-data">Simulate example data</a></li>
+  <li><a href="#fitting-a-linear-regression-model-with-inlabru" id="toc-fitting-a-linear-regression-model-with-inlabru" class="nav-link" data-scroll-target="#fitting-a-linear-regression-model-with-inlabru">Fitting a linear regression model with <code>inlabru</code></a></li>
+  <li><a href="#generate-model-predictions" id="toc-generate-model-predictions" class="nav-link" data-scroll-target="#generate-model-predictions">Generate model predictions</a></li>
+  </ul></li>
+  <li><a href="#linear-mixed-model" id="toc-linear-mixed-model" class="nav-link" data-scroll-target="#linear-mixed-model">Linear Mixed Model</a>
+  <ul class="collapse">
+  <li><a href="#simulate-example-data-1" id="toc-simulate-example-data-1" class="nav-link" data-scroll-target="#simulate-example-data-1"><strong>Simulate example data</strong></a></li>
+  <li><a href="#fitting-a-lmm-in-inlabru" id="toc-fitting-a-lmm-in-inlabru" class="nav-link" data-scroll-target="#fitting-a-lmm-in-inlabru">Fitting a LMM in <code>inlabru</code></a></li>
+  <li><a href="#model-predictions" id="toc-model-predictions" class="nav-link" data-scroll-target="#model-predictions">Model predictions</a></li>
+  </ul></li>
+  <li><a href="#sec-genlinmodel" id="toc-sec-genlinmodel" class="nav-link" data-scroll-target="#sec-genlinmodel">Generalized Linear Model</a>
+  <ul class="collapse">
+  <li><a href="#simulate-example-data-2" id="toc-simulate-example-data-2" class="nav-link" data-scroll-target="#simulate-example-data-2"><strong>Simulate example data</strong></a></li>
+  <li><a href="#fitting-a-glm-in-inlabru" id="toc-fitting-a-glm-in-inlabru" class="nav-link" data-scroll-target="#fitting-a-glm-in-inlabru">Fitting a GLM in <code>inlabru</code></a></li>
+  <li><a href="#generate-model-predictions-1" id="toc-generate-model-predictions-1" class="nav-link" data-scroll-target="#generate-model-predictions-1">Generate model predictions</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="day1_practical.pdf"><i class="bi bi-file-pdf"></i>PDF (PrettyPDF)</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./day1_practical.html">Practicals</a></li><li class="breadcrumb-item"><a href="./day1_practical.html">Practical 1</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Practical 1</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><font size="5"> <strong>Aim of this practical:</strong> </font></p>
+<p>In this first practical we are going to look at some simple models</p>
+<ol type="1">
+<li>A Gaussian model with simulated data</li>
+<li>A Linear mixed model</li>
+<li>A GLM model with random effects</li>
+</ol>
+<p>we are going to learn:</p>
+<ul>
+<li>How to fit some commonly used models with <code>inlabru</code></li>
+<li>How to explore the results</li>
+<li>How to get predictions for missing data points</li>
+</ul>
+<p><a href="#dnldts11752" onclick="fetch('data:text/plain;base64,IyMgLS0tLWNoaWxkPSJwcmFjdGljYWxzL0xNX2V4LnFtZCItLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IHdhcm5pbmc6IGZhbHNlCiN8IG1lc3NhZ2U6IGZhbHNlCiN8IGNvZGUtc3VtbWFyeTogIkxvYWQgbGlicmFyaWVzIgoKbGlicmFyeShkcGx5cikKbGlicmFyeShJTkxBKQpsaWJyYXJ5KGdncGxvdDIpCmxpYnJhcnkocGF0Y2h3b3JrKQpsaWJyYXJ5KGlubGFicnUpICAgICAKIyBsb2FkIHNvbWUgbGlicmFyaWVzIHRvIGdlbmVyYXRlIG5pY2UgcGxvdHMKbGlicmFyeShzY2ljbykKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojfCBjb2RlLWZvbGQ6IHNob3cKI3wgY29kZS1zdW1tYXJ5OiAiU2ltdWxhdGUgRGF0YSBmcm9tIGEgTE0iCgpiZXRhID0gYygyLDAuNSkKc2RfZXJyb3IgPSAwLjEKCm4gPSAxMDAKeCA9IHJub3JtKG4pCnkgPSBiZXRhWzFdICsgYmV0YVsyXSAqIHggKyBybm9ybShuLCBzZCA9IHNkX2Vycm9yKQoKZGYgPSBkYXRhLmZyYW1lKHkgPSB5LCB4ID0geCkgIAoKCgoKCgoKCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IGNvZGUtc3VtbWFyeTogIkZpdCBMTSBpbiBgaW5sYWJydWAiCmZpdC5sbSA9IGJydShjbXAsIGxpaykKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojfCBjb2RlLXN1bW1hcnk6ICJNb2RlbCBzdW1tYXJpZXMiCiN8IGNvbGxhcHNlOiB0cnVlCnN1bW1hcnkoZml0LmxtKQoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCm5ld19kYXRhID0gZGF0YS5mcmFtZSh4ID0gYyhkZiR4LCBydW5pZigxMCkpLAogICAgICAgICAgICAgICAgICAgICAgeSA9IGMoZGYkeSwgcmVwKE5BLDEwKSkpCnByZWQgPSBwcmVkaWN0KGZpdC5sbSwgbmV3X2RhdGEsIH4gYmV0YV8wICsgYmV0YV8xLAogICAgICAgICAgICAgICBuLnNhbXBsZXMgPSAxMDAwKQoKCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IGNvZGUtZm9sZDogdHJ1ZQojfCBmaWctY2FwOiBEYXRhIGFuZCA5NSUgY3JlZGlibGUgaW50ZXJ2YWxzCiN8IGVjaG86IGZhbHNlCiN8IG1lc3NhZ2U6IGZhbHNlCiN8IHdhcm5pbmc6IGZhbHNlCiN8IGZpZy1hbGlnbjogY2VudGVyCiN8IGZpZy13aWR0aDogNAojfCBmaWctaGVpZ2h0OiA0CgpwcmVkICU+JSBnZ3Bsb3QoKSArIAogIGdlb21fcG9pbnQoYWVzKHgseSksIGFscGhhID0gMC4zKSArCiAgZ2VvbV9saW5lKGFlcyh4LG1lYW4pKSArCiAgZ2VvbV9saW5lKGFlcyh4LCBxMC4wMjUpLCBsaW5ldHlwZSA9ICJkYXNoZWQiKSsKICBnZW9tX2xpbmUoYWVzKHgsIHEwLjk3NSksIGxpbmV0eXBlID0gImRhc2hlZCIpKwogIHhsYWIoIkNvdmFyaWF0ZSIpICsgeWxhYigiT2JzZXJ2YXRpb25zIikKCgoKIyMgLS0tLWNoaWxkPSJwcmFjdGljYWxzL0xNTV9leC5xbWQiLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IGNvZGUtc3VtbWFyeTogIlNpbXVsYXRlIGRhdGEgZnJvbSBhIExNTSIKI3wgCnNldC5zZWVkKDEyKQpiZXRhID0gYygxLjUsMSkKc2RfZXJyb3IgPSAxCnRhdV9ncm91cCA9IDEKCm4gPSAxMDAKbi5ncm91cHMgPSA1CnggPSBybm9ybShuKQp2ID0gcm5vcm0obi5ncm91cHMsIHNkID0gdGF1X2dyb3VwXnstMS8yfSkKeSA9IGJldGFbMV0gKyBiZXRhWzJdICogeCArIHJub3JtKG4sIHNkID0gc2RfZXJyb3IpICsKICByZXAodiwgZWFjaCA9IDIwKQoKZGYgPSBkYXRhLmZyYW1lKHkgPSB5LCB4ID0geCwgaiA9IHJlcCgxOjUsIGVhY2ggPSAyMCkpICAKCgojIyAtLS0tcGxvdF9kYXRhX2xtbS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojfCBjb2RlLWZvbGQ6IHRydWUKI3wgZmlnLWNhcDogRGF0YSBmb3IgdGhlIGxpbmVhciBtaXhlZCBtb2RlbCBleGFtcGxlIHdpdGggNSBncm91cHMKI3wgZmlnLWFsaWduOiBjZW50ZXIKI3wgZmlnLXdpZHRoOiA0CiN8IGZpZy1oZWlnaHQ6IDQKCmdncGxvdChkZikgKwogIGdlb21fcG9pbnQoYWVzKHggPSB4LCBjb2xvdXIgPSBmYWN0b3IoaiksIHkgPSB5KSkgKwogIHRoZW1lX2NsYXNzaWMoKSArCiAgc2NhbGVfY29sb3VyX2Rpc2NyZXRlKCJHcm91cCIpCgoKCiMjIC0tLS1kZWZpbmVfY29tcG9uZW50c19sbW0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiMgRGVmaW5lIG1vZGVsIGNvbXBvbmVudHMKY21wID0gIH4gLTEgKyBiZXRhXzAoMSkgKyBiZXRhXzEoeCwgbW9kZWwgPSAibGluZWFyIikgKwogIHUoaiwgbW9kZWwgPSAiaWlkIikKCgojIyAtLS0tZGVmaW5lX2xpa2VsaWhvb2RfbG1tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojIENvbnN0cnVjdCBsaWtlbGlob29kCmxpayA9ICBicnVfb2JzKGZvcm11bGEgPSB5IH4uLAogICAgICAgICAgICBmYW1pbHkgPSAiZ2F1c3NpYW4iLAogICAgICAgICAgICBkYXRhID0gZGYpCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KI3wgY29sbGFwc2U6IHRydWUKI3wgY29kZS1zdW1tYXJ5OiAiRml0IGEgTE1NIGluIGlubGFicnUiCmZpdCA9IGJydShjbXAsIGxpaykKc3VtbWFyeShmaXQpCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KI3wgY29kZS1mb2xkOiB0cnVlCiN8IGNvZGUtc3VtbWFyeTogIkxNTSBmaXR0ZWQgdmFsdWVzIgojfCBmaWctYWxpZ246IGNlbnRlcgojfCBmaWctd2lkdGg6IDQKI3wgZmlnLWhlaWdodDogNAoKIyBOZXcgZGF0YQp4cHJlZCA9IHNlcShyYW5nZSh4KVsxXSwgcmFuZ2UoeClbMl0sIGxlbmd0aC5vdXQgPSAxMDApCmogPSAxOm4uZ3JvdXBzCnByZWRfZGF0YSA9IGV4cGFuZC5ncmlkKHggPSB4cHJlZCwgaiA9IGopCnByZWQgPSBwcmVkaWN0KGZpdCwgcHJlZF9kYXRhLCBmb3JtdWxhID0gfiBiZXRhXzAgKyBiZXRhXzEgKyB1KSAKCgpwcmVkICU+JQogIGdncGxvdChhZXMoeD14LHk9bWVhbixjb2xvcj1mYWN0b3IoaikpKSsKICBnZW9tX2xpbmUoKSsKICBnZW9tX3JpYmJvbihhZXMoeCx5bWluID0gcTAuMDI1LCB5bWF4PSBxMC45NzUsZmlsbD1mYWN0b3IoaikpLCBhbHBoYSA9IDAuNSkgKyAKICBnZW9tX3BvaW50KGRhdGE9ZGYsYWVzKHg9eCx5PXksY29sb3VyPWZhY3RvcihqKSkpKwogIGZhY2V0X3dyYXAofmopCgoKCgojIyAtLS0tY2hpbGQ9InByYWN0aWNhbHMvR0xNX2V4LnFtZCItLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KI3wgY29kZS1zdW1tYXJ5OiAiU2ltdWxhdGUgRGF0YSBmcm9tIGEgR0xNIgpzZXQuc2VlZCgxMjMpCm4gPSAxMDAKYmV0YSA9IGMoMSwxKQp4ID0gcm5vcm0obikKbGFtYmRhID0gZXhwKGJldGFbMV0gKyBiZXRhWzJdICogeCkKeSA9IHJwb2lzKG4sIGxhbWJkYSAgPSBsYW1iZGEpCmRmID0gZGF0YS5mcmFtZSh5ID0geSwgeCA9IHgpICAKCgoKCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KI3wgY29kZS1zdW1tYXJ5OiAiR0xNIGxpa2VsaWhvb2QiCgpsaWsgPSAgYnJ1X29icyhmb3JtdWxhID0gZXRhLAogICAgICAgICAgICBmYW1pbHkgPSAicG9pc3NvbiIsCiAgICAgICAgICAgIGRhdGEgPSBkZikKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojfCBjb2RlLXN1bW1hcnk6ICJGaXQgYSBHTE0iCmZpdF9nbG0gPSBicnUoY21wLCBsaWspCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KI3wgY29kZS1zdW1tYXJ5OiAiR0xNIHN1bW1hcmllcyIKc3VtbWFyeShmaXRfZ2xtKQoKCiMjIC0tLS1nZXRfcHJlZGljdGlvbnNfZ2xtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IGNvZGUtc3VtbWFyeTogIlByZWRjaXRlZCB2YWx1ZXMgZm9yIFBvaXNzb24gR0xNIgoKIyBEZWZpbmUgbmV3IGRhdGEsIHNldCB0byBOQSB0aGUgdmFsdWVzIGZvciBwcmVkaWN0aW9uCgpuZXdfZGF0YSA9IGRhdGEuZnJhbWUoeCA9IGMoZGYkeCwgcnVuaWYoMTApKSwKICAgICAgICAgICAgICAgICAgICAgIHkgPSBjKGRmJHksIHJlcChOQSwxMCkpKQoKIyBEZWZpbmUgcHJlZGljdG9yIGZvcm11bGEKcHJlZF9mbWwgPC0gfiBleHAoYmV0YV8wICsgYmV0YV8xKQoKIyBHZW5lcmF0ZSBwcmVkaWN0aW9ucwpwcmVkX2dsbSA8LSBwcmVkaWN0KGZpdF9nbG0sIG5ld19kYXRhLCBwcmVkX2ZtbCkKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojfCBlY2hvOiBmYWxzZQojfCBjb2RlLXN1bW1hcnk6ICJQbG90IEdMTSBwcmVkaWN0ZWQgdmFsdWVzIgojfCBmaWctY2FwOiBEYXRhIGFuZCA5NSUgY3JlZGlibGUgaW50ZXJ2YWxzCiN8IGZpZy1hbGlnbjogY2VudGVyCiN8IGZpZy13aWR0aDogNAojfCBmaWctaGVpZ2h0OiA0CiN8IHdhcm5pbmc6IGZhbHNlCgpwcmVkX2dsbSAlPiUgZ2dwbG90KCkgKyAKICBnZW9tX3BvaW50KGFlcyh4LHkpLCBhbHBoYSA9IDAuMykgKwogIGdlb21fbGluZShhZXMoeCxtZWFuKSkgKwogICAgZ2VvbV9yaWJib24oYWVzKHggPSB4LCB5bWF4ID0gcTAuOTc1LCB5bWluID0gcTAuMDI1KSxmaWxsID0gInRvbWF0byIsIGFscGhhID0gMC4zKSsKICBnZW9tX2xpbmUoYWVzKHgsIHEwLjAyNSksIGxpbmV0eXBlID0gImRhc2hlZCIpKwogIGdlb21fbGluZShhZXMoeCwgcTAuOTc1KSwgbGluZXR5cGUgPSAiZGFzaGVkIikrCiAgeGxhYigiQ292YXJpYXRlIikgKyB5bGFiKCJPYnNlcnZhdGlvbnMgKGNvdW50cykiKQoKCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KI3wgY29kZS1zdW1tYXJ5OiAiR0xNIFRhc2siCnNldC5zZWVkKDEyMykKbiA9IDEwMAphbHBoYSA9IGMoMC41LDEuNSkKdyA9IHJub3JtKG4pCnBzaSA9IHBsb2dpcyhhbHBoYVsxXSArIGFscGhhWzJdICogdykKeSA9IHJiaW5vbShuID0gbiwgc2l6ZSA9IDEsIHByb2IgPSAgcHNpKSAjIHNldCBzaXplID0gMSB0byBkcmF3IGJpbmFyeSBvYnNlcnZhdGlvbnMKZGZfbG9naXMgPSBkYXRhLmZyYW1lKHkgPSB5LCB3ID0gdykgIAoKCg==').then(res => res.blob()).then(blob => {
+      const downloadURL = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.href = downloadURL;
+      a.download = 'practical_1.R.R'; a.click();
+      window.URL.revokeObjectURL(downloadURL);
+      document.body.removeChild(a);
+        });"><button class="btn btn-success downloadthis  " id="dnldts11752"><i class="bi bi-database-fill-down"></i> Download Practical 1 R script </button></a></p>
+<section id="sec-linmodel" class="level2">
+<h2 class="anchored" data-anchor-id="sec-linmodel">Linear Model</h2>
+<p>In this practical we will:</p>
+<ul>
+<li>Simulate Gaussian data</li>
+<li>Learn how to fit a linear model with <code>inlabru</code></li>
+<li>Generate predictions from the model</li>
+</ul>
+<p>Start by loading useful libraries:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(INLA)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(inlabru)     </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># load some libraries to generate nice plots</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scico)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>As our first example we consider a simple linear regression model with Gaussian observations <span class="math display">\[
+y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
+\]</span></p>
+<p>where <span class="math inline">\(\sigma^2\)</span> is the observation error, and the mean parameter <span class="math inline">\(\mu_i\)</span> is linked to the <strong>linear predictor</strong> (<span class="math inline">\(\eta_i\)</span>) through an identity function: <span class="math display">\[
+\eta_i = \mu_i = \beta_0 + \beta_1 x_i
+\]</span> where <span class="math inline">\(x_i\)</span> is a covariate and <span class="math inline">\(\beta_0, \beta_1\)</span> are parameters to be estimated. We assign <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> a vague Gaussian prior.</p>
+<p>To finalize the Bayesian model we assign a <span class="math inline">\(\text{Gamma}(a,b)\)</span> prior to the precision parameter <span class="math inline">\(\tau = 1/\sigma^2\)</span> and two independent Gaussian priors with mean <span class="math inline">\(0\)</span> and precision <span class="math inline">\(\tau_{\beta}\)</span> to the regression parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> (we will use the default prior settings in INLA for now).</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span><i class="bi-question-octagon " style="color: #6dc83c;" role="img" aria-hidden="true"></i> Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What is the dimension of the hyperparameter vector and latent Gaussian field?</p>
+<div class="webex-solution">
+<button>
+Answer
+</button>
+<p>The hyperparameter vector has dimension 1, <span class="math inline">\(\pmb{\theta} = (\tau)\)</span> while the latent Gaussian field <span class="math inline">\(\pmb{u} = (\beta_0, \beta_1)\)</span> has dimension 2, <span class="math inline">\(0\)</span> mean, and sparse precision matrix:</p>
+<p><span class="math display">\[
+\pmb{Q} = \begin{bmatrix}
+\tau_{\beta_0} &amp; 0\\
+0 &amp; \tau_{\beta_1}
+\end{bmatrix}
+\]</span> Note that, since <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are fixed effects, the precision parameters <span class="math inline">\(\tau_{\beta_0}\)</span> and <span class="math inline">\(\tau_{\beta_1}\)</span> are fixed.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can write the linear predictor vector <span class="math inline">\(\pmb{\eta} = (\eta_1,\dots,\eta_N)\)</span> as</p>
+<p><span class="math display">\[
+\pmb{\eta} = \pmb{A}\pmb{u} = \pmb{A}_1\pmb{u}_1 + \pmb{A}_2\pmb{u}_2 = \begin{bmatrix}
+1 \\
+1\\
+\vdots\\
+1
+\end{bmatrix} \beta_0 + \begin{bmatrix}
+x_1 \\
+x_2\\
+\vdots\\
+x_N
+\end{bmatrix} \beta_1
+\]</span></p>
+<p>Our linear predictor consists then of two components: an intercept and a slope.</p>
+</div>
+</div>
+<section id="simulate-example-data" class="level3">
+<h3 class="anchored" data-anchor-id="simulate-example-data">Simulate example data</h3>
+<p>First, we simulate data from the model</p>
+<p><span class="math display">\[
+y_i\sim\mathcal{N}(\eta_i,0.1^2), \ i = 1,\dots,100
+\]</span></p>
+<p>with</p>
+<p><span class="math display">\[
+\eta_i = \beta_0 + \beta_1 x_i
+\]</span></p>
+<p>where <span class="math inline">\(\beta_0 = 2\)</span>, <span class="math inline">\(\beta_1 = 0.5\)</span> and the values of the covariate <span class="math inline">\(x\)</span> are generated from an Uniform(0,1) distribution. The simulated response and covariate data are then saved in a <code>data.frame</code> object.</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Simulate Data from a LM</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="fl">0.5</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sd_error <span class="ot">=</span> <span class="fl">0.1</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> beta[<span class="dv">1</span>] <span class="sc">+</span> beta[<span class="dv">2</span>] <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> sd_error)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">x =</span> x)  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="fitting-a-linear-regression-model-with-inlabru" class="level3">
+<h3 class="anchored" data-anchor-id="fitting-a-linear-regression-model-with-inlabru">Fitting a linear regression model with <code>inlabru</code></h3>
+<hr>
+<p><strong>Defining model components</strong></p>
+<p>The model has two parameters to be estimated <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>. We need to define the two corresponding model components.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Define an object called <code>cmp</code> that includes and (i) intercept <code>beta_0</code> and (ii) a covariate <code>x</code> linear effect <code>beta_1</code>.</p>
+<div class="webex-solution">
+<button>
+Take hint
+</button>
+<p>The <code>cmp</code> object is here used to define model components. We can give them any useful names we like, in this case, <code>beta_0</code> and <code>beta_1</code>. You can remove the automatic intercept construction by adding a <code>-1</code> in the components</p>
+</div>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cmp <span class="ot">=</span>  <span class="er">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> <span class="fu">beta_0</span>(<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">beta_1</span>(x, <span class="at">model =</span> <span class="st">"linear"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that we have excluded the default Intercept term in the model by typing <code>-1</code> in the model components. However, <code>inlabru</code> has automatic intercept that can be called by typing <code>Intercept()</code> , which is one of <code>inlabru</code> special names and it is used to define a global intercept, e.g.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cmp <span class="ot">=</span>  <span class="er">~</span>  <span class="fu">Intercept</span>(<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">beta_1</span>(x, <span class="at">model =</span> <span class="st">"linear"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p><strong>Observation model construction</strong></p>
+<p>The next step is to construct the observation model by defining the model likelihood. The most important inputs here are the <code>formula</code>, the <code>family</code> and the <code>data</code>.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Define a linear predictor <code>eta</code> using the component labels you have defined on the previous task.</p>
+<div class="webex-solution">
+<button>
+Take hint
+</button>
+<p>The <code>eta</code> object defines how the components should be combined in order to define the model predictor.</p>
+</div>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">=</span> y <span class="sc">~</span> beta_0 <span class="sc">+</span> beta_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<p>The likelihood for the observational model is defined using the <code>bru_obs()</code> function.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Define the observational model likelihood in an object called <code>lik</code> using the <code>bru_obs()</code> function.</p>
+<div class="webex-solution">
+<button>
+Take hint
+</button>
+<p>The <code>bru_obs</code> is expecting three arguments:</p>
+<ul>
+<li>The linear predictor <code>eta</code> we defined in the previous task</li>
+<li>The data likelihood (this can be specified by setting <code>family = "gaussian"</code>)</li>
+<li>The data set <code>df</code></li>
+</ul>
+</div>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>lik <span class="ot">=</span>  <span class="fu">bru_obs</span>(<span class="at">formula =</span> eta,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<p><strong>Fit the model</strong></p>
+<p>We fit the model using the <code>bru()</code> functions which takes as input the components and the observation model:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fit.lm <span class="ot">=</span> <span class="fu">bru</span>(cmp, lik)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Extract results</strong></p>
+<p>The <code>summary()</code> function will give access to some basic information about model fit and estimates</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit.lm)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="do">## inlabru version: 2.13.0.9011 </span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="do">## INLA version: 25.09.19 </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Components: </span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Latent components:</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="do">## beta_0: main = linear(1)</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="do">## beta_1: main = linear(x)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Observation models: </span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="do">##   Family: 'gaussian'</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="do">##     Tag: &lt;No tag&gt;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="do">##     Data class: 'data.frame'</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="do">##     Response class: 'numeric'</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="do">##     Predictor: y ~ beta_0 + beta_1</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="do">##     Additive/Linear: TRUE/TRUE</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="do">##     Used components: effects[beta_0, beta_1], latent[] </span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="do">## Time used:</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="do">##     Pre = 1.07, Running = 0.274, Post = 0.0183, Total = 1.36 </span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Fixed effects:</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="do">##         mean   sd 0.025quant 0.5quant 0.975quant  mode kld</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="do">## beta_0 1.997 0.01      1.977    1.997      2.017 1.997   0</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="do">## beta_1 0.494 0.01      0.475    0.494      0.512 0.494   0</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="do">## Model hyperparameters:</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="do">##                                          mean    sd 0.025quant 0.5quant</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="do">## Precision for the Gaussian observations 99.93 14.13      74.20    99.27</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="do">##                                         0.975quant  mode</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Precision for the Gaussian observations     129.49 97.93</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="do">## Marginal log-Likelihood:  65.82 </span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="do">##  is computed </span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="do">## Posterior summaries for the linear predictor and the fitted values are computed</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="do">## (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can see that both the intercept and slope and the error precision are correctly estimated.</p>
+</section>
+<section id="generate-model-predictions" class="level3">
+<h3 class="anchored" data-anchor-id="generate-model-predictions">Generate model predictions</h3>
+<hr>
+<p>Now we can take the fitted <code>bru</code> object and use the <code>predict</code> function to produce predictions for <span class="math inline">\(\mu\)</span> given a new set of values for the model covariates or the original values used for the model fit</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>new_data <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(df<span class="sc">$</span>x, <span class="fu">runif</span>(<span class="dv">10</span>)),</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">c</span>(df<span class="sc">$</span>y, <span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">10</span>)))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">=</span> <span class="fu">predict</span>(fit.lm, new_data, <span class="sc">~</span> beta_0 <span class="sc">+</span> beta_1,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">n.samples =</span> <span class="dv">1000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The <code>predict</code> function generate samples from the fitted model. In this case we set the number of samples to 1000.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">R Code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day1_practical_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="384"></p>
+<figcaption>Data and 95% credible intervals</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pred <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(x,y), <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x,mean)) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x, q0<span class="fl">.025</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>)<span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x, q0<span class="fl">.975</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>)<span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Covariate"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Observations"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Generate predictions for a new observation with <span class="math inline">\(x_0 = 0.45\)</span></p>
+<div class="webex-solution">
+<button>
+Take hint
+</button>
+<p>You can create a new data frame containing the new observation <span class="math inline">\(x_0\)</span> and then use the <code>predict</code> function.</p>
+</div>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>new_data <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fl">0.45</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">=</span> <span class="fu">predict</span>(fit.lm, new_data, <span class="sc">~</span> beta_0 <span class="sc">+</span> beta_1,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">n.samples =</span> <span class="dv">1000</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="linear-mixed-model" class="level2">
+<h2 class="anchored" data-anchor-id="linear-mixed-model">Linear Mixed Model</h2>
+<p>In this practical we will:</p>
+<ul>
+<li>Understand the basic structure of a Linear Mixed Model (LLM)</li>
+<li>Simulate data from a LMM</li>
+<li>Learn how to fit a LMM with <code>inlabru</code> and predict from the model.</li>
+</ul>
+<p>Consider the a simple linear regression model except with the addition that the data that comes in groups. Suppose that we want to include a random effect for each group <span class="math inline">\(j\)</span> (equivalent to adding a group random intercept). The model is then: <span class="math display">\[
+y_{ij}  = \beta_0 + \beta_1 x_i + u_j + \epsilon_{ij} ~~~  \text{for}~i = 1,\ldots,N~ \text{and}~ j = 1,\ldots,m.
+\]</span></p>
+<p>Here the random group effect is given by the variable <span class="math inline">\(u_j \sim \mathcal{N}(0, \tau^{-1}_u)\)</span> with <span class="math inline">\(\tau_u = 1/\sigma^2_u\)</span> describing the variability between groups (i.e., how much the group means differ from the overall mean). Then, <span class="math inline">\(\epsilon_j \sim \mathcal{N}(0, \tau^{-1}_\epsilon)\)</span> denotes the residuals of the model and <span class="math inline">\(\tau_\epsilon = 1/\sigma^2_\epsilon\)</span> captures how much individual observations deviate from their group mean (i.e., variability within group).</p>
+<p>The model design matrix for the random effect has one row for each observation (this is equivalent to a random intercept model). The row of the design matrix associated with the <span class="math inline">\(ij\)</span>-th observation consists of zeros except for the element associated with <span class="math inline">\(u_j\)</span>, which has a one.</p>
+<p><span class="math display">\[
+\pmb{\eta} = \pmb{A}\pmb{u} = \pmb{A}_1\pmb{u}_1 + \pmb{A}_2\pmb{u}_2 + \pmb{A}_3\pmb{u}_3
+\]</span></p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Supplementary material: LMM as a LGM
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In matrix form, the linear mixed model for the <em>j</em>-th group can be written as:</p>
+<p><span class="math display">\[ \overbrace{\mathbf{y}_j}^{ N \times 1} = \overbrace{X_j}^{ N \times 2} \underbrace{\beta}_{1\times 1} + \overbrace{Z_j}^{n_j \times 1} \underbrace{u_j}_{1\times1} + \overbrace{\epsilon_j}^{n_j \times 1}, \]</span></p>
+<p>In a latent Gaussian model (LGM) formulation the mixed model predictor for the <em>i</em>-th observation can be written as :</p>
+<p><span class="math display">\[
+\eta_i = \beta_0 + \beta_1 x_i + \sum_k^K f_k(u_j)
+\]</span></p>
+<p>where <span class="math inline">\(f_k(u_j) = u_j\)</span> since there’s only one random effect per group (i.e., a random intercept for group <span class="math inline">\(j\)</span>). The fixed effects <span class="math inline">\((\beta_0,\beta_1)\)</span> are assigned Gaussian priors (e.g., <span class="math inline">\(\beta \sim \mathcal{N}(0,\tau_\beta^{-1})\)</span>). The random effects <span class="math inline">\(\mathbf{u} = (u_1,\ldots,u_m)^T\)</span> follow a Gaussian density <span class="math inline">\(\mathcal{N}(0,\mathbf{Q}_u^{-1})\)</span> where <span class="math inline">\(\mathbf{Q}_u = \tau_u\mathbf{I}_m\)</span> is the precision matrix for the random intercepts. Then, the components for the LGM are the following:</p>
+<ul>
+<li><p>Latent field given by</p>
+<p><span class="math display">\[
+\begin{bmatrix} \beta \\\mathbf{u}
+\end{bmatrix} \sim \mathcal{N}\left(\mathbf{0},\begin{bmatrix}\tau_\beta^{-1}\mathbf{I}_2&amp;\mathbf{0}\\\mathbf{0} &amp;\tau_u^{-1}\mathbf{I}_m\end{bmatrix}\right)
+\]</span></p></li>
+<li><p>Likelihood:</p>
+<p><span class="math display">\[
+y_i \sim \mathcal{N}(\eta_i,\tau_{\epsilon}^{-1})
+\]</span></p></li>
+<li><p>Hyperparameters:</p>
+<ul>
+<li><span class="math inline">\(\tau_u\sim\mathrm{Gamma}(a,b)\)</span></li>
+<li><span class="math inline">\(\tau_\epsilon \sim \mathrm{Gamma}(c,d)\)</span></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<section id="simulate-example-data-1" class="level3">
+<h3 class="anchored" data-anchor-id="simulate-example-data-1"><strong>Simulate example data</strong></h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">1.5</span>,<span class="dv">1</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>sd_error <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>tau_group <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>n.groups <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>v <span class="ot">=</span> <span class="fu">rnorm</span>(n.groups, <span class="at">sd =</span> tau_group<span class="sc">^</span>{<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>})</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> beta[<span class="dv">1</span>] <span class="sc">+</span> beta[<span class="dv">2</span>] <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> sd_error) <span class="sc">+</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(v, <span class="at">each =</span> <span class="dv">20</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">x =</span> x, <span class="at">j =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">each =</span> <span class="dv">20</span>))  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Note that <code>inlabru</code> expects an integer indexing variable to label the groups.</p>
+<div class="cell" data-layout-align="center">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">colour =</span> <span class="fu">factor</span>(j), <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_discrete</span>(<span class="st">"Group"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day1_practical_files/figure-html/plot_data_lmm-1.png" class="img-fluid figure-img" width="384"></p>
+<figcaption>Data for the linear mixed model example with 5 groups</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="fitting-a-lmm-in-inlabru" class="level3">
+<h3 class="anchored" data-anchor-id="fitting-a-lmm-in-inlabru">Fitting a LMM in <code>inlabru</code></h3>
+<hr>
+<p><strong>Defining model components and observational model</strong></p>
+<p>In order to specify this model we must use the <code>group</code> argument to tell <code>inlabru</code> which variable indexes the groups. The <code>model = "iid"</code> tells INLA that the groups are independent from one another.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define model components</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>cmp <span class="ot">=</span>  <span class="er">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> <span class="fu">beta_0</span>(<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">beta_1</span>(x, <span class="at">model =</span> <span class="st">"linear"</span>) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">u</span>(j, <span class="at">model =</span> <span class="st">"iid"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The group variable is indexed by column <code>j</code> in the dataset. We have chosen to name this component <code>v()</code> to connect with the mathematical notation that we used above.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct likelihood</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>lik <span class="ot">=</span>  <span class="fu">bru_obs</span>(<span class="at">formula =</span> y <span class="sc">~</span>.,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Fitting the model</strong></p>
+<p>The model can be fitted exactly as in the previous examples by using the <code>bru</code> function with the components and likelihood objects.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">bru</span>(cmp, lik)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="do">## inlabru version: 2.13.0.9011 </span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="do">## INLA version: 25.09.19 </span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Components: </span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Latent components:</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="do">## beta_0: main = linear(1)</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="do">## beta_1: main = linear(x)</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="do">## u: main = iid(j)</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Observation models: </span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="do">##   Family: 'gaussian'</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="do">##     Tag: &lt;No tag&gt;</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="do">##     Data class: 'data.frame'</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="do">##     Response class: 'numeric'</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="do">##     Predictor: y ~ .</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="do">##     Additive/Linear: TRUE/TRUE</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="do">##     Used components: effects[beta_0, beta_1, u], latent[] </span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Time used:</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="do">##     Pre = 0.943, Running = 0.192, Post = 0.036, Total = 1.17 </span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Fixed effects:</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="do">##         mean    sd 0.025quant 0.5quant 0.975quant  mode kld</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="do">## beta_0 2.108 0.438      1.229    2.108      2.986 2.108   0</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="do">## beta_1 1.172 0.120      0.936    1.172      1.407 1.172   0</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="do">## Random effects:</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="do">##   Name     Model</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="do">##     u IID model</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="do">## Model hyperparameters:</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="do">##                                          mean    sd 0.025quant 0.5quant</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="do">## Precision for the Gaussian observations 0.995 0.144      0.738    0.986</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="do">## Precision for u                         1.613 1.060      0.369    1.356</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="do">##                                         0.975quant  mode</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="do">## Precision for the Gaussian observations       1.30 0.971</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a><span class="do">## Precision for u                               4.35 0.918</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="do">## Marginal log-Likelihood:  -179.93 </span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="do">##  is computed </span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="do">## Posterior summaries for the linear predictor and the fitted values are computed</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="do">## (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="model-predictions" class="level3">
+<h3 class="anchored" data-anchor-id="model-predictions">Model predictions</h3>
+<p>To compute model predictions we can create a <code>data.frame</code> containing a range of values of covariate where we want the response to be predicted for each group. Then we simply call the predict function while specifying the model components.</p>
+<div class="cell" data-layout-align="center">
+<details class="code-fold">
+<summary>LMM fitted values</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># New data</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>xpred <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">range</span>(x)[<span class="dv">1</span>], <span class="fu">range</span>(x)[<span class="dv">2</span>], <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>j <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span>n.groups</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>pred_data <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">x =</span> xpred, <span class="at">j =</span> j)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">=</span> <span class="fu">predict</span>(fit, pred_data, <span class="at">formula =</span> <span class="sc">~</span> beta_0 <span class="sc">+</span> beta_1 <span class="sc">+</span> u) </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>pred <span class="sc">%&gt;%</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>mean,<span class="at">color=</span><span class="fu">factor</span>(j)))<span class="sc">+</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(x,<span class="at">ymin =</span> q0<span class="fl">.025</span>, <span class="at">ymax=</span> q0<span class="fl">.975</span>,<span class="at">fill=</span><span class="fu">factor</span>(j)), <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data=</span>df,<span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y,<span class="at">colour=</span><span class="fu">factor</span>(j)))<span class="sc">+</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>j)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day1_practical_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span><i class="bi-question-octagon " style="color: #6dc83c;" role="img" aria-hidden="true"></i> Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose that we are also interested in including random slopes into our model. Assuming intercept and slopes are independent, can your write down the linear predictor and the components of this model as a LGM?</p>
+<div class="webex-solution">
+<button>
+Give me a hint
+</button>
+<p>In general, the mixed model predictor can decomposed as:</p>
+<p><span class="math display">\[ \pmb{\eta} = X\beta + Z\mathbf{u} \]</span></p>
+<p>Where <span class="math inline">\(X\)</span> is a <span class="math inline">\(n \times p\)</span> design matrix and <span class="math inline">\(\beta\)</span> the corresponding <em>p</em>-dimensional vector of fixed effects. Then <span class="math inline">\(Z\)</span> is a <span class="math inline">\(n\times q_J\)</span> design matrix for the <span class="math inline">\(q_J\)</span> random effects and <span class="math inline">\(J\)</span> groups; <span class="math inline">\(\mathbf{v}\)</span> is then a <span class="math inline">\(q_J \times 1\)</span> vector of <span class="math inline">\(q\)</span> random effects for the <span class="math inline">\(J\)</span> groups. In a latent Gaussian model (LGM) formulation this can be written as:</p>
+<p><span class="math display">\[ \eta_i = \beta_0 + \sum\beta_j x_{ij} + \sum_k f(k) (u_{ij}) \]</span></p>
+</div>
+<div class="webex-solution">
+<button>
+See Solution
+</button>
+<ul>
+<li><p>The linear predictor is given by</p>
+<p><span class="math display">\[
+\eta_i = \beta_0 + \beta_1x_i + u_{0j} + u_{1j}x_i
+\]</span></p></li>
+<li><p>Latent field defined by:</p>
+<ul>
+<li><p><span class="math inline">\(\beta \sim \mathcal{N}(0,\tau_\beta^{-1})\)</span></p></li>
+<li><p><span class="math inline">\(\mathbf{u}_j = \begin{bmatrix}u_{0j} \\ u_{1j}\end{bmatrix}, \mathbf{u}_j \sim \mathcal{N}(\mathbf{0},\mathbf{Q}_u^{-1})\)</span> where the precision matrix is a block-diagonal matrix with entries <span class="math inline">\(\mathbf{Q}_u= \begin{bmatrix}\tau_{u_0} &amp; {0} \\{0} &amp; \tau_{u_1}\end{bmatrix}\)</span></p></li>
+</ul></li>
+<li><p>The hyperparameters are then:</p>
+<ul>
+<li><span class="math inline">\(\tau_{u_0},\tau_{u_1} \text{and}~\tau_\epsilon\)</span></li>
+</ul></li>
+</ul>
+<p>To fit this model in <code>inlabru</code> we can simply modify the model components as follows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>cmp <span class="ot">=</span>  <span class="er">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> <span class="fu">beta_0</span>(<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">beta_1</span>(x, <span class="at">model =</span> <span class="st">"linear"</span>) <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">u0</span>(j, <span class="at">model =</span> <span class="st">"iid"</span>) <span class="sc">+</span> <span class="fu">u1</span>(j,x, <span class="at">model =</span> <span class="st">"iid"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-genlinmodel" class="level2">
+<h2 class="anchored" data-anchor-id="sec-genlinmodel">Generalized Linear Model</h2>
+<p>In this practical we will:</p>
+<ul>
+<li>Simulate non-Gaussian data</li>
+<li>Learn how to fit a generalised linear model with <code>inlabru</code></li>
+<li>Generate predictions from the model</li>
+</ul>
+<p>A generalised linear model allows for the data likelihood to be non-Gaussian. In this example we have a discrete response variable which we model using a Poisson distribution. Thus, we assume that our data <span class="math display">\[
+y_i \sim \text{Poisson}(\lambda_i)
+\]</span> with rate parameter <span class="math inline">\(\lambda_i\)</span> which, using a log link, has associated predictor <span class="math display">\[
+\eta_i = \log \lambda_i = \beta_0 + \beta_1 x_i
+\]</span> with parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>, and covariate <span class="math inline">\(x\)</span>.</p>
+<section id="simulate-example-data-2" class="level3">
+<h3 class="anchored" data-anchor-id="simulate-example-data-2"><strong>Simulate example data</strong></h3>
+<p>This code generates 100 samples of covariate <code>x</code> and data <code>y</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">=</span> <span class="fu">exp</span>(beta[<span class="dv">1</span>] <span class="sc">+</span> beta[<span class="dv">2</span>] <span class="sc">*</span> x)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">rpois</span>(n, <span class="at">lambda  =</span> lambda)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">x =</span> x)  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="fitting-a-glm-in-inlabru" class="level3">
+<h3 class="anchored" data-anchor-id="fitting-a-glm-in-inlabru">Fitting a GLM in <code>inlabru</code></h3>
+<hr>
+<p><strong>Define model components</strong></p>
+<p>The predictor here only contains only 2 components (Intercept and Slope).</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i>Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Define an object called <code>cmp</code> that includes and (i) intercept <code>beta_0</code> and (ii) a covariate <code>x</code> linear effect <code>beta_1</code>.</p>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>cmp <span class="ot">=</span>  <span class="er">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> <span class="fu">beta_0</span>(<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">beta_1</span>(x, <span class="at">model =</span> <span class="st">"linear"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<p><strong>Define linear predictor</strong></p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i>Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Define a linear predictor <code>eta</code> using the component labels you have defined on the previous task.</p>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>eta <span class="ot">=</span> y <span class="sc">~</span> beta_0 <span class="sc">+</span> beta_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<p><strong>Build observational model</strong></p>
+<p>When building the observation model likelihood we must now specify the Poisson likelihood using the <code>family</code> argument (the default link function for this family is the <span class="math inline">\(\log\)</span> link).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>lik <span class="ot">=</span>  <span class="fu">bru_obs</span>(<span class="at">formula =</span> eta,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">family =</span> <span class="st">"poisson"</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Fit the model</strong></p>
+<p>Once the likelihood object is constructed, fitting the model is exactly the same process, we just need to specify the model components and the observational model, and pass this on to the <code>bru</code> function:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fit_glm <span class="ot">=</span> <span class="fu">bru</span>(cmp, lik)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And model summaries can be viewed using</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_glm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>inlabru version: 2.13.0.9011 
+INLA version: 25.09.19 
+Components: 
+Latent components:
+beta_0: main = linear(1)
+beta_1: main = linear(x)
+Observation models: 
+  Family: 'poisson'
+    Tag: &lt;No tag&gt;
+    Data class: 'data.frame'
+    Response class: 'integer'
+    Predictor: y ~ beta_0 + beta_1
+    Additive/Linear: TRUE/TRUE
+    Used components: effects[beta_0, beta_1], latent[] 
+Time used:
+    Pre = 0.98, Running = 0.194, Post = 0.00576, Total = 1.18 
+Fixed effects:
+        mean    sd 0.025quant 0.5quant 0.975quant  mode kld
+beta_0 0.915 0.071      0.775    0.915      1.054 0.915   0
+beta_1 1.048 0.056      0.938    1.048      1.157 1.048   0
+
+Marginal log-Likelihood:  -204.02 
+ is computed 
+Posterior summaries for the linear predictor and the fitted values are computed
+(Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')</code></pre>
+</div>
+</div>
+</section>
+<section id="generate-model-predictions-1" class="level3">
+<h3 class="anchored" data-anchor-id="generate-model-predictions-1">Generate model predictions</h3>
+<hr>
+<p>To generate new predictions we must provide a data frame that contains the covariate values for <span class="math inline">\(x\)</span> at which we want to predict.</p>
+<p>This code block generates predictions for the data we used to fit the model (contained in <code>df$x</code>) as well as 10 new covariate values sampled from a uniform distribution <code>runif(10)</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define new data, set to NA the values for prediction</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>new_data <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(df<span class="sc">$</span>x, <span class="fu">runif</span>(<span class="dv">10</span>)),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">c</span>(df<span class="sc">$</span>y, <span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">10</span>)))</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Define predictor formula</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>pred_fml <span class="ot">&lt;-</span> <span class="er">~</span> <span class="fu">exp</span>(beta_0 <span class="sc">+</span> beta_1)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate predictions</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>pred_glm <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_glm, new_data, pred_fml)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Since we used a log link (which is the default for <code>family = "poisson"</code>), we want to predict the exponential of the predictor. We specify this using a general <code>R</code> expression using the formula syntax.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that the <code>predict</code> function will call the component names (i.e.&nbsp;the “labels”) that were decided when defining the model.</p>
+</div>
+</div>
+<p>Since the component definition is looking for a covariate named <span class="math inline">\(x\)</span>, all we need to provide is a data frame that contains one, and the software does the rest.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">R Code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day1_practical_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid figure-img" width="384"></p>
+<figcaption>Data and 95% credible intervals</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pred_glm <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(x,y), <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x,mean)) <span class="sc">+</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">ymax =</span> q0<span class="fl">.975</span>, <span class="at">ymin =</span> q0<span class="fl">.025</span>),<span class="at">fill =</span> <span class="st">"tomato"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>)<span class="sc">+</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Covariate"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Observations (counts)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i>Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose a binary response such that</p>
+<p><span class="math display">\[
+    \begin{aligned}
+y_i &amp;\sim \mathrm{Bernoulli}(\psi_i)\\
+\eta_i &amp;= \mathrm{logit}(\psi_i) = \alpha_0 +\alpha_1 \times w_i
+\end{aligned}
+\]</span> Using the following simulated data, use <code>inlabru</code> to fit the logistic regression above. Then, plot the predictions for the data used to fit the model along with 10 new covariate values</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">=</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">1.5</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>w <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>psi <span class="ot">=</span> <span class="fu">plogis</span>(alpha[<span class="dv">1</span>] <span class="sc">+</span> alpha[<span class="dv">2</span>] <span class="sc">*</span> w)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">rbinom</span>(<span class="at">n =</span> n, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span>  psi) <span class="co"># set size = 1 to draw binary observations</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>df_logis <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">w =</span> w)  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Here we use the logit link function <span class="math inline">\(\mathrm{logit}(x) = \log\left(\frac{x}{1-x}\right)\)</span> (<code>plogis()</code> function in R) to link the linear predictor to the probabilities <span class="math inline">\(\psi\)</span>.</p>
+<div class="webex-solution">
+<button>
+Take hint
+</button>
+<p>You can set <code>family = "binomial"</code> for binary responses and the <code>plogis()</code> function for computing the predicted values.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The Bernoulli distribution is equivalent to a <span class="math inline">\(\mathrm{Binomial}(1, \psi)\)</span> pmf. If you have proportional data (e.g.&nbsp;no. successes/no. trials) you can specify the number of events as your response and then the number of trials via the <code>Ntrials = n</code> argument of the <code>bru_obs</code> function (where <code>n</code> is the known vector of trials in your data set).</p>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model components</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>cmp_logis <span class="ot">=</span>  <span class="er">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> <span class="fu">alpha_0</span>(<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">alpha_1</span>(w, <span class="at">model =</span> <span class="st">"linear"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Model likelihood</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>lik_logis <span class="ot">=</span>  <span class="fu">bru_obs</span>(<span class="at">formula =</span> y <span class="sc">~</span>.,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">family =</span> <span class="st">"binomial"</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> df_logis)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># fit the model</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>fit_logis <span class="ot">&lt;-</span> <span class="fu">bru</span>(cmp_logis,lik_logis)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Define data for prediction</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>new_data <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">w =</span> <span class="fu">c</span>(df_logis<span class="sc">$</span>w, <span class="fu">runif</span>(<span class="dv">10</span>)),</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="fu">c</span>(df_logis<span class="sc">$</span>y, <span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">10</span>)))</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Define predictor formula</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>pred_fml <span class="ot">&lt;-</span> <span class="er">~</span> <span class="fu">plogis</span>(alpha_0 <span class="sc">+</span> alpha_1)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate predictions</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>pred_logis <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit_logis, new_data, pred_fml)</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot predictions</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>pred_logis <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(w,y), <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(w,mean)) <span class="sc">+</span></span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">x =</span> w, <span class="at">ymax =</span> q0<span class="fl">.975</span>, <span class="at">ymin =</span> q0<span class="fl">.025</span>),<span class="at">fill =</span> <span class="st">"tomato"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>)<span class="sc">+</span></span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Covariate"</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">"Observations"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day1_practical_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./slides/slides_13.html" class="pagination-link" aria-label="Lecture 12">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 12</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./day1_practical_2.html" class="pagination-link" aria-label="Practical 2">
+        <span class="nav-page-text">Practical 2</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

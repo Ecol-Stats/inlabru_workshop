@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Practical 6 – inlabru workshop</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./day4_practical_7.html" rel="next">
+<link href="./day3_practical_5.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-02bc17c6550519fb281f2cc46da73859.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-e687ad03c4740c0784da0e53b5ccae62.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-02bc17c6550519fb281f2cc46da73859.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/quarto-contrib/downloadthis-1.9.1/downloadthis.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/bootstrap-icons-1.11.1/all.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="include/webex.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./INLA_logo.png" alt="" class="navbar-logo light-content">
+    <img src="./INLA_logo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">inlabru workshop</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./day1_practical.html">Practicals</a></li><li class="breadcrumb-item"><a href="./day4_practical_6.html">Practical 6</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Slides</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 9</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 11</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 12</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Practicals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day1_practical.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day1_practical_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day2_practical_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day2_practical_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day3_practical_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 5</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day4_practical_6.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Practical 6</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day4_practical_7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 7</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day5_practical_8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 8</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day5_practical_9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 9</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#space-time-models" id="toc-space-time-models" class="nav-link active" data-scroll-target="#space-time-models">Space time models</a>
+  <ul class="collapse">
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">The data</a></li>
+  <li><a href="#spatio-temporal-modeling" id="toc-spatio-temporal-modeling" class="nav-link" data-scroll-target="#spatio-temporal-modeling">Spatio-temporal modeling</a></li>
+  <li><a href="#model-comparison" id="toc-model-comparison" class="nav-link" data-scroll-target="#model-comparison">Model Comparison</a></li>
+  </ul></li>
+  <li><a href="#model-check-and-comparison" id="toc-model-check-and-comparison" class="nav-link" data-scroll-target="#model-check-and-comparison">Model check and comparison</a></li>
+  <li><a href="#model-checking-for-linear-models" id="toc-model-checking-for-linear-models" class="nav-link" data-scroll-target="#model-checking-for-linear-models">Model Checking for Linear Models</a>
+  <ul class="collapse">
+  <li><a href="#simulate-example-data" id="toc-simulate-example-data" class="nav-link" data-scroll-target="#simulate-example-data">Simulate example data</a></li>
+  <li><a href="#fitting-the-linear-regression-model-with-inlabru" id="toc-fitting-the-linear-regression-model-with-inlabru" class="nav-link" data-scroll-target="#fitting-the-linear-regression-model-with-inlabru">Fitting the linear regression model with <code>inlabru</code></a></li>
+  <li><a href="#residuals-analysis" id="toc-residuals-analysis" class="nav-link" data-scroll-target="#residuals-analysis">Residuals analysis</a></li>
+  <li><a href="#posterior-predictive-checks" id="toc-posterior-predictive-checks" class="nav-link" data-scroll-target="#posterior-predictive-checks">Posterior Predictive Checks</a></li>
+  </ul></li>
+  <li><a href="#sec-linmodel" id="toc-sec-linmodel" class="nav-link" data-scroll-target="#sec-linmodel">GLM model checking</a>
+  <ul class="collapse">
+  <li><a href="#model-assessment-and-model-choice" id="toc-model-assessment-and-model-choice" class="nav-link" data-scroll-target="#model-assessment-and-model-choice">Model assessment and model choice</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="day4_practical_6.pdf"><i class="bi bi-file-pdf"></i>PDF (PrettyPDF)</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./day1_practical.html">Practicals</a></li><li class="breadcrumb-item"><a href="./day4_practical_6.html">Practical 6</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Practical 6</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><font size="5"> <strong>Aim of this practical:</strong> </font></p>
+<p>In this practical we are going to look at space-time model and model comparison and validation techniques.</p>
+<p><a href="#dnldts38516" onclick="fetch('data:text/plain;base64,IyMgLS0tLWNoaWxkPSJwcmFjdGljYWxzL3NwYWNlX3RpbWVfZXgucW1kIi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IHdhcm5pbmc6IGZhbHNlCiN8IG1lc3NhZ2U6IGZhbHNlCgoKbGlicmFyeShkcGx5cikKbGlicmFyeShJTkxBKQpsaWJyYXJ5KGlubGFicnUpIApsaWJyYXJ5KHNmKQpsaWJyYXJ5KHRlcnJhKQoKCiMgbG9hZCBzb21lIGxpYnJhcmllcyB0byBnZW5lcmF0ZSBuaWNlIG1hcCBwbG90cwpsaWJyYXJ5KHNjaWNvKQpsaWJyYXJ5KGdncGxvdDIpCmxpYnJhcnkocGF0Y2h3b3JrKQpsaWJyYXJ5KG1hcHZpZXcpCmxpYnJhcnkodGlkeXRlcnJhKQoKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojfCBtZXNzYWdlOiBmYWxzZQojfCB3YXJuaW5nOiBmYWxzZQpsaWJyYXJ5KHNkbVRNQikKCnBjb2RfZGYgPSBzZG1UTUI6OnBjb2QgICU+JSBmaWx0ZXIoeWVhcjw9MjAwNSkKcWNzX2dyaWQgPSBzZG1UTUI6OnFjc19ncmlkCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IG1lc3NhZ2U6IGZhbHNlCiN8IHdhcm5pbmc6IGZhbHNlCiN8IApwY29kX3NmID0gICBzdF9hc19zZihwY29kX2RmLCBjb29yZHMgPSBjKCJsb24iLCJsYXQiKSwgY3JzID0gNDMyNikKcGNvZF9zZiA9IHN0X3RyYW5zZm9ybShwY29kX3NmLAogICAgICAgICAgY3JzID0gIitwcm9qPXV0bSArem9uZT05ICtkYXR1bT1XR1M4NCArbm9fZGVmcyArdHlwZT1jcnMgK3VuaXRzPWttIiApCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCmRlcHRoX3IgPC0gcmFzdChxY3NfZ3JpZCwgdHlwZSA9ICJ4eXoiKQpjcnMoZGVwdGhfcikgPC0gY3JzKHBjb2Rfc2YpCgoKCgoKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQptZXNoID0gZm1fbWVzaF8yZChsb2MgPSBwY29kX3NmLCAgICAKICAgICAgICAgICAgICAgICAgY3V0b2ZmID0gMSwKICAgICAgICAgICAgICAgICAgbWF4LmVkZ2UgPSBjKDEwLDIwKSwgICAgIAogICAgICAgICAgICAgICAgICBvZmZzZXQgPSBjKDUsNTApLAogICAgICAgICAgICAgICAgICBjcnMgPSBzdF9jcnMocGNvZF9kZikpICAgCgpzcGRlX21vZGVsID0gIGlubGEuc3BkZTIucGNtYXRlcm4obWVzaCwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHByaW9yLnNpZ21hID0gYygxLCAwLjUpLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcHJpb3IucmFuZ2UgPSBjKDEwMCwgMC41KSkKCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCmRlcHRoX3IkZGVwdGhfZ3JvdXAgPSBpbmxhLmdyb3VwKHZhbHVlcyhkZXB0aF9yJGRlcHRoX3NjYWxlZCkpCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCnBjb2Rfc2YgPSBwY29kX3NmICU+JQogICAgIG11dGF0ZSh0aW1lX2lkeCA9IG1hdGNoKHllYXIsIGMoMjAwMywgMjAwNCwgMjAwNSkpLAogICAgICAgICBpZCA9IDE6bnJvdyguKSkgIyBPYnNlcnZhdGlvbiBpZCBmb3IgQ1YKCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiMgU2VsZWN0IHRoZSByYXN0ZXIgb2YgaW50ZXJlc3QKZGVwdGhfb3JpZyA9IGRlcHRoX3IkZGVwdGhfZ3JvdXAKcmUgPC0gZXh0ZW5kKGRlcHRoX29yaWcsIGV4dChkZXB0aF9vcmlnKSoxLjA1KQojIENvbnZlcnQgdG8gYW4gc2Ygc3BhdGlhbCBvYmplY3QKcmVfZGYgPC0gcmUgJT4lIHN0YXJzOjpzdF9hc19zdGFycygpICU+JSAgc3RfYXNfc2YobmEucm09RikKIyBmaWxsIGluIG1pc3NpbmcgdmFsdWVzIHVzaW5nIHRoZSBvcmlnaW5hbCByYXN0ZXIgCnJlX2RmJGRlcHRoX2dyb3VwID0gIGJydV9maWxsX21pc3NpbmcoZGVwdGhfb3JpZyxyZV9kZixyZV9kZiRkZXB0aF9ncm91cCkKIyByYXN0ZXJpemUKZGVwdGhfZmlsbGVkIDwtIHN0YXJzOjpzdF9yYXN0ZXJpemUocmVfZGYpICU+JSByYXN0KCkKcGxvdChkZXB0aF9maWxsZWQpCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KcHhsID0gc3RfYXNfc2YoZGF0YS5mcmFtZShjcmRzKGRlcHRoX3IpKSwgY29vcmRzID0gYygieCIsInkiKSAsCiAgICAgICAgICAgICAgIGNycyAgPSBzdF9jcnMocGNvZF9zZikpCgoKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojIFBDIHByaW9yIGZvciBBUigxKSBjb3JyZWxhdGlvbiBwYXJhbWV0ZXIKaC5zcGVjIDwtIGxpc3QocmhvID0gbGlzdChwcmlvciA9ICdwYy5jb3IwJywgcGFyYW0gPSBjKDAuNSwgMC4xKSkpCgoKCiMjIC0tLS1jaGlsZD0icHJhY3RpY2Fscy9MTV9yZXNpZHMucW1kIi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojfCBlY2hvOiBmYWxzZQojfCBtZXNzYWdlOiBmYWxzZQojfCB3YXJuaW5nOiBmYWxzZQoKbGlicmFyeSh3ZWJleGVyY2lzZXMpCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IHdhcm5pbmc6IGZhbHNlCiN8IG1lc3NhZ2U6IGZhbHNlCgpsaWJyYXJ5KGRwbHlyKQpsaWJyYXJ5KHRpZHlyKQpsaWJyYXJ5KElOTEEpCmxpYnJhcnkoZ2dwbG90MikKbGlicmFyeShwYXRjaHdvcmspCmxpYnJhcnkoaW5sYWJydSkgICAgIAoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IGNvZGUtZm9sZDogc2hvdwpiZXRhID0gYygyLDAuNSkKc2RfZXJyb3IgPSAwLjEKCm4gPSAxMDAKeCA9IHJub3JtKG4pCnkgPSBiZXRhWzFdICsgYmV0YVsyXSAqIHggKyBybm9ybShuLCBzZCA9IHNkX2Vycm9yKQoKZGYgPSBkYXRhLmZyYW1lKHkgPSB5LCB4ID0geCkgIAoKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojIE1vZGVsIGNvbXBvbmVudHMKY21wID0gIH4gLTEgKyBiZXRhXzAoMSkgKyBiZXRhXzEoeCwgbW9kZWwgPSAibGluZWFyIikKIyBMaW5lYXIgcHJlZGljdG9yCmZvcm11bGEgPSB5IH4gSW50ZXJjZXB0ICsgYmV0YV8xCiMgT2JzZXJ2YXRpb25hbCBtb2RlbCBsaWtlbGlob29kCmxpayA9ICBicnVfb2JzKGZvcm11bGEgPSB5IH4uLAogICAgICAgICAgICBmYW1pbHkgPSAiZ2F1c3NpYW4iLAogICAgICAgICAgICBkYXRhID0gZGYpCiMgRml0IHRoZSBNb2RlbApmaXQubG0gPSBicnUoY21wLCBsaWspCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KcmVzX3NhbXBsZXMgPC0gcHJlZGljdCgKICBmaXQubG0sICAgICAgICAgIyB0aGUgZml0dGVkIG1vZGVsCiAgZGYsICAgICAgICAgICAgICMgdGhlIG9yaWdpbmFsIGRhdGEgc2V0CiAgfiBkYXRhLmZyYW1lKCAgIAogICAgcmVzID0geS0oYmV0YV8wICsgYmV0YV8xKSAgIyBjb21wdXRlIHRoZSByZXNpZHVhbHMKICApLAogIG4uc2FtcGxlcyA9IDEwMDAgICAjIGRyYXcgMTAwMCBzYW1wbGVzCikKCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KI3wgZmlnLXdpZHRoOiA2CiN8IGZpZy1oZWlnaHQ6IDQKI3wgZmlnLWFsaWduOiBjZW50ZXIKI3wgZmlnLWNhcDogIkJheWVzaWFuIHJlc2lkdWFsIHBsb3RzOiB0aGUgbGVmdCBwYW5lbCBpcyB0aGUgcmVzaWR1YWwgaW5kZXggcGxvdDsgdGhlIHJpZ2h0IHBhbmVsIGlzIHRoZSBwbG90IG9mIHRoZSByZXNpZHVhbCB2ZXJzdXMgdGhlIGNvdmFyaWF0ZSB4IgojfCBjb2RlLWZvbGQ6IHRydWUKI3wgY29kZS1zdW1tYXJ5OiAiUmVzaWR1YWxzIGNoZWNrcyBmb3IgTGluZWFyIE1vZGVsIgoKZ2dwbG90KHJlc19zYW1wbGVzLGFlcyh5PW1lYW4seD0xOjEwMCkpK2dlb21fcG9pbnQoKSArCmdncGxvdChyZXNfc2FtcGxlcyxhZXMoeT1tZWFuLHg9eCkpK2dlb21fcG9pbnQoKQoKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojfCBmaWctd2lkdGg6IDQKI3wgZmlnLWhlaWdodDogNAojfCBmaWctYWxpZ246IGNlbnRlcgojfCBjb2RlLWZvbGQ6IHRydWUKI3wgY29kZS1zdW1tYXJ5OiAiUVFQbG90IGZvciBMaW5lYXIgTW9kZWwiCgphcnJhbmdlKHJlc19zYW1wbGVzLCBtZWFuKSAlPiUKICBtdXRhdGUodGhlb3J0aWNhbF9xdWFudGlsZXMgPSBxbm9ybSgxOjEwMCAvICgxKzEwMCkpKSAlPiUKICBnZ3Bsb3QoYWVzKHg9dGhlb3J0aWNhbF9xdWFudGlsZXMseT0gbWVhbikpICsgCiAgZ2VvbV9yaWJib24oYWVzKHltaW4gPSBxMC4wMjUsIHltYXggPSBxMC45NzUpLCBmaWxsID0gImdyZXk3MCIpKwogIGdlb21fYWJsaW5lKGludGVyY2VwdCA9IG1lYW4ocmVzX3NhbXBsZXMkbWVhbiksCiAgICAgICAgICAgICAgc2xvcGUgPSBzZChyZXNfc2FtcGxlcyRtZWFuKSkgKwogIGdlb21fcG9pbnQoKSArCiAgbGFicyh4ID0gIlRoZW9yZXRpY2FsIFF1YW50aWxlcyAoTm9ybWFsKSIsCiAgICAgICB5PSAiU2FtcGxlIFF1YW50aWxlcyAoUmVzaWR1YWxzKSIpIAoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IHdhcm5pbmc6IGZhbHNlCiN8IG1lc3NhZ2U6IGZhbHNlCgpzYW1wbGVzID0gIGdlbmVyYXRlKGZpdC5sbSwgZGYsCiAgZm9ybXVsYSA9IH4gewogICAgbXUgPC0gKGJldGFfMCArIGJldGFfMSkKICAgIHNkIDwtIHNxcnQoMSAvIFByZWNpc2lvbl9mb3JfdGhlX0dhdXNzaWFuX29ic2VydmF0aW9ucykKICAgIHJub3JtKDEwMCwgbWVhbiA9IG11LCBzZCA9IHNkKQogIH0sCiAgbi5zYW1wbGVzID0gNTAwCikgCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KIyBUaWR5IGZvcm1hdCBmb3IgcGxvdHRpbmcKc2FtcGxlc19sb25nID0gZGF0YS5mcmFtZShzYW1wbGVzKSAlPiUgCiAgbXV0YXRlKGlkID0gMToxMDApICU+JSAjIGktdGggb2JzZXJ2YXRpb24KICBwaXZvdF9sb25nZXIoLWlkKQoKIyBjb21wdXRlIHRoZSBtZWFuIGFuZCBxdWFudGlsZXMgZm9yIHRoZSBzYW1wbGVzCmRyYXdzX3N1bW1hcmllcyA9IGRhdGEuZnJhbWUobWVhbl9zYW1wbGVzID0gYXBwbHkoc2FtcGxlcywxLG1lYW4pLApxMjUgPSBhcHBseShzYW1wbGVzLDEsZnVuY3Rpb24oeClxdWFudGlsZSh4LDAuMDI1KSksICAKcTk3NSA9IGFwcGx5KHNhbXBsZXMsMSxmdW5jdGlvbih4KXF1YW50aWxlKHgsMC45NzUpKSwKb2JzZXJ2YXRpb25zID0gZGYkeSkgIAoKcDEgPSBnZ3Bsb3QoKSArIGdlb21fZGVuc2l0eShkYXRhID0gc2FtcGxlc19sb25nLCAKICAgICAgICAgICAgICAgICAgICAgICAgYWVzKHZhbHVlLCBncm91cCA9IG5hbWUpLCAgY29sb3IgPSAiI0U2OUYwMCIpICsKICBnZW9tX2RlbnNpdHkoZGF0YSA9IGRmLCBhZXMoeSkpICArCiAgeGxhYigiIikgKyB5bGFiKCIiKSAKCnAyID0gZ2dwbG90KGRyYXdzX3N1bW1hcmllcyxhZXMoeT1tZWFuX3NhbXBsZXMseD1vYnNlcnZhdGlvbnMpKSsKICBnZW9tX2Vycm9yYmFyKGFlcyh5bWluID0gcTI1LAogICAgICAgICAgICAgICAgICAgeW1heCA9IHE5NzUpLCAKICAgICAgICAgICAgICAgYWxwaGEgPSAwLjUsIGNvbG9yID0gImdyZXk1MCIpKwpnZW9tX3BvaW50KCkrZ2VvbV9hYmxpbmUoc2xvcGUgPSAxLGludGVyY2VwdCA9IDAsbHR5PTIpK2xhYnMoKQoKcDEgK3AyCgoKCiMjIC0tLS1jaGlsZD0icHJhY3RpY2Fscy9HTE1fc2NvcmVzX2V4LnFtZCItLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojfCBlY2hvOiBmYWxzZQojfCBtZXNzYWdlOiBmYWxzZQojfCB3YXJuaW5nOiBmYWxzZQoKbGlicmFyeSh3ZWJleGVyY2lzZXMpCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IHdhcm5pbmc6IGZhbHNlCiN8IG1lc3NhZ2U6IGZhbHNlCgpsaWJyYXJ5KGRwbHlyKQpsaWJyYXJ5KElOTEEpCmxpYnJhcnkoZ2dwbG90MikKbGlicmFyeShwYXRjaHdvcmspCmxpYnJhcnkoaW5sYWJydSkgICAgIAoKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpjcmFicyA8LSByZWFkLmNzdigiZGF0YXNldHMvY3JhYnMuY3N2IikKCiMgY29uZGl0aW9uYWwgbWVhbnMgYW5kIHZhcmlhbmNlcwpjcmFicyAlPiUKICBzdW1tYXJpc2UoIE1lYW4gPSBtZWFuKHNhdGVsbCApLAogICAgICAgICAgICAgVmFyaWFuY2UgPSB2YXIoc2F0ZWxsKSwKICAgICAgICAgICAgICAgICAgICAgLmJ5ID0gY29sb3IpCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCmNyYWJzX2RmID0gbW9kZWwubWF0cml4KCB+ICBjb2xvciAsIGNyYWJzKSAlPiUKICBhcy5kYXRhLmZyYW1lKCkgJT4lCiAgc2VsZWN0KC0xKSAlPiUgICAgICAgICMgZHJvcCBpbnRlcmNlcHQKICBiaW5kX2NvbHMoY3JhYnMpICU+JSAgIyBhcHBlbmQgdG8gb3JpZ2luYWwgZGF0YQogIHNlbGVjdCgtY29sb3IpICAgICAgICAjIHJlbW92ZSBvcmlnaW5hbCBjb2xvciBjYXRlZ29yaWNhbCB2YXJpYWJsZQoKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQoKY21wID0gIH4gLTEgKyBiZXRhMCgxKSArICBjb2xvcmRhcmtlciArCiAgICAgICBjb2xvcmxpZ2h0ICsgY29sb3JtZWRpdW0gKwogICAgICAgdyh3ZWlnaHQsIG1vZGVsID0gImxpbmVhciIpCgpsaWsgPSAgYnJ1X29icyhmb3JtdWxhID0gc2F0ZWxsIH4uLAogICAgICAgICAgICBmYW1pbHkgPSAicG9pc3NvbiIsCiAgICAgICAgICAgIGRhdGEgPSBjcmFic19kZikKCmZpdF9wb2lzID0gYnJ1KGNtcCwgbGlrKQoKc3VtbWFyeShmaXRfcG9pcykKCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KYnJ1X29wdGlvbnNfc2V0KGNvbnRyb2wuY29tcHV0ZSA9IGxpc3QoY3BvID0gVFJVRSkpCgpmaXRfcG9pcyA9IGJydShjbXAsIGxpaykKCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IGV2YWw6IGZhbHNlCgojIAojIGZpdF9wb2lzJGNwbyRwaXQgJT4lCiMgICBoaXN0KG1haW4gPSAiSGlzdG9ncmFtIG9mIFBJVCB2YWx1ZXMiKQojIAojIHFxcGxvdChxdW5pZihwcG9pbnRzKGxlbmd0aChmaXRfcG9pcyRjcG8kcGl0KSkpLAojICAgICAgICBmaXRfcG9pcyRjcG8kcGl0LAojICAgICAgICBtYWluID0gIlEtUSBwbG90IGZvciBVbmlmKDAsMSkiLAojICAgICAgICB4bGFiID0gIlRoZW9yZXRpY2FsIFF1YW50aWxlcyIsCiMgICAgICAgIHlsYWIgPSAiU2FtcGxlIFF1YW50aWxlcyIpCiMgCiMgcXFsaW5lKGZpdF9wb2lzJGNwbyRwaXQsCiMgICAgICAgIGRpc3RyaWJ1dGlvbiA9IGZ1bmN0aW9uKHApIHF1bmlmKHApLAojICAgICAgICBwcm9iID0gYygwLjEsIDAuOSkpCgoK').then(res => res.blob()).then(blob => {
+      const downloadURL = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.href = downloadURL;
+      a.download = 'day4_practical_6.R.R'; a.click();
+      window.URL.revokeObjectURL(downloadURL);
+      document.body.removeChild(a);
+        });"><button class="btn btn-success downloadthis  " id="dnldts38516"><i class="bi bi-database-fill-down"></i> Download Practical 6 R script </button></a></p>
+<section id="space-time-models" class="level2">
+<h2 class="anchored" data-anchor-id="space-time-models">Space time models</h2>
+<hr>
+<p>Libraries to load:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(INLA)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(inlabru) </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># load some libraries to generate nice map plots</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scico)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mapview)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyterra)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="the-data" class="level3">
+<h3 class="anchored" data-anchor-id="the-data">The data</h3>
+<p>In this practical, we will revisit the data on the Pacific Cod (<em>Gadus macrocephalus</em>) from a trawl survey in Queen Charlotte Sound. The <code>pcod</code> dataset is available from the <code>sdmTMB</code> package and contains the presence/absence records of the Pacific Cod during each surveys along with the biomass density of Pacific cod in the area swept (kg/Km<span class="math inline">\(^2\)</span>). The <code>qcs_grid</code> data contain the depth values stored as <span class="math inline">\(2\times 2\)</span> km grid for Queen Charlotte Sound.</p>
+<p>The dataset contains presence/absence data from 2003 to 2017. To make computations faster we only consider the first 3 years.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sdmTMB)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>pcod_df <span class="ot">=</span> sdmTMB<span class="sc">::</span>pcod  <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year<span class="sc">&lt;=</span><span class="dv">2005</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>qcs_grid <span class="ot">=</span> sdmTMB<span class="sc">::</span>qcs_grid</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Then, we create a <code>sf</code> object and assign the right coordinate reference to it:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pcod_sf <span class="ot">=</span>   <span class="fu">st_as_sf</span>(pcod_df, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"lon"</span>,<span class="st">"lat"</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pcod_sf <span class="ot">=</span> <span class="fu">st_transform</span>(pcod_sf,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">crs =</span> <span class="st">"+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We convert the covariates into a raster and assign the same coordinate reference:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>depth_r <span class="ot">&lt;-</span> <span class="fu">rast</span>(qcs_grid, <span class="at">type =</span> <span class="st">"xyz"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">crs</span>(depth_r) <span class="ot">&lt;-</span> <span class="fu">crs</span>(pcod_sf)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day4_practical_6_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="spatio-temporal-modeling" class="level3">
+<h3 class="anchored" data-anchor-id="spatio-temporal-modeling">Spatio-temporal modeling</h3>
+<section id="model-fitting" class="level4">
+<h4 class="anchored" data-anchor-id="model-fitting">Model fitting</h4>
+<p>Now lets compare two different space-time models using LGOCV and some information criteria metrics. The general model structure is given by:</p>
+<p><span class="math display">\[
+\begin{aligned}
+y(s,t)|\eta(s,t)&amp;\sim\text{Binom}(1, p(s,t))\\
+\eta(s,t) &amp;= \text{logit}(p(s,t)) \\
+\end{aligned}
+\]</span> We also want to compare the models using WAIC, DIC and marginal likelihood:</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Set the <code>bru_options</code> so that the quantities of interest are computed</p>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bru_options_set</span>(<span class="at">control.compute =</span> <span class="fu">list</span>(<span class="at">waic =</span> <span class="cn">TRUE</span>,<span class="at">dic=</span> <span class="cn">TRUE</span>,<span class="at">mlik =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="model-1" class="level4">
+<h4 class="anchored" data-anchor-id="model-1">Model 1</h4>
+<ol type="1">
+<li><strong>Model 1 - time iid effect</strong> We consider a separable space-time model with a linear predictors given by:</li>
+</ol>
+<p><span class="math display">\[
+\eta(s,t) = \beta_0 + f_1(\text{depth}(s)) + f_2(t) + \omega(s)
+\]</span></p>
+<ul>
+<li><p><span class="math inline">\(f_1(\text{depth}(s))\)</span> is a smooth covariate effect of depth (modeled using a RW2 model)</p></li>
+<li><p><span class="math inline">\(f_2(t)\)</span> is an IID effect of time</p></li>
+<li><p><span class="math inline">\(\omega(s)\)</span> is Matérn random field.</p></li>
+</ul>
+<p>The first step is to define the mesh and the spde model</p>
+<p><strong>Construct the mesh and the SPDE model</strong></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mesh <span class="ot">=</span> <span class="fu">fm_mesh_2d</span>(<span class="at">loc =</span> pcod_sf,    </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cutoff =</span> <span class="dv">1</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">max.edge =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>),     </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">offset =</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">50</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">crs =</span> <span class="fu">st_crs</span>(pcod_df))   </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>spde_model <span class="ot">=</span>  <span class="fu">inla.spde2.pcmatern</span>(mesh,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">prior.sigma =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">prior.range =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="fl">0.5</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day4_practical_6_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>create time index and the grouped variable</strong></p>
+<p>To use the RW2 model the covariate has to be groupes:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>depth_r<span class="sc">$</span>depth_group <span class="ot">=</span> <span class="fu">inla.group</span>(<span class="fu">values</span>(depth_r<span class="sc">$</span>depth_scaled))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>we also define a time index from 1 to in the data frame</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pcod_sf <span class="ot">=</span> pcod_sf <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>     <span class="fu">mutate</span>(<span class="at">time_idx =</span> <span class="fu">match</span>(year, <span class="fu">c</span>(<span class="dv">2003</span>, <span class="dv">2004</span>, <span class="dv">2005</span>)),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(.)) <span class="co"># Observation id for CV</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Implement the model in <code>inlabru</code></p>
+<ol type="1">
+<li>Define the components</li>
+<li>Define the formula</li>
+<li>Define the likelihood model using the <code>bru_obs()</code> function</li>
+<li>Run the model</li>
+</ol>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model components</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>cmp_spat <span class="ot">=</span> <span class="er">~</span> <span class="fu">Intercept</span>(<span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">covariate</span>(depth_r<span class="sc">$</span>depth_group, <span class="at">model =</span> <span class="st">"rw2"</span>, <span class="at">scale.model =</span> <span class="cn">TRUE</span>)<span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">trend</span>(time_idx, <span class="at">model =</span> <span class="st">"iid"</span>)<span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">space</span>(geometry, <span class="at">model =</span> spde_model)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear predictor</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>formula_spat <span class="ot">=</span> present <span class="sc">~</span> Intercept  <span class="sc">+</span> trend <span class="sc">+</span> space <span class="sc">+</span> covariate</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Observational model</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>lik_spat <span class="ot">=</span> <span class="fu">bru_obs</span>(<span class="at">formula =</span> formula_spat, </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> pcod_sf, </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit Model </span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>fit_spat <span class="ot">=</span> <span class="fu">bru</span>(cmp_spat,lik_spat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that there are some survey locations in certain years that fall outside the depth raster region. <code>inlabru</code> will input these missing covariate values using the nearest available value. This can be computationally expensive, but you can avoid it by supplying a raster layer that encompasses all of your data points (e.g., by pre-imputing these missing values with your preferred method of choice).</p>
+<p>One way of doing this in the <code>inlabru</code> framework is to use the <code>bru_fill_missing()</code> function:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the raster of interest</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>depth_orig <span class="ot">=</span> depth_r<span class="sc">$</span>depth_group</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>re <span class="ot">&lt;-</span> <span class="fu">extend</span>(depth_orig, <span class="fu">ext</span>(depth_orig)<span class="sc">*</span><span class="fl">1.05</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to an sf spatial object</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>re_df <span class="ot">&lt;-</span> re <span class="sc">%&gt;%</span> stars<span class="sc">::</span><span class="fu">st_as_stars</span>() <span class="sc">%&gt;%</span>  <span class="fu">st_as_sf</span>(<span class="at">na.rm=</span>F)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># fill in missing values using the original raster </span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>re_df<span class="sc">$</span>depth_group <span class="ot">=</span>  <span class="fu">bru_fill_missing</span>(depth_orig,re_df,re_df<span class="sc">$</span>depth_group)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># rasterize</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>depth_filled <span class="ot">&lt;-</span> stars<span class="sc">::</span><span class="fu">st_rasterize</span>(re_df) <span class="sc">%&gt;%</span> <span class="fu">rast</span>()</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(depth_filled)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="day4_practical_6_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>We have now fit the model and want to check the results.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Is the effect of depth significant? Does it seem important to have a non-linear model?</p>
+<p>Inspect the estimated time effect and</p>
+<p>Use the <code>predict</code> function to inspect the estimated spatial effect.</p>
+<p>Use the <code>depth_r</code> raster to define the points in space where to predict</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pxl <span class="ot">=</span> <span class="fu">st_as_sf</span>(<span class="fu">data.frame</span>(<span class="fu">crds</span>(depth_r)), <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"y"</span>) ,</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">crs  =</span> <span class="fu">st_crs</span>(pcod_sf))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># covariate effect</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>p_cov <span class="ot">=</span> fit_spat<span class="sc">$</span>summary.random<span class="sc">$</span>covariate <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(ID, <span class="at">ymin =</span> <span class="st">`</span><span class="at">0.025quant</span><span class="st">`</span>, <span class="at">ymax =</span> <span class="st">`</span><span class="at">0.975quant</span><span class="st">`</span> )) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(ID,mean)) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Covariate effect"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># time effect</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>p_time <span class="ot">=</span> fit_spat<span class="sc">$</span>summary.random<span class="sc">$</span>trend <span class="sc">%&gt;%</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(ID, <span class="at">ymin =</span> <span class="st">`</span><span class="at">0.025quant</span><span class="st">`</span>, <span class="at">ymax =</span> <span class="st">`</span><span class="at">0.975quant</span><span class="st">`</span> )) <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(ID,mean)) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Time effect"</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#space effect</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>pred_space <span class="ot">=</span> <span class="fu">predict</span>(fit_spat, pxl, <span class="sc">~</span> space)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>p_space_mean <span class="ot">=</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">gg</span>(pred_space, <span class="fu">aes</span>(<span class="at">color =</span> mean))</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>p_space_sd <span class="ot">=</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">gg</span>(pred_space, <span class="fu">aes</span>(<span class="at">color =</span> sd))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="model-2" class="level4">
+<h4 class="anchored" data-anchor-id="model-2">Model 2</h4>
+<ol type="1">
+<li><strong>Model 2 - spatiotemporal field</strong> We consider a separable space time model with a linear predictor given by:</li>
+</ol>
+<p><span class="math display">\[
+\eta(s,t) = \beta_0 + f_1(\text{depth}(s)) + \omega(s,t)
+\]</span></p>
+<ul>
+<li><span class="math inline">\(f_1(\text{depth}(s))\)</span> is a smooth covariate effect of depth (RW2)</li>
+<li><span class="math inline">\(\omega(s,t)\)</span> is a space-time Matérn spatial field with AR1 time component <span class="math display">\[
+\omega(s,t) = \phi\ \omega(s,t-1) + \epsilon(s),\qquad \epsilon(s)\sim\text{GF}(\sigma_{\epsilon},\rho_{\epsilon})
+\]</span></li>
+</ul>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Implement this second model in <code>inlabru</code></p>
+<ol type="1">
+<li>Define the components For the AR1 model use this following PC prior for the correlation parameter <span class="math inline">\(\phi\)</span></li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PC prior for AR(1) correlation parameter</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>h.spec <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">rho =</span> <span class="fu">list</span>(<span class="at">prior =</span> <span class="st">'pc.cor0'</span>, <span class="at">param =</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.1</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol start="2" type="1">
+<li>Define the formula</li>
+<li>Define the likelihood model using the <code>bru_obs()</code> function</li>
+<li>Run the model (This model can take a couple of minutes to run)</li>
+</ol>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model components</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>cmp_spat_ar1 <span class="ot">=</span> <span class="er">~</span> <span class="fu">Intercept</span>(<span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">covariate</span>(depth_filled<span class="sc">$</span>depth_group, <span class="at">model =</span> <span class="st">"rw2"</span>, <span class="at">scale.model =</span> <span class="cn">TRUE</span>)<span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">space_time</span>(geometry,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">group =</span> time_idx ,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">model =</span> spde_model,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">control.group =</span> <span class="fu">list</span>(<span class="at">model =</span> <span class="st">'ar1'</span>,<span class="at">hyper =</span> h.spec))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear predictor</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>formula_spat_ar1 <span class="ot">=</span> present <span class="sc">~</span> .</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Observational model</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>lik_spat_ar1 <span class="ot">=</span> <span class="fu">bru_obs</span>(<span class="at">formula =</span> formula_spat_ar1, </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> pcod_sf, </span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit Model </span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>fit_spat_ar1 <span class="ot">=</span> <span class="fu">bru</span>(cmp_spat_ar1,lik_spat_ar1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<p>Now we want to check the results</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What is the estimated parameter <span class="math inline">\(phi\)</span> in the auto-regressive part of the model?</p>
+<p>Check the effect of the covariate.</p>
+<p>Use the <code>predict</code> function to inspect the estimated probability of presence. Use the same prediction points as before, but here you also need to use the `</p>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># autoregressive effect</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#fit_spat_ar1$summary.hyperpar</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#covariate</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>p_cov_ar1 <span class="ot">=</span> fit_spat_ar1<span class="sc">$</span>summary.random<span class="sc">$</span>covariate <span class="sc">%&gt;%</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(ID, <span class="at">ymin =</span> <span class="st">`</span><span class="at">0.025quant</span><span class="st">`</span>, <span class="at">ymax =</span> <span class="st">`</span><span class="at">0.975quant</span><span class="st">`</span> )) <span class="sc">+</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(ID,mean)) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">"Covariate effect"</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">#space-time effect</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>inv_logit <span class="ot">=</span> <span class="cf">function</span>(x){ <span class="fu">exp</span>(x) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(x))}</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>pxl_all <span class="ot">=</span> <span class="fu">fm_cprod</span>(pxl, <span class="fu">data.frame</span>(<span class="at">time_idx =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>))</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>pred_space_ar1 <span class="ot">=</span> <span class="fu">predict</span>(fit_spat_ar1, pxl_all, <span class="sc">~</span><span class="fu">data.frame</span>(<span class="at">logit_prob =</span> Intercept  <span class="sc">+</span> </span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>                                                               covariate  <span class="sc">+</span> </span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>                                                               space_time ,</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">prob =</span> <span class="fu">inv_logit</span>(Intercept  <span class="sc">+</span> </span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>                                                               covariate  <span class="sc">+</span> </span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>                                                               space_time)))</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>p_ar1 <span class="ot">=</span> pred_space_ar1<span class="sc">$</span>prob <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">color =</span> mean)) <span class="sc">+</span> </span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(.<span class="sc">~</span>time_idx) <span class="sc">+</span> <span class="fu">scale_color_scico</span>(<span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  theme_map</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="model-comparison" class="level3">
+<h3 class="anchored" data-anchor-id="model-comparison">Model Comparison</h3>
+<p>Now we want to use the WAIC, DIC and MLIK to compare the models</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Compare the scores, what is your conclusion?</p>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>out<span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">Model =</span> <span class="fu">c</span>(<span class="st">"Model 1"</span>, <span class="st">"Model 2"</span>),</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">DIC =</span> <span class="fu">c</span>(fit_spat<span class="sc">$</span>dic<span class="sc">$</span>dic, fit_spat_ar1<span class="sc">$</span>dic<span class="sc">$</span>dic),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">WAIC =</span> <span class="fu">c</span>(fit_spat<span class="sc">$</span>waic<span class="sc">$</span>waic, fit_spat_ar1<span class="sc">$</span>waic<span class="sc">$</span>waic),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">MLIK =</span> <span class="fu">c</span>(fit_spat<span class="sc">$</span>mlik[<span class="dv">1</span>], fit_spat_ar1<span class="sc">$</span>mlik[<span class="dv">1</span>]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="model-check-and-comparison" class="level2">
+<h2 class="anchored" data-anchor-id="model-check-and-comparison">Model check and comparison</h2>
+</section>
+<section id="model-checking-for-linear-models" class="level2">
+<h2 class="anchored" data-anchor-id="model-checking-for-linear-models">Model Checking for Linear Models</h2>
+<p>In this exercise we will:</p>
+<ul>
+<li>Learn about some model assessments techniques available in INLA</li>
+<li>Conduct posterior predictive model checking</li>
+</ul>
+<p>Libraries to load:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(INLA)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(inlabru)     </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Recall a simple linear regression model with Gaussian observations</p>
+<p><span class="math display">\[
+y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
+\]</span></p>
+<p>where <span class="math inline">\(\sigma^2\)</span> is the observation error, and the mean parameter <span class="math inline">\(\mu_i\)</span> is linked to the linear predictor through an identity function:</p>
+<p><span class="math display">\[
+\eta_i = \mu_i = \beta_0 + \beta_1 x_i
+\]</span> where <span class="math inline">\(x_i\)</span> is a covariate and <span class="math inline">\(\beta_0, \beta_1\)</span> are parameters to be estimated.</p>
+<section id="simulate-example-data" class="level3">
+<h3 class="anchored" data-anchor-id="simulate-example-data">Simulate example data</h3>
+<p>We simulate data from a simple linear regression model</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="fl">0.5</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>sd_error <span class="ot">=</span> <span class="fl">0.1</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> beta[<span class="dv">1</span>] <span class="sc">+</span> beta[<span class="dv">2</span>] <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> sd_error)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">x =</span> x)  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="fitting-the-linear-regression-model-with-inlabru" class="level3">
+<h3 class="anchored" data-anchor-id="fitting-the-linear-regression-model-with-inlabru">Fitting the linear regression model with <code>inlabru</code></h3>
+<p>Now we fit a simple linear regression model in <code>inalbru</code> by defining (1) the model components, (2) the linear predictor and (3) the likelihood.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model components</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>cmp <span class="ot">=</span>  <span class="er">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> <span class="fu">beta_0</span>(<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">beta_1</span>(x, <span class="at">model =</span> <span class="st">"linear"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear predictor</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">=</span> y <span class="sc">~</span> Intercept <span class="sc">+</span> beta_1</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Observational model likelihood</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>lik <span class="ot">=</span>  <span class="fu">bru_obs</span>(<span class="at">formula =</span> y <span class="sc">~</span>.,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> df)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the Model</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>fit.lm <span class="ot">=</span> <span class="fu">bru</span>(cmp, lik)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="residuals-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="residuals-analysis">Residuals analysis</h3>
+<p>A common way for model diagnostics in regression analysis is by checking residual plots. In a Bayesian setting residuals can be defined in multiple ways depending on how you account for posterior uncertainty. Here, we will adopt a Bayesian approach by generating samples from the posterior distribution of the model parameters and then draw samples from the residuals defined as:</p>
+<p><span class="math display">\[
+r_i = y_i - x_i^T\beta
+\]</span></p>
+<p>We can use the <code>predict</code> function to achieve this:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>res_samples <span class="ot">&lt;-</span> <span class="fu">predict</span>(</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  fit.lm,         <span class="co"># the fitted model</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  df,             <span class="co"># the original data set</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">data.frame</span>(   </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">res =</span> y<span class="sc">-</span>(beta_0 <span class="sc">+</span> beta_1)  <span class="co"># compute the residuals</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.samples =</span> <span class="dv">1000</span>   <span class="co"># draw 1000 samples</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The resulting data frame contains the posterior draw of the residuals mean for which we can produce some diagnostics plots , e.g.</p>
+<div class="cell" data-layout-align="center">
+<details class="code-fold">
+<summary>Residuals checks for Linear Model</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(res_samples,<span class="fu">aes</span>(<span class="at">y=</span>mean,<span class="at">x=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>))<span class="sc">+</span><span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(res_samples,<span class="fu">aes</span>(<span class="at">y=</span>mean,<span class="at">x=</span>x))<span class="sc">+</span><span class="fu">geom_point</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day4_practical_6_files/figure-html/unnamed-chunk-47-1.png" class="img-fluid figure-img" width="576"></p>
+<figcaption>Bayesian residual plots: the left panel is the residual index plot; the right panel is the plot of the residual versus the covariate x</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>We can also compare these against the theoretical quantiles of the Normal distribution as follows:</p>
+<div class="cell" data-layout-align="center">
+<details class="code-fold">
+<summary>QQPlot for Linear Model</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(res_samples, mean) <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">theortical_quantiles =</span> <span class="fu">qnorm</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span> <span class="sc">/</span> (<span class="dv">1</span><span class="sc">+</span><span class="dv">100</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>theortical_quantiles,<span class="at">y=</span> mean)) <span class="sc">+</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> q0<span class="fl">.025</span>, <span class="at">ymax =</span> q0<span class="fl">.975</span>), <span class="at">fill =</span> <span class="st">"grey70"</span>)<span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="fu">mean</span>(res_samples<span class="sc">$</span>mean),</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">slope =</span> <span class="fu">sd</span>(res_samples<span class="sc">$</span>mean)) <span class="sc">+</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Theoretical Quantiles (Normal)"</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y=</span> <span class="st">"Sample Quantiles (Residuals)"</span>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day4_practical_6_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="posterior-predictive-checks" class="level3">
+<h3 class="anchored" data-anchor-id="posterior-predictive-checks">Posterior Predictive Checks</h3>
+<p>Now, instead of generating samples from the mean, we will account for the observational process uncertainty by:</p>
+<ol type="1">
+<li>Sampling <span class="math inline">\(y^{1k}_i\sim\pi(y_i|\mathbf{y})\)</span> <span class="math inline">\(k = 1,\dots,M;~i = 1,\ldots,100\)</span> using <code>generate()</code> (here we will draw <span class="math inline">\(M=500\)</span> samples)</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">=</span>  <span class="fu">generate</span>(fit.lm, df,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">formula =</span> <span class="sc">~</span> {</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    mu <span class="ot">&lt;-</span> (beta_0 <span class="sc">+</span> beta_1)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    sd <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">/</span> Precision_for_the_Gaussian_observations)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> mu, <span class="at">sd =</span> sd)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">n.samples =</span> <span class="dv">500</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol start="2" type="1">
+<li>Comparing some summaries of the simulated data with the one of the observed one</li>
+</ol>
+<p>Here we compare (i) the estimated posterior densities <span class="math inline">\(\hat{\pi}^k(y|\mathbf{y})\)</span> with the estimated data density and (ii) the samples means and 95% credible intervals against the observations.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tidy format for plotting</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>samples_long <span class="ot">=</span> <span class="fu">data.frame</span>(samples) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>) <span class="sc">%&gt;%</span> <span class="co"># i-th observation</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>id)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the mean and quantiles for the samples</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>draws_summaries <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">mean_samples =</span> <span class="fu">apply</span>(samples,<span class="dv">1</span>,mean),</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="at">q25 =</span> <span class="fu">apply</span>(samples,<span class="dv">1</span>,<span class="cf">function</span>(x)<span class="fu">quantile</span>(x,<span class="fl">0.025</span>)),  </span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="at">q975 =</span> <span class="fu">apply</span>(samples,<span class="dv">1</span>,<span class="cf">function</span>(x)<span class="fu">quantile</span>(x,<span class="fl">0.975</span>)),</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="at">observations =</span> df<span class="sc">$</span>y)  </span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">=</span> <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="at">data =</span> samples_long, </span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">aes</span>(value, <span class="at">group =</span> name),  <span class="at">color =</span> <span class="st">"#E69F00"</span>) <span class="sc">+</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">data =</span> df, <span class="fu">aes</span>(y))  <span class="sc">+</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">""</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">""</span>) </span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">=</span> <span class="fu">ggplot</span>(draws_summaries,<span class="fu">aes</span>(<span class="at">y=</span>mean_samples,<span class="at">x=</span>observations))<span class="sc">+</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> q25,</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ymax =</span> q975), </span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">color =</span> <span class="st">"grey50"</span>)<span class="sc">+</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_point</span>()<span class="sc">+</span><span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>,<span class="at">intercept =</span> <span class="dv">0</span>,<span class="at">lty=</span><span class="dv">2</span>)<span class="sc">+</span><span class="fu">labs</span>()</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span>p2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="day4_practical_6_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-linmodel" class="level2">
+<h2 class="anchored" data-anchor-id="sec-linmodel">GLM model checking</h2>
+<p>In this exercise we will:</p>
+<ul>
+<li>Learn about some model assessments techniques available in INLA</li>
+<li>Conduct posterior predictive model checking using CPO and PIT</li>
+</ul>
+<p>Libraries to load:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(INLA)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(inlabru)     </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In this exercise, we will use data on horseshoe crabs (<em>Limulus polyphemus</em>) where the number of satellites males surrounding a breeding female are counted along with the female’s color and carapace width.</p>
+<p><a href="#dnldts4438" onclick="fetch('data:text/csv;base64,ImNvbG9yIiwic3BpbmUiLCJ3aWR0aCIsInNhdGVsbCIsIndlaWdodCIsInkiCiJtZWRpdW0iLCJiYWQiLDI4LjMsOCwzMDUwLDEKImRhcmsiLCJiYWQiLDIyLjUsMCwxNTUwLDAKImxpZ2h0IiwiZ29vZCIsMjYsOSwyMzAwLDEKImRhcmsiLCJiYWQiLDI0LjgsMCwyMTAwLDAKImRhcmsiLCJiYWQiLDI2LDQsMjYwMCwxCiJtZWRpdW0iLCJiYWQiLDIzLjgsMCwyMTAwLDAKImxpZ2h0IiwiZ29vZCIsMjYuNSwwLDIzNTAsMAoiZGFyayIsIm1pZGRsZSIsMjQuNywwLDE5MDAsMAoibWVkaXVtIiwiZ29vZCIsMjMuNywwLDE5NTAsMAoiZGFyayIsImJhZCIsMjUuNiwwLDIxNTAsMAoiZGFyayIsImJhZCIsMjQuMywwLDIxNTAsMAoibWVkaXVtIiwiYmFkIiwyNS44LDAsMjY1MCwwCiJtZWRpdW0iLCJiYWQiLDI4LjIsMTEsMzA1MCwxCiJkYXJrZXIiLCJtaWRkbGUiLDIxLDAsMTg1MCwwCiJtZWRpdW0iLCJnb29kIiwyNiwxNCwyMzAwLDEKImxpZ2h0IiwiZ29vZCIsMjcuMSw4LDI5NTAsMQoibWVkaXVtIiwiYmFkIiwyNS4yLDEsMjAwMCwxCiJtZWRpdW0iLCJiYWQiLDI5LDEsMzAwMCwxCiJkYXJrZXIiLCJiYWQiLDI0LjcsMCwyMjAwLDAKIm1lZGl1bSIsImJhZCIsMjcuNCw1LDI3MDAsMQoibWVkaXVtIiwibWlkZGxlIiwyMy4yLDQsMTk1MCwxCiJsaWdodCIsIm1pZGRsZSIsMjUsMywyMzAwLDEKIm1lZGl1bSIsImdvb2QiLDIyLjUsMSwxNjAwLDEKImRhcmsiLCJiYWQiLDI2LjcsMiwyNjAwLDEKImRhcmtlciIsImJhZCIsMjUuOCwzLDIwMDAsMQoiZGFya2VyIiwiYmFkIiwyNi4yLDAsMTMwMCwwCiJtZWRpdW0iLCJiYWQiLDI4LjcsMywzMTUwLDEKIm1lZGl1bSIsImdvb2QiLDI2LjgsNSwyNzAwLDEKImRhcmtlciIsImJhZCIsMjcuNSwwLDI2MDAsMAoibWVkaXVtIiwiYmFkIiwyNC45LDAsMjEwMCwwCiJsaWdodCIsImdvb2QiLDI5LjMsNCwzMjAwLDEKImxpZ2h0IiwiYmFkIiwyNS44LDAsMjYwMCwwCiJtZWRpdW0iLCJtaWRkbGUiLDI1LjcsMCwyMDAwLDAKIm1lZGl1bSIsImdvb2QiLDI1LjcsOCwyMDAwLDEKIm1lZGl1bSIsImdvb2QiLDI2LjcsNSwyNzAwLDEKImRhcmtlciIsImJhZCIsMjMuNywwLDE4NTAsMAoibWVkaXVtIiwiYmFkIiwyNi44LDAsMjY1MCwwCiJtZWRpdW0iLCJiYWQiLDI3LjUsNiwzMTUwLDEKImRhcmtlciIsImJhZCIsMjMuNCwwLDE5MDAsMAoibWVkaXVtIiwiYmFkIiwyNy45LDYsMjgwMCwxCiJkYXJrIiwiYmFkIiwyNy41LDMsMzEwMCwxCiJsaWdodCIsImdvb2QiLDI2LjEsNSwyODAwLDEKImxpZ2h0IiwiZ29vZCIsMjcuNyw2LDI1MDAsMQoibWVkaXVtIiwiZ29vZCIsMzAsNSwzMzAwLDEKImRhcmsiLCJnb29kIiwyOC41LDksMzI1MCwxCiJkYXJrIiwiYmFkIiwyOC45LDQsMjgwMCwxCiJtZWRpdW0iLCJiYWQiLDI4LjIsNiwyNjAwLDEKIm1lZGl1bSIsImJhZCIsMjUsNCwyMTAwLDEKIm1lZGl1bSIsImJhZCIsMjguNSwzLDMwMDAsMQoibWVkaXVtIiwiZ29vZCIsMzAuMywzLDM2MDAsMQoiZGFya2VyIiwiYmFkIiwyNC43LDUsMjEwMCwxCiJtZWRpdW0iLCJiYWQiLDI3LjcsNSwyOTAwLDEKImxpZ2h0IiwiZ29vZCIsMjcuNCw2LDI3MDAsMQoibWVkaXVtIiwiYmFkIiwyMi45LDQsMTYwMCwxCiJtZWRpdW0iLCJnb29kIiwyNS43LDUsMjAwMCwxCiJtZWRpdW0iLCJiYWQiLDI4LjMsMTUsMzAwMCwxCiJtZWRpdW0iLCJiYWQiLDI3LjIsMywyNzAwLDEKImRhcmsiLCJiYWQiLDI2LjIsMywyMzAwLDEKIm1lZGl1bSIsImdvb2QiLDI3LjgsMCwyNzUwLDAKImRhcmtlciIsImJhZCIsMjUuNSwwLDIyNTAsMAoiZGFyayIsImJhZCIsMjcuMSwwLDI1NTAsMAoiZGFyayIsImJhZCIsMjQuNSw1LDIwNTAsMQoiZGFyayIsImdvb2QiLDI3LDMsMjQ1MCwxCiJtZWRpdW0iLCJiYWQiLDI2LDUsMjE1MCwxCiJtZWRpdW0iLCJiYWQiLDI4LDEsMjgwMCwxCiJtZWRpdW0iLCJiYWQiLDMwLDgsMzA1MCwxCiJtZWRpdW0iLCJiYWQiLDI5LDEwLDMyMDAsMQoibWVkaXVtIiwiYmFkIiwyNi4yLDAsMjQwMCwwCiJtZWRpdW0iLCJnb29kIiwyNi41LDAsMTMwMCwwCiJtZWRpdW0iLCJiYWQiLDI2LjIsMywyNDAwLDEKImRhcmsiLCJiYWQiLDI1LjYsNywyODAwLDEKImRhcmsiLCJiYWQiLDIzLDEsMTY1MCwxCiJkYXJrIiwiYmFkIiwyMywwLDE4MDAsMAoibWVkaXVtIiwiYmFkIiwyNS40LDYsMjI1MCwxCiJkYXJrIiwiYmFkIiwyNC4yLDAsMTkwMCwwCiJtZWRpdW0iLCJtaWRkbGUiLDIyLjksMCwxNjAwLDAKImRhcmsiLCJtaWRkbGUiLDI2LDMsMjIwMCwxCiJtZWRpdW0iLCJiYWQiLDI1LjQsNCwyMjUwLDEKImRhcmsiLCJiYWQiLDI1LjcsMCwxMjAwLDAKIm1lZGl1bSIsImJhZCIsMjUuMSw1LDIxMDAsMQoiZGFyayIsIm1pZGRsZSIsMjQuNSwwLDIyNTAsMAoiZGFya2VyIiwiYmFkIiwyNy41LDAsMjkwMCwwCiJkYXJrIiwiYmFkIiwyMy4xLDAsMTY1MCwwCiJkYXJrIiwiZ29vZCIsMjUuOSw0LDI1NTAsMQoibWVkaXVtIiwiYmFkIiwyNS44LDAsMjMwMCwwCiJkYXJrZXIiLCJiYWQiLDI3LDMsMjI1MCwxCiJtZWRpdW0iLCJiYWQiLDI4LjUsMCwzMDUwLDAKImRhcmtlciIsImdvb2QiLDI1LjUsMCwyNzUwLDAKImRhcmtlciIsImJhZCIsMjMuNSwwLDE5MDAsMAoibWVkaXVtIiwibWlkZGxlIiwyNCwwLDE3MDAsMAoibWVkaXVtIiwiZ29vZCIsMjkuNyw1LDM4NTAsMQoibWVkaXVtIiwiZ29vZCIsMjYuOCwwLDI1NTAsMAoiZGFya2VyIiwiYmFkIiwyNi43LDAsMjQ1MCwwCiJtZWRpdW0iLCJnb29kIiwyOC43LDAsMzIwMCwwCiJkYXJrIiwiYmFkIiwyMy4xLDAsMTU1MCwwCiJtZWRpdW0iLCJnb29kIiwyOSwxLDI4MDAsMQoiZGFyayIsImJhZCIsMjUuNSwwLDIyNTAsMAoiZGFyayIsImJhZCIsMjYuNSwxLDE5NjcsMQoiZGFyayIsImJhZCIsMjQuNSwxLDIyMDAsMQoiZGFyayIsImJhZCIsMjguNSwxLDMwMDAsMQoibWVkaXVtIiwiYmFkIiwyOC4yLDEsMjg2NywxCiJtZWRpdW0iLCJiYWQiLDI0LjUsMSwxNjAwLDEKIm1lZGl1bSIsImJhZCIsMjcuNSwxLDI1NTAsMQoibWVkaXVtIiwibWlkZGxlIiwyNC43LDQsMjU1MCwxCiJtZWRpdW0iLCJnb29kIiwyNS4yLDEsMjAwMCwxCiJkYXJrIiwiYmFkIiwyNy4zLDEsMjkwMCwxCiJtZWRpdW0iLCJiYWQiLDI2LjMsMSwyNDAwLDEKIm1lZGl1bSIsImJhZCIsMjksMSwzMTAwLDEKIm1lZGl1bSIsImJhZCIsMjUuMywyLDE5MDAsMQoibWVkaXVtIiwiYmFkIiwyNi41LDQsMjMwMCwxCiJtZWRpdW0iLCJiYWQiLDI3LjgsMywzMjUwLDEKIm1lZGl1bSIsImJhZCIsMjcsNiwyNTAwLDEKImRhcmsiLCJiYWQiLDI1LjcsMCwyMTAwLDAKIm1lZGl1bSIsImJhZCIsMjUsMiwyMTAwLDEKIm1lZGl1bSIsImJhZCIsMzEuOSwyLDMzMjUsMQoiZGFya2VyIiwiYmFkIiwyMy43LDAsMTgwMCwwCiJkYXJrZXIiLCJiYWQiLDI5LjMsMTIsMzIyNSwxCiJkYXJrIiwiYmFkIiwyMiwwLDE0MDAsMAoibWVkaXVtIiwiYmFkIiwyNSw1LDI0MDAsMQoiZGFyayIsImJhZCIsMjcsNiwyNTAwLDEKImRhcmsiLCJiYWQiLDIzLjgsNiwxODAwLDEKImxpZ2h0IiwiZ29vZCIsMzAuMiwyLDMyNzUsMQoiZGFyayIsImJhZCIsMjYuMiwwLDIyMjUsMAoibWVkaXVtIiwiYmFkIiwyNC4yLDIsMTY1MCwxCiJtZWRpdW0iLCJiYWQiLDI3LjQsMywyOTAwLDEKIm1lZGl1bSIsIm1pZGRsZSIsMjUuNCwwLDIzMDAsMAoiZGFyayIsImJhZCIsMjguNCwzLDMyMDAsMQoiZGFya2VyIiwiYmFkIiwyMi41LDQsMTQ3NSwxCiJtZWRpdW0iLCJiYWQiLDI2LjIsMiwyMDI1LDEKIm1lZGl1bSIsImdvb2QiLDI0LjksNiwyMzAwLDEKImxpZ2h0IiwibWlkZGxlIiwyNC41LDYsMTk1MCwxCiJtZWRpdW0iLCJiYWQiLDI1LjEsMCwxODAwLDAKIm1lZGl1bSIsImdvb2QiLDI4LDQsMjkwMCwxCiJkYXJrZXIiLCJiYWQiLDI1LjgsMTAsMjI1MCwxCiJtZWRpdW0iLCJiYWQiLDI3LjksNywzMDUwLDEKIm1lZGl1bSIsImJhZCIsMjQuOSwwLDIyMDAsMAoibWVkaXVtIiwiZ29vZCIsMjguNCw1LDMxMDAsMQoiZGFyayIsImJhZCIsMjcuMiw1LDI0MDAsMQoibWVkaXVtIiwibWlkZGxlIiwyNSw2LDIyNTAsMQoibWVkaXVtIiwiYmFkIiwyNy41LDYsMjYyNSwxCiJtZWRpdW0iLCJnb29kIiwzMy41LDcsNTIwMCwxCiJtZWRpdW0iLCJiYWQiLDMwLjUsMywzMzI1LDEKImRhcmsiLCJiYWQiLDI5LDMsMjkyNSwxCiJtZWRpdW0iLCJnb29kIiwyNC4zLDAsMjAwMCwwCiJtZWRpdW0iLCJiYWQiLDI1LjgsMCwyNDAwLDAKImRhcmtlciIsImJhZCIsMjUsOCwyMTAwLDEKIm1lZGl1bSIsImdvb2QiLDMxLjcsNCwzNzI1LDEKIm1lZGl1bSIsImJhZCIsMjkuNSw0LDMwMjUsMQoiZGFyayIsImJhZCIsMjQsMTAsMTkwMCwxCiJtZWRpdW0iLCJiYWQiLDMwLDksMzAwMCwxCiJtZWRpdW0iLCJiYWQiLDI3LjYsNCwyODUwLDEKIm1lZGl1bSIsImJhZCIsMjYuMiwwLDIzMDAsMAoibWVkaXVtIiwiZ29vZCIsMjMuMSwwLDIwMDAsMAoibWVkaXVtIiwiZ29vZCIsMjIuOSwwLDE2MDAsMAoiZGFya2VyIiwiYmFkIiwyNC41LDAsMTkwMCwwCiJtZWRpdW0iLCJiYWQiLDI0LjcsNCwxOTUwLDEKIm1lZGl1bSIsImJhZCIsMjguMywwLDMyMDAsMAoibWVkaXVtIiwiYmFkIiwyMy45LDIsMTg1MCwxCiJkYXJrIiwiYmFkIiwyMy44LDAsMTgwMCwwCiJkYXJrIiwibWlkZGxlIiwyOS44LDQsMzUwMCwxCiJtZWRpdW0iLCJiYWQiLDI2LjUsNCwyMzUwLDEKIm1lZGl1bSIsImJhZCIsMjYsMywyMjc1LDEKIm1lZGl1bSIsImJhZCIsMjguMiw4LDMwNTAsMQoiZGFya2VyIiwiYmFkIiwyNS43LDAsMjE1MCwwCiJtZWRpdW0iLCJiYWQiLDI2LjUsNywyNzUwLDEKIm1lZGl1bSIsImJhZCIsMjUuOCwwLDIyMDAsMAoiZGFyayIsImJhZCIsMjQuMSwwLDE4MDAsMAoiZGFyayIsImJhZCIsMjYuMiwyLDIxNzUsMQoiZGFyayIsImJhZCIsMjYuMSwzLDI3NTAsMQoiZGFyayIsImJhZCIsMjksNCwzMjc1LDEKImxpZ2h0IiwiZ29vZCIsMjgsMCwyNjI1LDAKImRhcmtlciIsImJhZCIsMjcsMCwyNjI1LDAKIm1lZGl1bSIsIm1pZGRsZSIsMjQuNSwwLDIwMDAsMAo=').then(res => res.blob()).then(blob => {
+      const downloadURL = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.href = downloadURL;
+      a.download = 'crabs.csv'; a.click();
+      window.URL.revokeObjectURL(downloadURL);
+      document.body.removeChild(a);
+        });"><button class="btn btn-info downloadthis  " id="dnldts4438"><i class="bi bi-database-fill-down"></i> Download data set </button></a></p>
+<p>A possible model to study the factors that affect the number of satellites for female crabs is</p>
+<p><span class="math display">\[
+\begin{aligned}
+y_i&amp;\sim\mathrm{Poisson}(\mu_i), \qquad i = 1,\dots,N \\
+\eta_i &amp;= \mu_i = \beta_0 + \beta_1 x_i + \ldots
+\end{aligned}
+\]</span></p>
+<p>We can explore the conditional means and variances given the female’s color:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>crabs <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"datasets/crabs.csv"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># conditional means and variances</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>crabs <span class="sc">%&gt;%</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>( <span class="at">Mean =</span> <span class="fu">mean</span>(satell ),</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">Variance =</span> <span class="fu">var</span>(satell),</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">.by =</span> color)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   color     Mean  Variance
+1 medium 3.294737 10.273908
+2   dark 2.227273  6.737844
+3  light 4.083333  9.719697
+4 darker 2.045455 13.093074</code></pre>
+</div>
+</div>
+<p>The mean of the number of satellites vary by color which gives a good indication that color might be useful for predicting satellites numbers. However, notice that the mean is lower than its variance suggesting that overdispersion might be present and that a negative binomial model would be more appropriate for the data (we will cover this later).</p>
+<p><strong>Fitting the model</strong></p>
+<p>First, lets begin fitting the Poisson model above using the carapace’s color and width as predictors. Since, color is a categorical variable in our model we need to create a dummy variable for it. We can use the <code>model.matrix</code> function to help us constructing the design matrix and then append this to our data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>crabs_df <span class="ot">=</span> <span class="fu">model.matrix</span>( <span class="sc">~</span>  color , crabs) <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="dv">1</span>) <span class="sc">%&gt;%</span>        <span class="co"># drop intercept</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(crabs) <span class="sc">%&gt;%</span>  <span class="co"># append to original data</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>color)        <span class="co"># remove original color categorical variable</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The new data set <code>crabs_df</code> contains a dummy variable for the different color categories (<code>dark</code> being the reference category). Then we can fit the model in <code>inlabru</code> as follows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>cmp <span class="ot">=</span>  <span class="er">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> <span class="fu">beta0</span>(<span class="dv">1</span>) <span class="sc">+</span>  colordarker <span class="sc">+</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>       colorlight <span class="sc">+</span> colormedium <span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">w</span>(weight, <span class="at">model =</span> <span class="st">"linear"</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>lik <span class="ot">=</span>  <span class="fu">bru_obs</span>(<span class="at">formula =</span> satell <span class="sc">~</span>.,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">family =</span> <span class="st">"poisson"</span>,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> crabs_df)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>fit_pois <span class="ot">=</span> <span class="fu">bru</span>(cmp, lik)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_pois)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>inlabru version: 2.13.0.9011 
+INLA version: 25.09.19 
+Components: 
+Latent components:
+beta0: main = linear(1)
+colordarker: main = linear(colordarker)
+colorlight: main = linear(colorlight)
+colormedium: main = linear(colormedium)
+w: main = linear(weight)
+Observation models: 
+  Family: 'poisson'
+    Tag: &lt;No tag&gt;
+    Data class: 'data.frame'
+    Response class: 'integer'
+    Predictor: satell ~ .
+    Additive/Linear: TRUE/TRUE
+    Used components: effects[beta0, colordarker, colorlight, colormedium, w], latent[] 
+Time used:
+    Pre = 0.838, Running = 0.189, Post = 0.00756, Total = 1.03 
+Fixed effects:
+              mean    sd 0.025quant 0.5quant 0.975quant   mode kld
+beta0       -0.501 0.196     -0.885   -0.501     -0.117 -0.501   0
+colordarker -0.008 0.180     -0.362   -0.008      0.345 -0.008   0
+colorlight   0.445 0.176      0.101    0.445      0.790  0.445   0
+colormedium  0.248 0.118      0.017    0.248      0.479  0.248   0
+w            0.001 0.000      0.000    0.001      0.001  0.001   0
+
+Deviance Information Criterion (DIC) ...............: 917.12
+Deviance Information Criterion (DIC, saturated) ....: 561.74
+Effective number of parameters .....................: 5.01
+
+Watanabe-Akaike information criterion (WAIC) ...: 929.70
+Effective number of parameters .................: 16.51
+
+Marginal log-Likelihood:  -489.43 
+ is computed 
+Posterior summaries for the linear predictor and the fitted values are computed
+(Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')</code></pre>
+</div>
+</div>
+<section id="model-assessment-and-model-choice" class="level3">
+<h3 class="anchored" data-anchor-id="model-assessment-and-model-choice">Model assessment and model choice</h3>
+<p>Now that we have fitted the model we would like to carry some model assessments. In a Bayesian setting, this is often based on posterior predictive checks. To do so, we will use the CPO and PIT - two commonly used Bayesian model assessment criteria based on the <strong>posterior predictive distribution</strong>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Posterior predictive model checking
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The posterior predictive distribution for a predicted value <span class="math inline">\(\hat{y}\)</span> is</p>
+<p><span class="math display">\[
+\pi(\hat{y}|\mathbf{y}) = \int_\theta \pi(\hat{y}|\theta)\pi(\theta|\mathbf{y})d\theta.
+\]</span></p>
+<p>The probability integral transform (PIT) introduced by Dawid (1984) is defined for each observation as:</p>
+<p><span class="math display">\[
+\mathrm{PIT}_i = \pi(\hat{y}_i \leq y_i |\mathbf{y}{-i})
+\]</span></p>
+<p>The PIT evaluates how well a model’s predicted values match the observed data distribution. It is computed as the cumulative distribution function (CDF) of the observed data evaluated at each predicted value. If the model is well-calibrated, the PIT values should be <em>approximately uniformly distributed</em>. Deviations from this uniform distribution may indicate issues with model calibration or overfitting.</p>
+<p>Another metric we could used to asses the model fit is the conditional predictive ordinate (CPO) introduced by Pettit (1990), and deﬁned as:</p>
+<p><span class="math display">\[
+\text{CPO}_i = \pi(y_i| \mathbf{y}{-i})
+\]</span></p>
+<p>The CPO measures the density of the observed value of <span class="math inline">\(y_i\)</span> when model is fit using all data but <span class="math inline">\(y_i\)</span>. CPO provides a measure of how well the model predicts each individual observation while taking into account the rest of the data and the model. <em>Large values indicate a better fit</em> of the model to the data, while small values indicate a bad fitting of the model</p>
+</div>
+</div>
+<p>To compute PIT and CPO we can either:</p>
+<ol type="1">
+<li><p>ask <code>inlabru</code> to compute them by set <code>options = list(control.compute = list(cpo = TRUE))</code> in the <code>bru()</code> function arguments.</p></li>
+<li><p>set this as default in <code>inlabru</code> global option using the <code>bru_options_set</code> function.</p></li>
+</ol>
+<p>Here we will do the later and re-run the model</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bru_options_set</span>(<span class="at">control.compute =</span> <span class="fu">list</span>(<span class="at">cpo =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>fit_pois <span class="ot">=</span> <span class="fu">bru</span>(cmp, lik)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now we can produce histograms and QQ plots to assess for uniformity in the PIT values which can be accessed through <code>inlabru_model$cpo$pit</code> :</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">R Code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day4_practical_6_files/figure-html/unnamed-chunk-67-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fit_pois<span class="sc">$</span>cpo<span class="sc">$</span>pit <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(<span class="at">main =</span> <span class="st">"Histogram of PIT values"</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">qqplot</span>(<span class="fu">qunif</span>(<span class="fu">ppoints</span>(<span class="fu">length</span>(fit_pois<span class="sc">$</span>cpo<span class="sc">$</span>pit))),</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>       fit_pois<span class="sc">$</span>cpo<span class="sc">$</span>pit,</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Q-Q plot for Unif(0,1)"</span>,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">"Theoretical Quantiles"</span>,</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">"Sample Quantiles"</span>)</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(fit_pois<span class="sc">$</span>cpo<span class="sc">$</span>pit,</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">distribution =</span> <span class="cf">function</span>(p) <span class="fu">qunif</span>(p),</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<p>Both Q-Q plots and histogram of the PIT values suggest a not so great model fit. For the CPO values, usually the following summary of the CPO is often used:</p>
+<p><span class="math display">\[
+-\sum_{i=1}^n \log (\text{CPO}\_i)
+\]</span></p>
+<p>This quantities is useful when comparing different models - a smaller values indicate a better model fit. CPO values can be accessed by typing <code>inlabru_model$cpo$cpo</code>.</p>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The model assessment above suggests that a Poisson model might not be the most appropriate model, likely due to the overdispersion we detected previously. Fit a Negative binomial to relax the Poisson model assumption that the conditional mean and variance are equal. Then, compute the CPO summary statistic and PIT QQ plot to decide which model gives the better fit.</p>
+<div class="webex-solution">
+<button>
+Take hint
+</button>
+<p>To specify a negative binomial model you only need to change the family distribution to <code>family =  "nbinomial"</code>.</p>
+</div>
+<div class="cell" data-layout-align="center" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the negative binomial model</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>lik_nbinom <span class="ot">=</span>  <span class="fu">bru_obs</span>(<span class="at">formula =</span> satell <span class="sc">~</span>.,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">family =</span> <span class="st">"nbinomial"</span>,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> crabs_df)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>fit_nbinom <span class="ot">=</span> <span class="fu">bru</span>(cmp, lik_nbinom)</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="co"># PIT checks</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>fit_nbinom<span class="sc">$</span>cpo<span class="sc">$</span>pit <span class="sc">%&gt;%</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(<span class="at">main =</span> <span class="st">"Histogram of PIT values"</span>)</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="fu">qqplot</span>(<span class="fu">qunif</span>(<span class="fu">ppoints</span>(<span class="fu">length</span>(fit_nbinom<span class="sc">$</span>cpo<span class="sc">$</span>pit))),</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>       fit_nbinom<span class="sc">$</span>cpo<span class="sc">$</span>pit,</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Q-Q plot for Unif(0,1)"</span>,</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">"Theoretical Quantiles"</span>,</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">ylab =</span> <span class="st">"Sample Quantiles"</span>)</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a><span class="fu">qqline</span>(fit_nbinom<span class="sc">$</span>cpo<span class="sc">$</span>pit,</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">distribution =</span> <span class="cf">function</span>(p) <span class="fu">qunif</span>(p),</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>       <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day4_practical_6_files/figure-html/unnamed-chunk-69-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CPO comparison</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>( <span class="at">CPO =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fu">sum</span>(<span class="fu">log</span>(fit_pois<span class="sc">$</span>cpo<span class="sc">$</span>cpo)),</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>                    <span class="sc">-</span><span class="fu">sum</span>(<span class="fu">log</span>(fit_nbinom<span class="sc">$</span>cpo<span class="sc">$</span>cpo))),</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">Model =</span> <span class="fu">c</span>(<span class="st">"Poisson"</span>,<span class="st">"Negative Binomial"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       CPO             Model
+1 465.4061           Poisson
+2 379.3340 Negative Binomial</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Overall, we can see that the negative binomial model provides a better fit to the data.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./day3_practical_5.html" class="pagination-link" aria-label="Practical 5">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Practical 5</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./day4_practical_7.html" class="pagination-link" aria-label="Practical 7">
+        <span class="nav-page-text">Practical 7</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

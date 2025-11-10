@@ -9,6 +9,7 @@ project:
     - day2_practical_4.qmd
     - day3_practical_5.qmd
     - day4_practical_6.qmd
+    - day4_practical_7.qmd
     - day5_practical_8.qmd
     - day5_practical_9.qmd
     # - slides/slides_1.qmd
@@ -34,32 +35,39 @@ website:
       - href: index.html
         text: Home
 
-      - section: "Day 1"
+      - section: "Slides"
+        contents:
+          - href: slides/slides_2.html
+            text: Lecture 1
+          - href: slides/slides_3.html
+            text: Lecture 2
+          - href: slides/slides_4.html
+            text: Lecture 3
+          - href: slides/slides_5.html
+            text: Lecture 4
+          - href: slides/slides_10.html
+            text: Lecture 9
+          - href: slides/slides_12.html
+            text: Lecture 11
+          - href: slides/slides_13.html
+            text: Lecture 12
+
+      - section: "Practicals"
         contents:
           - href: day1_practical.html
             text: Practical 1
           - href: day1_practical_2.html
             text: Practical 2
-
-      - section: "Day 2"
-        contents:
           - href: day2_practical_3.html
             text: Practical 3
           - href: day2_practical_4.html
             text: Practical 4
-
-      - section: "Day 3"
-        contents:
           - href: day3_practical_5.html
             text: Practical 5
-
-      - section: "Day 4"
-        contents:
           - href: day4_practical_6.html
             text: Practical 6
-
-      - section: "Day 5"
-        contents:
+          - text: Practical 7
+            href: day4_practical_7.html
           - text: Practical 8
             href: day5_practical_8.html
             external: true
@@ -67,22 +75,6 @@ website:
             href: day5_practical_9.html
             external: true
 
-      - section: "Slides"
-        contents:
-          - href: slides/slides_2.html
-            text: Slide 2
-          - href: slides/slides_3.html
-            text: Slide 3
-          - href: slides/slides_4.html
-            text: Slide 4
-          - href: slides/slides_5.html
-            text: Slide 5
-          - href: slides/slides_10.html
-            text: Slide 10
-          - href: slides/slides_12.html
-            text: Slide 12
-          - href: slides/slides_13.html
-            text: Slide 13
 
   page-navigation: true
 

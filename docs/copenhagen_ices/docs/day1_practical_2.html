@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Practical 2 – inlabru workshop</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./day2_practical_3.html" rel="next">
+<link href="./day1_practical.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-02bc17c6550519fb281f2cc46da73859.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-e687ad03c4740c0784da0e53b5ccae62.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-02bc17c6550519fb281f2cc46da73859.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/quarto-contrib/downloadthis-1.9.1/downloadthis.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/bootstrap-icons-1.11.1/all.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="include/webex.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./INLA_logo.png" alt="" class="navbar-logo light-content">
+    <img src="./INLA_logo.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">inlabru workshop</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./day1_practical.html">Practicals</a></li><li class="breadcrumb-item"><a href="./day1_practical_2.html">Practical 2</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Slides</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 9</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 11</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides/slides_13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 12</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Practicals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day1_practical.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day1_practical_2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Practical 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day2_practical_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day2_practical_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day3_practical_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 5</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day4_practical_6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 6</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day4_practical_7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 7</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day5_practical_8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 8</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./day5_practical_9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Practical 9</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#setting-priors-and-model-checking-for-linear-models" id="toc-setting-priors-and-model-checking-for-linear-models" class="nav-link active" data-scroll-target="#setting-priors-and-model-checking-for-linear-models">Setting priors and model checking for Linear Models</a>
+  <ul class="collapse">
+  <li><a href="#change-the-prior-distributions" id="toc-change-the-prior-distributions" class="nav-link" data-scroll-target="#change-the-prior-distributions">Change the prior distributions</a></li>
+  <li><a href="#visualizing-the-posterior-marginals" id="toc-visualizing-the-posterior-marginals" class="nav-link" data-scroll-target="#visualizing-the-posterior-marginals">Visualizing the posterior marginals</a></li>
+  </ul></li>
+  <li><a href="#sec-llm_fish" id="toc-sec-llm_fish" class="nav-link" data-scroll-target="#sec-llm_fish">Linear Mixed Model for fish weight-length relationship</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="day1_practical_2.pdf"><i class="bi bi-file-pdf"></i>PDF (PrettyPDF)</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./day1_practical.html">Practicals</a></li><li class="breadcrumb-item"><a href="./day1_practical_2.html">Practical 2</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Practical 2</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><font size="5"> <strong>Aim of this practical:</strong> </font></p>
+<ol type="1">
+<li>Set priors for different linear models</li>
+<li>Compute and visualize posterior densities and summaries for marginal effects</li>
+<li>Fit hierarchical flexible models</li>
+</ol>
+<p>we are going to learn:</p>
+<ul>
+<li>How to change some of the R default priors in <code>inlabru</code></li>
+<li>How to explore and visualize model parameters</li>
+<li>Fit different flexible models</li>
+</ul>
+<p><a href="#dnldts39274" onclick="fetch('data:text/plain;base64,IyMgLS0tLWNoaWxkPSJwcmFjdGljYWxzL0xNX2V4X3ByaW9ycy5xbWQiLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IGVjaG86IGZhbHNlCiN8IG1lc3NhZ2U6IGZhbHNlCiN8IHdhcm5pbmc6IGZhbHNlCgpsaWJyYXJ5KHdlYmV4ZXJjaXNlcykKCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KI3wgd2FybmluZzogZmFsc2UKI3wgbWVzc2FnZTogZmFsc2UKCgpsaWJyYXJ5KGRwbHlyKQpsaWJyYXJ5KElOTEEpCmxpYnJhcnkoZ2dwbG90MikKbGlicmFyeShwYXRjaHdvcmspCmxpYnJhcnkoaW5sYWJydSkgICAgIAoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IGNvZGUtZm9sZDogc2hvdwpiZXRhID0gYygyLDAuNSkKc2RfZXJyb3IgPSAwLjEKCm4gPSAxMDAKeCA9IHJub3JtKG4pCnkgPSBiZXRhWzFdICsgYmV0YVsyXSAqIHggKyBybm9ybShuLCBzZCA9IHNkX2Vycm9yKQoKZGYgPSBkYXRhLmZyYW1lKHkgPSB5LCB4ID0geCkgIAoKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojIE1vZGVsIGNvbXBvbmVudHMKY21wID0gIH4gLTEgKyBiZXRhXzAoMSkgKyBiZXRhXzEoeCwgbW9kZWwgPSAibGluZWFyIikKIyBMaW5lYXIgcHJlZGljdG9yCmZvcm11bGEgPSB5IH4gSW50ZXJjZXB0ICsgYmV0YV8xCiMgT2JzZXJ2YXRpb25hbCBtb2RlbCBsaWtlbGlob29kCmxpayA9ICBicnVfb2JzKGZvcm11bGEgPSB5IH4uLAogICAgICAgICAgICBmYW1pbHkgPSAiZ2F1c3NpYW4iLAogICAgICAgICAgICBkYXRhID0gZGYpCiMgRml0IHRoZSBNb2RlbApmaXQubG0gPSBicnUoY21wLCBsaWspCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KI3wgZXZhbDogdHJ1ZQojfCBwdXJsOiB0cnVlIAoKaW5sYS5wcmlvcnMudXNlZChmaXQubG0pCgoKCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgojIEZpcnN0IHdlIGRlZmluZSB0aGUgbG9nR2FtbWEgKDAuMDEsMC4wMSkgcHJpb3IgCgpwcmVjLnRhdSA8LSBsaXN0KHByZWMgPSBsaXN0KHByaW9yID0gImxvZ2dhbW1hIiwgICAjIHByaW9yIG5hbWUKICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwYXJhbSA9IGMoMC4wMSwgMC4wMSkpKSAjIHByaW9yIHZhbHVlcwoKbGlrMiA9ICBicnVfb2JzKGZvcm11bGEgPSB5IH4uLAogICAgICAgICAgICAgICAgZmFtaWx5ID0gImdhdXNzaWFuIiwKICAgICAgICAgICAgICAgIGRhdGEgPSBkZiwKICAgICAgICAgICAgICAgIGNvbnRyb2wuZmFtaWx5ID0gbGlzdChoeXBlciA9IHByZWMudGF1KSkKCmZpdC5sbTIgPSBicnUoY21wMiwgbGlrMikgCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiN8IGZpZy13aWR0aDogNAojfCBmaWctYWxpZ246IGNlbnRlcgojfCBmaWctaGVpZ2h0OiA0CiN8IGNvZGUtZm9sZDogc2hvdwoKcGxvdChmaXQubG0sICJiZXRhXzAiKQoKCgojIyAtLS0tY2hpbGQ9InByYWN0aWNhbHMvTE1NX2Zpc2hfZXhhbXBsZS5xbWQiLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KI3wgd2FybmluZzogZmFsc2UKI3wgbWVzc2FnZTogZmFsc2UKCgpsaWJyYXJ5KGRwbHlyKQpsaWJyYXJ5KElOTEEpCmxpYnJhcnkoZ2dwbG90MikKbGlicmFyeShwYXRjaHdvcmspCmxpYnJhcnkoaW5sYWJydSkgICAgIAoKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojfCBlY2hvOiBmYWxzZQojfCBtZXNzYWdlOiBmYWxzZQojfCB3YXJuaW5nOiBmYWxzZQojfCBldmFsOiBmYWxzZQoKIyBsaWJyYXJ5KEZTQWRhdGEpCiMgZGYgPSBQeWdteVdGQkMKIyAjIHN1YnNldCBmb3IgMjAwMSBhbmQgcmVtb3ZlIG5ldHMgd2l0aCB6ZXJvIG9ic2VydmF0aW9ucwojIGRmID0gZGYgJT4lIGZpbHRlcih5ZWFyPT0yMDAxICYgIWlzLm5hKHNleCkgJiBuZXRfbm8gJWluJSBjKDE6NSw3OjgpKSAlPiUgZHBseXI6OnNlbGVjdChuZXRfbm8sd3QsdGwsc2V4KQojIHdyaXRlLmNzdihkZixmaWxlID0gImRhdGFzZXRzL1B5Z215V0ZCQy5jc3YiLHJvdy5uYW1lcyA9IEYpCiMgCgoKIyMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KI3wgZmlnLXdpZHRoOiA0CiN8IGZpZy1oZWlnaHQ6IDQKI3wgZmlnLWFsaWduOiBjZW50ZXIKI3wgd2FybmluZzogZmFsc2UKI3wgbWVzc2FnZTogZmFsc2UKClB5Z215V0ZCQyA8LSByZWFkLmNzdigiZGF0YXNldHMvUHlnbXlXRkJDLmNzdiIpCgpnZ3Bsb3QoUHlnbXlXRkJDLCBhZXMoeCA9IGZhY3RvcihuZXRfbm8pLCB5ID0gd3QsZmlsbCA9IHNleCkpICsgCiAgZ2VvbV9ib3hwbG90KCkgKyAKICBsYWJzKHk9IldlaWdodCAoZykiLHggPSAiTmV0IG5vLiIpCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tClB5Z215V0ZCQyRzZXhfTSA8LSBpZmVsc2UoUHlnbXlXRkJDJHNleD09IkYiLDAsMSkKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpjbXAgPSAgfiAtMSArIHNleF9NICsgCiAgYmV0YV8wKDEpICArIAogIGJldGFfMSh0bCwgbW9kZWwgPSAibGluZWFyIikgKyAgCiAgbmV0X2VmZihuZXRfbm8sIG1vZGVsID0gImlpZCIpCgpsaWsgPSAgYnJ1X29icyhmb3JtdWxhID0gd3QgfiAuLAogICAgICAgICAgICBmYW1pbHkgPSAiZ2F1c3NpYW4iLAogICAgICAgICAgICBkYXRhID0gUHlnbXlXRkJDKQoKZml0ID0gYnJ1KGNtcCwgbGlrKQoKc3VtbWFyeShmaXQpCgoKCgojIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpwbG90KGZpdCwibmV0X2VmZiIpCgoKCiMjIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgpzYW1wdmFycyA8LSAgcHJlZGljdChmaXQsUHlnbXlXRkJDLCB+IHsKICAgdGF1X2UgPC0gUHJlY2lzaW9uX2Zvcl90aGVfR2F1c3NpYW5fb2JzZXJ2YXRpb25zCiAgIHRhdV91IDwtIFByZWNpc2lvbl9mb3JfbmV0X2VmZgogICBsaXN0KHNpZ21hX3UgPSAxL3RhdV91LAogICAgICAgIHNpZ21hX2UgPSAxL3RhdV9lKQogICB9LAogICBuLnNhbXBsZXMgPSAxMDAwCiAgKQoKbmFtZXMoc2FtcHZhcnMpID0gYygiRXJyb3IgdmFyaWFuY2UiLCJCZXR3ZWVuLW5ldCBWYXJpYW5jZSIpCgpzYW1wdmFycwoKCgo=').then(res => res.blob()).then(blob => {
+      const downloadURL = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.href = downloadURL;
+      a.download = 'practical_2.R.R'; a.click();
+      window.URL.revokeObjectURL(downloadURL);
+      document.body.removeChild(a);
+        });"><button class="btn btn-success downloadthis  " id="dnldts39274"><i class="bi bi-database-fill-down"></i> Download Practical 2 R script </button></a></p>
+<section id="setting-priors-and-model-checking-for-linear-models" class="level2">
+<h2 class="anchored" data-anchor-id="setting-priors-and-model-checking-for-linear-models">Setting priors and model checking for Linear Models</h2>
+<p>In this exercise we will:</p>
+<ul>
+<li>Learn how to set priors for linear effects <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span></li>
+<li>Learn how to set the priors for the hyperparameter <span class="math inline">\(\tau = 1/\sigma^2\)</span>.</li>
+<li>Visualize marginal posterior distributions</li>
+</ul>
+<p>Start by loading useful libraries:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(INLA)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(inlabru)     </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Recall a simple linear regression model with Gaussian observations <span class="math display">\[
+y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
+\]</span></p>
+<p>where <span class="math inline">\(\sigma^2\)</span> is the observation error, and the mean parameter <span class="math inline">\(\mu_i\)</span> is linked to the linear predictor through an identity function: <span class="math display">\[
+\eta_i = \mu_i = \beta_0 + \beta_1 x_i
+\]</span> where <span class="math inline">\(x_i\)</span> is a covariate and <span class="math inline">\(\beta_0, \beta_1\)</span> are parameters to be estimated. In INLA, we assume that the model is a latent Gaussian model, i.e., we have to assign <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> a Gaussian prior. For the precision hyperparameter <span class="math inline">\(\tau = 1/\sigma^2\)</span> a typical prior choice is a <span class="math inline">\(\text{Gamma}(a,b)\)</span> prior.</p>
+<p>In <code>R-INLA</code>, the default choice of priors for each <span class="math inline">\(\beta\)</span> is</p>
+<p><span class="math display">\[
+\beta \sim \mathcal{N}(0,10^3).
+\]</span></p>
+<p>and the prior for the variance parameter in terms of the log precision is</p>
+<p><span class="math display">\[ \log(\tau) \sim \mathrm{logGamma}(1,5 \times 10^{-5}) \]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If your model uses the default intercept construction (i.e., <code>Intercept(1)</code> in the linear predictor) <code>inlabru</code> will assign a default <span class="math inline">\(\mathcal{N} (0,0)\)</span> prior to it.</p>
+</div>
+</div>
+<p>Lets see how can we change the default priors using some simulated data</p>
+<section id="simulate-example-data" class="level4">
+<h4 class="anchored" data-anchor-id="simulate-example-data"><strong>Simulate example data</strong></h4>
+<p>We simulate data from a simple linear regression model</p>
+<div class="cell">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="fl">0.5</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sd_error <span class="ot">=</span> <span class="fl">0.1</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> beta[<span class="dv">1</span>] <span class="sc">+</span> beta[<span class="dv">2</span>] <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> sd_error)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">x =</span> x)  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="fitting-the-linear-regression-model-with-inlabru" class="level4">
+<h4 class="anchored" data-anchor-id="fitting-the-linear-regression-model-with-inlabru"><strong>Fitting the linear regression model with <code>inlabru</code></strong></h4>
+<p>Now we fit a simple linear regression model in <code>inlabru</code> by defining (1) the model components, (2) the linear predictor and (3) the likelihood.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model components</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cmp <span class="ot">=</span>  <span class="er">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> <span class="fu">beta_0</span>(<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">beta_1</span>(x, <span class="at">model =</span> <span class="st">"linear"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Linear predictor</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>formula <span class="ot">=</span> y <span class="sc">~</span> Intercept <span class="sc">+</span> beta_1</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Observational model likelihood</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>lik <span class="ot">=</span>  <span class="fu">bru_obs</span>(<span class="at">formula =</span> y <span class="sc">~</span>.,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> df)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the Model</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>fit.lm <span class="ot">=</span> <span class="fu">bru</span>(cmp, lik)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="change-the-prior-distributions" class="level3">
+<h3 class="anchored" data-anchor-id="change-the-prior-distributions">Change the prior distributions</h3>
+<p>Until now, we have used the default priors for both the precision <span class="math inline">\(\tau\)</span> and the fixed effects <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>. Let’s see how to customize these.</p>
+<p>To check which priors are used in a fitted model one can use the function <code>inla.prior.used()</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inla.priors.used</span>(fit.lm)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>section=[family]
+    tag=[INLA.Data1] component=[gaussian]
+        theta1:
+            parameter=[log precision]
+            prior=[loggamma]
+            param=[1e+00, 5e-05]
+section=[linear]
+    tag=[beta_0] component=[beta_0]
+        beta:
+            parameter=[beta_0]
+            prior=[normal]
+            param=[0.000, 0.001]
+    tag=[beta_1] component=[beta_1]
+        beta:
+            parameter=[beta_1]
+            prior=[normal]
+            param=[0.000, 0.001]</code></pre>
+</div>
+</div>
+<p>From the output we see that the precision for the observation <span class="math inline">\(\tau\sim\text{Gamma}(1e+00,5e-05)\)</span> while <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> have precision 0.001, that is variance <span class="math inline">\(1/0.001\)</span>.</p>
+<p><strong>Change the precision for the linear effects</strong></p>
+<p>The precision for linear effects is set in the component definition. For example, if we want to increase the precision to 0.01 for <span class="math inline">\(\beta_0\)</span> we define the relative components as:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>cmp1 <span class="ot">=</span>  <span class="er">~</span><span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span>  <span class="fu">beta_0</span>(<span class="dv">1</span>, <span class="at">prec.linear =</span> <span class="fl">0.01</span>) <span class="sc">+</span> <span class="fu">beta_1</span>(x, <span class="at">model =</span> <span class="st">"linear"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Run the model again using 0.1 as default precision for both the intercept and the slope parameter.</p>
+<div class="cell" data-layout-align="center" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>cmp2 <span class="ot">=</span>  <span class="er">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">beta_0</span>(<span class="dv">1</span>, <span class="at">prec.linear =</span> <span class="fl">0.1</span>) <span class="sc">+</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">beta_1</span>(x, <span class="at">model =</span> <span class="st">"linear"</span>, <span class="at">prec.linear =</span> <span class="fl">0.1</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>lm.fit2 <span class="ot">=</span> <span class="fu">bru</span>(cmp2, lik) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p>Note that we can use the same observation model as before since both the formula and the dataset are unchanged.</p>
+</div>
+</div>
+<p><strong>Change the prior for the precision of the observation error</strong> <span class="math inline">\(\tau\)</span></p>
+<p>Priors on the hyperparameters of the observation model must be passed by defining argument <code>hyper</code> within <code>control.family</code> in the call to the <code>bru_obs()</code> function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First we define the logGamma (0.01,0.01) prior </span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>prec.tau <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">prec =</span> <span class="fu">list</span>(<span class="at">prior =</span> <span class="st">"loggamma"</span>,   <span class="co"># prior name</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">param =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.01</span>))) <span class="co"># prior values</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>lik2 <span class="ot">=</span>  <span class="fu">bru_obs</span>(<span class="at">formula =</span> y <span class="sc">~</span>.,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">data =</span> df,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">control.family =</span> <span class="fu">list</span>(<span class="at">hyper =</span> prec.tau))</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>fit.lm2 <span class="ot">=</span> <span class="fu">bru</span>(cmp2, lik2) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The names of the priors available in&nbsp;<strong>R-INLA</strong>&nbsp;can be seen with <code>names(inla.models()$prior)</code></p>
+</section>
+<section id="visualizing-the-posterior-marginals" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-the-posterior-marginals">Visualizing the posterior marginals</h3>
+<p>Posterior marginal distributions of the ﬁxed effects parameters and the hyperparameters can be visualized using the <code>plot()</code> function by calling the name of the component. For example, if want to visualize the posterior density of the intercept <span class="math inline">\(\beta_0\)</span> we can type:</p>
+<div class="cell" data-layout-align="center">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit.lm, <span class="st">"beta_0"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day1_practical_2_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Plot the posterior marginals for <span class="math inline">\(\beta_1\)</span> and for the precision of the observation error <span class="math inline">\(\pi(\tau|y)\)</span></p>
+<div class="webex-solution">
+<button>
+Take hint
+</button>
+<p>See the <code>summary()</code> output to check the names for the different model components.</p>
+</div>
+<div class="cell" data-layout-align="center" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit.lm, <span class="st">"beta_1"</span>) <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit.lm, <span class="st">"Precision for the Gaussian observations"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day1_practical_2_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-llm_fish" class="level2">
+<h2 class="anchored" data-anchor-id="sec-llm_fish">Linear Mixed Model for fish weight-length relationship</h2>
+<p>In this exercise we will:</p>
+<ul>
+<li>Plot random effects of a LMM</li>
+<li>Compute posterior densities and summaries for the variance components</li>
+</ul>
+<p>Libraries to load:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(INLA)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(inlabru)     </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In this exercise, we will use a subset of the Pygmy Whitefish (<em>Prosopium coulterii</em>) dataset from the <code>FSAdata</code> R package, containing biological data collected in 2001 from Dina Lake, British Columbia.</p>
+<p><a href="#dnldts45739" onclick="fetch('data:text/csv;base64,Im5ldF9ubyIsInd0IiwidGwiLCJzZXgiCjcsMTIuNiwxMS4yLCJGIgo3LDExLjMsMTAuOCwiTSIKNywxMy40LDEyLjYsIkYiCjMsMTYuNiwxMi4yLCJGIgozLDE4LjMsMTIuNiwiRiIKNCw4LjYsMTAuMiwiRiIKNCw5LjIsMTAuMSwiTSIKNCw5LjEsMTAuMiwiTSIKNCwxMCwxMC4xLCJGIgo0LDguNyw5LCJGIgo0LDExLjksMTEuNSwiRiIKNCxOQSw5LjksIkYiCjQsMTMuOSwxMS4zLCJGIgoyLDMuNCw3LjEsIkYiCjMsMTYuNSwxMi40LCJGIgozLDE3LjIsMTMuMSwiRiIKMywxNy4yLDEyLjIsIkYiCjEsMy40LDcuNSwiRiIKMiw5LjMsOS45LCJNIgoyLDkuNiwxMCwiTSIKMiwxNS41LDEyLjMsIkYiCjQsMi40LDYuNiwiRiIKNCwxLjYsNS43LCJGIgoyLDEwLjIsMTAuOCwiTSIKMywyMC43LDEzLjYsIkYiCjMsMTUuNywxMS45LCJGIgozLDE1LjUsMTEuOSwiTSIKNCwxLjgsNy4xLCJGIgoxLDQuNCw3LjksIkYiCjEsMTQuNywxMi4yLCJGIgoyLDEwLDEwLjMsIkYiCjIsMTAuMiwxMC43LCJGIgoyLDEwLDkuOSwiRiIKMiwxMy4yLDExLCJGIgoyLDEwLjYsMTAuNCwiRiIKMiwxMiwxMC43LCJGIgoyLDExLjgsMTAuMiwiRiIKMywxNy4xLDEyLjQsIkYiCjMsMTcuNCwxMi4yLCJGIgo4LDEyLjMsMTAuOSwiTSIKNywxOS4yLDEzLjUsIkYiCjcsMTYsMTIuNiwiRiIKOCwxNy45LDEzLjEsIkYiCjgsMTcuMiwxMywiRiIKOCwxNi40LDEzLjMsIkYiCjgsOC4xLDkuMywiTSIKOCwxMC4xLDEwLjcsIk0iCjgsOS4yLDEwLjEsIkYiCjgsOS4yLDEwLjMsIk0iCjgsMTMuMiwxMS44LCJGIgo4LDE0LjQsMTEuNiwiRiIKOCwxNC42LDEyLjIsIkYiCjgsMTEuOSwxMC45LCJGIgo4LDExLjMsMTAuMywiRiIKOCwxNC44LDExLjcsIkYiCjgsMTEuMSwxMC45LCJNIgo4LDEyLjksMTEuNiwiTSIKOCwxMC43LDEwLjgsIk0iCjgsMTEuNSwxMS4zLCJNIgo4LDE1LjIsMTEuOSwiRiIKOCwxNCwxMS42LCJGIgo4LDExLjcsMTAuNCwiRiIKOCwxMS44LDExLjEsIk0iCjgsMTIsMTAuOCwiTSIKOCw4LjIsOS42LCJNIgo4LDcuOSw5LjcsIk0iCjgsMTIuNywxMC43LCJNIgo4LDE2LjksMTIuOSwiRiIKOCwxNi44LDEyLjcsIkYiCjgsMTEuMiwxMC42LCJNIgo4LDEyLjIsMTAuOCwiRiIKOCw5LjIsMTAuMywiTSIKOCwxMiwxMS4xLCJGIgo4LDExLjQsMTAuOCwiRiIKOCwxMS45LDEwLjksIkYiCjgsOS43LDEwLjMsIkYiCjgsMTIsMTEuMiwiRiIKOCwxMS44LDEwLjgsIk0iCjcsMjEuNSwxMy4xLCJGIgo3LDIxLjcsMTMuNSwiRiIKNywyMC41LDEzLjYsIkYiCjcsMjEsMTIuOCwiTSIKNywyMC4xLDEzLjEsIkYiCjcsMTgsMTIuOCwiRiIKNywxOS44LDEyLjYsIkYiCjcsMTguMiwxMi40LCJGIgo3LDE5LjEsMTIuMSwiRiIKNywxNi43LDExLjksIkYiCjcsMjAuMSwxMy4xLCJGIgo3LDIwLjksMTMuNSwiRiIKNywyMiwxMy41LCJGIgo3LDE2LjksMTEuOSwiRiIKNywxNS41LDExLjcsIkYiCjcsMTMuOCwxMS4yLCJGIgo3LDE2LjEsMTIuMSwiRiIKNywxNi43LDEyLjcsIkYiCjcsMTQsMTEuOSwiTSIKNywxOSwxMS45LCJGIgo3LDE0LjQsMTEuNCwiRiIKNywxNy42LDEyLjcsIkYiCjcsMTkuMSwxMi42LCJGIgoyLDcuMiw5LjcsIkYiCjIsMTMuOSwxMS41LCJGIgoyLDYuMiw4LjcsIk0iCjMsNCw3LjQsIk0iCjMsMy45LDguMiwiRiIKMywzLjgsNy42LCJNIgozLDIuOCw3LjEsIkYiCjMsMy4yLDYuOSwiRiIKMyw4LjksMTAuMiwiTSIKMywzLjksOC4yLCJGIgozLDQuMSw4LjQsIk0iCjMsNi41LDguNywiTSIKMyw0LjEsNy45LCJGIgozLDQuNCw4LjMsIk0iCjMsMy44LDcuOCwiRiIKMyw0LjQsNy42LCJGIgozLDQsOCwiTSIKMiw5LDEwLjgsIkYiCjEsNSw5LCJGIgoyLDkuMiw5LjksIkYiCjIsMTUuMywxMS43LCJGIgoyLDEzLjIsMTEuMywiRiIKMiwxMC4zLDEwLjYsIk0iCjIsOS41LDEwLjMsIk0iCjIsMTAuOSwxMC42LCJGIgoyLDE0LjEsMTEuOCwiRiIKMiwxMSwxMC4yLCJGIgoyLDExLjUsMTAuOCwiRiIKMiwxNi43LDEyLjksIkYiCjIsMTQuOCwxMi41LCJGIgoyLDEzLjEsMTEuNywiRiIKMiwxNi43LDEyLjYsIkYiCjIsOS42LDkuNSwiRiIKMiwxMi4xLDExLCJGIgoyLDEzLjYsMTIuMSwiRiIKMiwxNi4yLDEyLCJGIgo0LDE3LjksMTMuNCwiRiIKNCw2LjEsOS45LCJGIgo0LDExLjcsMTEuNSwiRiIKNCwxLjgsNi44LCJNIgo1LDE5LjksMTIuNywiRiIKNSwxNC44LDExLjgsIkYiCjUsMy41LDguNCwiTSIKNSwyMC4zLDEzLjQsIkYiCjIsMTQuOSwxMywiRiIKMiwxNC4zLDEyLjQsIkYiCjIsMTUuNCwxMi42LCJGIgoyLDE0LjMsMTIuNCwiRiIKMiw5LjYsMTEuMSwiTSIKMiwwLjIsMTAuMiwiRiIKMiw2LjksMTAuMSwiTSIKMiw1LjYsOS43LCJGIgoyLDMsOC4xLCJGIgoyLDMuNiw5LCJGIgozLDEwLjEsMTAuNSwiTSIKMyw5LjYsMTEuMSwiTSIKMywxMy4zLDExLjcsIkYiCjUsMi42LDkuMSwiRiIKNSw2LjQsMTAuMiwiTSIKMSw5LjcsMTAuMywiTSIKMSwxMC4zLDEwLjcsIkYiCjEsNy44LDEwLCJNIgoxLDEwLjYsMTEsIk0iCjEsOS4xLDEwLjgsIk0iCjEsNy42LDEwLjUsIk0iCjEsMTQuNCwxMi40LCJNIgoxLDEwLjgsMTAuNCwiTSIKMSwxMC41LDEwLjEsIk0iCjEsMTQuMiwxMi4zLCJGIgoxLDkuOSwxMCwiTSIKMSw5LjYsMTAuNSwiTSIKMSwxMC40LDExLjQsIk0iCjEsOC4yLDEwLjEsIk0iCjEsOC41LDExLjEsIk0iCjEsOS42LDExLjMsIk0iCjEsMTUuNywxMy4zLCJGIgoxLDEwLjEsMTAuMiwiRiIKMSwxMi4zLDExLjcsIkYiCjEsOS4zLDEwLjUsIk0iCjEsOC4yLDEwLjEsIk0iCjEsOSwxMC4xLCJNIgoxLDcuNSwxMC4xLCJNIgoxLDEzLjIsMTEsIkYiCjEsNy42LDEwLCJNIgoxLDguOSwxMC4yLCJNIgoxLDExLjMsMTEuOCwiTSIKMSwxMy4yLDExLjMsIkYiCjEsMTAuNiwxMS4yLCJNIgoxLDEyLjksMTEuNCwiRiIKMSwxNC4xLDExLjgsIkYiCjEsMTQuMSwxMi4xLCJGIgoxLDguMywxMCwiTSIKMSw4LjcsMTAuNiwiTSIKMSw4LjcsMTAuMSwiTSIKMSw4LjEsMTAuMSwiTSIKMSwxNi42LDEyLjksIkYiCjEsOS44LDEwLjksIk0iCjEsOC40LDEwLjQsIk0iCjEsOS42LDExLjIsIk0iCjEsMTMuMywxMi41LCJGIgoxLDguMSwxMC42LCJNIgoxLDEyLjQsMTEuNSwiTSIKMSw5LjIsMTAuNCwiTSIKMSwxMC40LDExLjMsIk0iCjEsMTAuMiwxMSwiTSIKMSw4LjgsMTAuNSwiTSIKMSw3LjcsMTAuMywiTSIKMSw4LjIsMTAuMiwiTSIKMSw3LjUsMTAsIk0iCjEsNi45LDkuOSwiTSIKMSw4LjMsMTAuMSwiTSIKMSwxMC4xLDEwLjksIk0iCjEsOS44LDEwLjksIk0iCjEsMTEuNywxMi4zLCJNIgoxLDE3LjcsMTMsIkYiCjMsMTIuMiwxMS4yLCJNIgozLDEwLjgsMTAuNSwiTSIKMyw3LjksMTAuNywiTSIKMywxMC4zLDEwLjksIk0iCjMsOC45LDEwLjQsIk0iCjMsOC40LDkuOSwiRiIKMyw4LjksMTAuNSwiTSIKMywxMS40LDExLjQsIk0iCjMsMTEuNywxMS40LCJGIgozLDEyLjUsMTAuOSwiRiIKMyw4LjUsMTAuNCwiTSIKMywxMS41LDExLjcsIkYiCjEsMjEuNCwxNC4zLCJGIgoxLDE4LjMsMTIuNiwiRiIKMSwxNy45LDEyLjgsIkYiCjEsMTUuOCwxMy4xLCJGIgoxLDEyLjIsMTEuNiwiRiIKMSwxMS45LDExLjQsIkYiCjEsMTIuMywxMSwiRiIKMiwxMS40LDExLjgsIk0iCjIsMTEuNCwxMS41LCJGIgo=').then(res => res.blob()).then(blob => {
+      const downloadURL = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      document.body.appendChild(a);
+      a.href = downloadURL;
+      a.download = 'PygmyWFBC.csv'; a.click();
+      window.URL.revokeObjectURL(downloadURL);
+      document.body.removeChild(a);
+        });"><button class="btn btn-info downloadthis  " id="dnldts45739"><i class="bi bi-database-fill-down"></i> Download data set </button></a></p>
+<p>The data set contains the following information:</p>
+<ul>
+<li><code>net_no</code>Unique net identification number</li>
+<li><code>wt</code> Fish weight (g)</li>
+<li><code>tl</code> Total fish length (cm)</li>
+<li><code>sex</code> Sex code (<code>F</code>=Female, <code>M</code> = Male)</li>
+</ul>
+<p>We can visualize the distribution of the response (weight) across the nets split by sex as follows:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>PygmyWFBC <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"datasets/PygmyWFBC.csv"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(PygmyWFBC, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(net_no), <span class="at">y =</span> wt,<span class="at">fill =</span> sex)) <span class="sc">+</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y=</span><span class="st">"Weight (g)"</span>,<span class="at">x =</span> <span class="st">"Net no."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="day1_practical_2_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Suppose we are interested in modelling the weight-length relationship for captured fish. The exploratory plot suggest some important variability in this relationship, potentially attributable to differences among sampling nets deployed across various sites in the Dina Lake.</p>
+<p>To account for this between-net variability, we model net as a random effect using the following linear mixed model:</p>
+<p><span class="math display">\[
+\begin{aligned}
+y_{ij} &amp;\sim\mathcal{N}(\mu_{ij}, \sigma_e^2), \qquad i = 1,\dots,a \qquad j = 1,\ldots,n \\
+\eta_{ij} &amp;= \mu_{ij} = \beta_0 + \beta_1 \times \text{length}_j + \beta_2 \times \mathbb{I}(\mathrm{Sex}_{ij}=\mathrm{M}) +  u_i \\
+u_i &amp;\sim \mathcal{N}(0,\sigma^2_u)
+\end{aligned}
+\]</span></p>
+<p>where:</p>
+<ul>
+<li><p><span class="math inline">\(y_{ij}\)</span> is the weight of the <span class="math inline">\(j\)</span>-th fish from net <span class="math inline">\(i\)</span></p></li>
+<li><p><span class="math inline">\(\text{length}_{ij}\)</span> is the corresponding fish length</p></li>
+<li><p><span class="math inline">\(\mathbb{I}(\text{Sex}_{ij} = \text{M})\)</span> is an indicator/dummy such that for the <em>i</em>th net <span class="math display">\[
+\mathbb{I}(\mathrm{Sex}_{ij}) \begin{cases}1 &amp; \text{if the } j \text{th fish is Male} \\0 &amp; \text{otherwise} \end{cases}
+\]</span></p></li>
+<li><p><span class="math inline">\(u_i\)</span> represents the random intercept for net <span class="math inline">\(i\)</span></p></li>
+<li><p><span class="math inline">\(\sigma_u^2\)</span> and <span class="math inline">\(\sigma_\epsilon^2\)</span> are the between-net and residual variances, respectively</p></li>
+</ul>
+<p>To run this model in<code>inlabru</code> we first need to create our sex dummy variable :</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>PygmyWFBC<span class="sc">$</span>sex_M <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(PygmyWFBC<span class="sc">$</span>sex<span class="sc">==</span><span class="st">"F"</span>,<span class="dv">0</span>,<span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><code>inlabru</code> will treat 0 as the reference category (i.e., the intercept <span class="math inline">\(\beta_0\)</span> will represent the baseline weight for females ). Now we can define the model component, the likelihood and fit the model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cmp <span class="ot">=</span>  <span class="er">~</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">+</span> sex_M <span class="sc">+</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">beta_0</span>(<span class="dv">1</span>)  <span class="sc">+</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">beta_1</span>(tl, <span class="at">model =</span> <span class="st">"linear"</span>) <span class="sc">+</span>  </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">net_eff</span>(net_no, <span class="at">model =</span> <span class="st">"iid"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>lik <span class="ot">=</span>  <span class="fu">bru_obs</span>(<span class="at">formula =</span> wt <span class="sc">~</span> .,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">family =</span> <span class="st">"gaussian"</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> PygmyWFBC)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">bru</span>(cmp, lik)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>inlabru version: 2.13.0.9011 
+INLA version: 25.09.19 
+Components: 
+Latent components:
+sex_M: main = linear(sex_M)
+beta_0: main = linear(1)
+beta_1: main = linear(tl)
+net_eff: main = iid(net_no)
+Observation models: 
+  Family: 'gaussian'
+    Tag: &lt;No tag&gt;
+    Data class: 'data.frame'
+    Response class: 'numeric'
+    Predictor: wt ~ .
+    Additive/Linear: TRUE/TRUE
+    Used components: effects[sex_M, beta_0, beta_1, net_eff], latent[] 
+Time used:
+    Pre = 1, Running = 0.197, Post = 0.0342, Total = 1.23 
+Fixed effects:
+          mean    sd 0.025quant 0.5quant 0.975quant    mode kld
+sex_M   -1.106 0.218     -1.534   -1.106     -0.678  -1.106   0
+beta_0 -15.816 0.870    -17.516  -15.819    -14.099 -15.819   0
+beta_1   2.555 0.072      2.414    2.555      2.696   2.555   0
+
+Random effects:
+  Name    Model
+    net_eff IID model
+
+Model hyperparameters:
+                                         mean    sd 0.025quant 0.5quant
+Precision for the Gaussian observations 0.475 0.044      0.393    0.473
+Precision for net_eff                   2.151 1.330      0.561    1.837
+                                        0.975quant mode
+Precision for the Gaussian observations      0.568 0.47
+Precision for net_eff                        5.579 1.31
+
+Marginal log-Likelihood:  -467.53 
+ is computed 
+Posterior summaries for the linear predictor and the fitted values are computed
+(Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')</code></pre>
+</div>
+</div>
+<p>For interpretability, we could have centered the predictors, but our primary focus here is on estimating the variance components of the mixed model.</p>
+<p>We can plot the posterior density of the nets random intercept as follows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit,<span class="st">"net_eff"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="day1_practical_2_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For theoretical and computational purposes, INLA works with the precision which is the inverse of the variance. To obtain the posterior summaries on the SDs scale we can sample from the posterior distribution for the precision while back-transforming the samples and then computing the summary statistics. Transforming the samples is necessary because some quantities such as the mean and mode are not invariant to monotone transformation; alternatively we can use some of the in-built <code>inlabru</code> functions to achieve this (see supplementary note).</p>
+<p>We use the <code>predict</code> function to draw samples from the approximated joint posterior for the hyperparameters, then invert them to get variances and lastly compute the mean, std. dev., quantiles, etc.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To get the right name for the hyperparameters to use in the <code>predict()</code> function, you can use the function <code>bru_names()</code>.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sampvars <span class="ot">&lt;-</span>  <span class="fu">predict</span>(fit,PygmyWFBC, <span class="sc">~</span> {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>   tau_e <span class="ot">&lt;-</span> Precision_for_the_Gaussian_observations</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>   tau_u <span class="ot">&lt;-</span> Precision_for_net_eff</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">list</span>(<span class="at">sigma_u =</span> <span class="dv">1</span><span class="sc">/</span>tau_u,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">sigma_e =</span> <span class="dv">1</span><span class="sc">/</span>tau_e)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>   },</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.samples =</span> <span class="dv">1000</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(sampvars) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Error variance"</span>,<span class="st">"Between-net Variance"</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>sampvars</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$`Error variance`
+       mean        sd    q0.025     q0.5   q0.975   median sd.mc_std_err
+1 0.6616978 0.5233516 0.1788688 0.519843 1.729197 0.519843    0.03841196
+  mean.mc_std_err
+1      0.01897922
+
+$`Between-net Variance`
+      mean       sd  q0.025     q0.5  q0.975   median sd.mc_std_err
+1 2.126421 0.188269 1.76038 2.110596 2.54322 2.110596   0.005098576
+  mean.mc_std_err
+1      0.00627605
+
+attr(,"class")
+[1] "bru_prediction" "list"          </code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span><i class="bi-pencil-square " style="color: #c8793c;" role="img" aria-hidden="true"></i> Task
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Another useful quantity we can compute is the intraclass correlation coefﬁcient (ICC) which help us determine how much the response varies within groups compared to between groups. The intraclass correlation coefﬁcient is defined as:</p>
+<p><span class="math display">\[
+\text{ICC} = \frac{\sigma^2_u}{\sigma^2_u + \sigma^2_e}
+\]</span></p>
+<p>Compute the mean, median, and quantiles for the ICC by drawing posterior samples for <span class="math inline">\(\sigma^2_e\)</span> and <span class="math inline">\(\sigma^2_u\)</span> using the <code>predict</code> function.</p>
+<div class="cell" data-webex.hide="Click here to see the solution">
+<div class="webex-solution">
+<button>
+Click here to see the solution
+</button>
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ICC <span class="ot">&lt;-</span>  <span class="fu">predict</span>(fit,PygmyWFBC, <span class="sc">~</span> {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>   tau_e <span class="ot">&lt;-</span> Precision_for_the_Gaussian_observations</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>   tau_u <span class="ot">&lt;-</span> Precision_for_net_eff</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>   sigma_u <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span>tau_u</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>   sigma_e <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span>tau_e</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">list</span>(<span class="at">ICC =</span> sigma_u<span class="sc">/</span> (sigma_u<span class="sc">+</span>sigma_e))</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>   },</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.samples =</span> <span class="dv">1000</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Supplementary Material
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The marginal densities for the hyper parameters can be also found by calling<code>inlabru_model$marginals.hyperpar</code>. We can then apply a transformation using the <code>inla.tmarginal</code> function to transform the precision posterior distributions.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>var_e <span class="ot">&lt;-</span> fit<span class="sc">$</span>marginals.hyperpar<span class="sc">$</span><span class="st">`</span><span class="at">Precision for the Gaussian observations</span><span class="st">`</span> <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inla.tmarginal</span>(<span class="cf">function</span>(x) <span class="dv">1</span><span class="sc">/</span>x,.) </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>var_u <span class="ot">&lt;-</span> fit<span class="sc">$</span>marginals.hyperpar<span class="sc">$</span><span class="st">`</span><span class="at">Precision for net_eff</span><span class="st">`</span> <span class="sc">%&gt;%</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inla.tmarginal</span>(<span class="cf">function</span>(x) <span class="dv">1</span><span class="sc">/</span>x,.) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The marginal densities for the hyper parameters can be found with <code>inlabru_model$marginals.hyperpar</code>, then we can apply a transformation using the <code>inla.tmarginal</code> function to transform the precision posterior distributions. Then, we can compute posterior summaries using <code>inla.zmarginal</code> function as follows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>post_var_summaries <span class="ot">&lt;-</span> <span class="fu">cbind</span>( <span class="fu">inla.zmarginal</span>(var_e,<span class="at">silent =</span> T),</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">inla.zmarginal</span>(var_u,<span class="at">silent =</span> T))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(post_var_summaries) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sigma_e"</span>,<span class="st">"sigma_u"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>post_var_summaries</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           sigma_e   sigma_u  
+mean       2.124302  0.6517157
+sd         0.1980826 0.4188677
+quant0.025 1.763733  0.1797262
+quant0.25  1.98528   0.3680138
+quant0.5   2.113846  0.5419625
+quant0.75  2.25199   0.8093747
+quant0.975 2.541157  1.762555 </code></pre>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./day1_practical.html" class="pagination-link" aria-label="Practical 1">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Practical 1</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./day2_practical_3.html" class="pagination-link" aria-label="Practical 3">
+        <span class="nav-page-text">Practical 3</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
