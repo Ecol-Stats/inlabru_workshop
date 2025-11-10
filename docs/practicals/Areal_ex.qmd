@@ -212,14 +212,7 @@ After fitting the model we want to extract results.
 
 1. What is the estimated value for $\beta_0$? `r fitb(fit$summary.fixed[1], num = TRUE, tol = .001)`
 
-2. Look at the estimated values of the hyperparameters using
-```{r}
-#| echo: true
-#| eval: false
-fit$summary.hyperpar
-```
-
-which of the two spatial components (structured or unstructured) explains more of the variability in the counts? `mcq(c("structured", answer = "unstructured"))`
+2. Look at the estimated values of the hyperparameters using `fit$summary.hyperpar` , which of the two spatial components (structured or unstructured) explains more of the variability in the counts? `r mcq(c("structured", answer = "unstructured"))`
 
 :::
 
@@ -247,7 +240,7 @@ pred = predict(fit, resp_cases, ~data.frame(log_risk = ...,
 
 
 
-`r hide("Answer")`
+`r hide("Show Answer")`
 
 
 ```{r}

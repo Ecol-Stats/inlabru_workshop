@@ -123,14 +123,27 @@ df = data.frame(y = y, x = x)
 
 **Defining model components**
 
-The model has two parameters to be estimated $\beta_1$ and $\beta_2$. We need to define the two corresponding model components:
+The model has two parameters to be estimated $\beta_1$ and $\beta_2$. We need to define the two corresponding model components.
 
-```{r }
-#| code-summary: "Define LM components"
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Define an object called `cmp` that includes and (i) intercept `beta_0` and (ii) a covariate `x` linear effect `beta_1`.
+
+`r hide("Take hint")`
+
+The `cmp` object is here used to define model components. We can give them any useful names we like, in this case, `beta_0` and `beta_1`. You can remove the automatic intercept construction by adding a `-1` in the components
+
+`r unhide()`
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
 cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
-```
 
-The `cmp` object is here used to define model components. We can give them any useful names we like, in this case, `beta_0` and `beta_1`.
+```
+:::
 
 ::: callout-note
 Note that we have excluded the default Intercept term in the model by typing `-1` in the model components. However, `inlabru` has automatic intercept that can be called by typing `Intercept()` , which is one of `inlabru` special names and it is used to define a global intercept, e.g.
@@ -148,26 +161,53 @@ cmp =  ~  Intercept(1) + beta_1(x, model = "linear")
 
 The next step is to construct the observation model by defining the model likelihood. The most important inputs here are the `formula`, the `family` and the `data`.
 
-The `formula` defines how the components should be combined in order to define the model predictor.
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Define a linear predictor `eta` using the component labels you have defined on the previous task.
+
+`r hide("Take hint")`
+
+The `eta` object defines how the components should be combined in order to define the model predictor.
+
+`r unhide()`
 
 ```{r}
-#| eval: false
-#| code-summary: "Define LM formula"
-formula = y ~ beta_0 + beta_1
-```
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+eta = y ~ beta_0 + beta_1
 
-::: callout-note
-In this case we can also use the shortcut `formula = y ~ .`. This will tell `inlabru` that the model is linear and that it is not necessary to linearize the model and assess convergence.
+```
 :::
 
-The likelihood is defined using the `bru_obs()` function as follows:
+The likelihood for the observational model is defined using the `bru_obs()` function.
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Define the observational model likelihood in an object called `lik` using the `bru_obs()` function.
+
+`r hide("Take hint")`
+
+The `bru_obs` is expecting three arguments:
+
+-   The linear predictor `eta` we defined in the previous task
+-   The data likelihood (this can be specified by setting `family = "gaussian"`)
+-   The data set `df`
+
+`r unhide()`
 
 ```{r}
-#| code-summary: "Define Observational model"
-lik =  bru_obs(formula = y ~.,
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+lik =  bru_obs(formula = eta,
             family = "gaussian",
             data = df)
+
 ```
+:::
 
 **Fit the model**
 

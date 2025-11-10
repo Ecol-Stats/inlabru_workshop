@@ -1,12 +1,14 @@
 ---
 title: "Practical 2"
+execute: 
+  freeze: auto
 format: 
   html:
     mainfont: "12"
   PrettyPDF-pdf:
-    keep-tex: true
+    keep-tex: false
     number-sections: true
-embed-resources: true
+embed-resources: false
 editor_options: 
   chunk_output_type: console
 ---
@@ -40,7 +42,4 @@ we are going to learn:
 ```
 
 ```{r child="practicals/LMM_fish_example.qmd"}
-```
-
-```{r child="practicals/HGAMM_ex.qmd"}
 ```

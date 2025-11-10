@@ -133,7 +133,10 @@ PygmyWFBC$sex_M <- ifelse(PygmyWFBC$sex=="F",0,1)
 
 
 ## -----------------------------------------------------------------------------
-cmp =  ~ -1 + sex_M +  beta_0(1)  + beta_1(tl, model = "linear") +   net_eff(net_no, model = "iid")
+cmp =  ~ -1 + sex_M + 
+  beta_0(1)  + 
+  beta_1(tl, model = "linear") +  
+  net_eff(net_no, model = "iid")
 
 lik =  bru_obs(formula = wt ~ .,
             family = "gaussian",
@@ -153,141 +156,18 @@ plot(fit,"net_eff")
 
 ## -----------------------------------------------------------------------------
 
-sampvars <- 1/inla.hyperpar.sample(1000,fit,improve.marginals = T)
+sampvars <-  predict(fit,PygmyWFBC, ~ {
+   tau_e <- Precision_for_the_Gaussian_observations
+   tau_u <- Precision_for_net_eff
+   list(sigma_u = 1/tau_u,
+        sigma_e = 1/tau_e)
+   },
+   n.samples = 1000
+  )
 
-colnames(sampvars) <- c("Error variance","Between-net Variance")
+names(sampvars) = c("Error variance","Between-net Variance")
 
-apply(sampvars,2,
-      function(x) c("mean"=mean(x),
-                    "std.dev" = sd(x),
-                    quantile(x,c(0.025,0.5,0.975))))
-
-
-
-## ----child="practicals/HGAMM_ex.qmd"------------------------------------------
-
-## -----------------------------------------------------------------------------
-#| echo: false
-#| message: false
-#| warning: false
-
-library(webexercises)
-
-
-
-## -----------------------------------------------------------------------------
-#| warning: false
-#| message: false
-
-
-library(dplyr)
-library(INLA)
-library(ggplot2)
-library(patchwork)
-library(inlabru)     
-
-
-
-## -----------------------------------------------------------------------------
-#| echo: false
-#| fig-align: center
-#| fig-width: 6
-#| fig-height: 6
-#| fig-cap: "Source–depth proﬁles per month. Each line represents a station."
-icit <- read.csv("datasets/ISIT.csv")
-
-icit$Month <- as.factor(icit$Month)
-levels(icit$Month) <- month.abb[unique(icit$Month)]
-icit$Month_id <- as.numeric(icit$Month)
-
-ggplot(icit,aes(x=SampleDepth,y= Sources,group=as.factor(Station),colour=as.factor(Station)))+geom_line()+facet_wrap(~Month)+theme(legend.position = "none")
-
-
-## -----------------------------------------------------------------------------
-#| eval: false
-
-# icit <- read.csv("datasets/ISIT.csv")
-# 
-# icit$Month <- as.factor(icit$Month)
-# levels(icit$Month) <- month.abb[unique(icit$Month)]
-# 
-# ggplot(icit,aes(x=SampleDepth,y= Sources,
-#                 group=as.factor(Station),
-#                 colour=as.factor(Station)))+
-#   geom_line()+
-#   facet_wrap(~Month)+
-#   theme(legend.position = "none")
-
-
-## -----------------------------------------------------------------------------
-
-icit$Month_id <- as.numeric(icit$Month) # numeric index for the i-th month
-
-cmp_g =  ~ -1+ beta_0(1) + 
-  smooth_g(SampleDepth, model = "rw1") + 
-  month_reff(Month_id, model = "iid") 
-
-lik =  bru_obs(formula = Sources ~.,
-               family = "gaussian",
-               data = icit)
-
-fit_g = bru(cmp_g, lik)
-
-summary(fit_g)
-
-
-
-## -----------------------------------------------------------------------------
-#| code-summary: "Global smoother marginal effect"
-#| code-fold: true
-#| fig-align: center
-#| fig-width: 4
-#| fig-height: 4
-
-data.frame(fit_g$summary.random$smooth_g) %>% 
-  ggplot() + 
-  geom_ribbon(aes(ID,ymin = X0.025quant, ymax= X0.975quant), alpha = 0.5) + 
-  geom_line(aes(ID,mean)) + 
-  xlab("covariate") + ylab("smooth effect")
-
-
-## -----------------------------------------------------------------------------
-icit$depth_grouped <- inla.group(icit$SampleDepth,n=50)
-
-
-
-
-
-## -----------------------------------------------------------------------------
-
-cmp_gs =  ~ -1+ beta_0(1) +
-  smooth_g(SampleDepth, model = "rw1") + 
-  month_reff(Month_id, model = "iid")+
-  smooth_loc(SampleDepth, model = "rw1", group = Month_id)
-
-
-
-## -----------------------------------------------------------------------------
-
-fit_gs = bru(cmp_gs, lik) 
-
-
-
-## -----------------------------------------------------------------------------
-pred_gs = predict(fit_gs, icit, ~ (beta_0 + smooth_g+month_reff+smooth_loc))
-
-
-
-## -----------------------------------------------------------------------------
-#| code-summary: "Global + group smoother predictions"
-#| code-fold: true
-
-ggplot(pred_gs,aes(y=mean,x=SampleDepth))+
-  geom_ribbon(aes(SampleDepth,ymin = q0.025, ymax= q0.975), alpha = 0.5,fill="tomato") +
-  geom_line()+
-  geom_point(aes(x=SampleDepth,y=Sources ),alpha=0.25,col="grey40")+
-  facet_wrap(~Month)
-
+sampvars
 
 
 

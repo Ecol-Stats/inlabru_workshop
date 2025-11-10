@@ -63,7 +63,7 @@ and the prior for the variance parameter in terms of the log precision is
 $$ \log(\tau) \sim \mathrm{logGamma}(1,5 \times 10^{-5}) $$
 
 ::: callout-note
-If your model uses the default intercept construction (i.e., `Intercept(1)` in the linear predictor) INLA will assign a default $\mathcal{N} (0,0)$ prior to it.
+If your model uses the default intercept construction (i.e., `Intercept(1)` in the linear predictor) `inlabru` will assign a default $\mathcal{N} (0,0)$ prior to it.
 :::
 
 Lets see how can we change the default priors using some simulated data
@@ -87,7 +87,7 @@ df = data.frame(y = y, x = x)
 
 #### **Fitting the linear regression model with `inlabru`**
 
-Now we fit a simple linear regression model in `inalbru` by defining (1) the model components, (2) the linear predictor and (3) the likelihood.
+Now we fit a simple linear regression model in `inlabru` by defining (1) the model components, (2) the linear predictor and (3) the likelihood.
 
 ```{r }
 # Model components

@@ -1,12 +1,14 @@
 ---
 title: "Practical 4"
+execute:
+  freeze: auto
 format: 
   html:
     mainfont: "12"
   PrettyPDF-pdf:
-    keep-tex: true
+    keep-tex: false
     number-sections: true
-embed-resources: true
+embed-resources: false
 editor_options: 
   chunk_output_type: console
 ---
@@ -25,14 +27,12 @@ knitr::purl("day2_practical_4.qmd")
 <font size="5"> **Aim of this practical:** </font>
 
 1.  Work with different types of spatial data types including: Areal, Geostatistical and Spatial Point process data.
+
 2.  Read and visualize shapefiles into R
+
 3.  Manipulate and visualize `sf` spatial object in R
+
 4.  Manipulate and visualize raster data in R.
-
-we are going to learn:
-
--   Explore tools for spatial data wrangling and visualization.
--   Use some commonly used metrics to assess spatial autocorrelation in our data.
 
 {{< downloadthis day2_practical_4.R dname="practical_4.R" label="Download Practical 3 R script" icon="database-fill-down" type="success" >}}
 

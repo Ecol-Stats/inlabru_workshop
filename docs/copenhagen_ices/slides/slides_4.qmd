@@ -1,0 +1,902 @@
+---
+title: "Lecture 3"
+from: markdown+emoji
+subtitle: "Temporal Models and Smoothing" 
+format:
+  revealjs:
+    margin: 0
+    logo:  NTNU_UofG.png
+    theme: uofg_theme.scss
+    header-includes: |
+      <script src="custom.js" type="application/javascript"></script>
+slide-number: "c/t"
+title-slide-attributes:
+#    data-background-image: images/trondheim3.png
+    data-background-size: cover
+    data-background-opacity: "0.55"
+author:
+  - name: Sara Martino
+    #orcid: 0000-0002-6879-4412
+    email: sara.martino@ntnu.no
+    affiliations: Dept. of Mathematical Science, NTNU
+  - name: Janine Illian
+    #orcid: 0000-0002-6879-4412
+    email: Janine.Illian@glasgow.ac.uk
+    affiliations: University of Glasgow 
+  - name: Jafet Belmont
+    #orcid: 0000-0002-6879-4412
+    email: Jafet.Belmont@glasgow.ac.uk
+    affiliations: University of Glasgow   
+        
+# date: May 22, 2025
+# bibliography: references.bib
+embed-resources: true
+execute:
+  allow-html: true
+  freeze: auto
+---
+
+```{r setup}
+# #| include: false
+
+knitr::opts_chunk$set(echo = FALSE,
+                      message=FALSE,
+                      warning=FALSE,
+                      strip.white=TRUE,
+                      prompt=FALSE,
+                      fig.align="center",
+                       out.width = "60%")
+
+library(knitr)    # For knitting document and include_graphics function
+library(ggplot2)  # For plotting
+library(png)
+library(tidyverse)
+library(INLA)
+library(BAS)
+library(patchwork)
+library(DAAG)
+library(inlabru)
+
+library(cowplot) # needs install.packages("magick") to draw images
+
+```
+
+## Motivation {.smaller}
+
+Data are often observed in time, and time dependence is often expected.
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+lakes = as.data.frame(greatLakes ) %>% mutate(year = 1918:2009)
+lakes %>% 
+  pivot_longer(-year) %>%
+  ggplot() + geom_point(aes(year, value ))+
+  facet_wrap(.~name,scales = "free" ) + xlab("") + ylab("")
+```
+
+. . .
+
+-   Observations are correlated in time
+
+## Motivation {auto-animate="true"}
+
+1.  Smoothing of the time effect
+
+```{r}
+lakes = as.data.frame(greatLakes ) %>% mutate(year = 1918:2009)
+
+cmp = ~ -1 + Intercept(1) + time(year, model = "rw2", 
+                                 scale.model = T,
+                                 hyper = list(prec = list(prior = "pc.prec", param = c(1, 0.01))))
+
+lik = bru_obs(formula = Erie~.,
+              data = lakes)
+out = bru(cmp, lik)
+pred = predict(out, lakes, ~ Intercept + time)
+
+pred %>% ggplot() + 
+  geom_point(data = lakes, aes(year, Erie)) + ylab("") + xlab("")
+```
+
+## What is our goal? {auto-animate="true"}
+
+1.  Smoothing of the time effect
+
+```{r}
+
+pred %>% ggplot() + geom_line(aes(year, mean)) +
+  geom_ribbon(aes(year, ymin = q0.025, ymax = q0.975), alpha = 0.4 ) + 
+  geom_point(data = lakes, aes(year, Erie)) + ylab("") + xlab("")
+```
+
+. . .
+
+**Note:** We can use the same model to smooth covariate effects!
+
+## What is our goal? {auto-animate="true"}
+
+1.  Smoothing of the time effect
+
+2.  Prediction
+
+```{r}
+
+
+question <- readPNG("figures/question.png", native = TRUE)
+
+
+p1 = pred %>% ggplot() + geom_line(aes(year, mean)) +
+  geom_ribbon(aes(year, ymin = q0.025, ymax = q0.975), alpha = 0.4 ) + 
+  geom_point(data = lakes, aes(year, Erie)) + ylab("") + xlab("") + xlim(1919,2030)
+ggdraw() +  draw_plot(p1) + draw_image(question, scale = .4, y = 0.15, x=0.35)
+
+```
+
+. . .
+
+We can "predict" any unobserved data, does not have to be in the future
+
+## Modeling time with INLA {auto-animate="true"}
+
+Time can be indexed over a
+
+-   Discrete domain (e.g., years)
+
+-   Continuous domain
+
+## Modeling time with INLA {auto-animate="true"}
+
+Time can be indexed over a
+
+-   Discrete domain (e.g., years)
+
+    -   Main models: RW1, RW2 and AR1
+
+    -   **Note:** RW1 and RW2 are also used for smoothing covariates
+
+-   Continuous domain
+
+    -   Here we use the so-called SPDE-approach
+
+# Discrete time modelling
+
+## Example - Height of Lake Erie in time
+
+```{r}
+
+
+lakes %>% ggplot() + geom_point(aes(year, Erie)) + 
+  ylab("m") + xlab("Year")
+
+
+
+
+if(0)
+{
+cmp = ~ Intercept(1)+year(year, model = "linear") + time(time, model = "rw2")
+lik = bru_obs(formula = y~.,
+              family = "gaussian",
+              data = df)
+
+fit = bru(cmp, lik)
+
+preds = predict(fit, df, ~Intercept+year + time)
+
+
+
+cmp2 = ~ Intercept(1)+year(year, model = "linear") + seas(month, model = "rw2", cyclic = T)
+lik2 = bru_obs(formula = y~.,
+              family = "gaussian",
+              data = df)
+
+fit2 = bru(cmp2, lik2)
+
+
+
+
+preds2 = predict(fit2, df, ~Intercept+year + seas)
+
+
+ppreds = rbind(cbind(preds, model = 1),
+               cbind(preds2, model = 2))
+ppreds %>% 
+  filter(!is.na(y)) %>%
+  ggplot() + geom_line(aes(time, mean, group = model, color = factor(model))) + 
+   geom_ribbon(aes(time, ymin = q0.025, ymax = q0.975, group = model, fill = factor(model) ), alpha =  0.5) 
+
+}
+
+```
+
+**Goal** we want understand the pattern and predict into the future
+
+## Random Walk models {.smaller}
+
+Random walk models encourage the mean of the linear predictor to vary gradually over time.
+
+. . .
+
+They do this by assuming that, on average, the time effect at each point is the mean of the effect at the neighboring points.
+
+```{r}
+# Example random walk data
+dd <- data.frame(
+  time = 0:6,
+  y = (-3:3)/2 # example path
+)
+
+# Define a normal distribution at time = 3
+dens <- data.frame(y = seq(-3, 3, length.out = 200))
+dens$density <- dnorm(dens$y, mean = 0, sd = .2)
+
+# scale density so it looks like a vertical shape at x = 3
+scale_factor <- 0.5
+dens$x <- 3 + dens$density * scale_factor
+
+ggplot(dd, aes(time, y)) +
+  # grey background
+ 
+  
+  # points
+  geom_point(size = 2) +
+  
+  # connecting line between neighbors t=2 and t=4
+  geom_line(data = dd %>% filter(time %in% c(2,4)), aes(time, y), color = "black") +
+  
+  # normal density "red blob"
+  geom_polygon(data = dens,
+               aes(x, y), fill = "red", alpha = 0.8) +
+  
+  # predicted mean point
+  geom_point(aes(x = 3, y = 0), color = "blue", size = 3) +
+  ylim(-2,2) + 
+  # labels
+  labs(title = "First Order Random Walk",
+       x = "Time",
+       y = "Mean Response")
+
+```
+
+. . .
+
+-   Random Walk of order 1 (RW1) we take the two nearest neighbors
+
+-   Random Walk of order 2 (RW2) we take the four nearest neighbors
+
+## Random walks of order 1 {auto-animate="true"}
+
+**Idea:** $\longrightarrow\ u_t = \text{mean}(u_{t-1} , u_{t+1}) + \text{Gaussian error with precision  } \tau$
+
+. . .
+
+**Definition**
+
+$$
+  \pi(\mathbf{u} \mid \tau) \propto
+  \exp\!\left(
+     -\frac{\tau}{2} \sum_{t=1}^{T-1} (u_{t+1} - u_t)^2
+  \right) = \exp\!\left(-\tfrac{1}{2} \, \mathbf{u}^{\top} \mathbf{Q}\ \mathbf{u}\right)
+$$
+
+$$
+    \mathbf{Q} = \tau
+    \begin{bmatrix}
+      1 & -1 &  &        &        &   \\
+      -1 & 2 & -1 &        &        &   \\
+         &    & \ddots & \ddots & \ddots &   \\
+         &    &        & -1     & 2 & -1 \\
+         &    &        &        & -1 & 1
+    \end{bmatrix}
+$$
+
+## Random walks of order 1 {auto-animate="true"}
+
+**Idea:** $\longrightarrow\ u_t = \text{mean}(u_{t-1} , u_{t+1}) + \text{Gaussian error with precision  } \tau$
+
+**Definition**
+
+$$
+  \pi(\mathbf{u} \mid \tau) \propto
+  \exp\!\left(
+     -\frac{\tau}{2} \sum_{t=1}^{T-1} (u_{t+1} - u_t)^2
+  \right) = \exp\!\left(-\tfrac{1}{2} \, \mathbf{u}^{\top} \mathbf{Q}\ \mathbf{u}\right)
+$$
+
+1.  Role of the precision parameter $\tau$ and prior distribution
+2.  RW as intrinsic model
+
+## What is the role of the precision parameter?
+
+-   $\tau$ says how much $u_t$ can vary around its mean
+
+    -   Small $\tau$ $\rightarrow$ large variation $\rightarrow$ less smooth effect
+    -   Large $\tau$ $\rightarrow$ small variation $\rightarrow$ smoother effect
+
+. . .
+
+```{r}
+#| fig-align: center
+#| out-width: 60%
+
+cmp = ~ -1 +  time(year, model = "rw2", constr = FALSE,
+                            hyper = list(prec = list(initial = 0, fixed = T)))
+cmp2 = ~ -1 +  time(year, model = "rw2", constr = FALSE,
+                            hyper = list(prec = list(initial = 20, fixed = T)))
+                                        
+
+lik = bru_obs(formula = Erie~.,
+              data = lakes)
+out = bru(cmp, lik)
+out2=bru(cmp2, lik)
+ggplot() + geom_point(data = lakes, aes(year, Erie)) +
+  geom_line(data= out$summary.random$time, aes(ID, mean, color = "small precision")) +
+  geom_line(data= out2$summary.random$time, aes(ID, mean, color = "large precision")) +
+  ylab("") + xlab("") + theme(legend.title = element_blank())
+
+```
+
+. . .
+
+We need to set a *prior distribution* for $\tau$.
+
+A common option is the so called *PC-priors*
+
+## Penalized Complexity (PC) priors {auto-animate="true"}
+
+-   PC prior are easily available in `inlabru` for many model parameters
+
+. . .
+
+-   They are build with two principle in mind:
+
+    1.  The prior **discourages overdispersion** by penalizing distance from a *base model*
+
+::::: columns
+::: {.column width="60%"}
+```{r precs}
+#| out-width: 100%
+cmp = ~ -1 +  time(year, model = "rw2", constr = FALSE,
+                            hyper = list(prec = list(initial = 10, fixed = T)))
+cmp2 = ~ -1 +  time(year, model = "rw2", constr = FALSE,
+                            hyper = list(prec = list(initial = 20, fixed = T)))
+                                        
+
+lik = bru_obs(formula = Erie~.,
+              data = lakes)
+out = bru(cmp, lik)
+out2=bru(cmp2, lik)
+ggplot() + geom_point(data = lakes, aes(year, Erie)) +
+  geom_line(data= out$summary.random$time, aes(ID, mean, color = "small precision")) +
+  geom_line(data= out2$summary.random$time, aes(ID, mean, color = "large precision")) +
+  ylab("") + xlab("") + theme(legend.title = element_blank(), legend.position = "none")
+
+```
+:::
+
+::: {.column width="40%"}
+-   A line is the *base model*
+
+-   We want to penalize more complex models
+:::
+:::::
+
+## Penalized Complexity (PC) priors {auto-animate="true"}
+
+-   PC prior are easily available in `inlabru` for many model parameters
+
+-   They are build with two principle in mind:
+
+    1.  The prior **discourages overdispersion** by penalizing distance from a *base model*
+    2.  **User-defined** scaling
+
+::::: columns
+::: {.column width="50%"}
+$$
+\begin{eqnarray}
+\sigma = \sqrt{1/\tau} \\ 
+\text{Prob}(\sigma>U) = \alpha;\\ \qquad U>0, \ \alpha \in (0,1)
+\end{eqnarray}
+$$
+:::
+
+::: {.column width="50%"}
+-   $U$ an upper limit for the standard deviation and $\alpha$ a small probability.
+
+-   $U$ a likely value for the standard deviation and $\alpha=0.5$.
+:::
+:::::
+
+## Example
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+y_i|\eta_i, \sigma^2 & \sim \mathcal{N}(\eta_i,\sigma^2)\\
+\eta_i & = \beta_0 + f(t_i)\\
+f(t_1),f(t_2),\dots,f(t_n) &\sim \text{RW2}(\tau)
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| out-width: 100%
+
+lakes %>% ggplot() + geom_point(aes(year, Erie)) + xlab("") + ylab("")
+
+```
+:::
+:::::
+
+::::: columns
+::: {.column width="60%"}
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+
+cmp = ~ Intercept(1) + 
+  time(year, model = "rw1",
+       hyper = list(prec = 
+                      list(prior = "pc.prec",
+                           param = c(0.5, 0.5))))
+```
+:::
+
+::: {.column width="40%"}
+```{r}
+#| fig-align: center
+#| out-width: 100%
+#| eval: true
+
+cmp0 = ~ -1 +  time(year, model = "rw2", constr = FALSE,
+                   scale.model = TRUE, 
+                    hyper = list(prec = list(prior = "pc.prec", param = c(0.3,0.5))))
+lik = bru_obs(formula = Erie~.,
+              data = lakes)
+out_pc0 = bru(cmp0, lik)
+
+
+prior = data.frame(x = seq(0,9,0.01),
+                   y = INLA::inla.pc.dprec(seq(0,9,0.01), 
+                                           u  = 0.3, alpha = 0.5))
+posterior = inla.tmarginal(function(x)1/sqrt(x),
+                           out_pc0$marginals.hyperpar$`Precision for time`)
+
+ggplot() + geom_line(data = prior, aes(x,y, color = "prior")) +
+  geom_line(data = posterior, aes(x,y, color = "posterior"))
+
+```
+:::
+:::::
+
+## RW as intrinsic models {.smaller}
+
+RW1 defines *differences*, not *absolute levels*:
+
+-   Only the *changes* between neighboring terms are modeled.
+
+-   Mathematically, $$
+    (u_1,\dots,u_n)\text{ and }(u_1+a,\dots,u_n+a)
+    $$ produce identical likelihoods — they’re indistinguishable.
+
+. . .
+
+This means:
+
+-   If $u_t\sim\text{RW}1$ then $$
+    \eta_t = \beta_0 + u_t = (\beta_0+k) + (u_t-k) = \beta_0^* + u_t^*  
+    $$ so parameters are not well-defined
+
+. . .
+
+Solution:
+
+-   Sum to zero constraint $\sum_{i = 1}^n u_i = 0$
+-   This is be default included in the model
+
+## RW as intrinsic models {.smaller}
+
+```{r}
+#| echo: true
+cmp1 = ~ Intercept(1) + time(year, model = "rw1", constr = TRUE)
+cmp2 = ~ Intercept(1) + time(year, model = "rw1", constr = FALSE)
+lik = bru_obs(formula = Erie~.,
+              data = lakes)
+
+fit1 = bru(cmp1,lik)
+fit2 = bru(cmp2,lik)
+```
+
+```{r}
+print("FIT1 - Intercept")
+round(fit1$summary.fixed,3)
+print("FIT2 - Intercept")
+round(fit2$summary.fixed,3)
+
+print("FIT1 - RW1 effect")
+round(fit1$summary.random$time[c(1:2),],3)
+print("FIT2 - RW1 effect")
+round(fit2$summary.random$time[c(1:2),],3)
+
+```
+
+## Random walks of order 2
+
+-   Just like RW1, but now we consider 4 neighbours instead of 2
+
+$$
+u_t = \text{mean}(u_{t-2} ,u_{t-1} , u_{t+1}, u_{t+2} ) + \text{some Gaussian error with precision  } \tau
+$$
+
+-   RW2 are smoother than RW1
+
+-   The precision has the same role as for RW1
+
+## Example {.smaller}
+
+::::: columns
+::: {.column width="60%"}
+```{r}
+#| echo: true
+cmp1 = ~ Intercept(1) + 
+  time(year, model = "rw1", 
+       scale.model = T,
+       hyper = list(prec = 
+                      list(prior = "pc.prec",
+                           param = c(0.3,0.5))))
+
+cmp2 = ~ Intercept(1) + 
+  time(year, model = "rw2",
+       scale.model = T,
+       hyper = list(prec = 
+                      list(prior = "pc.prec", 
+                           param = c(0.3,0.5))))
+
+
+lik = bru_obs(formula = Erie~ ., 
+              data = lakes)
+
+fit1 = bru(cmp1, lik)
+fit2 = bru(cmp2, lik)
+
+
+```
+:::
+
+::: {.column width="40%"}
+```{r}
+#| echo: false
+#| out-width: 100%
+pred1 = predict(fit1, lakes, ~ Intercept + time)
+pred2 = predict(fit2, lakes, ~ Intercept + time)
+
+ggplot()+ geom_line(data = pred1, aes(year, mean, color = "rw1")) +
+  geom_line(data = pred2, aes(year, mean, color = "rw2")) + ylab("") + xlab("") +
+  theme(legend.title = element_blank(), legend.position = "bottom")
+
+```
+
+**NOTE:** the `scale.model = TRUE` option scales the $\mathbf{Q}$ matrix so the precision parameter has the same interpretation in both models.
+:::
+:::::
+
+## RW models as smoothers for covariates {.smaller}
+
+-   RW models are discrete models
+
+-   Covariates are often recorded as continuous values
+
+-   The function `inla.group()` will bin covariate values into groups (default 25 groups)
+
+> `inla.group(x, n = 25, method = c("cut", "quantile"))`
+
+-   Two ways to bin
+
+    -   `cut` (default) splits the data using equal length intervals
+    -   `quantile` uses equidistant quantiles in the probability space.
+
+## RW models as smoothers for covariates - Example
+
+::::: columns
+::: {.column width="50%"}
+The data are derived from an anthropometric study of 892 females under 50 years in three Gambian villages in West Africa.
+
+`Age` - Age of respondent (continuous)
+
+`triceps` - Triceps skinfold thickness.
+
+```{r}
+triceps = read_csv("Data/triceps.csv")
+triceps$age_group = inla.group(triceps$age, n = 30)
+
+# Description
+# The data are derived from an anthropometric study of 892 females under 50 years in three Gambian villages in West Africa.
+# 
+# Format
+# A data frame with 892 observations on the following 3 variables:
+# 
+# age Age of respondents.
+# lntriceps Log of the triceps skinfold thickness.
+# triceps Triceps skinfold thickness.
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| eval: true
+#| out-width: 100%
+
+triceps %>% ggplot() + geom_point(aes(age, triceps, color = "original") ) +
+  geom_point(aes(age_group, triceps, color = "grouped")) + theme(legend.title =  element_blank())
+
+```
+:::
+:::::
+
+```{r}
+#| echo: true
+#| eval: false
+triceps$age_group = inla.group(triceps$age, n = 30)
+```
+
+## Model fit and results
+
+```{r}
+#| echo: true
+cmp = ~ Intercept(1) + cov(age_group, model = "rw2", scale.model =T)
+lik = bru_obs(formula = triceps ~.,
+              data = triceps)
+
+fit = bru(cmp, lik)
+pred = predict(fit, triceps, ~ Intercept + cov)
+```
+
+```{r}
+
+pred %>% ggplot() +
+  geom_point(aes(age, triceps), alpha = 0.4)+ geom_line(aes(age_group, mean), color = "red") +
+  geom_ribbon(aes(age_group, ymin = q0.025, ymax = q0.975), alpha = 0.5, fill = "red") 
+
+```
+
+## Summary RW (1 and 2) models
+
+-   Latent effects suitable for smoothing and modeling temporal data.
+
+-   One hyperparameter: the precision $\tau$
+
+    -   Use PC prior for $\tau$
+
+-   It is an *intrinsic* model
+
+    -   The precision matrix $\mathbf{Q}$ is rank deficient
+
+    -   A sum-to-zero constraint is added to make the model identifiable!
+
+-   RW2 models are smoother than RW1
+
+## Auto Regressive Models of order 1 (AR1)
+
+**Definition**
+
+$$
+u_t = \phi u_{t-i} + \epsilon_t; \qquad \phi\in(-1,1), \ \epsilon_t\sim\mathcal{N}(0,\tau^{-1})
+$$
+
+$$
+\pi(\mathbf{u}|\tau)\propto\exp\left(-\frac{\tau}{2}\mathbf{u}^T\mathbf{Q}\mathbf{u}\right)
+$$
+
+with
+
+$$
+    \mathbf{Q} =
+    \begin{bmatrix}
+      1 & -\phi &  &        &        &   \\
+      -\phi & (1+\phi^2) & -\phi &        &        &   \\
+         &    & \ddots & \ddots & \ddots &   \\
+         &    &        & -\phi     & (1+\phi^2) & -\phi \\
+         &    &        &        & -\phi & 1
+    \end{bmatrix}
+$$
+
+## AR1: Hyperparameters and prior {auto-animate="true"}
+
+The AR1 model has two parameters
+
+-   The precision $\tau$
+-   The autocorrelation (or persistence) parameter $\phi\in(0,1)$
+
+## AR1: Hyperparameters and prior {auto-animate="true"}
+
+The AR1 model has two parameters
+
+-   The precision $\tau$
+
+    -   PC prior as before - Baseline $\tau=0$ `pc.prec` $$
+        \text{Prob}(\sigma > u) = \alpha
+        $$
+
+-   The autocorrelation (or persistence) parameter \$\phi\in(-1,1)
+
+    -   Two choices of PC priors
+
+::::: columns
+::: {.column width="50%"}
+1.  Baseline $\phi = 0$ `pc.cor0`
+
+$$
+\begin{eqnarray}
+\text{Prob}(|\rho| > u) = \alpha;\\
+-1<u<1;\ 0<\alpha<1
+\end{eqnarray}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| out-width: 100%
+#| fig-align: "center"
+data.frame(xx = seq(-1,1,0.001)) %>%
+  mutate(yy1 = inla.pc.dcor0(xx, u = 0.07, alpha= 0.5),
+  yy2 = inla.pc.dcor0(xx, u = 0.4, alpha= 0.5),
+  yy3 = inla.pc.dcor0(xx, u = 0.7, alpha= 0.5)) %>%
+  pivot_longer(-xx)%>%
+  ggplot()  + geom_line(aes(xx,value, group = name, color = name)) + 
+  xlab("") + ylab("")+ 
+  scale_color_discrete(name="",
+                         breaks=c("yy1", "yy2", "yy3"),
+                         labels = list(
+      expression(u == 0.07 ~ "," ~ alpha == 0.5),
+      expression(u == 0.4~ "," ~ alpha == 0.5),
+      expression(u == 0.7~ "," ~ alpha == 0.5)))+
+  ylim(c(0,5))
+```
+:::
+:::::
+
+## AR1: Hyperparameters and prior {auto-animate="true"}
+
+The AR1 model has two parameters
+
+-   The precision $\tau$
+
+    -   PC prior as before - Baseline $\tau=0$ `pc.prec` $$
+        \text{Prob}(\sigma > u) = \alpha
+        $$
+
+-   The autocorrelation (or persistence) parameter \$\phi\in(-1,1)
+
+    -   Two choices of PC priors
+
+::::: columns
+::: {.column width="50%"}
+2.  Baseline $\phi = 1$ `pc.cor1`
+
+$$
+\begin{eqnarray}
+\text{Prob}(\rho > u) = \alpha;&\\
+-1<u<1;\qquad &\sqrt{\frac{1-u}{2}}<\alpha<1
+\end{eqnarray}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| out-width: 100%
+#| fig-align: "center"
+pp = data.frame(xx = seq(-1,1,0.001)) %>%
+  mutate(yy1 = inla.pc.dcor1(xx, u = 0.07, alpha= 0.7),
+  yy2 = inla.pc.dcor1(xx, u = 0.4, alpha= 0.8),
+  yy3 = inla.pc.dcor1(xx, u = 0.2, alpha= 0.7)) %>%
+  pivot_longer(-xx)
+pp %>%
+  ggplot()  + geom_line(aes(xx,value, group = name, color = name)) + 
+  xlab("") + ylab("")+ scale_color_discrete(name="",
+                         breaks=c("yy1", "yy2", "yy3"),
+                         labels = list(
+      expression(u == 0.07 ~ "," ~ alpha == 0.7),
+      expression(u == 0.4~ "," ~ alpha == 0.8),
+      expression(u == 0.7~ "," ~ alpha == 0.7)))+
+  ylim(c(0,5))
+```
+:::
+:::::
+
+## Example - AR1 and RW1 for earthquakes data
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+y_t|\eta_t & \sim \text{Poisson}(\exp(\eta_t))\\
+\eta_t & = \beta_0 + u_t\\
+1.\ u_t&\sim \text{RW}1(\tau)\\
+2.\ u_t&\sim \text{AR}1(\tau, \phi)\\
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+Number of serious earthquakes per year
+
+```{r}
+#| echo: false
+#| out-width: 100%
+df = read_delim("Data/quakes1.csv", delim = ";")
+
+ggplot() + geom_point(data = df, aes(year, quakes))
+
+```
+:::
+:::::
+
+```{r}
+#| echo: true
+hyper = list(prec = list(prior = "pc.prec", param = c(1,0.5)))
+cmp1 = ~ Intercept(1) + time(year, model = "rw1", scale.model = T,
+                             hyper = hyper)
+cmp2 = ~ Intercept(1) + time(year, model = "ar1",
+                             hyper = hyper)
+
+
+lik = bru_obs(formula = quakes ~ .,
+              family = "poisson",
+              data = df)
+
+fit1 = bru(cmp1, lik)
+fit2 = bru(cmp2, lik)
+```
+
+## Example - RW1 and AR1
+
+Estimated trend
+
+```{r}
+
+
+pred1 = predict(fit1, df, ~ exp(Intercept + time))
+pred2 = predict(fit2, df, ~ exp(Intercept + time))
+
+
+rbind(cbind(pred1, model = "rw1"),
+     cbind(pred2, model = "ar1")
+     ) %>%
+  filter(year<2006) %>%
+  ggplot() + geom_line(aes(year, mean, color = model, group = model)) +
+  geom_ribbon(aes(year, ymin =  q0.025, ymax = q0.975, group = model, fill = model), alpha = 0.3) +
+  geom_point( aes(year, quakes) , size = 0.5)+ theme(legend.title = element_blank()) + ylab("") + xlab("")
+
+```
+
+## Example - RW1 and AR1
+
+Predictions
+
+```{r}
+
+rbind(cbind(pred1, model = "rw1"),
+     cbind(pred2, model = "ar1")
+     ) %>%
+  ggplot() + geom_line(aes(year, mean, color = model, group = model)) +
+  geom_ribbon(aes(year, ymin =  q0.025, ymax = q0.975, group = model, fill = model), alpha = 0.3) +
+  geom_point(aes(year, quakes) , size = 0.5) + theme(legend.title = element_blank()) + ylab("") + xlab("")
+
+
+```
+
+## AR1 vs RW models
+
+# Continuous time modelling

@@ -16,7 +16,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-
 ```{r}
 #| echo: false
 
@@ -25,22 +24,19 @@ library(webexercises)
 
 ```
 
-# Models for areal data 
+# Models for areal data
 
+In this practical we are going to fit an areal model. We will:
 
-In this practical we are going to fit an areal model. We will: 
+-   Learn how to fit an areal model in `inlabru`
 
-- Learn how to fit an areal model in `inlabru`
+-   Learn how to add spatial covariates to the model
 
-- Learn how to add spatial covariates to the model
+-   Learn how to do predictions
 
-- Learn how to do predictions
+-   Learn how to simulate from the fitted model
 
-- Learn how to simulate from the fitted model
-
-
-
----
+------------------------------------------------------------------------
 
 Libraries to load:
 
@@ -56,10 +52,7 @@ library(mapview)
 library(scico)
 ```
 
-
-
 ## The data
-
 
 We consider data on respiratory hospitalizations for Greater Glasgow and Clyde in 2007. The data are available from the `CARBayesdata` R Package:
 
@@ -96,8 +89,7 @@ mapview(GGHB.IZ)
 
 ```
 
-
-We first merge the two dataset and select only one year of data, compute the SME  and plot the observed 
+We first merge the two dataset and select only one year of data, compute the SME and plot the observed
 
 ```{r}
 
@@ -112,8 +104,7 @@ ggplot() + geom_sf(data = resp_cases, aes(fill = SMR)) + scale_fill_scico(direct
 
 ```
 
-
-Then we compute the adjacency matrix using the functions `poly2nb()` and  `nb2mat()` in the `spdep` library. We then convert the adjacency matrix into the precision matrix $\mathbf{Q}$ of the CAR model. Remember this matrix has, on the diagonal the number of e 
+Then we compute the adjacency matrix using the functions `poly2nb()` and `nb2mat()` in the `spdep` library. We then convert the adjacency matrix into the precision matrix $\mathbf{Q}$ of the CAR model. Remember this matrix has, on the diagonal the number of e
 
 ```{r}
 library(spdep)
@@ -126,37 +117,27 @@ Q = -R
 diag(Q) = diag
 ```
 
-
-
 ## The model
 
-We fit a first model to the data where we consider a Poisson model for the  observed cases.
+We fit a first model to the data where we consider a Poisson model for the observed cases.
 
-
-**Stage 1** Model for the response
-$$
+**Stage 1** Model for the response $$
 y_i|\eta_i\sim\text{Poisson}(E_i\lambda_i)
-$$
-where $E_i$ are the expected cases for area $i$.
+$$ where $E_i$ are the expected cases for area $i$.
 
-**Stage 2** Latent field model
-$$
+**Stage 2** Latent field model $$
 \eta_i = \text{log}(\lambda_i) = \beta_0 + \omega_i + z_i
-$$
-where
- 
- - $\beta_0$ is a common intercept 
- - $\mathbf{\omega} = (\omega_1, \dots, \omega_k)$ is a conditional Autorgressive model (CAR) with precision matrix $\tau_1\mathbf{Q}$
- - $\mathbf{z} = (z_1, \dots, z_k)$ is an unstrictured random effect with precision $\tau_2$
+$$ where
 
- 
+-   $\beta_0$ is a common intercept
+-   $\mathbf{\omega} = (\omega_1, \dots, \omega_k)$ is a conditional Autorgressive model (CAR) with precision matrix $\tau_1\mathbf{Q}$
+-   $\mathbf{z} = (z_1, \dots, z_k)$ is an unstrictured random effect with precision $\tau_2$
+
 **Stage 3** Hyperparameters
 
 The hyperparameters of the model are $\tau_1$ and $\tau_2$
 
-
 **NOTE** In this case the linear predictor $\eta$ consists of three components!!
-
 
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
@@ -181,9 +162,7 @@ fit = bru(cmp, lik)
 
 ```
 
-
 `r hide("Answer")`
-
 
 ```{r}
 
@@ -200,8 +179,6 @@ fit = bru(cmp, lik)
 
 ```
 
-
-
 `r unhide()`
 :::
 
@@ -210,19 +187,10 @@ After fitting the model we want to extract results.
 ::: {.callout-tip icon="false"}
 ## {{< bi question-octagon color=#6dc83c >}} Question
 
-1. What is the estimated value for $\beta_0$? `r fitb(fit$summary.fixed[1], num = TRUE, tol = .001)`
+1.  What is the estimated value for $\beta_0$? `r fitb(fit$summary.fixed[1], num = TRUE, tol = .001)`
 
-2. Look at the estimated values of the hyperparameters using
-```{r}
-#| echo: true
-#| eval: false
-fit$summary.hyperpar
-```
-
-which of the two spatial components (structured or unstructured) explains more of the variability in the counts? `mcq(c("structured", answer = "unstructured"))`
-
+2.  Look at the estimated values of the hyperparameters using `fit$summary.hyperpar` , which of the two spatial components (structured or unstructured) explains more of the variability in the counts? `r mcq(c("structured", answer = "unstructured"))`
 :::
-
 
 We now look at the predictions over space.
 
@@ -230,8 +198,6 @@ We now look at the predictions over space.
 ## {{< bi pencil-square color=#c8793c >}} Task
 
 Complete the code below to produce prediction of the linear predictor $\eta_i$ and of the risk $\lambda_i$ and of the expected cases $E_i\exp(\lambda_i)$ over the whole space of interest. Then plot the mean and sd of the resulting surfaces.
-
-
 
 ```{r}
 #| echo: true
@@ -245,10 +211,7 @@ pred = predict(fit, resp_cases, ~data.frame(log_risk = ...,
 
 ```
 
-
-
-`r hide("Answer")`
-
+`r hide("Show Answer")`
 
 ```{r}
 
@@ -274,12 +237,8 @@ p1 + p2
 
 ```
 
-
-
 `r unhide()`
-
 :::
-
 
 Finally we want to compare our observations $y_i$ with the predicted means of the Poisson distribution $E_i\exp(\lambda_i)$
 
@@ -290,23 +249,19 @@ pred$cases %>% ggplot() + geom_point(aes(observed, mean)) +
 
 ```
 
-**Note:** Here we are predicting the _mean_ of counts, not the counts!!! Predicting counts is the theme of the next task!
+**Note:** Here we are predicting the *mean* of counts, not the counts!!! Predicting counts is the theme of the next task!
 
 ## Getting prediction densities
 
-Posterior predictive distributions, that is $\pi(y_i^{\text{new}}|\mathbf{y})$ are of interest in many applied problems. The `bru()` function
-does not return predictive densities. In the previous step we have computed predictions for the `expected counts` $\pi(E_i\lambda_i|\mathbf{y})$. The predictive distribution is then:
-$$
+Posterior predictive distributions, that is $\pi(y_i^{\text{new}}|\mathbf{y})$ are of interest in many applied problems. The `bru()` function does not return predictive densities. In the previous step we have computed predictions for the `expected counts` $\pi(E_i\lambda_i|\mathbf{y})$. The predictive distribution is then: $$
 \pi(y_i^{\text{new}}|\mathbf{y}) = \int \pi(y_i|E_i\lambda_i)\pi(E_i\lambda_i|\mathbf{y})\ dE_i\lambda_i
-$$
-where, in our case, $\pi(y_i|E_i\lambda_i)$ is Poisson with mean $E_i\lambda_i$. We can achieve this using the following algorith:
+$$ where, in our case, $\pi(y_i|E_i\lambda_i)$ is Poisson with mean $E_i\lambda_i$. We can achieve this using the following algorith:
 
-  1. Simulate $n$ replicates of $g^k = E_i\lambda_i$ for $k = 1,\dots,n$ using the function _generate()_ which takes the same input as _predict()_
-  2. For each of the $k$ replicates simulate a new value $y_i^{new}$ using the function _rpois()_
-  3. Summarise the $n$ samples of $y_i^{new}$ using, for example the mean and the 0.025 and 0.975 quantiles.
+1.  Simulate $n$ replicates of $g^k = E_i\lambda_i$ for $k = 1,\dots,n$ using the function *generate()* which takes the same input as *predict()*
+2.  For each of the $k$ replicates simulate a new value $y_i^{new}$ using the function *rpois()*
+3.  Summarise the $n$ samples of $y_i^{new}$ using, for example the mean and the 0.025 and 0.975 quantiles.
 
 Here is the code:
-
 
 ```{r}
 
@@ -329,17 +284,10 @@ pred_counts = data.frame(observed = resp_cases$observed,
                          )
 ```
 
-
-
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
 Plot the observations against the predicted new counts and the predicted expected counts. Include the uncertainty and compare the two.
-
-`r hide("Take hint")`
-
-
-`r unhide()`
 
 ```{r}
 #| fig-width: 6
@@ -360,4 +308,60 @@ ggplot() +
 ```
 :::
 
+## Adding a spatial covariate
 
+Finally, we want to add a covariate to the model. We are going to check if the PM10 levels influence the numbers of hospitalizations.
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Add the effect of PM10 in the previous model. First as a linear effect and then as a smooth effect (RW2). Check the results.
+
+`r hide("Take hint")`
+
+To use the RW2 model you first need to group the values of the PM10 using the `inla.group()` function.
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+## Linear Effect
+cmp = ~ Intercept(1) + space(space, model = "besag", graph = Q) + iid(space, model = "iid") +
+  cov(pm10, model = "linear")
+
+formula = observed ~ Intercept + space + iid + cov
+
+lik = bru_obs(formula = formula, 
+              family = "poisson",
+              E = expected,
+              data = resp_cases)
+
+fit_lin = bru(cmp, lik)
+# effect of the covaraite
+# fit_lin$summary.fixed
+
+## Linear Effect
+resp_cases$pm10_group=  inla.group(resp_cases$pm10)
+cmp = ~ Intercept(1) + space(space, model = "besag", graph = Q) + iid(space, model = "iid") +
+  cov(pm10_group, model = "rw2")
+
+formula = observed ~ Intercept + space + iid + cov
+
+lik = bru_obs(formula = formula, 
+              family = "poisson",
+              E = expected,
+              data = resp_cases)
+
+fit_smooth = bru(cmp, lik)
+
+#check the smooth effect of the covariate
+#fit_smooth$summary.random$cov %>% ggplot() + geom_line(aes(ID,mean)) +
+#  geom_ribbon(aes(ID, ymin =`0.025quant`, ymax = `0.975quant`), alpha = 0.5)
+```
+:::

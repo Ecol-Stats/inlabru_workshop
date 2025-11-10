@@ -4,12 +4,13 @@ format:
   html:
     mainfont: "12"
   PrettyPDF-pdf:
-    keep-tex: true
+    keep-tex: false
     number-sections: true
-embed-resources: true
+embed-resources: false
 execute: 
   warning: false
   message: false
+  freeze: auto
 editor_options: 
   chunk_output_type: console
 ---
@@ -35,7 +36,4 @@ In this first practical we are going to fit spatial modes for Areal, Geostatisti
 ```
 
 ```{r child="practicals/Geostat_ex.qmd"}
-```
-
-```{r child="practicals/PointProcess_ex.qmd"}
 ```

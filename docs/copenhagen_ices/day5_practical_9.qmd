@@ -1,0 +1,34 @@
+---
+title: "Practical 8 - Zero Inflated"
+execute: 
+  freeze: auto
+format: 
+  html:
+    mainfont: "12"
+  PrettyPDF-pdf:
+    keep-tex:  false 
+    number-sections: true
+embed-resources: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+#| results: hide
+
+library(webexercises)
+knitr::purl("day5_practical_9.qmd")
+```
+
+<font size="5"> **Aim of this practical:** </font>
+
+In this practical we are going to look zero-inflated models.
+
+{{< downloadthis day5_practical_9.R dname="practical_9.R" label="Download Practical 9 R script" icon="database-fill-down" type="success" >}}
+
+```{r child="practicals/zero_inflated_ex.qmd"}
+```

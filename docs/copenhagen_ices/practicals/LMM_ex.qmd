@@ -132,7 +132,7 @@ The group variable is indexed by column `j` in the dataset. We have chosen to na
 
 ```{r define_likelihood_lmm}
 # Construct likelihood
-lik =  like(formula = y ~.,
+lik =  bru_obs(formula = y ~.,
             family = "gaussian",
             data = df)
 ```
@@ -150,7 +150,7 @@ summary(fit)
 
 ### Model predictions
 
-To compute model predictions we can create a `data.frame` containing a range of values of covariate where we want the response to be predicted for each group. Then we simply call the predict function while spe
+To compute model predictions we can create a `data.frame` containing a range of values of covariate where we want the response to be predicted for each group. Then we simply call the predict function while specifying the model components.
 
 ```{r}
 #| code-fold: true

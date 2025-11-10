@@ -1,12 +1,14 @@
 ---
 title: "Practical 6"
+execute: 
+  freeze: auto
 format: 
   html:
     mainfont: "12"
   PrettyPDF-pdf:
     keep-tex: true
     number-sections: true
-embed-resources: true
+embed-resources: false
 editor_options: 
   chunk_output_type: console
 ---
@@ -24,15 +26,19 @@ knitr::purl("day4_practical_6.qmd")
 
 <font size="5"> **Aim of this practical:** </font>
 
-In this practical we are going to look at some model comparison and validation techniques.
+In this practical we are going to look at space-time model and model comparison and validation techniques.
 
 {{< downloadthis day4_practical_6.R dname="day4_practical_6.R" label="Download Practical 6 R script" icon="database-fill-down" type="success" >}}
+
+## Space time models
+
+```{r child="practicals/space_time_ex.qmd"}
+```
+
+## Model check and comparison
 
 ```{r child="practicals/LM_resids.qmd"}
 ```
 
 ```{r child="practicals/GLM_scores_ex.qmd"}
-```
-
-```{r child="practicals/LGOCV_ex.qmd"}
 ```

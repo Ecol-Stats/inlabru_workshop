@@ -25,9 +25,12 @@ knitr::purl("practical1_compiler.qmd")
 
 <font size="5"> **Aim of this practical:** </font>
 
-In this first practical we are going to learn how fit a distance sampling model using `inlabru`
+In this first practical we are going to learn how fit a point process model to transect data using `inlabru`
 
 {{< downloadthis practical1_compiler.R dname="session_1.R" label = "Download Practical 1 R script" icon="database-fill-down" type="success" >}}
 
 ```{r child="practicals/distance_sampling.qmd"}
+```
+
+```{r child="practicals/distance_sampling_spat.qmd"}
 ```

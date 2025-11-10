@@ -112,7 +112,10 @@ PygmyWFBC$sex_M <- ifelse(PygmyWFBC$sex=="F",0,1)
 `inlabru` will treat 0 as the reference category (i.e., the intercept $\beta_0$ will represent the baseline weight for females ). Now we can define the model component, the likelihood and fit the model.
 
 ```{r}
-cmp =  ~ -1 + sex_M +  beta_0(1)  + beta_1(tl, model = "linear") +   net_eff(net_no, model = "iid")
+cmp =  ~ -1 + sex_M + 
+  beta_0(1)  + 
+  beta_1(tl, model = "linear") +  
+  net_eff(net_no, model = "iid")
 
 lik =  bru_obs(formula = wt ~ .,
             family = "gaussian",
@@ -134,20 +137,29 @@ plot(fit,"net_eff")
 
 ```
 
-For theoretical and computational purposes, INLA works with the precision which is the inverse of the variance. To obtain the posterior summaries on the SDs scale we can sample from the posterior distribution for the precision while back-transforming the samples and then computing the summary statistics. Transforming the samples is necessary because some quantities such as the mean and mode are not invariant to monotone transformation; alternatively we can use some of the in-built `R-INLA` functions to achieve this (see supplementary note).
+For theoretical and computational purposes, INLA works with the precision which is the inverse of the variance. To obtain the posterior summaries on the SDs scale we can sample from the posterior distribution for the precision while back-transforming the samples and then computing the summary statistics. Transforming the samples is necessary because some quantities such as the mean and mode are not invariant to monotone transformation; alternatively we can use some of the in-built `inlabru` functions to achieve this (see supplementary note).
 
-We use the `inla.hyperpar.sample` function to draw samples from the approximated joint posterior for the hyperparameters, then invert them to get variances and lastly compute the mean, std. dev., quantiles, etc.
+We use the `predict` function to draw samples from the approximated joint posterior for the hyperparameters, then invert them to get variances and lastly compute the mean, std. dev., quantiles, etc.
+
+::: callout-note
+To get the right name for the hyperparameters to use in the `predict()` function, you can use the function `bru_names()`.
+:::
 
 ```{r}
 
-sampvars <- 1/inla.hyperpar.sample(1000,fit,improve.marginals = T)
+sampvars <-  predict(fit,PygmyWFBC, ~ {
+   tau_e <- Precision_for_the_Gaussian_observations
+   tau_u <- Precision_for_net_eff
+   list(sigma_u = 1/tau_u,
+        sigma_e = 1/tau_e)
+   },
+   n.samples = 1000
+  )
 
-colnames(sampvars) <- c("Error variance","Between-net Variance")
+names(sampvars) = c("Error variance","Between-net Variance")
 
-apply(sampvars,2,
-      function(x) c("mean"=mean(x),
-                    "std.dev" = sd(x),
-                    quantile(x,c(0.025,0.5,0.975))))
+sampvars
+
 ```
 
 ::: {.callout-warning icon="false"}
@@ -159,21 +171,24 @@ $$
 \text{ICC} = \frac{\sigma^2_u}{\sigma^2_u + \sigma^2_e}
 $$
 
-Compute the median, and quantiles for the ICC using the posterior samples we draw for $\sigma^2_e$ and $\sigma^2_u$.
-
-`r hide("Take hint")`
-
-The `rowSums` function can be used to compute $\sigma^2_{u,s} + \sigma^2_{e,s}$ for the $s$th posterior draw.
-
-`r unhide()`
+Compute the mean, median, and quantiles for the ICC by drawing posterior samples for $\sigma^2_e$ and $\sigma^2_u$ using the `predict` function.
 
 ```{r}
 #| webex.hide: "Click here to see the solution"
 #| code-fold: show
 #| purl: false
 
-sampicc <- sampvars[,2]/(rowSums(sampvars))
-quantile(sampicc, c(0.025,0.5,0.975))
+
+ICC <-  predict(fit,PygmyWFBC, ~ {
+   tau_e <- Precision_for_the_Gaussian_observations
+   tau_u <- Precision_for_net_eff
+   sigma_u = 1/tau_u
+   sigma_e = 1/tau_e
+   list(ICC = sigma_u/ (sigma_u+sigma_e))
+   },
+   n.samples = 1000
+  )
+
 ```
 :::
 
