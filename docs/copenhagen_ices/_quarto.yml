@@ -28,10 +28,14 @@ website:
     left:
       - href: index.qmd
         text: Home
+      # - href: about.qmd
+      #   text: Slides
+
   sidebar:
     style: docked
     search: true
     contents:
+    
       - href: index.html
         text: Home
 
@@ -44,13 +48,13 @@ website:
           - href: slides/slides_4.html
             text: Lecture 3
           - href: slides/slides_5.html
-            text: Lecture 4
+            text: Lecture 5
           - href: slides/slides_10.html
-            text: Lecture 9
+            text: Lecture 10
           - href: slides/slides_12.html
-            text: Lecture 11
-          - href: slides/slides_13.html
             text: Lecture 12
+          - href: slides/slides_13.html
+            text: Lecture 13
 
       - section: "Practicals"
         contents:

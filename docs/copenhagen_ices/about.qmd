@@ -1,36 +1,7 @@
-# Practicals Day 1
+---
+title: "Slides"
+---
 
-In this practical session you will cover the basics of linear models and GAMs, which can be accessed.
+<iframe class="slide-deck" src="slides/slides_2.html">
 
-
-
-```{r}
-#| echo: false
-#| message: false
-#| warning: false
-#| layout-ncol: 2
-#| column: page
-#| eval: false
-library(downloadthis)
-
-download_file(
-  path = "https://github.com/Ecol-Stats/inlabru_workshop/raw/main/docs/practicals/test.html",
-  button_label = "Download Practical 1 (html version)",
-  output_name = "practical_1",
-  button_type = "success",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-download_link(
-  link = "https://github.com/Ecol-Stats/inlabru_workshop/raw/main/docs/practicals/test.pdf",
-  button_label = "Download Practical 1 (pdf version)",
-  button_type = "warning",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-```
-
-# Practicals Day 2
+</iframe>

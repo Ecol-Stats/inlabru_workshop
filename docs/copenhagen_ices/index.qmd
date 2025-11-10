@@ -61,7 +61,7 @@ No knowledge of `R-INLA` is required.
 |:---------------------:|:----------------------------------------------:|
 | 9:00 - 10:00 | [**Session 3**: Temporal modelling and smoothing part 1](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_4.html) |
 | 10:00 - 10:30 | Snack 🥙 |
-| 10:30 - 11:30 | **Session 4**: Temporal modelling and smoothing part 2 |
+| 10:30 - 11:30 |  Temporal modelling and smoothing part 2 |
 | 11:30 - 13:00 | [Practical Session 3](day2_practical_3.qmd) |
 | 13:00 - 14:30 | Lunch break 🍽️ |
 | 14:30 - 15:30 | [**Session 5**: Introduction to Spatial Statistics](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_5.html) |
