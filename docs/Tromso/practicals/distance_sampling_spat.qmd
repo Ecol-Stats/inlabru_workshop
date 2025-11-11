@@ -24,12 +24,11 @@ library(webexercises)
 
 ```
 
-# Distance Sampling
+# Space-time model for transect survey data
 
 In this practical we will:
 
--   Fit a spatio-temporal model to distance sampled data
-
+-   Fit a spatio-temporal model to transect survey data.
 
 Libraries to load:
 
@@ -74,8 +73,7 @@ For computational purposes we will assume perfect detection along the transects 
 
 $$
 p(\mathbf{y} | \lambda)  \propto \exp \left( -\int_\Omega \lambda(\mathbf{s,t}) \mathrm{d}\mathbf{s,t} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i,t)) 
-$$
-### The SPDE mode
+$$ \### The SPDE mode
 
 First, we define the SPDE model:
 
@@ -86,11 +84,9 @@ matern <- inla.spde2.pcmatern(mrsea$mesh,
 )
 ```
 
-
-
 ### Model components
 
-In this example we will employ a spatio-temporal SPDE component. Note how the `group` and `ngroup` parameters are employed to let the SPDE model know about the name of the time dimension (season) and the total number of distinct points in time. Further control of the spatio-temporal filed can be passed as a list through the the `control.group` argument. In this case, we specify an `iid` effect to describe how the spatial field evolves in time  (this could be change to accommodate a time dependent structure such as an AR(1) model).
+In this example we will employ a spatio-temporal SPDE component. Note how the `group` and `ngroup` parameters are employed to let the SPDE model know about the name of the time dimension (season) and the total number of distinct points in time. Further control of the spatio-temporal filed can be passed as a list through the the `control.group` argument. In this case, we specify an `iid` effect to describe how the spatial field evolves in time (this could be change to accommodate a time dependent structure such as an AR(1) model).
 
 ```{r}
 cmp <- ~ Intercept(1) + 
@@ -121,13 +117,11 @@ eta <- ... + ... ~ ... + ...
 eta <- geometry + season ~ space_time +
   Intercept 
 ```
-
 :::
-
 
 ### Build the observational model
 
-We can now build the integration scheme using the  `fm_int()` function by specifying the domain and samplers arguments. Note that omitting the season dimension from domain would lead to aggregation of all sampling regions over time.
+We can now build the integration scheme using the `fm_int()` function by specifying the domain and samplers arguments. Note that omitting the season dimension from domain would lead to aggregation of all sampling regions over time.
 
 ```{r}
 ips <- fm_int(
@@ -163,7 +157,6 @@ lik = bru_obs(formula = eta,
 fit = bru(cmp, lik)
 
 ```
-
 :::
 
 Once the model is fitted we can predict and plot the intensity for all seasons:
@@ -185,4 +178,3 @@ pl1 <- ggplot() +
   coord_sf()
 pl1
 ```
-
