@@ -136,9 +136,9 @@ ggdraw() +  draw_plot(p1) + draw_image(question, scale = .4, y = 0.15, x=0.35)
 
 . . .
 
-We can "predict" any unobserved data, does not have to be in the future
+We can "predict" any unobserved data, not only future data, e.g.\ gaps in the data etc.
 
-## Modeling time with INLA {auto-animate="true"}
+## Modelling time with INLA {auto-animate="true"}
 
 Time can be indexed over a
 
@@ -146,7 +146,7 @@ Time can be indexed over a
 
 -   Continuous domain
 
-## Modeling time with INLA {auto-animate="true"}
+## Modelling time with INLA {auto-animate="true"}
 
 Time can be indexed over a
 
@@ -158,7 +158,7 @@ Time can be indexed over a
 
 -   Continuous domain
 
-    -   Here we use the so-called SPDE-approach
+    -   Here we use the so-called SPDE-approach (more on this later)
 
 # Discrete time modelling
 
@@ -218,7 +218,7 @@ Random walk models encourage the mean of the linear predictor to vary gradually 
 
 . . .
 
-They do this by assuming that, on average, the time effect at each point is the mean of the effect at the neighboring points.
+They do this by assuming that, on average, the time effect at each point is the mean of the effect at the neighbouring points.
 
 ```{r}
 # Example random walk data
@@ -261,9 +261,9 @@ ggplot(dd, aes(time, y)) +
 
 . . .
 
--   Random Walk of order 1 (RW1) we take the two nearest neighbors
+-   Random Walk of order 1 (RW1) we take the two nearest neighbours
 
--   Random Walk of order 2 (RW2) we take the four nearest neighbors
+-   Random Walk of order 2 (RW2) we take the four nearest neighbours
 
 ## Random walks of order 1 {auto-animate="true"}
 
@@ -345,13 +345,13 @@ A common option is the so called *PC-priors*
 
 ## Penalized Complexity (PC) priors {auto-animate="true"}
 
--   PC prior are easily available in `inlabru` for many model parameters
+-   PC priors are easily available in `inlabru` for many model parameters
 
 . . .
 
--   They are build with two principle in mind:
+-   They are built with two principles in mind:
 
-    1.  The prior **discourages overdispersion** by penalizing distance from a *base model*
+    1.  The prior **discourages overdispersion** by penalizing deviation from a *base model*
 
 ::::: columns
 ::: {.column width="60%"}
@@ -386,9 +386,9 @@ ggplot() + geom_point(data = lakes, aes(year, Erie)) +
 
 -   PC prior are easily available in `inlabru` for many model parameters
 
--   They are build with two principle in mind:
+-   They are built with two principle in mind:
 
-    1.  The prior **discourages overdispersion** by penalizing distance from a *base model*
+    1.  The prior **discourages overdispersion** by penalizing deviation from a *base model*
     2.  **User-defined** scaling
 
 ::::: columns
@@ -483,7 +483,7 @@ ggplot() + geom_line(data = prior, aes(x,y, color = "prior")) +
 
 RW1 defines *differences*, not *absolute levels*:
 
--   Only the *changes* between neighboring terms are modeled.
+-   Only the *changes* between neighbouring terms are modelled.
 
 -   Mathematically, $$
     (u_1,\dots,u_n)\text{ and }(u_1+a,\dots,u_n+a)
@@ -502,7 +502,7 @@ This means:
 Solution:
 
 -   Sum to zero constraint $\sum_{i = 1}^n u_i = 0$
--   This is be default included in the model
+-   This is included in the model be default
 
 ## RW as intrinsic models {.smaller}
 
@@ -603,7 +603,7 @@ ggplot()+ geom_line(data = pred1, aes(year, mean, color = "rw1")) +
 -   Two ways to bin
 
     -   `cut` (default) splits the data using equal length intervals
-    -   `quantile` uses equidistant quantiles in the probability space.
+    -   `quantile` uses equi-distant quantiles in the probability space.
 
 ## RW models as smoothers for covariates - Example
 
@@ -671,7 +671,7 @@ pred %>% ggplot() +
 
 ## Summary RW (1 and 2) models
 
--   Latent effects suitable for smoothing and modeling temporal data.
+-   Latent effects suitable for smoothing and modelling temporal data.
 
 -   One hyperparameter: the precision $\tau$
 
@@ -897,6 +897,6 @@ rbind(cbind(pred1, model = "rw1"),
 
 ```
 
-## AR1 vs RW models
+## AR1 vs. RW models
 
 # Continuous time modelling
