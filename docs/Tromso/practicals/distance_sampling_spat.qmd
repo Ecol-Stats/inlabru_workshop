@@ -67,7 +67,7 @@ ggplot() +
   ggtitle("MRSea observation seasons")
 ```
 
-## The workflow
+## The Model
 
 For computational purposes we will assume perfect detection along the transects and thus, the spatiotemporal animal density is modelled using a point process model of the form:
 
@@ -86,7 +86,7 @@ matern <- inla.spde2.pcmatern(mrsea$mesh,
 )
 ```
 
-### Model components
+## Model components
 
 In this example we will employ a spatio-temporal SPDE component. Note how the `group` and `ngroup` parameters are employed to let the SPDE model know about the name of the time dimension (season) and the total number of distinct points in time. Further control of the spatio-temporal filed can be passed as a list through the the `control.group` argument. In this case, we specify an `iid` effect to describe how the spatial field evolves in time (this could be change to accommodate a time dependent structure such as an AR(1) model).
 

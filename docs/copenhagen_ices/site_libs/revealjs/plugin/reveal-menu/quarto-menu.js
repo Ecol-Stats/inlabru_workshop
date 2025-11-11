@@ -40,4 +40,10 @@ window.RevealMenuToolHandlers = {
   togglePdfExport: revealMenuToolHandler(function () {
     PdfExport.togglePdfExport();
   }),
+<<<<<<< Updated upstream
+=======
+  toggleScrollView: revealMenuToolHandler(function() {
+    Reveal.getPlugin("quarto-support").toggleScrollView();
+  })
+>>>>>>> Stashed changes
 };
