@@ -15,36 +15,36 @@ editor_options:
 # Welcome to the course!
 
 -   Welcome to the `inlabru` workshop!
--   The goal for the workshop is to introduce Bayesian statistics implemented using the `inlabru` package.
--   Workshop materials in the github repository [inlabru-workshop](https://github.com/Ecol-Stats/inlabru_workshop/tree/main/docs/copenague)
+-   The aim of this workshop is to introduce you to a range of statistical modelling approaches, in particular the temporal, spatial and spatio-temporal modelling as implemented in the `inlabru` package.
+-   Workshop materials are available in the github repository [inlabru-workshop](https://github.com/Ecol-Stats/inlabru_workshop/tree/main/docs/copenague)
 
 # Learning Objectives for the workshop
 
-At the end of the workshop, participants will be able to:
+At the end of the workshop, participants will have an understanding of:
 
--   Understand the motivation and challenges linked to spatial data
--   Understand the statistical models used to analyse spatial and spatio-temporal data
--   Understand how to implement such models using the `inlabru` library
--   Independently analyse spatial data collected at sea using `inlabru`
+-   the motivation for and the challenges of analysing and modelling spatial data
+-   statistical models used to analyse spatial and spatio-temporal data
+-   the implementation of these models in the `inlabru` package
+-   how to independently analyse spatial data with `inlabru`
 
 # Intended audience
 
-The tutorial is intended for anyone who desires to improve their analyses of data collected at sea, including those data that are used as inputs to fishery stock assessments.
+The workshop aims to cater for participants with a range of different backgrounds, who is interested in analysing data with modern spatial and spatio-temporal statistical modelling approaches. 
 
-# Level
+# Prerequisites
 
-Participants should be familiar with the R environment, and general statistical approaches for modelling such as regression, analysis of covariance, and general linear models.​
+Participants should be familiar with the `R` environment, and general statistical approaches for modelling such as regression, analysis of (co)variance, and generalized linear models.​
 
-No knowledge of `R-INLA` is required.
+No knowledge of `R-INLA` or `inlabru` is required.
 
-# Schedule Program {#schedule-tabs}
+# Schedule {#schedule-tabs}
 
 ::: panel-tabset
 ### Day 1
 
 | Time | Topic |
 |:----------------------------------:|:----------------------------------:|
-| 10:00 - 10:30 | ICES informative session |
+| 10:00 - 10:30 | ICES information session |
 | 10:30 - 11:30 | [**Session 1**: Introduction to `inlabru`](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_2.html) |
 | 11:30 - 13:00 | [Practical Session 1](day1_practical.qmd) |
 | 13:00 - 14:30 | Lunch break 🍽️ |
@@ -96,7 +96,7 @@ No knowledge of `R-INLA` is required.
 | 10:30 - 11:30 | [**Session 10**: Model comparison and evaluation](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_10.html) |
 | 11:30 - 13:00 | [Practical Session 6](day4_practical_6.qmd) |
 | 13:00 - 14:30 | Lunch break 🍽️ |
-| 14:30 - 15:30 | **Session 11**: Multilikelihoods/joint likelihood |
+| 14:30 - 15:30 | **Session 11**: Multi-likelihood/joint likelihood models |
 | 15:35 - 15:45 | Coffee Break ☕ |
 | 15:45 - 16:45 | [Practical Session 7](day4_practical_7.qmd) |
 | 16:45 - 17:00 | wrap-up and outlook |
@@ -121,7 +121,7 @@ No knowledge of `R-INLA` is required.
 
 # In preparation for the workshop
 
-Participants are required to follow the next steps before the day of the workshop:
+Participants are required to follow the below steps ahead of the first day of the workshop:
 
 1.  Install [R-INLA](https://www.r-inla.org/download-install)
 
