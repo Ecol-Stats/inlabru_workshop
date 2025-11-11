@@ -62,7 +62,7 @@ library(patchwork)
 -   Latent Gaussian Models
 -   
 
-## Repetition
+## Recall
 
 Everything in R-INLA is based on so-called **latent Gaussian models**
 
@@ -74,7 +74,7 @@ Everything in R-INLA is based on so-called **latent Gaussian models**
 — Instead we make indirect observations $\mathbf{y}|\mathbf{u},\theta\sim\pi(\mathbf{y}|\mathbf{u},\theta)$ of the underlying latent Gaussian field
 :::
 
-## Repetition
+## Recall
 
 Models of this kind: $$
 \begin{aligned}
