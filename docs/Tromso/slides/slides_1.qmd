@@ -631,12 +631,13 @@ $$
 \end{aligned}
 $$
 
-::::::::::::::::::::::::::::::::::::::::::::::: incremental
+::: incremental
 -   Here $\log 2$ accounts for the two-sided detection.
 
 -   Typically $\mathbb{P}(distance)$ is a non-linear function, that is where `inlabru` can help via a **Fixed point iteration scheme** (further details available in this [vignette](https://cran.r-project.org/web/packages/inlabru/vignettes/method.html))
 
 -   we define $\log (\sigma)$ as a latent Gaussian variable and iteratively linearise it.
+:::
 
 # Example
 
@@ -1533,4 +1534,5 @@ attributes(bc1)$ggp
 ::: notes
 Compared the observed binned counts against expected number of detections within a given distance
 :::
-:::::::::::::::::::::::::::::::::::::::::::::::
+
+
