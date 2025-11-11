@@ -73,7 +73,9 @@ For computational purposes we will assume perfect detection along the transects 
 
 $$
 p(\mathbf{y} | \lambda)  \propto \exp \left( -\int_\Omega \lambda(\mathbf{s,t}) \mathrm{d}\mathbf{s,t} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i,t)) 
-$$ \### The SPDE mode
+$$
+
+### The SPDE mode
 
 First, we define the SPDE model:
 

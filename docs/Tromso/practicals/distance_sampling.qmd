@@ -189,8 +189,6 @@ For point process models the spatial covariate has to cover the whole domain inc
 ```{r}
 #| echo: false
 #| fig-align: center
-#| fig-height: 5
-#| fig-width: 8
 #| message: false
 #| warning: false
 library(tidyterra)
