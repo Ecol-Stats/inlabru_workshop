@@ -85,17 +85,17 @@ Models of this kind: $$
 \end{aligned}
 $$
 
-occurs in many, seemingly unrelated, statistical models.
+occur in many, seemingly unrelated, statistical models.
 
 ## Examples
 
 -   Generalised linear (mixed) models
--   Stochastic volatility
+-   Stochastic volatility models
 -   Generalised additive (mixed) models
 -   Measurement error models
 -   Spline smoothing
--   Semiparametric regression
--   Space-varying (semiparametric) regression models
+-   Semi-parametric regression
+-   Space-varying (semi-parametric) regression models
 -   Disease mapping
 -   Log-Gaussian Cox-processes
 -   Model-based geostatistics (\*)
@@ -111,4 +111,4 @@ occurs in many, seemingly unrelated, statistical models.
 4.  The dimension of $\mathbf{u}$ can be big ($10^3-10^6$)
 5.  The dimension of $\theta$ should be not too big.
 
-[^1]: we will see that this can be partly relaxed :smiley:
+[^1]: we will see later that this can be partly relaxed with `inlabru` :smiley:
