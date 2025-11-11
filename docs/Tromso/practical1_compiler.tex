@@ -286,7 +286,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, colback={codebgcolor}, breakable, frame hidden, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, breakable, enhanced, colback={codebgcolor}, frame hidden]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -381,7 +381,7 @@ We can load and visualize the data as follows:
 \end{Shaded}
 
 \begin{verbatim}
-file:///C:/Users/admin/AppData/Local/Temp/RtmpS4upQF/file414780e3649/widget41424a37965.html screenshot completed
+file:///C:/Users/admin/AppData/Local/Temp/Rtmp8WCDun/filec18412256ed5/widgetc184559e496b.html screenshot completed
 \end{verbatim}
 
 \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-4-1.pdf}}
@@ -460,7 +460,7 @@ maximum triangle edge lengths, \texttt{offset} for inner and outer
 extensions (to prevent edge effects), and cutoff to avoid overly small
 triangles in clustered areas.
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, toprule=.15mm, left=2mm, arc=.35mm, colframe=quarto-callout-note-color-frame, titlerule=0mm, colback=white, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, coltitle=black, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacitybacktitle=0.6, breakable, leftrule=.75mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacitybacktitle=0.6, opacityback=0, arc=.35mm, breakable, coltitle=black, rightrule=.15mm, colframe=quarto-callout-note-color-frame, bottomrule=.15mm, toprule=.15mm, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colback=white]
 
 \textbf{General guidelines for creating the mesh}
 
@@ -487,7 +487,7 @@ triangles in clustered areas.
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, toprule=.15mm, left=2mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, colback=white, rightrule=.15mm, title={Task}, coltitle=black, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, opacitybacktitle=0.6, breakable, leftrule=.75mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacitybacktitle=0.6, opacityback=0, arc=.35mm, breakable, coltitle=black, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, bottomrule=.15mm, toprule=.15mm, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, titlerule=0mm, title={Task}, colback=white]
 
 Look at the documentation for the \texttt{fm\_mesh\_2d} function typing
 
@@ -589,7 +589,7 @@ reasonable that
 P(\sigma>\sigma_0)=p_{\sigma}
 \]
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, toprule=.15mm, left=2mm, arc=.35mm, colframe=quarto-callout-tip-color-frame, titlerule=0mm, colback=white, rightrule=.15mm, title={Question}, coltitle=black, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, opacitybacktitle=0.6, breakable, leftrule=.75mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacitybacktitle=0.6, opacityback=0, arc=.35mm, breakable, coltitle=black, rightrule=.15mm, colframe=quarto-callout-tip-color-frame, bottomrule=.15mm, toprule=.15mm, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, titlerule=0mm, title={Question}, colback=white]
 
 Take a look at the code below and select which of the following
 statements about the specified Matérn PC priors are true.
@@ -679,7 +679,7 @@ function parameter \texttt{sigma}.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, toprule=.15mm, left=2mm, arc=.35mm, colframe=quarto-callout-note-color-frame, titlerule=0mm, colback=white, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, coltitle=black, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacitybacktitle=0.6, breakable, leftrule=.75mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacitybacktitle=0.6, opacityback=0, arc=.35mm, breakable, coltitle=black, rightrule=.15mm, colframe=quarto-callout-note-color-frame, bottomrule=.15mm, toprule=.15mm, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colback=white]
 
 To control the prior distribution for the \texttt{sigma} parameter, we
 use a transformation mapper that converts a latent variable into an
@@ -697,7 +697,7 @@ the linear predictor
 
 \[\log \color{red}{\tilde{\lambda}(s)} = \overbrace{\log \lambda (s)}^{\beta_0 + \beta_1 x(s) + \xi(s)} + \overbrace{\log \color{red}{g(d(s))}}^{-0.5~d(\mathbf{s})^2\sigma^{-2}}\]
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, toprule=.15mm, left=2mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, colback=white, rightrule=.15mm, title={Task}, coltitle=black, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, opacitybacktitle=0.6, breakable, leftrule=.75mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacitybacktitle=0.6, opacityback=0, arc=.35mm, breakable, coltitle=black, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, bottomrule=.15mm, toprule=.15mm, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, titlerule=0mm, title={Task}, colback=white]
 
 Complete the code below to define the formula
 
@@ -779,7 +779,7 @@ model
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, toprule=.15mm, left=2mm, arc=.35mm, colframe=quarto-callout-note-color-frame, titlerule=0mm, colback=white, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, coltitle=black, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, opacitybacktitle=0.6, breakable, leftrule=.75mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacitybacktitle=0.6, opacityback=0, arc=.35mm, breakable, coltitle=black, rightrule=.15mm, colframe=quarto-callout-note-color-frame, bottomrule=.15mm, toprule=.15mm, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, colback=white]
 
 \texttt{inlabru} supports a shortcut for defining the integration points
 using the \texttt{domain} and \texttt{samplers} argument of
@@ -882,7 +882,7 @@ Finally, we can plot the maps of the spatial effect
 how the posterior sd is inflated around the border, this is the ``border
 effect'' due to the SPDE representation.
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, toprule=.15mm, left=2mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, colback=white, rightrule=.15mm, title={Task}, coltitle=black, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, opacitybacktitle=0.6, breakable, leftrule=.75mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacitybacktitle=0.6, opacityback=0, arc=.35mm, breakable, coltitle=black, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, bottomrule=.15mm, toprule=.15mm, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, titlerule=0mm, title={Task}, colback=white]
 
 Using the predictions stored in \texttt{pr.int}, produce a map of the
 posterior mean intensity.
@@ -937,10 +937,10 @@ intensity over the region of interest as follows:
 \end{Shaded}
 
 \begin{verbatim}
-     mean       sd   q0.025     q0.5   q0.975   median sd.mc_std_err
-1 256.294 57.64073 167.5732 248.9284 391.3706 248.9284      5.166786
+      mean       sd   q0.025    q0.5  q0.975  median sd.mc_std_err
+1 258.7841 59.19069 168.5301 248.785 387.994 248.785      5.075462
   mean.mc_std_err
-1         6.79743
+1        6.934161
 \end{verbatim}
 
 To fully propagate the uncertainty on the expected number animals we can
@@ -1021,7 +1021,7 @@ and their associated uncertainty:
 
 \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-32-1.pdf}}
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, toprule=.15mm, left=2mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, colback=white, rightrule=.15mm, title={Task}, coltitle=black, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, opacitybacktitle=0.6, breakable, leftrule=.75mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacitybacktitle=0.6, opacityback=0, arc=.35mm, breakable, coltitle=black, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, bottomrule=.15mm, toprule=.15mm, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, titlerule=0mm, title={Task}, colback=white]
 
 Fit a model using a hazard detection function instead and compare the
 GoF of this model with that from the half-normal detection model. Recall
@@ -1181,7 +1181,7 @@ an AR(1) model).
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, toprule=.15mm, left=2mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, colback=white, rightrule=.15mm, title={Task}, coltitle=black, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, opacitybacktitle=0.6, breakable, leftrule=.75mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacitybacktitle=0.6, opacityback=0, arc=.35mm, breakable, coltitle=black, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, bottomrule=.15mm, toprule=.15mm, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, titlerule=0mm, title={Task}, colback=white]
 
 Complete the following code to define the linear predictor:
 
@@ -1219,7 +1219,7 @@ all sampling regions over time.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, toptitle=1mm, toprule=.15mm, left=2mm, arc=.35mm, colframe=quarto-callout-warning-color-frame, titlerule=0mm, colback=white, rightrule=.15mm, title={Task}, coltitle=black, bottomtitle=1mm, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, opacitybacktitle=0.6, breakable, leftrule=.75mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, opacitybacktitle=0.6, opacityback=0, arc=.35mm, breakable, coltitle=black, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, bottomrule=.15mm, toprule=.15mm, left=2mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, titlerule=0mm, title={Task}, colback=white]
 
 Complete the following arguments to construct the observational model
 and the fit the model using the \texttt{bru} function

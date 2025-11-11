@@ -16,6 +16,8 @@ format:
 -   The goal of this workshop is to introduce new users to the `inlabru` software for Bayesian spatial modelling using the integrated nested Laplace approximation (INLA).
 -   The workshop is intended for applied statisticians and quantitative ecologists who are interested in efficiently modelling spatial data- No prior knowledge of `R-INLA` is required.
 
+![](url_qrcodecreator.com_17_54_03.png){fig-align="center" width="212"}
+
 \clearpage
 
 # In preparation for the workshop

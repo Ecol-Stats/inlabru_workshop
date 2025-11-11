@@ -116,7 +116,7 @@ library(gt)
 ::: {.column width="40%"}
 -   This idea is implemented in the model as a detection function that depends on distance.
 
-    -   Species at greater distances are harder to detect and the detection function therefore declines as distance increases.
+    -   Animals at greater distances are harder to detect and the detection function therefore declines as distance increases.
 :::
 
 ::: {.column width="60%"}
@@ -642,12 +642,10 @@ $$
 
 -   Typically $p(d)$ is a non-linear function, that is where `inlabru` can help via a **Fixed point iteration scheme** (further details available in this [vignette](https://cran.r-project.org/web/packages/inlabru/vignettes/method.html))
 
-:::{.notes}
-
+::: notes
 $$
 \mathbb{E}[N_{\text{det}}] = 2W \lambda(s) \times \frac{1}{W} \int_0^W p(r)  dr = 2\lambda(s) \int_0^W p(r)  dr
 $$
-
 :::
 
 # Example
@@ -1350,9 +1348,7 @@ Lambda
 
 We can also get Monte Carlo samples for the expected number of dolphins as follows:
 
-
-:::: {.columns}
-
+::::: columns
 ::: {.column width="60%"}
 ```{r}
 Ns <- seq(50, 450, by = 1)
@@ -1381,7 +1377,6 @@ Nest <- dplyr::bind_rows(
 :::
 
 ::: {.column width="40%"}
-
 ```{r}
 #| echo: false
 ggplot(data = Nest) +
@@ -1400,17 +1395,13 @@ ggplot(data = Nest) +
 
 ```
 :::
-
-::::
-
-
+:::::
 
 # Model comparison
 
 ## Fitting a Model with a hazard detection function
 
-:::: {.columns}
-
+::::: columns
 ::: {.column width="40%"}
 ```{r}
 hr <- function(distance, sigma) {
@@ -1432,7 +1423,6 @@ fit_hazard = bru(cmp, lik_2)
 :::
 
 ::: {.column width="60%"}
-
 ```{r}
 pr.int1 <- predict(fit_hazard, pxl, ~ data.frame(spatial = space,
                                       loglambda = Intercept + space,
@@ -1446,19 +1436,14 @@ ggplot() +
   plot(dfun1)+plot_layout(ncol=1)
 
 ```
-
 :::
+:::::
 
-::::
-
-
-
-## Model comparison with GoF
+## Model comparison with GoF {.smaller}
 
 Look at the goodness-of-fit of the two models in the distance dimension
 
-:::: {.columns}
-
+::::: columns
 ::: {.column width="50%"}
 ```{r}
 bc <- bincount(
@@ -1482,11 +1467,8 @@ bc1 <- bincount(
 attributes(bc1)$ggp
 ```
 :::
+:::::
 
-::::
-
-
-::: {.notes}
+::: notes
 Compared the observed binned counts against expected number of detections within a given distance
 :::
-
