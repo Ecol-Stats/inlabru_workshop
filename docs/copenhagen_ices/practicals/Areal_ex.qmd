@@ -130,8 +130,8 @@ $$ where $E_i$ are the expected cases for area $i$.
 $$ where
 
 -   $\beta_0$ is a common intercept
--   $\mathbf{\omega} = (\omega_1, \dots, \omega_k)$ is a conditional Autorgressive model (CAR) with precision matrix $\tau_1\mathbf{Q}$
--   $\mathbf{z} = (z_1, \dots, z_k)$ is an unstrictured random effect with precision $\tau_2$
+-   $\mathbf{\omega} = (\omega_1, \dots, \omega_k)$ is a Besag (or ICAR) model with precision matrix $\tau_1\mathbf{Q}$
+-   $\mathbf{z} = (z_1, \dots, z_k)$ is an unstructured random effect with precision $\tau_2$
 
 **Stage 3** Hyperparameters
 
