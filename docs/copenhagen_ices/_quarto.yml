@@ -17,6 +17,7 @@ project:
     - slides/slides_3.qmd
     - slides/slides_4.qmd
     - slides/slides_5.qmd
+    - slides/slides_9.qmd
     - slides/slides_10.qmd
     - slides/slides_12.qmd
     - slides/slides_13.qmd
@@ -50,6 +51,8 @@ website:
             text: Lecture 3
           - href: slides/slides_5.html
             text: Lecture 5
+          - href: slides/slides_9.html
+            text: Lecture 9
           - href: slides/slides_10.html
             text: Lecture 10
           - href: slides/slides_12.html
