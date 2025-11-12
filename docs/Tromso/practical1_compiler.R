@@ -74,8 +74,6 @@ depth_rast_p <- stars::st_rasterize(re_df) %>% rast()
 ## -----------------------------------------------------------------------------
 #| echo: false
 #| fig-align: center
-#| fig-height: 5
-#| fig-width: 8
 #| message: false
 #| warning: false
 library(tidyterra)

@@ -69,11 +69,15 @@ ggplot() +
 
 ## The workflow
 
+### The Model
+
 For computational purposes we will assume perfect detection along the transects and thus, the spatiotemporal animal density is modelled using a point process model of the form:
 
 $$
 p(\mathbf{y} | \lambda)  \propto \exp \left( -\int_\Omega \lambda(\mathbf{s,t}) \mathrm{d}\mathbf{s,t} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i,t)) 
-$$ \### The SPDE mode
+$$
+
+### The SPDE model
 
 First, we define the SPDE model:
 

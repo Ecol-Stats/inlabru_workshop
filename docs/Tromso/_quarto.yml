@@ -19,8 +19,16 @@ website:
     style: docked
     search: true
     contents:
-    - index.qmd
-    - practical1_compiler.qmd
+      - href: index.html
+        text: Home
+      - section: "Slides"
+        contents: 
+         - href: slides/slides_1.html
+           text: Lecture 
+      - section: "Practicals"
+        contents:
+         - href: practical1_compiler.qmd
+           text: "Practical 1"
   page-navigation: true
 format:
   html:

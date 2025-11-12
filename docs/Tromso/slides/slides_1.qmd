@@ -176,7 +176,7 @@ Many of the ecological and environmental processes of interest can be represente
 
 -   The set of locations at which events occur are denoted by $\mathbf{s} = (\mathbf{s}_1, \ldots, \mathbf{s}_n)$.
 
--   We let $N(A)$ be the random variable which represents the total number of events in region $A$.
+-   A point process is defined by a random variable $N(A)$ that counts the number of events in every subset of the region of interest $A$.
 
 -   Our primary interest is in measuring where events occur, so the **locations are our data**.
 
@@ -616,36 +616,27 @@ $$
 
 -   The pdf of detected *distances* is $\pi(d_1,\ldots,d_m|m) \propto \prod_{i=1}^m\dfrac{ g(d_i)}{\int_o^W g(d) \text{d}d}$ if $\color{red}{\tilde{\lambda}(d_i)} = \lambda \color{red}{g(d_i)}$
 
-## An approximation: Strips as lines
+## Putting all the pieces together {.smaller}
 
 -   If the strips width ( $2W$ ) is narrow compared to study region ($\Omega$) we can treat them as lines.
 
-    -   We need to adjust the intensity at a *point* $\mathbf{s}$ on the line to take account of the actual width of the strip
+-   Define the Poisson process likelihood along the kronecker spaces (line $\times$ distance)
 
-    -   Adjust the thinning probability to account for having collapsed all points onto the line.
-
-## An approximation: Strips as lines {.smaller}
-
-The intensity at a *point* $\mathbf{s}$ on the line becomes $2W\lambda(s)$ instead of $\lambda(s)$.
-
--   Let $\pi(d)$ be the probability that the point is at a distance $d$ from the line.
-
--   Let $p(d)$ be the probability that is detected given it is at $d$.
-
-Then, the thinning probability becomes $\pi(d)\times p(d)$, assuming the points are uniformly distributed within the strip then $\pi(d) = 1/W$ (the density of distances is assumed to be constant on the interval $[0,W]$).
-
-This updates our thinning intensity to
+-   Accounting for imperfect detection the thinned Poisson process model on (space, distance) along the transects becomes:
 
 $$
-\log \tilde{\lambda}(s) = \underbrace{\mathbf{x}'\beta + \xi(s)}_{\log \lambda(s)} + \log p(d) + \log \times(2/2W)
+\begin{aligned}
+\log \tilde{\lambda}(s,\text{distance}) &= \overbrace{\mathbf{x}'\beta + \xi(s)}^{\log \lambda(s)} + \log \mathbb{P}(\text{detection at }s|\text{distance},\sigma) + \log(2)\\
+\mathbb{P}(\text{detection}) &=1-\exp\left(-\frac{\sigma}{\text{distance}}\right)
+\end{aligned}
 $$
 
--   Typically $p(d)$ is a non-linear function, that is where `inlabru` can help via a **Fixed point iteration scheme** (further details available in this [vignette](https://cran.r-project.org/web/packages/inlabru/vignettes/method.html))
+::: incremental
+-   Here $\log 2$ accounts for the two-sided detection.
 
-::: notes
-$$
-\mathbb{E}[N_{\text{det}}] = 2W \lambda(s) \times \frac{1}{W} \int_0^W p(r)  dr = 2\lambda(s) \int_0^W p(r)  dr
-$$
+-   Typically $\mathbb{P}(distance)$ is a non-linear function, that is where `inlabru` can help via a **Fixed point iteration scheme** (further details available in this [vignette](https://cran.r-project.org/web/packages/inlabru/vignettes/method.html))
+
+-   we define $\log (\sigma)$ as a latent Gaussian variable and iteratively linearise it.
 :::
 
 # Example
@@ -852,8 +843,8 @@ We start by plotting the distances and histogram of frequencies in distance inte
 ```{r}
 #| echo: false
 #| fig-align: center
-#| fig-height: 4
-#| fig-width: 6
+#| fig-height: 3.5
+#| fig-width: 4
 W <- 8
 ggplot(mexdolphin$points) +
   geom_histogram(aes(x = distance),
@@ -872,6 +863,9 @@ hn <- function(distance, sigma) {
   exp(-0.5 * (distance / sigma)^2)
 }
 ```
+
+::: {style="height: 50px;"}
+:::
 
 ## Example: Dolphins in the Gulf of Mexico {.smaller background-color="#FFFFFF"}
 
@@ -913,7 +907,6 @@ lik = bru_obs("cp",
               formula = eta,
               data = mexdolphin$points,
               ips = ips)
-
 # fit the model
 fit = bru(cmp, lik)
 ```
@@ -925,7 +918,6 @@ The **integration scheme**
 ```{r}
 #| echo: true
 
-
 # build integration scheme
 distance_domain <-  fm_mesh_1d(seq(0, 8,
                               length.out = 30))
@@ -936,12 +928,24 @@ ips = fm_int(list(geometry = mesh,
 
 ```{r}
 #| echo: false
-#| fig-width: 5
-#| fig-height: 4
+#| fig-height: 8
 
-ggplot()  + geom_sf(data = ips, aes(color = weight),size=0.5) + 
-   scale_color_scico(palette = "roma") + gg(mesh) 
+ips_area = fm_int(mesh,
+                  samplers = mexdolphin$ppoly)
 
+ips_line = fm_int( mesh,
+                   samplers = mexdolphin$samplers)
+
+p3 = ggplot()  +geom_sf(data=mexdolphin$ppoly)+
+  geom_sf(data = ips_area, aes(color = weight),size=0.8)+
+  ggtitle("Area integration") +
+  scale_color_scico(palette = "roma")
+p2 = ggplot()  + geom_sf(data=mexdolphin$ppoly)+ 
+  geom_sf(data = ips_line, aes(color =  16*weight),size=0.8) + geom_sf(data=mexdolphin$samplers) +
+  ggtitle("Line integration") +
+   scale_color_scico(palette = "roma")
+
+((p2 / p3 + plot_layout(guides = 'keep')) ) 
 ```
 :::
 :::::
@@ -1016,11 +1020,24 @@ ips = fm_int(list(geometry = mesh,
 
 ```{r}
 #| echo: false
-#| fig-width: 5
-#| fig-height: 4
+#| fig-height: 8
 
-ggplot()  + geom_sf(data = ips, aes(color = weight),size=0.5) + 
-   scale_color_scico(palette = "roma") + gg(mesh) 
+ips_area = fm_int(mesh,
+                  samplers = mexdolphin$ppoly)
+
+ips_line = fm_int( mesh,
+                   samplers = mexdolphin$samplers)
+
+p3 = ggplot()  +geom_sf(data=mexdolphin$ppoly)+
+  geom_sf(data = ips_area, aes(color = weight),size=0.8)+
+  ggtitle("Area integration") +
+  scale_color_scico(palette = "roma")
+p2 = ggplot()  + geom_sf(data=mexdolphin$ppoly)+ 
+  geom_sf(data = ips_line, aes(color =  16*weight),size=0.8) + geom_sf(data=mexdolphin$samplers) +
+  ggtitle("Line integration") +
+   scale_color_scico(palette = "roma")
+
+((p2 / p3 + plot_layout(guides = 'keep')) ) 
 
 ```
 :::
@@ -1092,12 +1109,24 @@ ips = fm_int(list(geometry = mesh,
 
 ```{r}
 #| echo: false
-#| fig-width: 5
-#| fig-height: 4
+#| fig-height: 8
 
-ggplot()  + geom_sf(data = ips, aes(color = weight),size=0.5) + 
-   scale_color_scico(palette = "roma") + gg(mesh) 
+ips_area = fm_int(mesh,
+                  samplers = mexdolphin$ppoly)
 
+ips_line = fm_int( mesh,
+                   samplers = mexdolphin$samplers)
+
+p3 = ggplot()  +geom_sf(data=mexdolphin$ppoly)+
+  geom_sf(data = ips_area, aes(color = weight),size=0.8)+
+  ggtitle("Area integration") +
+  scale_color_scico(palette = "roma")
+p2 = ggplot()  + geom_sf(data=mexdolphin$ppoly)+ 
+  geom_sf(data = ips_line, aes(color =  16*weight),size=0.8) + geom_sf(data=mexdolphin$samplers) +
+  ggtitle("Line integration") +
+   scale_color_scico(palette = "roma")
+
+((p2 / p3 + plot_layout(guides = 'keep')) ) 
 ```
 :::
 :::::
@@ -1164,11 +1193,23 @@ ips = fm_int(list(geometry = mesh,
 
 ```{r}
 #| echo: false
-#| fig-width: 5
-#| fig-height: 4
+#| fig-height: 8
+ips_area = fm_int(mesh,
+                  samplers = mexdolphin$ppoly)
 
-ggplot()  + geom_sf(data = ips, aes(color = weight),size=0.5) + 
-   scale_color_scico(palette = "roma") + gg(mesh) 
+ips_line = fm_int( mesh,
+                   samplers = mexdolphin$samplers)
+
+p3 = ggplot()  +geom_sf(data=mexdolphin$ppoly)+
+  geom_sf(data = ips_area, aes(color = weight),size=0.8)+
+  ggtitle("Area integration") +
+  scale_color_scico(palette = "roma")
+p2 = ggplot()  + geom_sf(data=mexdolphin$ppoly)+ 
+  geom_sf(data = ips_line, aes(color =  16*weight),size=0.8) + geom_sf(data=mexdolphin$samplers) +
+  ggtitle("Line integration") +
+   scale_color_scico(palette = "roma")
+
+((p2 / p3 + plot_layout(guides = 'keep')) ) 
 
 ```
 :::
@@ -1206,7 +1247,7 @@ fit = bru(cmp, lik)
 
 ::::: columns
 ::: {.column width="40%"}
-We can use the `fit$summary.fixed` and `summary.hyperpar` to obtain psoterior summarie sof the mdoel parameters.
+We can use the `fit$summary.fixed` and `summary.hyperpar` to obtain posterior summaries of the model parameters.
 
 ```{r}
 #| echo: false
@@ -1326,7 +1367,7 @@ ggplot() +
 
 ## Results: predicted densities {.smaller background-color="#FFFFFF"}
 
-We can also use the `predict` function to predict the detection function:
+We can also use the `predict` function to predict the detection probabilities:
 
 ```{r}
 distdf <- data.frame(distance = seq(0, 8, length.out = 100))
@@ -1334,17 +1375,37 @@ dfun <- predict(fit, distdf, ~ hn(distance, sigma))
 plot(dfun)
 ```
 
-## Results: predicted expected counts {.smaller background-color="#FFFFFF"}
+## Results: Data level prediction {.smaller}
 
-We can look at the posterior for the mean expected number of dolphins:
+47 groups were seen. How many would be seen along the transects under perfect detection?
+
+```{r}
+predpts_transect <- fm_int(mexdolphin$mesh, mexdolphin$samplers)
+Lambda_transect <- predict(fit,
+                           predpts_transect,~ 16 * sum(weight * exp(space + Intercept)))
+```
+
+```{r}
+#| echo: false
+Lambda_transect %>% gt() %>% fmt_number()
+
+```
+
+How many would be seen under perfect detection across the whole study area (i.e., the **mean** expected number of dolphins)?
 
 ```{r}
 predpts <- fm_int(mexdolphin$mesh, mexdolphin$ppoly)
 Lambda <- predict(fit, predpts, ~ sum(weight * exp(space + Intercept)))
-Lambda
+```
+
+```{r}
+#| echo: false
+Lambda %>%  gt() %>% fmt_number()
 ```
 
 ## Results: predicted expected counts {.smaller background-color="#FFFFFF"}
+
+What’s the predictive distribution of group counts?
 
 We can also get Monte Carlo samples for the expected number of dolphins as follows:
 
@@ -1379,6 +1440,7 @@ Nest <- dplyr::bind_rows(
 ::: {.column width="40%"}
 ```{r}
 #| echo: false
+#| fig-height: 8
 ggplot(data = Nest) +
   geom_line(aes(x = N, y = mean, colour = Method)) +
   geom_ribbon(
@@ -1399,7 +1461,7 @@ ggplot(data = Nest) +
 
 # Model comparison
 
-## Fitting a Model with a hazard detection function
+## Fitting a Model with a hazard detection function {background-color="#FFFFFF"}
 
 ::::: columns
 ::: {.column width="40%"}
@@ -1433,13 +1495,13 @@ dfun1 <- predict(fit_hazard, distdf, ~ hr(distance, sigma))
 ggplot() +
   gg(pr.int1$loglambda, geom = "tile") +
   scale_fill_scico(palette="imola",name=expression(log(lambda)))+
-  plot(dfun1)+plot_layout(ncol=1)
+  plot(dfun1)+plot_layout(ncol=2)
 
 ```
 :::
 :::::
 
-## Model comparison with GoF {.smaller}
+## Model comparison with GoF {background-color="#FFFFFF"}
 
 Look at the goodness-of-fit of the two models in the distance dimension
 
@@ -1472,3 +1534,5 @@ attributes(bc1)$ggp
 ::: notes
 Compared the observed binned counts against expected number of detections within a given distance
 :::
+
+
