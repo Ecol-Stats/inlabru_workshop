@@ -670,7 +670,7 @@ This makes model evaluation especially challenging. Especially cross-validation 
 
 ::::: columns
 ::: {.column width="50%"}
--   In a Point process also empty areas are "data"
+-   In a point process empty areas are also "data"
 -   We cannot just remove points as this will change the underlying intensity
 -   We need to remove a whole subdomain in order to cross-validate
 :::
@@ -757,7 +757,7 @@ These residuals can be used to evaluate the model.
 
 . . .
 
-This is still work in progress and at the moment non easily available... but it will be :grinning:
+This is still work in progress and at the moment not easily available... but it will be :grinning:
 
 [Here](https://inlabru-org.github.io/inlabru/articles/2d_lgcp_residuals_sf.html) you can see some examples of computation and use.
 
