@@ -390,3 +390,249 @@ fit3$summary.random$covariate %>%
 # inv_logit = function(x) (1+exp(-x))^(-1)
 
 
+
+## ----child="practicals/PointProcess_ex.qmd"-----------------------------------
+
+## -----------------------------------------------------------------------------
+#| echo: false
+#| message: false
+#| warning: false
+
+# load webexercises library for tasks and questions (just for a preview - the practical compiler should take care of this when compiling multiple excercises)
+library(webexercises)
+
+
+
+## -----------------------------------------------------------------------------
+#| warning: false
+#| message: false
+
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+library(spatstat)
+library(sf)
+library(scico)
+library(spatstat)
+library(lubridate)
+library(terra)
+library(tidyterra)
+
+
+
+
+## -----------------------------------------------------------------------------
+#| label: fig-points
+#| fig-cap: "Distribution of the observed forest fires caused by lightning in Castilla-La Mancha in 2004"
+#| 
+data("clmfires")
+pp = st_as_sf(as.data.frame(clmfires) %>%
+                mutate(x = x, 
+                       y = y),
+              coords = c("x","y"),
+              crs = NA) %>%
+  filter(cause == "lightning",
+         year(date) == 2004)
+
+poly = as.data.frame(clmfires$window$bdry[[1]]) %>%
+  mutate(ID = 1)
+
+region = poly %>% 
+  st_as_sf(coords = c("x", "y"), crs = NA) %>% 
+  dplyr::group_by(ID) %>% 
+  summarise(geometry = st_combine(geometry)) %>%
+  st_cast("POLYGON") 
+  
+ggplot() + geom_sf(data = region, alpha = 0) + geom_sf(data = pp)  
+
+
+## -----------------------------------------------------------------------------
+# define integration scheme
+
+ips = st_sf(
+geometry = st_sample(region, 1)) # some random location inside the domain
+ips$weight = st_area(region) # integration weight is the area of the domain
+
+cmp = ~ 0 + beta_0(1)
+
+formula = geometry ~ beta_0
+
+lik = bru_obs(data = pp,
+              family = "cp",
+              formula = formula,
+              ips = ips)
+fit1 = bru(cmp, lik)
+
+
+
+
+## -----------------------------------------------------------------------------
+#|label: fig-altitude
+#|fig-cap: "Distribution of the observed forest fires and scaled altitude"
+#| 
+elev_raster = rast(clmfires.extra[[2]]$elevation)
+elev_raster = scale(elev_raster)
+ggplot() + 
+  geom_spatraster(data = elev_raster) + 
+  geom_sf(data = pp) +
+  scale_fill_scico()
+
+
+
+## -----------------------------------------------------------------------------
+#|label: fig-int2
+#|fig-cap: "Integration scheme."
+
+n.int = 1000
+ips = st_sf(geometry = st_sample(region,
+            size = n.int,
+            type = "regular"))
+
+ips$weight = st_area(region) / n.int
+ggplot() + geom_sf(data = ips, aes(color = weight)) + geom_sf(data= region, alpha = 0)
+
+
+
+## -----------------------------------------------------------------------------
+cmp = ~ Intercept(1) + elev(elev_raster, model = "linear")
+formula = geometry ~ Intercept + elev
+lik = bru_obs(data = pp,
+              family = "cp",
+              formula = formula,
+              ips = ips)
+fit2 = bru(cmp, lik)
+
+
+
+
+## -----------------------------------------------------------------------------
+n.int2 = 50
+
+ips2 = st_sf(geometry = st_sample(region,
+            size = n.int2,
+            type = "regular"))
+ips2$weight = st_area(region) / n.int2
+
+
+
+
+## -----------------------------------------------------------------------------
+est_grid = st_as_sf(data.frame(crds(elev_raster)), coords = c("x","y"))
+est_grid  = st_intersection(est_grid, region)
+
+
+
+
+## -----------------------------------------------------------------------------
+N_fires = generate(fit2, ips,
+                      formula = ~ {
+                        lambda = sum(weight * exp(elev + Intercept))
+                        rpois(1, lambda)},
+                    n.samples = 2000)
+
+ggplot(data = data.frame(N = as.vector(N_fires))) +
+  geom_histogram(aes(x = N),
+                 colour = "blue",
+                 alpha = 0.5,
+                 bins = 20) +
+  geom_vline(xintercept = nrow(pp),
+             colour = "red") +
+  theme_minimal() +
+  xlab(expression(Lambda))
+
+
+
+## -----------------------------------------------------------------------------
+mesh = fm_mesh_2d(boundary = region,
+                  max.edge = c(5, 10),
+                  cutoff = 4, crs = NA)
+
+ggplot() + gg(mesh) + geom_sf(data = pp)
+
+spde_model =  inla.spde2.pcmatern(mesh,
+                                  prior.sigma = c(1, 0.5),
+                                  prior.range = c(100, 0.5))
+
+
+
+## -----------------------------------------------------------------------------
+ips = fm_int(mesh, samplers = region)
+
+ggplot() + geom_sf(data = ips, aes(color = weight)) +
+  gg(mesh) +
+   scale_color_scico()
+
+
+## -----------------------------------------------------------------------------
+#| echo: true
+#| eval: false
+
+# 
+# cmp = ~ ...
+# 
+# formula = geometry ~ ...
+# 
+# lik = bru_obs("cp",
+#               formula = formula,
+#               data = pp,
+#               ips = ...)
+# 
+# fit3 = bru(cmp, lik)
+# 
+
+
+
+
+## -----------------------------------------------------------------------------
+#| echo: false
+#| eval: true
+#| warning: true
+
+fit3 = bru(cmp, lik)
+
+
+
+
+
+## -----------------------------------------------------------------------------
+#| fig-width: 4.5
+#| fig-height: 4.5
+#| fig-align: center
+# Extend raster ext by 30 % of the original raster so it covers the whole mesh
+re <- extend(elev_raster, ext(elev_raster)*1.3)
+# Convert to an sf spatial object
+re_df <- re %>% stars::st_as_stars() %>%  st_as_sf(na.rm=F)
+# fill in missing values using the original raster 
+re_df$lyr.1 <- bru_fill_missing(elev_raster,re_df,re_df$lyr.1)
+# rasterize
+elev_rast_p <- stars::st_rasterize(re_df) %>% rast()
+ggplot() + geom_spatraster(data = elev_rast_p) 
+
+
+
+
+
+## -----------------------------------------------------------------------------
+sim_fields = generate(fit3, pxl, ~data.frame(spde = space,
+                                       log_int = Intercept + space + elev),
+                     n.samples = 4)
+
+cbind(pxl,sapply(sim_fields, function(x) x$spde)) %>%
+  pivot_longer(-geometry) %>%
+  ggplot() + geom_sf(aes(color = value)) + 
+  facet_wrap(.~name) + scale_color_scico() +
+  ggtitle("simulated spatial fields")
+
+
+cbind(pxl,sapply(sim_fields, function(x) x$log_int)) %>%
+  pivot_longer(-geometry) %>%
+  ggplot() + geom_sf(aes(color = value)) + 
+  facet_wrap(.~name) + scale_color_scico() + 
+  ggtitle("simulated log intensity")
+
+
+
+

@@ -29,7 +29,7 @@ At the end of the workshop, participants will have an understanding of:
 
 # Intended audience
 
-The workshop aims to cater for participants with a range of different backgrounds, who is interested in analysing data with modern spatial and spatio-temporal statistical modelling approaches. 
+The workshop aims to cater for participants with a range of different backgrounds, who is interested in analysing data with modern spatial and spatio-temporal statistical modelling approaches.
 
 # Prerequisites
 
@@ -58,7 +58,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 ### Day 2
 
 | Time | Topic |
-|:----------------------:|:----------------------------------------------:|
+|:----------------------:|:---------------------------------------------:|
 | 9:00 - 10:00 | [**Session 3**: Temporal modelling and smoothing part 1](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_4.html) |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | Temporal modelling and smoothing part 2 |

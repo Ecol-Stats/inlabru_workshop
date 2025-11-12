@@ -34,7 +34,7 @@ embed-resources: true
 execute:
   allow-html: true
   freeze: auto
-  cache: true
+  cache: false
 ---
 
 ```{r setup}
@@ -64,7 +64,7 @@ library(gt)
 ::: {.column width="40%"}
 -   This idea is implemented in the model as a detection function that depends on distance.
 
-    -   Species at greater distances are harder to detect and the detection function therefore declines as distance increases.
+    -   Animals at greater distances are harder to detect and the detection function therefore declines as distance increases.
 :::
 
 ::: {.column width="60%"}
