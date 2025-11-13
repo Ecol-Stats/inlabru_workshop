@@ -243,7 +243,7 @@ to vary gradually over time.
 
 . . . 
 
-They do this by assuming that, on average, the   time effect at each point is the mean of the effect at the neighboring points.
+They do this by assuming that, on average, thetime effect at each point is the mean of the effect at the neighbouring points.
 
 
 ```{r}
@@ -296,7 +296,6 @@ ggplot(dd, aes(time, y)) +
  
  
  
- 
 ## Random walks of order 1{auto-animate="true"}
 **Idea:** $\longrightarrow\ u_t = \text{mean}(u_{t-1} , u_{t+1}) + \text{Gaussian error with precision  } \tau$
 
@@ -308,7 +307,7 @@ $$
   \pi(\mathbf{u} \mid \tau) \propto
   \exp\!\left(
      -\frac{\tau}{2} \sum_{t=1}^{T-1} (u_{t+1} - u_t)^2
-  \right) = \exp\!\left(-\tfrac{1}{2} \, \mathbf{u}^{\top} \mathbf{Q}\ \mathbf{u}\right)
+  \right) = \exp\!\left(-\tfrac{1}{2} \, \mathbf{u}^{\top} \mathbf{Q}\ \mathbf{u}\right),
 $$
 where  the precision is
 $\mathbf{Q} = \tau\mathbf{R}$ with
@@ -377,17 +376,17 @@ ggplot() + geom_point(data = lakes, aes(year, Erie)) +
 
 We need to set a _prior distribution_ for $\tau$.
 
-A common option is the so called _PC-priors_
+A common option are the so called _PC-priors_
 
 
 ## Penalized Complexity (PC) priors{ auto-animate="true"}
 
-- PC prior are easily available in `inlabru` for many model parameters
+- PC priors are available in `inlabru` for many model parameters
 
 . . . 
 
 
-- They are build with two principle in mind:
+- They are built with two principles in mind:
 
    1. The prior discourage overdispersion by penalizing distance from a _base model_
 
@@ -434,9 +433,9 @@ ggplot() + geom_point(data = lakes, aes(year, Erie)) +
 
 ## Penalized Complexity (PC) priors{ auto-animate="true"}
 
-- PC prior are easily available in `inlabru` for many model parameters
+- PC prior are available in `inlabru` for many model parameters
 
-- They are build with two principle in mind:
+- They are built with two principles in mind:
 
    1. The prior discourage overdispersion by penalizing distance from a _base model_
    2. User-defined scaling
@@ -528,7 +527,7 @@ ggplot() + geom_line(data = prior, aes(x,y, color = "prior")) +
 
 RW1 defines differences, not absolute levels:
 
-- Only the *changes* between neighboring terms are modeled.
+- Only the *changes* between neighbouring terms are modelled.
 
 - The model has no information about the global mean (intercept).
 
@@ -552,7 +551,7 @@ This means:
  Solution:
   
   - Sum to zero constraint $\sum_{i = 1}^n u_i = 0$
-  - This is be default included in the model
+  - This is included in the model by default
   
 
 ## Random walks of order 2
@@ -614,17 +613,17 @@ ggplot()+ geom_line(data = pred1, aes(year, mean, color = "rw1")) +
 
 . . .
 
-**NOTE:** the `scale.model = TRUE` option scales the $\mathbf{Q}$ matrix so the precision parameter has the same interpretation in both models. 
+**NOTE:** the `scale.model = TRUE` option scales the $\mathbf{Q}$ matrix so that the precision parameter has the same interpretation in both models. 
 
 ## Summary RW (1 and 2) models
 
 - Latent effects suitable for smoothing and modeling temporal data.
 
-- Has one hyperparameter: the precision $\tau$
+- Have one hyperparameter: the precision $\tau$
   
   - Use PC prior for $\tau$  
 
-- It is an _intrinsic_ model
+- Are an _intrinsic_ model
 
   - The precision matrix $\mathbf{Q}$ is rank deficient
   
