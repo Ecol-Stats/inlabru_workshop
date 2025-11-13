@@ -57,7 +57,7 @@ library(patchwork)
 ### Simple simulated example
 
 
-In this example we are going to fit a model where one covariate acts in the same way for two different data
+In this example we are going to fit a model where one covariate acts in the same way for two different responses
 
   
   - Gaussian observations
@@ -125,9 +125,9 @@ lik_pois = bru_obs(formula = y_pois ~ Intercept_pois + covariate,
 
 Fit three models using the components and likelihoods above:
 
-  - A model that only considers the gaussian data
+  - A model that only considers the Gaussian data
   - A model that only considers the Poisson data
-  - A model that only considers both data sets
+  - A model that considers both data sets
 
 ```{r}
 #| purl: false
@@ -156,7 +156,7 @@ ggplot() +
 
 In this practical we present a way to fit the Bayesian coregionalization model similar to the one presented in Chapter 8 in Blangiardo and Cameletti (2015).
 
-These models are often used when measurement stations record several variables; for example, a station measuring pollution may register values of CO2 and NO2. Instead of modeling these as several univariate datasets, the models we present in this section deal with the joint dependency structure. Dependencies among the different outcomes are modeled through shared components at the predictor level.
+These models are often used when measurement stations record several variables; for example, a station measuring pollution may register values of CO2 and NO2. Instead of modelling these as several univariate datasets, the models we present in this section deal with the joint dependency structure. Dependencies among the different outcomes are modelled through shared components at the predictor level.
 
 Usually, in coregionalization models, the different responses are assumed to be observed at the same locations. With the INLA-SPDE approach, we do not require the different outcome variables to be measured at the same locations. Hence, in the code example below we show how to model responses observed at different locations.
 
@@ -167,19 +167,19 @@ We consider the following model
 $$
 \begin{aligned}
 y_1(s) & = \beta_1 + \omega_1(s) + e_1(s)\\
-y_2(s) & = \beta_2 + \lambda\ \omega_1(s) + \omega_2(s) +e_1(s)
+y_2(s) & = \beta_2 + \lambda\ \omega_1(s) + \omega_2(s) +e_1(s),
 \end{aligned}
 $$
 where the 
 
 - $\beta_k$ are intercepts,  $k=1,2$.
 
-- $\omega_1(s)$ is Gaussian spatial effects that is common for both observations
+- $\omega_1(s)$ is a Gaussian spatial effect that is common for both observations
 
 - $\lambda$ is a weight for the spatial effect $\omega_1(s)$.
 
 
-- $\omega_2(s)$ is Gaussian spatial effects specific for the second observations
+- $\omega_2(s)$ is a Gaussian spatial effect specific to the second observations
 
 - $e_k(s)$ are uncorrelated error terms,  $k=1,2$.
 
@@ -219,7 +219,7 @@ e.sd <- c(0.3, 0.2)
 ```
 
 and simulate our data. We assume that we observe data in a window $(0:10)\times(0:5)$.
-We assume that in some locations we observe both $y_1$ and $y_2$ while in other we only observe one of them
+We assume that in some locations we observe both $y_1$ and $y_2$ while in others we only observe one of them
 
 ```{r}
 # define the area of interest
@@ -298,7 +298,7 @@ mesh <-  fm_mesh_2d(loc = rbind(loc1, loc2),
 
 ```
 
-Here is the mesh, together with the observation $y_1$ (red) and $y_2$ (black).
+Here is the mesh, together with the observations $y_1$ (red) and $y_2$ (black).
 ```{r, echo = F}
 ggplot() + 
   gg(mesh) + 
