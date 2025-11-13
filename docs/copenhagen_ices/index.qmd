@@ -64,7 +64,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 | 10:30 - 11:30 | Temporal modelling and smoothing part 2 |
 | 11:30 - 13:00 | [Practical Session 3](day2_practical_3.qmd) |
 | 13:00 - 14:30 | Lunch break 🍽️ |
-| 14:30 - 15:30 | [**Session 5**: Introduction to Spatial Statistics](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_5.html) |
+| 14:30 - 15:30 | [**Session 5**: Introduction to Spatial Statistics](Slides_Janine_pdf/slides_5_inlabru.pdf) |
 | 15:35 - 15:45 | Coffee Break ☕ |
 | 15:45 - 16:45 | [Practical Session 4](day2_practical_4.qmd) |
 | 16:45 - 17:00 | wrap-up and outlook |
@@ -75,12 +75,12 @@ No knowledge of `R-INLA` or `inlabru` is required.
 
 |     Time      |                         Topic                         |
 |:-------------:|:-----------------------------------------------------:|
-| 9:00 - 10:00  |            **Session 6**: Areal Processes             |
+| 9:00 - 10:00  |            [**Session 6**: Areal Processes](Slides_Janine_pdf/slides_6_inlabru.pdf) |
 | 10:00 - 10:30 |                       Snack 🥙                        |
-| 10:30 - 11:30 |             **Session 7**: Geostatistics              |
+| 10:30 - 11:30 |             [**Session 7**: Geostatistics ](Slides_Janine_pdf/slides_7_inlabru.pdf) |
 | 11:30 - 13:00 |      [Practical Session 5](day3_practical_5.qmd)      |
 | 13:00 - 14:30 |                    Lunch break 🍽️                     |
-| 14:30 - 15:30 |        **Session 8**: Spatial Point processes         |
+| 14:30 - 15:30 |        [**Session 8**: Spatial Point processes](Slides_Janine_pdf/slides_8_inlabru.pdf) |
 | 15:35 - 15:45 |                    Coffee Break ☕                    |
 | 15:45 - 16:45 | [Practical Session 5 continued](day3_practical_5.qmd) |
 | 16:45 - 17:00 |                  wrap-up and outlook                  |

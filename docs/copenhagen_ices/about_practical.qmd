@@ -2,7 +2,6 @@
 title: "Practicals"
 ---
 
-
 [Practical 1](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day1_practical.html)
 
 [Practical 2](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day1_practical_2.html)
@@ -20,4 +19,3 @@ title: "Practicals"
 [Practical 8](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day5_practical_8.html)
 
 [Practical 9](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day5_practical_9.html)
-

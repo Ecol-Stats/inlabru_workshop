@@ -48,8 +48,24 @@ website:
             text: Lecture 2
           - href: slides/slides_4.html
             text: Lecture 3
-          - href: slides/slides_5.html
-            text: Lecture 5
+        
+          - href: Slides_Janine_pdf/slides_5_inlabru.pdf
+            text: Lecture 5 (PDF)
+            target: _blank     # optional: open in new tab  
+          
+          - href: Slides_Janine_pdf/slides_6_inlabru.pdf
+            text: Lecture 6 (PDF)
+            target: _blank     # optional: open in new tab  
+          
+          - href: Slides_Janine_pdf/slides_7_inlabru.pdf
+            text: Lecture 7 (PDF)
+            target: _blank     # optional: open in new tab  
+          
+          - href: Slides_Janine_pdf/slides_8_inlabru.pdf
+            text: Lecture 8 (PDF)
+            target: _blank     # optional: open in new tab  
+            
+            
           - href: slides/slides_9.html
             text: Lecture 9
           - href: slides/slides_10.html

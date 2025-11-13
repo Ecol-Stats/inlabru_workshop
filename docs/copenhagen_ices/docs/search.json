@@ -863,156 +863,91 @@
     "href": "slides/slides_5.html#outline",
     "title": "Lecture 5",
     "section": "Outline",
-    "text": "Outline\n\nWhy spatial modelling?\nWhy is spatial modelling computationally expensive?\nDifferent data types?\nModelling in discrete space – areal data\nModelling in continuous space – geo-referenced data\nModelling continuous space – spatial point process data",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "Outline\n\nWhy spatial modelling?\nWhy is spatial modelling computationally expensive?\nDifferent data types?\nModelling in discrete space – areal data\nModelling in continuous space – geo-referenced data\nModelling continuous space – spatial point process data"
   },
   {
     "objectID": "slides/slides_5.html#spatial-modelling",
     "href": "slides/slides_5.html#spatial-modelling",
     "title": "Lecture 5",
     "section": "Spatial modelling",
-    "text": "Spatial modelling\nmany natural processes take place in space large amounts of data collected in space; increased resolution large, complex data sets\nHOWEVER:\n\nspatial statistical analysis is often not complex enough\ninaccessible to practitioners as literature written for statisticians\ndevelopment of methodology often not linked to applications (unrealistic assumptions)\ndifficult to apply (unless you are an expert statistician and programmer)\n\nwe will see that inlabru can help with this… why do we need spatial models in the first place?",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "Spatial modelling\nmany natural processes take place in space large amounts of data collected in space; increased resolution large, complex data sets\nHOWEVER:\n\nspatial statistical analysis is often not complex enough\ninaccessible to practitioners as literature written for statisticians\ndevelopment of methodology often not linked to applications (unrealistic assumptions)\ndifficult to apply (unless you are an expert statistician and programmer)\n\nwe will see that inlabru can help with this… why do we need spatial models in the first place?"
   },
   {
     "objectID": "slides/slides_5.html#an-example",
     "href": "slides/slides_5.html#an-example",
     "title": "Lecture 5",
     "section": "an example",
-    "text": "an example\nglobal pm 2.5\nexposure to air pollution; particulate matter &lt; 2.5 microns in diameter (PM 2.5)\n\nlinked to poor health outcomes\nresponsible for three million deaths worldwide each year\nmaybe observations not independent?\nsparsely measured\nheterogeneous spatial coverage\n\nWe need to take account of spatial dependence… i.e. account for autocorrelation… and complexity",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "an example\nglobal pm 2.5\nexposure to air pollution; particulate matter &lt; 2.5 microns in diameter (PM 2.5)\n\nlinked to poor health outcomes\nresponsible for three million deaths worldwide each year\nmaybe observations not independent?\nsparsely measured\nheterogeneous spatial coverage\n\nWe need to take account of spatial dependence… i.e. account for autocorrelation… and complexity"
   },
   {
     "objectID": "slides/slides_5.html#spatial-modelling-1",
     "href": "slides/slides_5.html#spatial-modelling-1",
     "title": "Lecture 5",
     "section": "Spatial modelling",
-    "text": "Spatial modelling\naccounting for spatial dependence\n\nstandard statistical modelling usually assumes independent observations\ndistributional assumptions that are made are only true if the independence assumption hold\nspatio-temporal data, however, are often not independent, but are spatially auto correlated\nindependence assumptions are violated here\ntwo observations taken in close proximity are very similar\ndo not provide two (independent) pieces of information",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "Spatial modelling\naccounting for spatial dependence\n\nstandard statistical modelling usually assumes independent observations\ndistributional assumptions that are made are only true if the independence assumption hold\nspatio-temporal data, however, are often not independent, but are spatially auto correlated\nindependence assumptions are violated here\ntwo observations taken in close proximity are very similar\ndo not provide two (independent) pieces of information"
   },
   {
     "objectID": "slides/slides_5.html#spatial-modelling-2",
     "href": "slides/slides_5.html#spatial-modelling-2",
     "title": "Lecture 5",
     "section": "Spatial modelling",
-    "text": "Spatial modelling\naccounting for spatial dependence - ignoring this = pretend we have as much independent information as we have observations - pretend we have more information than we actually have - spurious inference and ultimately wrong conclusions…\nspatio-temporal models have special model components that explicitly model the dependence structure we need to:\n\nsay what the dependence in our data looks like in general: choose a specific class of spatial models, and\nestimate its specific properties for a specific dataset",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "Spatial modelling\naccounting for spatial dependence - ignoring this = pretend we have as much independent information as we have observations - pretend we have more information than we actually have - spurious inference and ultimately wrong conclusions…\nspatio-temporal models have special model components that explicitly model the dependence structure we need to:\n\nsay what the dependence in our data looks like in general: choose a specific class of spatial models, and\nestimate its specific properties for a specific dataset"
   },
   {
     "objectID": "slides/slides_5.html#spatial-modelling-computations",
     "href": "slides/slides_5.html#spatial-modelling-computations",
     "title": "Lecture 5",
     "section": "Spatial modelling – computations",
-    "text": "Spatial modelling – computations\n\ncomputationally expensive\nin the past: often MCMC, takes forever",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "Spatial modelling – computations\n\ncomputationally expensive\nin the past: often MCMC, takes forever"
   },
   {
     "objectID": "slides/slides_5.html#types-of-spatial-data",
     "href": "slides/slides_5.html#types-of-spatial-data",
     "title": "Lecture 5",
     "section": "Types of spatial data",
-    "text": "Types of spatial data\nWe can distinguish three types of spatial data\nDiscrete space: - data on a spatial grid (areal data)\nContinuous space: - geostatistical (geo-referenced) data - spatial point data",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "Types of spatial data\nWe can distinguish three types of spatial data\nDiscrete space: - data on a spatial grid (areal data)\nContinuous space: - geostatistical (geo-referenced) data - spatial point data"
   },
   {
     "objectID": "slides/slides_5.html#discrete-space-areal-data",
     "href": "slides/slides_5.html#discrete-space-areal-data",
     "title": "Lecture 5",
     "section": "Discrete space: areal data",
-    "text": "Discrete space: areal data\n\ndata on a (regular or irregular) spatial grid\nexamples: number of individuals in a region, average rainfall in a province\n(originally geostatistical or point data; gridded for practical reasons)\n\nObserved response(s): Measurement over each grid cell (e.g. number of individuals in cell; rainfall in province)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "Discrete space: areal data\n\ndata on a (regular or irregular) spatial grid\nexamples: number of individuals in a region, average rainfall in a province\n(originally geostatistical or point data; gridded for practical reasons)\n\nObserved response(s): Measurement over each grid cell (e.g. number of individuals in cell; rainfall in province)"
   },
   {
     "objectID": "slides/slides_5.html#continuous-space-geostatistical-data",
     "href": "slides/slides_5.html#continuous-space-geostatistical-data",
     "title": "Lecture 5",
     "section": "Continuous space: geostatistical data",
-    "text": "Continuous space: geostatistical data\n\nphenomenon that is continuous in space\nexamples: nutrient levels in soil, salinity in the sea measurements at a given set of locations that are determined by surveyor\n\nObserved response(s): measurement(s) taken at given locations",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "Continuous space: geostatistical data\n\nphenomenon that is continuous in space\nexamples: nutrient levels in soil, salinity in the sea measurements at a given set of locations that are determined by surveyor\n\nObserved response(s): measurement(s) taken at given locations"
   },
   {
     "objectID": "slides/slides_5.html#continuous-space-spatial-point-patterns",
     "href": "slides/slides_5.html#continuous-space-spatial-point-patterns",
     "title": "Lecture 5",
     "section": "Continuous space: spatial point patterns",
-    "text": "Continuous space: spatial point patterns\n\npatterns formed by locations of objects (individuals) in space (typically 2D)\nexamples: locations of trees in a forest, groups of animals, earthquakes\n\nObserved response(s): x,y coordinates of points (individuals/groups) sometimes also properties of individuals/groups (“marks”)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "Continuous space: spatial point patterns\n\npatterns formed by locations of objects (individuals) in space (typically 2D)\nexamples: locations of trees in a forest, groups of animals, earthquakes\n\nObserved response(s): x,y coordinates of points (individuals/groups) sometimes also properties of individuals/groups (“marks”)"
   },
   {
     "objectID": "slides/slides_5.html#point-patterns-vs.-geostatistical-data",
     "href": "slides/slides_5.html#point-patterns-vs.-geostatistical-data",
     "title": "Lecture 5",
     "section": "point patterns vs. geostatistical data",
-    "text": "point patterns vs. geostatistical data\npoint patterns: - data format : x,y coordinates optional : properties of objects represented by the points (“marks”)\ngeostatistical data: - data format : x,y coordinates not optional : measurement taken in these locations\nThese seem rather similar…",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "point patterns vs. geostatistical data\npoint patterns: - data format : x,y coordinates optional : properties of objects represented by the points (“marks”)\ngeostatistical data: - data format : x,y coordinates not optional : measurement taken in these locations\nThese seem rather similar…"
   },
   {
     "objectID": "slides/slides_5.html#point-patterns-vs.-geostatistical-data-1",
     "href": "slides/slides_5.html#point-patterns-vs.-geostatistical-data-1",
     "title": "Lecture 5",
     "section": "point patterns vs. geostatistical data",
-    "text": "point patterns vs. geostatistical data\npoint patterns : - data format : x,y coordinates\noptional : properties of objects represented by the points (“marks”)\n\naim : modelling the locations of objects in continuous space\nlocations are being modelled and are considered random\nmarks only take values in locations where there is a point\n\ngeostatistical data : - data format : x,y coordinates\nnot optional : measurement taken in these locations\n\naim : modelling continuous process observed in finite number of locations\nlocations have typically been deliberately chosen and are fixed\ncontinuous spatial field takes on values in whole subset of \\(\\mathbf R^ 2\\)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "point patterns vs. geostatistical data\npoint patterns : - data format : x,y coordinates\noptional : properties of objects represented by the points (“marks”)\n\naim : modelling the locations of objects in continuous space\nlocations are being modelled and are considered random\nmarks only take values in locations where there is a point\n\ngeostatistical data : - data format : x,y coordinates\nnot optional : measurement taken in these locations\n\naim : modelling continuous process observed in finite number of locations\nlocations have typically been deliberately chosen and are fixed\ncontinuous spatial field takes on values in whole subset of \\(\\mathbf R^ 2\\)"
   },
   {
     "objectID": "slides/slides_5.html#take-home-message",
     "href": "slides/slides_5.html#take-home-message",
     "title": "Lecture 5",
     "section": "Take home message!",
-    "text": "Take home message!\n\nall spatial models we discuss here are also special cases of the large class of Latent Gaussian models\nto account for spatial dependence in the data, different types of spatial terms have to be included in the model for different spatial data structures, but they are all approximated by an SPDE model\ninlabru provides an efficient and unified way to fit all these models!",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 5"
-    ]
+    "text": "Take home message!\n\nall spatial models we discuss here are also special cases of the large class of Latent Gaussian models\nto account for spatial dependence in the data, different types of spatial terms have to be included in the model for different spatial data structures, but they are all approximated by an SPDE model\ninlabru provides an efficient and unified way to fit all these models!"
   },
   {
     "objectID": "slides/slides_3.html#outline",
