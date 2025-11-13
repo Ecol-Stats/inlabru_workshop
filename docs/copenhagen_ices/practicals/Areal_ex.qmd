@@ -240,7 +240,7 @@ p1 + p2
 `r unhide()`
 :::
 
-Finally we want to compare our observations $y_i$ with the predicted means of the Poisson distribution $E_i\exp(\lambda_i)$
+Finally, we want to compare our observations $y_i$ with the predicted means of the Poisson distribution $E_i\exp(\lambda_i)$
 
 ```{r}
 pred$cases %>% ggplot() + geom_point(aes(observed, mean)) + 
@@ -253,11 +253,11 @@ pred$cases %>% ggplot() + geom_point(aes(observed, mean)) +
 
 ## Getting prediction densities
 
-Posterior predictive distributions, that is $\pi(y_i^{\text{new}}|\mathbf{y})$ are of interest in many applied problems. The `bru()` function does not return predictive densities. In the previous step we have computed predictions for the `expected counts` $\pi(E_i\lambda_i|\mathbf{y})$. The predictive distribution is then: $$
+Posterior predictive distributions, i.e.\ $\pi(y_i^{\text{new}}|\mathbf{y})$, are of interest in many applied problems. The `bru()` function does not return predictive densities. In the previous step we have computed predictions for the `expected counts` $\pi(E_i\lambda_i|\mathbf{y})$. The predictive distribution is then: $$
 \pi(y_i^{\text{new}}|\mathbf{y}) = \int \pi(y_i|E_i\lambda_i)\pi(E_i\lambda_i|\mathbf{y})\ dE_i\lambda_i
-$$ where, in our case, $\pi(y_i|E_i\lambda_i)$ is Poisson with mean $E_i\lambda_i$. We can achieve this using the following algorith:
+$$ where, in our case, $\pi(y_i|E_i\lambda_i)$ is Poisson with mean $E_i\lambda_i$. We can achieve this using the following algorithm:
 
-1.  Simulate $n$ replicates of $g^k = E_i\lambda_i$ for $k = 1,\dots,n$ using the function *generate()* which takes the same input as *predict()*
+1.  Simulate $n$ replicates of $g^k = E_i\lambda_i$ for $k = 1,\dots,n$ using the function *generate()*, which takes the same input as *predict()*
 2.  For each of the $k$ replicates simulate a new value $y_i^{new}$ using the function *rpois()*
 3.  Summarise the $n$ samples of $y_i^{new}$ using, for example the mean and the 0.025 and 0.975 quantiles.
 
