@@ -68,7 +68,7 @@ library(tidyterra)
 
 ## The data
 
-In this practical, we will explore data on the Pacific Cod (*Gadus macrocephalus*) from a trawl survey in Queen Charlotte Sound. The `pcod` dataset is available from the `sdmTMB` package and contains the presence/absence records of the Pacific Cod during each surveys along with the biomass density of Pacific cod in the area swept (kg/Km$^2$). The `qcs_grid` data contain the depth values stored as $2\times 2$ km grid for Queen Charlotte Sound.
+We will explore data on the Pacific Cod (*Gadus macrocephalus*) from a trawl survey in Queen Charlotte Sound. The `pcod` dataset is available from the `sdmTMB` package and contains the presence/absence records of the Pacific Cod during each surveys along with the biomass density of Pacific cod in the area swept (kg/Km$^2$). The `qcs_grid` data contain the depth values stored as $2\times 2$ km grid for Queen Charlotte Sound.
 
 The dataset contains presence/absence data from 2003 to 2017. In this practical we only consider year 2003.
 
@@ -84,7 +84,7 @@ qcs_grid = sdmTMB::qcs_grid
 
 ```
 
-Then, we create ab `sf` object and assign the rough coordinate reference to it:
+Then, we create an `sf` object and assign the rough coordinate reference to it:
 
 ```{r}
 #| message: false
@@ -104,7 +104,7 @@ crs(depth_r) <- crs(pcod_sf)
 
 ```
 
-Finally we can plot our dataset. Note that to plot the raster we need to upload also the `tidyterra` library.
+Finally, we can plot our dataset. Note that to plot the raster we need to also upload the `tidyterra` library.
 
 ```{r}
 
@@ -148,13 +148,13 @@ The hyperparameters of the model are $\rho$ and $\sigma$
 
 ### The workflow
 
-When fitting a geostatistical model we need to fulfill the following tasks:
+When fitting a geostatistical model we need to go through the following steps:
 
 1.  Build the mesh
 
 2.  Define the SPDE representation of the spatial GF. This includes defining the priors for the range and sd of the spatial GF
 
-3.  Define the *components* of the linear predictor. This includes the spatial GF and all eventual covariates
+3.  Define the *components* of the linear predictor. This includes the spatial GF and all potential covariates
 
 4.  Define the observation model using the `bru_obs()` function
 
@@ -301,9 +301,9 @@ ggplot() +
 ::: {.callout-tip icon="false"}
 ## {{< bi question-octagon color=#6dc83c >}} Question
 
-Consider the `pcod_sf`, the spatial extension and type of the data...is some of the previous choices more reasonable than other? `r mcq(c("spde_model1","spde_model2", answer = "spde_model3"))`
+Consider the `pcod_sf`, the spatial extension and type of the data... are some of the previous choices more reasonable than others? `r mcq(c("spde_model1","spde_model2", answer = "spde_model3"))`
 
-**NOTE** Remember that a prior should be reasonable..but the model should not totally depend on it.
+**NOTE** Remember that a prior should be reasonable, but the model should not totally depend on it.
 :::
 
 ### 3. Define the components of the linear predictor
@@ -396,7 +396,7 @@ ggplot() +
 
 ## Spatial prediction
 
-We now want to extract the estimated posterior mean and sd of spatial GF. To do this we first need to define a grid of points where we want to predict. We do this using the function `fm_pixel()` which creates a regular grid of points covering the mesh
+We now want to extract the estimated posterior mean and sd of spatial GF. To do this we first need to define a grid of points where we want to predict. We do this using the function `fm_pixel()`, which creates a regular grid of points covering the mesh
 
 ```{r}
 pxl = fm_pixels(mesh)
@@ -431,7 +431,7 @@ st_as_sf(coords = c("x","y"))
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
-Produce prediction over `pxl1` unsing the same techniques as before. Plot your results.
+Produce prediction over `pxl1` using the same techniques as before. Plot your results.
 
 `r hide("Take hint")`
 
@@ -458,7 +458,7 @@ ggplot() + geom_sf(data = pred_pxl1$total,aes(color = sd)) + scale_color_scico()
 ```
 :::
 
-Instead of computing the posterior mean and standard deviations of the estimated surface, one can also *simulate* possible realizations of such surface. This will give the user a better idea of the type of realized surfaces one can expect. We can do this using the function `generate()`.
+Instead of computing the posterior mean and standard deviations of the estimated surface, one can also *simulate* possible realizations of such a surface. This will give the user a better idea of the type of realized surfaces one can expect. We can do this using the function `generate()`.
 
 ```{r}
 # we simulate 4 samples from the 
@@ -478,7 +478,7 @@ pp %>% select(-depth) %>%
 
 ## An alternative model
 
-We now want to check if the `depth` covatiate has an influende on the probability of presence. We do this in two different models
+We now want to check if the `depth` covatiate has an influence on the probability of presence. We do this in two different models
 
 1.  **Model 1** The depth enters the model in a linear way. The linear predictor is then defined as:
 

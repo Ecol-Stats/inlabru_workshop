@@ -29,7 +29,7 @@ library(webexercises)
 
 ```
 
-# Log-Gaussian Cox Processes {#sec-linmodel}
+# Point process models {#sec-linmodel}
 
 In this practical we will:
 
@@ -66,7 +66,7 @@ In this practical we consider the data `clmfires` in the `spatstat`
 library.
 
 This dataset is a record of forest fires in the Castilla-La Mancha
-region of Spain between 1998 and 2007. This region is approximately 400
+region of Spain between 1998 and 2007. This region covers approximately 400
 by 400 kilometres. The coordinates are recorded in kilometres. For more
 info about the data you can type:
 
