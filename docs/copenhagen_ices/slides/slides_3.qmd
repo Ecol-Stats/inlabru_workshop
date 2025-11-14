@@ -1110,34 +1110,25 @@ But ultimately....
 You do not need to deeply understand all of this if you want to use \texttt{inlabru} to solve your (statistical) problems :smile:
 
 # Good news!
-Recall...  we have computationally efficient and flexible methodology...\\ 
-$\leadsto$ we can  fit more (realistically) complex models...\pause \\
+Recall...  we have computationally efficient and flexible methodology...
 
- e.g.\  spatial and spatio-temporal models (to geo-referenced data, point pattern data, aerial data, spatio-temporal data...) \pause \\[0.2cm]
+- we can  fit more (realistically) complex models...
+- e.g.\  spatial and spatio-temporal models (to geo-referenced data, point pattern data, aerial data, spatio-temporal data...) 
 
 \pause
-Using  \textbf{INLA + SPDE approach} we can\pause
-\begin{itemize}
-\item fit complex models quickly
-\item flexibly fit joint models of more than one response variable
-\pause
-\item model on complex domains 
-\pause
-\begin{itemize}
-\item the sphere = the earth\\
-\pause
-\item observation areas with barriers (islands, archipelagos...)
-\end{itemize}
-\end{itemize}
-\begin{center}
-\includegraphics[width=0.16\textwidth]{figures/terror}
-\end{center}
+Using \textbf{INLA + SPDE approach} we can:
 
+* fit complex models quickly
+* flexibly fit joint models of more than one response variable
+* model on complex domains, e.g.\ the sphere = the earth\\
+*  observation areas with barriers (islands, archipelagos...)
+
+![](figures/terror.pdf){fig-align="center" width="100%" height="70%"}
 ---
 
 # What INLA cannot do...
 
-INLA assumes that spatial data have been collected and detected ``everywhere" in the area of interest \\ \pause
+INLA assumes that spatial data have been collected and detected ``everywhere" in the area of interest  \pause
 and the predictor needs to be linear in the latent variables\\
 $\leadsto$  not realistic in many large scale applications\\
 \pause
@@ -1145,20 +1136,12 @@ $\leadsto$  not realistic in many large scale applications\\
 \Inlabru to the rescue!
 \vspace{0.2cm}
 \pause
-\begin{inlabru}
-\begin{itemize} 
+*inlabru*
+
+* [$\Rightarrow$] wrapper around \texttt{R-INLA} + extra functionality:
+* \texttt{R}-library that makes fitting  of ``tricky" models (e.g.\ multi-likelihood models, spatial point processes) less fiddly than \texttt{R-INLA}
+* takes observation process into account (e.g.\ for distance sampling, plot sampling); more on this later
+*allows for non-linear predictors defined by general \texttt{R} expressions
 \pause
-\item[$\Rightarrow$] wrapper around \texttt{R-INLA} + extra functionality:
-\pause
-\vspace{0.2cm}
-\item \texttt{R}-library that makes fitting  of ``tricky" models (e.g.\ multi-likelihood models, spatial point processes) less fiddly than \texttt{R-INLA}
-\pause
-\item takes observation process into account (e.g.\ for distance sampling, plot sampling); more on this later
-\pause
-\item allows for non-linear predictors defined by general \texttt{R} expressions
-\end{itemize}
-\end{inlabru}
-\pause
-\vspace{0.2cm}
-%\textbf{issue:} needs to be linear in the latent variables}
+
 
