@@ -1,7 +1,6 @@
 ---
-title: "Lecture 1"
+title: "Introduction"
 from: markdown+emoji
-subtitle: "Introduction" 
 format:
   revealjs:
     margin: 0
