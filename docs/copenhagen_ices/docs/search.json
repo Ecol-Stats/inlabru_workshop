@@ -950,11 +950,11 @@
     "text": "Take home message!\n\nall spatial models we discuss here are also special cases of the large class of Latent Gaussian models\nto account for spatial dependence in the data, different types of spatial terms have to be included in the model for different spatial data structures, but they are all approximated by an SPDE model\ninlabru provides an efficient and unified way to fit all these models!"
   },
   {
-    "objectID": "slides/slides_3.html#outline",
-    "href": "slides/slides_3.html#outline",
+    "objectID": "slides/slides_3.html#main-elements-of-the-inla-methodology",
+    "href": "slides/slides_3.html#main-elements-of-the-inla-methodology",
     "title": "Lecture 2",
-    "section": "Outline",
-    "text": "Outline\n\nLatent Gaussian Models",
+    "section": "Main elements of the INLA methodology",
+    "text": "Main elements of the INLA methodology\n\nLatent Gaussian Models\nSparse matrices\nLaplace approximations\n…other “technical” details for the special interested!",
     "crumbs": [
       "Home",
       "Slides",
@@ -962,11 +962,11 @@
     ]
   },
   {
-    "objectID": "slides/slides_3.html#recall",
-    "href": "slides/slides_3.html#recall",
+    "objectID": "slides/slides_3.html#repetition",
+    "href": "slides/slides_3.html#repetition",
     "title": "Lecture 2",
-    "section": "Recall",
-    "text": "Recall\nEverything in R-INLA is based on so-called latent Gaussian models\n— A few hyperparameters \\(\\theta\\sim\\pi(\\theta)\\) control variances, range and so on\n— Given these hyperparameters we have an underlying Gaussian distribution \\(\\mathbf{u}|\\theta\\sim\\mathcal{N}(\\mathbf{0},\\mathbf{Q}^{-1}(\\theta))\\) that we cannot directly observe\n— Instead we make indirect observations \\(\\mathbf{y}|\\mathbf{u},\\theta\\sim\\pi(\\mathbf{y}|\\mathbf{u},\\theta)\\) of the underlying latent Gaussian field",
+    "section": "Repetition",
+    "text": "Repetition\nEverything in INLA is based on so-called latent Gaussian models\n\n\n\nA few hyperparameters \\(\\theta\\sim\\pi(\\theta)\\) control variances, range and so on\nGiven these hyperparameters we have an underlying Gaussian distribution \\(\\mathbf{u}|\\theta\\sim\\mathcal{N}(\\mathbf{0},\\mathbf{Q}^{-1}(\\theta))\\) that we cannot directly observe\nInstead we make indirect observations \\(\\mathbf{y}|\\mathbf{u},\\theta\\sim\\pi(\\mathbf{y}|\\mathbf{u},\\theta)\\) of the underlying latent Gaussian field",
     "crumbs": [
       "Home",
       "Slides",
@@ -974,11 +974,11 @@
     ]
   },
   {
-    "objectID": "slides/slides_3.html#recall-1",
-    "href": "slides/slides_3.html#recall-1",
+    "objectID": "slides/slides_3.html#repetition-1",
+    "href": "slides/slides_3.html#repetition-1",
     "title": "Lecture 2",
-    "section": "Recall",
-    "text": "Recall\nModels of this kind: \\[\n\\begin{aligned}\n\\mathbf{y}|\\mathbf{x},\\theta &\\sim \\prod_i \\pi(y_i|\\eta_i,\\theta)\\\\\n\\mathbf{\\eta} & = A_1\\mathbf{u}_1 + A_2\\mathbf{u}_2+\\dots + A_k\\mathbf{u}_k\\\\\n\\mathbf{u},\\theta &\\sim \\mathcal{N}(0,\\mathbf{Q}(θ)^{−1})\\\\\n\\theta & \\sim \\pi(\\theta)\n\\end{aligned}\n\\]\noccur in many, seemingly unrelated, statistical models.",
+    "section": "Repetition",
+    "text": "Repetition\nModels of this kind: \\[\n\\begin{aligned}\n\\mathbf{y}|\\mathbf{u},\\theta &\\sim \\prod_i \\pi(y_i|\\eta_i,\\theta)\\\\\n\\mathbf{\\eta} & = A_1\\mathbf{u}_1 + A_2\\mathbf{u}_2+\\dots + A_k\\mathbf{u}_k\\\\\n\\mathbf{u},\\theta &\\sim \\mathcal{N}(0,\\mathbf{Q}(θ)^{−1})\\\\\n\\theta & \\sim \\pi(\\theta)\n\\end{aligned}\n\\]\noccurs in many, seemingly unrelated, statistical models.",
     "crumbs": [
       "Home",
       "Slides",
@@ -990,7 +990,7 @@
     "href": "slides/slides_3.html#examples",
     "title": "Lecture 2",
     "section": "Examples",
-    "text": "Examples\n\nGeneralised linear (mixed) models\nStochastic volatility models\nGeneralised additive (mixed) models\nMeasurement error models\nSpline smoothing\nSemi-parametric regression\nSpace-varying (semi-parametric) regression models\nDisease mapping\nLog-Gaussian Cox-processes\nModel-based geostatistics (*)\nSpatio-temporal models\nSurvival analysis\n+++",
+    "text": "Examples\n\nGeneralised linear (mixed) models\nStochastic volatility\nGeneralised additive (mixed) models\nMeasurement error models\nSpline smoothing\nSemiparametric regression\nSpace-varying (semiparametric) regression models\nDisease mapping\nLog-Gaussian Cox-processes\nModel-based geostatistics (*)\nSpatio-temporal models\nSurvival analysis\n+++",
     "crumbs": [
       "Home",
       "Slides",
@@ -1002,7 +1002,499 @@
     "href": "slides/slides_3.html#main-characteristics",
     "title": "Lecture 2",
     "section": "Main Characteristics",
-    "text": "Main Characteristics\n\nLatent Gaussian model\nThe data are conditionally independent given the latent field\nThe predictor is linear1\nThe dimension of \\(\\mathbf{u}\\) can be big (\\(10^3-10^6\\))\nThe dimension of \\(\\theta\\) should be not too big.\n\n\n\nwe will see later that this can be partly relaxed with inlabru 😃",
+    "text": "Main Characteristics\n\nLatent Gaussian model \\(\\mathbf{u}|\\theta\\sim\\mathcal{N}(0,\\mathbf{Q}^{-1}(\\theta))\\)\nThe data are conditionally independent given the latent field\nThe predictor is linear wrt the elements of \\(\\mathbf{u}\\)1\nThe dimension of \\(\\mathbf{u}\\) can be big (\\(10^3-10^6\\))\nThe dimension of \\(\\theta\\) should be not too big.\n\n\n\nIn this talk we will focus on the characteristics of \\(\\mathbf{u}|\\theta\\)\n\n\nwe will see that this can be partly relaxed 😃",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#the-big-n-problem",
+    "href": "slides/slides_3.html#the-big-n-problem",
+    "title": "Lecture 2",
+    "section": "The big n problem!",
+    "text": "The big n problem!\nFor many interesting applications it is necessary to solve large problems.\n\n\n\nWith large problems we think of models where the size \\(n\\) of the latent field \\(\\mathbf{u}\\) is between 100 to 100, 000. This includes fixed effects, spatial effects and so on.\n\n\n\n\n\n\nComputations with models of this size are cumbersome!\n\n\n\n\n\n\nThe solution in the INLA world are Gaussian Markov random fields (GMRFs)!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#the-gaussian-distribution",
+    "href": "slides/slides_3.html#the-gaussian-distribution",
+    "title": "Lecture 2",
+    "section": "The Gaussian distribution",
+    "text": "The Gaussian distribution\nA Gaussian distribution \\(\\mathbf{u}\\sim\\mathcal{N}(0,\\Sigma)\\) is controlled by:\n— The mean vector \\(\\mu\\), which we have set equal to 0. This is the centre of the distribution\n— The matrix \\(\\Sigma\\) describes all pairwise covariances \\(\\Sigma_{ij} = \\text{Cov}(u_i, u_j)\\)\nFormally \\[\n\\pi(\\mathbf{u}) = \\frac{1}{2\\pi|\\Sigma|^{1/2}}\\exp\\left\\{-\\frac{1}{2}\\mathbf{u}^T\\Sigma^{-1}\\mathbf{u}\\right\\}\n\\]",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#the-gaussian-distribution-1",
+    "href": "slides/slides_3.html#the-gaussian-distribution-1",
+    "title": "Lecture 2",
+    "section": "The Gaussian distribution",
+    "text": "The Gaussian distribution\n\n\n\n\n\n\n\nAdvantages 😄👍\nDisadvantages 😔👎\n\n\n\n\nmostly theoretical\nmostly computational\n\n\nAnalytically tractable.\n\\(\\Sigma\\) usually is large and dense\n\n\nWe have a good understanding of its properties.\nComputations scale as \\(\\mathcal{O}(n^3)\\)\n\n\nBasically, it’s easy to do the theory\nNot feasible for large problems\n\n\n\n\nWe need to reduce the computational burden !",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#sparse-matrices",
+    "href": "slides/slides_3.html#sparse-matrices",
+    "title": "Lecture 2",
+    "section": "Sparse matrices",
+    "text": "Sparse matrices\n\nA matrix \\(\\mathbf{Q}\\) is called sparse if most of its elements are zero.\n\n\\[\n\\mathbf{Q} = \\begin{bmatrix}\n1 & 0 & 0 & 0\\\\\n0& 2& 0 & 0\\\\\n0& 0& -1 & 0\\\\\n0& 1& 0 & 0.4\\\\\n\\end{bmatrix}\n\\]\n— There exist very efficient numerical algorithms to deal with sparse matrices:\n— In order to solve large problems we need to exploit some property to make the computations feasible\n\n\nWhich matrix should be sparse in a Gaussian field?",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#two-possible-options",
+    "href": "slides/slides_3.html#two-possible-options",
+    "title": "Lecture 2",
+    "section": "Two possible options",
+    "text": "Two possible options\n\\[\n\\mathcal{u}\\sim\\mathcal{N}(0,\\Sigma)\n\\]\n\nForce the covariance matrix \\(\\Sigma\\) to be sparse\nForce the precision matrix \\(\\Sigma^{-1}\\) to be sparse",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#two-possible-options-1",
+    "href": "slides/slides_3.html#two-possible-options-1",
+    "title": "Lecture 2",
+    "section": "Two possible options",
+    "text": "Two possible options\n\\[\n\\mathcal{u}\\sim\\mathcal{N}(0,\\Sigma)\n\\]\n\nForce the covariance matrix \\(\\Sigma\\) to be sparse\n\n\\(\\Sigma_{ij} = \\text{Cov}(u_i, u_j)\\) : Covariance between \\(u_i\\) and \\(u_j\\)\n\\(\\Sigma_{ij} = 0\\) \\(\\longrightarrow\\) \\(u_i\\) and \\(u_j\\) are independent\nA sparse covariance matrix implies that many elements of \\(\\mathbf{u}\\) are mutually independent…..is this desirable?\n\nForce the precision matrix \\(\\mathbf{Q} = \\Sigma^{-1}\\) to be sparse",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#two-possible-options-2",
+    "href": "slides/slides_3.html#two-possible-options-2",
+    "title": "Lecture 2",
+    "section": "Two possible options",
+    "text": "Two possible options\n\\[\n\\mathcal{u}\\sim\\mathcal{N}(0,\\Sigma)\n\\]\n\nForce the covariance matrix \\(\\Sigma\\) to be sparse\n\n\\(\\Sigma_{ij} = \\text{Cov}(u_i, u_j)\\) : Covariance between \\(u_i\\) and \\(u_j\\)\n\\(\\Sigma_{ij} = 0\\) \\(\\longrightarrow\\) \\(u_i\\) and \\(u_j\\) are independent\nA sparse covariance matrix implies that many elements of \\(\\mathbf{u}\\) are mutually independent…..is this desirable?\n\nForce the precision matrix \\(\\mathbf{Q} = \\Sigma^{-1}\\) to be sparse\n\nWhat does \\(Q_{ij}\\) represents?\nWhat does a sparse precision matrix implies?",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#example-the-ar1-proces",
+    "href": "slides/slides_3.html#example-the-ar1-proces",
+    "title": "Lecture 2",
+    "section": "Example: The AR1 proces",
+    "text": "Example: The AR1 proces\nDefinition\n\\[\n\\begin{aligned}\n\\mathbf{i=1}&:  u_1 \\sim\\mathcal{N}(0, \\frac{1}{1-\\phi^2})\\\\\n\\mathbf{i=2,\\dots,T}&:  u_i  = \\phi\\  u_{i-1} +\\epsilon_i,\\ \\epsilon_i\\sim\\mathcal{N}(0,1)\n\\end{aligned}\n\\]\n\nVery common to model dependence in time\nThe joint distribution of \\(u_1,u_2,\\dots,u_N\\) is Gaussian\nHow do covariance and precision matrices look?",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#covariance-and-precision-matrix-for-ar1",
+    "href": "slides/slides_3.html#covariance-and-precision-matrix-for-ar1",
+    "title": "Lecture 2",
+    "section": "Covariance and Precision Matrix for AR1",
+    "text": "Covariance and Precision Matrix for AR1\n\n\nCovariance Matrix\n\\[\n\\Sigma = \\frac{1}{1-\\phi^2}  \\begin{bmatrix}\n1& \\phi & \\phi^2  & \\dots& \\phi^N \\\\\n\\phi & 1& \\phi  & \\dots& \\phi^{N-1} \\\\\n\\phi^2 & \\phi & 1 & \\dots& \\phi^{N-2} \\\\\n\\dots& \\dots& \\dots& \\dots& \\dots& \\\\\n\\phi^{N} & \\phi^{N-1}& \\phi^{N-2}  & \\dots& 1\\\\\n\\end{bmatrix}\n\\]\n\nThis is a dense matrix.\nAll elements of the \\(\\mathbf{u}\\) vector are dependent.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#covariance-and-precision-matrix-for-ar1-1",
+    "href": "slides/slides_3.html#covariance-and-precision-matrix-for-ar1-1",
+    "title": "Lecture 2",
+    "section": "Covariance and Precision Matrix for AR1",
+    "text": "Covariance and Precision Matrix for AR1\nPrecision Matrix\n\\[\n\\mathbf{Q} = \\Sigma^{-1} =  \\begin{bmatrix}\n1& -\\phi & 0  & 0 &\\dots& 0 \\\\\n-\\phi & 1 + \\phi^2& -\\phi  & 0 & \\dots& 0 \\\\\n0 & -\\phi & 1-\\phi^2 &-\\phi &  \\dots& 0 \\\\\n0 & 0 & -\\phi &1-\\phi^2 & \\dots & \\dots \\\\\n\\dots& \\dots& \\dots& \\dots& \\dots& \\dots& \\\\\n0 &0 & 0 & \\dots  & -\\phi& 1\\\\\n\\end{bmatrix}\n\\]\n\nThis is a tridiagonal matrix, it is sparse\nThe tridiagonal form of \\(\\mathbf{Q}\\) can be exploited for quick calculations.\n\n\nWhat is the key property of this example that causes \\(\\mathbf{Q}\\) to be sparse?",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#conditional-independence",
+    "href": "slides/slides_3.html#conditional-independence",
+    "title": "Lecture 2",
+    "section": "Conditional independence",
+    "text": "Conditional independence\nThe key lies in the full conditionals\n\\[\nu_t|\\mathbf{u}_{-t}\\sim\\mathcal{N}\\left(\\frac{\\phi}{1-\\phi^2}(x_{t-1}+x_{t+1}), \\frac{1}{1+\\phi^2}\\right)\n\\]\n\nEach timepoint is only conditionally dependent on the two closest timepoints\nIt is useful to represent the conditional independence structure through a graph",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#conditional-independence-and-the-precision-matrix",
+    "href": "slides/slides_3.html#conditional-independence-and-the-precision-matrix",
+    "title": "Lecture 2",
+    "section": "Conditional independence and the precision matrix",
+    "text": "Conditional independence and the precision matrix\n\n\nTheorem: \\(u_i\\perp u_j|\\mathbf{u}_{-ij}\\Longleftrightarrow Q{ij} =0\\)\n\n\nThis is the key property! 😃",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#informal-definition-of-a-gmrf",
+    "href": "slides/slides_3.html#informal-definition-of-a-gmrf",
+    "title": "Lecture 2",
+    "section": "(Informal) definition of a GMRF",
+    "text": "(Informal) definition of a GMRF\n\n\nA GMRF is a Gaussian distribution where the non-zero elements of the precision matrix are defined by the graph structure.\n\n\n\nIn the previous example the precision matrix is tridiagonal since each variable is connected only to its predecessor and successor.\n\\[\n\\mathbf{Q} = \\Sigma^{-1} =  \\begin{bmatrix}\n1& -\\phi & 0  & 0 &\\dots& 0 \\\\\n-\\phi & 1 + \\phi^2& -\\phi  & 0 & \\dots& 0 \\\\\n0 & -\\phi & 1-\\phi^2 &-\\phi &  \\dots& 0 \\\\\n0 & 0 & -\\phi &1-\\phi^2 & \\dots & \\dots \\\\\n\\dots& \\dots& \\dots& \\dots& \\dots& \\dots& \\\\\n0 &0 & 0 & \\dots  & -\\phi& 1\\\\\n\\end{bmatrix}\n\\]",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#gmrf-and-inla",
+    "href": "slides/slides_3.html#gmrf-and-inla",
+    "title": "Lecture 2",
+    "section": "GMRF and INLA",
+    "text": "GMRF and INLA\n\nEvery component of the latent Gaussian field \\(\\mathbf{u}\\) in an INLA model is always a GMRF!!\nWe will see how the idea of GMRF expands also for continuously indexed processes (SPDE approach)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#what-do-we-need-to-be-able-to-compute",
+    "href": "slides/slides_3.html#what-do-we-need-to-be-able-to-compute",
+    "title": "Lecture 2",
+    "section": "What do we need to be able to compute?",
+    "text": "What do we need to be able to compute?\n\nWe need to compute determinants of large, sparse matrices. This is needed for likelihood calculations.\nWe need to compute square roots of large, sparse matrices. This is needed for likelihood calculations and simulations.\n\n\nTechnically:\n\nIn the end our computations come down to the Cholesky decomposition, \\(\\mathbf{Q} = \\mathbf{LL}^T\\)\nAfter \\(\\mathbf{L}\\) is available, things are fast\nThe limiting factor is how quickly the Cholesky factorization can be done",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#what-is-the-gain",
+    "href": "slides/slides_3.html#what-is-the-gain",
+    "title": "Lecture 2",
+    "section": "What is the gain?",
+    "text": "What is the gain?\n\nTemporal structure uses \\(\\mathcal{O}(n)\\) operations\nSpatial structure uses \\(\\mathcal{O}(n^{3/2})\\) operations\nSpatio-temporal structure uses \\(\\mathcal{O}(n^{2})\\) operations\n\nCompare this with \\(\\mathcal{O}(n^{3})\\) operations in the general case.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#summary",
+    "href": "slides/slides_3.html#summary",
+    "title": "Lecture 2",
+    "section": "Summary",
+    "text": "Summary\nGaussian Markov Random Fields (GMRF):\n\nGive faster computations, both in INLA and in MCMC schemes (thanks to sparse precision matrices)\nKeep the analytical tractability of the Gaussian distribution\nAllow modelling through conditional distributions\nNaturally arises from the SPDE approach (that we will talk about …..)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#formal-definition-of-a-gmrf",
+    "href": "slides/slides_3.html#formal-definition-of-a-gmrf",
+    "title": "Lecture 2",
+    "section": "Formal definition of a GMRF",
+    "text": "Formal definition of a GMRF\n\nDefinition\nA random variable \\(\\mathbf{u}\\) is said to be a Gaussian Markov random field (GMRF) with respect to the graph \\(\\mathcal{G}\\), with vertices \\(\\{1, 2,\\dots , n\\}\\) and edges \\(\\mathcal{E}\\), with mean \\(\\mu\\) and precision matrix \\(\\mathbf{Q}\\) if its probability distribution is given by \\[\n\\pi(\\mathbf{u}) = \\frac{|\\mathbf{Q}|^{1/2}}{(2\\pi)^{n/2}}\\exp\\left\\{ -\\frac{1}{2}(\\mathbf{u}-\\mu)^T\\mathbf{Q}(\\mathbf{u}-\\mu)\\right\\}\n\\] and \\(Q_{ij} \\neq 0\\Longleftrightarrow \\{i,j\\}\\in\\mathcal{E}\\)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#the-inla-recipe",
+    "href": "slides/slides_3.html#the-inla-recipe",
+    "title": "Lecture 2",
+    "section": "The INLA recipe",
+    "text": "The INLA recipe\n\nNumerical integration schemes\nThe GMRF-Approximation\nThe Laplace approximation\n…many many many “technical” details",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#hierarchical-gmrf",
+    "href": "slides/slides_3.html#hierarchical-gmrf",
+    "title": "Lecture 2",
+    "section": "Hierarchical GMRF",
+    "text": "Hierarchical GMRF\n\n\\(\\mathbf{y}|\\mathbf{u},\\theta\\), Observation model (likelihood)\n\\(\\mathbf{u}|\\theta\\), Gaussian random field\n\\(\\theta\\) Hyperparameters",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#hierarchical-gmrf-1",
+    "href": "slides/slides_3.html#hierarchical-gmrf-1",
+    "title": "Lecture 2",
+    "section": "Hierarchical GMRF",
+    "text": "Hierarchical GMRF\n\n\\(\\mathbf{y}|\\mathbf{u},\\theta\\), Observation model (likelihood)\n\\(\\mathbf{u}|\\theta\\), Gaussian random field\n\\(\\theta\\) Hyperparameters\n\nExtra requirements\n\nThe latent field \\(\\mathbf{u}\\) is a GMRF \\[\n\\pi(\\mathbf{u}|\\theta)\\propto\\exp\\left\\{-\\frac{1}{2}\\mathbf{u}^T\\mathbf{Q}\\mathbf{u}\\right\\}\n\\]\n\nThe precision matrix \\(\\mathbf{Q}\\) is sparse.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#hierarchical-gmrf-2",
+    "href": "slides/slides_3.html#hierarchical-gmrf-2",
+    "title": "Lecture 2",
+    "section": "Hierarchical GMRF",
+    "text": "Hierarchical GMRF\n\n\\(\\mathbf{y}|\\mathbf{u},\\theta\\), Observation model (likelihood)\n\\(\\mathbf{u}|\\theta\\), Gaussian random field\n\\(\\theta\\) Hyperparameters\n\nExtra requirements\n\nThe latent field \\(x\\) is a GMRF \\(\\pi(\\mathbf{u}|\\theta)\\propto\\exp\\left\\{-\\frac{1}{2}\\mathbf{u}^T\\mathbf{Q}\\mathbf{u}\\right\\}\\)\nWe can factorize the likelihood as: \\(\\pi(\\mathbf{y}|\\mathbf{u},\\theta) = \\prod_i\\pi(y_i|\\eta_i,\\theta)\\)\n\nData are conditional independent give \\(\\mathbf{u}\\) and \\(\\theta\\)\nEach data point depends on only 1 element of the latent field: the predictor \\(\\eta_i\\)\n\\(\\eta\\) is a linear combination of other elements of \\(\\mathbf{u}\\): \\(\\eta = \\mathbf{A}^T\\mathbf{u}\\)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#hierarchical-gmrf-3",
+    "href": "slides/slides_3.html#hierarchical-gmrf-3",
+    "title": "Lecture 2",
+    "section": "Hierarchical GMRF",
+    "text": "Hierarchical GMRF\n\n\\(\\mathbf{y}|\\mathbf{u},\\theta\\), Observation model (likelihood)\n\\(\\mathbf{u}|\\theta\\), Gaussian random field\n\\(\\theta\\) Hyperparameters\n\nExtra requirements\n\nThe latent field \\(\\mathbf{u}\\) is a GMRF \\(\\pi(\\mathbf{u}|\\theta)\\propto\\exp\\left\\{-\\frac{1}{2}\\mathbf{u}^T\\mathbf{Q}\\mathbf{u}\\right\\}\\)\nWe can factorize the likelihood as: \\(\\pi(\\mathbf{y}|\\mathbf{u},\\theta) = \\prod_i\\pi(y_i|\\eta_i,\\theta)\\)\nThe vector of hyperparameters \\(\\theta\\) is low dimensional.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#inference",
+    "href": "slides/slides_3.html#inference",
+    "title": "Lecture 2",
+    "section": "Inference",
+    "text": "Inference\nMain Inferential Goal:\n\\[\\begin{aligned}\n\\overbrace{\\pi(\\mathbf{u}, {\\theta}\\mid\\mathbf{y})}^{{\\text{Posterior}}} &\\propto \\overbrace{\\pi({\\theta}) \\pi(\\mathbf{u}\\mid{\\theta})}^{{\\text{Prior}}} \\overbrace{\\prod_{i}\\pi(y_i \\mid \\eta_i, {\\theta})}^{{\\text{Likelihood}}}\n\\end{aligned}\\]\n\nThe posterior distribution is, in general, not available in closed form…\n..what to do then?",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#inla-strategy-in-short",
+    "href": "slides/slides_3.html#inla-strategy-in-short",
+    "title": "Lecture 2",
+    "section": "INLA strategy in short",
+    "text": "INLA strategy in short\nAssumption\nWe are mainly interested in posterior margianals \\(\\pi(u_i|\\mathbf{y})\\) and \\(\\pi(\\theta_j|\\mathbf{y})\\)\nStrategy\n\nWe use numerical integration in a smart way\nWe approximate what we do not know analitically exploiting the Gaussian structure of \\(\\mathbf{u}|\\theta\\)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#numerical-integration",
+    "href": "slides/slides_3.html#numerical-integration",
+    "title": "Lecture 2",
+    "section": "Numerical Integration",
+    "text": "Numerical Integration\nWe want to compute \\(\\pi(u_i|\\mathbf{y})\\)\n\n\n\nHard way 👎\n\\[\n\\pi(u_i|\\mathbf{y}) = \\int\\pi(\\mathbf{u}|\\theta)\\ d\\mathbf{u}_{-i}\n\\]\n\nThis is a hard integral as \\(\\mathbf{u}\\) can be very high dimentional!!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#numerical-integration-1",
+    "href": "slides/slides_3.html#numerical-integration-1",
+    "title": "Lecture 2",
+    "section": "Numerical Integration",
+    "text": "Numerical Integration\nWe want to compute \\(\\pi(u_i|\\mathbf{y})\\)\n\n\n\nHard way 👎\n\\[\n\\pi(u_i|\\mathbf{y}) = \\int\\pi(\\mathbf{u}|\\mathbf{y})\\ d\\mathbf{u}_{-i}\n\\]\n\nThis is a hard integral as \\(\\mathbf{u}\\) can be very high dimentional!!\n\n\nEasier way 👍\n\\[\n\\pi(u_i|\\mathbf{y}) = \\int\\pi(u_i|\\theta, \\mathbf{y})\\pi(\\theta|\\mathbf{y)}\\ d\\theta\n\\]\n\n\\(\\theta\\) is a smaller dimensional vectore, easier to integrate\nBUT we need to approximate both \\(\\pi(\\theta|\\mathbf{y})\\) and \\(\\pi(u_i|\\theta, \\mathbf{y})\\)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#approximating-the-posterior-for-the-hyperparameters",
+    "href": "slides/slides_3.html#approximating-the-posterior-for-the-hyperparameters",
+    "title": "Lecture 2",
+    "section": "Approximating the posterior for the hyperparameters",
+    "text": "Approximating the posterior for the hyperparameters\nWe want to build an approximation to \\(\\pi(\\theta|\\mathbf{y})\\)\n\\[\n\\pi(\\mathbf{\\theta} \\mid \\mathbf{y}) =  \\frac{\n           \\pi(\\mathbf{u}, \\mathbf{\n           \\theta\n}\\mid \\mathbf{y})}\n      {\\pi(\\mathbf{u} \\mid \\mathbf{y},\n            \\mathbf{\\theta})} \\: \\Bigg|_{\\text{This is just the Bayes theorem! It is valid for  any value of } \\mathbf{u}}\n\\]",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#approximating-the-posterior-for-the-hyperparameters-1",
+    "href": "slides/slides_3.html#approximating-the-posterior-for-the-hyperparameters-1",
+    "title": "Lecture 2",
+    "section": "Approximating the posterior for the hyperparameters",
+    "text": "Approximating the posterior for the hyperparameters\nWe want to build an approximation to \\(\\pi(\\theta|\\mathbf{y})\\)\n\\[\\begin{aligned}\n\\pi(\\mathbf{\\theta} \\mid \\mathbf{y}) & =  \\frac{\n           \\pi(\\mathbf{u}, \\mathbf{\n           \\theta\n}\\mid \\mathbf{y})}\n      {\\pi(\\mathbf{u} \\mid \\mathbf{y},\n            \\mathbf{\\theta})} \\\\\n            & \\propto \\frac{\n            \\overbrace{\\pi( \\mathbf{y}\\mid \\mathbf{u},\\mathbf{\\theta})\\  \\pi(\\mathbf{\\theta})}^{\\text{Non-Gaussian, KNOWN}}  \\overbrace{\\pi( \\mathbf{u}\\mid \\mathbf{\\theta})}^{\\text{ Gaussian, KNOWN}}  }\n            {\\underbrace{\\pi(\\mathbf{u} \\mid \\mathbf{y},\n            \\mathbf{\\theta})}_{\\text{Non-Gaussian,UNKNOWN}}}\n\\end{aligned}\\]\n\n\nWe approximate \\(\\pi(\\mathbf{u} \\mid \\mathbf{y},\\mathbf{\\theta})\\) with a Gaussian distribution \\(\\pi_G(\\mathbf{u} \\mid \\mathbf{y},\\mathbf{\\theta})\\)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#the-gmrf-approximation",
+    "href": "slides/slides_3.html#the-gmrf-approximation",
+    "title": "Lecture 2",
+    "section": "The GMRF Approximation",
+    "text": "The GMRF Approximation\n\\[\n\\begin{aligned}\n\\pi(\\mathbf{u}\\mid {\\theta},\\mathbf{y}) & \\propto \\pi(\\mathbf{u}\\mid {\\theta}) \\pi(\\mathbf{y}|\\mathbf{u},\\theta) \\\\\n& \\propto \\exp\\left\\{-\\frac{1}{2}\\mathbf{u}^T\\mathbf{Q}\\mathbf{u} + \\sum \\log \\pi(y_i|\\eta_i,\\theta)\\right\\}\\\\\n\\end{aligned}\n\\]",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#the-gmrf-approximation-1",
+    "href": "slides/slides_3.html#the-gmrf-approximation-1",
+    "title": "Lecture 2",
+    "section": "The GMRF Approximation",
+    "text": "The GMRF Approximation\n\\[\n\\begin{aligned}\n\\pi(\\mathbf{u}\\mid {\\theta},\\mathbf{y}) & \\propto \\pi(\\mathbf{u}\\mid {\\theta}) \\pi(\\mathbf{y}|\\mathbf{u},\\theta) \\\\\n& \\propto \\exp\\left\\{-\\frac{1}{2}\\mathbf{u}^T\\mathbf{Q}\\mathbf{u} + \\sum \\log \\pi(y_i|\\eta_i,\\theta)\\right\\}\\\\\n\\end{aligned}\n\\]\n\\[\n\\begin{aligned}\n& \\approx \\exp\\left\\{-\\frac{1}{2}\\mathbf{u}^T\\mathbf{Q}\\mathbf{u} + \\sum (b_i\\eta_i - \\frac{1}{2}c_i\\eta_i^2)\\right\\}\n\\end{aligned}\n\\]\nRecall \\[\n\\begin{aligned}\n        f(x) \\approx f(x_0) + f'(x_0)(x-x_0)+ \\frac{1}{2} f''(x_0)(x-x_0)^2\n        = a+ bx - \\frac{1}{2}cx^2\n\\end{aligned}\n\\] with\n\\[\n\\begin{aligned}\nb &=f'(x_0) - f''(x_0)x_0\\\\\nc &= -f''(x_0)\n\\end{aligned}\n\\].",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#the-gmrf-approximation-2",
+    "href": "slides/slides_3.html#the-gmrf-approximation-2",
+    "title": "Lecture 2",
+    "section": "The GMRF Approximation",
+    "text": "The GMRF Approximation\n\\[\n\\begin{aligned}\n\\pi(\\mathbf{u}\\mid {\\theta},\\mathbf{y}) & \\propto \\pi(\\mathbf{u}\\mid {\\theta}) \\pi(\\mathbf{y}|\\mathbf{u},\\theta) \\\\\n& \\propto \\exp\\left\\{-\\frac{1}{2}\\mathbf{u}^T\\mathbf{Q}\\mathbf{u} + \\sum \\log \\pi(y_i|\\eta_i,\\theta)\\right\\}\\\\\n& = \\exp \\left\\{ -\\frac{1}{2} \\mathbf{u}^T\\tilde{\\mathbf{Q}}  \\mathbf{u} + \\tilde{\\mathbf{b}}\\mathbf{u}\\right\\}\n\\end{aligned}\n\\] Which means that we approximate \\(\\pi(\\mathbf{u}\\mid {\\theta},\\mathbf{y})\\) with\n\\[\n\\mathcal{N}(\\tilde{\\mathbf{Q}}^{-1}\\tilde{\\mathbf{b}},\\tilde{\\mathbf{Q}}^{-1})\\  \\text{ with   }\\ \\tilde{\\mathbf{Q}} = \\mathbf{Q} +\\begin{bmatrix}\n\\text{diag}(\\mathbf{c}) & 0\\\\\n0& 0\n\\end{bmatrix}\\qquad \\tilde{\\mathbf{b}} = [\\mathbf{b}\\ 0]^T\n\\]",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#the-gmfr-approximation---one-dimensional-example",
+    "href": "slides/slides_3.html#the-gmfr-approximation---one-dimensional-example",
+    "title": "Lecture 2",
+    "section": "The GMFR approximation - One dimensional example",
+    "text": "The GMFR approximation - One dimensional example\n\n\nAssume \\[\n\\begin{aligned}\n  y|\\lambda \\sim\\text{Poisson}(\\lambda)  & \\text{ Likelihood}\\\\\n  \\eta = \\log(\\lambda)  & \\text{ Predictor}\\\\\n  \\mathbf{u}  = \\eta & \\text{ Latent field }\\\\\n  x\\sim\\mathcal{N}(0,1) & \\text{ Latent Model}\n\\end{aligned}\n\\] we have that\n\\[\n\\begin{aligned}\n  \\pi(x|y) & \\propto\\pi(y|x)\\pi(x)\\\\\n  & \\propto\\exp\\{ -\\frac{1}{2}x^2+\n  \\underbrace{xy-\\exp(x)}_{\\text{non-gaussian part}}\n  \\}\n\\end{aligned}\n\\]",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#the-gmfr-approximation",
+    "href": "slides/slides_3.html#the-gmfr-approximation",
+    "title": "Lecture 2",
+    "section": "The GMFR approximation",
+    "text": "The GMFR approximation\n\n😄 Easy to compute\n😄 Exact for Gaussian likelihood\n😄 Good when you have little or a lot of data\n😄 inherits the same sparseness of \\(\\mathbf{u}\\)\n😟 No skewness",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#the-laplace-approximation",
+    "href": "slides/slides_3.html#the-laplace-approximation",
+    "title": "Lecture 2",
+    "section": "The Laplace Approximation",
+    "text": "The Laplace Approximation\n\n\n\\[\n\\begin{aligned}\n\\pi(\\mathbf{\\theta} \\mid  \\mathbf{y})  & \\propto \\frac{\n            \\pi( \\mathbf{y}\\mid \\mathbf{u},\\mathbf{\\theta})\\  \\pi(\\mathbf{\\theta})  \\pi( \\mathbf{u}\\mid \\mathbf{\\theta})  }\n            {\\pi(\\mathbf{u} \\mid \\mathbf{y},\n            \\mathbf{\\theta})}\\\\\n            & \\approx \\frac{\n            \\pi( \\mathbf{y}\\mid \\mathbf{u},\\mathbf{\\theta})\\  \\pi(\\mathbf{\\theta})  \\pi( \\mathbf{u}\\mid \\mathbf{\\theta})  }\n            {\\pi_G(\\mathbf{u} \\mid \\mathbf{y},\n            \\mathbf{\\theta})}  \\: \\Bigg|_{\\mathbf{u} = \\mathbf{u}^\\star(\\mathbf{\\theta})}\n\\end{aligned}\n\\]\nIf \\(\\theta\\) is low dimension we can actually compute this!\n\n\n\n\n\n\n\n\n\n\n\nThis is the Laplace approximation to \\(\\pi(\\theta|\\mathbf{y})\\) !",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#the-inla-scheme",
+    "href": "slides/slides_3.html#the-inla-scheme",
+    "title": "Lecture 2",
+    "section": "The INLA scheme",
+    "text": "The INLA scheme\n\nApproximate \\(\\pi(\\theta|\\mathbf{y})\\) ✅\nApproximate \\(\\pi(u_i|\\theta,\\mathbf{y})\\)\nUse numerical integration to compute \\(\\pi(u_i|\\mathbf{y})\\) ✅",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#approximating-the-posterior-for-the-latent-field.",
+    "href": "slides/slides_3.html#approximating-the-posterior-for-the-latent-field.",
+    "title": "Lecture 2",
+    "section": "Approximating the posterior for the latent field.",
+    "text": "Approximating the posterior for the latent field.\n\nNow we have an aproximation for \\(\\pi(\\theta|\\mathbf{y})\\)\nWe need an approximation for \\(\\pi(u_i|\\theta,\\mathbf{y})\\)\nThis is more difficult… \\(\\mathbf{u}\\) is large!! Anything we do we have to do it many times!\n\n\nCan we use the marginal from \\(\\pi_G(\\mathbf{u}|\\theta, \\mathbf{y})\\) ?",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#unfortunately-it-is-not-accurate-enough",
+    "href": "slides/slides_3.html#unfortunately-it-is-not-accurate-enough",
+    "title": "Lecture 2",
+    "section": "…unfortunately it is not accurate enough!",
+    "text": "…unfortunately it is not accurate enough!\n\n\n\n\n\n\n\n\nFrom Rue and Martino 2007\n\n\nNotes:\n\nResults are quite accurate in general\nThere can be errors in the location and/or errors due to the lack of skewness…",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#inla-and-variational-bayes",
+    "href": "slides/slides_3.html#inla-and-variational-bayes",
+    "title": "Lecture 2",
+    "section": "INLA and Variational Bayes",
+    "text": "INLA and Variational Bayes\n\nVariational Bayes techniques are used to improve the mean of the GMRF approximation \\(\\pi_G(\\mathbf{u}|\\theta, \\mathbf{y})\\)\nFrom this improved GMRF approximation we can compute the marginals \\(\\pi_G^*(u_i|\\theta,\\mathbf{y})\\) that can then be used to numerically compute: \\[\n\\tilde{\\pi}(u_i|\\mathbf{y}) = \\sum_k\\pi_G^*(u_i|\\theta, \\mathbf{y})\\tilde{\\pi}(\\theta|\\mathbf{y)}\\ w_k\n\\]\n\n\nNOTE:\n\nWe know the precision matrix \\(\\mathbf{Q}\\) of the GRMF approximation \\(\\pi_G^*(\\mathbf{u}|\\theta, \\mathbf{y})\\)\nEfficient algoriths to compute the marginal variance are used.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#inla-posterior-sampling",
+    "href": "slides/slides_3.html#inla-posterior-sampling",
+    "title": "Lecture 2",
+    "section": "INLA posterior sampling",
+    "text": "INLA posterior sampling\nAlthough INLA mainly computes posterior marginals\n\n\\(\\pi(\\theta|\\mathbf{y})\\)\n\\(\\pi(u_i|\\mathbf{y})\\)\n\nINLA allowes to sample from the approximate posterior \\(\\pi(\\mathbf{u}|\\mathbf{y})\\)\nThis is important is one is interested in the posterior of functions of one or more parameters.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#take-home-messages",
+    "href": "slides/slides_3.html#take-home-messages",
+    "title": "Lecture 2",
+    "section": "Take home messages!",
+    "text": "Take home messages!\n\nThe INLA methodology heavily relies on sparse matrices !\nGMRF are the key tool in INLA-friendly models\nINLA uses numerical approximation and numerical integration to provide efficient and precise approximations to posterior marginals\n\nBut ultimateli….\n\nYou do not need to deeply understand all of this if you want to use to solve your (statistical) problems 😄",
     "crumbs": [
       "Home",
       "Slides",
