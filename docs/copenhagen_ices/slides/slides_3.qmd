@@ -1123,7 +1123,10 @@ Using \textbf{INLA + SPDE approach} we can:
 * model on complex domains, e.g.\ the sphere = the earth\\
 *  observation areas with barriers (islands, archipelagos...)
 
-![](figures/terror.pdf){fig-align="center" width="100%" height="70%"}
+![](figures/terror.png){fig-align="center" width="70%" height="90%"}
+
+
+
 ---
 
 # What INLA cannot do...
