@@ -20,11 +20,13 @@ project:
     - slides/slides_10.qmd
     - slides/slides_12.qmd
     - slides/slides_13.qmd
-    - about.qmd
-    - about_practical.qmd
+    # - about.qmd
+    # - about_practical.qmd
 
 website:
   title: inlabru workshop
+  page-footer:
+    center: '<a href="https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/" style="color:#ccc;">Home</a>'
   navbar:
     logo: INLA_logo.png
     left:
@@ -109,6 +111,8 @@ format:
       - include/webex.css
     toc: true
     include-after-body: include/webex.js
+  revealjs:
+    footer: '<a href="https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/" style="color:#ccc;">Home</a>'
 
 editor: visual
 

@@ -1,0 +1,21 @@
+---
+title: "Practicals"
+---
+
+[Practical 1](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day1_practical.html)
+
+[Practical 2](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day1_practical_2.html)
+
+[Practical 3](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day2_practical_3.html)
+
+[Practical 4](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day2_practical_4.html)
+
+[Practical 5](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day3_practical_5.html)
+
+[Practical 6](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day4_practical_6.html)
+
+[Practical 7](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day4_practical_7.html)
+
+[Practical 8](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day5_practical_8.html)
+
+[Practical 9](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/day5_practical_9.html)

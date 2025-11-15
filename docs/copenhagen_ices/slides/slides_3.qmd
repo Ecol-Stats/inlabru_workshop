@@ -29,7 +29,6 @@ embed-resources: true
 execute:
   allow-html: true
   freeze: auto
-
 ---
 
 ```{r setup}
@@ -52,7 +51,6 @@ library(BAS)
 library(patchwork)
 
 ```
-
 
 ```{r}
 # code from the book
@@ -282,8 +280,6 @@ book.color.d = function(n=4) {
 
 ```
 
-
-
 ## Main elements of the INLA methodology
 
 -   Latent Gaussian Models
@@ -373,7 +369,7 @@ $$
 ## The Gaussian distribution
 
 | Advantages :smile::+1: | Disadvantages :pensive::-1: |
-|----------------------------------------|--------------------------------|
+|----|----|
 | **mostly theoretical** | **mostly computational** |
 | Analytically tractable. | $\Sigma$ usually is large and **dense** |
 | We have a good understanding of its properties. | Computations scale as $\mathcal{O}(n^3)$ |
@@ -1107,44 +1103,42 @@ But ultimately....
 
 . . .
 
-You do not need to deeply understand all of this if you want to use \texttt{inlabru} to solve your (statistical) problems :smile:
+You do not need to deeply understand all of this if you want to use `inlabru` to solve your (statistical) problems :smile:
 
-# Good news!
-Recall...  we have computationally efficient and flexible methodology...
+## Good news!
 
-- we can  fit more (realistically) complex models...
-- e.g.\  spatial and spatio-temporal models (to geo-referenced data, point pattern data, aerial data, spatio-temporal data...) 
+Recall... we have computationally efficient and flexible methodology...
 
-\pause
-Using \textbf{INLA + SPDE approach} we can:
+-   we can fit more (realistically) complex models...
+-   e.g. spatial and spatio-temporal models (to geo-referenced data, point pattern data, aerial data, spatio-temporal data...)
 
-* fit complex models quickly
-* flexibly fit joint models of more than one response variable
-* model on complex domains, e.g.\ the sphere = the earth\\
-*  observation areas with barriers (islands, archipelagos...)
+. . .
+
+Using **INLA + SPDE approach** we can:
+
+-   fit complex models quickly
+-   flexibly fit joint models of more than one response variable
+-   model on complex domains, (e.g. the sphere = the earth)
+-   observation areas with barriers (islands, archipelagos...)
 
 ![](figures/terror.png){fig-align="center" width="70%" height="90%"}
 
+## How to use the INLA approach {.smaller}
 
+The INLA methodology is implemented in two R packages: `R-INLA` and `inlabru`.
 
----
+Why do we (strongly) recommend `inlabru`:
 
-# What INLA cannot do...
+. . .
 
-INLA assumes that spatial data have been collected and detected ``everywhere" in the area of interest  \pause
-and the predictor needs to be linear in the latent variables\\
-$\leadsto$  not realistic in many large scale applications\\
-\pause
+-   wrapper around `R-INLA` + extra functionality.
 
-\Inlabru to the rescue!
-\vspace{0.2cm}
-\pause
-*inlabru*
+-   much easier to fit spatial models
 
-* [$\Rightarrow$] wrapper around \texttt{R-INLA} + extra functionality:
-* \texttt{R}-library that makes fitting  of ``tricky" models (e.g.\ multi-likelihood models, spatial point processes) less fiddly than \texttt{R-INLA}
-* takes observation process into account (e.g.\ for distance sampling, plot sampling); more on this later
-*allows for non-linear predictors defined by general \texttt{R} expressions
-\pause
+-   full support for `sf` and `terra` libraries
 
+-   makes fitting of *tricky* models (e.g. multi-likelihood models, spatial point processes) less fiddly than `R-INLA`
 
+-   takes observation process into account (e.g. for distance sampling, plot sampling); more on this later
+
+-   allows for non-linear predictors defined by general `R` expressions (this is done by linearizing and running the INLA approximation several times...)

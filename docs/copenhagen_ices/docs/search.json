@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "about_practical.html",
-    "href": "about_practical.html",
-    "title": "Practicals",
-    "section": "",
-    "text": "Practical 1\nPractical 2\nPractical 3\nPractical 4\nPractical 5\nPractical 6\nPractical 7\nPractical 8\nPractical 9"
-  },
-  {
     "objectID": "slides/slides_13.html#overview-of-distance-sampling",
     "href": "slides/slides_13.html#overview-of-distance-sampling",
     "title": "Lecture 13",
@@ -1494,7 +1487,31 @@
     "href": "slides/slides_3.html#take-home-messages",
     "title": "Lecture 2",
     "section": "Take home messages!",
-    "text": "Take home messages!\n\nThe INLA methodology heavily relies on sparse matrices !\nGMRF are the key tool in INLA-friendly models\nINLA uses numerical approximation and numerical integration to provide efficient and precise approximations to posterior marginals\n\nBut ultimately….\n\nYou do not need to deeply understand all of this if you want to use to solve your (statistical) problems 😄",
+    "text": "Take home messages!\n\nThe INLA methodology heavily relies on sparse matrices !\nGMRF are the key tool in INLA-friendly models\nINLA uses numerical approximation and numerical integration to provide efficient and precise approximations to posterior marginals\n\nBut ultimately….\n\nYou do not need to deeply understand all of this if you want to use inlabru to solve your (statistical) problems 😄",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#good-news",
+    "href": "slides/slides_3.html#good-news",
+    "title": "Lecture 2",
+    "section": "Good news!",
+    "text": "Good news!\nRecall… we have computationally efficient and flexible methodology…\n\nwe can fit more (realistically) complex models…\ne.g. spatial and spatio-temporal models (to geo-referenced data, point pattern data, aerial data, spatio-temporal data…)\n\n\nUsing INLA + SPDE approach we can:\n\nfit complex models quickly\nflexibly fit joint models of more than one response variable\nmodel on complex domains, (e.g. the sphere = the earth)\nobservation areas with barriers (islands, archipelagos…)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 2"
+    ]
+  },
+  {
+    "objectID": "slides/slides_3.html#how-to-use-the-inla-approach",
+    "href": "slides/slides_3.html#how-to-use-the-inla-approach",
+    "title": "Lecture 2",
+    "section": "How to use the INLA approach",
+    "text": "How to use the INLA approach\nThe INLA methodology is implemented in two R packages: R-INLA and inlabru.\nWhy do we (strongly) recommend inlabru:\n\n\nwrapper around R-INLA + extra functionality.\nmuch easier to fit spatial models\nfull support for sf and terra libraries\nmakes fitting of tricky models (e.g. multi-likelihood models, spatial point processes) less fiddly than R-INLA\ntakes observation process into account (e.g. for distance sampling, plot sampling); more on this later\nallows for non-linear predictors defined by general R expressions (this is done by linearizing and running the INLA approximation several times…)",
     "crumbs": [
       "Home",
       "Slides",
