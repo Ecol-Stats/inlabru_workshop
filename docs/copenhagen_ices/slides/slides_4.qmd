@@ -136,7 +136,7 @@ ggdraw() +  draw_plot(p1) + draw_image(question, scale = .4, y = 0.15, x=0.35)
 
 . . .
 
-We can "predict" any unobserved data, not only future data, e.g.\ gaps in the data etc.
+We can "predict" any unobserved data, not only future data, e.g. gaps in the data etc.
 
 ## Modelling time with INLA {auto-animate="true"}
 
