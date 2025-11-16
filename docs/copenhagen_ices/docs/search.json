@@ -2852,7 +2852,7 @@
     "href": "slides/slides_4.html#rw-as-intrinsic-models",
     "title": "Lecture 3",
     "section": "RW as intrinsic models",
-    "text": "RW as intrinsic models\nRW1 defines differences, not absolute levels:\n\nOnly the changes between neighbouring terms are modelled.\nMathematically, \\[\n(u_1,\\dots,u_n)\\text{ and }(u_1+a,\\dots,u_n+a)\n\\] produce identical likelihoods — they’re indistinguishable.\n\n\nThis means:\n\nIf \\(u_t\\sim\\text{RW}1\\) then \\[\n\\eta_t = \\beta_0 + u_t = (\\beta_0+k) + (u_t-k) = \\beta_0^* + u_t^*  \n\\] so parameters are not well-defined\n\n\n\nSolution:\n\nSum to zero constraint \\(\\sum_{i = 1}^n u_i = 0\\)\nThis is included in the model be default",
+    "text": "RW as intrinsic models\nRW1 defines differences, not absolute levels:\n\nOnly the changes between neighbouring terms are modelled.\nMathematically, \\[\n(u_1,\\dots,u_n)\\text{ and }(u_1+a,\\dots,u_n+a)\n\\] produce identical likelihoods — they’re indistinguishable.\n\n\n\n\nThis means:\n\nIf \\(u_t\\sim\\text{RW}1\\) then \\[\n\\begin{aligned}\n\\eta_t & = \\beta_0 + u_t \\\\\n& =(\\beta_0+k) + (u_t-k) \\\\\n& =    \\beta_0^* + u_t^*  \n\\end{aligned}\n\\]\n\nso parameters are not well-defined.\n\nSolution:\n\nSum to zero constraint \\(\\sum_{i = 1}^n u_i = 0\\)\nThis is included in the model be default",
     "crumbs": [
       "Home",
       "Slides",
@@ -2864,7 +2864,7 @@
     "href": "slides/slides_4.html#rw-as-intrinsic-models-1",
     "title": "Lecture 3",
     "section": "RW as intrinsic models",
-    "text": "RW as intrinsic models\n\ncmp1 = ~ Intercept(1) + time(year, model = \"rw1\", constr = TRUE)\ncmp2 = ~ Intercept(1) + time(year, model = \"rw1\", constr = FALSE)\nlik = bru_obs(formula = Erie~.,\n              data = lakes)\n\nfit1 = bru(cmp1,lik)\nfit2 = bru(cmp2,lik)\n\n\n\n[1] \"FIT1 - Intercept\"\n\n\n             mean    sd 0.025quant 0.5quant 0.975quant    mode   kld\nIntercept 174.138 0.002    174.134  174.138    174.142 174.138 0.002\n\n\n[1] \"FIT2 - Intercept\"\n\n\n          mean     sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0 31.623    -62.009        0     62.009    0   0\n\n\n[1] \"FIT1 - RW1 effect\"\n\n\n    ID   mean    sd 0.025quant 0.5quant 0.975quant   mode   kld\n1 1918 -0.122 0.017     -0.155   -0.122     -0.083 -0.122 0.002\n2 1919  0.038 0.017     -0.005    0.040      0.069  0.042 0.002\n\n\n[1] \"FIT2 - RW1 effect\"\n\n\n    ID    mean     sd 0.025quant 0.5quant 0.975quant    mode kld\n1 1918 174.017 31.623    112.008  174.017    236.025 174.017   0\n2 1919 174.177 31.623    112.168  174.177    236.185 174.177   0",
+    "text": "RW as intrinsic models\n\ncmp1 = ~ Intercept(1) + time(year, model = \"rw1\", constr = TRUE)\ncmp2 = ~ Intercept(1) + time(year, model = \"rw1\", constr = FALSE)\nlik = bru_obs(formula = Erie~.,\n              data = lakes)\n\nfit1 = bru(cmp1,lik)\nfit2 = bru(cmp2,lik)\n\n\n\n[1] \"FIT1 - Intercept\"\n\n\n             mean    sd 0.025quant 0.5quant 0.975quant    mode kld\nIntercept 174.138 0.002    174.135  174.138    174.141 174.138   0\n\n\n[1] \"FIT2 - Intercept\"\n\n\n          mean     sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0 31.623    -62.009        0     62.009    0   0\n\n\n[1] \"FIT1 - RW1 effect\"\n\n\n    ID   mean    sd 0.025quant 0.5quant 0.975quant   mode kld\n1 1918 -0.122 0.015     -0.151   -0.122     -0.090 -0.122   0\n2 1919  0.039 0.015      0.005    0.040      0.067  0.042   0\n\n\n[1] \"FIT2 - RW1 effect\"\n\n\n    ID    mean     sd 0.025quant 0.5quant 0.975quant    mode kld\n1 1918 174.016 31.623    112.008  174.016    236.025 174.016   0\n2 1919 174.177 31.623    112.168  174.177    236.186 174.177   0",
     "crumbs": [
       "Home",
       "Slides",
@@ -3032,7 +3032,7 @@
     "href": "slides/slides_4.html#ar1-vs.-rw-models",
     "title": "Lecture 3",
     "section": "AR1 vs. RW models",
-    "text": "AR1 vs. RW models",
+    "text": "AR1 vs. RW models\n\nRW1 models can be seen as a limit for AR1 models\nThey are not too different when smoothing, but can",
     "crumbs": [
       "Home",
       "Slides",
@@ -4021,6 +4021,90 @@
       "Home",
       "Slides",
       "Lecture 12"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#continuous-time-modelling-1",
+    "href": "slides/slides_4.html#continuous-time-modelling-1",
+    "title": "Lecture 3",
+    "section": "Continuous time modelling",
+    "text": "Continuous time modelling\n\nSometimes the data are not collected at discrete time points but over continous time\nOne solution (not a bad one usually) is to discretize the time and use RW model (AR models are then harder to justify..)\n\n_ A different solution is to use a continuous smoother based on a continous Gaussian Random Field (GRF) \\(\\omega(t)\\)\n\nWhat is this?\n\nIs a process defined everywhere in the time domain \\(\\mathcal{T}\\) such that, if i take \\(n\\) points \\(t_1,t_2,\\dots,t_n\\) then\n\n\\[\n(\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n))\\sim\\mathcal{N}(\\mathbf{0},\\mathbf{\\Sigma}_{\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n)} ), \\qquad \\text{ for any } t_1,t_2,\\dots,t_n\\in\\mathcal{T}\n\\] Where \\(\\mathbf{\\Sigma}_{\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n)}\\) is a variance-covariance matrix.\nTo define \\(\\omega(t), t\\in\\mathcal{T}\\), we have to define \\(\\Sigma\\)\nBUT…\n\n\nCovariance matrices are not nice objects!\n\nHard to define\nDense\ncomputationally hard to deal with",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#the-spde-approach",
+    "href": "slides/slides_4.html#the-spde-approach",
+    "title": "Lecture 3",
+    "section": "The SPDE approach",
+    "text": "The SPDE approach\nWe define a (Matern) GRF as the solution of a stochastic partial differential equation (SPDE)\n\\[\n(\\kappa^2-\\Delta)^{\\alpha/2}\\omega(t) = W(t)\n\\]\nWhat is this?\n\n\\(W(t)\\) is random noise\n\\(\\omega(t)\\) is the smooth process we want\n\\((\\kappa^2-\\Delta)^{\\alpha/2}\\) is an operator that “smooths” the white noise.\n\\(\\kappa\\) and \\(\\alpha\\) are parameters",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#one-analogy..",
+    "href": "slides/slides_4.html#one-analogy..",
+    "title": "Lecture 3",
+    "section": "One analogy..",
+    "text": "One analogy..\n\nThink of white noise as someone randomly tapping along a rope.\n\nThe taps are independent.\nSome are big, some are small.\nThey have no relation to each other.\nThis is just like White noise!\n\n\n\n\nBut the rope has tension and stifness\n\nthe tension spreads each tap to nearby points.\nSharp jumps are softened.\n\n\n\n\n\nThe rope settles into a smooth wiggly shape (just like a Matérn field!)\n\n\n\nThe parameters:\n\nTension = controls how far randomness propagates (\\(\\kappa\\))\nStiffness = controls how smooth the field becomes (\\(\\alpha\\))",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#spde-as-a-smoothing-operator",
+    "href": "slides/slides_4.html#spde-as-a-smoothing-operator",
+    "title": "Lecture 3",
+    "section": "SPDE as a smoothing operator",
+    "text": "SPDE as a smoothing operator",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#solving-the-spde",
+    "href": "slides/slides_4.html#solving-the-spde",
+    "title": "Lecture 3",
+    "section": "Solving the SPDE",
+    "text": "Solving the SPDE\nOk…but we still need to solve the SPDE to find \\(\\omega(t)\\)!\n\nNow we need to discretize the domain into T points (we cannot compute on the continuous!)\n\n\n\n\nWe represent our solution as\n\\[\n\\omega(t) = \\sum_{i = 1}^T\\phi_i(t)w_i\n\\] Where\n\n\\(\\phi_i(s)\\) are (known) basis functions\n\\(w_i\\) are (unknown) weights",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#solving-the-spde-1",
+    "href": "slides/slides_4.html#solving-the-spde-1",
+    "title": "Lecture 3",
+    "section": "Solving the SPDE",
+    "text": "Solving the SPDE",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#in-summary",
+    "href": "slides/slides_4.html#in-summary",
+    "title": "Lecture 3",
+    "section": "In summary",
+    "text": "In summary",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
     ]
   }
 ]

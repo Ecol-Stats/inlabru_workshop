@@ -369,7 +369,7 @@ $$
 ## The Gaussian distribution
 
 | Advantages :smile::+1: | Disadvantages :pensive::-1: |
-|----|----|
+|----------------------------------------|--------------------------------|
 | **mostly theoretical** | **mostly computational** |
 | Analytically tractable. | $\Sigma$ usually is large and **dense** |
 | We have a good understanding of its properties. | Computations scale as $\mathcal{O}(n^3)$ |

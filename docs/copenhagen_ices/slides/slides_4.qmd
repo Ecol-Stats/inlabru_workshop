@@ -22,12 +22,7 @@ author:
   - name: Janine Illian
     #orcid: 0000-0002-6879-4412
     email: Janine.Illian@glasgow.ac.uk
-    affiliations: University of Glasgow 
-  - name: Jafet Belmont
-    #orcid: 0000-0002-6879-4412
-    email: Jafet.Belmont@glasgow.ac.uk
-    affiliations: University of Glasgow   
-        
+    affiliations: University of Glasgow     
 # date: May 22, 2025
 # bibliography: references.bib
 embed-resources: true
@@ -35,6 +30,7 @@ execute:
   allow-html: true
   freeze: auto
 ---
+
 
 ```{r setup}
 # #| include: false
@@ -307,7 +303,7 @@ $$
 1.  Role of the precision parameter $\tau$ and prior distribution
 2.  RW as intrinsic model
 
-## What is the role of the precision parameter?
+## What is the role of the precision parameter?{.smaller}
 
 -   $\tau$ says how much $u_t$ can vary around its mean
 
@@ -491,18 +487,36 @@ RW1 defines *differences*, not *absolute levels*:
 
 . . .
 
+
+::::: columns
+::: {.column width="50%"}
+
 This means:
 
--   If $u_t\sim\text{RW}1$ then $$
-    \eta_t = \beta_0 + u_t = (\beta_0+k) + (u_t-k) = \beta_0^* + u_t^*  
-    $$ so parameters are not well-defined
+-   If $u_t\sim\text{RW}1$ then 
+$$
+\begin{aligned}
+    \eta_t & = \beta_0 + u_t \\ 
+    & =(\beta_0+k) + (u_t-k) \\
+& =    \beta_0^* + u_t^*  
+\end{aligned}
+$$ 
 
-. . .
+so parameters are not well-defined.
 
-Solution:
+
+:::
+::: {.column width="50%"}
+
+**Solution:**
 
 -   Sum to zero constraint $\sum_{i = 1}^n u_i = 0$
 -   This is included in the model be default
+
+
+:::
+::::: 
+
 
 ## RW as intrinsic models {.smaller}
 
@@ -710,14 +724,14 @@ $$
     \end{bmatrix}
 $$
 
-## AR1: Hyperparameters and prior {auto-animate="true"}
+## AR1: Hyperparameters and prior {.smaller auto-animate="true"}
 
 The AR1 model has two parameters
 
 -   The precision $\tau$
 -   The autocorrelation (or persistence) parameter $\phi\in(0,1)$
 
-## AR1: Hyperparameters and prior {auto-animate="true"}
+## AR1: Hyperparameters and prior {.smaller auto-animate="true"}
 
 The AR1 model has two parameters
 
@@ -765,7 +779,7 @@ data.frame(xx = seq(-1,1,0.001)) %>%
 :::
 :::::
 
-## AR1: Hyperparameters and prior {auto-animate="true"}
+## AR1: Hyperparameters and prior {.smaller auto-animate="true"}
 
 The AR1 model has two parameters
 
@@ -813,7 +827,7 @@ pp %>%
 :::
 :::::
 
-## Example - AR1 and RW1 for earthquakes data
+## Example - AR1 and RW1 for earthquakes data{.smaller}
 
 ::::: columns
 ::: {.column width="50%"}
@@ -899,4 +913,302 @@ rbind(cbind(pred1, model = "rw1"),
 
 ## AR1 vs. RW models
 
+* RW1 models can be seen as a limit for  AR1 models
+
+* They are not too different when smoothing, but can 
+
 # Continuous time modelling
+
+
+## Continuous time modelling{.smaller}
+
+- Sometimes the data are not collected at discrete time points but over continous time
+
+- One solution (not a bad one usually) is to discretize the time and use  RW model (AR models are then harder to justify..)
+
+_ A different solution is to use a continuous smoother based on a continous Gaussian Random Field (GRF) $\omega(t)$
+
+. . .
+
+What is this?
+
+- Is a process defined everywhere in the time domain $\mathcal{T}$ such that, if i take $n$ points $t_1,t_2,\dots,t_n$ then
+
+$$
+(\omega(t_1),\omega(t_2),\dots,\omega(t_n))\sim\mathcal{N}(\mathbf{0},\mathbf{\Sigma}_{\omega(t_1),\omega(t_2),\dots,\omega(t_n)} ), \qquad \text{ for any } t_1,t_2,\dots,t_n\in\mathcal{T}
+$$
+Where $\mathbf{\Sigma}_{\omega(t_1),\omega(t_2),\dots,\omega(t_n)}$ is a variance-covariance matrix.
+
+To define $\omega(t), t\in\mathcal{T}$, we have to define $\Sigma$
+
+BUT...
+
+. . .
+
+Covariance matrices are not nice objects!
+
+- Hard to define
+- Dense
+- computationally hard to deal with
+
+## The SPDE approach
+
+We define a (Matern) GRF as the solution of  a stochastic partial differential equation (SPDE)
+
+$$
+(\kappa^2-\Delta)^{\alpha/2}\omega(t) = W(t)
+$$
+
+What is this?
+
+- $W(t)$ is random noise
+- $\omega(t)$ is the smooth process we want
+- $(\kappa^2-\Delta)^{\alpha/2}$ is an operator that "smooths" the white noise.
+- $\kappa$ and $\alpha$ are parameters
+
+## One analogy..
+
+- Think of white noise as someone randomly tapping along a rope.
+  
+  - The taps are independent.
+  - Some are big, some are small.
+  - They have no relation to each other.
+  - This is just like White noise!
+
+. . .   
+
+- But the rope has tension and stifness
+
+  - the tension spreads each tap to nearby points.
+  - Sharp jumps are softened.
+
+. . .
+
+
+- The rope settles into a smooth wiggly shape  (just like a Matérn field!)
+
+
+. . .
+
+The parameters:
+
+- Tension = controls how far randomness propagates ($\kappa$)
+
+- Stiffness = controls how smooth the field becomes ($\alpha$)
+
+
+## SPDE as a smoothing operator
+
+```{r}
+# spde_rope_demo.R
+# Illustrate SPDE-as-a-rope (1D) -> solving (kappa^2 - d2/dx2)^(alpha/2) u = W
+# Author: ChatGPT
+# Date: 2025-11-16
+
+
+# ----- Parameters -----
+N      <- 650        # number of grid points
+x_min  <- 0
+x_max  <- 10
+x      <- seq(x_min, x_max, length.out = N)
+h      <- x[2] - x[1]   # grid spacing
+
+# SPDE parameters to try
+kappa_vals <- c(0.5, 1.0, 2.0)   # smaller kappa -> longer range (looser rope)
+alpha_vals <- c(2, 4)            # alpha = 2 (one smoothing), alpha = 4 (smoother)
+
+# ----- Build 1D second-difference matrix D2 -----
+# D2 * u approx = u_{i-1} - 2 u_i + u_{i+1}
+D2 <- matrix(0, nrow = N, ncol = N)
+diag(D2) <- -2
+for(i in 1:(N-1)){
+  D2[i, i+1] <- 1
+  D2[i+1, i] <- 1
+}
+# (Neumann-like) boundary handling: keep D2[1,1] = -1? We'll keep simple Dirichlet-style here:
+# (current code uses the simple interior stencil and leaves boundaries with fewer neighbors)
+
+I_N <- diag(1, N)
+
+# ----- Helper: build discrete operator A = (kappa^2 I - d2/dx2) -----
+build_A <- function(kappa) {
+  # discrete second derivative is D2 / h^2
+  A <- (kappa^2) * I_N - (D2 / (h^2))
+  # small regularization for numeric stability (optional)
+  A <- A + 1e-10 * I_N
+  return(A)
+}
+
+# ----- Helper: solve (A^m) u = W  for integer m >= 1 (alpha = 2*m) -----
+solve_alpha <- function(A, W, m = 1) {
+  # Solve A^m u = W by sequential solves: A v_1 = W, A v_2 = v_1, ..., u = v_m
+  v <- W
+  for(j in 1:m) {
+    v <- solve(A, v)
+  }
+  return(v)
+}
+
+# ----- Generate one white-noise realization -----
+W <- rnorm(N, mean = 0, sd = 1)  # white noise on the grid
+
+
+u_fix1 <- solve_alpha(build_A(0.5), W, m = 2/2)  # alpha=2 -> m=1
+u_fix2 <- solve_alpha(build_A(1), W, m = 2/2)  # alpha=2 -> m=1
+u_fix3 <- solve_alpha(build_A(2), W, m = 2/2)  # alpha=2 -> m=1
+
+
+u_fix12 <- solve_alpha(build_A(0.5), W, m = 4/2)  # alpha=2 -> m=1
+u_fix22 <- solve_alpha(build_A(1), W, m = 4/2)  # alpha=2 -> m=1
+u_fix32 <- solve_alpha(build_A(2), W, m = 4/2)  # alpha=2 -> m=1
+
+
+p1 = data.frame(x =x,
+           W = W, 
+           u1  = u_fix1,
+           u2  = u_fix2,
+           u3  = u_fix3
+           ) %>%
+  ggplot() + geom_line(aes(x,W), alpha = 0.2) + geom_line(aes(x,u1, color = "k = 0.5")) + 
+  geom_line(aes(x,u2, color = "k = 1")) +
+  geom_line(aes(x,u3, color = "k = 2")) + xlab("") + ylab("") + ggtitle("alpha = 1") + ylim(-1.5,1.5)
+
+p2 = data.frame(x =x,
+           W = W, 
+           u1  = u_fix12,
+           u2  = u_fix22,
+           u3  = u_fix32
+) %>%
+  ggplot() + geom_line(aes(x,W), alpha = 0.2) + 
+  geom_line(aes(x,u1, color = "k = 0.5")) + 
+  geom_line(aes(x,u2, color = "k = 1")) +
+  geom_line(aes(x,u3, color = "k = 2"))+ xlab("") + ylab("") + ggtitle("alpha = 2") + ylim(-1.5,1.5)
+
+library(patchwork)
+
+p1 + p2 + plot_layout(ncol = 1, guides = "collect")
+
+```
+
+
+
+## Solving the SPDE
+
+Ok...but we still need to solve the SPDE to find $\omega(t)$!
+
+. . .
+
+Now we need to discretize the domain into T points (we cannot compute on the continuous!)
+
+. . .
+
+::::: columns
+::: {.column width="50%"}
+
+We represent our solution as
+
+$$
+\omega(t) = \sum_{i = 1}^T\phi_i(t)w_i
+$$
+Where
+
+ - $\phi_i(s)$ are (known) basis functions
+ - $w_i$ are (unknown) weights
+
+:::
+::: {.column width="50%"}
+```{r}
+#| out-width: 100%
+
+locs = c(-5,10,15,25,40,50,60)
+mesh1d = fm_mesh_1d(locs, degree = 1, boundary = "neumann")
+p1 = ggplot() +
+  geom_fm(data = mesh1d, xlim = c(-10, 70)) +
+  geom_point(data = data.frame(x = locs, y = 0), aes(x,y)) +
+  geom_text(data = data.frame(x = locs + 0.5, y = -0.1), aes(x,y,label = 1:7))
+
+p1
+
+eval = fm_evaluator(mesh1d)
+w = round(runif(7), 3)
+
+ p1 + geom_line(data = data.frame(x = eval$x,
+                           y = fm_evaluate(eval, w)),
+                aes(x,y)) + ggtitle(paste("w=",paste(round(w,2), collapse = ', ')))
+
+```
+
+:::
+:::::
+
+## In summary
+
+- The continuous Matern GRF is the solution of  a SPDE and is represented as
+
+$$
+\omega(t) = \sum_{i = 1}^T\phi_i(t)w_i
+$$
+
+- The weights vector $\mathbf{w} = (w_1,\dots,w_N)$ is Gaussian with a **sparse** precision matrix $\longrightarrow$ Compotational convenience
+
+- The field has two parameters
+
+  - The range $\rho$ 
+  - The marginal variance $\sigma^2$
+  
+- These parameters are linked to the parameters of the SPDE
+
+- We need to assign prior to them
+
+## PC priors for range and marginal variance
+
+
+
+
+
+
+
+##
+```{r}
+triceps = read_csv("Data/triceps.csv")
+triceps$age_group = inla.group(triceps$age, n = 30)
+
+
+locs = seq(-5,60,5)
+mesh1d = fm_mesh_1d(locs, degree = 2, boundary = "neumann")
+ggplot() +
+  geom_fm(data = mesh1d, xlim = c(-10, 70))
+
+
+spde <- inla.spde2.pcmatern(mesh1d,
+  prior.range = c(10, 0.5),
+  prior.sigma = c(1, 0.5)
+)
+
+
+cmp <- ~ Intercept(1) +  field(age, model = spde)
+lik_spde = bru_obs(formula = triceps ~.,
+                   data = triceps)
+fit_spde = bru(cmp, lik_spde)
+pred_spde = predict(fit_spde, triceps, ~ Intercept + field)
+
+
+
+
+cmp = ~ Intercept(1) + cov(age_group, model = "rw2", scale.model =T)
+lik = bru_obs(formula = triceps ~.,
+              data = triceps)
+
+fit = bru(cmp, lik)
+pred = predict(fit, triceps, ~ Intercept + cov)
+
+
+ggplot() + geom_line(data = pred_spde, aes(age, mean, color = "spde")) +
+  geom_ribbon(data = pred_spde, aes(age, ymin = q0.025, ymax = q0.975, fill = "spde"), alpha = 0.5) +
+  geom_line(data = pred, aes(age_group, mean, color = "rw")) +
+  geom_ribbon(data = pred, aes(age_group, ymin = q0.025, ymax = q0.975, fill = "rw"), alpha = 0.5)
+
+
+
+```
+
