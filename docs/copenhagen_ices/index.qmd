@@ -58,7 +58,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 ### Day 2
 
 | Time | Topic |
-|:----------------------:|:---------------------------------------------:|
+|:-----------------------:|:---------------------------------------------:|
 | 9:00 - 10:00 | [**Session 3**: Temporal modelling and smoothing part 1](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_4.html) |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | Temporal modelling and smoothing part 2 |
@@ -73,17 +73,17 @@ No knowledge of `R-INLA` or `inlabru` is required.
 
 ### Day 3
 
-|     Time      |                         Topic                         |
-|:-------------:|:-----------------------------------------------------:|
-| 9:00 - 10:00  |            [**Session 6**: Areal Processes](Slides_Janine_pdf/slides_6_inlabru.pdf) |
-| 10:00 - 10:30 |                       Snack 🥙                        |
-| 10:30 - 11:30 |             [**Session 7**: Geostatistics ](Slides_Janine_pdf/slides_7_inlabru.pdf) |
-| 11:30 - 13:00 |      [Practical Session 5](day3_practical_5.qmd)      |
-| 13:00 - 14:30 |                    Lunch break 🍽️                     |
-| 14:30 - 15:30 |        [**Session 8**: Spatial Point processes](Slides_Janine_pdf/slides_8_inlabru.pdf) |
-| 15:35 - 15:45 |                    Coffee Break ☕                    |
+| Time | Topic |
+|:---------------:|:----------------------------------------------------:|
+| 9:00 - 10:00 | [**Session 6**: Areal Processes](Slides_Janine_pdf/slides_6_inlabru.pdf) |
+| 10:00 - 10:30 | Snack 🥙 |
+| 10:30 - 11:30 | [**Session 7**: Geostatistics](Slides_Janine_pdf/slides_7_inlabru.pdf) |
+| 11:30 - 13:00 | [Practical Session 5](day3_practical_5.qmd) |
+| 13:00 - 14:30 | Lunch break 🍽️ |
+| 14:30 - 15:30 | [**Session 8**: Spatial Point processes](Slides_Janine_pdf/slides_8_inlabru.pdf) |
+| 15:35 - 15:45 | Coffee Break ☕ |
 | 15:45 - 16:45 | [Practical Session 5 continued](day3_practical_5.qmd) |
-| 16:45 - 17:00 |                  wrap-up and outlook                  |
+| 16:45 - 17:00 | wrap-up and outlook |
 
 : {.striped .hover}
 
@@ -122,6 +122,9 @@ No knowledge of `R-INLA` or `inlabru` is required.
 # In preparation for the workshop
 
 Participants are required to follow the below steps ahead of the first day of the workshop:
+
+1. Check your `R` version, it should be at least 4.3.*
+
 
 1.  Install [R-INLA](https://www.r-inla.org/download-install)
 

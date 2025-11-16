@@ -2864,7 +2864,7 @@
     "href": "slides/slides_4.html#rw-as-intrinsic-models-1",
     "title": "Lecture 3",
     "section": "RW as intrinsic models",
-    "text": "RW as intrinsic models\n\ncmp1 = ~ Intercept(1) + time(year, model = \"rw1\", constr = TRUE)\ncmp2 = ~ Intercept(1) + time(year, model = \"rw1\", constr = FALSE)\nlik = bru_obs(formula = Erie~.,\n              data = lakes)\n\nfit1 = bru(cmp1,lik)\nfit2 = bru(cmp2,lik)\n\n\n\n[1] \"FIT1 - Intercept\"\n\n\n             mean    sd 0.025quant 0.5quant 0.975quant    mode kld\nIntercept 174.138 0.002    174.135  174.138    174.141 174.138   0\n\n\n[1] \"FIT2 - Intercept\"\n\n\n          mean     sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0 31.623    -62.009        0     62.009    0   0\n\n\n[1] \"FIT1 - RW1 effect\"\n\n\n    ID   mean    sd 0.025quant 0.5quant 0.975quant   mode kld\n1 1918 -0.122 0.015     -0.151   -0.122     -0.090 -0.122   0\n2 1919  0.039 0.015      0.005    0.040      0.067  0.042   0\n\n\n[1] \"FIT2 - RW1 effect\"\n\n\n    ID    mean     sd 0.025quant 0.5quant 0.975quant    mode kld\n1 1918 174.016 31.623    112.008  174.016    236.025 174.016   0\n2 1919 174.177 31.623    112.168  174.177    236.186 174.177   0",
+    "text": "RW as intrinsic models\n\ncmp1 = ~ Intercept(1) + time(year, model = \"rw1\", constr = TRUE)\ncmp2 = ~ Intercept(1) + time(year, model = \"rw1\", constr = FALSE)\nlik = bru_obs(formula = Erie~.,\n              data = lakes)\n\nfit1 = bru(cmp1,lik)\nfit2 = bru(cmp2,lik)\n\n\n\n[1] \"FIT1 - Intercept\"\n\n\n             mean    sd 0.025quant 0.5quant 0.975quant    mode kld\nIntercept 174.138 0.002    174.134  174.138    174.142 174.138   0\n\n\n[1] \"FIT2 - Intercept\"\n\n\n          mean     sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0 31.623    -62.009        0     62.009    0   0\n\n\n[1] \"FIT1 - RW1 effect\"\n\n\n    ID   mean    sd 0.025quant 0.5quant 0.975quant   mode   kld\n1 1918 -0.122 0.017     -0.156   -0.122     -0.083 -0.122 0.000\n2 1919  0.038 0.017     -0.004    0.040      0.070  0.042 0.001\n\n\n[1] \"FIT2 - RW1 effect\"\n\n\n    ID    mean     sd 0.025quant 0.5quant 0.975quant    mode kld\n1 1918 174.017 31.623    112.008  174.017    236.025 174.017   0\n2 1919 174.176 31.623    112.168  174.176    236.185 174.176   0",
     "crumbs": [
       "Home",
       "Slides",
@@ -4100,7 +4100,67 @@
     "href": "slides/slides_4.html#in-summary",
     "title": "Lecture 3",
     "section": "In summary",
-    "text": "In summary",
+    "text": "In summary\n\nThe continuous Matern GRF is the solution of a SPDE and is represented as\n\n\\[\n\\omega(t) = \\sum_{i = 1}^T\\phi_i(t)w_i\n\\]\n\nThe weights vector \\(\\mathbf{w} = (w_1,\\dots,w_N)\\) is Gaussian with a sparse precision matrix \\(\\longrightarrow\\) Compotational convenience\nThe field has two parameters\n\nThe range \\(\\rho\\)\nThe marginal variance \\(\\sigma^2\\)\n\nThese parameters are linked to the parameters of the SPDE\nWe need to assign prior to them",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance",
+    "href": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance",
+    "title": "Lecture 3",
+    "section": "PC priors for range and marginal variance",
+    "text": "PC priors for range and marginal variance\nRemember:\n\nPC priors penalize distance from a basis model\nAre expressed in a user friendly way\n\n\nFor the range we have: \\[\n\\text{Prob}(\\rho&lt;\\rho_0) = p_{\\rho}\n\\]\nFor the marginal standard deviation we have: \\[\n\\text{Prob}(\\sigma&lt;\\sigma_0) = p_{\\sigma}\n\\]\n\nThe\n\n(more on this tomorrow!)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance-1",
+    "href": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance-1",
+    "title": "Lecture 3",
+    "section": "PC priors for range and marginal variance",
+    "text": "PC priors for range and marginal variance",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#in-practice",
+    "href": "slides/slides_4.html#in-practice",
+    "title": "Lecture 3",
+    "section": "In practice…",
+    "text": "In practice…\nIf you want to use a continous model for time (or for smoothing a covariate) you need to:\n\nDefine a 1-dimensional mesh over the domain of interest (allowing for some buffer around your domain)\n\n\nHow many nodes?\nWhere to place them?\n\n\n# domain of interest 0-10\nlocs = seq(-3,13,1)\nmesh1d = fm_mesh_1d(locs, degree = 1, boundary = \"neumann\")\n\n\nDefine the SPDE model and the prior\n\n\nspde &lt;- inla.spde2.pcmatern(mesh1d,\n  prior.range = c(10, 0.5), # Prob(range&lt;10) = 0.5\n  prior.sigma = c(1, 0.5)   # Prob(sd&gt;1) = 0.5\n)\n\n\nUse the SPDE model in a component of your model\n\n\ncmp = ~ Intercept(1) + smooth(covariate, model = spde)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example-2",
+    "href": "slides/slides_4.html#example-2",
+    "title": "Lecture 3",
+    "section": "Example",
+    "text": "Example\nLet’s go back to the Triceps skinfold thickness example.\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\omega(\\text{age}_i)\\\\\n\\omega(\\text{age}_i) & \\sim \\text{GF}(\\rho_{\\omega},\\sigma_{\\omega})\n\\end{aligned}\n\\]\n\n\ntriceps = read_csv(\"Data/triceps.csv\")\ntriceps[1:3,c(1,3)]\n\n# A tibble: 3 × 2\n    age triceps\n  &lt;dbl&gt;   &lt;dbl&gt;\n1 12.1     3.40\n2  9.91    4   \n3 10.0     4.20\n\n\n\nThe code\n\nlocs = seq(-5,60,5)\nmesh1d = fm_mesh_1d(locs, degree = 2, boundary = \"neumann\")\n\nspde &lt;- inla.spde2.pcmatern(mesh1d,\n  prior.range = c(10, 0.5),\n  prior.sigma = c(1, 0.5))\n\ncmp &lt;- ~ Intercept(1) +  field(age, model = spde)\nlik_spde = bru_obs(formula = triceps ~.,data = triceps)\nfit_spde = bru(cmp, lik_spde)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#comparing-spde-and-rw2",
+    "href": "slides/slides_4.html#comparing-spde-and-rw2",
+    "title": "Lecture 3",
+    "section": "Comparing SPDE and RW2",
+    "text": "Comparing SPDE and RW2",
     "crumbs": [
       "Home",
       "Slides",
