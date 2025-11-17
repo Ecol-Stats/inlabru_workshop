@@ -275,7 +275,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, colback={codebgcolor}, boxrule=0pt, enhanced, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, enhanced, sharp corners, boxrule=0pt, breakable, colback={codebgcolor}]}{\end{tcolorbox}}\fi
 \makeatother
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -519,7 +519,7 @@ day of the workshop:
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  Check your \texttt{R} version, it should be at least 4.3.*
+  Check your \texttt{R} version, it should be at least 4.3\ldots.
 \item
   Install \href{https://www.r-inla.org/download-install}{R-INLA}
 \item

@@ -123,7 +123,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 
 Participants are required to follow the below steps ahead of the first day of the workshop:
 
-1.  Check your `R` version, it should be at least 4.3.\*
+1.  Check your `R` version, it should be at least 4.3....
 
 2.  Install [R-INLA](https://www.r-inla.org/download-install)
 
