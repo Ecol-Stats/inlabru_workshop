@@ -1775,7 +1775,7 @@
     "href": "index.html",
     "title": "inlabru Workshop",
     "section": "",
-    "text": "Welcome to the course!\n\nWelcome to the inlabru workshop!\nThe aim of this workshop is to introduce you to a range of statistical modelling approaches, in particular the temporal, spatial and spatio-temporal modelling as implemented in the inlabru package.\nWorkshop materials are available in the github repository inlabru-workshop\n\n\n\nLearning Objectives for the workshop\nAt the end of the workshop, participants will have an understanding of:\n\nthe motivation for and the challenges of analysing and modelling spatial data\nstatistical models used to analyse spatial and spatio-temporal data\nthe implementation of these models in the inlabru package\nhow to independently analyse spatial data with inlabru\n\n\n\nIntended audience\nThe workshop aims to cater for participants with a range of different backgrounds, who is interested in analysing data with modern spatial and spatio-temporal statistical modelling approaches.\n\n\nPrerequisites\nParticipants should be familiar with the R environment, and general statistical approaches for modelling such as regression, analysis of (co)variance, and generalized linear models.​\nNo knowledge of R-INLA or inlabru is required.\n\n\nSchedule\n\nDay 1Day 2Day 3Day 4Day 5\n\n\n\n\n\nTime\nTopic\n\n\n\n\n10:00 - 10:30\nICES information session\n\n\n10:30 - 11:30\nSession 1: Introduction to inlabru\n\n\n11:30 - 13:00\nPractical Session 1\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 2: Latent Gaussian Models and INLA\n\n\n15:30 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 2\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 3: Temporal modelling and smoothing part 1\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nTemporal modelling and smoothing part 2\n\n\n11:30 - 13:00\nPractical Session 3\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 5: Introduction to Spatial Statistics\n\n\n15:35 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 4\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 6: Areal Processes\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nSession 7: Geostatistics\n\n\n11:30 - 13:00\nPractical Session 5\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 8: Spatial Point processes\n\n\n15:35 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 5 continued\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 9: Spatiotemporal models\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nSession 10: Model comparison and evaluation\n\n\n11:30 - 13:00\nPractical Session 6\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 11: Multi-likelihood/joint likelihood models\n\n\n15:35 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 7\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 12: Zero inflated models\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nSession 13: Complex observational processes: Distance Sampling\n\n\n11:30 - 13:00\nPractical Session 8: Zero Inflated models - Distance sampling\n\n\n13:00 - 13:15\nCoffee Break ☕\n\n\n13:15 - 14:00\nClosing session\n\n\n\n\n\n\n\n\nIn preparation for the workshop\nParticipants are required to follow the below steps ahead of the first day of the workshop:\n\nInstall R-INLA\nInstall inlabru (available from CRAN)\n\n\n# Enable universe(s) by inlabru-org\noptions(repos = c(\n  inlabruorg = \"https://inlabru-org.r-universe.dev\",\n  INLA = \"https://inla.r-inla-download.org/R/testing\",\n  CRAN = \"https://cloud.r-project.org\"\n))\n\n# Install some packages\ninstall.packages(\"inlabru\")\n\n\nMake sure you have the latest R-INLA, inlabru and R versions installed.\nInstall the following libraries:\n\n\n\ninstall.packages(c(\n  \"CARBayesdata\",\n  \"DAAG\",\n  \"dplyr\",\n  \"FSAdata\",\n  \"ggplot2\",\n  \"gt\",\n  \"lubridate\",\n  \"magrittr\",\n  \"mapview\",\n  \"patchwork\",\n  \"scico\",\n  \"sdmTMB\",\n  \"sf\",\n  \"spatstat\",\n  \"spdep\",\n  \"terra\",\n  \"tidyr\",\n  \"tidyterra\",\n  \"tidyverse\"\n))",
+    "text": "Welcome to the course!\n\nWelcome to the inlabru workshop!\nThe aim of this workshop is to introduce you to a range of statistical modelling approaches, in particular the temporal, spatial and spatio-temporal modelling as implemented in the inlabru package.\nWorkshop materials are available in the github repository inlabru-workshop\n\n\n\nLearning Objectives for the workshop\nAt the end of the workshop, participants will have an understanding of:\n\nthe motivation for and the challenges of analysing and modelling spatial data\nstatistical models used to analyse spatial and spatio-temporal data\nthe implementation of these models in the inlabru package\nhow to independently analyse spatial data with inlabru\n\n\n\nIntended audience\nThe workshop aims to cater for participants with a range of different backgrounds, who is interested in analysing data with modern spatial and spatio-temporal statistical modelling approaches.\n\n\nPrerequisites\nParticipants should be familiar with the R environment, and general statistical approaches for modelling such as regression, analysis of (co)variance, and generalized linear models.​\nNo knowledge of R-INLA or inlabru is required.\n\n\nSchedule\n\nDay 1Day 2Day 3Day 4Day 5\n\n\n\n\n\nTime\nTopic\n\n\n\n\n10:00 - 10:30\nICES information session\n\n\n10:30 - 11:30\nSession 1: Introduction to inlabru\n\n\n11:30 - 13:00\nPractical Session 1\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 2: Latent Gaussian Models and INLA\n\n\n15:30 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 2\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 3: Temporal modelling and smoothing part 1\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nTemporal modelling and smoothing part 2\n\n\n11:30 - 13:00\nPractical Session 3\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 5: Introduction to Spatial Statistics\n\n\n15:35 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 4\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 6: Areal Processes\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nSession 7: Geostatistics\n\n\n11:30 - 13:00\nPractical Session 5\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 8: Spatial Point processes\n\n\n15:35 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 5 continued\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 9: Spatiotemporal models\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nSession 10: Model comparison and evaluation\n\n\n11:30 - 13:00\nPractical Session 6\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 11: Multi-likelihood/joint likelihood models\n\n\n15:35 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 7\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 12: Zero inflated models\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nSession 13: Complex observational processes: Distance Sampling\n\n\n11:30 - 13:00\nPractical Session 8: Zero Inflated models - Distance sampling\n\n\n13:00 - 13:15\nCoffee Break ☕\n\n\n13:15 - 14:00\nClosing session\n\n\n\n\n\n\n\n\nIn preparation for the workshop\nParticipants are required to follow the below steps ahead of the first day of the workshop:\n\nCheck your R version, it should be at least 4.3.*\nInstall R-INLA\nInstall inlabru (available from CRAN)\n\n\n# Enable universe(s) by inlabru-org\noptions(repos = c(\n  inlabruorg = \"https://inlabru-org.r-universe.dev\",\n  INLA = \"https://inla.r-inla-download.org/R/testing\",\n  CRAN = \"https://cloud.r-project.org\"\n))\n\n# Install some packages\ninstall.packages(\"inlabru\")\n\n\nMake sure you have the latest R-INLA, inlabru and R versions installed.\nInstall the following libraries:\n\n\n\ninstall.packages(c(\n  \"CARBayesdata\",\n  \"DAAG\",\n  \"dplyr\",\n  \"FSAdata\",\n  \"ggplot2\",\n  \"gt\",\n  \"lubridate\",\n  \"magrittr\",\n  \"mapview\",\n  \"patchwork\",\n  \"scico\",\n  \"sdmTMB\",\n  \"sf\",\n  \"spatstat\",\n  \"spdep\",\n  \"terra\",\n  \"tidyr\",\n  \"tidyterra\",\n  \"tidyverse\"\n))",
     "crumbs": [
       "Home"
     ]
@@ -3040,6 +3040,138 @@
     ]
   },
   {
+    "objectID": "slides/slides_4.html#continuous-time-modelling-1",
+    "href": "slides/slides_4.html#continuous-time-modelling-1",
+    "title": "Lecture 3",
+    "section": "Continuous time modelling",
+    "text": "Continuous time modelling\n\nSometimes the data are not collected at discrete time points but over continous time\nOne solution (not a bad one usually) is to discretize the time and use RW model (AR models are then harder to justify..)\n\n_ A different solution is to use a continuous smoother based on a continous Gaussian Random Field (GRF) \\(\\omega(t)\\)\n\nWhat is this?\n\nIs a process defined everywhere in the time domain \\(\\mathcal{T}\\) such that, if i take \\(n\\) points \\(t_1,t_2,\\dots,t_n\\) then\n\n\\[\n(\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n))\\sim\\mathcal{N}(\\mathbf{0},\\mathbf{\\Sigma}_{\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n)} ), \\qquad \\text{ for any } t_1,t_2,\\dots,t_n\\in\\mathcal{T}\n\\] Where \\(\\mathbf{\\Sigma}_{\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n)}\\) is a variance-covariance matrix.\nTo define \\(\\omega(t), t\\in\\mathcal{T}\\), we have to define \\(\\Sigma\\)\nBUT…\n\n\nCovariance matrices are not nice objects!\n\nHard to define\nDense\ncomputationally hard to deal with",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#the-spde-approach",
+    "href": "slides/slides_4.html#the-spde-approach",
+    "title": "Lecture 3",
+    "section": "The SPDE approach",
+    "text": "The SPDE approach\nWe define a (Matern) GRF as the solution of a stochastic partial differential equation (SPDE)\n\\[\n(\\kappa^2-\\Delta)^{\\alpha/2}\\omega(t) = W(t)\n\\]\nWhat is this?\n\n\\(W(t)\\) is random noise\n\\(\\omega(t)\\) is the smooth process we want\n\\((\\kappa^2-\\Delta)^{\\alpha/2}\\) is an operator that “smooths” the white noise.\n\\(\\kappa\\) and \\(\\alpha\\) are parameters",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#one-analogy..",
+    "href": "slides/slides_4.html#one-analogy..",
+    "title": "Lecture 3",
+    "section": "One analogy..",
+    "text": "One analogy..\n\nThink of white noise as someone randomly tapping along a rope.\n\nThe taps are independent.\nSome are big, some are small.\nThey have no relation to each other.\nThis is just like White noise!\n\n\n\n\nBut the rope has tension and stifness\n\nthe tension spreads each tap to nearby points.\nSharp jumps are softened.\n\n\n\n\n\nThe rope settles into a smooth wiggly shape (just like a Matérn field!)\n\n\n\nThe parameters:\n\nTension = controls how far randomness propagates (\\(\\kappa\\))\nStiffness = controls how smooth the field becomes (\\(\\alpha\\))",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#spde-as-a-smoothing-operator",
+    "href": "slides/slides_4.html#spde-as-a-smoothing-operator",
+    "title": "Lecture 3",
+    "section": "SPDE as a smoothing operator",
+    "text": "SPDE as a smoothing operator",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#solving-the-spde",
+    "href": "slides/slides_4.html#solving-the-spde",
+    "title": "Lecture 3",
+    "section": "Solving the SPDE",
+    "text": "Solving the SPDE\nOk…but we still need to solve the SPDE to find \\(\\omega(t)\\)!\n\nNow we need to discretize the domain into T points (we cannot compute on the continuous!)\n\n\n\n\nWe represent our solution as\n\\[\n\\omega(t) = \\sum_{i = 1}^T\\phi_i(t)w_i\n\\] Where\n\n\\(\\phi_i(s)\\) are (known) basis functions\n\\(w_i\\) are (unknown) weights",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#in-summary",
+    "href": "slides/slides_4.html#in-summary",
+    "title": "Lecture 3",
+    "section": "In summary",
+    "text": "In summary\n\nThe continuous Matern GRF is the solution of a SPDE and is represented as\n\n\\[\n\\omega(t) = \\sum_{i = 1}^T\\phi_i(t)w_i\n\\]\n\nThe weights vector \\(\\mathbf{w} = (w_1,\\dots,w_N)\\) is Gaussian with a sparse precision matrix \\(\\longrightarrow\\) Compotational convenience\nThe field has two parameters\n\nThe range \\(\\rho\\)\nThe marginal variance \\(\\sigma^2\\)\n\nThese parameters are linked to the parameters of the SPDE\nWe need to assign prior to them",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance",
+    "href": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance",
+    "title": "Lecture 3",
+    "section": "PC priors for range and marginal variance",
+    "text": "PC priors for range and marginal variance\nRemember:\n\nPC priors penalize distance from a basis model\nAre expressed in a user friendly way\n\n\nFor the range we have: \\[\n\\text{Prob}(\\rho&lt;\\rho_0) = p_{\\rho}\n\\]\nFor the marginal standard deviation we have: \\[\n\\text{Prob}(\\sigma&lt;\\sigma_0) = p_{\\sigma}\n\\]\n\nThe\n\n(more on this tomorrow!)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance-1",
+    "href": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance-1",
+    "title": "Lecture 3",
+    "section": "PC priors for range and marginal variance",
+    "text": "PC priors for range and marginal variance",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#in-practice",
+    "href": "slides/slides_4.html#in-practice",
+    "title": "Lecture 3",
+    "section": "In practice…",
+    "text": "In practice…\nIf you want to use a continous model for time (or for smoothing a covariate) you need to:\n\nDefine a 1-dimensional mesh over the domain of interest (allowing for some buffer around your domain)\n\n\nHow many nodes?\nWhere to place them?\n\n\n# domain of interest 0-10\nlocs = seq(-3,13,1)\nmesh1d = fm_mesh_1d(locs, degree = 1, boundary = \"neumann\")\n\n\nDefine the SPDE model and the prior\n\n\nspde &lt;- inla.spde2.pcmatern(mesh1d,\n  prior.range = c(10, 0.5), # Prob(range&lt;10) = 0.5\n  prior.sigma = c(1, 0.5)   # Prob(sd&gt;1) = 0.5\n)\n\n\nUse the SPDE model in a component of your model\n\n\ncmp = ~ Intercept(1) + smooth(covariate, model = spde)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example-2",
+    "href": "slides/slides_4.html#example-2",
+    "title": "Lecture 3",
+    "section": "Example",
+    "text": "Example\nLet’s go back to the Triceps skinfold thickness example.\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\omega(\\text{age}_i)\\\\\n\\omega(\\text{age}_i) & \\sim \\text{GF}(\\rho_{\\omega},\\sigma_{\\omega})\n\\end{aligned}\n\\]\n\n\ntriceps = read_csv(\"Data/triceps.csv\")\ntriceps[1:3,c(1,3)]\n\n# A tibble: 3 × 2\n    age triceps\n  &lt;dbl&gt;   &lt;dbl&gt;\n1 12.1     3.40\n2  9.91    4   \n3 10.0     4.20\n\n\n\nThe code\n\nlocs = seq(-5,60,5)\nmesh1d = fm_mesh_1d(locs, degree = 2, boundary = \"neumann\")\n\nspde &lt;- inla.spde2.pcmatern(mesh1d,\n  prior.range = c(10, 0.5),\n  prior.sigma = c(1, 0.5))\n\ncmp &lt;- ~ Intercept(1) +  field(age, model = spde)\nlik_spde = bru_obs(formula = triceps ~.,data = triceps)\nfit_spde = bru(cmp, lik_spde)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#comparing-spde-and-rw2",
+    "href": "slides/slides_4.html#comparing-spde-and-rw2",
+    "title": "Lecture 3",
+    "section": "Comparing SPDE and RW2",
+    "text": "Comparing SPDE and RW2",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
     "objectID": "slides/slides_9.html#motivation",
     "href": "slides/slides_9.html#motivation",
     "title": "Lecture 9",
@@ -4021,150 +4153,6 @@
       "Home",
       "Slides",
       "Lecture 12"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#continuous-time-modelling-1",
-    "href": "slides/slides_4.html#continuous-time-modelling-1",
-    "title": "Lecture 3",
-    "section": "Continuous time modelling",
-    "text": "Continuous time modelling\n\nSometimes the data are not collected at discrete time points but over continous time\nOne solution (not a bad one usually) is to discretize the time and use RW model (AR models are then harder to justify..)\n\n_ A different solution is to use a continuous smoother based on a continous Gaussian Random Field (GRF) \\(\\omega(t)\\)\n\nWhat is this?\n\nIs a process defined everywhere in the time domain \\(\\mathcal{T}\\) such that, if i take \\(n\\) points \\(t_1,t_2,\\dots,t_n\\) then\n\n\\[\n(\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n))\\sim\\mathcal{N}(\\mathbf{0},\\mathbf{\\Sigma}_{\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n)} ), \\qquad \\text{ for any } t_1,t_2,\\dots,t_n\\in\\mathcal{T}\n\\] Where \\(\\mathbf{\\Sigma}_{\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n)}\\) is a variance-covariance matrix.\nTo define \\(\\omega(t), t\\in\\mathcal{T}\\), we have to define \\(\\Sigma\\)\nBUT…\n\n\nCovariance matrices are not nice objects!\n\nHard to define\nDense\ncomputationally hard to deal with",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#the-spde-approach",
-    "href": "slides/slides_4.html#the-spde-approach",
-    "title": "Lecture 3",
-    "section": "The SPDE approach",
-    "text": "The SPDE approach\nWe define a (Matern) GRF as the solution of a stochastic partial differential equation (SPDE)\n\\[\n(\\kappa^2-\\Delta)^{\\alpha/2}\\omega(t) = W(t)\n\\]\nWhat is this?\n\n\\(W(t)\\) is random noise\n\\(\\omega(t)\\) is the smooth process we want\n\\((\\kappa^2-\\Delta)^{\\alpha/2}\\) is an operator that “smooths” the white noise.\n\\(\\kappa\\) and \\(\\alpha\\) are parameters",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#one-analogy..",
-    "href": "slides/slides_4.html#one-analogy..",
-    "title": "Lecture 3",
-    "section": "One analogy..",
-    "text": "One analogy..\n\nThink of white noise as someone randomly tapping along a rope.\n\nThe taps are independent.\nSome are big, some are small.\nThey have no relation to each other.\nThis is just like White noise!\n\n\n\n\nBut the rope has tension and stifness\n\nthe tension spreads each tap to nearby points.\nSharp jumps are softened.\n\n\n\n\n\nThe rope settles into a smooth wiggly shape (just like a Matérn field!)\n\n\n\nThe parameters:\n\nTension = controls how far randomness propagates (\\(\\kappa\\))\nStiffness = controls how smooth the field becomes (\\(\\alpha\\))",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#spde-as-a-smoothing-operator",
-    "href": "slides/slides_4.html#spde-as-a-smoothing-operator",
-    "title": "Lecture 3",
-    "section": "SPDE as a smoothing operator",
-    "text": "SPDE as a smoothing operator",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#solving-the-spde",
-    "href": "slides/slides_4.html#solving-the-spde",
-    "title": "Lecture 3",
-    "section": "Solving the SPDE",
-    "text": "Solving the SPDE\nOk…but we still need to solve the SPDE to find \\(\\omega(t)\\)!\n\nNow we need to discretize the domain into T points (we cannot compute on the continuous!)\n\n\n\n\nWe represent our solution as\n\\[\n\\omega(t) = \\sum_{i = 1}^T\\phi_i(t)w_i\n\\] Where\n\n\\(\\phi_i(s)\\) are (known) basis functions\n\\(w_i\\) are (unknown) weights",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#solving-the-spde-1",
-    "href": "slides/slides_4.html#solving-the-spde-1",
-    "title": "Lecture 3",
-    "section": "Solving the SPDE",
-    "text": "Solving the SPDE",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#in-summary",
-    "href": "slides/slides_4.html#in-summary",
-    "title": "Lecture 3",
-    "section": "In summary",
-    "text": "In summary\n\nThe continuous Matern GRF is the solution of a SPDE and is represented as\n\n\\[\n\\omega(t) = \\sum_{i = 1}^T\\phi_i(t)w_i\n\\]\n\nThe weights vector \\(\\mathbf{w} = (w_1,\\dots,w_N)\\) is Gaussian with a sparse precision matrix \\(\\longrightarrow\\) Compotational convenience\nThe field has two parameters\n\nThe range \\(\\rho\\)\nThe marginal variance \\(\\sigma^2\\)\n\nThese parameters are linked to the parameters of the SPDE\nWe need to assign prior to them",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance",
-    "href": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance",
-    "title": "Lecture 3",
-    "section": "PC priors for range and marginal variance",
-    "text": "PC priors for range and marginal variance\nRemember:\n\nPC priors penalize distance from a basis model\nAre expressed in a user friendly way\n\n\nFor the range we have: \\[\n\\text{Prob}(\\rho&lt;\\rho_0) = p_{\\rho}\n\\]\nFor the marginal standard deviation we have: \\[\n\\text{Prob}(\\sigma&lt;\\sigma_0) = p_{\\sigma}\n\\]\n\nThe\n\n(more on this tomorrow!)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance-1",
-    "href": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance-1",
-    "title": "Lecture 3",
-    "section": "PC priors for range and marginal variance",
-    "text": "PC priors for range and marginal variance",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#in-practice",
-    "href": "slides/slides_4.html#in-practice",
-    "title": "Lecture 3",
-    "section": "In practice…",
-    "text": "In practice…\nIf you want to use a continous model for time (or for smoothing a covariate) you need to:\n\nDefine a 1-dimensional mesh over the domain of interest (allowing for some buffer around your domain)\n\n\nHow many nodes?\nWhere to place them?\n\n\n# domain of interest 0-10\nlocs = seq(-3,13,1)\nmesh1d = fm_mesh_1d(locs, degree = 1, boundary = \"neumann\")\n\n\nDefine the SPDE model and the prior\n\n\nspde &lt;- inla.spde2.pcmatern(mesh1d,\n  prior.range = c(10, 0.5), # Prob(range&lt;10) = 0.5\n  prior.sigma = c(1, 0.5)   # Prob(sd&gt;1) = 0.5\n)\n\n\nUse the SPDE model in a component of your model\n\n\ncmp = ~ Intercept(1) + smooth(covariate, model = spde)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#example-2",
-    "href": "slides/slides_4.html#example-2",
-    "title": "Lecture 3",
-    "section": "Example",
-    "text": "Example\nLet’s go back to the Triceps skinfold thickness example.\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\omega(\\text{age}_i)\\\\\n\\omega(\\text{age}_i) & \\sim \\text{GF}(\\rho_{\\omega},\\sigma_{\\omega})\n\\end{aligned}\n\\]\n\n\ntriceps = read_csv(\"Data/triceps.csv\")\ntriceps[1:3,c(1,3)]\n\n# A tibble: 3 × 2\n    age triceps\n  &lt;dbl&gt;   &lt;dbl&gt;\n1 12.1     3.40\n2  9.91    4   \n3 10.0     4.20\n\n\n\nThe code\n\nlocs = seq(-5,60,5)\nmesh1d = fm_mesh_1d(locs, degree = 2, boundary = \"neumann\")\n\nspde &lt;- inla.spde2.pcmatern(mesh1d,\n  prior.range = c(10, 0.5),\n  prior.sigma = c(1, 0.5))\n\ncmp &lt;- ~ Intercept(1) +  field(age, model = spde)\nlik_spde = bru_obs(formula = triceps ~.,data = triceps)\nfit_spde = bru(cmp, lik_spde)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#comparing-spde-and-rw2",
-    "href": "slides/slides_4.html#comparing-spde-and-rw2",
-    "title": "Lecture 3",
-    "section": "Comparing SPDE and RW2",
-    "text": "Comparing SPDE and RW2",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
     ]
   }
 ]

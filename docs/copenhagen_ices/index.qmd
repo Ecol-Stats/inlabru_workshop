@@ -58,7 +58,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 ### Day 2
 
 | Time | Topic |
-|:-----------------------:|:---------------------------------------------:|
+|:-----------------------:|:--------------------------------------------:|
 | 9:00 - 10:00 | [**Session 3**: Temporal modelling and smoothing part 1](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_4.html) |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | Temporal modelling and smoothing part 2 |
@@ -74,7 +74,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 ### Day 3
 
 | Time | Topic |
-|:---------------:|:----------------------------------------------------:|
+|:----------------:|:----------------------------------------------------:|
 | 9:00 - 10:00 | [**Session 6**: Areal Processes](Slides_Janine_pdf/slides_6_inlabru.pdf) |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | [**Session 7**: Geostatistics](Slides_Janine_pdf/slides_7_inlabru.pdf) |
@@ -123,12 +123,11 @@ No knowledge of `R-INLA` or `inlabru` is required.
 
 Participants are required to follow the below steps ahead of the first day of the workshop:
 
-1. Check your `R` version, it should be at least 4.3.*
+1.  Check your `R` version, it should be at least 4.3.\*
 
+2.  Install [R-INLA](https://www.r-inla.org/download-install)
 
-1.  Install [R-INLA](https://www.r-inla.org/download-install)
-
-2.  Install `inlabru` (available from CRAN)
+3.  Install `inlabru` (available from CRAN)
 
 ```{r}
 #| eval: false
