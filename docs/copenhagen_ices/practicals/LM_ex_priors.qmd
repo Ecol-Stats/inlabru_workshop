@@ -66,7 +66,7 @@ $$ \log(\tau) \sim \mathrm{logGamma}(1,5 \times 10^{-5}) $$
 If your model uses the default intercept construction (i.e., `Intercept(1)` in the linear predictor) `inlabru` will assign a default $\mathcal{N} (0,0)$ prior to it.
 :::
 
-Lets see how can we change the default priors using some simulated data
+Let's see how can we change the default priors using some simulated data
 
 #### **Simulate example data**
 
@@ -102,7 +102,7 @@ lik =  bru_obs(formula = y ~.,
 fit.lm = bru(cmp, lik)
 ```
 
-### Change the prior distributions
+### Changing the prior distributions
 
 Until now, we have used the default priors for both the precision $\tau$ and the fixed effects $\beta_0$ and $\beta_1$. Let's see how to customize these.
 
@@ -117,9 +117,9 @@ inla.priors.used(fit.lm)
 
 From the output we see that the precision for the observation $\tau\sim\text{Gamma}(1e+00,5e-05)$ while $\beta_0$ and $\beta_1$ have precision 0.001, that is variance $1/0.001$.
 
-**Change the precision for the linear effects**
+**Changing the precision for the linear effects**
 
-The precision for linear effects is set in the component definition. For example, if we want to increase the precision to 0.01 for $\beta_0$ we define the relative components as:
+The precision for linear effects is set in the component definition. For example, if we want to increase the precision to 0.01 for $\beta_0$ we define the respective components as:
 
 ```{r }
 #| eval: false 
@@ -152,7 +152,7 @@ lm.fit2 = bru(cmp2, lik)
 Note that we can use the same observation model as before since both the formula and the dataset are unchanged.
 :::
 
-**Change the prior for the precision of the observation error** $\tau$
+**Changing the prior for the precision of the observation error** $\tau$
 
 Priors on the hyperparameters of the observation model must be passed by defining argument `hyper` within `control.family` in the call to the `bru_obs()` function.
 
