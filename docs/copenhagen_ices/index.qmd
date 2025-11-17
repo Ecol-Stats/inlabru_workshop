@@ -16,7 +16,7 @@ editor_options:
 
 -   Welcome to the `inlabru` workshop!
 -   The aim of this workshop is to introduce you to a range of statistical modelling approaches, in particular the temporal, spatial and spatio-temporal modelling as implemented in the `inlabru` package.
--   Workshop materials are available in the github repository [inlabru-workshop](https://github.com/Ecol-Stats/inlabru_workshop/tree/main/docs/copenague)
+-   Workshop materials are available in the github repository [inlabru-workshop](https://github.com/Ecol-Stats/inlabru_workshop/tree/main/docs/copenhagen_ices)
 
 # Learning Objectives for the workshop
 
