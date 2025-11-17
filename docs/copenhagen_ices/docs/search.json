@@ -2840,7 +2840,7 @@
     "href": "slides/slides_4.html#example",
     "title": "Lecture 3",
     "section": "Example",
-    "text": "Example\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + f(t_i)\\\\\nf(t_1),f(t_2),\\dots,f(t_n) &\\sim \\text{RW2}(\\tau)\n\\end{aligned}\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe code\n\ncmp = ~ Intercept(1) + \n  time(year, model = \"rw1\",\n       hyper = list(prec = \n                      list(prior = \"pc.prec\",\n                           param = c(0.5, 0.5))))",
+    "text": "Example\nLet’s fit the model for the Tokyo rainfall data \\[\n\\begin{aligned}\ny_t|\\eta_t&\\sim\\text{Bin}(n_t, p_t),\\qquad i = 1,\\dots,366\\\\\n\\eta_t &= \\text{logit}(p_t)= \\beta_0 + f(\\text{time}_t)\n\\end{aligned}\n\\]\n\ndata(\"Tokyo\")\ncmp= ~ -1 + Intercept(1) + time(time, model =\"rw2\")\nformula = y ~ Intercept + time\nlik = bru_obs(formula = formula,\n              data = Tokyo,\n              Ntrials = n,\n              family = \"binomial\")\nfit = bru(cmp, lik)\n\nWe now want to extract results…what do we want?\n\n\nThe time effect \\(f(\\text{time}_t)\\) ?\nThe linear predictor \\(\\eta_t = \\beta_0 + f(\\text{time}_t)\\)?\nThe estimated probability offit precipitation \\(p_t = \\text{inv_logit}(\\eta_t)\\) ?\n\nWe can get all of them with the predict() or generate() functions!",
     "crumbs": [
       "Home",
       "Slides",
@@ -2852,7 +2852,7 @@
     "href": "slides/slides_4.html#rw-as-intrinsic-models",
     "title": "Lecture 3",
     "section": "RW as intrinsic models",
-    "text": "RW as intrinsic models\nRW1 defines differences, not absolute levels:\n\nOnly the changes between neighbouring terms are modelled.\nMathematically, \\[\n(u_1,\\dots,u_n)\\text{ and }(u_1+a,\\dots,u_n+a)\n\\] produce identical likelihoods — they’re indistinguishable.\n\n\n\n\nThis means:\n\nIf \\(u_t\\sim\\text{RW}1\\) then \\[\n\\begin{aligned}\n\\eta_t & = \\beta_0 + u_t \\\\\n& =(\\beta_0+k) + (u_t-k) \\\\\n& =    \\beta_0^* + u_t^*  \n\\end{aligned}\n\\]\n\nso parameters are not well-defined.\n\nSolution:\n\nSum to zero constraint \\(\\sum_{i = 1}^n u_i = 0\\)\nThis is included in the model be default",
+    "text": "RW as intrinsic models\nRW1 defines differences, not absolute levels:\n\nOnly the changes between neighbouring terms are modelled.\nMathematically, \\[\n(u_1,\\dots,u_n)\\text{ and }(u_1+a,\\dots,u_n+a)\n\\] produce identical likelihoods — they’re indistinguishable.\n\n\n\n\nThis means:\n\nIf \\(u_t\\sim\\text{RW}1\\) then \\[\n\\begin{aligned}\n\\eta_t & = \\beta_0 + u_t \\\\\n& =(\\beta_0+k) + (u_t-k) \\\\\n& =    \\beta_0^* + u_t^*\n\\end{aligned}\n\\]\n\nso parameters are not well-defined.\n\nSolution:\n\nSum to zero constraint \\(\\sum_{i = 1}^n u_i = 0\\)\nThis is included in the model be default",
     "crumbs": [
       "Home",
       "Slides",
@@ -2864,7 +2864,7 @@
     "href": "slides/slides_4.html#rw-as-intrinsic-models-1",
     "title": "Lecture 3",
     "section": "RW as intrinsic models",
-    "text": "RW as intrinsic models\n\ncmp1 = ~ Intercept(1) + time(year, model = \"rw1\", constr = TRUE)\ncmp2 = ~ Intercept(1) + time(year, model = \"rw1\", constr = FALSE)\nlik = bru_obs(formula = Erie~.,\n              data = lakes)\n\nfit1 = bru(cmp1,lik)\nfit2 = bru(cmp2,lik)\n\n\n\n[1] \"FIT1 - Intercept\"\n\n\n             mean    sd 0.025quant 0.5quant 0.975quant    mode kld\nIntercept 174.138 0.002    174.134  174.138    174.142 174.138   0\n\n\n[1] \"FIT2 - Intercept\"\n\n\n          mean     sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0 31.623    -62.009        0     62.009    0   0\n\n\n[1] \"FIT1 - RW1 effect\"\n\n\n    ID   mean    sd 0.025quant 0.5quant 0.975quant   mode   kld\n1 1918 -0.122 0.017     -0.156   -0.122     -0.083 -0.122 0.000\n2 1919  0.038 0.017     -0.004    0.040      0.070  0.042 0.001\n\n\n[1] \"FIT2 - RW1 effect\"\n\n\n    ID    mean     sd 0.025quant 0.5quant 0.975quant    mode kld\n1 1918 174.017 31.623    112.008  174.017    236.025 174.017   0\n2 1919 174.176 31.623    112.168  174.176    236.185 174.176   0",
+    "text": "RW as intrinsic models\n\ncmp1 = ~ Intercept(1) + time(year, model = \"rw1\", constr = TRUE)\ncmp2 = ~ Intercept(1) + time(year, model = \"rw1\", constr = FALSE)\nlik = bru_obs(formula = Erie~.,\n              data = lakes)\n\nfit1 = bru(cmp1,lik)\nfit2 = bru(cmp2,lik)\n\n\n\n[1] \"FIT1 - Intercept\"\n\n\n             mean    sd 0.025quant 0.5quant 0.975quant    mode   kld\nIntercept 174.138 0.002    174.135  174.138    174.142 174.138 0.004\n\n\n[1] \"FIT2 - Intercept\"\n\n\n          mean     sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0 31.623    -62.009        0     62.009    0   0\n\n\n[1] \"FIT1 - RW1 effect\"\n\n\n    ID   mean    sd 0.025quant 0.5quant 0.975quant   mode   kld\n1 1918 -0.122 0.017     -0.154   -0.122     -0.085 -0.122 0.003\n2 1919  0.039 0.017     -0.002    0.040      0.069  0.042 0.006\n\n\n[1] \"FIT2 - RW1 effect\"\n\n\n    ID    mean     sd 0.025quant 0.5quant 0.975quant    mode kld\n1 1918 174.016 31.623    112.008  174.016    236.025 174.016   0\n2 1919 174.177 31.623    112.168  174.177    236.186 174.177   0",
     "crumbs": [
       "Home",
       "Slides",
@@ -2888,7 +2888,7 @@
     "href": "slides/slides_4.html#example-1",
     "title": "Lecture 3",
     "section": "Example",
-    "text": "Example\n\n\n\ncmp1 = ~ Intercept(1) + \n  time(year, model = \"rw1\", \n       scale.model = T,\n       hyper = list(prec = \n                      list(prior = \"pc.prec\",\n                           param = c(0.3,0.5))))\n\ncmp2 = ~ Intercept(1) + \n  time(year, model = \"rw2\",\n       scale.model = T,\n       hyper = list(prec = \n                      list(prior = \"pc.prec\", \n                           param = c(0.3,0.5))))\n\n\nlik = bru_obs(formula = Erie~ ., \n              data = lakes)\n\nfit1 = bru(cmp1, lik)\nfit2 = bru(cmp2, lik)\n\n\n\n\n\n\n\n\n\n\n\nNOTE: the scale.model = TRUE option scales the \\(\\mathbf{Q}\\) matrix so the precision parameter has the same interpretation in both models.",
+    "text": "Example\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + f(t_i)\\\\\nf(t_1),f(t_2),\\dots,f(t_n) &\\sim \\text{RW2}(\\tau)\n\\end{aligned}\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe code\n\ncmp = ~ Intercept(1) +\n  time(year, model = \"rw1\",\n       hyper = list(prec =\n                      list(prior = \"pc.prec\",\n                           param = c(0.5, 0.5))))",
     "crumbs": [
       "Home",
       "Slides",
@@ -3032,7 +3032,7 @@
     "href": "slides/slides_4.html#ar1-vs.-rw-models",
     "title": "Lecture 3",
     "section": "AR1 vs. RW models",
-    "text": "AR1 vs. RW models\n\nRW1 models can be seen as a limit for AR1 models\nThey are not too different when smoothing, but can",
+    "text": "AR1 vs. RW models\n\nRW1 models can be seen as a limit for AR1 models\nThey are not too different when smoothing, but can give different predictions.",
     "crumbs": [
       "Home",
       "Slides",
@@ -3044,7 +3044,7 @@
     "href": "slides/slides_4.html#continuous-time-modelling-1",
     "title": "Lecture 3",
     "section": "Continuous time modelling",
-    "text": "Continuous time modelling\n\nSometimes the data are not collected at discrete time points but over continous time\nOne solution (not a bad one usually) is to discretize the time and use RW model (AR models are then harder to justify..)\n\n_ A different solution is to use a continuous smoother based on a continous Gaussian Random Field (GRF) \\(\\omega(t)\\)\n\nWhat is this?\n\nIs a process defined everywhere in the time domain \\(\\mathcal{T}\\) such that, if i take \\(n\\) points \\(t_1,t_2,\\dots,t_n\\) then\n\n\\[\n(\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n))\\sim\\mathcal{N}(\\mathbf{0},\\mathbf{\\Sigma}_{\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n)} ), \\qquad \\text{ for any } t_1,t_2,\\dots,t_n\\in\\mathcal{T}\n\\] Where \\(\\mathbf{\\Sigma}_{\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n)}\\) is a variance-covariance matrix.\nTo define \\(\\omega(t), t\\in\\mathcal{T}\\), we have to define \\(\\Sigma\\)\nBUT…\n\n\nCovariance matrices are not nice objects!\n\nHard to define\nDense\ncomputationally hard to deal with",
+    "text": "Continuous time modelling\n\nSometimes the data are not collected at discrete time points but over continous time\nOne solution (not a bad one usually) is to discretize the time and use RW model (AR models are then harder to justify..)\nA different solution is to use a continuous smoother based on a continuous Gaussian Random Field (GRF) \\(\\omega(t)\\)\n\n\nWhat is this?\n\nIs a process defined everywhere in the time domain \\(\\mathcal{T}\\) such that, if i take \\(n\\) points \\(t_1,t_2,\\dots,t_n\\) then\n\n\\[\n(\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n))\\sim\\mathcal{N}(\\mathbf{0},\\mathbf{\\Sigma}_{\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n)} ), \\qquad \\text{ for any } t_1,t_2,\\dots,t_n\\in\\mathcal{T}\n\\] Where \\(\\mathbf{\\Sigma}_{\\omega(t_1),\\omega(t_2),\\dots,\\omega(t_n)}\\) is a variance-covariance matrix.\nTo define \\(\\omega(t), t\\in\\mathcal{T}\\), we have to define \\(\\Sigma\\)\nBUT…\n\n\nCovariance matrices are not nice objects!\n\nHard to define\nDense\ncomputationally hard to deal with",
     "crumbs": [
       "Home",
       "Slides",
@@ -3092,7 +3092,7 @@
     "href": "slides/slides_4.html#solving-the-spde",
     "title": "Lecture 3",
     "section": "Solving the SPDE",
-    "text": "Solving the SPDE\nOk…but we still need to solve the SPDE to find \\(\\omega(t)\\)!\n\nNow we need to discretize the domain into T points (we cannot compute on the continuous!)\n\n\n\n\nWe represent our solution as\n\\[\n\\omega(t) = \\sum_{i = 1}^T\\phi_i(t)w_i\n\\] Where\n\n\\(\\phi_i(s)\\) are (known) basis functions\n\\(w_i\\) are (unknown) weights",
+    "text": "Solving the SPDE\nOk…but we still need to solve the SPDE to find \\(\\omega(t)\\)!\n\nNow we need to discretize the domain into T points (we cannot compute on the continuous!)\n\n\n\n\nWe represent our solution as\n\\[\n\\omega(t) = \\sum_{i = 1}^T\\phi_i(t)w_i\n\\]\nWhere\n\n\\(\\phi_i(s)\\) are (known) basis functions\n\\(w_i\\) are (unknown) weights",
     "crumbs": [
       "Home",
       "Slides",
@@ -3104,7 +3104,7 @@
     "href": "slides/slides_4.html#in-summary",
     "title": "Lecture 3",
     "section": "In summary",
-    "text": "In summary\n\nThe continuous Matern GRF is the solution of a SPDE and is represented as\n\n\\[\n\\omega(t) = \\sum_{i = 1}^T\\phi_i(t)w_i\n\\]\n\nThe weights vector \\(\\mathbf{w} = (w_1,\\dots,w_N)\\) is Gaussian with a sparse precision matrix \\(\\longrightarrow\\) Compotational convenience\nThe field has two parameters\n\nThe range \\(\\rho\\)\nThe marginal variance \\(\\sigma^2\\)\n\nThese parameters are linked to the parameters of the SPDE\nWe need to assign prior to them",
+    "text": "In summary\n\nThe continuous Matern GRF is the solution of a SPDE and is represented as\n\n\\[\n\\omega(t) = \\sum_{i = 1}^T\\phi_i(t)w_i\n\\]\n\nThe weights vector \\(\\mathbf{w} = (w_1,\\dots,w_N)\\) is Gaussian with a sparse precision matrix \\(\\longrightarrow\\) Computational convenience\nThe field has two parameters\n\nThe range \\(\\rho\\)\nThe marginal variance \\(\\sigma^2\\)\n\nThese parameters are linked to the parameters of the SPDE\nWe need to assign prior to them",
     "crumbs": [
       "Home",
       "Slides",
@@ -3116,7 +3116,7 @@
     "href": "slides/slides_4.html#pc-priors-for-range-and-marginal-variance",
     "title": "Lecture 3",
     "section": "PC priors for range and marginal variance",
-    "text": "PC priors for range and marginal variance\nRemember:\n\nPC priors penalize distance from a basis model\nAre expressed in a user friendly way\n\n\nFor the range we have: \\[\n\\text{Prob}(\\rho&lt;\\rho_0) = p_{\\rho}\n\\]\nFor the marginal standard deviation we have: \\[\n\\text{Prob}(\\sigma&lt;\\sigma_0) = p_{\\sigma}\n\\]\n\nThe\n\n(more on this tomorrow!)",
+    "text": "PC priors for range and marginal variance\nRemember:\n\nPC priors penalize distance from a basis model\nAre expressed in a user friendly way\n\n\nFor the range we have: \\[\n\\text{Prob}(\\rho&lt;\\rho_0) = p_{\\rho}\n\\]\nFor the marginal standard deviation we have: \\[\n\\text{Prob}(\\sigma&lt;\\sigma_0) = p_{\\sigma}\n\\]",
     "crumbs": [
       "Home",
       "Slides",
@@ -3152,7 +3152,7 @@
     "href": "slides/slides_4.html#example-2",
     "title": "Lecture 3",
     "section": "Example",
-    "text": "Example\nLet’s go back to the Triceps skinfold thickness example.\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\omega(\\text{age}_i)\\\\\n\\omega(\\text{age}_i) & \\sim \\text{GF}(\\rho_{\\omega},\\sigma_{\\omega})\n\\end{aligned}\n\\]\n\n\ntriceps = read_csv(\"Data/triceps.csv\")\ntriceps[1:3,c(1,3)]\n\n# A tibble: 3 × 2\n    age triceps\n  &lt;dbl&gt;   &lt;dbl&gt;\n1 12.1     3.40\n2  9.91    4   \n3 10.0     4.20\n\n\n\nThe code\n\nlocs = seq(-5,60,5)\nmesh1d = fm_mesh_1d(locs, degree = 2, boundary = \"neumann\")\n\nspde &lt;- inla.spde2.pcmatern(mesh1d,\n  prior.range = c(10, 0.5),\n  prior.sigma = c(1, 0.5))\n\ncmp &lt;- ~ Intercept(1) +  field(age, model = spde)\nlik_spde = bru_obs(formula = triceps ~.,data = triceps)\nfit_spde = bru(cmp, lik_spde)",
+    "text": "Example\n\n\n\ncmp1 = ~ Intercept(1) +\n  time(year, model = \"rw1\",\n       scale.model = T,\n       hyper = list(prec =\n                      list(prior = \"pc.prec\",\n                           param = c(0.3,0.5))))\n\ncmp2 = ~ Intercept(1) +\n  time(year, model = \"rw2\",\n       scale.model = T,\n       hyper = list(prec =\n                      list(prior = \"pc.prec\",\n                           param = c(0.3,0.5))))\n\n\nlik = bru_obs(formula = Erie~ .,\n              data = lakes)\n\nfit1 = bru(cmp1, lik)\nfit2 = bru(cmp2, lik)\n\n\n\n\n\n\n\n\n\n\n\nNOTE: the scale.model = TRUE option scales the \\(\\mathbf{Q}\\) matrix so the precision parameter has the same interpretation in both models.",
     "crumbs": [
       "Home",
       "Slides",
@@ -4153,6 +4153,210 @@
       "Home",
       "Slides",
       "Lecture 12"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#some-inlabru-shortcuts",
+    "href": "slides/slides_4.html#some-inlabru-shortcuts",
+    "title": "Lecture 3",
+    "section": "Some inlabru shortcuts",
+    "text": "Some inlabru shortcuts\nIn the slides we have fitted the model as:\n\ncmp = ~ -1 + beta0(1) beta1(covariate, model = \"linear\")\nformula = y ~ beta0 + beta1\nlik = bru_obs(formula = formula,\n              famuly  = \"gaussian\",\n              data = df)\nfit = bry(cmp, lik)\n\nbut in the practical you have\n\ncmp = ~ -1 + beta0(1) beta1(covariate, model = \"linear\")\n\nlik = bru_obs(formula = y~.,\n              famuly  = \"gaussian\",\n              data = df)\nfit = bry(cmp, lik)\n\n\n\nYou don’t have to define a formula outside of the bru_obs() function..it can be defines also inside the function!\n\n\n\n\nThe expression y ~ . just means “take all the components and sum them together”. It also tells the bru() function that your predictor is linear.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#predict-and-generate-functions",
+    "href": "slides/slides_4.html#predict-and-generate-functions",
+    "title": "Lecture 3",
+    "section": "predict() and generate() functions",
+    "text": "predict() and generate() functions\nIn the practicals you have used the predict() function to get results from the fitted model.\n\npredict() simulates from the fitted posterior distribution \\(\\pi(\\mathbf{y}|\\mathbf{u},\\theta)\\), computes what you ask and produces a summary of the samples (mean, sd, quantiles, etc)\ngenerate() simulates from the fitted posterior distribution \\(\\pi(\\mathbf{y}|\\mathbf{u},\\theta)\\), computes what you ask and return the samples!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example-3",
+    "href": "slides/slides_4.html#example-3",
+    "title": "Lecture 3",
+    "section": "Example",
+    "text": "Example\nLet’s go back to the Triceps skinfold thickness example.\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\omega(\\text{age}_i)\\\\\n\\omega(\\text{age}_i) & \\sim \\text{GF}(\\rho_{\\omega},\\sigma_{\\omega})\n\\end{aligned}\n\\]\n\n\ntriceps = read_csv(\"Data/triceps.csv\")\ntriceps[1:3,c(1,3)]\n\n# A tibble: 3 × 2\n    age triceps\n  &lt;dbl&gt;   &lt;dbl&gt;\n1 12.1     3.40\n2  9.91    4   \n3 10.0     4.20\n\n\n\nThe code\n\n#|\nlocs = seq(-5,60,5)\nmesh1d = fm_mesh_1d(locs, degree = 2, boundary = \"neumann\")\n\nspde &lt;- inla.spde2.pcmatern(mesh1d,\n  prior.range = c(10, 0.5),\n  prior.sigma = c(1, 0.5))\n\ncmp &lt;- ~ Intercept(1) +  field(age, model = spde)\nlik_spde = bru_obs(formula = triceps ~.,data = triceps)\nfit_spde = bru(cmp, lik_spde)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example-4",
+    "href": "slides/slides_4.html#example-4",
+    "title": "Lecture 3",
+    "section": "Example",
+    "text": "Example\nLet’s go back to the Triceps skinfold thickness example.\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\omega(\\text{age}_i)\\\\\n\\omega(\\text{age}_i) & \\sim \\text{GF}(\\rho_{\\omega},\\sigma_{\\omega})\n\\end{aligned}\n\\]\n\n\ntriceps = read_csv(\"Data/triceps.csv\")\ntriceps[1:3,c(1,3)]\n\n# A tibble: 3 × 2\n    age triceps\n  &lt;dbl&gt;   &lt;dbl&gt;\n1 12.1     3.40\n2  9.91    4   \n3 10.0     4.20\n\n\n\nThe code\n\nlocs = seq(-5,60,5)\nmesh1d = fm_mesh_1d(locs, degree = 2, boundary = \"neumann\")\n\nspde &lt;- inla.spde2.pcmatern(mesh1d,\n  prior.range = c(10, 0.5),\n  prior.sigma = c(1, 0.5))\n\ncmp &lt;- ~ Intercept(1) +  field(age, model = spde)\nlik_spde = bru_obs(formula = triceps ~.,data = triceps)\nfit_spde = bru(cmp, lik_spde)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example---predict",
+    "href": "slides/slides_4.html#example---predict",
+    "title": "Lecture 3",
+    "section": "Example - predict()",
+    "text": "Example - predict()\n\npreds1 = predict(object = fit, newdata = Tokyo, ~ time)\npreds2 = predict(object = fit, newdata = Tokyo, ~ Intercept + time)\ninv_logit = function(x) ((1 + exp(-x))^(-1))\npreds3 = predict(object = fit, newdata = Tokyo, ~ inv_logit(Intercept + time))\n\nor\n\ninv_logit = function(x) ((1 + exp(-x))^(-1))\npreds = predict(object = fit, newdata = Tokyo, \n                ~ data.frame(time_eff = time,\n                             lin_pred = Intercept + time,\n                             probs = inv_logit(Intercept + time)),\n                n.samples = 1000\n                )\n# preds is then a list                \nround(preds$probs[1:3,],3)\n\n  y n time  mean    sd q0.025  q0.5 q0.975 median sd.mc_std_err mean.mc_std_err\n1 0 2    1 0.176 0.084  0.059 0.159  0.387  0.159         0.002           0.003\n2 0 2    2 0.174 0.080  0.062 0.159  0.370  0.159         0.002           0.003\n3 1 2    3 0.171 0.075  0.065 0.158  0.354  0.158         0.002           0.003",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example---predict-1",
+    "href": "slides/slides_4.html#example---predict-1",
+    "title": "Lecture 3",
+    "section": "Example - predict()",
+    "text": "Example - predict()\n\npreds$probs %&gt;% ggplot() + geom_line(aes(time, mean)) +\n  geom_ribbon(aes(time, ymin = q0.025, ymax = q0.975), alpha = 0.5)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example---generate",
+    "href": "slides/slides_4.html#example---generate",
+    "title": "Lecture 3",
+    "section": "Example - generate()",
+    "text": "Example - generate()\n\nsamples = generate(object = fit, newdata = Tokyo, \n                ~ data.frame(time_eff = time,\n                             lin_pred = Intercept + time,\n                             probs = inv_logit(Intercept + time)),\n                n.samples = 20\n                )\n# samples is now a list of length 20 (n.samples) each element of the list looks like:\n\nsamples[[1]][1:3,]\n\n    time_eff  lin_pred     probs\n1 -0.3197982 -1.468668 0.1871452\n2 -0.3065099 -1.455379 0.1891750\n3 -0.2925854 -1.441455 0.1913202",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example---generate-1",
+    "href": "slides/slides_4.html#example---generate-1",
+    "title": "Lecture 3",
+    "section": "Example - generate()",
+    "text": "Example - generate()\n\ndata.frame(time = Tokyo$time, sapply(samples, function(x) x[,1])) %&gt;%\n  pivot_longer(-time) %&gt;%\n  ggplot() + geom_line(aes(time, value, group = name, color = factor(name))) +\n  theme(legend.position = \"none\")",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#effects-of-categorical-variables-and-interactions",
+    "href": "slides/slides_4.html#effects-of-categorical-variables-and-interactions",
+    "title": "Lecture 3",
+    "section": "Effects of categorical variables and Interactions",
+    "text": "Effects of categorical variables and Interactions\nBoth this things require a little more thinking when using inlabru than when using lm or similar\n\nLet’s look at the mtcars dataset that is in R\n\n\n                   mpg cyl disp  hp drat    wt  qsec vs am gear carb\nMazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4\nMazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4\nDatsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1\nHornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1\nHornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2\nValiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#effects-of-categorical-variables",
+    "href": "slides/slides_4.html#effects-of-categorical-variables",
+    "title": "Lecture 3",
+    "section": "Effects of categorical variables",
+    "text": "Effects of categorical variables\nWe want to fit a model where rank is the only covariate.\ngear has three categories: 3 4``5\n\nm1 = lm(mpg~ gear, data = df)\nm1$coef\n\n(Intercept)       gear4       gear5 \n  16.106667    8.426667    5.273333 \n\n\nHow do we do this in inlabru?\n\n\nOption 1: Use the model.matrix() function in R\n\n\n# create the model matrix\ncov_effect = model.matrix(~ gear, data = df)\ncov_effect[1:2,]\n\n              (Intercept) gear4 gear5\nMazda RX4               1     1     0\nMazda RX4 Wag           1     1     0\n\n# attach this to your data\ndf = cbind(df, cov_effect[,-1])\n\ncmp1 = ~ Intercept(1) + gear_4(gear4, model = \"linear\") +\n  gear_5(gear5, model= \"linear\")\nlik1 = bru_obs(formula = mpg ~.,\n               data = df)\nfit1 = bru(cmp1, lik1)\nfit1$summary.fixed$mean\n\n[1] 16.103112  8.414875  5.253896",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#section",
+    "href": "slides/slides_4.html#section",
+    "title": "Lecture 3",
+    "section": "",
+    "text": "Interaction between two categorical variables\n\n\n       rank discipline yrs.since.phd yrs.service  sex salary\n1      Prof          B            19          18 Male 139750\n2      Prof          B            20          16 Male 173200\n3  AsstProf          B             4           3 Male  79750\n4      Prof          B            45          39 Male 115000\n5      Prof          B            40          41 Male 141500\n6 AssocProf          B             6           6 Male  97000",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#effects-of-categorical-variables-1",
+    "href": "slides/slides_4.html#effects-of-categorical-variables-1",
+    "title": "Lecture 3",
+    "section": "Effects of categorical variables",
+    "text": "Effects of categorical variables\nWe want to fit a model where rank is the only covariate.\nrank has three categories: Prof AsstProf``AssocProf\n\nm1 = lm(mpg~ gear, data = df)\nm1$coefficients\n\n(Intercept)       gear4       gear5 \n  16.106667    8.426667    5.273333 \n\n\nHow do we do this in inlabru?\n\nOption 2: fixed effect are just random effects with fixed precision\n\n\ndf$gear_id = as.numeric(df$gear) # inlabru needs values like 1,2,3 for random effects\n\ncmp2 = ~ -1 +  gear_effect(gear_id, model = \"iid\", fixed = T,initial = -6)\nlik2 = bru_obs(formula = mpg ~.,\n               data = df)\nfit2 = bru(cmp2, lik2)\nfit2$summary.random$gear_effect$mean\n\n[1] 16.04861 24.42290 21.15058\n\n\nWhat is happening here??\n\nThis is just a re-parametrization problem\n\nc(m1$coef[1], m1$coef[1] + m1$coef[2],m1$coef[1] + m1$coef[3])\n\n(Intercept) (Intercept) (Intercept) \n   16.10667    24.53333    21.38000",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#interaction-between-two-categorical-variables",
+    "href": "slides/slides_4.html#interaction-between-two-categorical-variables",
+    "title": "Lecture 3",
+    "section": "Interaction between two categorical variables",
+    "text": "Interaction between two categorical variables\nSay we want to fit this model\n\ndf = mtcars %&gt;% mutate(gear = factor(gear), vs = factor(vs))\nm2 = lm(mpg ~ gear * vs, data = df)\n\n\n\n(Intercept)       gear4       gear5         vs1   gear4:vs1   gear5:vs1 \n  15.050000    5.950000    4.075000    5.283333   -1.043333    5.991667 \n\n\n\nHere the best solution is to use the model.matrix() again\n\n# create the model matrix\ncov_effect = model.matrix(~ gear * vs, data = df)\ncov_effect[1:1,]\n\n(Intercept)       gear4       gear5         vs1   gear4:vs1   gear5:vs1 \n          1           1           0           0           0           0 \n\ndf = cbind(df, cov_effect[,-1])       # attach this to your data\n\ncmp3 = ~ Intercept(1) + gear_4(gear4, model = \"linear\") +\n  gear_5(gear5, model = \"linear\") + vs_1(vs1, model = \"linear\") +\n  gear4_vs1(`gear4:vs1`, model = \"linear\") + gear5_vs1(`gear5:vs1`, model = \"linear\") \n\nlik3 = bru_obs(formula= mpg ~ ., data = df)\nfit3 = bru(cmp3, lik3)\nfit3$summary.fixed$mean\n\n[1] 15.0434706  5.8986926  4.0890218  5.2876239 -0.9881328  5.8811268",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#interaction-between-categorical-and-continous-variable",
+    "href": "slides/slides_4.html#interaction-between-categorical-and-continous-variable",
+    "title": "Lecture 3",
+    "section": "Interaction between categorical and continous variable",
+    "text": "Interaction between categorical and continous variable",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#interaction-categorical-and-continous-variable",
+    "href": "slides/slides_4.html#interaction-categorical-and-continous-variable",
+    "title": "Lecture 3",
+    "section": "Interaction categorical and continous variable",
+    "text": "Interaction categorical and continous variable\n\ndf = mtcars %&gt;% mutate(gear = factor(gear))\nm2 = lm(mpg ~ gear * disp, data = df)\n\n\n\n(Intercept)       gear4       gear5        disp  gear4:disp  gear5:disp \n24.51556635 15.05196338  7.14538044 -0.02577046 -0.09644222 -0.02500467 \n\n\n\nOption 1: Again we can use the model.matrix() option:\n\n# create the model matrix\ncov_effect = model.matrix(~ gear * disp, data = df)\ncov_effect[1:1,]\n\n(Intercept)       gear4       gear5        disp  gear4:disp  gear5:disp \n          1           1           0         160         160           0 \n\ndf = cbind(df, cov_effect[,-1])       # attach this to your data\n\ncmp4 = ~ Intercept(1) + gear_4(gear4, model = \"linear\") +\n  gear_5(gear5, model = \"linear\") + disp(disp, model = \"linear\") +\n  gear4_disp(`gear4:disp`, model = \"linear\") + gear5_disp(`gear5:disp`, model = \"linear\") \n\nlik4 = bru_obs(formula= mpg ~ ., data = df)\nfit4 = bru(cmp4, lik4)\nfit4$summary.fixed$mean\n\n[1] 24.50105393 14.96906870  7.11469450 -0.02572923 -0.09575814 -0.02486877",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#interaction-categorical-and-continous-variable-1",
+    "href": "slides/slides_4.html#interaction-categorical-and-continous-variable-1",
+    "title": "Lecture 3",
+    "section": "Interaction categorical and continous variable",
+    "text": "Interaction categorical and continous variable\n\ndf = mtcars %&gt;% mutate(gear = factor(gear))\nm2 = lm(mpg ~ gear * disp, data = df)\n\n\n\n(Intercept)       gear4       gear5        disp  gear4:disp  gear5:disp \n24.51556635 15.05196338  7.14538044 -0.02577046 -0.09644222 -0.02500467 \n\n\nOption 2: fixed effects are random effect with fixed precision!\n\ndf$gear_id = as.numeric(df$gear) # inlabru needs values like 1,2,3 for random effects\n\ncmp5 = ~ -1 +  gear_effect_int(gear_id, model = \"iid\", fixed = T,initial = -6) +\n  gear_effect_slope(gear_id, disp, model = \"iid\", fixed = T,initial = -6)\nlik5 = bru_obs(formula = mpg ~.,\n               data = df)\nfit5 = bru(cmp5, lik5)\nfit5$summary.random$gear_effect_int$mean\n\n[1] 24.15667 38.93827 31.16922\n\nfit5$summary.random$gear_effect_slope$mean\n\n[1] -0.02475096 -0.11752711 -0.04884812\n\n\n\nAgain..the differences are a matter of parametrization!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#interaction-categorical-and-continous-variable-2",
+    "href": "slides/slides_4.html#interaction-categorical-and-continous-variable-2",
+    "title": "Lecture 3",
+    "section": "Interaction categorical and continous variable",
+    "text": "Interaction categorical and continous variable\n\npred_df = data.frame(disp = rep(seq(70:473),3),\n                     gear = factor(rep(3:5, each = length(seq(70:473))))) %&gt;%\n  mutate(gear_id = as.numeric(gear))\n\nlm_pred = cbind(pred_df, pred = predict(m2, newdata = pred_df))\n\ninla_pred = predict(fit5, pred_df, ~ gear_effect_int + gear_effect_slope)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
     ]
   }
 ]

@@ -35,7 +35,6 @@ execute:
   freeze: auto
 ---
 
-
 ```{r setup}
 # #| include: false
 
@@ -61,6 +60,368 @@ library(cowplot) # needs install.packages("magick") to draw images
 
 ```
 
+# Some things were missing yesterday ...
+
+## Some `inlabru` shortcuts{.smaller}
+
+In the slides we have fitted the model as:
+
+```{r}
+#| echo: true
+#| eval: false
+cmp = ~ -1 + beta0(1) beta1(covariate, model = "linear")
+formula = y ~ beta0 + beta1
+lik = bru_obs(formula = formula,
+              famuly  = "gaussian",
+              data = df)
+fit = bry(cmp, lik)
+```
+
+but in the practical you have
+
+
+
+```{r}
+#| echo: true
+#| eval: false
+cmp = ~ -1 + beta0(1) beta1(covariate, model = "linear")
+
+lik = bru_obs(formula = y~.,
+              famuly  = "gaussian",
+              data = df)
+fit = bry(cmp, lik)
+```
+
+. . .
+
+1. You *don't have to* define a formula outside of the `bru_obs()` function..it can be defines also inside the function! 
+
+. . .
+
+2. The expression `y ~ .` just means "take all the components and sum them together". It also tells the _bru()_ function that your predictor is *linear*.
+
+
+## `predict()` and `generate()` functions
+
+
+In the practicals you have used the _predict()_ function to get results from the fitted model.
+
+- `predict()` *simulates* from the fitted posterior distribution $\pi(\mathbf{y}|\mathbf{u},\theta)$, computes what you ask and produces a summary of the samples (mean, sd, quantiles, etc)
+
+- `generate()` *simulates* from the fitted posterior distribution $\pi(\mathbf{y}|\mathbf{u},\theta)$, computes what you ask and return the samples!
+
+## Example{.smaller}
+
+Let's fit the model for the Tokyo rainfall data
+$$
+\begin{aligned}
+y_t|\eta_t&\sim\text{Bin}(n_t, p_t),\qquad i = 1,\dots,366\\
+\eta_t &= \text{logit}(p_t)= \beta_0 + f(\text{time}_t)
+\end{aligned}
+$$ 
+
+```{r}
+#| echo: true
+data("Tokyo")
+cmp= ~ -1 + Intercept(1) + time(time, model ="rw2")
+formula = y ~ Intercept + time
+lik = bru_obs(formula = formula,
+              data = Tokyo,
+              Ntrials = n,
+              family = "binomial")
+fit = bru(cmp, lik)
+```
+
+
+We now want to extract results...what do we want?
+
+. . .
+
+
+- The time effect $f(\text{time}_t)$ ?
+- The linear predictor $\eta_t = \beta_0 + f(\text{time}_t)$?
+- The estimated probability offit precipitation $p_t = \text{inv_logit}(\eta_t)$ ?
+
+We can get all of them with the `predict()` or `generate()` functions!
+
+
+## Example - `predict()`
+
+```{r}
+#| echo: true
+#| eval: false
+preds1 = predict(object = fit, newdata = Tokyo, ~ time)
+preds2 = predict(object = fit, newdata = Tokyo, ~ Intercept + time)
+inv_logit = function(x) ((1 + exp(-x))^(-1))
+preds3 = predict(object = fit, newdata = Tokyo, ~ inv_logit(Intercept + time))
+```
+
+or
+
+```{r}
+#| echo: true
+#| eval: true
+inv_logit = function(x) ((1 + exp(-x))^(-1))
+preds = predict(object = fit, newdata = Tokyo, 
+                ~ data.frame(time_eff = time,
+                             lin_pred = Intercept + time,
+                             probs = inv_logit(Intercept + time)),
+                n.samples = 1000
+                )
+# preds is then a list                
+round(preds$probs[1:3,],3)
+```
+
+## Example - `predict()`
+
+```{r}
+#| echo: true
+preds$probs %>% ggplot() + geom_line(aes(time, mean)) +
+  geom_ribbon(aes(time, ymin = q0.025, ymax = q0.975), alpha = 0.5)
+```
+## Example - `generate()`
+
+```{r}
+#| echo: true
+#| eval: true
+samples = generate(object = fit, newdata = Tokyo, 
+                ~ data.frame(time_eff = time,
+                             lin_pred = Intercept + time,
+                             probs = inv_logit(Intercept + time)),
+                n.samples = 20
+                )
+# samples is now a list of length 20 (n.samples) each element of the list looks like:
+
+samples[[1]][1:3,]
+```
+
+## Example - `generate()`
+
+```{r}
+#| echo: true
+
+data.frame(time = Tokyo$time, sapply(samples, function(x) x[,1])) %>%
+  pivot_longer(-time) %>%
+  ggplot() + geom_line(aes(time, value, group = name, color = factor(name))) +
+  theme(legend.position = "none")
+
+```
+
+## Effects of categorical variables and Interactions 
+
+Both this things require a little more thinking when using `inlabru` than when using `lm` or similar
+
+. . .
+
+Let's look at the `mtcars` dataset that is in  `R` 
+
+
+```{r}
+df = mtcars %>% mutate(gear = factor(gear))
+head(df)
+
+```
+
+## Effects of categorical variables{.smaller} 
+
+We want to fit a model where `rank` is the only covariate.
+
+`gear` has three categories: `3` `4``5`
+
+```{r}
+#| echo: true
+m1 = lm(mpg~ gear, data = df)
+m1$coef
+```
+
+How do we do this in `inlabru`?
+
+. . .
+
+- Option 1: Use the `model.matrix()` function in `R`
+
+
+
+```{r}
+#| echo: true
+# create the model matrix
+cov_effect = model.matrix(~ gear, data = df)
+cov_effect[1:2,]
+
+# attach this to your data
+df = cbind(df, cov_effect[,-1])
+
+cmp1 = ~ Intercept(1) + gear_4(gear4, model = "linear") +
+  gear_5(gear5, model= "linear")
+lik1 = bru_obs(formula = mpg ~.,
+               data = df)
+fit1 = bru(cmp1, lik1)
+fit1$summary.fixed$mean
+```
+
+
+## Effects of categorical variables{.smaller} 
+
+We want to fit a model where `rank` is the only covariate.
+
+`rank` has three categories: `Prof` `AsstProf``AssocProf`
+
+```{r}
+#| echo: true
+m1 = lm(mpg~ gear, data = df)
+m1$coefficients
+```
+
+How do we do this in `inlabru`?
+
+- Option 2: fixed effect are just random effects with fixed precision
+
+
+```{r}
+#| echo: true
+
+df$gear_id = as.numeric(df$gear) # inlabru needs values like 1,2,3 for random effects
+
+cmp2 = ~ -1 +  gear_effect(gear_id, model = "iid", fixed = T,initial = -6)
+lik2 = bru_obs(formula = mpg ~.,
+               data = df)
+fit2 = bru(cmp2, lik2)
+fit2$summary.random$gear_effect$mean
+```
+
+What is happening here??
+
+. . .
+
+This is just a re-parametrization problem
+
+```{r}
+#| echo: true
+c(m1$coef[1], m1$coef[1] + m1$coef[2],m1$coef[1] + m1$coef[3])
+```
+
+
+
+## Interaction between two categorical variables{.smaller}
+
+Say we want to fit this model
+
+```{r}
+#| echo: true
+df = mtcars %>% mutate(gear = factor(gear), vs = factor(vs))
+m2 = lm(mpg ~ gear * vs, data = df)
+```
+
+```{r}
+m2$coef
+```
+. . .
+
+Here the best solution is to use the `model.matrix()` again
+
+```{r}
+#| echo: true
+# create the model matrix
+cov_effect = model.matrix(~ gear * vs, data = df)
+cov_effect[1:1,]
+df = cbind(df, cov_effect[,-1])       # attach this to your data
+
+cmp3 = ~ Intercept(1) + gear_4(gear4, model = "linear") +
+  gear_5(gear5, model = "linear") + vs_1(vs1, model = "linear") +
+  gear4_vs1(`gear4:vs1`, model = "linear") + gear5_vs1(`gear5:vs1`, model = "linear") 
+
+lik3 = bru_obs(formula= mpg ~ ., data = df)
+fit3 = bru(cmp3, lik3)
+fit3$summary.fixed$mean
+```
+
+
+## Interaction categorical and continous variable
+
+```{r}
+#| echo: true
+df = mtcars %>% mutate(gear = factor(gear))
+m2 = lm(mpg ~ gear * disp, data = df)
+```
+
+```{r}
+m2$coef
+```
+
+. . .
+
+Option 1: Again we can use the `model.matrix()` option:
+
+```{r}
+#| echo: true
+# create the model matrix
+cov_effect = model.matrix(~ gear * disp, data = df)
+cov_effect[1:1,]
+df = cbind(df, cov_effect[,-1])       # attach this to your data
+
+cmp4 = ~ Intercept(1) + gear_4(gear4, model = "linear") +
+  gear_5(gear5, model = "linear") + disp(disp, model = "linear") +
+  gear4_disp(`gear4:disp`, model = "linear") + gear5_disp(`gear5:disp`, model = "linear") 
+
+lik4 = bru_obs(formula= mpg ~ ., data = df)
+fit4 = bru(cmp4, lik4)
+fit4$summary.fixed$mean
+```
+
+
+## Interaction categorical and continous variable
+
+```{r}
+#| echo: true
+df = mtcars %>% mutate(gear = factor(gear))
+m2 = lm(mpg ~ gear * disp, data = df)
+```
+
+```{r}
+m2$coef
+```
+
+Option 2: fixed effects are random effect with fixed precision!
+
+```{r}
+#| echo: true
+df$gear_id = as.numeric(df$gear) # inlabru needs values like 1,2,3 for random effects
+
+cmp5 = ~ -1 +  gear_effect_int(gear_id, model = "iid", fixed = T,initial = -6) +
+  gear_effect_slope(gear_id, disp, model = "iid", fixed = T,initial = -6)
+lik5 = bru_obs(formula = mpg ~.,
+               data = df)
+fit5 = bru(cmp5, lik5)
+fit5$summary.random$gear_effect_int$mean
+fit5$summary.random$gear_effect_slope$mean
+```
+
+. . .
+
+Again..the differences are a matter of parametrization!
+
+
+## Interaction categorical and continous variable
+
+
+```{r}
+#| echo: true
+pred_df = data.frame(disp = rep(seq(70:473),3),
+                     gear = factor(rep(3:5, each = length(seq(70:473))))) %>%
+  mutate(gear_id = as.numeric(gear))
+
+lm_pred = cbind(pred_df, pred = predict(m2, newdata = pred_df))
+
+inla_pred = predict(fit5, pred_df, ~ gear_effect_int + gear_effect_slope)
+```
+
+```{r}
+ggplot()  + geom_line(data = inla_pred, aes(disp, mean, group= gear, color = gear)) + geom_ribbon(data = inla_pred, aes(disp, ymin = q0.025, ymax = q0.975,  mean, group= gear, fill = gear), alpha = 0.5)+ geom_line(data = lm_pred, aes(disp, pred, group= gear))
+
+```
+
+
+# Temporal models and smoothing
 ## Motivation {.smaller}
 
 Data are often observed in time, and time dependence is often expected.
@@ -70,7 +431,7 @@ Data are often observed in time, and time dependence is often expected.
 #| fig-height: 6
 #| fig-align: center
 lakes = as.data.frame(greatLakes ) %>% mutate(year = 1918:2009)
-lakes %>% 
+lakes %>%
   pivot_longer(-year) %>%
   ggplot() + geom_point(aes(year, value ))+
   facet_wrap(.~name,scales = "free" ) + xlab("") + ylab("")
@@ -87,7 +448,7 @@ lakes %>%
 ```{r}
 lakes = as.data.frame(greatLakes ) %>% mutate(year = 1918:2009)
 
-cmp = ~ -1 + Intercept(1) + time(year, model = "rw2", 
+cmp = ~ -1 + Intercept(1) + time(year, model = "rw2",
                                  scale.model = T,
                                  hyper = list(prec = list(prior = "pc.prec", param = c(1, 0.01))))
 
@@ -96,7 +457,7 @@ lik = bru_obs(formula = Erie~.,
 out = bru(cmp, lik)
 pred = predict(out, lakes, ~ Intercept + time)
 
-pred %>% ggplot() + 
+pred %>% ggplot() +
   geom_point(data = lakes, aes(year, Erie)) + ylab("") + xlab("")
 ```
 
@@ -107,7 +468,7 @@ pred %>% ggplot() +
 ```{r}
 
 pred %>% ggplot() + geom_line(aes(year, mean)) +
-  geom_ribbon(aes(year, ymin = q0.025, ymax = q0.975), alpha = 0.4 ) + 
+  geom_ribbon(aes(year, ymin = q0.025, ymax = q0.975), alpha = 0.4 ) +
   geom_point(data = lakes, aes(year, Erie)) + ylab("") + xlab("")
 ```
 
@@ -128,7 +489,7 @@ question <- readPNG("figures/question.png", native = TRUE)
 
 
 p1 = pred %>% ggplot() + geom_line(aes(year, mean)) +
-  geom_ribbon(aes(year, ymin = q0.025, ymax = q0.975), alpha = 0.4 ) + 
+  geom_ribbon(aes(year, ymin = q0.025, ymax = q0.975), alpha = 0.4 ) +
   geom_point(data = lakes, aes(year, Erie)) + ylab("") + xlab("") + xlim(1919,2030)
 ggdraw() +  draw_plot(p1) + draw_image(question, scale = .4, y = 0.15, x=0.35)
 
@@ -167,7 +528,7 @@ Time can be indexed over a
 ```{r}
 
 
-lakes %>% ggplot() + geom_point(aes(year, Erie)) + 
+lakes %>% ggplot() + geom_point(aes(year, Erie)) +
   ylab("m") + xlab("Year")
 
 
@@ -201,10 +562,10 @@ preds2 = predict(fit2, df, ~Intercept+year + seas)
 
 ppreds = rbind(cbind(preds, model = 1),
                cbind(preds2, model = 2))
-ppreds %>% 
+ppreds %>%
   filter(!is.na(y)) %>%
-  ggplot() + geom_line(aes(time, mean, group = model, color = factor(model))) + 
-   geom_ribbon(aes(time, ymin = q0.025, ymax = q0.975, group = model, fill = factor(model) ), alpha =  0.5) 
+  ggplot() + geom_line(aes(time, mean, group = model, color = factor(model))) +
+   geom_ribbon(aes(time, ymin = q0.025, ymax = q0.975, group = model, fill = factor(model) ), alpha =  0.5)
 
 }
 
@@ -237,21 +598,21 @@ dens$x <- 3 + dens$density * scale_factor
 
 ggplot(dd, aes(time, y)) +
   # grey background
- 
-  
+
+
   # points
   geom_point(size = 2) +
-  
+
   # connecting line between neighbors t=2 and t=4
   geom_line(data = dd %>% filter(time %in% c(2,4)), aes(time, y), color = "black") +
-  
+
   # normal density "red blob"
   geom_polygon(data = dens,
                aes(x, y), fill = "red", alpha = 0.8) +
-  
+
   # predicted mean point
   geom_point(aes(x = 3, y = 0), color = "blue", size = 3) +
-  ylim(-2,2) + 
+  ylim(-2,2) +
   # labels
   labs(title = "First Order Random Walk",
        x = "Time",
@@ -307,7 +668,7 @@ $$
 1.  Role of the precision parameter $\tau$ and prior distribution
 2.  RW as intrinsic model
 
-## What is the role of the precision parameter?{.smaller}
+## What is the role of the precision parameter? {.smaller}
 
 -   $\tau$ says how much $u_t$ can vary around its mean
 
@@ -324,7 +685,7 @@ cmp = ~ -1 +  time(year, model = "rw2", constr = FALSE,
                             hyper = list(prec = list(initial = 0, fixed = T)))
 cmp2 = ~ -1 +  time(year, model = "rw2", constr = FALSE,
                             hyper = list(prec = list(initial = 20, fixed = T)))
-                                        
+
 
 lik = bru_obs(formula = Erie~.,
               data = lakes)
@@ -361,7 +722,7 @@ cmp = ~ -1 +  time(year, model = "rw2", constr = FALSE,
                             hyper = list(prec = list(initial = 10, fixed = T)))
 cmp2 = ~ -1 +  time(year, model = "rw2", constr = FALSE,
                             hyper = list(prec = list(initial = 20, fixed = T)))
-                                        
+
 
 lik = bru_obs(formula = Erie~.,
               data = lakes)
@@ -395,7 +756,7 @@ ggplot() + geom_point(data = lakes, aes(year, Erie)) +
 ::: {.column width="50%"}
 $$
 \begin{eqnarray}
-\sigma = \sqrt{1/\tau} \\ 
+\sigma = \sqrt{1/\tau} \\
 \text{Prob}(\sigma>U) = \alpha;\\ \qquad U>0, \ \alpha \in (0,1)
 \end{eqnarray}
 $$
@@ -444,9 +805,9 @@ lakes %>% ggplot() + geom_point(aes(year, Erie)) + xlab("") + ylab("")
 #| warning: false
 #| message: false
 
-cmp = ~ Intercept(1) + 
+cmp = ~ Intercept(1) +
   time(year, model = "rw1",
-       hyper = list(prec = 
+       hyper = list(prec =
                       list(prior = "pc.prec",
                            param = c(0.5, 0.5))))
 ```
@@ -459,7 +820,7 @@ cmp = ~ Intercept(1) +
 #| eval: true
 
 cmp0 = ~ -1 +  time(year, model = "rw2", constr = FALSE,
-                   scale.model = TRUE, 
+                   scale.model = TRUE,
                     hyper = list(prec = list(prior = "pc.prec", param = c(0.3,0.5))))
 lik = bru_obs(formula = Erie~.,
               data = lakes)
@@ -467,7 +828,7 @@ out_pc0 = bru(cmp0, lik)
 
 
 prior = data.frame(x = seq(0,9,0.01),
-                   y = INLA::inla.pc.dprec(seq(0,9,0.01), 
+                   y = INLA::inla.pc.dprec(seq(0,9,0.01),
                                            u  = 0.3, alpha = 0.5))
 posterior = inla.tmarginal(function(x)1/sqrt(x),
                            out_pc0$marginals.hyperpar$`Precision for time`)
@@ -491,36 +852,28 @@ RW1 defines *differences*, not *absolute levels*:
 
 . . .
 
-
 ::::: columns
 ::: {.column width="50%"}
-
 This means:
 
--   If $u_t\sim\text{RW}1$ then 
-$$
-\begin{aligned}
-    \eta_t & = \beta_0 + u_t \\ 
+-   If $u_t\sim\text{RW}1$ then $$
+    \begin{aligned}
+    \eta_t & = \beta_0 + u_t \\
     & =(\beta_0+k) + (u_t-k) \\
-& =    \beta_0^* + u_t^*  
-\end{aligned}
-$$ 
+    & =    \beta_0^* + u_t^*
+    \end{aligned}
+    $$
 
 so parameters are not well-defined.
-
-
 :::
-::: {.column width="50%"}
 
+::: {.column width="50%"}
 **Solution:**
 
 -   Sum to zero constraint $\sum_{i = 1}^n u_i = 0$
 -   This is included in the model be default
-
-
 :::
-::::: 
-
+:::::
 
 ## RW as intrinsic models {.smaller}
 
@@ -566,22 +919,22 @@ $$
 ::: {.column width="60%"}
 ```{r}
 #| echo: true
-cmp1 = ~ Intercept(1) + 
-  time(year, model = "rw1", 
+cmp1 = ~ Intercept(1) +
+  time(year, model = "rw1",
        scale.model = T,
-       hyper = list(prec = 
+       hyper = list(prec =
                       list(prior = "pc.prec",
                            param = c(0.3,0.5))))
 
-cmp2 = ~ Intercept(1) + 
+cmp2 = ~ Intercept(1) +
   time(year, model = "rw2",
        scale.model = T,
-       hyper = list(prec = 
-                      list(prior = "pc.prec", 
+       hyper = list(prec =
+                      list(prior = "pc.prec",
                            param = c(0.3,0.5))))
 
 
-lik = bru_obs(formula = Erie~ ., 
+lik = bru_obs(formula = Erie~ .,
               data = lakes)
 
 fit1 = bru(cmp1, lik)
@@ -639,10 +992,10 @@ triceps$age_group = inla.group(triceps$age, n = 30)
 
 # Description
 # The data are derived from an anthropometric study of 892 females under 50 years in three Gambian villages in West Africa.
-# 
+#
 # Format
 # A data frame with 892 observations on the following 3 variables:
-# 
+#
 # age Age of respondents.
 # lntriceps Log of the triceps skinfold thickness.
 # triceps Triceps skinfold thickness.
@@ -660,7 +1013,6 @@ triceps %>% ggplot() + geom_point(aes(age, triceps, color = "original") ) +
 ```
 :::
 :::::
-
 
 ```{r}
 #| echo: true
@@ -684,7 +1036,7 @@ pred = predict(fit, triceps, ~ Intercept + cov)
 
 pred %>% ggplot() +
   geom_point(aes(age, triceps), alpha = 0.4)+ geom_line(aes(age_group, mean), color = "red") +
-  geom_ribbon(aes(age_group, ymin = q0.025, ymax = q0.975), alpha = 0.5, fill = "red") 
+  geom_ribbon(aes(age_group, ymin = q0.025, ymax = q0.975), alpha = 0.5, fill = "red")
 
 ```
 
@@ -771,8 +1123,8 @@ data.frame(xx = seq(-1,1,0.001)) %>%
   yy2 = inla.pc.dcor0(xx, u = 0.4, alpha= 0.5),
   yy3 = inla.pc.dcor0(xx, u = 0.7, alpha= 0.5)) %>%
   pivot_longer(-xx)%>%
-  ggplot()  + geom_line(aes(xx,value, group = name, color = name)) + 
-  xlab("") + ylab("")+ 
+  ggplot()  + geom_line(aes(xx,value, group = name, color = name)) +
+  xlab("") + ylab("")+
   scale_color_discrete(name="",
                          breaks=c("yy1", "yy2", "yy3"),
                          labels = list(
@@ -820,7 +1172,7 @@ pp = data.frame(xx = seq(-1,1,0.001)) %>%
   yy3 = inla.pc.dcor1(xx, u = 0.2, alpha= 0.7)) %>%
   pivot_longer(-xx)
 pp %>%
-  ggplot()  + geom_line(aes(xx,value, group = name, color = name)) + 
+  ggplot()  + geom_line(aes(xx,value, group = name, color = name)) +
   xlab("") + ylab("")+ scale_color_discrete(name="",
                          breaks=c("yy1", "yy2", "yy3"),
                          labels = list(
@@ -832,7 +1184,7 @@ pp %>%
 :::
 :::::
 
-## Example - AR1 and RW1 for earthquakes data{.smaller}
+## Example - AR1 and RW1 for earthquakes data {.smaller}
 
 ::::: columns
 ::: {.column width="50%"}
@@ -918,31 +1270,31 @@ rbind(cbind(pred1, model = "rw1"),
 
 ## AR1 vs. RW models
 
-* RW1 models can be seen as a limit for  AR1 models
+-   RW1 models can be seen as a limit for AR1 models
 
-* They are not too different when smoothing, but can 
+-   They are not too different when smoothing, but can give different predictions.
+
+
 
 # Continuous time modelling
 
+## Continuous time modelling {.smaller}
 
-## Continuous time modelling{.smaller}
+-   Sometimes the data are not collected at discrete time points but over continous time
 
-- Sometimes the data are not collected at discrete time points but over continous time
+-   One solution (not a bad one usually) is to discretize the time and use RW model (AR models are then harder to justify..)
 
-- One solution (not a bad one usually) is to discretize the time and use  RW model (AR models are then harder to justify..)
-
-_ A different solution is to use a continuous smoother based on a continous Gaussian Random Field (GRF) $\omega(t)$
+- A different solution is to use a continuous smoother based on a continuous Gaussian Random Field (GRF) $\omega(t)$
 
 . . .
 
 What is this?
 
-- Is a process defined everywhere in the time domain $\mathcal{T}$ such that, if i take $n$ points $t_1,t_2,\dots,t_n$ then
+-   Is a process defined everywhere in the time domain $\mathcal{T}$ such that, if i take $n$ points $t_1,t_2,\dots,t_n$ then
 
 $$
 (\omega(t_1),\omega(t_2),\dots,\omega(t_n))\sim\mathcal{N}(\mathbf{0},\mathbf{\Sigma}_{\omega(t_1),\omega(t_2),\dots,\omega(t_n)} ), \qquad \text{ for any } t_1,t_2,\dots,t_n\in\mathcal{T}
-$$
-Where $\mathbf{\Sigma}_{\omega(t_1),\omega(t_2),\dots,\omega(t_n)}$ is a variance-covariance matrix.
+$$ Where $\mathbf{\Sigma}_{\omega(t_1),\omega(t_2),\dots,\omega(t_n)}$ is a variance-covariance matrix.
 
 To define $\omega(t), t\in\mathcal{T}$, we have to define $\Sigma$
 
@@ -952,13 +1304,13 @@ BUT...
 
 Covariance matrices are not nice objects!
 
-- Hard to define
-- Dense
-- computationally hard to deal with
+-   Hard to define
+-   Dense
+-   computationally hard to deal with
 
 ## The SPDE approach
 
-We define a (Matern) GRF as the solution of  a stochastic partial differential equation (SPDE)
+We define a (Matern) GRF as the solution of a stochastic partial differential equation (SPDE)
 
 $$
 (\kappa^2-\Delta)^{\alpha/2}\omega(t) = W(t)
@@ -966,41 +1318,38 @@ $$
 
 What is this?
 
-- $W(t)$ is random noise
-- $\omega(t)$ is the smooth process we want
-- $(\kappa^2-\Delta)^{\alpha/2}$ is an operator that "smooths" the white noise.
-- $\kappa$ and $\alpha$ are parameters
+-   $W(t)$ is random noise
+-   $\omega(t)$ is the smooth process we want
+-   $(\kappa^2-\Delta)^{\alpha/2}$ is an operator that "smooths" the white noise.
+-   $\kappa$ and $\alpha$ are parameters
 
-## One analogy..
+## One analogy..{.smaller}
 
-- Think of white noise as someone randomly tapping along a rope.
-  
-  - The taps are independent.
-  - Some are big, some are small.
-  - They have no relation to each other.
-  - This is just like White noise!
+-   Think of white noise as someone randomly tapping along a rope.
 
-. . .   
-
-- But the rope has tension and stifness
-
-  - the tension spreads each tap to nearby points.
-  - Sharp jumps are softened.
+    -   The taps are independent.
+    -   Some are big, some are small.
+    -   They have no relation to each other.
+    -   This is just like White noise!
 
 . . .
 
+-   But the rope has tension and stifness
 
-- The rope settles into a smooth wiggly shape  (just like a Matérn field!)
+    -   the tension spreads each tap to nearby points.
+    -   Sharp jumps are softened.
 
+. . .
+
+-   The rope settles into a smooth wiggly shape (just like a Matérn field!)
 
 . . .
 
 The parameters:
 
-- Tension = controls how far randomness propagates ($\kappa$)
+-   Tension = controls how far randomness propagates ($\kappa$)
 
-- Stiffness = controls how smooth the field becomes ($\alpha$)
-
+-   Stiffness = controls how smooth the field becomes ($\alpha$)
 
 ## SPDE as a smoothing operator
 
@@ -1069,25 +1418,25 @@ u_fix32 <- solve_alpha(build_A(2), W, m = 4/2)  # alpha=2 -> m=1
 
 
 p1 = data.frame(x =x,
-           W = W, 
+           W = W,
            u1  = u_fix1,
            u2  = u_fix2,
            u3  = u_fix3
            ) %>%
-  ggplot() + geom_line(aes(x,W), alpha = 0.2) + geom_line(aes(x,u1, color = "k = 0.5")) + 
+  ggplot() + geom_line(aes(x,W), alpha = 0.2) + geom_line(aes(x,u1, color = "k = 0.5")) +
   geom_line(aes(x,u2, color = "k = 1")) +
-  geom_line(aes(x,u3, color = "k = 2")) + xlab("") + ylab("") + ggtitle("alpha = 1") + ylim(-1.5,1.5)
+  geom_line(aes(x,u3, color = "k = 2")) + xlab("") + ylab("") + ggtitle("alpha = 1") + coord_cartesian(ylim = c(-1, 1))
 
 p2 = data.frame(x =x,
-           W = W, 
+           W = W,
            u1  = u_fix12,
            u2  = u_fix22,
            u3  = u_fix32
 ) %>%
-  ggplot() + geom_line(aes(x,W), alpha = 0.2) + 
-  geom_line(aes(x,u1, color = "k = 0.5")) + 
+  ggplot() + geom_line(aes(x,W), alpha = 0.2) +
+  geom_line(aes(x,u1, color = "k = 0.5")) +
   geom_line(aes(x,u2, color = "k = 1")) +
-  geom_line(aes(x,u3, color = "k = 2"))+ xlab("") + ylab("") + ggtitle("alpha = 2") + ylim(-1.5,1.5)
+  geom_line(aes(x,u3, color = "k = 2"))+ xlab("") + ylab("") + ggtitle("alpha = 2") + coord_cartesian(ylim = c(-1, 1))
 
 library(patchwork)
 
@@ -1095,9 +1444,7 @@ p1 + p2 + plot_layout(ncol = 1, guides = "collect")
 
 ```
 
-
-
-## Solving the SPDE
+## Solving the SPDE{.smaller}
 
 Ok...but we still need to solve the SPDE to find $\omega(t)$!
 
@@ -1109,21 +1456,21 @@ Now we need to discretize the domain into T points (we cannot compute on the con
 
 ::::: columns
 ::: {.column width="50%"}
-
 We represent our solution as
 
 $$
 \omega(t) = \sum_{i = 1}^T\phi_i(t)w_i
-$$
+$$ 
+
 Where
 
- - $\phi_i(s)$ are (known) basis functions
- - $w_i$ are (unknown) weights
-
+-   $\phi_i(s)$ are (known) basis functions
+-   $w_i$ are (unknown) weights
 :::
+
 ::: {.column width="50%"}
 ```{r}
-#| out-width: 100%
+#| out-width: 70%
 
 locs = c(-5,10,15,25,40,50,60)
 mesh1d = fm_mesh_1d(locs, degree = 1, boundary = "neumann")
@@ -1142,60 +1489,49 @@ w = round(runif(7), 3)
                 aes(x,y)) + ggtitle(paste("w=",paste(round(w,2), collapse = ', ')))
 
 ```
-
 :::
 :::::
 
-## In summary
+## In summary{.smaller}
 
-- The continuous Matern GRF is the solution of  a SPDE and is represented as
+-   The continuous Matern GRF is the solution of a SPDE and is represented as
 
 $$
 \omega(t) = \sum_{i = 1}^T\phi_i(t)w_i
 $$
 
-- The weights vector $\mathbf{w} = (w_1,\dots,w_N)$ is Gaussian with a **sparse** precision matrix $\longrightarrow$ Compotational convenience
+-   The weights vector $\mathbf{w} = (w_1,\dots,w_N)$ is Gaussian with a **sparse** precision matrix $\longrightarrow$ Computational convenience
 
-- The field has two parameters
+-   The field has two parameters
 
-  - The range $\rho$
-  - The marginal variance $\sigma^2$
-  
-- These parameters are linked to the parameters of the SPDE
+    -   The range $\rho$
+    -   The marginal variance $\sigma^2$
 
-- We need to assign prior to them
+-   These parameters are linked to the parameters of the SPDE
+
+-   We need to assign prior to them
 
 ## PC priors for range and marginal variance
 
-Remember: 
+Remember:
 
-  - PC priors penalize distance from a basis model
-  - Are expressed in a user friendly way
-  
+-   PC priors penalize distance from a basis model
+-   Are expressed in a user friendly way
+
 . . .
 
-For the **range** we have:
-$$
+For the **range** we have: $$
 \text{Prob}(\rho<\rho_0) = p_{\rho}
 $$
 
-
-For the **marginal standard deviation** we have:
-$$
+For the **marginal standard deviation** we have: $$
 \text{Prob}(\sigma<\sigma_0) = p_{\sigma}
 $$
 
-```{r}
 
-```
-
-
-- The 
-
-
-(more on this tomorrow!)
 
 ## PC priors for range and marginal variance
+
 ```{r}
 dens_prior_range = function(rho_0, p_alpha)
 {
@@ -1217,46 +1553,47 @@ dens_prior_sd = function(sigma_0, p_sigma)
   # P(sigma>sigma_0) = p_sigma
   sigma = seq(0, sigma_0*10, length.out =1000)
   alpha2_tilde = -log(p_sigma)/sigma_0
-  dens_sigma = alpha2_tilde* exp(-alpha2_tilde * sigma) 
+  dens_sigma = alpha2_tilde* exp(-alpha2_tilde * sigma)
   return(data.frame(x = sigma, y = dens_sigma))
 }
 
 
-p1 = ggplot() + geom_line(data=dens_prior_range(5, 0.5), 
+p1 = ggplot() + geom_line(data=dens_prior_range(5, 0.5),
                      aes(x,y,color = "P(rho<5) = 0.5")) +
-  geom_line(data=dens_prior_range(5, 0.1), 
+  geom_line(data=dens_prior_range(5, 0.1),
                      aes(x,y,color = "P(rho<5) = 0.1")) +
-  geom_line(data=dens_prior_range(10, 0.5), 
+  geom_line(data=dens_prior_range(10, 0.5),
                      aes(x,y,color = "P(rho<10) = 0.5")) +
-  geom_line(data=dens_prior_range(10, 0.1), 
+  geom_line(data=dens_prior_range(10, 0.1),
                      aes(x,y,color = "P(rho<10) = 0.1")) +
   xlab("") + ylab("") + theme(legend.title = element_blank())+
   ggtitle("PC prior for range")
 
 
 
-p2 = ggplot() + geom_line(data=dens_prior_sd(1, 0.5), 
+p2 = ggplot() + geom_line(data=dens_prior_sd(1, 0.5),
                      aes(x,y,color = "P(rho<5) = 0.5")) +
-  geom_line(data=dens_prior_sd(1, 0.1), 
+  geom_line(data=dens_prior_sd(1, 0.1),
                      aes(x,y,color = "P(rho<5) = 0.1")) +
-  geom_line(data=dens_prior_sd(0.2, 0.5), 
+  geom_line(data=dens_prior_sd(0.2, 0.5),
                      aes(x,y,color = "P(rho<10) = 0.5")) +
-  geom_line(data=dens_prior_sd(0.2, 0.1), 
+  geom_line(data=dens_prior_sd(0.2, 0.1),
                      aes(x,y,color = "P(rho<10) = 0.1")) +
   xlab("") + ylab("") + theme(legend.title = element_blank())+
   ggtitle("PC prior for range") + xlim(c(0,5))
 
-p1 + p2 
+p1 + p2
 ```
 
-## In practice...{.smaller}
+## In practice... {.smaller}
 
 If you want to use a continous model for time (or for smoothing a covariate) you need to:
 
-1. Define a 1-dimensional mesh over the domain of interest (allowing for some buffer around your domain)
+1.  Define a 1-dimensional mesh over the domain of interest (allowing for some buffer around your domain)
 
-  - How many nodes?
-  - Where to place them?
+-   How many nodes?
+-   Where to place them?
+
 ```{r}
 #| echo: true
 #| eval: false
@@ -1267,7 +1604,7 @@ mesh1d = fm_mesh_1d(locs, degree = 1, boundary = "neumann")
 
 ```
 
-2. Define the SPDE model and the prior
+2.  Define the SPDE model and the prior
 
 ```{r}
 #| echo: true
@@ -1279,7 +1616,7 @@ spde <- inla.spde2.pcmatern(mesh1d,
 )
 ```
 
-3. Use the SPDE model in a component of your model
+3.  Use the SPDE model in a component of your model
 
 ```{r}
 #| echo: true
@@ -1288,14 +1625,13 @@ spde <- inla.spde2.pcmatern(mesh1d,
 cmp = ~ Intercept(1) + smooth(covariate, model = spde)
 ```
 
+## Example {.smaller}
 
-
-## Example{.smaller}
 Let's go back to the Triceps skinfold thickness example.
 
 ::::: columns
 ::: {.column width="50%"}
-**The Model** 
+**The Model**
 
 $$
 \begin{aligned}
@@ -1322,7 +1658,7 @@ triceps[1:3,c(1,3)]
 #| eval: true
 #| warning: false
 #| message: false
-#| 
+#|
 locs = seq(-5,60,5)
 mesh1d = fm_mesh_1d(locs, degree = 2, boundary = "neumann")
 
@@ -1335,10 +1671,7 @@ lik_spde = bru_obs(formula = triceps ~.,data = triceps)
 fit_spde = bru(cmp, lik_spde)
 ```
 
-
-
 ## Comparing SPDE and RW2
-
 
 ```{r}
 
@@ -1362,8 +1695,3 @@ ggplot() + geom_line(data = pred_spde, aes(age, mean, color = "spde")) +
 
 
 ```
-
-
-
-
-

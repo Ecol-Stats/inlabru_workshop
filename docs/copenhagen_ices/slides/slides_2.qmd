@@ -516,7 +516,9 @@ p1 + geom_segment(data = inflection_points,
             size = 6)
 ```
 
-The observation model (likelihood) can be written as: $$
+The observation model (likelihood) can be written as: 
+
+$$
 \pi(\mathbf{y}|\eta,\sigma^2) = \prod_{i = 1}^n\pi(y_i|\eta_i,\sigma^2)
 $$
 
@@ -524,12 +526,14 @@ $$
 
 The elements of an `inlabru`-friendly statistical model are:
 
-1.  The observational model $$
-    \begin{aligned}
+1.  The observational model 
+$$
+\begin{aligned}
     y_i|\eta_i, \sigma^2 & \sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n\\
     E(y_i|\eta_i, \sigma^2) & = \eta_i
     \end{aligned}
-    $$ **Note**: We assume that, given the *linear predictor* $\eta$, the data are independent of each other! Data dependence is expressed through the *components* of the linear predictor.
+$$ 
+    **Note**: We assume that, given the *linear predictor* $\eta$, the data are independent of each other! Data dependence is expressed through the *components* of the linear predictor.
 
 ## Let's formalize this a bit... {auto-animate="true"}
 
@@ -1222,13 +1226,15 @@ pTokyo +
 
 $$
 y_t|\eta_t\sim\text{Bin}(n_t, p_t),\qquad \eta_t = \text{logit}(p_t),\qquad i = 1,\dots,366
-$$ $$
+$$ 
+$$
 n_t = \left\{
  \begin{array}{lr}
 1, & \text{for}\; 29\; \text{February}\\
 2, & \text{other days}
 \end{array}\right.
-$$ $$
+$$ 
+$$
 y_t =
 \begin{cases}
 \{0,1\}, & \text{for}\; 29\; \text{February}\\
@@ -1246,7 +1252,8 @@ $$
 y_t|\eta_t\sim\text{Bin}(n_t, p_t),\qquad \eta_t = \text{logit}(p_t),\qquad i = 1,\dots,366
 $$
 
-**Stage 2** The latent field $$
+**Stage 2** The latent field 
+$$
 \eta_t = \beta_0 + f(\text{time}_t)
 $$
 
