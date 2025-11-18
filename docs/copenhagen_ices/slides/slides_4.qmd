@@ -283,6 +283,7 @@ How do we do this in `inlabru`?
 df$gear_id = as.numeric(df$gear) # inlabru needs values like 1,2,3 for random effects
 
 cmp2 = ~ -1 +  gear_effect(gear_id, model = "iid", fixed = T,initial = -6)
+# or: cmp2 = ~ Intercept(1) +  gear_effect(gear_id, model = "iid", fixed = T,initial = -6, constr = T)
 lik2 = bru_obs(formula = mpg ~.,
                data = df)
 fit2 = bru(cmp2, lik2)
