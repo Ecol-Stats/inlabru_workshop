@@ -8,7 +8,9 @@ project:
   - practical2_compiler.qmd
   - slides/slides_1.qmd
 website:
-  title: BES workshop 2025
+  title: BES Annual meeting inlabru workshop 2025
+  page-footer:
+    center: '<a href="https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/" style="color:#ccc;">Home</a>'
   navbar:
     logo: INLA_logo.png
     left:
@@ -20,9 +22,20 @@ website:
     style: docked
     search: true
     contents:
-    - index.qmd
-    - practical1_compiler.qmd
-    - practical2_compiler.qmd
+      - href: index.html
+        text: Home
+      - section: "Slides"
+        contents:
+          - href: slides/slides_1.html
+            text: Lecture 1
+          - href: slides/slides_2.html
+            text: Lecture 2
+      - section: "Practicals"
+        contents:
+          - href: https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/practical1_compiler.html
+            text: Practical 1
+          - href: https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/practical2_compiler.html
+            text: Practical 2
   page-navigation: true
 format:
   html:

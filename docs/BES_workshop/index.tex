@@ -263,7 +263,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[colback={codebgcolor}, enhanced, frame hidden, boxrule=0pt, breakable, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[colback={codebgcolor}, frame hidden, boxrule=0pt, sharp corners, enhanced, breakable]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -308,33 +308,39 @@
   The goal of this workshop is to introduce new users to the
   \texttt{inlabru} software for Bayesian spatial modelling using the
   integrated nested Laplace approximation (INLA).
-\item
-  The workshop is intended for applied statisticians and quantitative
-  ecologists who are interested in efficiently modelling spatial data-
-  No prior knowledge of \texttt{R-INLA} is required.
 \end{itemize}
 
 \section{Learning Objectives for the
 workshop}\label{learning-objectives-for-the-workshop}
 
-At the end of the workshop, participants will be able to:
+At the end of the workshop, participants will have an understanding of:
 
 \begin{itemize}
 \tightlist
 \item
-  Understand the \texttt{inlabru} workflow and software principles.
+  The \texttt{inlabru} workflow and software principles.
 \item
-  Fit commonly used models such as Linear models, LMM, GLM and GAMs
-  using \texttt{inlabru}.
+  The motivation for and the challenges of analysing and modelling
+  spatial data.
 \item
-  Describe different types of spatial data and fit appropriate spatial
-  models.
+  Statistical models used to analyse spatial data.
 \item
-  Interpret model outputs and create spatial maps and predictions.
-\item
-  Implement a complete, reproducible spatial analysis workflow from data
-  preparation to result visualization.
+  The implementation of these models in the \texttt{inlabru} package
 \end{itemize}
+
+\section{Intended audience}\label{intended-audience}
+
+The workshop aims to cater for participants with a range of different
+backgrounds, who is interested in analysing data with modern spatial
+statistical modelling approaches.
+
+\section{Prerequisites}\label{prerequisites}
+
+Participants should be familiar with the R environment, and general
+statistical approaches for modelling such as regression, analysis of
+(co)variance, and generalized linear models.
+
+No knowledge of \texttt{R-INLA} or \texttt{inlabru} is required.
 
 \section{Schedule Program}\label{schedule-program}
 
@@ -355,8 +361,8 @@ Topic
 14:00 - 14:45 &
 \href{https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_1}{\textbf{Session
 1}}: Introduction to \texttt{inlabru} \\
-14:45 - 15:45 & \href{day1_practical.qmd}{Practical Session 1} \\
-15:45 - 16:00 & Coffee break \\
+14:45 - 15:30 & \href{day1_practical.qmd}{Practical Session 1} \\
+15:30 - 16:00 & Refreshment break \\
 16:00 - 16:45 &
 \href{https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_2}{\textbf{Session
 2}:} Spatial Modelling with \texttt{inlabru} \\
