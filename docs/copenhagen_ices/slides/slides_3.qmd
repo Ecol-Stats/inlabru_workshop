@@ -759,7 +759,7 @@ $$
 \pi(u_i|\mathbf{y}) = \int\pi(u_i|\theta, \mathbf{y})\pi(\theta|\mathbf{y)}\ d\theta
 $$
 
--   $\theta$ is a smaller dimensional vectore, easier to integrate
+-   $\theta$ is a smaller dimensional vector, easier to integrate
 -   **BUT** we need to approximate both $\pi(\theta|\mathbf{y})$ and $\pi(u_i|\theta, \mathbf{y})$
 :::
 :::::
