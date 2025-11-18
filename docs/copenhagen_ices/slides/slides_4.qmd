@@ -1696,3 +1696,75 @@ ggplot() + geom_line(data = pred_spde, aes(age, mean, color = "spde")) +
 
 
 ```
+
+## Some practical tips I
+
+You  might wonder which priors have you used in your model..
+
+
+```{r}
+#| echo: true
+#| eval: false
+fit = bru(cmp, lik)
+
+INLA::inla.priors.used(fit)
+
+```
+
+**NB** `inla.priors.used` is a function of the `INLA` package, so you need to load it explicitly.
+
+## Some practical tips II
+
+
+Getting help!
+
+```{r}
+#| echo: true
+#| eval: false
+
+inla.doc("ar1")
+inla.doc("pc.prior")
+inla.doc("gaussian")
+```
+
+
+## Some practical tips II{.smaller}
+
+Which models are implemented?
+
+**Likelihoods**
+```{r}
+#| echo: true
+#| eval: true
+# which likelihoods?
+inla.list.models("likelihood")
+```
+
+## Some practical tips II{.smaller}
+
+Which models are implemented?
+
+**Components**
+```{r}
+#| echo: true
+#| eval: true
+# which latent models? (components)
+inla.list.models("latent")
+```
+
+
+## Some practical tips II{.smaller}
+
+Which models are implemented?
+
+**Priors**
+
+
+```{r}
+#| echo: true
+#| eval: true
+# which priors?
+inla.list.models("prior")
+```
+
+```
