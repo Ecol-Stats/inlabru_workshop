@@ -1487,7 +1487,7 @@ w = round(runif(7), 3)
 
  p1 + geom_line(data = data.frame(x = eval$x,
                            y = fm_evaluate(eval, w)),
-                aes(x,y)) + ggtitle(paste("w=",paste(round(w,2), collapse = ', ')))
+                aes(x,y), size = 2) + ggtitle(paste("w=",paste(round(w,2), collapse = ', ')))
 
 ```
 :::
