@@ -417,7 +417,8 @@ ggplot(pred_1$a, aes(x = year, y = mean,
 
 ## Spatio temporal models for areal data {.smaller}
 
-The observation model $$
+The observation model 
+$$
 Y_{st}|\lambda_{st}\sim\text{Poisson}(E_{st}\lambda_{st})
 $$
 
@@ -500,9 +501,10 @@ We are going to see **3 different models for the linear predictor** $\eta_{st} =
 
     Here the spatial fields are different for each year, they are independent on each other.
 
-3.  **Model 3**: $\eta_{st} = \beta_0 + u_{st} + v_t$ with $$
+3.  **Model 3**: $\eta_{st} = \beta_0 + u_{st} + v_t$ with 
+$$
     u_{st} = \phi u_{st-1} + w_{st}, \text{ with } w_{st}\sim\text{CAR}(\tau),\ i = 1,\dots,T
-    $$
+$$
 
 Here we are adding more temporal dependence in the spatial term, using a AR1 type model Here the spatial fields are different for each year, they are independent on each other.
 
@@ -571,9 +573,10 @@ $$
 
 2.  **Model 2**: $\eta_{st} = \beta_0 + u_{st} + v_t$ with $u_{st}\sim\text{CAR}(\tau),\ i = 1,\dots,T$
 
-3.  **Model 3**: $\eta_{st} = \beta_0 + u_{st} + v_t$ with $$
+3.  **Model 3**: $\eta_{st} = \beta_0 + u_{st} + v_t$ with 
+$$
     u_{st} = \phi u_{st-1} + w_{st}, \text{ with } w_{st}\sim\text{CAR}(\tau),\ i = 1,\dots,T
-    $$
+$$
 
 **Compare**
 
@@ -615,6 +618,7 @@ round(fit_3$summary.hyperpar[,c(1,2, 3,5)],2)
 ```{r}
 #| echo: true
 names(inla.models()$group)
+
 ```
 
 <br>
@@ -919,9 +923,10 @@ We are going to see **3 different models for the linear predictor** $\eta_{st}$
 
     Here spatial fields are different for each year, are independent and share range and sd.
 
-3.  **Model 3**: $\eta_t(s) = \beta_0 + u_t(s) + v_t$ with $$
+3.  **Model 3**: $\eta_t(s) = \beta_0 + u_t(s) + v_t$ with 
+$$
     u_t(s) = \phi\ u_{t-1}(s)  + \omega(s),\text{ with }  \omega(s)\sim\text{GF}(\rho,\sigma_u)
-    $$
+$$
 
     Here we are adding more temporal dependence in the spatial term, using a AR1 type model Here the spatial fields are different for each year, they are independent on each other.
 
@@ -1166,7 +1171,7 @@ The `.data.` indicates the data that are input in the `bru_obs()` function
 
 # Point Processes
 
-## Space-time Point Processes
+## Space-time Point Processes{.smaller}
 
 -   For space-time point processes one can also use the `group` and `replicate` features
 
@@ -1187,7 +1192,7 @@ ggplot() +
 
 ```
 
-## Space-time Point Processes {auto-animate="true"}
+## Space-time Point Processes {auto-animate="true" .smaller}
 
 ```{r}
 matern <- inla.spde2.pcmatern(mrsea$mesh,
@@ -1219,7 +1224,7 @@ lik =  bru_obs(
 fit <- bru(cmp, lik)
 ```
 
-## Space-time Point Processes {auto-animate="true"}
+## Space-time Point Processes {auto-animate="true" .smaller}
 
 1.  Define the component (with the `group` feature)
 2.  Define the likelihood model
@@ -1247,7 +1252,7 @@ lik =  bru_obs(
 fit <- bru(cmp, lik)
 ```
 
-## Space-time Point Processes {auto-animate="true"}
+## Space-time Point Processes {auto-animate="true" .smaller}
 
 1.  Define the component (with the `group` feature)
 2.  Define the likelihood model
@@ -1277,7 +1282,7 @@ lik =  bru_obs(
 fit <- bru(cmp, lik)
 ```
 
-## Space-time Point Processes {auto-animate="true"}
+## Space-time Point Processes {auto-animate="true" .smaller}
 
 1.  Define the component (with the `group` feature)
 2.  Define the likelihood model
@@ -1308,7 +1313,7 @@ lik =  bru_obs(
 fit <- bru(cmp, lik)
 ```
 
-## Space-time Point Processes {auto-animate="true"}
+## Space-time Point Processes {auto-animate="true" .smaller}
 
 1.  Define the component (with the `group` feature)
 2.  Define the likelihood model
@@ -1336,7 +1341,7 @@ lik =  bru_obs(
 fit <- bru(cmp, lik)
 ```
 
-## Space-time Point Processes
+## Space-time Point Processes{.smaller}
 
 Results
 
@@ -1359,8 +1364,49 @@ pl1 <- ggplot() +
 pl1
 ```
 
-## Non-separable models in `inlabru`
+## Other spatial/spatio-temporal models{.smaller}
+
+- The Barrier model
+
+_Bakka et al. Non-stationary Gaussian models with physical barriers,
+Spatial Statistics (2019)_
+
+That could be interesting in many of your studies!!
+
+
+![](figures/barrier1.png){fig-align="center"}
+
+
+
+## Other spatial/spatio-temporal models{.smaller}
+
+- The Barrier model
+
+_Bakka et al. Non-stationary Gaussian models with physical barriers,
+Spatial Statistics (2019)_
+
+That could be interesting in many of your studies!!
+
+
+![](figures/barrier2.png){fig-align="center"}
+
+## Other spatial/spatio-temporal models{.smaller}
+
+- The Barrier model
+
+_Bakka et al. Non-stationary Gaussian models with physical barriers,
+Spatial Statistics (2019)_
+
+That could be interesting in many of your studies!!
 
 -   Some non-separable models are implemented in `inlabru`. See
 
-> Lindgrenn et al., A diffusion-based spatio-temporal extension of Gaussian Matern \> fields (2024) SORT 48
+_Lindgrenn et al., A diffusion-based spatio-temporal extension of Gaussian Matern fields (2024) SORT 48_
+
+Here they introduce a diffusion-type process that evolves in space and time.
+
+- Rational Approximations of Fractional SPDE
+
+_David Bolin, Alexandre B. Simas, Zhen Xiong (2024), Covariance-based rational approximations of fractional SPDEs for computationally efficient Bayesian inference. Journal of Computational and Graphical Statistics, 33:1, 64-74_
+
+Allows the estimation of the $\nu$ parameter. Comes with an `R` package `rSPDE` (\url{https://davidbolin.github.io/rSPDE/})

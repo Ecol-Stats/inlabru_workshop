@@ -3380,7 +3380,7 @@
     "href": "slides/slides_9.html#spatio-temporal-models-for-areal-data-6",
     "title": "Lecture 9",
     "section": "Spatio temporal models for areal data",
-    "text": "Spatio temporal models for areal data\nThe observation model\n\\[\nY_{st}|\\lambda_{st}\\sim\\text{Poisson}(E_{st}\\lambda_{st})\n\\]\n\nModel 1: \\(\\eta_{st} = \\beta_0 + u_s + v_t\\) with \\(u_s\\sim\\text{CAR}(\\tau)\\)\nModel 2: \\(\\eta_{st} = \\beta_0 + u_{st} + v_t\\) with \\(u_{st}\\sim\\text{CAR}(\\tau),\\ i = 1,\\dots,T\\)\nModel 3: \\(\\eta_{st} = \\beta_0 + u_{st} + v_t\\) with \\[\nu_{st} = \\phi u_{st-1} + w_{st}, \\text{ with } w_{st}\\sim\\text{CAR}(\\tau),\\ i = 1,\\dots,T\n\\]\n\nCompare\n\nDifferences between Model 2 and 3 are not evident when estimating the past, but they would give different predictions\nModel 3 in this case seem to better fit the data (more about these measures later)\n\n\n\n\n\n    model      DIC     WAIC\n1 Model 1 15994.34 28158.64\n2 Model 2 12395.38 12272.51\n3 Model 3 11975.92 11960.34\n\n\n\n\n\n                     mean    sd 0.025quant 0.975quant\nPrecision for space 11.75  1.12       9.68      14.07\nGroupRho for space   0.89  0.01       0.86       0.91\nPrecision for time  60.41 26.45      24.09     126.05",
+    "text": "Spatio temporal models for areal data\nThe observation model\n\\[\nY_{st}|\\lambda_{st}\\sim\\text{Poisson}(E_{st}\\lambda_{st})\n\\]\n\nModel 1: \\(\\eta_{st} = \\beta_0 + u_s + v_t\\) with \\(u_s\\sim\\text{CAR}(\\tau)\\)\nModel 2: \\(\\eta_{st} = \\beta_0 + u_{st} + v_t\\) with \\(u_{st}\\sim\\text{CAR}(\\tau),\\ i = 1,\\dots,T\\)\nModel 3: \\(\\eta_{st} = \\beta_0 + u_{st} + v_t\\) with \\[\nu_{st} = \\phi u_{st-1} + w_{st}, \\text{ with } w_{st}\\sim\\text{CAR}(\\tau),\\ i = 1,\\dots,T\n\\]\n\nCompare\n\nDifferences between Model 2 and 3 are not evident when estimating the past, but they would give different predictions\nModel 3 in this case seem to better fit the data (more about these measures later)\n\n\n\n\n\n    model      DIC     WAIC\n1 Model 1 15094.24 20305.65\n2 Model 2 12401.11 12313.98\n3 Model 3 12010.46 11986.29\n\n\n\n\n\n                     mean    sd 0.025quant 0.975quant\nPrecision for space 13.98  1.30      11.56      16.69\nGroupRho for space   0.87  0.01       0.84       0.90\nPrecision for time  60.60 30.22      21.06     136.77",
     "crumbs": [
       "Home",
       "Slides",
@@ -3548,7 +3548,7 @@
     "href": "slides/slides_9.html#space-covariates",
     "title": "Lecture 9",
     "section": "Space covariates",
-    "text": "Space covariates\n\nThey should be stored in a terra, SpatRaster object.\n\n\nlibrary(terra)\nlibrary(tidyterra)\n\n\ncov_space\n\nclass       : SpatRaster \nsize        : 147, 147, 1  (nrow, ncol, nlyr)\nresolution  : 4.465128, 3.11244  (x, y)\nextent      : -465.4573, 190.9165, 7031.885, 7489.413  (xmin, xmax, ymin, ymax)\ncoord. ref. : +proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs \nsource(s)   : memory\nname        :      last \nmin value   : -2.586361 \nmax value   :  1.404672 \n\nggplot()  + geom_spatraster(data = cov_space) + geom_sf(data = dd) + scale_fill_scico()",
+    "text": "Space covariates\n\nThey should be stored in a terra, SpatRaster object.\n\n\nlibrary(terra)\nlibrary(tidyterra)\n\n\ncov_space\n\nclass       : SpatRaster \nsize        : 147, 147, 1  (nrow, ncol, nlyr)\nresolution  : 4.465128, 3.11244  (x, y)\nextent      : -465.4573, 190.9165, 7031.885, 7489.413  (xmin, xmax, ymin, ymax)\ncoord. ref. : +proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs \nsource(s)   : memory\nname        :      last \nmin value   : -1.798686 \nmax value   :  2.686347 \n\nggplot()  + geom_spatraster(data = cov_space) + geom_sf(data = dd) + scale_fill_scico()",
     "crumbs": [
       "Home",
       "Slides",
@@ -3560,7 +3560,7 @@
     "href": "slides/slides_9.html#space-covariates---implementation",
     "title": "Lecture 9",
     "section": "Space covariates - Implementation",
-    "text": "Space covariates - Implementation\nSetting up and running the model\n\ncmp1 = ~ Intercept(1) +\n  time(time, model = \"rw2\") +\n  space(geometry, model = spde) +\n  cov(cov_space,  model = \"linear\")\n\nlik1 = bru_obs(formula =  Y~ .,\n              data = dd_1)\n\nfit_cov1 = bru(cmp1, lik1)\n\nLook at the results\n\nround(fit_cov1$summary.fixed,2)\n\n           mean   sd 0.025quant 0.5quant 0.975quant  mode kld\nIntercept  0.00 0.21      -0.41     0.00       0.43  0.00   0\ncov       -1.51 0.08      -1.68    -1.51      -1.35 -1.51   0",
+    "text": "Space covariates - Implementation\nSetting up and running the model\n\ncmp1 = ~ Intercept(1) +\n  time(time, model = \"rw2\") +\n  space(geometry, model = spde) +\n  cov(cov_space,  model = \"linear\")\n\nlik1 = bru_obs(formula =  Y~ .,\n              data = dd_1)\n\nfit_cov1 = bru(cmp1, lik1)\n\nLook at the results\n\nround(fit_cov1$summary.fixed,2)\n\n           mean   sd 0.025quant 0.5quant 0.975quant  mode kld\nIntercept -0.25 0.24      -0.74    -0.25       0.23 -0.25   0\ncov       -1.32 0.09      -1.50    -1.32      -1.14 -1.32   0",
     "crumbs": [
       "Home",
       "Slides",
@@ -3584,7 +3584,7 @@
     "href": "slides/slides_9.html#space-time-covariates-1",
     "title": "Lecture 9",
     "section": "Space-time covariates",
-    "text": "Space-time covariates\n\nHave the covariate as a multilier spatraster object\n\n\n# The covariate\ncov_space_time\n\nclass       : SpatRaster \nsize        : 147, 147, 12  (nrow, ncol, nlyr)\nresolution  : 4.465128, 3.11244  (x, y)\nextent      : -465.4573, 190.9165, 7031.885, 7489.413  (xmin, xmax, ymin, ymax)\ncoord. ref. : +proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs \nsource(s)   : memory\nnames       :         1,         2,          3,         4,         5,         6, ... \nmin values  : -2.586361, -2.027349, -4.7008890, 0.1762663, -2.316774, -3.042322, ... \nmax values  :  1.404672,  1.370718,  0.7657611, 3.4306457,  1.247278,  1.140367, ... \n\n\n\n# The data frame\ndd_1[1:3,]\n\nSimple feature collection with 3 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -103.4191 ymin: 7460.922 xmax: -103.4191 ymax: 7460.922\nProjected CRS: +proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs +type=crs\n# A tibble: 3 × 3\n       Y  time             geometry\n   &lt;dbl&gt; &lt;dbl&gt;         &lt;POINT [km]&gt;\n1  0.182     1 (-103.4191 7460.922)\n2  1.78      5 (-103.4191 7460.922)\n3 -0.910     6 (-103.4191 7460.922)\n\n\nNote The layers names in the raster are the same as the elements of the column time in the data.",
+    "text": "Space-time covariates\n\nHave the covariate as a multilier spatraster object\n\n\n# The covariate\ncov_space_time\n\nclass       : SpatRaster \nsize        : 147, 147, 12  (nrow, ncol, nlyr)\nresolution  : 4.465128, 3.11244  (x, y)\nextent      : -465.4573, 190.9165, 7031.885, 7489.413  (xmin, xmax, ymin, ymax)\ncoord. ref. : +proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs \nsource(s)   : memory\nnames       :         1,          2,         3,         4,         5,          6, ... \nmin values  : -1.798686, -3.1575299, -2.536028, -2.980773, -1.196847, -1.9487483, ... \nmax values  :  2.686347,  0.1652645,  1.058536,  2.167979,  2.746749,  0.8337583, ... \n\n\n\n# The data frame\ndd_1[1:3,]\n\nSimple feature collection with 3 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -103.4191 ymin: 7460.922 xmax: -103.4191 ymax: 7460.922\nProjected CRS: +proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs +type=crs\n# A tibble: 3 × 3\n       Y  time             geometry\n   &lt;dbl&gt; &lt;dbl&gt;         &lt;POINT [km]&gt;\n1 -3.93      1 (-103.4191 7460.922)\n2 -0.563     5 (-103.4191 7460.922)\n3 -0.449     6 (-103.4191 7460.922)\n\n\nNote The layers names in the raster are the same as the elements of the column time in the data.",
     "crumbs": [
       "Home",
       "Slides",
@@ -3596,7 +3596,7 @@
     "href": "slides/slides_9.html#space-time-covariates-2",
     "title": "Lecture 9",
     "section": "Space-time covariates",
-    "text": "Space-time covariates\nImplementation\n\ncmp1 = ~ Intercept(1) +\n  time(time, model = \"rw2\") +\n  space(geometry, model = spde) +\n  cov(eval_spatial(cov_space_time, .data.,  time),  model = \"linear\")\n\nlik1 = bru_obs(formula =  Y~ .,\n              data = dd_1)\n\nfit_cov1 = bru(cmp1, lik1)\n\nround(fit_cov1$summary.fixed)\n\n          mean sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0  0          0        0          1    0   0\ncov         -1  0         -1       -1         -1   -1   0\n\n\nThe .data. indicates the data that are input in the bru_obs() function",
+    "text": "Space-time covariates\nImplementation\n\ncmp1 = ~ Intercept(1) +\n  time(time, model = \"rw2\") +\n  space(geometry, model = spde) +\n  cov(eval_spatial(cov_space_time, .data.,  time),  model = \"linear\")\n\nlik1 = bru_obs(formula =  Y~ .,\n              data = dd_1)\n\nfit_cov1 = bru(cmp1, lik1)\n\nround(fit_cov1$summary.fixed)\n\n          mean sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0  0         -1        0          0    0   0\ncov         -1  0         -1       -1         -1   -1   0\n\n\nThe .data. indicates the data that are input in the bru_obs() function",
     "crumbs": [
       "Home",
       "Slides",
@@ -4477,6 +4477,126 @@
       "Home",
       "Slides",
       "Lecture 12"
+    ]
+  },
+  {
+    "objectID": "slides/slides_9.html#other-spatial-and-spatio-temporal-models-in-inlabru",
+    "href": "slides/slides_9.html#other-spatial-and-spatio-temporal-models-in-inlabru",
+    "title": "Lecture 9",
+    "section": "Other spatial and spatio-temporal models in inlabru",
+    "text": "Other spatial and spatio-temporal models in inlabru\n\nThe Barrier model\n\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\n\nThat could be interesting in many of your studies!!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 9"
+    ]
+  },
+  {
+    "objectID": "slides/slides_9.html#other-spatial-and-spatio-temporal-models-in-inlabru-1",
+    "href": "slides/slides_9.html#other-spatial-and-spatio-temporal-models-in-inlabru-1",
+    "title": "Lecture 9",
+    "section": "Other spatial and spatio-temporal models in inlabru",
+    "text": "Other spatial and spatio-temporal models in inlabru\n\nThe Barrier model\n\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\n\nThat could be interesting in many of your studies!!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 9"
+    ]
+  },
+  {
+    "objectID": "slides/slides_9.html#other-spatial-and-spatio-temporal-models-in-inlabru-2",
+    "href": "slides/slides_9.html#other-spatial-and-spatio-temporal-models-in-inlabru-2",
+    "title": "Lecture 9",
+    "section": "Other spatial and spatio-temporal models in inlabru",
+    "text": "Other spatial and spatio-temporal models in inlabru\n\nThe Barrier model\n\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\n\nThat could be interesting in many of your studies!!\n\nSome non-separable models are implemented in inlabru. See\n\n\nLindgrenn et al., A diffusion-based spatio-temporal extension of Gaussian Matern fields (2024) SORT 48\n\nHere they introduce a diffusion-type process that evolves in space and time.\n\nRational Approximations of Fractional SPDE\n\n\nDavid Bolin, Alexandre B. Simas, Zhen Xiong (2024), Covariance-based rational approximations of fractional SPDEs for computationally efficient Bayesian inference. Journal of Computational and Graphical Statistics, 33:1, 64-74.\n\nAllows the estimation of the \\(\\nu\\) parameter. Comes with an R package rSPDE ()",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 9"
+    ]
+  },
+  {
+    "objectID": "slides/slides_9.html#other-spatialspatio-temporal-models-in-inlabru",
+    "href": "slides/slides_9.html#other-spatialspatio-temporal-models-in-inlabru",
+    "title": "Lecture 9",
+    "section": "Other spatial/spatio-temporal models in inlabru",
+    "text": "Other spatial/spatio-temporal models in inlabru\n\nThe Barrier model\n\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\n\nThat could be interesting in many of your studies!!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 9"
+    ]
+  },
+  {
+    "objectID": "slides/slides_9.html#other-spatialspatio-temporal-models-in-inlabru-1",
+    "href": "slides/slides_9.html#other-spatialspatio-temporal-models-in-inlabru-1",
+    "title": "Lecture 9",
+    "section": "Other spatial/spatio-temporal models in inlabru",
+    "text": "Other spatial/spatio-temporal models in inlabru\n\nThe Barrier model\n\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\n\nThat could be interesting in many of your studies!!\n\nSome non-separable models are implemented in inlabru. See\n\n\nLindgrenn et al., A diffusion-based spatio-temporal extension of Gaussian Matern fields (2024) SORT 48\n\nHere they introduce a diffusion-type process that evolves in space and time.\n\nRational Approximations of Fractional SPDE\n\n\nDavid Bolin, Alexandre B. Simas, Zhen Xiong (2024), Covariance-based rational approximations of fractional SPDEs for computationally efficient Bayesian inference. Journal of Computational and Graphical Statistics, 33:1, 64-74.\n\nAllows the estimation of the \\(\\nu\\) parameter. Comes with an R package rSPDE ()",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 9"
+    ]
+  },
+  {
+    "objectID": "slides/slides_9.html#other-spatialspatio-temporal-models-in-inlabru-2",
+    "href": "slides/slides_9.html#other-spatialspatio-temporal-models-in-inlabru-2",
+    "title": "Lecture 9",
+    "section": "Other spatial/spatio-temporal models in inlabru",
+    "text": "Other spatial/spatio-temporal models in inlabru\n\nThe Barrier model\n\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\n\nThat could be interesting in many of your studies!!\n\nSome non-separable models are implemented in inlabru. See\n\n\nLindgrenn et al., A diffusion-based spatio-temporal extension of Gaussian Matern fields (2024) SORT 48\n\nHere they introduce a diffusion-type process that evolves in space and time.\n\nRational Approximations of Fractional SPDE\n\n\nDavid Bolin, Alexandre B. Simas, Zhen Xiong (2024), Covariance-based rational approximations of fractional SPDEs for computationally efficient Bayesian inference. Journal of Computational and Graphical Statistics, 33:1, 64-74.\n\nAllows the estimation of the \\(\\nu\\) parameter. Comes with an R package rSPDE ()",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 9"
+    ]
+  },
+  {
+    "objectID": "slides/slides_9.html#space-time-point-processes-7",
+    "href": "slides/slides_9.html#space-time-point-processes-7",
+    "title": "Lecture 9",
+    "section": "Space-time Point Processes",
+    "text": "Space-time Point Processes\n\nThe Barrier model\n\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\n\nThat could be interesting in many of your studies!!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 9"
+    ]
+  },
+  {
+    "objectID": "slides/slides_9.html#other-spatialspatio-temporal-models",
+    "href": "slides/slides_9.html#other-spatialspatio-temporal-models",
+    "title": "Lecture 9",
+    "section": "Other spatial/spatio-temporal models",
+    "text": "Other spatial/spatio-temporal models\n\nThe Barrier model\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\nThat could be interesting in many of your studies!!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 9"
+    ]
+  },
+  {
+    "objectID": "slides/slides_9.html#other-spatialspatio-temporal-models-1",
+    "href": "slides/slides_9.html#other-spatialspatio-temporal-models-1",
+    "title": "Lecture 9",
+    "section": "Other spatial/spatio-temporal models",
+    "text": "Other spatial/spatio-temporal models\n\nThe Barrier model\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\nThat could be interesting in many of your studies!!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 9"
+    ]
+  },
+  {
+    "objectID": "slides/slides_9.html#other-spatialspatio-temporal-models-2",
+    "href": "slides/slides_9.html#other-spatialspatio-temporal-models-2",
+    "title": "Lecture 9",
+    "section": "Other spatial/spatio-temporal models",
+    "text": "Other spatial/spatio-temporal models\n\nThe Barrier model\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\nThat could be interesting in many of your studies!!\n\nSome non-separable models are implemented in inlabru. See\n\nLindgrenn et al., A diffusion-based spatio-temporal extension of Gaussian Matern fields (2024) SORT 48\nHere they introduce a diffusion-type process that evolves in space and time.\n\nRational Approximations of Fractional SPDE\n\nDavid Bolin, Alexandre B. Simas, Zhen Xiong (2024), Covariance-based rational approximations of fractional SPDEs for computationally efficient Bayesian inference. Journal of Computational and Graphical Statistics, 33:1, 64-74\nAllows the estimation of the \\(\\nu\\) parameter. Comes with an R package rSPDE ()",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 9"
     ]
   }
 ]
