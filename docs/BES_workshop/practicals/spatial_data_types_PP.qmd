@@ -191,12 +191,33 @@ We can use PC-priors for the range $\rho$ and the standard deviation $\sigma$ of
 
 -   Define the prior for the range `prior.sigma  = (sigma0,Psigma)` $\text{Prob}(\sigma>\sigma_0) = p_{\sigma}$
 
+
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+Take a look at the code below and select which of the following statements about the specified Matérn PC priors are true.
+
 ```{r}
 spde_model =  inla.spde2.pcmatern(mesh,
-                       prior.sigma = c(1, 0.5), # P(sigma > 1) = 0.5
-                       prior.range = c(100, 0.5)) # P(range < 100) = 0.5
+                       prior.sigma = c(1, 0.5), 
+                       prior.range = c(100, 0.5)) 
 
 ```
+
+```{r}
+#| echo: false
+#| purl: false
+opts_p <- c(
+   "there is probability of 0.5 that the spatial range is greater or equal than 100",
+   answer = "the probability that the spatial range is smaller than 50 is 0.5",
+   "the probability that the marginal standard deviation is smaller than 1 is 0.5",
+   answer = "there is probability of 0.5 that the marginal standard deviation is at least equal or greater 1"
+)
+```
+
+`r longmcq(opts_p)`
+:::
 
 #### Step 3. Defining model components
 
