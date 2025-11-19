@@ -39,12 +39,10 @@ In this first practical we are going to fit spatial modes for Areal, Geostatisti
 
 ## Geostatistics
 
-
 ```{r child="practicals/Geostat_ex.qmd"}
 ```
 
 ## Point Process
-
 
 ```{r child="practicals/PointProcess_ex.qmd"}
 ```

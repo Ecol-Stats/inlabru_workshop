@@ -3716,7 +3716,7 @@
     "href": "slides/slides_12.html#two-main-solutions",
     "title": "Lecture 12",
     "section": "Two main solutions",
-    "text": "Two main solutions\nBoth handle excess zeros but use different assumptions about how zeros are generated.\n\nZero-Inflated Models\nHurdle Models",
+    "text": "Two main solutions\nBoth handle excess zeros but use different assumptions about how zeros are generated.\n\nZero-Inflated Models\nHurdle Models\n(Occurrence Models)",
     "crumbs": [
       "Home",
       "Slides",
@@ -3740,7 +3740,7 @@
     "href": "slides/slides_12.html#two-main-solutions-2",
     "title": "Lecture 12",
     "section": "Two main solutions",
-    "text": "Two main solutions\nBoth handle excess zeros but use different assumptions about how zeros are generated:\n\nZero-Inflated Models\n\nTwo sources of zero: inflation process or count process\n\nHurdle Models\n\nOnle one source of zeros",
+    "text": "Two main solutions\nBoth handle excess zeros but use different assumptions about how zeros are generated:\n\nZero-Inflated Models\n\nTwo sources of zero: inflation process or count process\n\nHurdle Models\n\nOne one source of zeros",
     "crumbs": [
       "Home",
       "Slides",
@@ -3956,7 +3956,7 @@
     "href": "slides/slides_12.html#example-strategy-1-implementation",
     "title": "Lecture 12",
     "section": "Example Strategy 1: Implementation",
-    "text": "Example Strategy 1: Implementation\n\n\nThe Model \\[\n\\begin{aligned}\n\\text{Model 1 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{TruncPois}(\\lambda(\\eta_i))\\\\\n\\text{Model 2 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{TruncNegBin}(n(\\eta_i),p(\\eta_i))\\\\\n\\text{Linear Predictor }: \\eta_i & = \\beta_0 + \\beta_1 x_{1i} + \\beta_2 x_{2i}\n\\end{aligned}\n\\]\n\n\nzinb[1:3,]\n\n  nofish persons child count\n1      1       1     0     0\n2      0       1     0     0\n3      0       1     0     0\n\n\n\nThe code\n\n# define model components\ncmp = ~ Intercept(1) + fishing(nofish, model = \"linear\") + \n  persons(persons, model = \"linear\") + \n  child(child, model = \"linear\")\n\n# define model predictor\nformula = count ~ .\n\n# build the observation model\n# Poisson model\nlik_pois = bru_obs(formula,\n                   family = \"zeroinflatedpoisson0\",\n                   data = zinb) \n\n# Negative binomial model\nlik_nbin = bru_obs(formula,\n                   family = \"zeroinflatednbinomial0\",\n                   data = zinb) \n\n# fit the model\nfit_pois0 = bru(cmp, lik_pois)\nfit_nbin0 = bru(cmp, lik_nbin)",
+    "text": "Example Strategy 1: Implementation\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\text{Model 1 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{TruncPois}(\\lambda(\\eta_i))\\\\\n\\text{Model 2 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{TruncNegBin}(n(\\eta_i),p(\\eta_i))\\\\\n\\text{Linear Predictor }: \\eta_i & = \\beta_0 + \\beta_1 x_{1i} + \\beta_2 x_{2i}\n\\end{aligned}\n\\]\n\n\nzinb[1:3,]\n\n  nofish persons child count\n1      1       1     0     0\n2      0       1     0     0\n3      0       1     0     0\n\n\n\nThe code\n\n# define model components\ncmp = ~ Intercept(1) + fishing(nofish, model = \"linear\") + \n  persons(persons, model = \"linear\") + \n  child(child, model = \"linear\")\n# define model predictor\nformula = count ~ .\n# build the observation model\n# Poisson model\nlik_pois = bru_obs(formula,\n                   family = \"zeroinflatedpoisson0\",\n                   data = zinb) \n# Negative binomial model\nlik_nbin = bru_obs(formula,\n                   family = \"zeroinflatednbinomial0\",\n                   data = zinb) \n# fit the model\nfit_pois0 = bru(cmp, lik_pois)\nfit_nbin0 = bru(cmp, lik_nbin)",
     "crumbs": [
       "Home",
       "Slides",
@@ -4004,7 +4004,7 @@
     "href": "slides/slides_12.html#example---gamma-hurdle-model",
     "title": "Lecture 12",
     "section": "Example - Gamma-Hurdle model",
-    "text": "Example - Gamma-Hurdle model\nDaily precipitation in Parana state\n\n\n\\[\nz_{st} = \\left\\{\n\\begin{eqnarray}\n0 & \\text{ if } &\\text{ no rain on day } t \\text{ at station } s\\\\\n1 & \\text{ if } &\\text{  rain on day } t \\text{ at station } s\n\\end{eqnarray}\n\\right.\n\\]\n\\[\ny_{st} = \\left\\{\n\\begin{eqnarray}\n\\text{NA} \\text{ if } && \\text{ no rain on day } t  \\text{ at station } s\\\\\n\\text{rain amout} \\text{ if } && \\text{  rain on day } t  \\text{ at station } s\n\\end{eqnarray}\n\\right.\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\[\nz_{st}\\sim \\text{Binom}(p_{st}, n_{st} = 1); \\qquad y_{st}|z_{st}=1\\sim\\text{Gamma}(a,b) \\ \\text{with}\\  E(y_{st}) = \\mu_{st} =  a/b\n\\] Where \\[\n\\begin{eqnarray}\n\\eta_t^1 & = \\text{logit}(p_t)  & = \\beta_0^B+u^B(s) \\\\\n\\eta_t^2 & = \\log(\\mu_t)& = \\beta_0^G+u^G(s)\n\\end{eqnarray}\n\\]",
+    "text": "Example - Gamma-Hurdle model\nDaily precipitation in Parana state\n\n\n\\[\nz_{st} = \\left\\{\n\\begin{eqnarray}\n0 & \\text{ if } &\\text{ no rain on day } t \\text{ at station } s\\\\\n1 & \\text{ if } &\\text{  rain on day } t \\text{ at station } s\n\\end{eqnarray}\n\\right.\n\\]\n\\[\ny_{st} = \\left\\{\n\\begin{eqnarray}\n\\text{NA} \\text{ if } && \\text{ no rain on day } t  \\text{ at station } s\\\\\n\\text{rain amout} \\text{ if } && \\text{  rain on day } t  \\text{ at station } s\n\\end{eqnarray}\n\\right.\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\[\nz_{st}\\sim \\text{Binom}(p_{st}, n_{st} = 1); \\qquad y_{st}|z_{st}=1\\sim\\text{Gamma}(a,b) \\ \\text{with}\\  E(y_{st}) = \\mu_{st} =  a/b\n\\]\n\\[\n\\text{Where}: \\qquad\n\\begin{eqnarray}\n\\eta_t^1 & = \\text{logit}(p_t)  & = \\beta_0^B+u^B(s) \\\\\n\\eta_t^2 & = \\log(\\mu_t)& = \\beta_0^G+u^G(s)\n\\end{eqnarray}\n\\]",
     "crumbs": [
       "Home",
       "Slides",
@@ -4100,7 +4100,7 @@
     "href": "slides/slides_12.html#example-binomial-hurdle-model-1",
     "title": "Lecture 12",
     "section": "Example: Binomial-Hurdle model",
-    "text": "Example: Binomial-Hurdle model\nImplementation\n\nDefine response and the components\n\n\n# Define response for binary and truncated neg. binomial\nzinb  = zinb %&gt;% mutate(z = ifelse(count==0,1,0),\n                        y = ifelse(count==0,NA, count))\n# define model components\ncmp = ~ -1 + Intercept_z(1) + Intercept_y(1) + \n  fishing_z(nofish, model = \"linear\") + fishing_y(nofish, model = \"linear\") + \n  persons_z(persons, model = \"linear\") + persons_y(persons, model = \"linear\") + \n  child_z(child, model = \"linear\") + child_y(child, model = \"linear\")\n\n\n\nBuild the likelihood for the binomial part\n\n\n# build the observation model\n# Poisson model\nlik_binom = bru_obs(z ~ Intercept_z + fishing_z + persons_z + child_z ,\n                   family = \"binomial\",\n                   data = zinb) \n\n\n\n\nDefine the type 0 Negbinomial with \\(\\pi\\) fixed to a small value\n\n\n# Negative binomial model\nlik_trunc_nbin = bru_obs(y ~ Intercept_y + fishing_y + persons_y + child_y ,\n                   family = \"zeroinflatednbinomial0\",\n                   data = zinb,\n                   control.family = list(hyper = list(theta = list(initial = -20, \n                                                                   fixed = TRUE))))\n\n\n\n\nRun the model\n\n\nfit_nbin = bru(cmp, lik_binom, lik_trunc_nbin)",
+    "text": "Example: Binomial-Hurdle model\nImplementation\n\nDefine response and the components\n\n\n# Define response for binary and truncated neg. binomial\nzinb  = zinb %&gt;% mutate(z = ifelse(count==0,1,0),\n                        y = ifelse(count==0,NA, count))\n# define model components\ncmp = ~ -1 + Intercept_z(1) + Intercept_y(1) + \n  fishing_z(nofish, model = \"linear\") + fishing_y(nofish, model = \"linear\") + \n  persons_z(persons, model = \"linear\") + persons_y(persons, model = \"linear\") + \n  child_z(child, model = \"linear\") + child_y(child, model = \"linear\")\n\n\n\nBuild the likelihood for the binomial part\n\n\n# build the observation model Poisson model\nlik_binom = bru_obs(z ~ Intercept_z + fishing_z + persons_z + child_z ,\n                   family = \"binomial\",\n                   data = zinb) \n\n\n\n\nDefine the type 0 Negbinomial with \\(\\pi\\) fixed to a small value\n\n\n# Negative binomial model\nlik_trunc_nbin = bru_obs(y ~ Intercept_y + fishing_y + persons_y + child_y ,\n                   family = \"zeroinflatednbinomial0\",\n                   data = zinb,\n                   control.family = list(hyper = list(theta = list(initial = -20,fixed = TRUE))))\n\n\n\n\nRun the model\n\n\nfit_nbin = bru(cmp, lik_binom, lik_trunc_nbin)",
     "crumbs": [
       "Home",
       "Slides",
@@ -4148,7 +4148,7 @@
     "href": "slides/slides_12.html#summary---treating-many-zero-with-inlabru-3",
     "title": "Lecture 12",
     "section": "Summary - Treating many zero with inlabru",
-    "text": "Summary - Treating many zero with inlabru\nThere are mainly two types of models to treat excess of zeros\n\nZero inflated models\nHurdle models\n\nOnly one source of zeros\nPositive values can be both discrete and continuous\nTwo ways to imlement in inlabru\n\nUse the implemented Type0 likelihoods\n\n\n\nProbability of zero is constant\n\n\nUse the “two-likelihood” approach\n\n\nProbability of zero can be modelled",
+    "text": "Summary - Treating many zero with inlabru\nThere are mainly two types of models to treat excess of zeros\n\nZero inflated models\nHurdle models\n\nOnly one source of zeros\nPositive values can be both discrete and continuous\nTwo ways to implement in inlabru\n\nUse the implemented Type0 likelihoods\n\n\n\nProbability of zero is constant\n\n\nUse the “two-likelihood” approach\n\n\nProbability of zero can be modelled",
     "crumbs": [
       "Home",
       "Slides",
@@ -4417,6 +4417,66 @@
       "Home",
       "Slides",
       "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_12.html#occupancy-models",
+    "href": "slides/slides_12.html#occupancy-models",
+    "title": "Lecture 12",
+    "section": "Occupancy models",
+    "text": "Occupancy models\nBasic idea Data contain information about two processes:\n\nThe species occupacy (biological process)\nThe detection (observation process)\n\nBasic model form\n\nBiological process \\[\n      Z_i\\sim\\text{Bernoulli}(\\phi_i),\\qquad i = 1,\\dots, M\\ \\ (\\text{Number of sites})\n\\]\n\nObservation process \\[       \nd_{ij}\\ |Z_i=z_i\\sim\\text{Bernoulli}(z_i\\ p_{ij}), \\qquad j = 1,\\dots, K_i\\ \\ (\\text{Number of visits at site } i)\n\\] Note The model requires multiple visits per site to be identifiable",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 12"
+    ]
+  },
+  {
+    "objectID": "slides/slides_12.html#the-occupancy-model",
+    "href": "slides/slides_12.html#the-occupancy-model",
+    "title": "Lecture 12",
+    "section": "The Occupancy model",
+    "text": "The Occupancy model\nFor a set of set of \\(M\\) discrete sites, let the detection history of the \\(i\\)th site \\(\\mathbf{d}_i= d_{i1},\\ldots,d_{iK}\\).\nThe joint likelihood is then:\n\\[\nL(\\psi,p|\\mathbf{d}_1,\\ldots,\\mathbf{d}_M) = \\underbrace{\\left[\\prod_{i=1}^{m} \\phi_i \\prod_j^{K_i} p_{ij}^{d_{ij}} (1-p_{ij})^{1-d_{ij}}\\right]}_{\\text{sites with at least one 1}}\\underbrace{\\prod_{i=m+1}^M\\left[\\phi_i\\prod_j^{K_i}(1-p_{ij})+(1-\\phi_i)\\right]}_{\\text{sites with only 0}}\n\\] If we assume that \\(p_{ij}=p_i\\) and let \\(y_i = \\sum_j\\ d_{ij}\\) then:\n\\[    \nL(\\psi,p|\\mathbf{d}_1,\\ldots,\\mathbf{d}_M)=\\prod_{i=1}^{M} \\left[\\phi_i\\ p_i^{y_i}(1-p_i)^{K_i-y_i}+\nI_{y_i=0}(1-\\phi_i)\\right]\n\\]\n\nThis is almost a Binomial Zero Inflated Model (ZIP) but now we are often more interested in \\(\\phi\\) (probability of presence) than in \\(p\\) (probabilisty of detection)\nWe often want to have some covariates in the detection probability\nCan we use INLA to fit this model?",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 12"
+    ]
+  },
+  {
+    "objectID": "slides/slides_12.html#true-and-false-zeros",
+    "href": "slides/slides_12.html#true-and-false-zeros",
+    "title": "Lecture 12",
+    "section": "True and false zeros",
+    "text": "True and false zeros",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 12"
+    ]
+  },
+  {
+    "objectID": "slides/slides_12.html#the-occupancy-model-1",
+    "href": "slides/slides_12.html#the-occupancy-model-1",
+    "title": "Lecture 12",
+    "section": "The Occupancy model",
+    "text": "The Occupancy model\n\\[    \nL(\\psi,p|\\mathbf{d}_1,\\ldots,\\mathbf{d}_M)=\\prod_{i=1}^{M} \\left[\\phi_i p_i^{y_i}(1-p_i)^{K_i-y_i}+\nI_{y_i=0}(1-\\phi_i)\\right]\n\\]\n\nLGM if we assume \\(\\eta =g(p)\\) or \\(\\eta = g(\\phi)\\) Gaussian\n\\(\\phi\\) or \\(p\\) (not both!) can be linked to the linear predictor \\(\\eta\\)\nThe likelihood 0binomialS allows for exactly that",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 12"
+    ]
+  },
+  {
+    "objectID": "slides/slides_12.html#occupancy-models---example",
+    "href": "slides/slides_12.html#occupancy-models---example",
+    "title": "Lecture 12",
+    "section": "Occupancy models - Example",
+    "text": "Occupancy models - Example",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 12"
     ]
   }
 ]
