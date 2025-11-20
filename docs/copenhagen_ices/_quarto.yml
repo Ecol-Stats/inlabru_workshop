@@ -72,6 +72,12 @@ website:
             text: Lecture 9
           - href: slides/slides_10.html
             text: Lecture 10
+          
+          - href: Slides_Janine_pdf/slides_11_inlabru.pdf
+            text: Lecture 11 (PDF)
+            target: _blank     # optional: open in new tab  
+             
+            
           - href: slides/slides_12.html
             text: Lecture 12
           - href: slides/slides_13.html

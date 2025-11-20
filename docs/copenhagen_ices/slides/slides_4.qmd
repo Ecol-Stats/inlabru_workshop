@@ -108,8 +108,7 @@ In the practicals you have used the *predict()* function to get results from the
 
 ## Example {.smaller}
 
-Let's fit the model for the Tokyo rainfall data 
-$$
+Let's fit the model for the Tokyo rainfall data $$
 \begin{aligned}
 y_t|\eta_t&\sim\text{Bin}(n_t, p_t),\qquad i = 1,\dots,366\\
 \eta_t &= \text{logit}(p_t)= \beta_0 + f(\text{time}_t)
@@ -345,11 +344,12 @@ Option 1: Again we can use the `model.matrix()` option:
 # create the model matrix
 cov_effect = model.matrix(~ gear * disp, data = df)
 cov_effect[1:1,]
-df = cbind(df, cov_effect[,-1])       # attach this to your data
+colnames(cov_effect)  = str_replace(colnames(cov_effect), ":", "_")
+df = cbind(df, cov_effect[,-c(1,4)])      # attach this to your data and remove duplicated columns
 
 cmp4 = ~ Intercept(1) + gear_4(gear4, model = "linear") +
   gear_5(gear5, model = "linear") + disp(disp, model = "linear") +
-  gear4_disp(`gear4:disp`, model = "linear") + gear5_disp(`gear5:disp`, model = "linear") 
+  gear4_disp(gear4_disp, model = "linear") + gear5_disp(gear5_disp, model = "linear") 
 
 lik4 = bru_obs(formula= mpg ~ ., data = df)
 fit4 = bru(cmp4, lik4)

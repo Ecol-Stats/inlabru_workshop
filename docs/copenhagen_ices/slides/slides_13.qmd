@@ -55,8 +55,9 @@ library(gt)
 # Complex observation processes -- Distance Sampling
 
 ## Observation processes {.smaller background-color="#FFFFFF"}
-- in practice, often on some sub-areas of the area of interest can be surveyed 
-- interest in entire observation area
+
+-   in practice, often on some sub-areas of the area of interest can be surveyed
+-   interest in entire observation area
 
 ![](figures/borneo.png){fig-align="center" width="544"}
 
@@ -80,7 +81,7 @@ library(gt)
 
 ## Density surface models {.smaller auto-animate="true" background-color="#FFFFFF"}
 
-Coupling distance sampling data with spatial modelling allows us to map spatially varying density 
+Coupling distance sampling data with spatial modelling allows us to map spatially varying density
 
 -   Traditionally, this is achieved in a two-stage approach by (i) using a detectability point estimate to create an offset vector to (ii) use within GLM or GAM models for count response data.
 
@@ -123,7 +124,7 @@ Coupling distance sampling data with spatial modelling allows maps of spatially 
     g(s) = \text{Prob}(\text{a point at s is detected}|\text{a point is at s})
     $$
 
--   key property --  an LGCP with intensity $\lambda(s)$ that thinned by a probability function $g(s)$, follows also a LGCP with intensity:
+-   key property -- an LGCP with intensity $\lambda(s)$ that thinned by a probability function $g(s)$, follows also a LGCP with intensity:
 
 $$
 \underbrace{\tilde{\lambda}(s)}_{\text{observed process}} = \underbrace{\lambda(s)}_{\text{true process}} \times \underbrace{g(s)}_{\text{thinning probability}}
@@ -813,6 +814,12 @@ ggplot()  + geom_sf(data = ips, aes(color = weight),size=0.5) +
 
 ```{r}
 #| echo: false
+spde_model =  inla.spde2.pcmatern(
+  mexdolphin$mesh,
+  prior.sigma = c(2, 0.1),
+  prior.range = c(50, 0.1)
+)
+
 
 # define model component
 cmp = ~ Intercept(1) + 
@@ -960,7 +967,7 @@ ggplot() +
 
 ::::: columns
 ::: {.column width="60%"}
-We can also  `predict` the detection function:
+We can also `predict` the detection function:
 
 ```{r}
 #| echo: true
