@@ -52,7 +52,13 @@ library(scico)
 library(gt)
 ```
 
-# Distance Sampling
+# Complex observation processes -- Distance Sampling
+
+## Observation processes {.smaller background-color="#FFFFFF"}
+- in practice, often on some sub-areas of the area of interest can be surveyed 
+- interest in entire observation area
+
+![](figures/borneo.png){fig-align="center" width="544"}
 
 ## Overview of Distance Sampling {.smaller background-color="#FFFFFF"}
 
