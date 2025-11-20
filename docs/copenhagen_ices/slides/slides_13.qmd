@@ -1,7 +1,7 @@
 ---
 title: "Lecture 13"
 from: markdown+emoji
-subtitle: "Introduction to Distance sampling with `inlabru`" 
+subtitle: "Complex Observation processes -- Distance sampling with `inlabru`" 
 format:
   revealjs:
     margin: 0
@@ -52,11 +52,17 @@ library(scico)
 library(gt)
 ```
 
-# Distance Sampling
+# Complex observation processes -- Distance Sampling
+
+## Observation processes {.smaller background-color="#FFFFFF"}
+- in practice, often on some sub-areas of the area of interest can be surveyed 
+- interest in entire observation area
+
+![](figures/borneo.png){fig-align="center" width="544"}
 
 ## Overview of Distance Sampling {.smaller background-color="#FFFFFF"}
 
--   Distance sampling is a family of related methods for estimating the abundance and spatial distribution of wild populations.
+-   Distance sampling is a family of related methods for estimating the abundance and spatial distribution of wildlife populations.
 
 -   Distance sampling is based on the idea that animals further away from observers are harder to detect than animals that are nearer.
 
@@ -74,9 +80,9 @@ library(gt)
 
 ## Density surface models {.smaller auto-animate="true" background-color="#FFFFFF"}
 
-Coupling distance sampling data with spatial modelling allows maps of spatially varying density to be produced.
+Coupling distance sampling data with spatial modelling allows us to map spatially varying density 
 
--   Traditionally, this is achieved in a two-stages approach by (i) using a detectability point estimates to create an offset vector to (ii) use within GLM or GAM for count response data.
+-   Traditionally, this is achieved in a two-stage approach by (i) using a detectability point estimate to create an offset vector to (ii) use within GLM or GAM models for count response data.
 
 ![](figures/dsm_approach.png){fig-align="center"}
 
@@ -111,13 +117,13 @@ Coupling distance sampling data with spatial modelling allows maps of spatially 
 ::: {style="height: 50px;"}
 :::
 
-The LGCP is a flexible approach that can include spatial covariates to model the mean intensity and a mean-zero spatially structured random effect to account for unexplained heterogeneity not captured by the covariates.
+-   flexible approach that can include spatial covariates to model the mean intensity and a spatially structured random effect to account for unexplained heterogeneity not captured by the covariates.
 
--   To account for the imperfect detection of points we specify a thinning probability function $$
+-   to account for the imperfect detection of points we specify a thinning probability function $$
     g(s) = \text{Prob}(\text{a point at s is detected}|\text{a point is at s})
     $$
 
--   A key property of LGCP is that a realisation of a point process with intensity $\lambda(s)$ that is thinned by probability function $g(s)$, follows also a LGCP with intensity:
+-   key property --  an LGCP with intensity $\lambda(s)$ that thinned by a probability function $g(s)$, follows also a LGCP with intensity:
 
 $$
 \underbrace{\tilde{\lambda}(s)}_{\text{observed process}} = \underbrace{\lambda(s)}_{\text{true process}} \times \underbrace{g(s)}_{\text{thinning probability}}
@@ -345,7 +351,7 @@ $$
 
 ## An approximation: Strips as lines
 
--   If the strips width ( $2W$ ) is narrow compared to study region ($\Omega$) we can treat them as lines.
+-   If the strips width ($2W$) is narrow compared to study region ($\Omega$) we can treat them as lines.
 
     -   We need to adjust the intensity at a *point* $\mathbf{s}$ on the line to take account of the actual width of the strip
 
@@ -443,7 +449,7 @@ mesh_0 = fm_mesh_2d(boundary = boundary0,
 
 First, we need to create the mesh used to approximate the random field. We can either:
 
-2.  Use a pre-define `sf` boundary and specify this directly into the mesh construction via the `fm_mesh_2d` function
+2.  Use a pre-defined `sf` boundary and specify this directly onto the mesh construction via the `fm_mesh_2d` function
 
 ```{r}
 #| message: false
@@ -471,106 +477,6 @@ mesh_1 = fm_mesh_2d(boundary = mexdolphin$ppoly,
 -   `cutoff` to avoid overly small triangles in clustered areas
 :::
 :::::
-
-## Step 1: Define the SPDE representation: The mesh
-
-::: incremental
--   All random field models need to be discretised for practical calculations.
-
--   The SPDE models were developed to provide a consistent model definition across a range of discretisations.
-
--   We use finite element methods with local, piecewise linear basis functions defined on a triangulation of a region of space containing the domain of interest.
-
--   Deviation from stationarity is generated near the boundary of the region.
-
--   The choice of region and choice of triangulation affects the numerical accuracy.
-:::
-
-## Step 1: Define the SPDE representation: The mesh
-
--   Too fine meshes $\rightarrow$ heavy computation
-
--   Too coarse mesh $\rightarrow$ not accurate enough
-
-![](figures/mesh_res.png){fig-align="center"}
-
-## Step 1: Define the SPDE representation: The mesh
-
-**Some guidelines**
-
--   Create triangulation meshes with `fm_mesh_2d()`:
-
--   edge length should be around a third to a tenth of the spatial range
-
--   Move undesired boundary effects away from the domain of interest by extending to a smooth external boundary:
-
--   Use a coarser resolution in the extension to reduce computational cost (`max.edge=c(inner, outer)`), i.e., add extra, larger triangles around the border
-
-## Step 1: Define the SPDE representation: The mesh
-
--   Use a fine resolution (subject to available computational resources) for the domain of interest (inner correlation range) and avoid small edges ,i.e., filter out small input point clusters (0 $<$ `cutoff` $<$ inner)
-
--   Coastlines and similar can be added to the domain specification in `fm_mesh_2d()` through the `boundary` argument.
-
--   simplify the border
-
-## Step 1: Define the SPDE representation: The SPDE {background-color="#FFFFFF"}
-
-We use the `inla.spde2.pcmatern` to define the SPDE model using PC priors through the following probability statements
-
-::::: columns
-::: {.column width="40%"}
--   $P(\rho < 50) = 0.1$
-
--   $P(\sigma > 2) = 0.1$
-:::
-
-::: {.column width="60%"}
-```{r}
-spde_model =  inla.spde2.pcmatern(
-  mexdolphin$mesh,
-  prior.sigma = c(2, 0.1),
-  prior.range = c(50, 0.1)
-)
-```
-:::
-:::::
-
-```{r}
-#| echo: false
-#| message: false
-#| warning: false
-#| fig-align: center
-
-
-dens_prior_range = function(rho_0, p_alpha)
-{
-  # compute the density of the PC prior for the
-  # range rho of the Matern field
-  # rho_0 and p_alpha are defined such that
-  # P(rho<rho_0) = p_alpha
-  rho = seq(0, rho_0*10, length.out =100)
-  alpha1_tilde = -log(p_alpha) * rho_0
-  dens_rho =  alpha1_tilde / rho^2 * exp(-alpha1_tilde / rho)
-  return(data.frame(x = rho, y = dens_rho))
-}
-
-dens_prior_sd = function(sigma_0, p_sigma)
-{
-  # compute the density of the PC prior for the
-  # sd sigma of the Matern field
-  # sigma_0 and p_sigma are defined such that
-  # P(sigma>sigma_0) = p_sigma
-  sigma = seq(0, sigma_0*5, length.out =100)
-  alpha2_tilde = -log(p_sigma)/sigma_0
-  dens_sigma = alpha2_tilde* exp(-alpha2_tilde * sigma) 
-  return(data.frame(x = sigma, y = dens_sigma))
-}
-
-ggplot() + geom_line(data = dens_prior_range(50,.1), aes(x,y))+ labs(y="",x="range",title="Prior for the range") +
-ggplot() + geom_line(data = dens_prior_sd(1,.1), aes(x,y)) + labs(y="",x="sd",title="Prior for the sd")
-
-```
 
 ## Step 2: Define the Detection function {.smaller background-color="#FFFFFF"}
 
@@ -933,7 +839,7 @@ fit = bru(cmp, lik)
 
 ::::: columns
 ::: {.column width="40%"}
-We can use the `fit$summary.fixed` and `summary.hyperpar` to obtain posterior summaries of the mdoel parameters.
+We can use the `fit$summary.fixed` and `summary.hyperpar` to obtain posterior summaries of the model parameters.
 
 ```{r}
 #| echo: false
@@ -944,7 +850,7 @@ rbind(fit$summary.fixed[,c(1,3,5)],
 :::
 
 ::: {.column width="60%"}
-The `spde.posterior` allow us to plot the posterior density of the Matern field parameters
+The `spde.posterior` allows us to plot the posterior density of the Matérn field parameters
 
 ```{r}
 spde.posterior(fit, "space", what = "range") %>% plot()
@@ -993,7 +899,7 @@ rbind(fit$summary.fixed[,c(1,3,5)],
 :::
 
 ::: {.column width="60%"}
-The `spde.posterior` allow us to plot the posterior density of the Matern field parameters
+The `spde.posterior` allows us to plot the posterior density of the Matérn field parameters
 
 ```{r}
 spde.posterior(fit, "space", what = "log.variance") %>% plot()
@@ -1054,7 +960,7 @@ ggplot() +
 
 ::::: columns
 ::: {.column width="60%"}
-We can also use the `predict` the detection function:
+We can also  `predict` the detection function:
 
 ```{r}
 #| echo: true
