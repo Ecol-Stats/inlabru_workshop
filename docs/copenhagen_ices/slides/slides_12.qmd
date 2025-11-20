@@ -947,7 +947,12 @@ The probability of the inflation process $\pi$ is a *hyperparameter* therefore c
 
 ## True and false zeros
 
+![](figures/findwally1.png){fig-align="center"}
 
+
+## True and false zeros
+
+![](figures/findwally2.png){fig-align="center"}
 
 ## Occupancy models{.smaller}
 
@@ -1002,8 +1007,8 @@ $$
 . . .
 -  What does this mean?
   
-  - We can have _complicated_ (with random effects) model for _either_ $p$ of $\phi$ 
-  - The other parameter can only have some (not too many) linear covariates as components
+    - We can have _complicated_ (with random effects) model for _either_ $p$ of $\phi$ 
+    - The other parameter can only have some (not too many) linear covariates as components
 
 . . .  
 

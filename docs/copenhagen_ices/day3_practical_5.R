@@ -452,9 +452,13 @@ ggplot() + geom_sf(data = region, alpha = 0) + geom_sf(data = pp)
 ## -----------------------------------------------------------------------------
 # define integration scheme
 
-ips = st_sf(
-geometry = st_sample(region, 1)) # some random location inside the domain
-ips$weight = st_area(region) # integration weight is the area of the domain
+
+ips <- fm_int_object(
+  st_sample(region, 1), # some random location inside the domain
+  weight = st_area(region), # integration weight is the area of the domain
+  name = "geometry"
+)
+
 
 cmp = ~ 0 + beta_0(1)
 
@@ -487,11 +491,13 @@ ggplot() +
 #|fig-cap: "Integration scheme."
 
 n.int = 1000
-ips = st_sf(geometry = st_sample(region,
-            size = n.int,
-            type = "regular"))
+ips <- st_sample(region, size = n.int, type = "regular") # May not be exactly n.int points
+ips <- fm_int_object(
+  ips,
+  weight = st_area(region) / length(ips),
+  name = "geometry"
+)
 
-ips$weight = st_area(region) / n.int
 ggplot() + geom_sf(data = ips, aes(color = weight)) + geom_sf(data= region, alpha = 0)
 
 
@@ -510,11 +516,13 @@ fit2 = bru(cmp, lik)
 
 ## -----------------------------------------------------------------------------
 n.int2 = 50
+ips2 <- st_sample(region, size = n.int2, type = "regular") # May not be exactly n.int points
+ips2 <- fm_int_object(
+  ips2,
+  weight = st_area(region) / length(ips2),
+  name = "geometry"
+)
 
-ips2 = st_sf(geometry = st_sample(region,
-            size = n.int2,
-            type = "regular"))
-ips2$weight = st_area(region) / n.int2
 
 
 

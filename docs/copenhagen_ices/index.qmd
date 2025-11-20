@@ -58,7 +58,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 ### Day 2
 
 | Time | Topic |
-|:-----------------------:|:--------------------------------------------:|
+|:------------------------:|:--------------------------------------------:|
 | 9:00 - 10:00 | [**Session 3**: Temporal modelling and smoothing part 1](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_4.html) |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | Temporal modelling and smoothing part 2 |
@@ -74,7 +74,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 ### Day 3
 
 | Time | Topic |
-|:----------------:|:----------------------------------------------------:|
+|:-----------------:|:---------------------------------------------------:|
 | 9:00 - 10:00 | [**Session 6**: Areal Processes](Slides_Janine_pdf/slides_6_inlabru.pdf) |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | [**Session 7**: Geostatistics](Slides_Janine_pdf/slides_7_inlabru.pdf) |
@@ -112,7 +112,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 | 10:30 - 11:30 | [**Session 13**: Complex observational processes: Distance Sampling](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_13.html) |
 | 11:30 - 13:00 | Practical Session 8: [Zero Inflated models](day5_practical_9.qmd) - [Distance sampling](day5_practical_8.qmd) |
 | 13:00 - 13:15 | Coffee Break ☕ |
-| 13:15 - 14:00 | Closing session |
+| 13:15 - 14:00 | [Closing session](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_14.html) |
 
 : {.striped .hover}
 :::
