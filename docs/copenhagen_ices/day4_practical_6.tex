@@ -291,7 +291,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, boxrule=0pt, colback={codebgcolor}, breakable, frame hidden, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, colback={codebgcolor}, boxrule=0pt, enhanced, breakable, sharp corners]}{\end{tcolorbox}}\fi
 \makeatother
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
@@ -406,7 +406,7 @@ y(s,t)|\eta(s,t)&\sim\text{Binom}(1, p(s,t))\\
 \] We also want to compare the models using WAIC, DIC and marginal
 likelihood:
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toprule=.15mm, left=2mm, titlerule=0mm, colframe=quarto-callout-warning-color-frame, breakable, coltitle=black, title={Task}, rightrule=.15mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, toprule=.15mm, colback=white, title={Task}, bottomtitle=1mm, opacitybacktitle=0.6, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, titlerule=0mm, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, opacityback=0, coltitle=black]
 
 Set the \texttt{bru\_options} so that the quantities of interest are
 computed
@@ -487,7 +487,7 @@ we also define a time index from 1 to in the data frame
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toprule=.15mm, left=2mm, titlerule=0mm, colframe=quarto-callout-warning-color-frame, breakable, coltitle=black, title={Task}, rightrule=.15mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, toprule=.15mm, colback=white, title={Task}, bottomtitle=1mm, opacitybacktitle=0.6, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, titlerule=0mm, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, opacityback=0, coltitle=black]
 
 Implement the model in \texttt{inlabru}
 
@@ -529,7 +529,7 @@ Click here to see the solution
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toprule=.15mm, left=2mm, titlerule=0mm, colframe=quarto-callout-note-color-frame, breakable, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, rightrule=.15mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, toprule=.15mm, colback=white, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, bottomtitle=1mm, opacitybacktitle=0.6, left=2mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, toptitle=1mm, titlerule=0mm, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, opacityback=0, coltitle=black]
 
 Note that there are some survey locations in certain years that fall
 outside the depth raster region. \texttt{inlabru} will input these
@@ -562,7 +562,7 @@ One way of doing this in the \texttt{inlabru} framework is to use the
 
 We have now fit the model and want to check the results.
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toprule=.15mm, left=2mm, titlerule=0mm, colframe=quarto-callout-warning-color-frame, breakable, coltitle=black, title={Task}, rightrule=.15mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, toprule=.15mm, colback=white, title={Task}, bottomtitle=1mm, opacitybacktitle=0.6, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, titlerule=0mm, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, opacityback=0, coltitle=black]
 
 Is the effect of depth significant? Does it seem important to have a
 non-linear model?
@@ -632,7 +632,7 @@ Click here to see the solution
   \]
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toprule=.15mm, left=2mm, titlerule=0mm, colframe=quarto-callout-warning-color-frame, breakable, coltitle=black, title={Task}, rightrule=.15mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, toprule=.15mm, colback=white, title={Task}, bottomtitle=1mm, opacitybacktitle=0.6, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, titlerule=0mm, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, opacityback=0, coltitle=black]
 
 Implement this second model in \texttt{inlabru}
 
@@ -692,7 +692,7 @@ Click here to see the solution
 
 Now we want to check the results
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toprule=.15mm, left=2mm, titlerule=0mm, colframe=quarto-callout-warning-color-frame, breakable, coltitle=black, title={Task}, rightrule=.15mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, toprule=.15mm, colback=white, title={Task}, bottomtitle=1mm, opacitybacktitle=0.6, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, titlerule=0mm, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, opacityback=0, coltitle=black]
 
 What is the estimated parameter \(phi\) in the auto-regressive part of
 the model?
@@ -742,7 +742,7 @@ Click here to see the solution
 
 Now we want to use the WAIC, DIC and MLIK to compare the models
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toprule=.15mm, left=2mm, titlerule=0mm, colframe=quarto-callout-warning-color-frame, breakable, coltitle=black, title={Task}, rightrule=.15mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, toprule=.15mm, colback=white, title={Task}, bottomtitle=1mm, opacitybacktitle=0.6, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, titlerule=0mm, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, opacityback=0, coltitle=black]
 
 Compare the scores, what is your conclusion?
 
@@ -1139,7 +1139,7 @@ predictive checks. To do so, we will use the CPO and PIT - two commonly
 used Bayesian model assessment criteria based on the \textbf{posterior
 predictive distribution}.
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toprule=.15mm, left=2mm, titlerule=0mm, colframe=quarto-callout-note-color-frame, breakable, coltitle=black, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Posterior predictive model checking}, rightrule=.15mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, toprule=.15mm, colback=white, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Posterior predictive model checking}, bottomtitle=1mm, opacitybacktitle=0.6, left=2mm, bottomrule=.15mm, colframe=quarto-callout-note-color-frame, toptitle=1mm, titlerule=0mm, arc=.35mm, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, opacityback=0, coltitle=black]
 
 The posterior predictive distribution for a predicted value \(\hat{y}\)
 is
@@ -1242,7 +1242,7 @@ This quantities is useful when comparing different models - a smaller
 values indicate a better model fit. CPO values can be accessed by typing
 \texttt{inlabru\_model\$cpo\$cpo}.
 
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, colback=white, leftrule=.75mm, opacitybacktitle=0.6, toprule=.15mm, left=2mm, titlerule=0mm, colframe=quarto-callout-warning-color-frame, breakable, coltitle=black, title={Task}, rightrule=.15mm, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, rightrule=.15mm, breakable, toprule=.15mm, colback=white, title={Task}, bottomtitle=1mm, opacitybacktitle=0.6, left=2mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, toptitle=1mm, titlerule=0mm, arc=.35mm, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, opacityback=0, coltitle=black]
 
 The model assessment above suggests that a Poisson model might not be
 the most appropriate model, likely due to the overdispersion we detected

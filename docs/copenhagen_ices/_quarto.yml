@@ -82,6 +82,9 @@ website:
             text: Lecture 12
           - href: slides/slides_13.html
             text: Lecture 13
+            
+          - href: slides/slides_14.html
+            text: Lecture 14
 
       - section: "Practicals"
         contents:

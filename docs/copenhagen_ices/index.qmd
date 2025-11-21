@@ -24,8 +24,7 @@ We would be very glad if you could fill in [this form](https://uofg.qualtrics.co
 
 The form can also be accessed using the QR code below
 
-![](slides/figures/feedback.png){width=40%}
-
+![](slides/figures/feedback.png){width="40%"}
 
 # Learning Objectives for the workshop
 
@@ -83,7 +82,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 ### Day 3
 
 | Time | Topic |
-|:-----------------:|:---------------------------------------------------:|
+|:------------------:|:--------------------------------------------------:|
 | 9:00 - 10:00 | [**Session 6**: Areal Processes](Slides_Janine_pdf/slides_6_inlabru.pdf) |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | [**Session 7**: Geostatistics](Slides_Janine_pdf/slides_7_inlabru.pdf) |
@@ -105,7 +104,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 | 10:30 - 11:30 | [**Session 10**: Model comparison and evaluation](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_10.html) |
 | 11:30 - 13:00 | [Practical Session 6](day4_practical_6.qmd) |
 | 13:00 - 14:30 | Lunch break 🍽️ |
-| 14:30 - 15:30 | [**Session 11**: Multi-likelihood/joint likelihood models](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_11.html)  |
+| 14:30 - 15:30 | [**Session 11**: Multi-likelihood/joint likelihood models](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_11.html) |
 | 15:35 - 15:45 | Coffee Break ☕ |
 | 15:45 - 16:45 | [Practical Session 7](day4_practical_7.qmd) |
 | 16:45 - 17:00 | wrap-up and outlook |

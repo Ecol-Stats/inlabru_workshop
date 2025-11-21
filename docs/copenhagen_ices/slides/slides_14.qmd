@@ -34,6 +34,8 @@ embed-resources: true
 execute:
   allow-html: true
   freeze: auto
+editor: 
+  mode: source
 ---
 
 ```{r setup}
