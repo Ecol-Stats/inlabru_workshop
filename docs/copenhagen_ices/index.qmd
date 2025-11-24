@@ -18,6 +18,14 @@ editor_options:
 -   The aim of this workshop is to introduce you to a range of statistical modelling approaches, in particular the temporal, spatial and spatio-temporal modelling as implemented in the `inlabru` package.
 -   Workshop materials are available in the github repository [inlabru-workshop](https://github.com/Ecol-Stats/inlabru_workshop/tree/main/docs/copenhagen_ices)
 
+# Feedback
+
+We would be very glad if you could fill in [this form](https://uofg.qualtrics.com/jfe/form/SV_5vwZDbkenZEAH5Q) and share your feedback about the course.
+
+The form can also be accessed using the QR code below
+
+![](slides/figures/feedback.png){width="40%"}
+
 # Learning Objectives for the workshop
 
 At the end of the workshop, participants will have an understanding of:
@@ -58,7 +66,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 ### Day 2
 
 | Time | Topic |
-|:-----------------------:|:--------------------------------------------:|
+|:------------------------:|:--------------------------------------------:|
 | 9:00 - 10:00 | [**Session 3**: Temporal modelling and smoothing part 1](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_4.html) |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | Temporal modelling and smoothing part 2 |
@@ -74,7 +82,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 ### Day 3
 
 | Time | Topic |
-|:----------------:|:----------------------------------------------------:|
+|:------------------:|:--------------------------------------------------:|
 | 9:00 - 10:00 | [**Session 6**: Areal Processes](Slides_Janine_pdf/slides_6_inlabru.pdf) |
 | 10:00 - 10:30 | Snack 🥙 |
 | 10:30 - 11:30 | [**Session 7**: Geostatistics](Slides_Janine_pdf/slides_7_inlabru.pdf) |
@@ -96,7 +104,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 | 10:30 - 11:30 | [**Session 10**: Model comparison and evaluation](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_10.html) |
 | 11:30 - 13:00 | [Practical Session 6](day4_practical_6.qmd) |
 | 13:00 - 14:30 | Lunch break 🍽️ |
-| 14:30 - 15:30 | **Session 11**: Multi-likelihood/joint likelihood models |
+| 14:30 - 15:30 | [**Session 11**: Multi-likelihood/joint likelihood models](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_11.html) |
 | 15:35 - 15:45 | Coffee Break ☕ |
 | 15:45 - 16:45 | [Practical Session 7](day4_practical_7.qmd) |
 | 16:45 - 17:00 | wrap-up and outlook |
@@ -112,7 +120,7 @@ No knowledge of `R-INLA` or `inlabru` is required.
 | 10:30 - 11:30 | [**Session 13**: Complex observational processes: Distance Sampling](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_13.html) |
 | 11:30 - 13:00 | Practical Session 8: [Zero Inflated models](day5_practical_9.qmd) - [Distance sampling](day5_practical_8.qmd) |
 | 13:00 - 13:15 | Coffee Break ☕ |
-| 13:15 - 14:00 | Closing session |
+| 13:15 - 14:00 | [Closing session](https://ecol-stats.github.io/inlabru_workshop/copenhagen_ices/docs/slides/slides_14.html) |
 
 : {.striped .hover}
 :::

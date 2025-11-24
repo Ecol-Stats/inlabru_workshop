@@ -86,6 +86,8 @@ Both handle excess zeros but use **different assumptions** about how zeros are g
 
 -   **Hurdle** Models
 
+-   (**Occurrence** Models)
+
 ## Two main solutions
 
 Both handle excess zeros but use **different assumptions** about how zeros are generated.
@@ -106,7 +108,7 @@ Both handle excess zeros but use **different assumptions** about how zeros are g
 
 -   **Hurdle** Models
 
-    -   Onle one source of zeros
+    -   One one source of zeros
 
 ## Zero-Inflated Models
 
@@ -156,7 +158,7 @@ $$ where $f(y)$ is scaled so that it integrates to $1-\pi$
 ## Comparison: Zero-Inflated vs. Hurdle Models
 
 | Feature | Zero-Inflated | Hurdle |
-|:---|:---|:---|
+|:-----------------------|:-----------------------|:-----------------------|
 | **Zeros come from** | Two sources (inflation + count) | One source (hurdle only) |
 | **Positive part** | Includes zeros | Truncated at zero |
 | **Can use continuous distributions?** | :x: Typically count only | :white_check_mark: Yes (Gamma, Lognormal) |
@@ -183,22 +185,32 @@ INLA::inla.doc("zero inflated")
 
 The probability of the inflation process $\pi$ is a *hyperparameter* therefore cannot be modeled with covariates
 
-## Example: number of fishes caught by fishermen at a state park.
+## Example{.smaller}
+
+Number of fishes caught by fishermen at a state park.
+
 
 ```{r}
+
 #| echo: false
+
 zinb <- read.csv("https://stats.idre.ucla.edu/stat/data/fish.csv") %>%
+
   filter(count<40) %>%
+
   dplyr::select(-c(livebait, camper, xb,zg))
 
 #Example 2. The state wildlife biologists want to model how many fish are being caught by fishermen at a state park. Visitors are asked how long they stayed, how many people were in the group, were there children in the group and how many fish were caught. Some visitors do not fish, but there is no data on whether a person fished or not. Some visitors who did fish did not catch any fish so there are excess zeros in the data because of the people that did not fish.
+
 ```
 
 ```{r}
-#| echo: false
-zinb[1:3,]
-ggplot() + geom_histogram(data= zinb, aes(x = count, y = ..density..), binwidth = 1)
 
+#| echo: false
+
+zinb[1:3,]
+
+ggplot() + geom_histogram(data= zinb, aes(x = count, y = ..density..), binwidth = 1)
 
 ```
 
@@ -228,33 +240,44 @@ $$
 #| eval: false
 
 inla.doc("negative binomial")
+
 ```
 
 $$
 \text{Prob}(Y=y) = \frac{\Gamma(y+n)}{\Gamma(n)\Gamma(y+1)}p^n(1-p)^y
-$$ with $$
+$$ 
+with 
+$$
 E(Y) = \mu = n\frac{1-p}{p} \qquad \text{Var}(Y) = \mu(1+\frac{\mu}{n})
-$$ and linear predictor $\eta = log(\mu)$
+$$ 
+and linear predictor $\eta = log(\mu)$
 
 ## Example: Implementation {.smaller auto-animate="true"}
 
 ::::: columns
+
 ::: {.column width="65%"}
-**The Model** $$
+
+**The Model** 
+$$
 \begin{aligned}
 \text{Model 1 }:  y_i|\eta_i & \sim \pi1_{(y=0)} + (1-\pi)\text{Pois}(\lambda(\eta_i))\\
 \text{Model 2 }:  y_i|\eta_i & \sim \pi1_{(y=0)} + (1-\pi)\text{NegBin}(n(\eta_i),p(\eta_i))\\
 \text{Linear Predictor }: \eta_i & = \color{red}{\boxed{\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i}}}
 \end{aligned}
 $$
+
 :::
 
 ::: {.column width="35%"}
+
 ```{r}
 #| echo: true
 zinb[1:3,]
 ```
+
 :::
+
 :::::
 
 **The code**
@@ -265,51 +288,54 @@ zinb[1:3,]
 #| warning: false
 #| message: false
 #| code-line-numbers: "1-7"
-
 # define model components
-cmp = ~ Intercept(1) + fishing(nofish, model = "linear") + 
-  persons(persons, model = "linear") + 
+cmp = ~ Intercept(1) + fishing(nofish, model = "linear") +
+  persons(persons, model = "linear") +
   child(child, model = "linear")
-
 # define model predictor
 formula = count ~ .
-
 # build the observation model
 # Poisson model
 lik_pois = bru_obs(formula,
                    family = "zeroinflatedpoisson1",
-                   data = zinb) 
-
+                   data = zinb)
 # Negative binomial model
 lik_nbin = bru_obs(formula,
                    family = "zeroinflatednbinomial1",
-                   data = zinb) 
-
+                   data = zinb)
 # fit the model
 fit_pois = bru(cmp, lik_pois)
 fit_nbin = bru(cmp, lik_nbin)
-
 ```
 
 ## Example: Implementation {.smaller auto-animate="true"}
 
 ::::: columns
+
 ::: {.column width="65%"}
-**The Model** $$
+
+**The Model** 
+$$
 \begin{aligned}
 \text{Model 1 }:  \color{red}{\boxed{y_i|\eta_i}} & \color{red}{\boxed{\sim \pi1_{(y=0)} + (1-\pi)\text{Pois}(\lambda(\eta_i))}}\\
 \text{Model 2 }:  y_i|\eta_i & \sim \pi1_{(y=0)} + (1-\pi)\text{NegBin}(n(\eta_i),p(\eta_i))\\
 \text{Linear Predictor }: \eta_i & = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i}
 \end{aligned}
 $$
+
 :::
 
 ::: {.column width="35%"}
+
 ```{r}
 #| echo: true
+
 zinb[1:3,]
+
 ```
+
 :::
+
 :::::
 
 **The code**
@@ -320,51 +346,53 @@ zinb[1:3,]
 #| warning: false
 #| message: false
 #| code-line-numbers: "9-13,21"
-
 # define model components
-cmp = ~ Intercept(1) + fishing(nofish, model = "linear") + 
-  persons(persons, model = "linear") + 
-  child(child, model = "linear")
 
+cmp = ~ Intercept(1) + fishing(nofish, model = "linear") +
+  persons(persons, model = "linear") +
+  child(child, model = "linear")
 # define model predictor
 formula = count ~ .
-
 # build the observation model
 # Poisson model
 lik_pois = bru_obs(formula,
                    family = "zeroinflatedpoisson1",
-                   data = zinb) 
-
+                   data = zinb)
 # Negative binomial model
 lik_nbin = bru_obs(formula,
                    family = "zeroinflatednbinomial1",
-                   data = zinb) 
-
+                   data = zinb)
 # fit the model
 fit_pois = bru(cmp, lik_pois)
 fit_nbin = bru(cmp, lik_nbin)
-
 ```
 
 ## Example: Implementation {.smaller auto-animate="true"}
 
 ::::: columns
+
 ::: {.column width="65%"}
-**The Model** $$
+
+**The Model** 
+$$
 \begin{aligned}
 \text{Model 1 }:  y_i|\eta_i & \sim \pi1_{(y=0)} + (1-\pi)\text{Pois}(\lambda(\eta_i))\\
 \text{Model 2 }:  \color{red}{\boxed{y_i|\eta_i}} & \color{red}{\boxed{\sim \pi1_{(y=0)} + (1-\pi)\text{NegBin}(n(\eta_i),p(\eta_i))}}\\
 \text{Linear Predictor }: \eta_i & = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i}
 \end{aligned}
 $$
+
 :::
 
 ::: {.column width="35%"}
+
 ```{r}
 #| echo: true
 zinb[1:3,]
 ```
+
 :::
+
 :::::
 
 **The code**
@@ -375,31 +403,25 @@ zinb[1:3,]
 #| warning: false
 #| message: false
 #| code-line-numbers: "15-18,22"
-
 bru_options_set(control.compute = list(dic = T, waic = T, mlik = T))
 # define model components
-cmp = ~ Intercept(1) + fishing(nofish, model = "linear") + 
-  persons(persons, model = "linear") + 
+cmp = ~ Intercept(1) + fishing(nofish, model = "linear") +
+  persons(persons, model = "linear") +
   child(child, model = "linear")
-
 # define model predictor
 formula = count ~ .
-
 # build the observation model
 # Poisson model
 lik_pois = bru_obs(formula,
                    family = "zeroinflatedpoisson1",
-                   data = zinb) 
-
+                   data = zinb)
 # Negative binomial model
 lik_nbin = bru_obs(formula,
                    family = "zeroinflatednbinomial1",
-                   data = zinb) 
-
+                   data = zinb)
 # fit the model
 fit_pois = bru(cmp, lik_pois)
 fit_nbin = bru(cmp, lik_nbin)
-
 ```
 
 ## Results - Fixed effects
@@ -409,7 +431,6 @@ print("Poisson Model")
 round(fit_pois$summary.fixed[,c(1,2,3,5)],2)
 print("Negative Binomial Model")
 round(fit_nbin$summary.fixed[,c(1,2,3,5)],2)
-
 ```
 
 ## Results - Hyperparameters and scores
@@ -417,9 +438,13 @@ round(fit_nbin$summary.fixed[,c(1,2,3,5)],2)
 Hyperparameters
 
 ```{r}
+
 print("Poisson Model")
+
 round(fit_pois$summary.hyperpar[,c(1,2)],2)
+
 print("Negative Binomial Model")
+
 round(fit_nbin$summary.hyperpar[,c(1,2)],2)
 
 ```
@@ -428,16 +453,23 @@ Scores
 
 ```{r}
 #| eval: true
-dd = data.frame( 
+
+dd = data.frame(
+
   Score = c("DIC", "Mlik", "WAIC"),
+
   Poisson = round(c(fit_pois$dic$dic, fit_pois$mlik[1], fit_pois$waic$waic),2),
+
   Nbin = round(c(fit_nbin$dic$dic, fit_nbin$mlik[1], fit_nbin$waic$waic),2))
 
 dd
+
 ```
 
 ::: notes
+
 There seems to be more overdispersion than excess zero..the negative binomial model better fits the data estimateing a small excess of zero.
+
 :::
 
 ## Comparing estimated distribution for a specific data point
@@ -447,13 +479,13 @@ $$
 \text{Model 1:   }\ & P(Y=0) &= \pi + (1-\pi)\ \text{Poisson}(\lambda)\\
 \text{Model 2:   }\ & P(Y=0)&= \pi + (1-\pi)\ \text{NegBinom}(n,p)\\
 \end{eqnarray}
-$$ We check the distribution for one person, non-fisher and no children
+$$ 
+We check the distribution for one person, non-fisher and no children
 
 ```{r}
 #| eval: true
 #| echo: false
 df_pred = data.frame(nofish = 0, persons = 1, child = 0)
-
 prob_pois = predict(fit_pois, df_pred,
         formula = ~ {
           pi0 <- zero_probability_parameter_for_zero_inflated_poisson_1
@@ -462,8 +494,6 @@ prob_pois = predict(fit_pois, df_pred,
           list(
             prob0 =  pi0 * c(1,rep(0,20)) + (1-pi0) * dpois(yy, lambda = lambda))
           } )
-
-
 prob_nbin = predict(fit_nbin, df_pred,
         formula = ~ {
           pi0 <- zero_probability_parameter_for_zero_inflated_nbinomial_1
@@ -473,13 +503,11 @@ prob_nbin = predict(fit_nbin, df_pred,
           yy = 0:20
           list(prob0 = pi0 * c(1,rep(0,20)) + (1-pi0) * dnbinom(yy,size = size, mu = mu))
         })
-
 rbind(prob_pois$prob0 %>% mutate(y = 0:20, model= "Poisson"),
       prob_nbin$prob0 %>% mutate(y = 0:20, model= "NegBin")) %>%
   ggplot() + geom_point(aes(y, mean)) +
   geom_errorbar(aes(y, ymin = q0.025, ymax = q0.975)) +
   facet_wrap(.~model) + ylab("Probability")
-
 ```
 
 ## Comparing estimated distribution - Implementation
@@ -488,7 +516,6 @@ rbind(prob_pois$prob0 %>% mutate(y = 0:20, model= "Poisson"),
 #| eval: false
 #| echo: true
 df_pred = data.frame(nofish = 0, persons = 1, child = 0)
-
 prob_pois = predict(fit_pois, df_pred,
         formula = ~ {
           pi0 <- zero_probability_parameter_for_zero_inflated_poisson_1
@@ -507,18 +534,18 @@ prob_nbin = predict(fit_nbin, df_pred,
           yy = 0:20
           list(prob0 = pi0 * c(1,rep(0,20)) + (1-pi0) * dnbinom(yy,size = size, mu = mu))
         })
+
 ```
 
 ## Comparing estimated distribution - Implementation
 
-Note: To get the names to input in `predict` use the `bru_standardise_names()` function:
+Note: To get the names to input in `predict` use the `bru_names()` function:
 
 ```{r}
 #| echo: true
-#| eval: false
+#| eval: true
 
-inlabru::bru_standardise_names(fit_pois)
-
+inlabru::bru_names(fit_pois)
 ```
 
 ## Hurdle Models in `inlabru`
@@ -546,6 +573,7 @@ There are two ways to implement hurdle models in `inlabru`
 **Advantages**
 
 -   It works exactly as the zero-inflated models
+
 -   No need for extra coding
 
 . . .
@@ -553,27 +581,37 @@ There are two ways to implement hurdle models in `inlabru`
 **Disadvantages**
 
 -   Can only be used for the models that are already implemented
+
 -   The probability of zero ($\pi$) is fixed and cannot have covariates
 
 ## Example Strategy 1: Implementation {.smaller auto-animate="true"}
 
 ::::: columns
+
 ::: {.column width="65%"}
-**The Model** $$
+
+**The Model**
+
+$$
 \begin{aligned}
 \text{Model 1 }:  y_i|\eta_i & \sim \pi1_{(y=0)} + (1-\pi)\text{TruncPois}(\lambda(\eta_i))\\
 \text{Model 2 }:  y_i|\eta_i & \sim \pi1_{(y=0)} + (1-\pi)\text{TruncNegBin}(n(\eta_i),p(\eta_i))\\
 \text{Linear Predictor }: \eta_i & = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i}
 \end{aligned}
 $$
+
 :::
 
 ::: {.column width="35%"}
+
 ```{r}
 #| echo: true
 zinb[1:3,]
+
 ```
+
 :::
+
 :::::
 
 **The code**
@@ -583,64 +621,81 @@ zinb[1:3,]
 #| eval: true
 #| warning: false
 #| message: false
-
 # define model components
-cmp = ~ Intercept(1) + fishing(nofish, model = "linear") + 
-  persons(persons, model = "linear") + 
+cmp = ~ Intercept(1) + fishing(nofish, model = "linear") +
+  persons(persons, model = "linear") +
   child(child, model = "linear")
 
 # define model predictor
 formula = count ~ .
-
 # build the observation model
 # Poisson model
 lik_pois = bru_obs(formula,
                    family = "zeroinflatedpoisson0",
-                   data = zinb) 
-
+                   data = zinb)
 # Negative binomial model
 lik_nbin = bru_obs(formula,
                    family = "zeroinflatednbinomial0",
-                   data = zinb) 
-
+                   data = zinb)
 # fit the model
 fit_pois0 = bru(cmp, lik_pois)
 fit_nbin0 = bru(cmp, lik_nbin)
-
 ```
 
 ## Example Strategy 1: Results
 
 ```{r}
+
 prob_pois0 = predict(fit_pois0, df_pred,
+
         formula = ~ {
+
           pi0 <- zero_probability_parameter_for_zero_inflated_poisson_0
+
           lambda = exp(Intercept +  fishing + persons + child)
+
           yy = 0:20
+
           list(
+
             prob0 =  pi0 * c(1,rep(0,20)) + (1-pi0) * dpois(yy, lambda = lambda))
+
           } )
 
-
 prob_nbin0 = predict(fit_nbin0, df_pred,
+
         formula = ~ {
+
           pi0 <- zero_probability_parameter_for_zero_inflated_nbinomial_0
+
           size = exp(size_for_nbinomial_0_zero_inflated_observations)
+
           mu = exp(Intercept +  fishing + persons + child)
+
           p = size/(size + mu)
+
           yy = 0:20
+
           list(prob0 = pi0 * c(1,rep(0,20)) + (1-pi0) * dnbinom(yy,size = size, mu = mu))
+
         })
 
 rbind(prob_pois$prob %>% mutate(y = 0:20, model= "Poisson", type = "zero-inflated (Type 1)"),
+
       prob_nbin$prob %>% mutate(y = 0:20, model= "NegBin", type = "zero-inflated (Type 1)"),
+
       prob_pois0$prob %>% mutate(y = 0:20, model= "Poisson", type = "hurdle (Type 0)"),
+
       prob_nbin0$prob %>% mutate(y = 0:20, model= "NegBin", type = "hurdle (Type 0)")
 
       ) %>%
+
   ggplot() + geom_point(aes(y, mean, color = type)) +
+
   geom_errorbar(aes(y, ymin = q0.025, ymax = q0.975, color = type)) +
+
   facet_wrap(.~model) + ylab("Probability")
+
 ```
 
 ## Strategy 2 - Two-likelihood trick
@@ -648,7 +703,9 @@ rbind(prob_pois$prob %>% mutate(y = 0:20, model= "Poisson", type = "zero-inflate
 **Advantages**
 
 -   More flexible model
+
 -   Can model also the probability of zero $\pi$
+
 -   Can also be used for continuous distributions with mass at 0
 
 . . .
@@ -662,6 +719,7 @@ rbind(prob_pois$prob %>% mutate(y = 0:20, model= "Poisson", type = "zero-inflate
 The Hurdle Model handles this by splitting the data-generating process into two parts:
 
 1.  **Zero-hurdle component**: This part is a binary model that estimates the probability of a zero count versus a non-zero count.
+
 2.  **Positive component**: This part models the distribution of the positive (non-zero) values.
 
 . . .
@@ -669,6 +727,7 @@ The Hurdle Model handles this by splitting the data-generating process into two 
 This idea can be used in `inlabru` by using two likelihood
 
 -   A binomial likelihood to model the 0/1 process
+
 -   A continuous **positive** density or a **truncated** count distribution for the positive part
 
 ## Example - Gamma-Hurdle model {.smaller}
@@ -676,7 +735,9 @@ This idea can be used in `inlabru` by using two likelihood
 Daily precipitation in Parana state
 
 ::::: columns
+
 ::: {.column width="50%"}
+
 $$
 z_{st} = \left\{
 \begin{eqnarray}
@@ -694,32 +755,34 @@ y_{st} = \left\{
 \end{eqnarray}
 \right.
 $$
+
+$$
+\begin{eqnarray}
+z_{st} & \sim \text{Binom}(p_{st}, n_{st} = 1);\\
+(y_{st}|z_{st}=1) &\sim\text{Gamma}(a,b) \\
+E(y_{st}) &= \mu_{st} =  a/b
+\end{eqnarray}
+$$
+
 :::
 
 ::: {.column width="50%"}
+
 ```{r}
 library(sf)
 data(PRprec)
 df  = st_as_sf(PRprec, coords = c("Longitude", "Latitude"),
          crs = st_crs("+proj=longlat +datum=WGS84")) %>%
   mutate(station = seq_along(geometry))
-
 df = df %>% pivot_longer(-c(geometry, Altitude, station)) %>%
   mutate(time = as.numeric(as.factor(name)))
-
 # Time series of the daily rain amount, with smoother curve
-
 p1 = ggplot(df %>% filter(station==1),aes(time, value)) +
   geom_segment(aes(x = time, xend = time, y = 0, yend = value)) +
   xlab("Date") +
   ylab("Rain (mm)") +
   ggtitle("Daily rain amount")
-
-
-
-
 # Histogram of the daily rain amount
-
 p2  = ggplot(df %>% filter(station ==1 ),aes(value)) +
   geom_histogram(binwidth = 1,colour = "blue", fill = "darkgrey") +
  # scale_x_continuous(breaks = seq(0,80,5)) +
@@ -729,36 +792,32 @@ p2  = ggplot(df %>% filter(station ==1 ),aes(value)) +
   ggtitle("Daily rain amount distribution")
 p1 + p2
 
-
-
-
-
 ggplot() + geom_sf(data = df, aes(color = Altitude))
 
-
 xys = st_as_sf(data.frame(PRborder), coords = c("Longitude", "Latitude"), crs = st_crs("+proj=longlat +datum=WGS84"))
-
 points_list <- list(PRborder)
 poly <- st_sfc(st_polygon(points_list), crs = st_crs("+proj=longlat +datum=WGS84"))
-
 mesh = mesh = fm_mesh_2d(loc = df, crs = st_crs(df), max.edge = c(30,50),
                          cutoff = 0.1)
 spde = inla.spde2.pcmatern(
   mesh, prior.range = c(100, 0.5), prior.sigma = c(0.5, 0.5))
 ```
+
 :::
+
 :::::
 
+
+
 $$
-z_{st}\sim \text{Binom}(p_{st}, n_{st} = 1); \qquad y_{st}|z_{st}=1\sim\text{Gamma}(a,b) \ \text{with}\  E(y_{st}) = \mu_{st} =  a/b
-$$ Where $$
+\text{Where}: \qquad
 \begin{eqnarray}
 \eta_t^1 & = \text{logit}(p_t)  & = \beta_0^B+u^B(s) \\
 \eta_t^2 & = \log(\mu_t)& = \beta_0^G+u^G(s)
 \end{eqnarray}
 $$
 
-## Example - Gamma-Hurdle model
+## Example - Gamma-Hurdle model{.smaller}
 
 **Implementation**
 
@@ -798,18 +857,16 @@ fit = bru(cmp, lik_z, lik_y)
 **Results**
 
 ```{r}
-
 inv_logit = function(x)(exp(x)/(1+exp(x)))
 pxl = fm_pixels(mesh, mask = poly)
-
 preds = predict(fit, pxl, ~ data.frame(prob = inv_logit(Intercept_z + space_z),
+
                                              mean_amount = exp(Intercept_y + space_y)))
 
+p1 = preds$prob %>% ggplot() + geom_sf(aes(color = mean)) + ggtitle("Probability of rain")
 
-
-preds$prob %>% ggplot() + geom_sf(aes(color = mean)) + ggtitle("Probability of rain")
-preds$mean_amount %>% ggplot() + geom_sf(aes(color = mean)) + ggtitle("Mean amount of rain")
-
+p2 = preds$mean_amount %>% ggplot() + geom_sf(aes(color = mean)) + ggtitle("Mean amount of rain")
+p1 + p2  + plot_layout(ncol = 2)
 ```
 
 ## Example - Gamma-Hurdle model
@@ -817,7 +874,9 @@ preds$mean_amount %>% ggplot() + geom_sf(aes(color = mean)) + ggtitle("Mean amou
 We can:
 
 -   use other components in both linear predictors $\eta^1$ and $\eta^2$
+
 -   have shared components between the two linear predictor
+
 -   use other positive-continuous distribution instead of the Gamma (for example log-Normal, Weibull, etc.)
 
 ## Example - Poisson- Hurdle model
@@ -829,14 +888,17 @@ $$
 P(Y = 0) = &\pi\\
 P(Y=y) = & (1-\pi) \frac{f_Y(y)}{f_Y(0)},& \qquad y =1,2,\dots
 \end{eqnarray}
-$$ We use the same "trick" as before and we now have $$
+$$ 
+We use the same "trick" as before and we now have 
+$$
 \begin{eqnarray}
 z\sim\text{Binomial}(\pi,n); &\qquad \eta_1 = \text{logit}(\pi) = \beta^1X\\
 z\sim\text{Truncated Poisson}(\lambda); &\qquad \eta_2 =\log(\lambda) =  \beta^2X\\
 \end{eqnarray}
-$$ In `inlabru` the **truncated Poisson distribution** is called `nzpoisson`
+$$ 
+In `inlabru` the **truncated Poisson distribution** is called `nzpoisson`
 
-## Example - Poisson- Hurdle model
+## Example - Poisson- Hurdle model{.smaller}
 
 **Implementation**
 
@@ -856,16 +918,14 @@ zinb  = zinb %>%
 cmp = ~ -1 + Intercept_z(1) + Intercept_y(1) +
   nofish_z(nofish, model = "linear") + persons_z(persons, model = "linear") +
     nofish_y(nofish, model = "linear") + persons_y(persons, model = "linear")
-
 lik_z = bru_obs(formula = z~ Intercept_z  + nofish_z + persons_z,
                 data = zinb,
                 family = "binomial")
-
 lik_y = bru_obs(formula = y~ Intercept_y  + nofish_y + persons_y,
                 data = zinb,
                 family = "nzpoisson")
-
 fit = bru(cmp, lik_z, lik_y)
+
 ```
 
 ## Example - Poisson- Hurdle model
@@ -876,16 +936,17 @@ fit = bru(cmp, lik_z, lik_y)
 #| echo: true
 
 round(fit$summary.fixed,2)
-
 ```
 
 ## Example: Binomial-Hurdle model
 
 -   In `inlabru` there is no implementation for the *truncated binomial* (or negative binomial) distribution
 
--   We can "trick" `inlabru` by using one of the implemented **Type 0** models $$
+-   We can "trick" `inlabru` by using one of the implemented **Type 0** models 
+$$
     y_i|\eta_i  \sim \pi1_{(y=0)} + (1-\pi)\frac{f(y)}{f(0)}
-    $$ with a *fixed* and small $\pi$ thus creating a *truncated* distribution!
+$$ 
+with a *fixed* and small $\pi$ thus creating a *truncated* distribution!
 
 ## Example: Binomial-Hurdle model {.smaller}
 
@@ -899,9 +960,9 @@ round(fit$summary.fixed,2)
 zinb  = zinb %>% mutate(z = ifelse(count==0,1,0),
                         y = ifelse(count==0,NA, count))
 # define model components
-cmp = ~ -1 + Intercept_z(1) + Intercept_y(1) + 
-  fishing_z(nofish, model = "linear") + fishing_y(nofish, model = "linear") + 
-  persons_z(persons, model = "linear") + persons_y(persons, model = "linear") + 
+cmp = ~ -1 + Intercept_z(1) + Intercept_y(1) +
+  fishing_z(nofish, model = "linear") + fishing_y(nofish, model = "linear") +
+  persons_z(persons, model = "linear") + persons_y(persons, model = "linear") +
   child_z(child, model = "linear") + child_y(child, model = "linear")
 ```
 
@@ -911,11 +972,10 @@ cmp = ~ -1 + Intercept_z(1) + Intercept_y(1) +
 
 ```{r}
 #| echo: true
-# build the observation model
-# Poisson model
+# build the observation model Poisson model
 lik_binom = bru_obs(z ~ Intercept_z + fishing_z + persons_z + child_z ,
                    family = "binomial",
-                   data = zinb) 
+                   data = zinb)
 ```
 
 . . .
@@ -925,13 +985,12 @@ lik_binom = bru_obs(z ~ Intercept_z + fishing_z + persons_z + child_z ,
 ```{r}
 #| echo: true
 #| code-line-numbers: "5-6"
-
 # Negative binomial model
 lik_trunc_nbin = bru_obs(y ~ Intercept_y + fishing_y + persons_y + child_y ,
                    family = "zeroinflatednbinomial0",
                    data = zinb,
-                   control.family = list(hyper = list(theta = list(initial = -20, 
-                                                                   fixed = TRUE))))
+                   control.family = list(hyper = list(theta = list(initial = -20,fixed = TRUE))))
+
 ```
 
 . . .
@@ -941,16 +1000,129 @@ lik_trunc_nbin = bru_obs(y ~ Intercept_y + fishing_y + persons_y + child_y ,
 ```{r}
 #| echo: true
 fit_nbin = bru(cmp, lik_binom, lik_trunc_nbin)
+
 ```
 
-## Summary - Treating many zero with `inlabru`
+## True and false zeros
+
+![](figures/findwally1.png){fig-align="center"}
+
+## True and false zeros
+
+![](figures/findwally2.png){fig-align="center"}
+
+## Occupancy models {.smaller}
+
+**Basic idea** Data contain information about two processes:
+
+-   The species occupacy (biological process)
+-   The detection (observation process)
+
+**Basic model form**
+
+-   Biological process $$
+          Z_i\sim\text{Bernoulli}(\phi_i),\qquad i = 1,\dots, M\ \ (\text{Number of sites})
+    $$\
+-   Observation process $$       
+    d_{ij}\ |Z_i=z_i\sim\text{Bernoulli}(z_i\ p_{ij}), \qquad j = 1,\dots, K_i\ \ (\text{Number of visits at site } i)
+    $$ **Note** The model requires multiple visits per site to be identifiable
+
+## The Occupancy model {.smaller}
+
+For a set of set of $M$ discrete sites, let the detection history of the $i$th site $\mathbf{d}_i= d_{i1},\ldots,d_{iK}$.
+
+The joint likelihood is then:
+
+$$
+ L(\psi,p|\mathbf{d}_1,\ldots,\mathbf{d}_M) = \underbrace{\left[\prod_{i=1}^{m} \phi_i \prod_j^{K_i} p_{ij}^{d_{ij}} (1-p_{ij})^{1-d_{ij}}\right]}_{\text{sites with at least one 1}}\underbrace{\prod_{i=m+1}^M\left[\phi_i\prod_j^{K_i}(1-p_{ij})+(1-\phi_i)\right]}_{\text{sites with only 0}} 
+$$ If we assume that $p_{ij}=p_i$ and let $y_i = \sum_j\ d_{ij}$ then:
+
+$$    
+L(\psi,p|\mathbf{d}_1,\ldots,\mathbf{d}_M)=\prod_{i=1}^{M} \left[\phi_i\ p_i^{y_i}(1-p_i)^{K_i-y_i}+
+I_{y_i=0}(1-\phi_i)\right]
+$$
+
+-   This is almost a Binomial Zero Inflated Model (ZIP) but now we are often more interested in $\phi$ (probability of presence) than in $p$ (probabilisty of detection)
+-   We often want to have some covariates in the detection probability
+-   Can we use INLA to fit this model?
+
+## The Occupancy model {.smaller}
+
+$$    
+L(\psi,p|\mathbf{d}_1,\ldots,\mathbf{d}_M)=\prod_{i=1}^{M} \left[\phi_i p_i^{y_i}(1-p_i)^{K_i-y_i}+
+I_{y_i=0}(1-\phi_i)\right]
+$$
+
+-   LGM **if** we assume $\eta =g(p)$ **or** $\eta = g(\phi)$ Gaussian
+
+-   $\phi$ or $p$ (not both!) can be linked to the linear predictor $\eta$ . . .
+
+-   What does this mean?
+
+    -   We can have *complicated* (with random effects) model for *either* $p$ of $\phi$
+    -   The other parameter can only have some (not too many) linear covariates as components
+
+. . .
+
+-   The likelihood `0binomialS` allows for exactly that
+
+## Occupancy models - Example
+
+Modelling the spatio-temporal distribution of the Red-eyed Vireo in the Hubbard Brook Experimental Forest, New Hampshire, USA
+
+$$
+\begin{aligned}
+&\text{Occupancy}\\
+z_{t}(s) & \sim \text{Bernoulli}(\phi_t(s))\\
+\text{logit}(\phi_t(s)) & = \eta_t(s) = \text{fixed + random effects}\\
+&\text{Detection}\\
+y_{ti}(s)| z_{t}(s) & \sim \text{Binomial}(z_{t}(s) \times p_{ti}(s))\\
+\text{logit}(p_{ti}(s)) & = \alpha_0  + \alpha_1\ \text{julian_day}+ \alpha_2\ \text{hour_of_the_day}
+\end{aligned}
+$$ 
+
+## Occupancy models - Example 
+
+![](figures/occ1.png){fig-align="center"} 
+
+## Occupancy models - Example 
+![](figures/occ2.png){fig-align="center"}
+
+## Occupancy models - Example{.smaller}
+
+The code is a bit more complicated than usual....but ask for details if you are interested :grinning:
+
+
+```{r}
+#| eval: false
+#| echo: true
+
+data <- st_as_sf(data.frame(scale_elev = scale(input$Xocc[,1]),
+                            coord1 = input$coord[,1],
+                            coord2 = input$coord[,2]),coords = c("coord1", "coord2"))
+response_data <- list(Y = input$Y, Int_det = 1, n = 3, X = input$X)
+
+formula <-  inla.mdata(cbind(Y, n),Int_det=Int_det, X=X) ~ 0 + Int_occ(1, prec.linear = 1) +
+  scale_elev(scale_elev, prec.linear = 1) + spatialfield(geometry, model = spde)
+
+fit <- bru(
+  formula,
+  family = "0binomialS",
+  data = data,
+  response_data = response_data,
+  control.family = list(control.link = list(model = "logit")))
+
+```
+
+## Summary - Treating with many zero{.smaller}
 
 There are mainly two types of models to treat excess of zeros
 
 -   Zero inflated models
 -   Hurdle models
+-   Occurrence models
 
-## Summary - Treating many zero with `inlabru`
+## Summary - Treating with many zero{.smaller}
 
 There are mainly two types of models to treat excess of zeros
 
@@ -960,8 +1132,9 @@ There are mainly two types of models to treat excess of zeros
     -   Four likelihood are implemented in `inlabru` (Type1)
     -   The probability of zero-inflation is **constant**
 -   Hurdle models
+-   Occurrence models
 
-## Summary - Treating many zero with `inlabru`
+## Summary - Treating with many zero{.smaller}
 
 There are mainly two types of models to treat excess of zeros
 
@@ -971,7 +1144,7 @@ There are mainly two types of models to treat excess of zeros
     -   Positive values can be both discrete and continuous
     -   Two ways to imlement in `inlabru`
 
-## Summary - Treating many zero with `inlabru`
+## Summary - Treating with many zero{.smaller}
 
 There are mainly two types of models to treat excess of zeros
 
@@ -981,12 +1154,27 @@ There are mainly two types of models to treat excess of zeros
 
     -   Positive values can be both discrete and continuous
 
-    -   Two ways to imlement in `inlabru`
+    -   Two ways to implement in `inlabru`
 
         1.  Use the implemented Type0 likelihoods\
 
-        -   Probability of zero is constant
+          -   Probability of zero is constant
 
         2.  Use the "two-likelihood" approach
 
-        -   Probability of zero can be modelled
+          -   Probability of zero can be modelled
+-   Occurrence models
+
+
+## Summary - Treating with many zero{.smaller}
+
+There are mainly two types of models to treat excess of zeros
+
+-   Zero inflated models
+-   Hurdle models
+-   Occurrence models
+
+    - Allow for covariates in both occurrence and detection probability (but random effects only in one of them)
+  
+    - Requires multiple observations
+

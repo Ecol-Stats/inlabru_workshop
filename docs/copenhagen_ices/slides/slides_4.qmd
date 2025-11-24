@@ -62,7 +62,7 @@ library(cowplot) # needs install.packages("magick") to draw images
 
 # Some things were missing yesterday ...
 
-## Some `inlabru` shortcuts{.smaller}
+## Some `inlabru` shortcuts {.smaller}
 
 In the slides we have fitted the model as:
 
@@ -79,8 +79,6 @@ fit = bry(cmp, lik)
 
 but in the practical you have
 
-
-
 ```{r}
 #| echo: true
 #| eval: false
@@ -94,31 +92,28 @@ fit = bry(cmp, lik)
 
 . . .
 
-1. You *don't have to* define a formula outside of the `bru_obs()` function..it can be defines also inside the function! 
+1.  You *don't have to* define a formula outside of the `bru_obs()` function..it can be defines also inside the function!
 
 . . .
 
-2. The expression `y ~ .` just means "take all the components and sum them together". It also tells the _bru()_ function that your predictor is *linear*.
-
+2.  The expression `y ~ .` just means "take all the components and sum them together". It also tells the *bru()* function that your predictor is *linear*.
 
 ## `predict()` and `generate()` functions
 
+In the practicals you have used the *predict()* function to get results from the fitted model.
 
-In the practicals you have used the _predict()_ function to get results from the fitted model.
+-   `predict()` *simulates* from the fitted posterior distribution $\pi(\mathbf{y}|\mathbf{u},\theta)$, computes what you ask and produces a summary of the samples (mean, sd, quantiles, etc)
 
-- `predict()` *simulates* from the fitted posterior distribution $\pi(\mathbf{y}|\mathbf{u},\theta)$, computes what you ask and produces a summary of the samples (mean, sd, quantiles, etc)
+-   `generate()` *simulates* from the fitted posterior distribution $\pi(\mathbf{y}|\mathbf{u},\theta)$, computes what you ask and return the samples!
 
-- `generate()` *simulates* from the fitted posterior distribution $\pi(\mathbf{y}|\mathbf{u},\theta)$, computes what you ask and return the samples!
+## Example {.smaller}
 
-## Example{.smaller}
-
-Let's fit the model for the Tokyo rainfall data
-$$
+Let's fit the model for the Tokyo rainfall data $$
 \begin{aligned}
 y_t|\eta_t&\sim\text{Bin}(n_t, p_t),\qquad i = 1,\dots,366\\
 \eta_t &= \text{logit}(p_t)= \beta_0 + f(\text{time}_t)
 \end{aligned}
-$$ 
+$$
 
 ```{r}
 #| echo: true
@@ -132,18 +127,15 @@ lik = bru_obs(formula = formula,
 fit = bru(cmp, lik)
 ```
 
-
 We now want to extract results...what do we want?
 
 . . .
 
-
-- The time effect $f(\text{time}_t)$ ?
-- The linear predictor $\eta_t = \beta_0 + f(\text{time}_t)$?
-- The estimated probability offit precipitation $p_t = \text{inv_logit}(\eta_t)$ ?
+-   The time effect $f(\text{time}_t)$ ?
+-   The linear predictor $\eta_t = \beta_0 + f(\text{time}_t)$?
+-   The estimated probability offit precipitation $p_t = \text{inv_logit}(\eta_t)$ ?
 
 We can get all of them with the `predict()` or `generate()` functions!
-
 
 ## Example - `predict()`
 
@@ -179,6 +171,7 @@ round(preds$probs[1:3,],3)
 preds$probs %>% ggplot() + geom_line(aes(time, mean)) +
   geom_ribbon(aes(time, ymin = q0.025, ymax = q0.975), alpha = 0.5)
 ```
+
 ## Example - `generate()`
 
 ```{r}
@@ -207,14 +200,13 @@ data.frame(time = Tokyo$time, sapply(samples, function(x) x[,1])) %>%
 
 ```
 
-## Effects of categorical variables and Interactions 
+## Effects of categorical variables and Interactions
 
 Both this things require a little more thinking when using `inlabru` than when using `lm` or similar
 
 . . .
 
-Let's look at the `mtcars` dataset that is in  `R` 
-
+Let's look at the `mtcars` dataset that is in `R`
 
 ```{r}
 df = mtcars %>% mutate(gear = factor(gear))
@@ -222,11 +214,11 @@ head(df)
 
 ```
 
-## Effects of categorical variables{.smaller} 
+## Effects of categorical variables {.smaller}
 
 We want to fit a model where `rank` is the only covariate.
 
-`gear` has three categories: `3` `4``5`
+`gear` has three categories: `3` ``` 4``5 ```
 
 ```{r}
 #| echo: true
@@ -238,9 +230,7 @@ How do we do this in `inlabru`?
 
 . . .
 
-- Option 1: Use the `model.matrix()` function in `R`
-
-
+-   Option 1: Use the `model.matrix()` function in `R`
 
 ```{r}
 #| echo: true
@@ -259,12 +249,11 @@ fit1 = bru(cmp1, lik1)
 fit1$summary.fixed$mean
 ```
 
-
-## Effects of categorical variables{.smaller} 
+## Effects of categorical variables {.smaller}
 
 We want to fit a model where `rank` is the only covariate.
 
-`rank` has three categories: `Prof` `AsstProf``AssocProf`
+`rank` has three categories: `Prof` ``` AsstProf``AssocProf ```
 
 ```{r}
 #| echo: true
@@ -274,8 +263,7 @@ m1$coefficients
 
 How do we do this in `inlabru`?
 
-- Option 2: fixed effect are just random effects with fixed precision
-
+-   Option 2: fixed effect are just random effects with fixed precision
 
 ```{r}
 #| echo: true
@@ -301,9 +289,7 @@ This is just a re-parametrization problem
 c(m1$coef[1], m1$coef[1] + m1$coef[2],m1$coef[1] + m1$coef[3])
 ```
 
-
-
-## Interaction between two categorical variables{.smaller}
+## Interaction between two categorical variables {.smaller}
 
 Say we want to fit this model
 
@@ -316,6 +302,7 @@ m2 = lm(mpg ~ gear * vs, data = df)
 ```{r}
 m2$coef
 ```
+
 . . .
 
 Here the best solution is to use the `model.matrix()` again
@@ -335,7 +322,6 @@ lik3 = bru_obs(formula= mpg ~ ., data = df)
 fit3 = bru(cmp3, lik3)
 fit3$summary.fixed$mean
 ```
-
 
 ## Interaction categorical and continous variable
 
@@ -358,17 +344,17 @@ Option 1: Again we can use the `model.matrix()` option:
 # create the model matrix
 cov_effect = model.matrix(~ gear * disp, data = df)
 cov_effect[1:1,]
-df = cbind(df, cov_effect[,-1])       # attach this to your data
+colnames(cov_effect)  = str_replace(colnames(cov_effect), ":", "_")
+df = cbind(df, cov_effect[,-c(1,4)])      # attach this to your data and remove duplicated columns
 
 cmp4 = ~ Intercept(1) + gear_4(gear4, model = "linear") +
   gear_5(gear5, model = "linear") + disp(disp, model = "linear") +
-  gear4_disp(`gear4:disp`, model = "linear") + gear5_disp(`gear5:disp`, model = "linear") 
+  gear4_disp(gear4_disp, model = "linear") + gear5_disp(gear5_disp, model = "linear") 
 
 lik4 = bru_obs(formula= mpg ~ ., data = df)
 fit4 = bru(cmp4, lik4)
 fit4$summary.fixed$mean
 ```
-
 
 ## Interaction categorical and continous variable
 
@@ -401,9 +387,7 @@ fit5$summary.random$gear_effect_slope$mean
 
 Again..the differences are a matter of parametrization!
 
-
 ## Interaction categorical and continous variable
-
 
 ```{r}
 #| echo: true
@@ -421,8 +405,8 @@ ggplot()  + geom_line(data = inla_pred, aes(disp, mean, group= gear, color = gea
 
 ```
 
-
 # Temporal models and smoothing
+
 ## Motivation {.smaller}
 
 Data are often observed in time, and time dependence is often expected.
@@ -1275,8 +1259,6 @@ rbind(cbind(pred1, model = "rw1"),
 
 -   They are not too different when smoothing, but can give different predictions.
 
-
-
 # Continuous time modelling
 
 ## Continuous time modelling {.smaller}
@@ -1285,7 +1267,7 @@ rbind(cbind(pred1, model = "rw1"),
 
 -   One solution (not a bad one usually) is to discretize the time and use RW model (AR models are then harder to justify..)
 
-- A different solution is to use a continuous smoother based on a continuous Gaussian Random Field (GRF) $\omega(t)$
+-   A different solution is to use a continuous smoother based on a continuous Gaussian Random Field (GRF) $\omega(t)$
 
 . . .
 
@@ -1324,7 +1306,7 @@ What is this?
 -   $(\kappa^2-\Delta)^{\alpha/2}$ is an operator that "smooths" the white noise.
 -   $\kappa$ and $\alpha$ are parameters
 
-## One analogy..{.smaller}
+## One analogy.. {.smaller}
 
 -   Think of white noise as someone randomly tapping along a rope.
 
@@ -1445,7 +1427,7 @@ p1 + p2 + plot_layout(ncol = 1, guides = "collect")
 
 ```
 
-## Solving the SPDE{.smaller}
+## Solving the SPDE {.smaller}
 
 Ok...but we still need to solve the SPDE to find $\omega(t)$!
 
@@ -1461,7 +1443,7 @@ We represent our solution as
 
 $$
 \omega(t) = \sum_{i = 1}^T\phi_i(t)w_i
-$$ 
+$$
 
 Where
 
@@ -1493,7 +1475,7 @@ w = round(runif(7), 3)
 :::
 :::::
 
-## In summary{.smaller}
+## In summary {.smaller}
 
 -   The continuous Matern GRF is the solution of a SPDE and is represented as
 
@@ -1528,8 +1510,6 @@ $$
 For the **marginal standard deviation** we have: $$
 \text{Prob}(\sigma<\sigma_0) = p_{\sigma}
 $$
-
-
 
 ## PC priors for range and marginal variance
 
@@ -1699,8 +1679,7 @@ ggplot() + geom_line(data = pred_spde, aes(age, mean, color = "spde")) +
 
 ## Some practical tips I
 
-You  might wonder which priors have you used in your model..
-
+You might wonder which priors have you used in your model..
 
 ```{r}
 #| echo: true
@@ -1715,7 +1694,6 @@ INLA::inla.priors.used(fit)
 
 ## Some practical tips II
 
-
 Getting help!
 
 ```{r}
@@ -1727,12 +1705,12 @@ inla.doc("pc.prior")
 inla.doc("gaussian")
 ```
 
-
-## Some practical tips II{.smaller}
+## Some practical tips II {.smaller}
 
 Which models are implemented?
 
 **Likelihoods**
+
 ```{r}
 #| echo: true
 #| eval: true
@@ -1740,11 +1718,12 @@ Which models are implemented?
 inla.list.models("likelihood")
 ```
 
-## Some practical tips II{.smaller}
+## Some practical tips II {.smaller}
 
 Which models are implemented?
 
 **Components**
+
 ```{r}
 #| echo: true
 #| eval: true
@@ -1752,13 +1731,11 @@ Which models are implemented?
 inla.list.models("latent")
 ```
 
-
-## Some practical tips II{.smaller}
+## Some practical tips II {.smaller}
 
 Which models are implemented?
 
 **Priors**
-
 
 ```{r}
 #| echo: true
@@ -1767,4 +1744,4 @@ Which models are implemented?
 inla.list.models("prior")
 ```
 
-```
+\`\`\`

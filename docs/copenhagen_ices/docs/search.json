@@ -1,10 +1,22 @@
 [
   {
+    "objectID": "slides/slides_13.html#observation-processes",
+    "href": "slides/slides_13.html#observation-processes",
+    "title": "Lecture 13",
+    "section": "Observation processes",
+    "text": "Observation processes\n\nin practice, often on some sub-areas of the area of interest can be surveyed\ninterest in entire observation area",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 13"
+    ]
+  },
+  {
     "objectID": "slides/slides_13.html#overview-of-distance-sampling",
     "href": "slides/slides_13.html#overview-of-distance-sampling",
     "title": "Lecture 13",
     "section": "Overview of Distance Sampling",
-    "text": "Overview of Distance Sampling\n\nDistance sampling is a family of related methods for estimating the abundance and spatial distribution of wild populations.\nDistance sampling is based on the idea that animals further away from observers are harder to detect than animals that are nearer.\n\n\n\n\nThis idea is implemented in the model as a detection function that depends on distance.\n\nAnimals at greater distances are harder to detect and the detection function therefore declines as distance increases.",
+    "text": "Overview of Distance Sampling\n\nDistance sampling is a family of related methods for estimating the abundance and spatial distribution of wildlife populations.\nDistance sampling is based on the idea that animals further away from observers are harder to detect than animals that are nearer.\n\n\n\n\nThis idea is implemented in the model as a detection function that depends on distance.\n\nAnimals at greater distances are harder to detect and the detection function therefore declines as distance increases.",
     "crumbs": [
       "Home",
       "Slides",
@@ -16,7 +28,7 @@
     "href": "slides/slides_13.html#density-surface-models",
     "title": "Lecture 13",
     "section": "Density surface models",
-    "text": "Density surface models\nCoupling distance sampling data with spatial modelling allows maps of spatially varying density to be produced.\n\nTraditionally, this is achieved in a two-stages approach by (i) using a detectability point estimates to create an offset vector to (ii) use within GLM or GAM for count response data.",
+    "text": "Density surface models\nCoupling distance sampling data with spatial modelling allows us to map spatially varying density\n\nTraditionally, this is achieved in a two-stage approach by (i) using a detectability point estimate to create an offset vector to (ii) use within GLM or GAM models for count response data.",
     "crumbs": [
       "Home",
       "Slides",
@@ -52,7 +64,7 @@
     "href": "slides/slides_13.html#thinned-point-process-1",
     "title": "Lecture 13",
     "section": "Thinned Point Process",
-    "text": "Thinned Point Process\n\n\n\nThe LGCP is a flexible approach that can include spatial covariates to model the mean intensity and a mean-zero spatially structured random effect to account for unexplained heterogeneity not captured by the covariates.\n\nTo account for the imperfect detection of points we specify a thinning probability function \\[\ng(s) = \\text{Prob}(\\text{a point at s is detected}|\\text{a point is at s})\n\\]\nA key property of LGCP is that a realisation of a point process with intensity \\(\\lambda(s)\\) that is thinned by probability function \\(g(s)\\), follows also a LGCP with intensity:\n\n\\[\n\\underbrace{\\tilde{\\lambda}(s)}_{\\text{observed process}} = \\underbrace{\\lambda(s)}_{\\text{true process}} \\times \\underbrace{g(s)}_{\\text{thinning probability}}\n\\]",
+    "text": "Thinned Point Process\n\n\n\n\nflexible approach that can include spatial covariates to model the mean intensity and a spatially structured random effect to account for unexplained heterogeneity not captured by the covariates.\nto account for the imperfect detection of points we specify a thinning probability function \\[\ng(s) = \\text{Prob}(\\text{a point at s is detected}|\\text{a point is at s})\n\\]\nkey property – an LGCP with intensity \\(\\lambda(s)\\) that thinned by a probability function \\(g(s)\\), follows also a LGCP with intensity:\n\n\\[\n\\underbrace{\\tilde{\\lambda}(s)}_{\\text{observed process}} = \\underbrace{\\lambda(s)}_{\\text{true process}} \\times \\underbrace{g(s)}_{\\text{thinning probability}}\n\\]",
     "crumbs": [
       "Home",
       "Slides",
@@ -268,7 +280,7 @@
     "href": "slides/slides_13.html#an-approximation-strips-as-lines",
     "title": "Lecture 13",
     "section": "An approximation: Strips as lines",
-    "text": "An approximation: Strips as lines\n\nIf the strips width ( \\(2W\\) ) is narrow compared to study region (\\(\\Omega\\)) we can treat them as lines.\n\nWe need to adjust the intensity at a point \\(\\mathbf{s}\\) on the line to take account of the actual width of the strip\nAdjust the thinning probability to account for having collapsed all points onto the line.",
+    "text": "An approximation: Strips as lines\n\nIf the strips width (\\(2W\\)) is narrow compared to study region (\\(\\Omega\\)) we can treat them as lines.\n\nWe need to adjust the intensity at a point \\(\\mathbf{s}\\) on the line to take account of the actual width of the strip\nAdjust the thinning probability to account for having collapsed all points onto the line.",
     "crumbs": [
       "Home",
       "Slides",
@@ -316,67 +328,7 @@
     "href": "slides/slides_13.html#step-1-define-the-spde-representation-the-mesh-1",
     "title": "Lecture 13",
     "section": "Step 1: Define the SPDE representation: The mesh",
-    "text": "Step 1: Define the SPDE representation: The mesh\nFirst, we need to create the mesh used to approximate the random field. We can either:\n\nUse a pre-define sf boundary and specify this directly into the mesh construction via the fm_mesh_2d function\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nmax.edge for maximum triangle edge lengths\ncutoff to avoid overly small triangles in clustered areas",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 13"
-    ]
-  },
-  {
-    "objectID": "slides/slides_13.html#step-1-define-the-spde-representation-the-mesh-2",
-    "href": "slides/slides_13.html#step-1-define-the-spde-representation-the-mesh-2",
-    "title": "Lecture 13",
-    "section": "Step 1: Define the SPDE representation: The mesh",
-    "text": "Step 1: Define the SPDE representation: The mesh\n\nAll random field models need to be discretised for practical calculations.\nThe SPDE models were developed to provide a consistent model definition across a range of discretisations.\nWe use finite element methods with local, piecewise linear basis functions defined on a triangulation of a region of space containing the domain of interest.\nDeviation from stationarity is generated near the boundary of the region.\nThe choice of region and choice of triangulation affects the numerical accuracy.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 13"
-    ]
-  },
-  {
-    "objectID": "slides/slides_13.html#step-1-define-the-spde-representation-the-mesh-3",
-    "href": "slides/slides_13.html#step-1-define-the-spde-representation-the-mesh-3",
-    "title": "Lecture 13",
-    "section": "Step 1: Define the SPDE representation: The mesh",
-    "text": "Step 1: Define the SPDE representation: The mesh\n\nToo fine meshes \\(\\rightarrow\\) heavy computation\nToo coarse mesh \\(\\rightarrow\\) not accurate enough",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 13"
-    ]
-  },
-  {
-    "objectID": "slides/slides_13.html#step-1-define-the-spde-representation-the-mesh-4",
-    "href": "slides/slides_13.html#step-1-define-the-spde-representation-the-mesh-4",
-    "title": "Lecture 13",
-    "section": "Step 1: Define the SPDE representation: The mesh",
-    "text": "Step 1: Define the SPDE representation: The mesh\nSome guidelines\n\nCreate triangulation meshes with fm_mesh_2d():\nedge length should be around a third to a tenth of the spatial range\nMove undesired boundary effects away from the domain of interest by extending to a smooth external boundary:\nUse a coarser resolution in the extension to reduce computational cost (max.edge=c(inner, outer)), i.e., add extra, larger triangles around the border",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 13"
-    ]
-  },
-  {
-    "objectID": "slides/slides_13.html#step-1-define-the-spde-representation-the-mesh-5",
-    "href": "slides/slides_13.html#step-1-define-the-spde-representation-the-mesh-5",
-    "title": "Lecture 13",
-    "section": "Step 1: Define the SPDE representation: The mesh",
-    "text": "Step 1: Define the SPDE representation: The mesh\n\nUse a fine resolution (subject to available computational resources) for the domain of interest (inner correlation range) and avoid small edges ,i.e., filter out small input point clusters (0 \\(&lt;\\) cutoff \\(&lt;\\) inner)\nCoastlines and similar can be added to the domain specification in fm_mesh_2d() through the boundary argument.\nsimplify the border",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 13"
-    ]
-  },
-  {
-    "objectID": "slides/slides_13.html#step-1-define-the-spde-representation-the-spde",
-    "href": "slides/slides_13.html#step-1-define-the-spde-representation-the-spde",
-    "title": "Lecture 13",
-    "section": "Step 1: Define the SPDE representation: The SPDE",
-    "text": "Step 1: Define the SPDE representation: The SPDE\nWe use the inla.spde2.pcmatern to define the SPDE model using PC priors through the following probability statements\n\n\n\n\\(P(\\rho &lt; 50) = 0.1\\)\n\\(P(\\sigma &gt; 2) = 0.1\\)",
+    "text": "Step 1: Define the SPDE representation: The mesh\nFirst, we need to create the mesh used to approximate the random field. We can either:\n\nUse a pre-defined sf boundary and specify this directly onto the mesh construction via the fm_mesh_2d function\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nmax.edge for maximum triangle edge lengths\ncutoff to avoid overly small triangles in clustered areas",
     "crumbs": [
       "Home",
       "Slides",
@@ -448,7 +400,7 @@
     "href": "slides/slides_13.html#results-posterior-summaries",
     "title": "Lecture 13",
     "section": "Results: posterior summaries",
-    "text": "Results: posterior summaries\n\n\nWe can use the fit$summary.fixed and summary.hyperpar to obtain posterior summaries of the mdoel parameters.\n\n\n\n\n\n\n\n\n\nmean\n0.025quant\n0.975quant\n\n\n\n\nIntercept\n−8.41\n−9.47\n−7.62\n\n\nsigma\n−0.05\n−0.46\n0.36\n\n\nRange for space\n131.74\n41.79\n320.28\n\n\nStdev for space\n1.17\n0.72\n1.78\n\n\n\n\n\n\n\n\nThe spde.posterior allow us to plot the posterior density of the Matern field parameters",
+    "text": "Results: posterior summaries\n\n\nWe can use the fit$summary.fixed and summary.hyperpar to obtain posterior summaries of the model parameters.\n\n\n\n\n\n\n\n\n\nmean\n0.025quant\n0.975quant\n\n\n\n\nIntercept\n−8.41\n−9.48\n−7.63\n\n\nsigma\n−0.05\n−0.46\n0.36\n\n\nRange for space\n130.50\n42.39\n313.09\n\n\nStdev for space\n1.19\n0.73\n1.79\n\n\n\n\n\n\n\n\nThe spde.posterior allows us to plot the posterior density of the Matérn field parameters",
     "crumbs": [
       "Home",
       "Slides",
@@ -460,7 +412,7 @@
     "href": "slides/slides_13.html#results-posterior-summaries-1",
     "title": "Lecture 13",
     "section": "Results: posterior summaries",
-    "text": "Results: posterior summaries\n\n\nWe can use the fit$summary.fixed and summary.hyperpar to obtain posterior summaries of the model parameters.\n\n\n\n\n\n\n\n\n\nmean\n0.025quant\n0.975quant\n\n\n\n\nIntercept\n−8.41\n−9.47\n−7.62\n\n\nsigma\n−0.05\n−0.46\n0.36\n\n\nRange for space\n131.74\n41.79\n320.28\n\n\nStdev for space\n1.17\n0.72\n1.78\n\n\n\n\n\n\n\n\nThe spde.posterior allow us to plot the posterior density of the Matern field parameters",
+    "text": "Results: posterior summaries\n\n\nWe can use the fit$summary.fixed and summary.hyperpar to obtain posterior summaries of the model parameters.\n\n\n\n\n\n\n\n\n\nmean\n0.025quant\n0.975quant\n\n\n\n\nIntercept\n−8.41\n−9.48\n−7.63\n\n\nsigma\n−0.05\n−0.46\n0.36\n\n\nRange for space\n130.50\n42.39\n313.09\n\n\nStdev for space\n1.19\n0.73\n1.79\n\n\n\n\n\n\n\n\nThe spde.posterior allows us to plot the posterior density of the Matérn field parameters",
     "crumbs": [
       "Home",
       "Slides",
@@ -484,7 +436,7 @@
     "href": "slides/slides_13.html#results-predicted-densities-1",
     "title": "Lecture 13",
     "section": "Results: predicted densities",
-    "text": "Results: predicted densities\n\n\nWe can also use the predict the detection function:\n\ndistdf &lt;- data.frame(distance = seq(0, 8, length.out = 100))\ndfun &lt;- predict(fit, distdf, ~ hn(distance, sigma))",
+    "text": "Results: predicted densities\n\n\nWe can also predict the detection function:\n\ndistdf &lt;- data.frame(distance = seq(0, 8, length.out = 100))\ndfun &lt;- predict(fit, distdf, ~ hn(distance, sigma))",
     "crumbs": [
       "Home",
       "Slides",
@@ -1319,7 +1271,7 @@
     "href": "slides/slides_3.html#numerical-integration-1",
     "title": "Lecture 2",
     "section": "Numerical Integration",
-    "text": "Numerical Integration\nWe want to compute \\(\\pi(u_i|\\mathbf{y})\\)\n\n\n\nHard way 👎\n\\[\n\\pi(u_i|\\mathbf{y}) = \\int\\pi(\\mathbf{u}|\\mathbf{y})\\ d\\mathbf{u}_{-i}\n\\]\n\nThis is a hard integral as \\(\\mathbf{u}\\) can be very high dimentional!!\n\n\nEasier way 👍\n\\[\n\\pi(u_i|\\mathbf{y}) = \\int\\pi(u_i|\\theta, \\mathbf{y})\\pi(\\theta|\\mathbf{y)}\\ d\\theta\n\\]\n\n\\(\\theta\\) is a smaller dimensional vectore, easier to integrate\nBUT we need to approximate both \\(\\pi(\\theta|\\mathbf{y})\\) and \\(\\pi(u_i|\\theta, \\mathbf{y})\\)",
+    "text": "Numerical Integration\nWe want to compute \\(\\pi(u_i|\\mathbf{y})\\)\n\n\n\nHard way 👎\n\\[\n\\pi(u_i|\\mathbf{y}) = \\int\\pi(\\mathbf{u}|\\mathbf{y})\\ d\\mathbf{u}_{-i}\n\\]\n\nThis is a hard integral as \\(\\mathbf{u}\\) can be very high dimentional!!\n\n\nEasier way 👍\n\\[\n\\pi(u_i|\\mathbf{y}) = \\int\\pi(u_i|\\theta, \\mathbf{y})\\pi(\\theta|\\mathbf{y)}\\ d\\theta\n\\]\n\n\\(\\theta\\) is a smaller dimensional vector, easier to integrate\nBUT we need to approximate both \\(\\pi(\\theta|\\mathbf{y})\\) and \\(\\pi(u_i|\\theta, \\mathbf{y})\\)",
     "crumbs": [
       "Home",
       "Slides",
@@ -1521,51 +1473,51 @@
   {
     "objectID": "day5_practical_9.html",
     "href": "day5_practical_9.html",
-    "title": "Practical 8 - Zero Inflated",
+    "title": "Practical 9 - Zero Inflated",
     "section": "",
     "text": "Aim of this practical:\nIn this practical we are going to look zero-inflated models.\nDownload Practical 9 R script"
   },
   {
     "objectID": "day5_practical_9.html#sec-prep",
     "href": "day5_practical_9.html#sec-prep",
-    "title": "Practical 8 - Zero Inflated",
+    "title": "Practical 9 - Zero Inflated",
     "section": "Data Preparation",
     "text": "Data Preparation\nThe following example use the gorillas dataset available in the inlabru library.\nThe data give the locations of Gorilla’s nests in an area:\n\ngorillas_sf &lt;- inlabru::gorillas_sf\nnests &lt;- gorillas_sf$nests\nboundary &lt;- gorillas_sf$boundary\n\nggplot() + geom_sf(data = nests) +\n  geom_sf(data = boundary, alpha = 0)\n\n\n\n\nLocation of gorilla nests\n\n\n\n\nThe dataset also contains covariates in the form or raster data. We consider two of them here:\n\ngcov = gorillas_sf_gcov()\nelev_cov &lt;- gcov$elevation\ndist_cov &lt;-  gcov$waterdist\n\n\n\n\n\n\nCovariates\n\n\n\n\nNote: the covariates have been expanded to cover all the nodes in the mesh.\n\nTo obtain the count data, we rasterize the species counts to match the spatial resolution of the covariates available. Then we aggregate the pixels to a rougher resolution (5x5 pixels in the original covariate raster dimensions). Finally, we mask regions outside the study area.\nIn addition we compute the area of each grid cell.\n\n# Rasterize data\ncounts_rstr &lt;-\n  terra::rasterize(vect(nests), gcov, fun = sum, background = 0) %&gt;%\n  terra::aggregate(fact = 5, fun = sum) %&gt;%\n  mask(vect(sf::st_geometry(boundary)))\nplot(counts_rstr)\n\n\n\n\nCounts of gorilla nests\n\n\n\n# compute cell area\ncounts_rstr &lt;- counts_rstr %&gt;%\n  cellSize(unit = \"km\") %&gt;%\n  c(counts_rstr)\n\nTo create our dataset of counts, we extract also the coordinate of center point of each raster pixel. In addition we create a column with presences and one with the pixel area\n\ncounts_df &lt;- crds(counts_rstr, df = TRUE, na.rm = TRUE) %&gt;%\n  bind_cols(values(counts_rstr, mat = TRUE, na.rm = TRUE)) %&gt;%\n  rename(count = sum) %&gt;%\n  mutate(present = (count &gt; 0) * 1L) %&gt;%\n  st_as_sf(coords = c(\"x\", \"y\"), crs = st_crs(nests))\n\nWe then aggregate the covariates to the same resolution as the nest counts and scale them.\n\nelev_cov1 &lt;- elev_cov %&gt;% \n  terra::aggregate(fact = 5, fun = mean) %&gt;% scale()\ndist_cov1 &lt;- dist_cov %&gt;% \n  terra::aggregate(fact = 5, fun = mean) %&gt;% scale()\n\n\n\n\n\n\n\n\n\nFigure 1: Covariates\n\n\n\n\n\n\nMesh building\nWe now define the mesh and the spde object.\n\n\nmesh &lt;- fm_mesh_2d(\n  loc = st_as_sfc(counts_df),\n  max.edge = c(0.5, 1),\n  crs = st_crs(counts_df)\n)\n\nmatern &lt;- inla.spde2.pcmatern(mesh,\n  prior.sigma = c(1, 0.01),\n  prior.range = c(5, 0.01)\n)\n\n\n\n\n\n\nMesh over the count locations\n\n\n\n\nIn our dataset, the number of zeros is quite substantial, and our model may struggle to account for them adequately. To address this, we should select a model capable of handling an “inflated” number of zeros, exceeding what a standard Poisson model would imply. For this purpose, we opt for a “zero-inflated Poisson model,” commonly abbreviated as ZIP."
   },
   {
     "objectID": "day5_practical_9.html#sec-zip",
     "href": "day5_practical_9.html#sec-zip",
-    "title": "Practical 8 - Zero Inflated",
+    "title": "Practical 9 - Zero Inflated",
     "section": "Zero-Inflated model (Type1)",
     "text": "Zero-Inflated model (Type1)\nWe fit now a Zero-Inflated model to our data.\nThe Type 1 Zero-inflated Poisson model is defined as follows:\n\\[\n\\text{Prob}(y\\vert\\dots)=\\pi\\times 1_{y=0}+(1-\\pi)\\times \\text{Poisson}(y)\n\\]\nHere, \\(\\pi=\\text{logit}^{-1}(\\theta)\\)\nThe expected value and variance for the counts are calculated as:\n\\[\n\\begin{gathered}\nE(count)=(1-\\pi)\\lambda \\\\\nVar(count)= (1-\\pi)(\\lambda+\\pi \\lambda^2)\n\\end{gathered}\n\\tag{1}\\]\nThis model has two parameters:\n\nThe probability of excess zero \\(\\pi\\) - This is a hyperparameter and therefore it is constant\nThe mean of the Poisson distribution \\(\\lambda\\). This is linked to the linear predictor as: \\[\n\\eta = E\\log(\\lambda) = \\log(E) + \\beta_0 + \\beta_1\\text{Elevation} + \\beta_2\\text{Distance } + u\n\\] where \\(\\log(E)\\) is an offset (the area of the pixel) that accounts for the size of the cell.\n\n\n\n\n\n\n\nWarning Task\n\n\n\nFit a zero-inflated model to the data (zeroinflatedpoisson1) by completing the following code:\n\ncmp = ~ Intercept(1) + elevation(...) + distance(...) + space(...)\n\nlik = bru_obs(...,\n    E = area)\n\nfit_zip &lt;- bru(cmp, lik)\n\n\n\nTake hint\n\nThe E = area is an offset that adjusts for the size of each cell.\n\n\n\n\nClick here to see the solution\n\n\nCode\n\ncmp = ~ Intercept(1) + elevation(elev_cov1, model = \"linear\") + distance(dist_cov1, model = \"linear\") + space(geometry, model = matern)\n\n\n\nlik = bru_obs(formula = count ~ .,\n    family = \"zeroinflatedpoisson1\", \n    data = counts_df,\n    E = area)\n\nfit_zip &lt;- bru(cmp, lik)\n\n\n\n\n\nOnce the model is fitted we can look at the results\n\n\n\n\n\n\nWarning Task\n\n\n\nCheck what the estimated excess zero probaility is.\nUse the predict() function to look at the estimated \\(\\lambda(s)\\) and mean count in Equation 1\n\n\nTake hint\n\nTo get the right name for the hyperparameters to use in the predict() function, you can use the function bru_names().\n\n\n\n\nClick here to see the solution\n\n\nCode\n# to check the estimated excess zero probability:\n# fit_zip$summary.hyperpar\n\npred_zip &lt;- predict(\n  fit_zip, \n  counts_df,\n  ~ {\n    pi &lt;- zero_probability_parameter_for_zero_inflated_poisson_1\n    lambda &lt;- area * exp( distance + elevation + space + Intercept)\n    expect &lt;- (1-pi) * lambda\n    variance &lt;- (1-pi) * (lambda + pi * lambda^2)\n    list(\n      lambda = lambda,\n      expect = expect,\n      variance = variance\n    )\n  },\n  n.samples = 2500\n)\n\n\n\n\n\n\n\n\n\n\nEstimated \\(\\lambda\\) (left) and expected counts (right) with zero inflated model"
   },
   {
     "objectID": "day5_practical_9.html#sec-zap",
     "href": "day5_practical_9.html#sec-zap",
-    "title": "Practical 8 - Zero Inflated",
+    "title": "Practical 9 - Zero Inflated",
     "section": "Hurdle model (Type0)",
     "text": "Hurdle model (Type0)\nWe now fit a hurdle model to the same data.\nIn the zeroinflatedpoisson0 model is defined by the following observation probability model\n\\[\n\\text{Prob}(y\\vert\\dots)=\\pi\\times 1_{y=0}+(1-\\pi)\\times \\text{Poisson}(y\\vert y&gt;0)\n\\]\nwhere \\(\\pi\\) is the probability of zero.\nThe expectation and variance of the counts are as follows:\n\\[\n\\begin{aligned}\nE(\\text{count})&=\\frac{1}{1-\\exp(-\\lambda)}\\pi\\lambda \\\\\nVar(\\text{count})&=  E(\\text{count}) \\left(1-\\exp(-\\lambda) E(\\text{count})\\right)\n\\end{aligned}\n\\tag{2}\\]\n\n\n\n\n\n\nWarning Task\n\n\n\nFit a hurdle model to the data using the zeroinflatedpoisson0 likelihood\n\n\nTake hint\n\nYou do not need to redefine the components as the linear predictor is not changing.\n\n\n\n\nClick here to see the solution\n\n\nCode\nlik = bru_obs(formula = count ~ .,\n    family = \"zeroinflatedpoisson0\", \n    data = counts_df,\n    E = area)\n\nfit_zap &lt;- bru(cmp, lik)\n\n\n\n\n\n\n\n\n\n\n\nWarning Task\n\n\n\nAs before, check what the estimated probability of zero is and use predict() to obtain a map of the estimated mean counts in Equation 2 over the domain.\n\n\nTake hint\n\n\n\n\n\nClick here to see the solution\n\n\nCode\n\npred_zap &lt;- predict( fit_zap, counts_df,\n  ~ {\n    pi &lt;- zero_probability_parameter_for_zero_inflated_poisson_0\n    lambda &lt;- area * exp( distance + elevation + space + Intercept)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    list(\n      lambda = lambda,\n      expect = expect\n    )\n  },\n  n.samples = 2500\n)\n\n\n\n\n\n\n\n\n\n\nEstimated \\(\\lambda\\) (left) and expected counts (right) with hurdle model"
   },
   {
     "objectID": "day5_practical_9.html#sec-two-lik",
     "href": "day5_practical_9.html#sec-two-lik",
-    "title": "Practical 8 - Zero Inflated",
+    "title": "Practical 9 - Zero Inflated",
     "section": "Hurdle model using two likelihoods",
     "text": "Hurdle model using two likelihoods\nHere the model is the same as in Section 1.3, but this time we also want to model \\(\\pi\\) using covariates and random effects. Therefore we define a second linear predictor \\[\n\\eta^2 =\\beta_0^2 + \\beta_1^2\\text{Elevation} +  \\beta_2^2\\text{Distance} + u^2\n\\] Note here we have defined the two linear predictor to use the same covariates, but this is not necessary, they can be totally independent.\nTo fit this model we have to define two likelihoods: - One will account for the presence-absence process and has a Binomial model - One will account for the counts and has a truncated Poisson model\n\n\n\n\n\n\nWarning Task\n\n\n\nComplete the following code to fit a hurdle model based on two likelihoods:\n\n# define components\ncmp &lt;- ~\n  Intercept_count(1) +\n    elev_count(elev_cov1, model = \"linear\") +\n    dist_count(dist_cov1, model = \"linear\") +\n    space_count(geometry, model = matern) +\n    Intercept_presence(1) +\n    elev_presence(elev_cov1, model = \"linear\") +\n    dist_presence(dist_cov1, model = \"linear\") +\n    space_presence(geometry, model = matern) \n\n# positive count model\npos_count_obs &lt;- bru_obs(formula = ...,\n      family = ...,\n      data = counts_df[counts_df$present &gt; 0, ],\n      E = area)\n  \n# presence model\npresence_obs &lt;- bru_obs(formula ...,\n  family = ...,\n  data = counts_df,\n)\n\n# fit the model\nfit_zap2 &lt;- bru(...)\n\n\n\nTake hint\n\nAdd hint details here…\n\n\n\n\nClick here to see the solution\n\n\nCode\ncmp &lt;- ~\n  Intercept_count(1) +\n    elev_count(elev_cov1, model = \"linear\") +\n    dist_count(dist_cov1, model = \"linear\") +\n    space_count(geometry, model = matern) +\n    Intercept_presence(1) +\n    elev_presence(elev_cov1, model = \"linear\") +\n    dist_presence(dist_cov1, model = \"linear\") +\n    space_presence(geometry, model = matern) \n\n\npos_count_obs &lt;- bru_obs(formula = count ~ Intercept_count + elev_count + \n                                   dist_count + space_count,\n      family = \"nzpoisson\",\n      data = counts_df[counts_df$present &gt; 0, ],\n      E = area)\n  \n\npresence_obs &lt;- bru_obs(formula = present ~ Intercept_presence + elev_presence + dist_presence +\n                          space_presence,\n  family = \"binomial\",\n  data = counts_df,\n)\n\nfit_zap2 &lt;- bru(\n  cmp,\n  presence_obs,\n  pos_count_obs\n)"
   },
   {
     "objectID": "day5_practical_9.html#sec-two-lik-share",
     "href": "day5_practical_9.html#sec-two-lik-share",
-    "title": "Practical 8 - Zero Inflated",
+    "title": "Practical 9 - Zero Inflated",
     "section": "Hurdle model using two likelihoods and a shared component",
     "text": "Hurdle model using two likelihoods and a shared component\nNote that in the model above, there is no direct link between the parameters of the two observation parts, and we could estimate them separately. However, the two likelihoods could share some of the components; for example the space_count component could be used for both predictors. This would be possible using the copy argument.\nWe would then need to define one component as space(geometry, model = matern) and then a copy of it as space_copy(geometry, copy = \"space\", fixed = FALSE).\nThe results from the model in ?@sec-sec-two-lik show that the estimated covariance parameters for the two fields are very different, so it is probably not sensible to share the same component between the two parts. We do it anyway to show an example:\n\ncmp &lt;- ~\n  Intercept_count(1) +\n    elev_count(elev_cov1, model = \"linear\") +\n    dist_count(dist_cov1, model = \"linear\") +\n    Intercept_presence(1) +\n    elev_presence(elev_cov1, model = \"linear\") +\n    dist_presence(dist_cov1, model = \"linear\") +\n    space(geometry, model = matern) +\n  space_copy(geometry, copy = \"space\", fixed = FALSE)\n\n\npos_count_obs &lt;- bru_obs(formula = count ~ Intercept_count + elev_count + dist_count + space,\n      family = \"nzpoisson\",\n      data = counts_df[counts_df$present &gt; 0, ],\n      E = area)\n\npresence_obs &lt;- bru_obs(formula = present ~ Intercept_presence + elev_presence + dist_presence + space_copy,\n  family = \"binomial\",\n  data = counts_df)\n\nfit_zap3 &lt;- bru(\n  cmp,\n  presence_obs,\n  pos_count_obs)"
   },
   {
     "objectID": "day5_practical_9.html#comparing-models",
     "href": "day5_practical_9.html#comparing-models",
-    "title": "Practical 8 - Zero Inflated",
+    "title": "Practical 9 - Zero Inflated",
     "section": "Comparing models",
-    "text": "Comparing models\nWe have fitted four different models. Now we want to compare them and see how they fit the data.\n\nComparing model predictions\nWe first want to compare the estimated surfaces of expected counts. To do this we want to produce the estimated expected counts, similar to what we did in Section 1.2 and Section 1.3 for all four models and plot them together:\n\npred_zip &lt;- predict(\n  fit_zip, \n  counts_df,\n  ~ {\n    pi &lt;- zero_probability_parameter_for_zero_inflated_poisson_1\n    lambda &lt;- area * exp( distance + elevation + space + Intercept)\n    expect &lt;- (1-pi) * lambda\n    variance &lt;- (1-pi) * (lambda + pi * lambda^2)\n    list(\n      expect = expect\n    )\n  },n.samples = 2500)\n\npred_zap &lt;- predict( fit_zap, counts_df,\n  ~ {\n    pi &lt;- zero_probability_parameter_for_zero_inflated_poisson_0\n    lambda &lt;- area * exp( distance + elevation + space + Intercept)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    list(\n      expect = expect)\n  },n.samples = 2500)\n\ninv.logit = function(x) (exp(x)/(1+exp(x)))\n\npred_zap2 &lt;- predict( fit_zap2, counts_df,\n  ~ {\n    pi &lt;- inv.logit(Intercept_presence + elev_presence + dist_presence + space_presence)\n    lambda &lt;- area * exp( dist_count + elev_count + space_count + Intercept_count)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    list(\n      expect = expect)\n  },n.samples = 2500)\n\npred_zap3 &lt;- predict( fit_zap3, counts_df,\n  ~ {\n    pi &lt;- inv.logit(Intercept_presence + elev_presence + dist_presence + space_copy)\n    lambda &lt;- area * exp( dist_count + elev_count + space + Intercept_count)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    list(\n      expect = expect)\n  },n.samples = 2500)\n\n\n\n\np =   data.frame(x = st_coordinates(counts_df)[,1],\n             y = st_coordinates(counts_df)[,2],\n    zip = pred_zip$expect$mean,\n         hurdle = pred_zap$expect$mean,\n         hurdle2 = pred_zap2$expect$mean,\n         hurdle3 = pred_zap3$expect$mean)  %&gt;%\n  pivot_longer(-c(x,y)) %&gt;%\n  ggplot() + geom_tile(aes(x,y, fill = value)) + facet_wrap(.~name) +\n    theme_map + scale_fill_scico(direction = -1)\n\n\n\n\n\n\n\nWarning Task\n\n\n\nCreate plots of the estimated variance of the counts.\n\n\nTake hint\n\nThe fomulas for the variances are in Equation 1 and Equation 2.\n\n\n\n\nClick here to see the solution\n\n\nCode\npred_zip &lt;- predict(\n  fit_zip, \n  counts_df,\n  ~ {\n    pi &lt;- zero_probability_parameter_for_zero_inflated_poisson_1\n    lambda &lt;- area * exp( distance + elevation + space + Intercept)\n    variance &lt;- (1-pi) * (lambda + pi * lambda^2)\n    list( variance = variance)\n  },n.samples = 2500)\n\npred_zap &lt;- predict( fit_zap, counts_df,\n  ~ {\n    pi &lt;- zero_probability_parameter_for_zero_inflated_poisson_0\n    lambda &lt;- area * exp( distance + elevation + space + Intercept)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    variance = expect *(1-exp(-lambda) * expect)\n    list(variance = variance)\n  },\n  n.samples = 2500)\n\ninv.logit = function(x) (exp(x)/(1+exp(x)))\n\npred_zap2 &lt;- predict( fit_zap2, counts_df,\n  ~ {\n    pi &lt;- inv.logit(Intercept_presence + elev_presence + dist_presence + space_presence)\n    lambda &lt;- area * exp( dist_count + elev_count + space_count + Intercept_count)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    variance = expect *(1-exp(-lambda) * expect)\n    list(variance = variance)\n  },\n  n.samples = 2500)\n\npred_zap3 &lt;- predict( fit_zap3, counts_df,\n  ~ {\n    pi &lt;- inv.logit(Intercept_presence + elev_presence + dist_presence + space_copy)\n    lambda &lt;- area * exp( dist_count + elev_count + space + Intercept_count)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    variance = expect *(1-exp(-lambda) * expect)\n    list(variance = variance)\n  },\n  n.samples = 2500)\n\n\n\n\n  data.frame(x = st_coordinates(counts_df)[,1],\n             y = st_coordinates(counts_df)[,2],\n    zip = pred_zip$variance$mean,\n         hurdle = pred_zap$variance$mean,\n         hurdle2 = pred_zap2$variance$mean,\n         hurdle3 = pred_zap3$variance$mean)  %&gt;%\n  pivot_longer(-c(x,y)) %&gt;%\n  ggplot() + geom_tile(aes(x,y, fill = value)) + facet_wrap(.~name) +\n    theme_map + scale_fill_scico(direction = -1)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nUsing scores\nWe can compare model using the scores that the bru() function computes since we have set, at the beginning. the options to\n\nbru_options_set(control.compute = list(dic = TRUE,\n                                       waic = TRUE,\n                                       mlik = TRUE,\n                                       cpo = TRUE))\n\nLets use these scores to compare the models.\n\n\n\n\n\n\nWarning Task\n\n\n\nExtract the DIC, WAIC and MLIK values for the four models and compare them\n\n\n\nClick here to see the solution\n\n\nCode\ndata.frame( Model = c(\"ZIP\", \"HURDLE\", \"HURDLE_2\",\"HURDLE_3\" ),\n  DIC = c(fit_zip$dic$dic, fit_zap$dic$dic, WAIC = fit_zap2$dic$dic, fit_zap3$dic$dic),\n            WAIC = c(fit_zip$waic$waic, fit_zap$waic$waic, fit_zap2$waic$waic, fit_zap3$waic$waic),\n            MLIK = c(fit_zip$mlik[1], fit_zap$mlik[1], fit_zap2$mlik[1], fit_zap3$mlik[1]))\n#&gt;      Model      DIC     WAIC      MLIK\n#&gt; 1      ZIP 1214.135 1223.713 -686.9498\n#&gt; 2   HURDLE 1886.065 1909.721 -994.3807\n#&gt; 3 HURDLE_2 1268.306 1285.507 -734.3704\n#&gt; 4 HURDLE_3 1501.223 1516.704 -914.2195\n\n\n\n\n\nFrom the table above we can see that the model that best balances complexity and fit is the zero inflated one (ZIP)."
+    "text": "Comparing models\nWe have fitted four different models. Now we want to compare them and see how they fit the data.\n\nComparing model predictions\nWe first want to compare the estimated surfaces of expected counts. To do this we want to produce the estimated expected counts, similar to what we did in Section 1.2 and Section 1.3 for all four models and plot them together:\n\npred_zip &lt;- predict(\n  fit_zip, \n  counts_df,\n  ~ {\n    pi &lt;- zero_probability_parameter_for_zero_inflated_poisson_1\n    lambda &lt;- area * exp( distance + elevation + space + Intercept)\n    expect &lt;- (1-pi) * lambda\n    variance &lt;- (1-pi) * (lambda + pi * lambda^2)\n    list(\n      expect = expect\n    )\n  },n.samples = 2500)\n\npred_zap &lt;- predict( fit_zap, counts_df,\n  ~ {\n    pi &lt;- zero_probability_parameter_for_zero_inflated_poisson_0\n    lambda &lt;- area * exp( distance + elevation + space + Intercept)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    list(\n      expect = expect)\n  },n.samples = 2500)\n\ninv.logit = function(x) (exp(x)/(1+exp(x)))\n\npred_zap2 &lt;- predict( fit_zap2, counts_df,\n  ~ {\n    pi &lt;- inv.logit(Intercept_presence + elev_presence + dist_presence + space_presence)\n    lambda &lt;- area * exp( dist_count + elev_count + space_count + Intercept_count)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    list(\n      expect = expect)\n  },n.samples = 2500)\n\npred_zap3 &lt;- predict( fit_zap3, counts_df,\n  ~ {\n    pi &lt;- inv.logit(Intercept_presence + elev_presence + dist_presence + space_copy)\n    lambda &lt;- area * exp( dist_count + elev_count + space + Intercept_count)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    list(\n      expect = expect)\n  },n.samples = 2500)\n\n\n\n\np =   data.frame(x = st_coordinates(counts_df)[,1],\n             y = st_coordinates(counts_df)[,2],\n    zip = pred_zip$expect$mean,\n         hurdle = pred_zap$expect$mean,\n         hurdle2 = pred_zap2$expect$mean,\n         hurdle3 = pred_zap3$expect$mean)  %&gt;%\n  pivot_longer(-c(x,y)) %&gt;%\n  ggplot() + geom_tile(aes(x,y, fill = value)) + facet_wrap(.~name) +\n    theme_map + scale_fill_scico(direction = -1)\n\n\n\n\n\n\n\nWarning Task\n\n\n\nCreate plots of the estimated variance of the counts.\n\n\nTake hint\n\nThe fomulas for the variances are in Equation 1 and Equation 2.\n\n\n\n\nClick here to see the solution\n\n\nCode\npred_zip &lt;- predict(\n  fit_zip, \n  counts_df,\n  ~ {\n    pi &lt;- zero_probability_parameter_for_zero_inflated_poisson_1\n    lambda &lt;- area * exp( distance + elevation + space + Intercept)\n    variance &lt;- (1-pi) * (lambda + pi * lambda^2)\n    list( variance = variance)\n  },n.samples = 2500)\n\npred_zap &lt;- predict( fit_zap, counts_df,\n  ~ {\n    pi &lt;- zero_probability_parameter_for_zero_inflated_poisson_0\n    lambda &lt;- area * exp( distance + elevation + space + Intercept)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    variance = expect *(1-exp(-lambda) * expect)\n    list(variance = variance)\n  },\n  n.samples = 2500)\n\ninv.logit = function(x) (exp(x)/(1+exp(x)))\n\npred_zap2 &lt;- predict( fit_zap2, counts_df,\n  ~ {\n    pi &lt;- inv.logit(Intercept_presence + elev_presence + dist_presence + space_presence)\n    lambda &lt;- area * exp( dist_count + elev_count + space_count + Intercept_count)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    variance = expect *(1-exp(-lambda) * expect)\n    list(variance = variance)\n  },\n  n.samples = 2500)\n\npred_zap3 &lt;- predict( fit_zap3, counts_df,\n  ~ {\n    pi &lt;- inv.logit(Intercept_presence + elev_presence + dist_presence + space_copy)\n    lambda &lt;- area * exp( dist_count + elev_count + space + Intercept_count)\n    expect &lt;- ((1-exp(-lambda))^(-1) * pi * lambda)\n    variance = expect *(1-exp(-lambda) * expect)\n    list(variance = variance)\n  },\n  n.samples = 2500)\n\n\n\n\n  data.frame(x = st_coordinates(counts_df)[,1],\n             y = st_coordinates(counts_df)[,2],\n    zip = pred_zip$variance$mean,\n         hurdle = pred_zap$variance$mean,\n         hurdle2 = pred_zap2$variance$mean,\n         hurdle3 = pred_zap3$variance$mean)  %&gt;%\n  pivot_longer(-c(x,y)) %&gt;%\n  ggplot() + geom_tile(aes(x,y, fill = value)) + facet_wrap(.~name) +\n    theme_map + scale_fill_scico(direction = -1)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nUsing scores\nWe can compare model using the scores that the bru() function computes since we have set, at the beginning. the options to\n\nbru_options_set(control.compute = list(dic = TRUE,\n                                       waic = TRUE,\n                                       mlik = TRUE,\n                                       cpo = TRUE))\n\nLets use these scores to compare the models.\n\n\n\n\n\n\nWarning Task\n\n\n\nExtract the DIC, WAIC and MLIK values for the four models and compare them\n\n\n\nClick here to see the solution\n\n\nCode\ndata.frame( Model = c(\"ZIP\", \"HURDLE\", \"HURDLE_2\",\"HURDLE_3\" ),\n  DIC = c(fit_zip$dic$dic, fit_zap$dic$dic, WAIC = fit_zap2$dic$dic, fit_zap3$dic$dic),\n            WAIC = c(fit_zip$waic$waic, fit_zap$waic$waic, fit_zap2$waic$waic, fit_zap3$waic$waic),\n            MLIK = c(fit_zip$mlik[1], fit_zap$mlik[1], fit_zap2$mlik[1], fit_zap3$mlik[1]))\n#&gt;      Model      DIC     WAIC      MLIK\n#&gt; 1      ZIP 1213.969 1223.861 -686.9664\n#&gt; 2   HURDLE 1886.538 1910.081 -994.3745\n#&gt; 3 HURDLE_2 1269.211 1286.146 -734.3707\n#&gt; 4 HURDLE_3 1893.955 4065.626 -858.1892\n\n\n\n\n\nFrom the table above we can see that the model that best balances complexity and fit is the zero inflated one (ZIP)."
   },
   {
     "objectID": "day4_practical_7.html",
@@ -1691,14 +1643,14 @@
     "href": "day3_practical_5.html#HPP",
     "title": "Practical 5",
     "section": "Fit a homogeneous Poisson Process",
-    "text": "Fit a homogeneous Poisson Process\nAs a first exercise we are going to fit a homogeneous Poisson process (HPP) to the data. This is a model that assume constant intensity over the whole space so our linear predictor is then:\n\\[\n\\eta(s) = \\log\\lambda(s) = \\beta_0 , \\ \\mathbf{s}\\in\\Omega\n\\]\nso the likelihood can be written as:\n\\[\n\\begin{aligned}\np(\\mathbf{y} | \\lambda)  & \\propto \\exp \\left( -\\int_\\Omega \\lambda(\\mathbf{s}) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n& = \\exp\\left( -\\int_{\\Omega}\\exp(\\beta_0)ds\\right)\\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n\\end{aligned}\n\\]\nwhere \\(|\\Omega|\\) is the area of the domain of interest.\nWe need to approximate the integral using a numerical integration scheme as:\n\\[\n\\approx\\exp\\left(-\\sum_{k=1}^{N_k}w_k\\lambda(s_k)\\right)\\prod_{i=1}^n \\lambda(\\mathbf{s}_i)\n\\]\nWhere \\(N_k\\) is the number of integration points \\(s_1,\\dots,s_{N_k}\\) and \\(w_1,\\dots,w_{N_k}\\) are the integration weights.\nIn this case, since the intensity is constant, the integration scheme is really simple: it is enough to consider one random point inside the domain with weight equal to the area of the domain.\n\n# define integration scheme\n\nips = st_sf(\ngeometry = st_sample(region, 1)) # some random location inside the domain\nips$weight = st_area(region) # integration weight is the area of the domain\n\ncmp = ~ 0 + beta_0(1)\n\nformula = geometry ~ beta_0\n\nlik = bru_obs(data = pp,\n              family = \"cp\",\n              formula = formula,\n              ips = ips)\nfit1 = bru(cmp, lik)\n\n\n\n\n\n\n\nWarning Task\n\n\n\n\nPlot the estimated posterior distribution of the intensity\nCompare the estimated expected number of fires on the whole domain with the observed ones.\n\n\n\nTake hint\n\nRemember that in the inlabru framework we model the log intensity \\(\\eta = log(\\lambda)\\)\n\n\n\n\nClick here to see the solution\n\n\nCode\n# 1) The estimated posterior distribution of the  intensity is\n\npost_int = inla.tmarginal(function(x) exp(x), fit1$marginals.fixed$beta_0)\npost_int %&gt;% ggplot() + geom_line(aes(x,y))\n\n\n\n\n\n\n\n\n\nCode\n# 2) To compute the expected number of points in the area we need to multiply the\n# estimated intensity by the area of the domain.\n# In the same plot we also show the number of observed fires as a vertical line.\n\npost_int = inla.tmarginal(function(x) st_area(region)* exp(x), fit1$marginals.fixed$beta_0)\npost_int %&gt;% ggplot() + geom_line(aes(x,y)) +\n  geom_vline(xintercept = dim(pp)[1])"
+    "text": "Fit a homogeneous Poisson Process\nAs a first exercise we are going to fit a homogeneous Poisson process (HPP) to the data. This is a model that assume constant intensity over the whole space so our linear predictor is then:\n\\[\n\\eta(s) = \\log\\lambda(s) = \\beta_0 , \\ \\mathbf{s}\\in\\Omega\n\\]\nso the likelihood can be written as:\n\\[\n\\begin{aligned}\np(\\mathbf{y} | \\lambda)  & \\propto \\exp \\left( -\\int_\\Omega \\lambda(\\mathbf{s}) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n& = \\exp\\left( -\\int_{\\Omega}\\exp(\\beta_0)ds\\right)\\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n\\end{aligned}\n\\]\nwhere \\(|\\Omega|\\) is the area of the domain of interest.\nWe need to approximate the integral using a numerical integration scheme as:\n\\[\n\\approx\\exp\\left(-\\sum_{k=1}^{N_k}w_k\\lambda(s_k)\\right)\\prod_{i=1}^n \\lambda(\\mathbf{s}_i)\n\\]\nWhere \\(N_k\\) is the number of integration points \\(s_1,\\dots,s_{N_k}\\) and \\(w_1,\\dots,w_{N_k}\\) are the integration weights.\nIn this case, since the intensity is constant, the integration scheme is really simple: it is enough to consider one random point inside the domain with weight equal to the area of the domain.\n\n# define integration scheme\n\n\nips &lt;- fm_int_object(\n  st_sample(region, 1), # some random location inside the domain\n  weight = st_area(region), # integration weight is the area of the domain\n  name = \"geometry\"\n)\n\n\ncmp = ~ 0 + beta_0(1)\n\nformula = geometry ~ beta_0\n\nlik = bru_obs(data = pp,\n              family = \"cp\",\n              formula = formula,\n              ips = ips)\nfit1 = bru(cmp, lik)\n\n\n\n\n\n\n\nWarning Task\n\n\n\n\nPlot the estimated posterior distribution of the intensity\nCompare the estimated expected number of fires on the whole domain with the observed ones.\n\n\n\nTake hint\n\nRemember that in the inlabru framework we model the log intensity \\(\\eta = log(\\lambda)\\)\n\n\n\n\nClick here to see the solution\n\n\nCode\n# 1) The estimated posterior distribution of the  intensity is\n\npost_int = inla.tmarginal(function(x) exp(x), fit1$marginals.fixed$beta_0)\npost_int %&gt;% ggplot() + geom_line(aes(x,y))\n\n\n\n\n\n\n\n\n\nCode\n# 2) To compute the expected number of points in the area we need to multiply the\n# estimated intensity by the area of the domain.\n# In the same plot we also show the number of observed fires as a vertical line.\n\npost_int = inla.tmarginal(function(x) st_area(region)* exp(x), fit1$marginals.fixed$beta_0)\npost_int %&gt;% ggplot() + geom_line(aes(x,y)) +\n  geom_vline(xintercept = dim(pp)[1])"
   },
   {
     "objectID": "day3_practical_5.html#NHPP",
     "href": "day3_practical_5.html#NHPP",
     "title": "Practical 5",
     "section": "Fit an Inhomogeneous Poisson Process",
-    "text": "Fit an Inhomogeneous Poisson Process\nThe model above has the clear disadvantages that assumes a constant intensity and from Figure 2 we clearly see that this is not the case.\nThe library spatstat contains also some covariates that can help explain the fires distribution. Figure @fit-altitude shows the location of fires together with the (scaled) altitude.\n\n#|label: fig-altitude\n#|fig-cap: \"Distribution of the observed forest fires and scaled altitude\"\n#| \nelev_raster = rast(clmfires.extra[[2]]$elevation)\nelev_raster = scale(elev_raster)\nggplot() + \n  geom_spatraster(data = elev_raster) + \n  geom_sf(data = pp) +\n  scale_fill_scico()\n\n\n\n\n\n\n\n\nWe are now going to use the altitude as a covariate to explain the variability of the intensity \\(\\lambda(s)\\) over the domain of interest.\nOur model is \\[\n\\log\\lambda(s) = \\beta_0 + \\beta_1x(s)\n\\] where \\(x(s)\\) is the altitude at location \\(s\\).\nThe likelihood becomes:\n\\[\n\\begin{aligned}\np(\\mathbf{y} | \\lambda)  & \\propto \\exp \\left( -\\int_\\Omega \\lambda(\\mathbf{s}) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n& = \\exp \\left( -\\int_\\Omega \\exp(\\beta_0 + \\beta_1x(s)) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n\\end{aligned}\n\\]\nNow we need to choose an integration scheme to solve the integral.\nIn this case we will take a simple grid based approach where each quadrature location has an equal weight. Our grid consists of \\(N_k = 1000\\) points and the weights are all equal to \\(|\\Omega|/N_k\\).\n\n#|label: fig-int2\n#|fig-cap: \"Integration scheme.\"\n\nn.int = 1000\nips = st_sf(geometry = st_sample(region,\n            size = n.int,\n            type = \"regular\"))\n\nips$weight = st_area(region) / n.int\nggplot() + geom_sf(data = ips, aes(color = weight)) + geom_sf(data= region, alpha = 0)\n\n\n\n\n\n\n\n\nOBS: The implicit assumption here is that the intensity is constant inside each grid box, and so is the covariate!!\nWe can now fit the model:\n\ncmp = ~ Intercept(1) + elev(elev_raster, model = \"linear\")\nformula = geometry ~ Intercept + elev\nlik = bru_obs(data = pp,\n              family = \"cp\",\n              formula = formula,\n              ips = ips)\nfit2 = bru(cmp, lik)\n\n\n\n\n\n\n\nWarning Task\n\n\n\nWhat is the effect of the altitude on the (log) intensity of the process?\n\n\nTake hint\n\nYou can look at the summary for the fixed effects\n\n\n\n\nClick here to see the solution\n\n\nCode\nfit2$summary.fixed\n\n\n                mean         sd 0.025quant   0.5quant 0.975quant       mode kld\nIntercept -6.6014069 0.10178436 -6.8009006 -6.6014069 -6.4019132 -6.6014069   0\nelev       0.6651591 0.06904875  0.5298261  0.6651591  0.8004922  0.6651591   0\n\n\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\n⚠️ WARNING!!⚠️ When fitting a Point process, the integration scheme has to be fine enough to capture the spatial variability of the covariate!!\n\n\n\n\n\n\n\n\nWarning Task\n\n\n\nRerun the model with the altitude as covariate, but this time change the integration scheme as follows:\n\nn.int2 = 50\n\nips2 = st_sf(geometry = st_sample(region,\n            size = n.int2,\n            type = \"regular\"))\nips2$weight = st_area(region) / n.int2\n\nWhat happens to the effect of the covariate?\n\n\nTake hint\n\nRe-run the model changing the integration scheme in the ips input of the bru_obs() function.\n\n\n\n\nClick here to see the solution\n\n\nCode\nlik_bis = bru_obs(data = pp,\n              family = \"cp\",\n              formula = formula,\n              ips = ips2)\n\nfit2bis = bru(cmp, lik_bis)\n\n# you can the check the differences between the two models\nrbind(fit2$summary.fixed,\nfit2bis$summary.fixed)\n\n\n                 mean         sd 0.025quant   0.5quant 0.975quant       mode\nIntercept  -6.6014069 0.10178436 -6.8009006 -6.6014069 -6.4019132 -6.6014069\nelev        0.6651591 0.06904875  0.5298261  0.6651591  0.8004922  0.6651591\nIntercept1 -6.6857785 0.10615983 -6.8938479 -6.6857785 -6.4777090 -6.6857785\nelev1       0.8425172 0.07727563  0.6910598  0.8425172  0.9939747  0.8425172\n                    kld\nIntercept  0.000000e+00\nelev       0.000000e+00\nIntercept1 2.550457e-13\nelev1      0.000000e+00\n\n\n\n\n\n\n\n\n\n\n\nWarning Task\n\n\n\nNow we want to predict the log-intensity over the whole domain. Use the grid from the elevation raster to predict the intensity over the domain.\n\nest_grid = st_as_sf(data.frame(crds(elev_raster)), coords = c(\"x\",\"y\"))\nest_grid  = st_intersection(est_grid, region)\n\n\n\n\nClick here to see the solution\n\n\nCode\npreds2 = predict(fit2, est_grid, ~ data.frame(log_scale = Intercept + elev,\n\n                                              lin_scale = exp(Intercept + elev)))\n# then visualize it like\npreds2$log_scale %&gt;% \n  ggplot() +\n  geom_sf(aes(color = mean)) +\n  scale_color_scico()\n\n\n\n\n\n\n\n\n\n\n\n\nFinally, we want to use the fitted model to estimate the total number of fires over the whole region. To do this we first have to fine the expected number of fires as:\n\\[\nE(N_{\\Omega}) = \\int_{\\Omega}\\exp(\\lambda(s))\\ ds\n\\]\nThen simulate possible realizations of \\(N_{\\Omega}\\) to include also the likelihood variability in our estimate:\n\nN_fires = generate(fit2, ips,\n                      formula = ~ {\n                        lambda = sum(weight * exp(elev + Intercept))\n                        rpois(1, lambda)},\n                    n.samples = 2000)\n\nggplot(data = data.frame(N = as.vector(N_fires))) +\n  geom_histogram(aes(x = N),\n                 colour = \"blue\",\n                 alpha = 0.5,\n                 bins = 20) +\n  geom_vline(xintercept = nrow(pp),\n             colour = \"red\") +\n  theme_minimal() +\n  xlab(expression(Lambda))"
+    "text": "Fit an Inhomogeneous Poisson Process\nThe model above has the clear disadvantages that assumes a constant intensity and from Figure 2 we clearly see that this is not the case.\nThe library spatstat contains also some covariates that can help explain the fires distribution. Figure @fit-altitude shows the location of fires together with the (scaled) altitude.\n\n#|label: fig-altitude\n#|fig-cap: \"Distribution of the observed forest fires and scaled altitude\"\n#| \nelev_raster = rast(clmfires.extra[[2]]$elevation)\nelev_raster = scale(elev_raster)\nggplot() + \n  geom_spatraster(data = elev_raster) + \n  geom_sf(data = pp) +\n  scale_fill_scico()\n\n\n\n\n\n\n\n\nWe are now going to use the altitude as a covariate to explain the variability of the intensity \\(\\lambda(s)\\) over the domain of interest.\nOur model is \\[\n\\log\\lambda(s) = \\beta_0 + \\beta_1x(s)\n\\] where \\(x(s)\\) is the altitude at location \\(s\\).\nThe likelihood becomes:\n\\[\n\\begin{aligned}\np(\\mathbf{y} | \\lambda)  & \\propto \\exp \\left( -\\int_\\Omega \\lambda(\\mathbf{s}) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n& = \\exp \\left( -\\int_\\Omega \\exp(\\beta_0 + \\beta_1x(s)) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n\\end{aligned}\n\\]\nNow we need to choose an integration scheme to solve the integral.\nIn this case we will take a simple grid based approach where each quadrature location has an equal weight. Our grid consists of \\(N_k = 1000\\) points and the weights are all equal to \\(|\\Omega|/N_k\\).\n\n#|label: fig-int2\n#|fig-cap: \"Integration scheme.\"\n\nn.int = 1000\nips &lt;- st_sample(region, size = n.int, type = \"regular\") # May not be exactly n.int points\nips &lt;- fm_int_object(\n  ips,\n  weight = st_area(region) / length(ips),\n  name = \"geometry\"\n)\n\nggplot() + geom_sf(data = ips, aes(color = weight)) + geom_sf(data= region, alpha = 0)\n\n\n\n\n\n\n\n\nOBS: The implicit assumption here is that the intensity is constant inside each grid box, and so is the covariate!!\nWe can now fit the model:\n\ncmp = ~ Intercept(1) + elev(elev_raster, model = \"linear\")\nformula = geometry ~ Intercept + elev\nlik = bru_obs(data = pp,\n              family = \"cp\",\n              formula = formula,\n              ips = ips)\nfit2 = bru(cmp, lik)\n\n\n\n\n\n\n\nWarning Task\n\n\n\nWhat is the effect of the altitude on the (log) intensity of the process?\n\n\nTake hint\n\nYou can look at the summary for the fixed effects\n\n\n\n\nClick here to see the solution\n\n\nCode\nfit2$summary.fixed\n\n\n                mean         sd 0.025quant   0.5quant 0.975quant       mode\nIntercept -6.6054163 0.10213811 -6.8056033 -6.6054163 -6.4052293 -6.6054163\nelev       0.6556545 0.06973643  0.5189736  0.6556545  0.7923354  0.6556545\n                  kld\nIntercept 7.72581e-15\nelev      0.00000e+00\n\n\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\n⚠️ WARNING!!⚠️ When fitting a Point process, the integration scheme has to be fine enough to capture the spatial variability of the covariate!!\n\n\n\n\n\n\n\n\nWarning Task\n\n\n\nRerun the model with the altitude as covariate, but this time change the integration scheme as follows:\n\nn.int2 = 50\nips2 &lt;- st_sample(region, size = n.int2, type = \"regular\") # May not be exactly n.int points\nips2 &lt;- fm_int_object(\n  ips2,\n  weight = st_area(region) / length(ips2),\n  name = \"geometry\"\n)\n\nWhat happens to the effect of the covariate?\n\n\nTake hint\n\nRe-run the model changing the integration scheme in the ips input of the bru_obs() function.\n\n\n\n\nClick here to see the solution\n\n\nCode\nlik_bis = bru_obs(data = pp,\n              family = \"cp\",\n              formula = formula,\n              ips = ips2)\n\nfit2bis = bru(cmp, lik_bis)\n\n# you can the check the differences between the two models\nrbind(fit2$summary.fixed,\nfit2bis$summary.fixed)\n\n\n                 mean         sd 0.025quant   0.5quant 0.975quant       mode\nIntercept  -6.6054163 0.10213811 -6.8056033 -6.6054163 -6.4052293 -6.6054163\nelev        0.6556545 0.06973643  0.5189736  0.6556545  0.7923354  0.6556545\nIntercept1 -6.6831602 0.10813283 -6.8950966 -6.6831602 -6.4712237 -6.6831602\nelev1       0.8923185 0.08081404  0.7339259  0.8923185  1.0507111  0.8923185\n                    kld\nIntercept  7.725810e-15\nelev       0.000000e+00\nIntercept1 3.728834e-14\nelev1      7.429228e-15\n\n\n\n\n\n\n\n\n\n\n\nWarning Task\n\n\n\nNow we want to predict the log-intensity over the whole domain. Use the grid from the elevation raster to predict the intensity over the domain.\n\nest_grid = st_as_sf(data.frame(crds(elev_raster)), coords = c(\"x\",\"y\"))\nest_grid  = st_intersection(est_grid, region)\n\n\n\n\nClick here to see the solution\n\n\nCode\npreds2 = predict(fit2, est_grid, ~ data.frame(log_scale = Intercept + elev,\n\n                                              lin_scale = exp(Intercept + elev)))\n# then visualize it like\npreds2$log_scale %&gt;% \n  ggplot() +\n  geom_sf(aes(color = mean)) +\n  scale_color_scico()\n\n\n\n\n\n\n\n\n\n\n\n\nFinally, we want to use the fitted model to estimate the total number of fires over the whole region. To do this we first have to fine the expected number of fires as:\n\\[\nE(N_{\\Omega}) = \\int_{\\Omega}\\exp(\\lambda(s))\\ ds\n\\]\nThen simulate possible realizations of \\(N_{\\Omega}\\) to include also the likelihood variability in our estimate:\n\nN_fires = generate(fit2, ips,\n                      formula = ~ {\n                        lambda = sum(weight * exp(elev + Intercept))\n                        rpois(1, lambda)},\n                    n.samples = 2000)\n\nggplot(data = data.frame(N = as.vector(N_fires))) +\n  geom_histogram(aes(x = N),\n                 colour = \"blue\",\n                 alpha = 0.5,\n                 bins = 20) +\n  geom_vline(xintercept = nrow(pp),\n             colour = \"red\") +\n  theme_minimal() +\n  xlab(expression(Lambda))"
   },
   {
     "objectID": "day3_practical_5.html#LGCP",
@@ -1775,7 +1727,7 @@
     "href": "index.html",
     "title": "inlabru Workshop",
     "section": "",
-    "text": "Welcome to the course!\n\nWelcome to the inlabru workshop!\nThe aim of this workshop is to introduce you to a range of statistical modelling approaches, in particular the temporal, spatial and spatio-temporal modelling as implemented in the inlabru package.\nWorkshop materials are available in the github repository inlabru-workshop\n\n\n\nLearning Objectives for the workshop\nAt the end of the workshop, participants will have an understanding of:\n\nthe motivation for and the challenges of analysing and modelling spatial data\nstatistical models used to analyse spatial and spatio-temporal data\nthe implementation of these models in the inlabru package\nhow to independently analyse spatial data with inlabru\n\n\n\nIntended audience\nThe workshop aims to cater for participants with a range of different backgrounds, who is interested in analysing data with modern spatial and spatio-temporal statistical modelling approaches.\n\n\nPrerequisites\nParticipants should be familiar with the R environment, and general statistical approaches for modelling such as regression, analysis of (co)variance, and generalized linear models.​\nNo knowledge of R-INLA or inlabru is required.\n\n\nSchedule\n\nDay 1Day 2Day 3Day 4Day 5\n\n\n\n\n\nTime\nTopic\n\n\n\n\n10:00 - 10:30\nICES information session\n\n\n10:30 - 11:30\nSession 1: Introduction to inlabru\n\n\n11:30 - 13:00\nPractical Session 1\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 2: Latent Gaussian Models and INLA\n\n\n15:30 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 2\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 3: Temporal modelling and smoothing part 1\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nTemporal modelling and smoothing part 2\n\n\n11:30 - 13:00\nPractical Session 3\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 5: Introduction to Spatial Statistics\n\n\n15:35 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 4\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 6: Areal Processes\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nSession 7: Geostatistics\n\n\n11:30 - 13:00\nPractical Session 5\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 8: Spatial Point processes\n\n\n15:35 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 5 continued\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 9: Spatiotemporal models\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nSession 10: Model comparison and evaluation\n\n\n11:30 - 13:00\nPractical Session 6\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 11: Multi-likelihood/joint likelihood models\n\n\n15:35 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 7\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 12: Zero inflated models\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nSession 13: Complex observational processes: Distance Sampling\n\n\n11:30 - 13:00\nPractical Session 8: Zero Inflated models - Distance sampling\n\n\n13:00 - 13:15\nCoffee Break ☕\n\n\n13:15 - 14:00\nClosing session\n\n\n\n\n\n\n\n\nIn preparation for the workshop\nParticipants are required to follow the below steps ahead of the first day of the workshop:\n\nCheck your R version, it should be at least 4.3….\nInstall R-INLA\nInstall inlabru (available from CRAN)\n\n\n# Enable universe(s) by inlabru-org\noptions(repos = c(\n  inlabruorg = \"https://inlabru-org.r-universe.dev\",\n  INLA = \"https://inla.r-inla-download.org/R/testing\",\n  CRAN = \"https://cloud.r-project.org\"\n))\n\n# Install some packages\ninstall.packages(\"inlabru\")\n\n\nMake sure you have the latest R-INLA, inlabru and R versions installed.\nInstall the following libraries:\n\n\n\ninstall.packages(c(\n  \"CARBayesdata\",\n  \"DAAG\",\n  \"dplyr\",\n  \"FSAdata\",\n  \"ggplot2\",\n  \"gt\",\n  \"lubridate\",\n  \"magrittr\",\n  \"mapview\",\n  \"patchwork\",\n  \"scico\",\n  \"sdmTMB\",\n  \"sf\",\n  \"spatstat\",\n  \"spdep\",\n  \"terra\",\n  \"tidyr\",\n  \"tidyterra\",\n  \"tidyverse\"\n))",
+    "text": "Welcome to the course!\n\nWelcome to the inlabru workshop!\nThe aim of this workshop is to introduce you to a range of statistical modelling approaches, in particular the temporal, spatial and spatio-temporal modelling as implemented in the inlabru package.\nWorkshop materials are available in the github repository inlabru-workshop\n\n\n\nFeedback\nWe would be very glad if you could fill in this form and share your feedback about the course.\nThe form can also be accessed using the QR code below\n\n\n\nLearning Objectives for the workshop\nAt the end of the workshop, participants will have an understanding of:\n\nthe motivation for and the challenges of analysing and modelling spatial data\nstatistical models used to analyse spatial and spatio-temporal data\nthe implementation of these models in the inlabru package\nhow to independently analyse spatial data with inlabru\n\n\n\nIntended audience\nThe workshop aims to cater for participants with a range of different backgrounds, who is interested in analysing data with modern spatial and spatio-temporal statistical modelling approaches.\n\n\nPrerequisites\nParticipants should be familiar with the R environment, and general statistical approaches for modelling such as regression, analysis of (co)variance, and generalized linear models.​\nNo knowledge of R-INLA or inlabru is required.\n\n\nSchedule\n\nDay 1Day 2Day 3Day 4Day 5\n\n\n\n\n\nTime\nTopic\n\n\n\n\n10:00 - 10:30\nICES information session\n\n\n10:30 - 11:30\nSession 1: Introduction to inlabru\n\n\n11:30 - 13:00\nPractical Session 1\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 2: Latent Gaussian Models and INLA\n\n\n15:30 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 2\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 3: Temporal modelling and smoothing part 1\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nTemporal modelling and smoothing part 2\n\n\n11:30 - 13:00\nPractical Session 3\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 5: Introduction to Spatial Statistics\n\n\n15:35 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 4\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 6: Areal Processes\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nSession 7: Geostatistics\n\n\n11:30 - 13:00\nPractical Session 5\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 8: Spatial Point processes\n\n\n15:35 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 5 continued\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 9: Spatiotemporal models\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nSession 10: Model comparison and evaluation\n\n\n11:30 - 13:00\nPractical Session 6\n\n\n13:00 - 14:30\nLunch break 🍽️\n\n\n14:30 - 15:30\nSession 11: Multi-likelihood/joint likelihood models\n\n\n15:35 - 15:45\nCoffee Break ☕\n\n\n15:45 - 16:45\nPractical Session 7\n\n\n16:45 - 17:00\nwrap-up and outlook\n\n\n\n\n\n\n\n\nTime\nTopic\n\n\n\n\n9:00 - 10:00\nSession 12: Zero inflated models\n\n\n10:00 - 10:30\nSnack 🥙\n\n\n10:30 - 11:30\nSession 13: Complex observational processes: Distance Sampling\n\n\n11:30 - 13:00\nPractical Session 8: Zero Inflated models - Distance sampling\n\n\n13:00 - 13:15\nCoffee Break ☕\n\n\n13:15 - 14:00\nClosing session\n\n\n\n\n\n\n\n\nIn preparation for the workshop\nParticipants are required to follow the below steps ahead of the first day of the workshop:\n\nCheck your R version, it should be at least 4.3….\nInstall R-INLA\nInstall inlabru (available from CRAN)\n\n\n# Enable universe(s) by inlabru-org\noptions(repos = c(\n  inlabruorg = \"https://inlabru-org.r-universe.dev\",\n  INLA = \"https://inla.r-inla-download.org/R/testing\",\n  CRAN = \"https://cloud.r-project.org\"\n))\n\n# Install some packages\ninstall.packages(\"inlabru\")\n\n\nMake sure you have the latest R-INLA, inlabru and R versions installed.\nInstall the following libraries:\n\n\n\ninstall.packages(c(\n  \"CARBayesdata\",\n  \"DAAG\",\n  \"dplyr\",\n  \"FSAdata\",\n  \"ggplot2\",\n  \"gt\",\n  \"lubridate\",\n  \"magrittr\",\n  \"mapview\",\n  \"patchwork\",\n  \"scico\",\n  \"sdmTMB\",\n  \"sf\",\n  \"spatstat\",\n  \"spdep\",\n  \"terra\",\n  \"tidyr\",\n  \"tidyterra\",\n  \"tidyverse\"\n))",
     "crumbs": [
       "Home"
     ]
@@ -2096,7 +2048,7 @@
     "href": "slides/slides_2.html#some-more-details-ii-1",
     "title": "Lecture 1",
     "section": "Some more details II",
-    "text": "Some more details II\nGiven the linear predictor \\(\\eta\\) the observations are independent of each other!\n\nThe observation model (likelihood) can be written as: \\[\n\\pi(\\mathbf{y}|\\eta,\\sigma^2) = \\prod_{i = 1}^n\\pi(y_i|\\eta_i,\\sigma^2)\n\\]",
+    "text": "Some more details II\nGiven the linear predictor \\(\\eta\\) the observations are independent of each other!\n\nThe observation model (likelihood) can be written as:\n\\[\n\\pi(\\mathbf{y}|\\eta,\\sigma^2) = \\prod_{i = 1}^n\\pi(y_i|\\eta_i,\\sigma^2)\n\\]",
     "crumbs": [
       "Home",
       "Slides",
@@ -2680,6 +2632,174 @@
     ]
   },
   {
+    "objectID": "slides/slides_4.html#some-inlabru-shortcuts",
+    "href": "slides/slides_4.html#some-inlabru-shortcuts",
+    "title": "Lecture 3",
+    "section": "Some inlabru shortcuts",
+    "text": "Some inlabru shortcuts\nIn the slides we have fitted the model as:\n\ncmp = ~ -1 + beta0(1) beta1(covariate, model = \"linear\")\nformula = y ~ beta0 + beta1\nlik = bru_obs(formula = formula,\n              famuly  = \"gaussian\",\n              data = df)\nfit = bry(cmp, lik)\n\nbut in the practical you have\n\ncmp = ~ -1 + beta0(1) beta1(covariate, model = \"linear\")\n\nlik = bru_obs(formula = y~.,\n              famuly  = \"gaussian\",\n              data = df)\nfit = bry(cmp, lik)\n\n\n\nYou don’t have to define a formula outside of the bru_obs() function..it can be defines also inside the function!\n\n\n\n\nThe expression y ~ . just means “take all the components and sum them together”. It also tells the bru() function that your predictor is linear.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#predict-and-generate-functions",
+    "href": "slides/slides_4.html#predict-and-generate-functions",
+    "title": "Lecture 3",
+    "section": "predict() and generate() functions",
+    "text": "predict() and generate() functions\nIn the practicals you have used the predict() function to get results from the fitted model.\n\npredict() simulates from the fitted posterior distribution \\(\\pi(\\mathbf{y}|\\mathbf{u},\\theta)\\), computes what you ask and produces a summary of the samples (mean, sd, quantiles, etc)\ngenerate() simulates from the fitted posterior distribution \\(\\pi(\\mathbf{y}|\\mathbf{u},\\theta)\\), computes what you ask and return the samples!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example",
+    "href": "slides/slides_4.html#example",
+    "title": "Lecture 3",
+    "section": "Example",
+    "text": "Example\nLet’s fit the model for the Tokyo rainfall data \\[\n\\begin{aligned}\ny_t|\\eta_t&\\sim\\text{Bin}(n_t, p_t),\\qquad i = 1,\\dots,366\\\\\n\\eta_t &= \\text{logit}(p_t)= \\beta_0 + f(\\text{time}_t)\n\\end{aligned}\n\\]\n\ndata(\"Tokyo\")\ncmp= ~ -1 + Intercept(1) + time(time, model =\"rw2\")\nformula = y ~ Intercept + time\nlik = bru_obs(formula = formula,\n              data = Tokyo,\n              Ntrials = n,\n              family = \"binomial\")\nfit = bru(cmp, lik)\n\nWe now want to extract results…what do we want?\n\n\nThe time effect \\(f(\\text{time}_t)\\) ?\nThe linear predictor \\(\\eta_t = \\beta_0 + f(\\text{time}_t)\\)?\nThe estimated probability offit precipitation \\(p_t = \\text{inv_logit}(\\eta_t)\\) ?\n\nWe can get all of them with the predict() or generate() functions!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example---predict",
+    "href": "slides/slides_4.html#example---predict",
+    "title": "Lecture 3",
+    "section": "Example - predict()",
+    "text": "Example - predict()\n\npreds1 = predict(object = fit, newdata = Tokyo, ~ time)\npreds2 = predict(object = fit, newdata = Tokyo, ~ Intercept + time)\ninv_logit = function(x) ((1 + exp(-x))^(-1))\npreds3 = predict(object = fit, newdata = Tokyo, ~ inv_logit(Intercept + time))\n\nor\n\ninv_logit = function(x) ((1 + exp(-x))^(-1))\npreds = predict(object = fit, newdata = Tokyo, \n                ~ data.frame(time_eff = time,\n                             lin_pred = Intercept + time,\n                             probs = inv_logit(Intercept + time)),\n                n.samples = 1000\n                )\n# preds is then a list                \nround(preds$probs[1:3,],3)\n\n  y n time  mean    sd q0.025  q0.5 q0.975 median sd.mc_std_err mean.mc_std_err\n1 0 2    1 0.181 0.086  0.061 0.165  0.409  0.165         0.003           0.003\n2 0 2    2 0.178 0.081  0.062 0.164  0.385  0.164         0.002           0.003\n3 1 2    3 0.176 0.076  0.065 0.162  0.362  0.162         0.002           0.003",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example---predict-1",
+    "href": "slides/slides_4.html#example---predict-1",
+    "title": "Lecture 3",
+    "section": "Example - predict()",
+    "text": "Example - predict()\n\npreds$probs %&gt;% ggplot() + geom_line(aes(time, mean)) +\n  geom_ribbon(aes(time, ymin = q0.025, ymax = q0.975), alpha = 0.5)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example---generate",
+    "href": "slides/slides_4.html#example---generate",
+    "title": "Lecture 3",
+    "section": "Example - generate()",
+    "text": "Example - generate()\n\nsamples = generate(object = fit, newdata = Tokyo, \n                ~ data.frame(time_eff = time,\n                             lin_pred = Intercept + time,\n                             probs = inv_logit(Intercept + time)),\n                n.samples = 20\n                )\n# samples is now a list of length 20 (n.samples) each element of the list looks like:\n\nsamples[[1]][1:3,]\n\n    time_eff  lin_pred     probs\n1 -0.9520950 -2.134173 0.1058195\n2 -0.9632759 -2.145354 0.1047662\n3 -0.9830156 -2.165093 0.1029292",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#example---generate-1",
+    "href": "slides/slides_4.html#example---generate-1",
+    "title": "Lecture 3",
+    "section": "Example - generate()",
+    "text": "Example - generate()\n\ndata.frame(time = Tokyo$time, sapply(samples, function(x) x[,1])) %&gt;%\n  pivot_longer(-time) %&gt;%\n  ggplot() + geom_line(aes(time, value, group = name, color = factor(name))) +\n  theme(legend.position = \"none\")",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#effects-of-categorical-variables-and-interactions",
+    "href": "slides/slides_4.html#effects-of-categorical-variables-and-interactions",
+    "title": "Lecture 3",
+    "section": "Effects of categorical variables and Interactions",
+    "text": "Effects of categorical variables and Interactions\nBoth this things require a little more thinking when using inlabru than when using lm or similar\n\nLet’s look at the mtcars dataset that is in R\n\n\n                   mpg cyl disp  hp drat    wt  qsec vs am gear carb\nMazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4\nMazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4\nDatsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1\nHornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1\nHornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2\nValiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#effects-of-categorical-variables",
+    "href": "slides/slides_4.html#effects-of-categorical-variables",
+    "title": "Lecture 3",
+    "section": "Effects of categorical variables",
+    "text": "Effects of categorical variables\nWe want to fit a model where rank is the only covariate.\ngear has three categories: 3 4``5\n\nm1 = lm(mpg~ gear, data = df)\nm1$coef\n\n(Intercept)       gear4       gear5 \n  16.106667    8.426667    5.273333 \n\n\nHow do we do this in inlabru?\n\n\nOption 1: Use the model.matrix() function in R\n\n\n# create the model matrix\ncov_effect = model.matrix(~ gear, data = df)\ncov_effect[1:2,]\n\n              (Intercept) gear4 gear5\nMazda RX4               1     1     0\nMazda RX4 Wag           1     1     0\n\n# attach this to your data\ndf = cbind(df, cov_effect[,-1])\n\ncmp1 = ~ Intercept(1) + gear_4(gear4, model = \"linear\") +\n  gear_5(gear5, model= \"linear\")\nlik1 = bru_obs(formula = mpg ~.,\n               data = df)\nfit1 = bru(cmp1, lik1)\nfit1$summary.fixed$mean\n\n[1] 16.103111  8.414874  5.253895",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#effects-of-categorical-variables-1",
+    "href": "slides/slides_4.html#effects-of-categorical-variables-1",
+    "title": "Lecture 3",
+    "section": "Effects of categorical variables",
+    "text": "Effects of categorical variables\nWe want to fit a model where rank is the only covariate.\nrank has three categories: Prof AsstProf``AssocProf\n\nm1 = lm(mpg~ gear, data = df)\nm1$coefficients\n\n(Intercept)       gear4       gear5 \n  16.106667    8.426667    5.273333 \n\n\nHow do we do this in inlabru?\n\nOption 2: fixed effect are just random effects with fixed precision\n\n\ndf$gear_id = as.numeric(df$gear) # inlabru needs values like 1,2,3 for random effects\n\ncmp2 = ~ -1 +  gear_effect(gear_id, model = \"iid\", fixed = T,initial = -6)\n# or: cmp2 = ~ Intercept(1) +  gear_effect(gear_id, model = \"iid\", fixed = T,initial = -6, constr = T)\nlik2 = bru_obs(formula = mpg ~.,\n               data = df)\nfit2 = bru(cmp2, lik2)\nfit2$summary.random$gear_effect$mean\n\n[1] 16.04855 24.42278 21.15033\n\n\nWhat is happening here??\n\nThis is just a re-parametrization problem\n\nc(m1$coef[1], m1$coef[1] + m1$coef[2],m1$coef[1] + m1$coef[3])\n\n(Intercept) (Intercept) (Intercept) \n   16.10667    24.53333    21.38000",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#interaction-between-two-categorical-variables",
+    "href": "slides/slides_4.html#interaction-between-two-categorical-variables",
+    "title": "Lecture 3",
+    "section": "Interaction between two categorical variables",
+    "text": "Interaction between two categorical variables\nSay we want to fit this model\n\ndf = mtcars %&gt;% mutate(gear = factor(gear), vs = factor(vs))\nm2 = lm(mpg ~ gear * vs, data = df)\n\n\n\n(Intercept)       gear4       gear5         vs1   gear4:vs1   gear5:vs1 \n  15.050000    5.950000    4.075000    5.283333   -1.043333    5.991667 \n\n\n\nHere the best solution is to use the model.matrix() again\n\n# create the model matrix\ncov_effect = model.matrix(~ gear * vs, data = df)\ncov_effect[1:1,]\n\n(Intercept)       gear4       gear5         vs1   gear4:vs1   gear5:vs1 \n          1           1           0           0           0           0 \n\ndf = cbind(df, cov_effect[,-1])       # attach this to your data\n\ncmp3 = ~ Intercept(1) + gear_4(gear4, model = \"linear\") +\n  gear_5(gear5, model = \"linear\") + vs_1(vs1, model = \"linear\") +\n  gear4_vs1(`gear4:vs1`, model = \"linear\") + gear5_vs1(`gear5:vs1`, model = \"linear\") \n\nlik3 = bru_obs(formula= mpg ~ ., data = df)\nfit3 = bru(cmp3, lik3)\nfit3$summary.fixed$mean\n\n[1] 15.043471  5.898698  4.089020  5.287623 -0.988139  5.881139",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#interaction-categorical-and-continous-variable",
+    "href": "slides/slides_4.html#interaction-categorical-and-continous-variable",
+    "title": "Lecture 3",
+    "section": "Interaction categorical and continous variable",
+    "text": "Interaction categorical and continous variable\n\ndf = mtcars %&gt;% mutate(gear = factor(gear))\nm2 = lm(mpg ~ gear * disp, data = df)\n\n\n\n(Intercept)       gear4       gear5        disp  gear4:disp  gear5:disp \n24.51556635 15.05196338  7.14538044 -0.02577046 -0.09644222 -0.02500467 \n\n\n\nOption 1: Again we can use the model.matrix() option:\n\n# create the model matrix\ncov_effect = model.matrix(~ gear * disp, data = df)\ncov_effect[1:1,]\n\n(Intercept)       gear4       gear5        disp  gear4:disp  gear5:disp \n          1           1           0         160         160           0 \n\ncolnames(cov_effect)  = str_replace(colnames(cov_effect), \":\", \"_\")\ndf = cbind(df, cov_effect[,-c(1,4)])      # attach this to your data and remove duplicated columns\n\ncmp4 = ~ Intercept(1) + gear_4(gear4, model = \"linear\") +\n  gear_5(gear5, model = \"linear\") + disp(disp, model = \"linear\") +\n  gear4_disp(gear4_disp, model = \"linear\") + gear5_disp(gear5_disp, model = \"linear\") \n\nlik4 = bru_obs(formula= mpg ~ ., data = df)\nfit4 = bru(cmp4, lik4)\nfit4$summary.fixed$mean\n\n[1] 24.50107577 14.96918703  7.11473778 -0.02572929 -0.09575912 -0.02486896",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#interaction-categorical-and-continous-variable-1",
+    "href": "slides/slides_4.html#interaction-categorical-and-continous-variable-1",
+    "title": "Lecture 3",
+    "section": "Interaction categorical and continous variable",
+    "text": "Interaction categorical and continous variable\n\ndf = mtcars %&gt;% mutate(gear = factor(gear))\nm2 = lm(mpg ~ gear * disp, data = df)\n\n\n\n(Intercept)       gear4       gear5        disp  gear4:disp  gear5:disp \n24.51556635 15.05196338  7.14538044 -0.02577046 -0.09644222 -0.02500467 \n\n\nOption 2: fixed effects are random effect with fixed precision!\n\ndf$gear_id = as.numeric(df$gear) # inlabru needs values like 1,2,3 for random effects\n\ncmp5 = ~ -1 +  gear_effect_int(gear_id, model = \"iid\", fixed = T,initial = -6) +\n  gear_effect_slope(gear_id, disp, model = \"iid\", fixed = T,initial = -6)\nlik5 = bru_obs(formula = mpg ~.,\n               data = df)\nfit5 = bru(cmp5, lik5)\nfit5$summary.random$gear_effect_int$mean\n\n[1] 24.15642 38.93783 31.16887\n\nfit5$summary.random$gear_effect_slope$mean\n\n[1] -0.02475024 -0.11752382 -0.04884677\n\n\n\nAgain..the differences are a matter of parametrization!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#interaction-categorical-and-continous-variable-2",
+    "href": "slides/slides_4.html#interaction-categorical-and-continous-variable-2",
+    "title": "Lecture 3",
+    "section": "Interaction categorical and continous variable",
+    "text": "Interaction categorical and continous variable\n\npred_df = data.frame(disp = rep(seq(70:473),3),\n                     gear = factor(rep(3:5, each = length(seq(70:473))))) %&gt;%\n  mutate(gear_id = as.numeric(gear))\n\nlm_pred = cbind(pred_df, pred = predict(m2, newdata = pred_df))\n\ninla_pred = predict(fit5, pred_df, ~ gear_effect_int + gear_effect_slope)",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
     "objectID": "slides/slides_4.html#motivation",
     "href": "slides/slides_4.html#motivation",
     "title": "Lecture 3",
@@ -2836,11 +2956,11 @@
     ]
   },
   {
-    "objectID": "slides/slides_4.html#example",
-    "href": "slides/slides_4.html#example",
+    "objectID": "slides/slides_4.html#example-1",
+    "href": "slides/slides_4.html#example-1",
     "title": "Lecture 3",
     "section": "Example",
-    "text": "Example\nLet’s fit the model for the Tokyo rainfall data \\[\n\\begin{aligned}\ny_t|\\eta_t&\\sim\\text{Bin}(n_t, p_t),\\qquad i = 1,\\dots,366\\\\\n\\eta_t &= \\text{logit}(p_t)= \\beta_0 + f(\\text{time}_t)\n\\end{aligned}\n\\]\n\ndata(\"Tokyo\")\ncmp= ~ -1 + Intercept(1) + time(time, model =\"rw2\")\nformula = y ~ Intercept + time\nlik = bru_obs(formula = formula,\n              data = Tokyo,\n              Ntrials = n,\n              family = \"binomial\")\nfit = bru(cmp, lik)\n\nWe now want to extract results…what do we want?\n\n\nThe time effect \\(f(\\text{time}_t)\\) ?\nThe linear predictor \\(\\eta_t = \\beta_0 + f(\\text{time}_t)\\)?\nThe estimated probability offit precipitation \\(p_t = \\text{inv_logit}(\\eta_t)\\) ?\n\nWe can get all of them with the predict() or generate() functions!",
+    "text": "Example\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + f(t_i)\\\\\nf(t_1),f(t_2),\\dots,f(t_n) &\\sim \\text{RW2}(\\tau)\n\\end{aligned}\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe code\n\ncmp = ~ Intercept(1) +\n  time(year, model = \"rw1\",\n       hyper = list(prec =\n                      list(prior = \"pc.prec\",\n                           param = c(0.5, 0.5))))",
     "crumbs": [
       "Home",
       "Slides",
@@ -2864,7 +2984,7 @@
     "href": "slides/slides_4.html#rw-as-intrinsic-models-1",
     "title": "Lecture 3",
     "section": "RW as intrinsic models",
-    "text": "RW as intrinsic models\n\ncmp1 = ~ Intercept(1) + time(year, model = \"rw1\", constr = TRUE)\ncmp2 = ~ Intercept(1) + time(year, model = \"rw1\", constr = FALSE)\nlik = bru_obs(formula = Erie~.,\n              data = lakes)\n\nfit1 = bru(cmp1,lik)\nfit2 = bru(cmp2,lik)\n\n\n\n[1] \"FIT1 - Intercept\"\n\n\n             mean    sd 0.025quant 0.5quant 0.975quant    mode kld\nIntercept 174.138 0.002    174.135  174.138    174.142 174.138   0\n\n\n[1] \"FIT2 - Intercept\"\n\n\n          mean     sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0 31.623    -62.009        0     62.009    0   0\n\n\n[1] \"FIT1 - RW1 effect\"\n\n\n    ID   mean    sd 0.025quant 0.5quant 0.975quant   mode kld\n1 1918 -0.122 0.016     -0.155   -0.122     -0.085 -0.122   0\n2 1919  0.039 0.017     -0.002    0.040      0.069  0.042   0\n\n\n[1] \"FIT2 - RW1 effect\"\n\n\n    ID    mean     sd 0.025quant 0.5quant 0.975quant    mode kld\n1 1918 174.017 31.623    112.008  174.017    236.025 174.017   0\n2 1919 174.177 31.623    112.168  174.177    236.185 174.177   0",
+    "text": "RW as intrinsic models\n\ncmp1 = ~ Intercept(1) + time(year, model = \"rw1\", constr = TRUE)\ncmp2 = ~ Intercept(1) + time(year, model = \"rw1\", constr = FALSE)\nlik = bru_obs(formula = Erie~.,\n              data = lakes)\n\nfit1 = bru(cmp1,lik)\nfit2 = bru(cmp2,lik)\n\n\n\n[1] \"FIT1 - Intercept\"\n\n\n             mean    sd 0.025quant 0.5quant 0.975quant    mode   kld\nIntercept 174.138 0.002    174.134  174.138    174.142 174.138 0.001\n\n\n[1] \"FIT2 - Intercept\"\n\n\n          mean     sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0 31.623    -62.009        0     62.009    0   0\n\n\n[1] \"FIT1 - RW1 effect\"\n\n\n    ID   mean    sd 0.025quant 0.5quant 0.975quant   mode   kld\n1 1918 -0.122 0.018     -0.157   -0.122     -0.081 -0.122 0.001\n2 1919  0.038 0.018     -0.007    0.040      0.070  0.042 0.002\n\n\n[1] \"FIT2 - RW1 effect\"\n\n\n    ID    mean     sd 0.025quant 0.5quant 0.975quant    mode kld\n1 1918 174.017 31.623    112.008  174.017    236.025 174.017   0\n2 1919 174.176 31.623    112.168  174.176    236.185 174.176   0",
     "crumbs": [
       "Home",
       "Slides",
@@ -2884,11 +3004,11 @@
     ]
   },
   {
-    "objectID": "slides/slides_4.html#example-1",
-    "href": "slides/slides_4.html#example-1",
+    "objectID": "slides/slides_4.html#example-2",
+    "href": "slides/slides_4.html#example-2",
     "title": "Lecture 3",
     "section": "Example",
-    "text": "Example\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + f(t_i)\\\\\nf(t_1),f(t_2),\\dots,f(t_n) &\\sim \\text{RW2}(\\tau)\n\\end{aligned}\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe code\n\ncmp = ~ Intercept(1) +\n  time(year, model = \"rw1\",\n       hyper = list(prec =\n                      list(prior = \"pc.prec\",\n                           param = c(0.5, 0.5))))",
+    "text": "Example\n\n\n\ncmp1 = ~ Intercept(1) +\n  time(year, model = \"rw1\",\n       scale.model = T,\n       hyper = list(prec =\n                      list(prior = \"pc.prec\",\n                           param = c(0.3,0.5))))\n\ncmp2 = ~ Intercept(1) +\n  time(year, model = \"rw2\",\n       scale.model = T,\n       hyper = list(prec =\n                      list(prior = \"pc.prec\",\n                           param = c(0.3,0.5))))\n\n\nlik = bru_obs(formula = Erie~ .,\n              data = lakes)\n\nfit1 = bru(cmp1, lik)\nfit2 = bru(cmp2, lik)\n\n\n\n\n\n\n\n\n\n\n\nNOTE: the scale.model = TRUE option scales the \\(\\mathbf{Q}\\) matrix so the precision parameter has the same interpretation in both models.",
     "crumbs": [
       "Home",
       "Slides",
@@ -3148,11 +3268,11 @@
     ]
   },
   {
-    "objectID": "slides/slides_4.html#example-2",
-    "href": "slides/slides_4.html#example-2",
+    "objectID": "slides/slides_4.html#example-3",
+    "href": "slides/slides_4.html#example-3",
     "title": "Lecture 3",
     "section": "Example",
-    "text": "Example\n\n\n\ncmp1 = ~ Intercept(1) +\n  time(year, model = \"rw1\",\n       scale.model = T,\n       hyper = list(prec =\n                      list(prior = \"pc.prec\",\n                           param = c(0.3,0.5))))\n\ncmp2 = ~ Intercept(1) +\n  time(year, model = \"rw2\",\n       scale.model = T,\n       hyper = list(prec =\n                      list(prior = \"pc.prec\",\n                           param = c(0.3,0.5))))\n\n\nlik = bru_obs(formula = Erie~ .,\n              data = lakes)\n\nfit1 = bru(cmp1, lik)\nfit2 = bru(cmp2, lik)\n\n\n\n\n\n\n\n\n\n\n\nNOTE: the scale.model = TRUE option scales the \\(\\mathbf{Q}\\) matrix so the precision parameter has the same interpretation in both models.",
+    "text": "Example\nLet’s go back to the Triceps skinfold thickness example.\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\omega(\\text{age}_i)\\\\\n\\omega(\\text{age}_i) & \\sim \\text{GF}(\\rho_{\\omega},\\sigma_{\\omega})\n\\end{aligned}\n\\]\n\n\ntriceps = read_csv(\"Data/triceps.csv\")\ntriceps[1:3,c(1,3)]\n\n# A tibble: 3 × 2\n    age triceps\n  &lt;dbl&gt;   &lt;dbl&gt;\n1 12.1     3.40\n2  9.91    4   \n3 10.0     4.20\n\n\n\nThe code\n\n#|\nlocs = seq(-5,60,5)\nmesh1d = fm_mesh_1d(locs, degree = 2, boundary = \"neumann\")\n\nspde &lt;- inla.spde2.pcmatern(mesh1d,\n  prior.range = c(10, 0.5),\n  prior.sigma = c(1, 0.5))\n\ncmp &lt;- ~ Intercept(1) +  field(age, model = spde)\nlik_spde = bru_obs(formula = triceps ~.,data = triceps)\nfit_spde = bru(cmp, lik_spde)",
     "crumbs": [
       "Home",
       "Slides",
@@ -3165,6 +3285,66 @@
     "title": "Lecture 3",
     "section": "Comparing SPDE and RW2",
     "text": "Comparing SPDE and RW2",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#some-practical-tips-i",
+    "href": "slides/slides_4.html#some-practical-tips-i",
+    "title": "Lecture 3",
+    "section": "Some practical tips I",
+    "text": "Some practical tips I\nYou might wonder which priors have you used in your model..\n\nfit = bru(cmp, lik)\n\nINLA::inla.priors.used(fit)\n\nNB inla.priors.used is a function of the INLA package, so you need to load it explicitly.",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#some-practical-tips-ii",
+    "href": "slides/slides_4.html#some-practical-tips-ii",
+    "title": "Lecture 3",
+    "section": "Some practical tips II",
+    "text": "Some practical tips II\nGetting help!\n\ninla.doc(\"ar1\")\ninla.doc(\"pc.prior\")\ninla.doc(\"gaussian\")",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#some-practical-tips-ii-1",
+    "href": "slides/slides_4.html#some-practical-tips-ii-1",
+    "title": "Lecture 3",
+    "section": "Some practical tips II",
+    "text": "Some practical tips II\nWhich models are implemented?\nLikelihoods\n\n# which likelihoods?\ninla.list.models(\"likelihood\")\n\nSection [likelihood]\n     0binomial                     New 0-inflated Binomial                 \n     0binomialS                    New 0-inflated Binomial Swap            \n     0poisson                      New 0-inflated Poisson                  \n     0poissonS                     New 0-inflated Poisson Swap             \n     1poisson                      New 1-inflated Poisson                  \n     1poissonS                     New 1-inflated Poisson Swap             \n     agaussian                     The aggregated Gaussian likelihoood     \n     bcgaussian                    The Box-Cox Gaussian likelihoood        \n     bell                          The Bell likelihood                     \n     beta                          The Beta likelihood                     \n     betabinomial                  The Beta-Binomial likelihood            \n     betabinomialna                The Beta-Binomial Normal approximation likelihood\n     bgev                          The blended Generalized Extreme Value likelihood\n     binomial                      The Binomial likelihood                 \n     binomialmix                   Binomial mixture                        \n     cbinomial                     The clustered Binomial likelihood       \n     cennbinomial2                 The CenNegBinomial2 likelihood (similar to cenpoisson2)\n     cenpoisson                    Then censored Poisson likelihood        \n     cenpoisson2                   Then censored Poisson likelihood (version 2)\n     circularnormal                The circular Gaussian likelihoood       \n     cloglike                      User-defined likelihood                 \n     coxph                         Cox-proportional hazard likelihood      \n     dgompertzsurv                 destructive gompertz (survival) distribution\n     dgp                           Discrete generalized Pareto likelihood  \n     egp                           Exteneded Generalized Pareto likelihood \n     exponential                   The Exponential likelihood              \n     exponentialsurv               The Exponential likelihood (survival)   \n     exppower                      The exponential power likelihoood       \n     fl                            The fl likelihood                       \n     fmri                          fmri distribution (special nc-chi)      \n     fmrisurv                      fmri distribution (special nc-chi)      \n     gamma                         The Gamma likelihood                    \n     gammacount                    A Gamma generalisation of the Poisson likelihood\n     gammajw                       A special case of the Gamma likelihood  \n     gammajwsurv                   A special case of the Gamma likelihood (survival)\n     gammasurv                     The Gamma likelihood (survival)         \n     gammasv                       The Gamma likelihood with constant rate \n     gaussian                      The Gaussian likelihoood                \n     gaussianjw                    The GaussianJW likelihoood              \n     gev                           The Generalized Extreme Value likelihood\n     ggaussian                     Generalized Gaussian                    \n     ggaussianS                    Generalized GaussianS                   \n     gompertz                      gompertz distribution                   \n     gompertzsurv                  gompertz distribution                   \n     gp                            Generalized Pareto likelihood           \n     gpoisson                      The generalized Poisson likelihood      \n     iidgamma                      (experimental)                          \n     iidlogitbeta                  (experimental)                          \n     loggammafrailty               (experimental)                          \n     logistic                      The Logistic likelihoood                \n     loglogistic                   The loglogistic likelihood              \n     loglogisticsurv               The loglogistic likelihood (survival)   \n     lognormal                     The log-Normal likelihood               \n     lognormalsurv                 The log-Normal likelihood (survival)    \n     logperiodogram                Likelihood for the log-periodogram      \n     mgamma                        The modal Gamma likelihood              \n     mgammasurv                    The modal Gamma likelihood (survival)   \n     nbinomial                     The negBinomial likelihood              \n     nbinomial2                    The negBinomial2 likelihood             \n     nmix                          Binomial-Poisson mixture                \n     nmixnb                        NegBinomial-Poisson mixture             \n     npoisson                      The Normal approximation to the Poisson likelihood\n     nvm                           Normal approx of the von Mises circular distribution\n     nzpoisson                     The nzPoisson likelihood                \n     obeta                         The ordered Beta likelihood             \n     occupancy                     Occupancy likelihood                    \n     poisson                       The Poisson likelihood                  \n     poisson.special1              The Poisson.special1 likelihood         \n     pom                           Likelihood for the proportional odds model\n     qkumar                        A quantile version of the Kumar likelihood\n     qloglogistic                  A quantile loglogistic likelihood       \n     qloglogisticsurv              A quantile loglogistic likelihood (survival)\n     rcpoisson                     Randomly censored Poisson               \n     sem                           The SEM likelihoood                     \n     simplex                       The simplex likelihood                  \n     sn                            The Skew-Normal likelihoood             \n     stdgaussian                   The stdGaussian likelihoood             \n     stochvol                      The Gaussian stochvol likelihood        \n     stochvolln                    The Log-Normal stochvol likelihood      \n     stochvolnig                   The Normal inverse Gaussian stochvol likelihood\n     stochvolsn                    The SkewNormal stochvol likelihood      \n     stochvolt                     The Student-t stochvol likelihood       \n     t                             Student-t likelihood                    \n     tpoisson                      Thinned Poisson                         \n     tstrata                       A stratified version of the Student-t likelihood\n     tweedie                       Tweedie distribution                    \n     vm                            von Mises circular distribution         \n     weibull                       The Weibull likelihood                  \n     weibullsurv                   The Weibull likelihood (survival)       \n     wrappedcauchy                 The wrapped Cauchy likelihoood          \n     xbinomial                     The Binomial likelihood (experimental version)\n     xpoisson                      The Poisson likelihood (expert version) \n     zeroinflatedbetabinomial0     Zero-inflated Beta-Binomial, type 0     \n     zeroinflatedbetabinomial1     Zero-inflated Beta-Binomial, type 1     \n     zeroinflatedbetabinomial2     Zero inflated Beta-Binomial, type 2     \n     zeroinflatedbinomial0         Zero-inflated Binomial, type 0          \n     zeroinflatedbinomial1         Zero-inflated Binomial, type 1          \n     zeroinflatedbinomial2         Zero-inflated Binomial, type 2          \n     zeroinflatedcenpoisson0       Zero-inflated censored Poisson, type 0  \n     zeroinflatedcenpoisson1       Zero-inflated censored Poisson, type 1  \n     zeroinflatednbinomial0        Zero inflated negBinomial, type 0       \n     zeroinflatednbinomial1        Zero inflated negBinomial, type 1       \n     zeroinflatednbinomial1strata2 Zero inflated negBinomial, type 1, strata 2\n     zeroinflatednbinomial1strata3 Zero inflated negBinomial, type 1, strata 3\n     zeroinflatednbinomial2        Zero inflated negBinomial, type 2       \n     zeroinflatedpoisson0          Zero-inflated Poisson, type 0           \n     zeroinflatedpoisson1          Zero-inflated Poisson, type 1           \n     zeroinflatedpoisson2          Zero-inflated Poisson, type 2           \n     zeroninflatedbinomial2        Zero and N inflated binomial, type 2    \n     zeroninflatedbinomial3        Zero and N inflated binomial, type 3",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#some-practical-tips-ii-2",
+    "href": "slides/slides_4.html#some-practical-tips-ii-2",
+    "title": "Lecture 3",
+    "section": "Some practical tips II",
+    "text": "Some practical tips II\nWhich models are implemented?\nComponents\n\n# which latent models? (components)\ninla.list.models(\"latent\")\n\nSection [latent]\n     2diid                         (This model is obsolute)                \n     ar                            Auto-regressive model of order p (AR(p))\n     ar1                           Auto-regressive model of order 1 (AR(1))\n     ar1c                          Auto-regressive model of order 1 w/covariates\n     besag                         The Besag area model (CAR-model)        \n     besag2                        The shared Besag model                  \n     besagproper                   A proper version of the Besag model     \n     besagproper2                  An alternative proper version of the Besag model\n     bym                           The BYM-model (Besag-York-Mollier model)\n     bym2                          The BYM-model with the PC priors        \n     cgeneric                      Generic latent model specified using C  \n     clinear                       Constrained linear effect               \n     copy                          Create a copy of a model component      \n     crw2                          Exact solution to the random walk of order 2\n     dmatern                       Dense Matern field                      \n     fgn                           Fractional Gaussian noise model         \n     fgn2                          Fractional Gaussian noise model (alt 2) \n     generic                       A generic model                         \n     generic0                      A generic model (type 0)                \n     generic1                      A generic model (type 1)                \n     generic2                      A generic model (type 2)                \n     generic3                      A generic model (type 3)                \n     iid                           Gaussian random effects in dim=1        \n     iid1d                         Gaussian random effect in dim=1 with Wishart prior\n     iid2d                         Gaussian random effect in dim=2 with Wishart prior\n     iid3d                         Gaussian random effect in dim=3 with Wishart prior\n     iid4d                         Gaussian random effect in dim=4 with Wishart prior\n     iid5d                         Gaussian random effect in dim=5 with Wishart prior\n     iidkd                         Gaussian random effect in dim=k with Wishart prior\n     intslope                      Intecept-slope model with Wishart-prior \n     linear                        Alternative interface to an fixed effect\n     log1exp                       A nonlinear model of a covariate        \n     logdist                       A nonlinear model of a covariate        \n     matern2d                      Matern covariance function on a regular grid\n     meb                           Berkson measurement error model         \n     mec                           Classical measurement error model       \n     ou                            The Ornstein-Uhlenbeck process          \n     prw2                          Proper random walk of order 2           \n     revsigm                       Reverse sigmoidal effect of a covariate \n     rgeneric                      Generic latent model specified using R  \n     rw1                           Random walk of order 1                  \n     rw2                           Random walk of order 2                  \n     rw2d                          Thin-plate spline model                 \n     rw2diid                       Thin-plate spline with iid noise        \n     scopy                         Create a scopy of a model component     \n     seasonal                      Seasonal model for time series          \n     sigm                          Sigmoidal effect of a covariate         \n     slm                           Spatial lag model                       \n     spde                          A SPDE model                            \n     spde2                         A SPDE2 model                           \n     spde3                         A SPDE3 model                           \n     z                             The z-model in a classical mixed model formulation",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 3"
+    ]
+  },
+  {
+    "objectID": "slides/slides_4.html#some-practical-tips-ii-3",
+    "href": "slides/slides_4.html#some-practical-tips-ii-3",
+    "title": "Lecture 3",
+    "section": "Some practical tips II",
+    "text": "Some practical tips II\nWhich models are implemented?\nPriors\n\n# which priors?\ninla.list.models(\"prior\")\n\nSection [prior]\n     betacorrelation               Beta prior for the correlation          \n     dirichlet                     Dirichlet prior                         \n     expression:                   A generic prior defined using expressions\n     flat                          A constant prior                        \n     gamma                         Gamma prior                             \n     gaussian                      Gaussian prior                          \n     invalid                       Void prior                              \n     jeffreystdf                   Jeffreys prior for the doc              \n     laplace                       Laplace prior                           \n     linksnintercept               Skew-normal-link intercept-prior        \n     logflat                       A constant prior for log(theta)         \n     loggamma                      Log-Gamma prior                         \n     logiflat                      A constant prior for log(1/theta)       \n     logitbeta                     Logit prior for a probability           \n     logtgaussian                  Truncated Gaussian prior                \n     logtnormal                    Truncated Normal prior                  \n     minuslogsqrtruncnormal        (obsolete)                              \n     mvnorm                        A multivariate Normal prior             \n     none                          No prior                                \n     normal                        Normal prior                            \n     pc                            Generic PC prior                        \n     pc.alphaw                     PC prior for alpha in Weibull           \n     pc.ar                         PC prior for the AR(p) model            \n     pc.cor0                       PC prior correlation, basemodel cor=0   \n     pc.cor1                       PC prior correlation, basemodel cor=1   \n     pc.dof                        PC prior for log(dof-2)                 \n     pc.egptail                    PC prior for the tail in the EGP likelihood\n     pc.fgnh                       PC prior for the Hurst parameter in FGN \n     pc.gamma                      PC prior for a Gamma parameter          \n     pc.gammacount                 PC prior for the GammaCount likelihood  \n     pc.gevtail                    PC prior for the tail in the GEV likelihood\n     pc.matern                     PC prior for the Matern SPDE            \n     pc.mgamma                     PC prior for a Gamma parameter          \n     pc.prec                       PC prior for log(precision)             \n     pc.prw2.range                 PCprior for the range in PRW2           \n     pc.range                      PC prior for the range in the Matern SPDE\n     pc.sn                         PC prior for the skew-normal            \n     pc.spde.GA                    (experimental)                          \n     pom                           #classes-dependent prior for the POM model\n     ref.ar                        Reference prior for the AR(p) model, p&lt;=3\n     rprior:                       A R-function defining the prior         \n     table:                        A generic tabulated prior               \n     wishart1d                     Wishart prior dim=1                     \n     wishart2d                     Wishart prior dim=2                     \n     wishart3d                     Wishart prior dim=3                     \n     wishart4d                     Wishart prior dim=4                     \n     wishart5d                     Wishart prior dim=5                     \n     wishartkd                     Wishart prior                           \n\n\n```",
     "crumbs": [
       "Home",
       "Slides",
@@ -3380,7 +3560,7 @@
     "href": "slides/slides_9.html#spatio-temporal-models-for-areal-data-6",
     "title": "Lecture 9",
     "section": "Spatio temporal models for areal data",
-    "text": "Spatio temporal models for areal data\nThe observation model\n\\[\nY_{st}|\\lambda_{st}\\sim\\text{Poisson}(E_{st}\\lambda_{st})\n\\]\n\nModel 1: \\(\\eta_{st} = \\beta_0 + u_s + v_t\\) with \\(u_s\\sim\\text{CAR}(\\tau)\\)\nModel 2: \\(\\eta_{st} = \\beta_0 + u_{st} + v_t\\) with \\(u_{st}\\sim\\text{CAR}(\\tau),\\ i = 1,\\dots,T\\)\nModel 3: \\(\\eta_{st} = \\beta_0 + u_{st} + v_t\\) with \\[\nu_{st} = \\phi u_{st-1} + w_{st}, \\text{ with } w_{st}\\sim\\text{CAR}(\\tau),\\ i = 1,\\dots,T\n\\]\n\nCompare\n\nDifferences between Model 2 and 3 are not evident when estimating the past, but they would give different predictions\nModel 3 in this case seem to better fit the data (more about these measures later)\n\n\n\n\n\n    model      DIC     WAIC\n1 Model 1 15994.34 28158.64\n2 Model 2 12395.38 12272.51\n3 Model 3 11975.92 11960.34\n\n\n\n\n\n                     mean    sd 0.025quant 0.975quant\nPrecision for space 11.75  1.12       9.68      14.07\nGroupRho for space   0.89  0.01       0.86       0.91\nPrecision for time  60.41 26.45      24.09     126.05",
+    "text": "Spatio temporal models for areal data\nThe observation model\n\\[\nY_{st}|\\lambda_{st}\\sim\\text{Poisson}(E_{st}\\lambda_{st})\n\\]\n\nModel 1: \\(\\eta_{st} = \\beta_0 + u_s + v_t\\) with \\(u_s\\sim\\text{CAR}(\\tau)\\)\nModel 2: \\(\\eta_{st} = \\beta_0 + u_{st} + v_t\\) with \\(u_{st}\\sim\\text{CAR}(\\tau),\\ i = 1,\\dots,T\\)\nModel 3: \\(\\eta_{st} = \\beta_0 + u_{st} + v_t\\) with \\[\nu_{st} = \\phi u_{st-1} + w_{st}, \\text{ with } w_{st}\\sim\\text{CAR}(\\tau),\\ i = 1,\\dots,T\n\\]\n\nCompare\n\nDifferences between Model 2 and 3 are not evident when estimating the past, but they would give different predictions\nModel 3 in this case seem to better fit the data (more about these measures later)\n\n\n\n\n\n    model      DIC     WAIC\n1 Model 1 15094.24 20305.65\n2 Model 2 12401.11 12313.98\n3 Model 3 12010.46 11986.29\n\n\n\n\n\n                     mean    sd 0.025quant 0.975quant\nPrecision for space 13.98  1.30      11.56      16.69\nGroupRho for space   0.87  0.01       0.84       0.90\nPrecision for time  60.60 30.22      21.06     136.77",
     "crumbs": [
       "Home",
       "Slides",
@@ -3548,7 +3728,7 @@
     "href": "slides/slides_9.html#space-covariates",
     "title": "Lecture 9",
     "section": "Space covariates",
-    "text": "Space covariates\n\nThey should be stored in a terra, SpatRaster object.\n\n\nlibrary(terra)\nlibrary(tidyterra)\n\n\ncov_space\n\nclass       : SpatRaster \nsize        : 147, 147, 1  (nrow, ncol, nlyr)\nresolution  : 4.465128, 3.11244  (x, y)\nextent      : -465.4573, 190.9165, 7031.885, 7489.413  (xmin, xmax, ymin, ymax)\ncoord. ref. : +proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs \nsource(s)   : memory\nname        :      last \nmin value   : -2.586361 \nmax value   :  1.404672 \n\nggplot()  + geom_spatraster(data = cov_space) + geom_sf(data = dd) + scale_fill_scico()",
+    "text": "Space covariates\n\nThey should be stored in a terra, SpatRaster object.\n\n\nlibrary(terra)\nlibrary(tidyterra)\n\n\ncov_space\n\nclass       : SpatRaster \nsize        : 147, 147, 1  (nrow, ncol, nlyr)\nresolution  : 4.465128, 3.11244  (x, y)\nextent      : -465.4573, 190.9165, 7031.885, 7489.413  (xmin, xmax, ymin, ymax)\ncoord. ref. : +proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs \nsource(s)   : memory\nname        :      last \nmin value   : -1.798686 \nmax value   :  2.686347 \n\nggplot()  + geom_spatraster(data = cov_space) + geom_sf(data = dd) + scale_fill_scico()",
     "crumbs": [
       "Home",
       "Slides",
@@ -3560,7 +3740,7 @@
     "href": "slides/slides_9.html#space-covariates---implementation",
     "title": "Lecture 9",
     "section": "Space covariates - Implementation",
-    "text": "Space covariates - Implementation\nSetting up and running the model\n\ncmp1 = ~ Intercept(1) +\n  time(time, model = \"rw2\") +\n  space(geometry, model = spde) +\n  cov(cov_space,  model = \"linear\")\n\nlik1 = bru_obs(formula =  Y~ .,\n              data = dd_1)\n\nfit_cov1 = bru(cmp1, lik1)\n\nLook at the results\n\nround(fit_cov1$summary.fixed,2)\n\n           mean   sd 0.025quant 0.5quant 0.975quant  mode kld\nIntercept  0.00 0.21      -0.41     0.00       0.43  0.00   0\ncov       -1.51 0.08      -1.68    -1.51      -1.35 -1.51   0",
+    "text": "Space covariates - Implementation\nSetting up and running the model\n\ncmp1 = ~ Intercept(1) +\n  time(time, model = \"rw2\") +\n  space(geometry, model = spde) +\n  cov(cov_space,  model = \"linear\")\n\nlik1 = bru_obs(formula =  Y~ .,\n              data = dd_1)\n\nfit_cov1 = bru(cmp1, lik1)\n\nLook at the results\n\nround(fit_cov1$summary.fixed,2)\n\n           mean   sd 0.025quant 0.5quant 0.975quant  mode kld\nIntercept -0.25 0.24      -0.74    -0.25       0.23 -0.25   0\ncov       -1.32 0.09      -1.50    -1.32      -1.14 -1.32   0",
     "crumbs": [
       "Home",
       "Slides",
@@ -3584,7 +3764,7 @@
     "href": "slides/slides_9.html#space-time-covariates-1",
     "title": "Lecture 9",
     "section": "Space-time covariates",
-    "text": "Space-time covariates\n\nHave the covariate as a multilier spatraster object\n\n\n# The covariate\ncov_space_time\n\nclass       : SpatRaster \nsize        : 147, 147, 12  (nrow, ncol, nlyr)\nresolution  : 4.465128, 3.11244  (x, y)\nextent      : -465.4573, 190.9165, 7031.885, 7489.413  (xmin, xmax, ymin, ymax)\ncoord. ref. : +proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs \nsource(s)   : memory\nnames       :         1,         2,          3,         4,         5,         6, ... \nmin values  : -2.586361, -2.027349, -4.7008890, 0.1762663, -2.316774, -3.042322, ... \nmax values  :  1.404672,  1.370718,  0.7657611, 3.4306457,  1.247278,  1.140367, ... \n\n\n\n# The data frame\ndd_1[1:3,]\n\nSimple feature collection with 3 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -103.4191 ymin: 7460.922 xmax: -103.4191 ymax: 7460.922\nProjected CRS: +proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs +type=crs\n# A tibble: 3 × 3\n       Y  time             geometry\n   &lt;dbl&gt; &lt;dbl&gt;         &lt;POINT [km]&gt;\n1  0.182     1 (-103.4191 7460.922)\n2  1.78      5 (-103.4191 7460.922)\n3 -0.910     6 (-103.4191 7460.922)\n\n\nNote The layers names in the raster are the same as the elements of the column time in the data.",
+    "text": "Space-time covariates\n\nHave the covariate as a multilier spatraster object\n\n\n# The covariate\ncov_space_time\n\nclass       : SpatRaster \nsize        : 147, 147, 12  (nrow, ncol, nlyr)\nresolution  : 4.465128, 3.11244  (x, y)\nextent      : -465.4573, 190.9165, 7031.885, 7489.413  (xmin, xmax, ymin, ymax)\ncoord. ref. : +proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs \nsource(s)   : memory\nnames       :         1,          2,         3,         4,         5,          6, ... \nmin values  : -1.798686, -3.1575299, -2.536028, -2.980773, -1.196847, -1.9487483, ... \nmax values  :  2.686347,  0.1652645,  1.058536,  2.167979,  2.746749,  0.8337583, ... \n\n\n\n# The data frame\ndd_1[1:3,]\n\nSimple feature collection with 3 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -103.4191 ymin: 7460.922 xmax: -103.4191 ymax: 7460.922\nProjected CRS: +proj=utm +zone=23 +south +datum=WGS84 +units=km +no_defs +type=crs\n# A tibble: 3 × 3\n       Y  time             geometry\n   &lt;dbl&gt; &lt;dbl&gt;         &lt;POINT [km]&gt;\n1 -3.93      1 (-103.4191 7460.922)\n2 -0.563     5 (-103.4191 7460.922)\n3 -0.449     6 (-103.4191 7460.922)\n\n\nNote The layers names in the raster are the same as the elements of the column time in the data.",
     "crumbs": [
       "Home",
       "Slides",
@@ -3596,7 +3776,7 @@
     "href": "slides/slides_9.html#space-time-covariates-2",
     "title": "Lecture 9",
     "section": "Space-time covariates",
-    "text": "Space-time covariates\nImplementation\n\ncmp1 = ~ Intercept(1) +\n  time(time, model = \"rw2\") +\n  space(geometry, model = spde) +\n  cov(eval_spatial(cov_space_time, .data.,  time),  model = \"linear\")\n\nlik1 = bru_obs(formula =  Y~ .,\n              data = dd_1)\n\nfit_cov1 = bru(cmp1, lik1)\n\nround(fit_cov1$summary.fixed)\n\n          mean sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0  0          0        0          1    0   0\ncov         -1  0         -1       -1         -1   -1   0\n\n\nThe .data. indicates the data that are input in the bru_obs() function",
+    "text": "Space-time covariates\nImplementation\n\ncmp1 = ~ Intercept(1) +\n  time(time, model = \"rw2\") +\n  space(geometry, model = spde) +\n  cov(eval_spatial(cov_space_time, .data.,  time),  model = \"linear\")\n\nlik1 = bru_obs(formula =  Y~ .,\n              data = dd_1)\n\nfit_cov1 = bru(cmp1, lik1)\n\nround(fit_cov1$summary.fixed)\n\n          mean sd 0.025quant 0.5quant 0.975quant mode kld\nIntercept    0  0         -1        0          0    0   0\ncov         -1  0         -1       -1         -1   -1   0\n\n\nThe .data. indicates the data that are input in the bru_obs() function",
     "crumbs": [
       "Home",
       "Slides",
@@ -3688,11 +3868,35 @@
     ]
   },
   {
-    "objectID": "slides/slides_9.html#non-separable-models-in-inlabru",
-    "href": "slides/slides_9.html#non-separable-models-in-inlabru",
+    "objectID": "slides/slides_9.html#other-spatialspatio-temporal-models",
+    "href": "slides/slides_9.html#other-spatialspatio-temporal-models",
     "title": "Lecture 9",
-    "section": "Non-separable models in inlabru",
-    "text": "Non-separable models in inlabru\n\nSome non-separable models are implemented in inlabru. See\n\n\nLindgrenn et al., A diffusion-based spatio-temporal extension of Gaussian Matern &gt; fields (2024) SORT 48",
+    "section": "Other spatial/spatio-temporal models",
+    "text": "Other spatial/spatio-temporal models\n\nThe Barrier model\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\nThat could be interesting in many of your studies!!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 9"
+    ]
+  },
+  {
+    "objectID": "slides/slides_9.html#other-spatialspatio-temporal-models-1",
+    "href": "slides/slides_9.html#other-spatialspatio-temporal-models-1",
+    "title": "Lecture 9",
+    "section": "Other spatial/spatio-temporal models",
+    "text": "Other spatial/spatio-temporal models\n\nThe Barrier model\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\nThat could be interesting in many of your studies!!",
+    "crumbs": [
+      "Home",
+      "Slides",
+      "Lecture 9"
+    ]
+  },
+  {
+    "objectID": "slides/slides_9.html#other-spatialspatio-temporal-models-2",
+    "href": "slides/slides_9.html#other-spatialspatio-temporal-models-2",
+    "title": "Lecture 9",
+    "section": "Other spatial/spatio-temporal models",
+    "text": "Other spatial/spatio-temporal models\n\nThe Barrier model\n\nBakka et al. Non-stationary Gaussian models with physical barriers, Spatial Statistics (2019)\nThat could be interesting in many of your studies!!\n\nSome non-separable models are implemented in inlabru. See\n\nLindgrenn et al., A diffusion-based spatio-temporal extension of Gaussian Matern fields (2024) SORT 48\nHere they introduce a diffusion-type process that evolves in space and time.\n\nRational Approximations of Fractional SPDE\n\nDavid Bolin, Alexandre B. Simas, Zhen Xiong (2024), Covariance-based rational approximations of fractional SPDEs for computationally efficient Bayesian inference. Journal of Computational and Graphical Statistics, 33:1, 64-74\nAllows the estimation of the \\(\\nu\\) parameter. Comes with an R package rSPDE ()",
     "crumbs": [
       "Home",
       "Slides",
@@ -3716,7 +3920,7 @@
     "href": "slides/slides_12.html#two-main-solutions",
     "title": "Lecture 12",
     "section": "Two main solutions",
-    "text": "Two main solutions\nBoth handle excess zeros but use different assumptions about how zeros are generated.\n\nZero-Inflated Models\nHurdle Models",
+    "text": "Two main solutions\nBoth handle excess zeros but use different assumptions about how zeros are generated.\n\nZero-Inflated Models\nHurdle Models\n(Occurrence Models)",
     "crumbs": [
       "Home",
       "Slides",
@@ -3740,7 +3944,7 @@
     "href": "slides/slides_12.html#two-main-solutions-2",
     "title": "Lecture 12",
     "section": "Two main solutions",
-    "text": "Two main solutions\nBoth handle excess zeros but use different assumptions about how zeros are generated:\n\nZero-Inflated Models\n\nTwo sources of zero: inflation process or count process\n\nHurdle Models\n\nOnle one source of zeros",
+    "text": "Two main solutions\nBoth handle excess zeros but use different assumptions about how zeros are generated:\n\nZero-Inflated Models\n\nTwo sources of zero: inflation process or count process\n\nHurdle Models\n\nOne one source of zeros",
     "crumbs": [
       "Home",
       "Slides",
@@ -3796,11 +4000,11 @@
     ]
   },
   {
-    "objectID": "slides/slides_12.html#example-number-of-fishes-caught-by-fishermen-at-a-state-park.",
-    "href": "slides/slides_12.html#example-number-of-fishes-caught-by-fishermen-at-a-state-park.",
+    "objectID": "slides/slides_12.html#example",
+    "href": "slides/slides_12.html#example",
     "title": "Lecture 12",
-    "section": "Example: number of fishes caught by fishermen at a state park.",
-    "text": "Example: number of fishes caught by fishermen at a state park.\n\n\n  nofish persons child count\n1      1       1     0     0\n2      0       1     0     0\n3      0       1     0     0",
+    "section": "Example",
+    "text": "Example\nNumber of fishes caught by fishermen at a state park.\n\n\n  nofish persons child count\n1      1       1     0     0\n2      0       1     0     0\n3      0       1     0     0",
     "crumbs": [
       "Home",
       "Slides",
@@ -3836,7 +4040,7 @@
     "href": "slides/slides_12.html#example-implementation",
     "title": "Lecture 12",
     "section": "Example: Implementation",
-    "text": "Example: Implementation\n\n\nThe Model \\[\n\\begin{aligned}\n\\text{Model 1 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{Pois}(\\lambda(\\eta_i))\\\\\n\\text{Model 2 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{NegBin}(n(\\eta_i),p(\\eta_i))\\\\\n\\text{Linear Predictor }: \\eta_i & = \\color{red}{\\boxed{\\beta_0 + \\beta_1 x_{1i} + \\beta_2 x_{2i}}}\n\\end{aligned}\n\\]\n\n\nzinb[1:3,]\n\n  nofish persons child count\n1      1       1     0     0\n2      0       1     0     0\n3      0       1     0     0\n\n\n\nThe code\n\n# define model components\ncmp = ~ Intercept(1) + fishing(nofish, model = \"linear\") + \n  persons(persons, model = \"linear\") + \n  child(child, model = \"linear\")\n\n# define model predictor\nformula = count ~ .\n\n# build the observation model\n# Poisson model\nlik_pois = bru_obs(formula,\n                   family = \"zeroinflatedpoisson1\",\n                   data = zinb) \n\n# Negative binomial model\nlik_nbin = bru_obs(formula,\n                   family = \"zeroinflatednbinomial1\",\n                   data = zinb) \n\n# fit the model\nfit_pois = bru(cmp, lik_pois)\nfit_nbin = bru(cmp, lik_nbin)",
+    "text": "Example: Implementation\n\n\nThe Model \\[\n\\begin{aligned}\n\\text{Model 1 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{Pois}(\\lambda(\\eta_i))\\\\\n\\text{Model 2 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{NegBin}(n(\\eta_i),p(\\eta_i))\\\\\n\\text{Linear Predictor }: \\eta_i & = \\color{red}{\\boxed{\\beta_0 + \\beta_1 x_{1i} + \\beta_2 x_{2i}}}\n\\end{aligned}\n\\]\n\n\nzinb[1:3,]\n\n  nofish persons child count\n1      1       1     0     0\n2      0       1     0     0\n3      0       1     0     0\n\n\n\nThe code\n\n# define model components\ncmp = ~ Intercept(1) + fishing(nofish, model = \"linear\") +\n  persons(persons, model = \"linear\") +\n  child(child, model = \"linear\")\n# define model predictor\nformula = count ~ .\n# build the observation model\n# Poisson model\nlik_pois = bru_obs(formula,\n                   family = \"zeroinflatedpoisson1\",\n                   data = zinb)\n# Negative binomial model\nlik_nbin = bru_obs(formula,\n                   family = \"zeroinflatednbinomial1\",\n                   data = zinb)\n# fit the model\nfit_pois = bru(cmp, lik_pois)\nfit_nbin = bru(cmp, lik_nbin)",
     "crumbs": [
       "Home",
       "Slides",
@@ -3848,7 +4052,7 @@
     "href": "slides/slides_12.html#example-implementation-1",
     "title": "Lecture 12",
     "section": "Example: Implementation",
-    "text": "Example: Implementation\n\n\nThe Model \\[\n\\begin{aligned}\n\\text{Model 1 }:  \\color{red}{\\boxed{y_i|\\eta_i}} & \\color{red}{\\boxed{\\sim \\pi1_{(y=0)} + (1-\\pi)\\text{Pois}(\\lambda(\\eta_i))}}\\\\\n\\text{Model 2 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{NegBin}(n(\\eta_i),p(\\eta_i))\\\\\n\\text{Linear Predictor }: \\eta_i & = \\beta_0 + \\beta_1 x_{1i} + \\beta_2 x_{2i}\n\\end{aligned}\n\\]\n\n\nzinb[1:3,]\n\n  nofish persons child count\n1      1       1     0     0\n2      0       1     0     0\n3      0       1     0     0\n\n\n\nThe code\n\n# define model components\ncmp = ~ Intercept(1) + fishing(nofish, model = \"linear\") + \n  persons(persons, model = \"linear\") + \n  child(child, model = \"linear\")\n\n# define model predictor\nformula = count ~ .\n\n# build the observation model\n# Poisson model\nlik_pois = bru_obs(formula,\n                   family = \"zeroinflatedpoisson1\",\n                   data = zinb) \n\n# Negative binomial model\nlik_nbin = bru_obs(formula,\n                   family = \"zeroinflatednbinomial1\",\n                   data = zinb) \n\n# fit the model\nfit_pois = bru(cmp, lik_pois)\nfit_nbin = bru(cmp, lik_nbin)",
+    "text": "Example: Implementation\n\n\nThe Model \\[\n\\begin{aligned}\n\\text{Model 1 }:  \\color{red}{\\boxed{y_i|\\eta_i}} & \\color{red}{\\boxed{\\sim \\pi1_{(y=0)} + (1-\\pi)\\text{Pois}(\\lambda(\\eta_i))}}\\\\\n\\text{Model 2 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{NegBin}(n(\\eta_i),p(\\eta_i))\\\\\n\\text{Linear Predictor }: \\eta_i & = \\beta_0 + \\beta_1 x_{1i} + \\beta_2 x_{2i}\n\\end{aligned}\n\\]\n\n\nzinb[1:3,]\n\n  nofish persons child count\n1      1       1     0     0\n2      0       1     0     0\n3      0       1     0     0\n\n\n\nThe code\n\n# define model components\n\ncmp = ~ Intercept(1) + fishing(nofish, model = \"linear\") +\n  persons(persons, model = \"linear\") +\n  child(child, model = \"linear\")\n# define model predictor\nformula = count ~ .\n# build the observation model\n# Poisson model\nlik_pois = bru_obs(formula,\n                   family = \"zeroinflatedpoisson1\",\n                   data = zinb)\n# Negative binomial model\nlik_nbin = bru_obs(formula,\n                   family = \"zeroinflatednbinomial1\",\n                   data = zinb)\n# fit the model\nfit_pois = bru(cmp, lik_pois)\nfit_nbin = bru(cmp, lik_nbin)",
     "crumbs": [
       "Home",
       "Slides",
@@ -3860,7 +4064,7 @@
     "href": "slides/slides_12.html#example-implementation-2",
     "title": "Lecture 12",
     "section": "Example: Implementation",
-    "text": "Example: Implementation\n\n\nThe Model \\[\n\\begin{aligned}\n\\text{Model 1 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{Pois}(\\lambda(\\eta_i))\\\\\n\\text{Model 2 }:  \\color{red}{\\boxed{y_i|\\eta_i}} & \\color{red}{\\boxed{\\sim \\pi1_{(y=0)} + (1-\\pi)\\text{NegBin}(n(\\eta_i),p(\\eta_i))}}\\\\\n\\text{Linear Predictor }: \\eta_i & = \\beta_0 + \\beta_1 x_{1i} + \\beta_2 x_{2i}\n\\end{aligned}\n\\]\n\n\nzinb[1:3,]\n\n  nofish persons child count\n1      1       1     0     0\n2      0       1     0     0\n3      0       1     0     0\n\n\n\nThe code\n\nbru_options_set(control.compute = list(dic = T, waic = T, mlik = T))\n# define model components\ncmp = ~ Intercept(1) + fishing(nofish, model = \"linear\") + \n  persons(persons, model = \"linear\") + \n  child(child, model = \"linear\")\n\n# define model predictor\nformula = count ~ .\n\n# build the observation model\n# Poisson model\nlik_pois = bru_obs(formula,\n                   family = \"zeroinflatedpoisson1\",\n                   data = zinb) \n\n# Negative binomial model\nlik_nbin = bru_obs(formula,\n                   family = \"zeroinflatednbinomial1\",\n                   data = zinb) \n\n# fit the model\nfit_pois = bru(cmp, lik_pois)\nfit_nbin = bru(cmp, lik_nbin)",
+    "text": "Example: Implementation\n\n\nThe Model \\[\n\\begin{aligned}\n\\text{Model 1 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{Pois}(\\lambda(\\eta_i))\\\\\n\\text{Model 2 }:  \\color{red}{\\boxed{y_i|\\eta_i}} & \\color{red}{\\boxed{\\sim \\pi1_{(y=0)} + (1-\\pi)\\text{NegBin}(n(\\eta_i),p(\\eta_i))}}\\\\\n\\text{Linear Predictor }: \\eta_i & = \\beta_0 + \\beta_1 x_{1i} + \\beta_2 x_{2i}\n\\end{aligned}\n\\]\n\n\nzinb[1:3,]\n\n  nofish persons child count\n1      1       1     0     0\n2      0       1     0     0\n3      0       1     0     0\n\n\n\nThe code\n\nbru_options_set(control.compute = list(dic = T, waic = T, mlik = T))\n# define model components\ncmp = ~ Intercept(1) + fishing(nofish, model = \"linear\") +\n  persons(persons, model = \"linear\") +\n  child(child, model = \"linear\")\n# define model predictor\nformula = count ~ .\n# build the observation model\n# Poisson model\nlik_pois = bru_obs(formula,\n                   family = \"zeroinflatedpoisson1\",\n                   data = zinb)\n# Negative binomial model\nlik_nbin = bru_obs(formula,\n                   family = \"zeroinflatednbinomial1\",\n                   data = zinb)\n# fit the model\nfit_pois = bru(cmp, lik_pois)\nfit_nbin = bru(cmp, lik_nbin)",
     "crumbs": [
       "Home",
       "Slides",
@@ -3908,7 +4112,7 @@
     "href": "slides/slides_12.html#comparing-estimated-distribution---implementation",
     "title": "Lecture 12",
     "section": "Comparing estimated distribution - Implementation",
-    "text": "Comparing estimated distribution - Implementation\n\ndf_pred = data.frame(nofish = 0, persons = 1, child = 0)\n\nprob_pois = predict(fit_pois, df_pred,\n        formula = ~ {\n          pi0 &lt;- zero_probability_parameter_for_zero_inflated_poisson_1\n          lambda = exp(Intercept +  fishing + persons + child)\n          yy = 0:20\n          list(\n            prob0 =  pi0 * c(1,rep(0,20)) + (1-pi0) * dpois(yy, lambda = lambda))\n          } )\n\nprob_nbin = predict(fit_nbin, df_pred,\n        formula = ~ {\n          pi0 &lt;- zero_probability_parameter_for_zero_inflated_nbinomial_1\n          size = exp(size_for_nbinomial_1_zero_inflated_observations)\n          mu = exp(Intercept +  fishing + persons + child)\n          p = size/(size + mu)\n          yy = 0:20\n          list(prob0 = pi0 * c(1,rep(0,20)) + (1-pi0) * dnbinom(yy,size = size, mu = mu))\n        })",
+    "text": "Comparing estimated distribution - Implementation\n\ndf_pred = data.frame(nofish = 0, persons = 1, child = 0)\nprob_pois = predict(fit_pois, df_pred,\n        formula = ~ {\n          pi0 &lt;- zero_probability_parameter_for_zero_inflated_poisson_1\n          lambda = exp(Intercept +  fishing + persons + child)\n          yy = 0:20\n          list(\n            prob0 =  pi0 * c(1,rep(0,20)) + (1-pi0) * dpois(yy, lambda = lambda))\n          } )\n\nprob_nbin = predict(fit_nbin, df_pred,\n        formula = ~ {\n          pi0 &lt;- zero_probability_parameter_for_zero_inflated_nbinomial_1\n          size = exp(size_for_nbinomial_1_zero_inflated_observations)\n          mu = exp(Intercept +  fishing + persons + child)\n          p = size/(size + mu)\n          yy = 0:20\n          list(prob0 = pi0 * c(1,rep(0,20)) + (1-pi0) * dnbinom(yy,size = size, mu = mu))\n        })",
     "crumbs": [
       "Home",
       "Slides",
@@ -3920,7 +4124,7 @@
     "href": "slides/slides_12.html#comparing-estimated-distribution---implementation-1",
     "title": "Lecture 12",
     "section": "Comparing estimated distribution - Implementation",
-    "text": "Comparing estimated distribution - Implementation\nNote: To get the names to input in predict use the bru_standardise_names() function:\n\ninlabru::bru_standardise_names(fit_pois)",
+    "text": "Comparing estimated distribution - Implementation\nNote: To get the names to input in predict use the bru_names() function:\n\ninlabru::bru_names(fit_pois)\n\n                                               Intercept \n                                             \"Intercept\" \n                                                 fishing \n                                               \"fishing\" \n                                                 persons \n                                               \"persons\" \n                                                   child \n                                                 \"child\" \n  zero-probability parameter for zero-inflated poisson_1 \n\"zero_probability_parameter_for_zero_inflated_poisson_1\"",
     "crumbs": [
       "Home",
       "Slides",
@@ -3956,7 +4160,7 @@
     "href": "slides/slides_12.html#example-strategy-1-implementation",
     "title": "Lecture 12",
     "section": "Example Strategy 1: Implementation",
-    "text": "Example Strategy 1: Implementation\n\n\nThe Model \\[\n\\begin{aligned}\n\\text{Model 1 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{TruncPois}(\\lambda(\\eta_i))\\\\\n\\text{Model 2 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{TruncNegBin}(n(\\eta_i),p(\\eta_i))\\\\\n\\text{Linear Predictor }: \\eta_i & = \\beta_0 + \\beta_1 x_{1i} + \\beta_2 x_{2i}\n\\end{aligned}\n\\]\n\n\nzinb[1:3,]\n\n  nofish persons child count\n1      1       1     0     0\n2      0       1     0     0\n3      0       1     0     0\n\n\n\nThe code\n\n# define model components\ncmp = ~ Intercept(1) + fishing(nofish, model = \"linear\") + \n  persons(persons, model = \"linear\") + \n  child(child, model = \"linear\")\n\n# define model predictor\nformula = count ~ .\n\n# build the observation model\n# Poisson model\nlik_pois = bru_obs(formula,\n                   family = \"zeroinflatedpoisson0\",\n                   data = zinb) \n\n# Negative binomial model\nlik_nbin = bru_obs(formula,\n                   family = \"zeroinflatednbinomial0\",\n                   data = zinb) \n\n# fit the model\nfit_pois0 = bru(cmp, lik_pois)\nfit_nbin0 = bru(cmp, lik_nbin)",
+    "text": "Example Strategy 1: Implementation\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\text{Model 1 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{TruncPois}(\\lambda(\\eta_i))\\\\\n\\text{Model 2 }:  y_i|\\eta_i & \\sim \\pi1_{(y=0)} + (1-\\pi)\\text{TruncNegBin}(n(\\eta_i),p(\\eta_i))\\\\\n\\text{Linear Predictor }: \\eta_i & = \\beta_0 + \\beta_1 x_{1i} + \\beta_2 x_{2i}\n\\end{aligned}\n\\]\n\n\nzinb[1:3,]\n\n  nofish persons child count\n1      1       1     0     0\n2      0       1     0     0\n3      0       1     0     0\n\n\n\nThe code\n\n# define model components\ncmp = ~ Intercept(1) + fishing(nofish, model = \"linear\") +\n  persons(persons, model = \"linear\") +\n  child(child, model = \"linear\")\n\n# define model predictor\nformula = count ~ .\n# build the observation model\n# Poisson model\nlik_pois = bru_obs(formula,\n                   family = \"zeroinflatedpoisson0\",\n                   data = zinb)\n# Negative binomial model\nlik_nbin = bru_obs(formula,\n                   family = \"zeroinflatednbinomial0\",\n                   data = zinb)\n# fit the model\nfit_pois0 = bru(cmp, lik_pois)\nfit_nbin0 = bru(cmp, lik_nbin)",
     "crumbs": [
       "Home",
       "Slides",
@@ -4004,7 +4208,7 @@
     "href": "slides/slides_12.html#example---gamma-hurdle-model",
     "title": "Lecture 12",
     "section": "Example - Gamma-Hurdle model",
-    "text": "Example - Gamma-Hurdle model\nDaily precipitation in Parana state\n\n\n\\[\nz_{st} = \\left\\{\n\\begin{eqnarray}\n0 & \\text{ if } &\\text{ no rain on day } t \\text{ at station } s\\\\\n1 & \\text{ if } &\\text{  rain on day } t \\text{ at station } s\n\\end{eqnarray}\n\\right.\n\\]\n\\[\ny_{st} = \\left\\{\n\\begin{eqnarray}\n\\text{NA} \\text{ if } && \\text{ no rain on day } t  \\text{ at station } s\\\\\n\\text{rain amout} \\text{ if } && \\text{  rain on day } t  \\text{ at station } s\n\\end{eqnarray}\n\\right.\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\[\nz_{st}\\sim \\text{Binom}(p_{st}, n_{st} = 1); \\qquad y_{st}|z_{st}=1\\sim\\text{Gamma}(a,b) \\ \\text{with}\\  E(y_{st}) = \\mu_{st} =  a/b\n\\] Where \\[\n\\begin{eqnarray}\n\\eta_t^1 & = \\text{logit}(p_t)  & = \\beta_0^B+u^B(s) \\\\\n\\eta_t^2 & = \\log(\\mu_t)& = \\beta_0^G+u^G(s)\n\\end{eqnarray}\n\\]",
+    "text": "Example - Gamma-Hurdle model\nDaily precipitation in Parana state\n\n\n\\[\nz_{st} = \\left\\{\n\\begin{eqnarray}\n0 & \\text{ if } &\\text{ no rain on day } t \\text{ at station } s\\\\\n1 & \\text{ if } &\\text{  rain on day } t \\text{ at station } s\n\\end{eqnarray}\n\\right.\n\\]\n\\[\ny_{st} = \\left\\{\n\\begin{eqnarray}\n\\text{NA} \\text{ if } && \\text{ no rain on day } t  \\text{ at station } s\\\\\n\\text{rain amout} \\text{ if } && \\text{  rain on day } t  \\text{ at station } s\n\\end{eqnarray}\n\\right.\n\\]\n\\[\n\\begin{eqnarray}\nz_{st} & \\sim \\text{Binom}(p_{st}, n_{st} = 1);\\\\\n(y_{st}|z_{st}=1) &\\sim\\text{Gamma}(a,b) \\\\\nE(y_{st}) &= \\mu_{st} =  a/b\n\\end{eqnarray}\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\text{Where}: \\qquad\n\\begin{eqnarray}\n\\eta_t^1 & = \\text{logit}(p_t)  & = \\beta_0^B+u^B(s) \\\\\n\\eta_t^2 & = \\log(\\mu_t)& = \\beta_0^G+u^G(s)\n\\end{eqnarray}\n\\]",
     "crumbs": [
       "Home",
       "Slides",
@@ -4064,7 +4268,7 @@
     "href": "slides/slides_12.html#example---poisson--hurdle-model-1",
     "title": "Lecture 12",
     "section": "Example - Poisson- Hurdle model",
-    "text": "Example - Poisson- Hurdle model\nImplementation\n\nDefine response for binary and truncated poisson process\n\n\nzinb  = zinb %&gt;%\n  mutate(z = ifelse(count==0,1,0),\n         y = ifelse(count==0,NA, count))\n\n\nDefine components, observation models and run\n\n\ncmp = ~ -1 + Intercept_z(1) + Intercept_y(1) +\n  nofish_z(nofish, model = \"linear\") + persons_z(persons, model = \"linear\") +\n    nofish_y(nofish, model = \"linear\") + persons_y(persons, model = \"linear\")\n\nlik_z = bru_obs(formula = z~ Intercept_z  + nofish_z + persons_z,\n                data = zinb,\n                family = \"binomial\")\n\nlik_y = bru_obs(formula = y~ Intercept_y  + nofish_y + persons_y,\n                data = zinb,\n                family = \"nzpoisson\")\n\nfit = bru(cmp, lik_z, lik_y)",
+    "text": "Example - Poisson- Hurdle model\nImplementation\n\nDefine response for binary and truncated poisson process\n\n\nzinb  = zinb %&gt;%\n  mutate(z = ifelse(count==0,1,0),\n         y = ifelse(count==0,NA, count))\n\n\nDefine components, observation models and run\n\n\ncmp = ~ -1 + Intercept_z(1) + Intercept_y(1) +\n  nofish_z(nofish, model = \"linear\") + persons_z(persons, model = \"linear\") +\n    nofish_y(nofish, model = \"linear\") + persons_y(persons, model = \"linear\")\nlik_z = bru_obs(formula = z~ Intercept_z  + nofish_z + persons_z,\n                data = zinb,\n                family = \"binomial\")\nlik_y = bru_obs(formula = y~ Intercept_y  + nofish_y + persons_y,\n                data = zinb,\n                family = \"nzpoisson\")\nfit = bru(cmp, lik_z, lik_y)",
     "crumbs": [
       "Home",
       "Slides",
@@ -4100,7 +4304,7 @@
     "href": "slides/slides_12.html#example-binomial-hurdle-model-1",
     "title": "Lecture 12",
     "section": "Example: Binomial-Hurdle model",
-    "text": "Example: Binomial-Hurdle model\nImplementation\n\nDefine response and the components\n\n\n# Define response for binary and truncated neg. binomial\nzinb  = zinb %&gt;% mutate(z = ifelse(count==0,1,0),\n                        y = ifelse(count==0,NA, count))\n# define model components\ncmp = ~ -1 + Intercept_z(1) + Intercept_y(1) + \n  fishing_z(nofish, model = \"linear\") + fishing_y(nofish, model = \"linear\") + \n  persons_z(persons, model = \"linear\") + persons_y(persons, model = \"linear\") + \n  child_z(child, model = \"linear\") + child_y(child, model = \"linear\")\n\n\n\nBuild the likelihood for the binomial part\n\n\n# build the observation model\n# Poisson model\nlik_binom = bru_obs(z ~ Intercept_z + fishing_z + persons_z + child_z ,\n                   family = \"binomial\",\n                   data = zinb) \n\n\n\n\nDefine the type 0 Negbinomial with \\(\\pi\\) fixed to a small value\n\n\n# Negative binomial model\nlik_trunc_nbin = bru_obs(y ~ Intercept_y + fishing_y + persons_y + child_y ,\n                   family = \"zeroinflatednbinomial0\",\n                   data = zinb,\n                   control.family = list(hyper = list(theta = list(initial = -20, \n                                                                   fixed = TRUE))))\n\n\n\n\nRun the model\n\n\nfit_nbin = bru(cmp, lik_binom, lik_trunc_nbin)",
+    "text": "Example: Binomial-Hurdle model\nImplementation\n\nDefine response and the components\n\n\n# Define response for binary and truncated neg. binomial\nzinb  = zinb %&gt;% mutate(z = ifelse(count==0,1,0),\n                        y = ifelse(count==0,NA, count))\n# define model components\ncmp = ~ -1 + Intercept_z(1) + Intercept_y(1) +\n  fishing_z(nofish, model = \"linear\") + fishing_y(nofish, model = \"linear\") +\n  persons_z(persons, model = \"linear\") + persons_y(persons, model = \"linear\") +\n  child_z(child, model = \"linear\") + child_y(child, model = \"linear\")\n\n\n\nBuild the likelihood for the binomial part\n\n\n# build the observation model Poisson model\nlik_binom = bru_obs(z ~ Intercept_z + fishing_z + persons_z + child_z ,\n                   family = \"binomial\",\n                   data = zinb)\n\n\n\n\nDefine the type 0 Negbinomial with \\(\\pi\\) fixed to a small value\n\n\n# Negative binomial model\nlik_trunc_nbin = bru_obs(y ~ Intercept_y + fishing_y + persons_y + child_y ,\n                   family = \"zeroinflatednbinomial0\",\n                   data = zinb,\n                   control.family = list(hyper = list(theta = list(initial = -20,fixed = TRUE))))\n\n\n\n\nRun the model\n\n\nfit_nbin = bru(cmp, lik_binom, lik_trunc_nbin)",
     "crumbs": [
       "Home",
       "Slides",
@@ -4108,11 +4312,11 @@
     ]
   },
   {
-    "objectID": "slides/slides_12.html#summary---treating-many-zero-with-inlabru",
-    "href": "slides/slides_12.html#summary---treating-many-zero-with-inlabru",
+    "objectID": "slides/slides_12.html#true-and-false-zeros",
+    "href": "slides/slides_12.html#true-and-false-zeros",
     "title": "Lecture 12",
-    "section": "Summary - Treating many zero with inlabru",
-    "text": "Summary - Treating many zero with inlabru\nThere are mainly two types of models to treat excess of zeros\n\nZero inflated models\nHurdle models",
+    "section": "True and false zeros",
+    "text": "True and false zeros",
     "crumbs": [
       "Home",
       "Slides",
@@ -4120,11 +4324,11 @@
     ]
   },
   {
-    "objectID": "slides/slides_12.html#summary---treating-many-zero-with-inlabru-1",
-    "href": "slides/slides_12.html#summary---treating-many-zero-with-inlabru-1",
+    "objectID": "slides/slides_12.html#true-and-false-zeros-1",
+    "href": "slides/slides_12.html#true-and-false-zeros-1",
     "title": "Lecture 12",
-    "section": "Summary - Treating many zero with inlabru",
-    "text": "Summary - Treating many zero with inlabru\nThere are mainly two types of models to treat excess of zeros\n\nZero inflated models\n\nZeros come from two sources\nCan only be used for counts (Poisson, Binomial,…)\nFour likelihood are implemented in inlabru (Type1)\nThe probability of zero-inflation is constant\n\nHurdle models",
+    "section": "True and false zeros",
+    "text": "True and false zeros",
     "crumbs": [
       "Home",
       "Slides",
@@ -4132,11 +4336,11 @@
     ]
   },
   {
-    "objectID": "slides/slides_12.html#summary---treating-many-zero-with-inlabru-2",
-    "href": "slides/slides_12.html#summary---treating-many-zero-with-inlabru-2",
+    "objectID": "slides/slides_12.html#occupancy-models",
+    "href": "slides/slides_12.html#occupancy-models",
     "title": "Lecture 12",
-    "section": "Summary - Treating many zero with inlabru",
-    "text": "Summary - Treating many zero with inlabru\nThere are mainly two types of models to treat excess of zeros\n\nZero inflated models\nHurdle models\n\nOnly one source of zeros\nPositive values can be both discrete and continuous\nTwo ways to imlement in inlabru",
+    "section": "Occupancy models",
+    "text": "Occupancy models\nBasic idea Data contain information about two processes:\n\nThe species occupacy (biological process)\nThe detection (observation process)\n\nBasic model form\n\nBiological process \\[\n      Z_i\\sim\\text{Bernoulli}(\\phi_i),\\qquad i = 1,\\dots, M\\ \\ (\\text{Number of sites})\n\\]\n\nObservation process \\[       \nd_{ij}\\ |Z_i=z_i\\sim\\text{Bernoulli}(z_i\\ p_{ij}), \\qquad j = 1,\\dots, K_i\\ \\ (\\text{Number of visits at site } i)\n\\] Note The model requires multiple visits per site to be identifiable",
     "crumbs": [
       "Home",
       "Slides",
@@ -4144,11 +4348,11 @@
     ]
   },
   {
-    "objectID": "slides/slides_12.html#summary---treating-many-zero-with-inlabru-3",
-    "href": "slides/slides_12.html#summary---treating-many-zero-with-inlabru-3",
+    "objectID": "slides/slides_12.html#the-occupancy-model",
+    "href": "slides/slides_12.html#the-occupancy-model",
     "title": "Lecture 12",
-    "section": "Summary - Treating many zero with inlabru",
-    "text": "Summary - Treating many zero with inlabru\nThere are mainly two types of models to treat excess of zeros\n\nZero inflated models\nHurdle models\n\nOnly one source of zeros\nPositive values can be both discrete and continuous\nTwo ways to imlement in inlabru\n\nUse the implemented Type0 likelihoods\n\n\n\nProbability of zero is constant\n\n\nUse the “two-likelihood” approach\n\n\nProbability of zero can be modelled",
+    "section": "The Occupancy model",
+    "text": "The Occupancy model\nFor a set of set of \\(M\\) discrete sites, let the detection history of the \\(i\\)th site \\(\\mathbf{d}_i= d_{i1},\\ldots,d_{iK}\\).\nThe joint likelihood is then:\n\\[\nL(\\psi,p|\\mathbf{d}_1,\\ldots,\\mathbf{d}_M) = \\underbrace{\\left[\\prod_{i=1}^{m} \\phi_i \\prod_j^{K_i} p_{ij}^{d_{ij}} (1-p_{ij})^{1-d_{ij}}\\right]}_{\\text{sites with at least one 1}}\\underbrace{\\prod_{i=m+1}^M\\left[\\phi_i\\prod_j^{K_i}(1-p_{ij})+(1-\\phi_i)\\right]}_{\\text{sites with only 0}}\n\\] If we assume that \\(p_{ij}=p_i\\) and let \\(y_i = \\sum_j\\ d_{ij}\\) then:\n\\[    \nL(\\psi,p|\\mathbf{d}_1,\\ldots,\\mathbf{d}_M)=\\prod_{i=1}^{M} \\left[\\phi_i\\ p_i^{y_i}(1-p_i)^{K_i-y_i}+\nI_{y_i=0}(1-\\phi_i)\\right]\n\\]\n\nThis is almost a Binomial Zero Inflated Model (ZIP) but now we are often more interested in \\(\\phi\\) (probability of presence) than in \\(p\\) (probabilisty of detection)\nWe often want to have some covariates in the detection probability\nCan we use INLA to fit this model?",
     "crumbs": [
       "Home",
       "Slides",
@@ -4156,267 +4360,123 @@
     ]
   },
   {
-    "objectID": "slides/slides_4.html#some-inlabru-shortcuts",
-    "href": "slides/slides_4.html#some-inlabru-shortcuts",
-    "title": "Lecture 3",
-    "section": "Some inlabru shortcuts",
-    "text": "Some inlabru shortcuts\nIn the slides we have fitted the model as:\n\ncmp = ~ -1 + beta0(1) beta1(covariate, model = \"linear\")\nformula = y ~ beta0 + beta1\nlik = bru_obs(formula = formula,\n              famuly  = \"gaussian\",\n              data = df)\nfit = bry(cmp, lik)\n\nbut in the practical you have\n\ncmp = ~ -1 + beta0(1) beta1(covariate, model = \"linear\")\n\nlik = bru_obs(formula = y~.,\n              famuly  = \"gaussian\",\n              data = df)\nfit = bry(cmp, lik)\n\n\n\nYou don’t have to define a formula outside of the bru_obs() function..it can be defines also inside the function!\n\n\n\n\nThe expression y ~ . just means “take all the components and sum them together”. It also tells the bru() function that your predictor is linear.",
+    "objectID": "slides/slides_12.html#the-occupancy-model-1",
+    "href": "slides/slides_12.html#the-occupancy-model-1",
+    "title": "Lecture 12",
+    "section": "The Occupancy model",
+    "text": "The Occupancy model\n\\[    \nL(\\psi,p|\\mathbf{d}_1,\\ldots,\\mathbf{d}_M)=\\prod_{i=1}^{M} \\left[\\phi_i p_i^{y_i}(1-p_i)^{K_i-y_i}+\nI_{y_i=0}(1-\\phi_i)\\right]\n\\]\n\nLGM if we assume \\(\\eta =g(p)\\) or \\(\\eta = g(\\phi)\\) Gaussian\n\\(\\phi\\) or \\(p\\) (not both!) can be linked to the linear predictor \\(\\eta\\) . . .\nWhat does this mean?\n\nWe can have complicated (with random effects) model for either \\(p\\) of \\(\\phi\\)\nThe other parameter can only have some (not too many) linear covariates as components\n\n\n\n\nThe likelihood 0binomialS allows for exactly that",
     "crumbs": [
       "Home",
       "Slides",
-      "Lecture 3"
+      "Lecture 12"
     ]
   },
   {
-    "objectID": "slides/slides_4.html#predict-and-generate-functions",
-    "href": "slides/slides_4.html#predict-and-generate-functions",
-    "title": "Lecture 3",
-    "section": "predict() and generate() functions",
-    "text": "predict() and generate() functions\nIn the practicals you have used the predict() function to get results from the fitted model.\n\npredict() simulates from the fitted posterior distribution \\(\\pi(\\mathbf{y}|\\mathbf{u},\\theta)\\), computes what you ask and produces a summary of the samples (mean, sd, quantiles, etc)\ngenerate() simulates from the fitted posterior distribution \\(\\pi(\\mathbf{y}|\\mathbf{u},\\theta)\\), computes what you ask and return the samples!",
+    "objectID": "slides/slides_12.html#occupancy-models---example",
+    "href": "slides/slides_12.html#occupancy-models---example",
+    "title": "Lecture 12",
+    "section": "Occupancy models - Example",
+    "text": "Occupancy models - Example\nModelling the spatio-temporal distribution of the Red-eyed Vireo in the Hubbard Brook Experimental Forest, New Hampshire, USA\n\\[\n\\begin{aligned}\n&\\text{Occupancy}\\\\\nz_{t}(s) & \\sim \\text{Bernoulli}(\\phi_t(s))\\\\\n\\text{logit}(\\phi_t(s)) & = \\eta_t(s) = \\text{fixed + random effects}\\\\\n&\\text{Detection}\\\\\ny_{ti}(s)| z_{t}(s) & \\sim \\text{Binomial}(z_{t}(s) \\times p_{ti}(s))\\\\\n\\text{logit}(p_{ti}(s)) & = \\alpha_0  + \\alpha_1\\ \\text{julian_day}+ \\alpha_2\\ \\text{hour_of_the_day}\n\\end{aligned}\n\\]",
     "crumbs": [
       "Home",
       "Slides",
-      "Lecture 3"
+      "Lecture 12"
     ]
   },
   {
-    "objectID": "slides/slides_4.html#example-3",
-    "href": "slides/slides_4.html#example-3",
-    "title": "Lecture 3",
-    "section": "Example",
-    "text": "Example\nLet’s go back to the Triceps skinfold thickness example.\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\omega(\\text{age}_i)\\\\\n\\omega(\\text{age}_i) & \\sim \\text{GF}(\\rho_{\\omega},\\sigma_{\\omega})\n\\end{aligned}\n\\]\n\n\ntriceps = read_csv(\"Data/triceps.csv\")\ntriceps[1:3,c(1,3)]\n\n# A tibble: 3 × 2\n    age triceps\n  &lt;dbl&gt;   &lt;dbl&gt;\n1 12.1     3.40\n2  9.91    4   \n3 10.0     4.20\n\n\n\nThe code\n\n#|\nlocs = seq(-5,60,5)\nmesh1d = fm_mesh_1d(locs, degree = 2, boundary = \"neumann\")\n\nspde &lt;- inla.spde2.pcmatern(mesh1d,\n  prior.range = c(10, 0.5),\n  prior.sigma = c(1, 0.5))\n\ncmp &lt;- ~ Intercept(1) +  field(age, model = spde)\nlik_spde = bru_obs(formula = triceps ~.,data = triceps)\nfit_spde = bru(cmp, lik_spde)",
+    "objectID": "slides/slides_12.html#occupancy-models---example-1",
+    "href": "slides/slides_12.html#occupancy-models---example-1",
+    "title": "Lecture 12",
+    "section": "Occupancy models - Example",
+    "text": "Occupancy models - Example",
     "crumbs": [
       "Home",
       "Slides",
-      "Lecture 3"
+      "Lecture 12"
     ]
   },
   {
-    "objectID": "slides/slides_4.html#example-4",
-    "href": "slides/slides_4.html#example-4",
-    "title": "Lecture 3",
-    "section": "Example",
-    "text": "Example\nLet’s go back to the Triceps skinfold thickness example.\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\omega(\\text{age}_i)\\\\\n\\omega(\\text{age}_i) & \\sim \\text{GF}(\\rho_{\\omega},\\sigma_{\\omega})\n\\end{aligned}\n\\]\n\n\ntriceps = read_csv(\"Data/triceps.csv\")\ntriceps[1:3,c(1,3)]\n\n# A tibble: 3 × 2\n    age triceps\n  &lt;dbl&gt;   &lt;dbl&gt;\n1 12.1     3.40\n2  9.91    4   \n3 10.0     4.20\n\n\n\nThe code\n\nlocs = seq(-5,60,5)\nmesh1d = fm_mesh_1d(locs, degree = 2, boundary = \"neumann\")\n\nspde &lt;- inla.spde2.pcmatern(mesh1d,\n  prior.range = c(10, 0.5),\n  prior.sigma = c(1, 0.5))\n\ncmp &lt;- ~ Intercept(1) +  field(age, model = spde)\nlik_spde = bru_obs(formula = triceps ~.,data = triceps)\nfit_spde = bru(cmp, lik_spde)",
+    "objectID": "slides/slides_12.html#occupancy-models---example-2",
+    "href": "slides/slides_12.html#occupancy-models---example-2",
+    "title": "Lecture 12",
+    "section": "Occupancy models - Example",
+    "text": "Occupancy models - Example",
     "crumbs": [
       "Home",
       "Slides",
-      "Lecture 3"
+      "Lecture 12"
     ]
   },
   {
-    "objectID": "slides/slides_4.html#example---predict",
-    "href": "slides/slides_4.html#example---predict",
-    "title": "Lecture 3",
-    "section": "Example - predict()",
-    "text": "Example - predict()\n\npreds1 = predict(object = fit, newdata = Tokyo, ~ time)\npreds2 = predict(object = fit, newdata = Tokyo, ~ Intercept + time)\ninv_logit = function(x) ((1 + exp(-x))^(-1))\npreds3 = predict(object = fit, newdata = Tokyo, ~ inv_logit(Intercept + time))\n\nor\n\ninv_logit = function(x) ((1 + exp(-x))^(-1))\npreds = predict(object = fit, newdata = Tokyo, \n                ~ data.frame(time_eff = time,\n                             lin_pred = Intercept + time,\n                             probs = inv_logit(Intercept + time)),\n                n.samples = 1000\n                )\n# preds is then a list                \nround(preds$probs[1:3,],3)\n\n  y n time  mean    sd q0.025  q0.5 q0.975 median sd.mc_std_err mean.mc_std_err\n1 0 2    1 0.178 0.087  0.058 0.162  0.392  0.162         0.003           0.003\n2 0 2    2 0.176 0.082  0.061 0.161  0.371  0.161         0.002           0.003\n3 1 2    3 0.173 0.077  0.063 0.160  0.361  0.160         0.002           0.003",
+    "objectID": "slides/slides_12.html#occupancy-models---example-3",
+    "href": "slides/slides_12.html#occupancy-models---example-3",
+    "title": "Lecture 12",
+    "section": "Occupancy models - Example",
+    "text": "Occupancy models - Example\nThe code is a bit more complicated than usual….but ask for details if you are interested 😀\n\ndata &lt;- st_as_sf(data.frame(scale_elev = scale(input$Xocc[,1]),\n                            coord1 = input$coord[,1],\n                            coord2 = input$coord[,2]),coords = c(\"coord1\", \"coord2\"))\nresponse_data &lt;- list(Y = input$Y, Int_det = 1, n = 3, X = input$X)\n\nformula &lt;-  inla.mdata(cbind(Y, n),Int_det=Int_det, X=X) ~ 0 + Int_occ(1, prec.linear = 1) +\n  scale_elev(scale_elev, prec.linear = 1) + spatialfield(geometry, model = spde)\n\nfit &lt;- bru(\n  formula,\n  family = \"0binomialS\",\n  data = data,\n  response_data = response_data,\n  control.family = list(control.link = list(model = \"logit\")))",
     "crumbs": [
       "Home",
       "Slides",
-      "Lecture 3"
+      "Lecture 12"
     ]
   },
   {
-    "objectID": "slides/slides_4.html#example---predict-1",
-    "href": "slides/slides_4.html#example---predict-1",
-    "title": "Lecture 3",
-    "section": "Example - predict()",
-    "text": "Example - predict()\n\npreds$probs %&gt;% ggplot() + geom_line(aes(time, mean)) +\n  geom_ribbon(aes(time, ymin = q0.025, ymax = q0.975), alpha = 0.5)",
+    "objectID": "slides/slides_12.html#summary---treating-with-many-zero",
+    "href": "slides/slides_12.html#summary---treating-with-many-zero",
+    "title": "Lecture 12",
+    "section": "Summary - Treating with many zero",
+    "text": "Summary - Treating with many zero\nThere are mainly two types of models to treat excess of zeros\n\nZero inflated models\nHurdle models\nOccurrence models",
     "crumbs": [
       "Home",
       "Slides",
-      "Lecture 3"
+      "Lecture 12"
     ]
   },
   {
-    "objectID": "slides/slides_4.html#example---generate",
-    "href": "slides/slides_4.html#example---generate",
-    "title": "Lecture 3",
-    "section": "Example - generate()",
-    "text": "Example - generate()\n\nsamples = generate(object = fit, newdata = Tokyo, \n                ~ data.frame(time_eff = time,\n                             lin_pred = Intercept + time,\n                             probs = inv_logit(Intercept + time)),\n                n.samples = 20\n                )\n# samples is now a list of length 20 (n.samples) each element of the list looks like:\n\nsamples[[1]][1:3,]\n\n   time_eff   lin_pred     probs\n1 0.1445455 -1.0489899 0.2594191\n2 0.1784837 -1.0150517 0.2659924\n3 0.2120371 -0.9814984 0.2725946",
+    "objectID": "slides/slides_12.html#summary---treating-with-many-zero-1",
+    "href": "slides/slides_12.html#summary---treating-with-many-zero-1",
+    "title": "Lecture 12",
+    "section": "Summary - Treating with many zero",
+    "text": "Summary - Treating with many zero\nThere are mainly two types of models to treat excess of zeros\n\nZero inflated models\n\nZeros come from two sources\nCan only be used for counts (Poisson, Binomial,…)\nFour likelihood are implemented in inlabru (Type1)\nThe probability of zero-inflation is constant\n\nHurdle models\nOccurrence models",
     "crumbs": [
       "Home",
       "Slides",
-      "Lecture 3"
+      "Lecture 12"
     ]
   },
   {
-    "objectID": "slides/slides_4.html#example---generate-1",
-    "href": "slides/slides_4.html#example---generate-1",
-    "title": "Lecture 3",
-    "section": "Example - generate()",
-    "text": "Example - generate()\n\ndata.frame(time = Tokyo$time, sapply(samples, function(x) x[,1])) %&gt;%\n  pivot_longer(-time) %&gt;%\n  ggplot() + geom_line(aes(time, value, group = name, color = factor(name))) +\n  theme(legend.position = \"none\")",
+    "objectID": "slides/slides_12.html#summary---treating-with-many-zero-2",
+    "href": "slides/slides_12.html#summary---treating-with-many-zero-2",
+    "title": "Lecture 12",
+    "section": "Summary - Treating with many zero",
+    "text": "Summary - Treating with many zero\nThere are mainly two types of models to treat excess of zeros\n\nZero inflated models\nHurdle models\n\nOnly one source of zeros\nPositive values can be both discrete and continuous\nTwo ways to imlement in inlabru",
     "crumbs": [
       "Home",
       "Slides",
-      "Lecture 3"
+      "Lecture 12"
     ]
   },
   {
-    "objectID": "slides/slides_4.html#effects-of-categorical-variables-and-interactions",
-    "href": "slides/slides_4.html#effects-of-categorical-variables-and-interactions",
-    "title": "Lecture 3",
-    "section": "Effects of categorical variables and Interactions",
-    "text": "Effects of categorical variables and Interactions\nBoth this things require a little more thinking when using inlabru than when using lm or similar\n\nLet’s look at the mtcars dataset that is in R\n\n\n                   mpg cyl disp  hp drat    wt  qsec vs am gear carb\nMazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4\nMazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4\nDatsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1\nHornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1\nHornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2\nValiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1",
+    "objectID": "slides/slides_12.html#summary---treating-with-many-zero-3",
+    "href": "slides/slides_12.html#summary---treating-with-many-zero-3",
+    "title": "Lecture 12",
+    "section": "Summary - Treating with many zero",
+    "text": "Summary - Treating with many zero\nThere are mainly two types of models to treat excess of zeros\n\nZero inflated models\nHurdle models\n\nOnly one source of zeros\nPositive values can be both discrete and continuous\nTwo ways to implement in inlabru\n\nUse the implemented Type0 likelihoods\n\n\n\nProbability of zero is constant\n\n\nUse the “two-likelihood” approach\n\n\nProbability of zero can be modelled\n\n\nOccurrence models",
     "crumbs": [
       "Home",
       "Slides",
-      "Lecture 3"
+      "Lecture 12"
     ]
   },
   {
-    "objectID": "slides/slides_4.html#effects-of-categorical-variables",
-    "href": "slides/slides_4.html#effects-of-categorical-variables",
-    "title": "Lecture 3",
-    "section": "Effects of categorical variables",
-    "text": "Effects of categorical variables\nWe want to fit a model where rank is the only covariate.\ngear has three categories: 3 4``5\n\nm1 = lm(mpg~ gear, data = df)\nm1$coef\n\n(Intercept)       gear4       gear5 \n  16.106667    8.426667    5.273333 \n\n\nHow do we do this in inlabru?\n\n\nOption 1: Use the model.matrix() function in R\n\n\n# create the model matrix\ncov_effect = model.matrix(~ gear, data = df)\ncov_effect[1:2,]\n\n              (Intercept) gear4 gear5\nMazda RX4               1     1     0\nMazda RX4 Wag           1     1     0\n\n# attach this to your data\ndf = cbind(df, cov_effect[,-1])\n\ncmp1 = ~ Intercept(1) + gear_4(gear4, model = \"linear\") +\n  gear_5(gear5, model= \"linear\")\nlik1 = bru_obs(formula = mpg ~.,\n               data = df)\nfit1 = bru(cmp1, lik1)\nfit1$summary.fixed$mean\n\n[1] 16.103112  8.414875  5.253896",
+    "objectID": "slides/slides_12.html#summary---treating-with-many-zero-4",
+    "href": "slides/slides_12.html#summary---treating-with-many-zero-4",
+    "title": "Lecture 12",
+    "section": "Summary - Treating with many zero",
+    "text": "Summary - Treating with many zero\nThere are mainly two types of models to treat excess of zeros\n\nZero inflated models\nHurdle models\nOccurrence models\n\nAllow for covariates in both occurrence and detection probability (but random effects only in one of them)\nRequires multiple observations",
     "crumbs": [
       "Home",
       "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#section",
-    "href": "slides/slides_4.html#section",
-    "title": "Lecture 3",
-    "section": "",
-    "text": "Interaction between two categorical variables\n\n\n       rank discipline yrs.since.phd yrs.service  sex salary\n1      Prof          B            19          18 Male 139750\n2      Prof          B            20          16 Male 173200\n3  AsstProf          B             4           3 Male  79750\n4      Prof          B            45          39 Male 115000\n5      Prof          B            40          41 Male 141500\n6 AssocProf          B             6           6 Male  97000",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#effects-of-categorical-variables-1",
-    "href": "slides/slides_4.html#effects-of-categorical-variables-1",
-    "title": "Lecture 3",
-    "section": "Effects of categorical variables",
-    "text": "Effects of categorical variables\nWe want to fit a model where rank is the only covariate.\nrank has three categories: Prof AsstProf``AssocProf\n\nm1 = lm(mpg~ gear, data = df)\nm1$coefficients\n\n(Intercept)       gear4       gear5 \n  16.106667    8.426667    5.273333 \n\n\nHow do we do this in inlabru?\n\nOption 2: fixed effect are just random effects with fixed precision\n\n\ndf$gear_id = as.numeric(df$gear) # inlabru needs values like 1,2,3 for random effects\n\ncmp2 = ~ -1 +  gear_effect(gear_id, model = \"iid\", fixed = T,initial = -6)\n# or: cmp2 = ~ Intercept(1) +  gear_effect(gear_id, model = \"iid\", fixed = T,initial = -6, constr = T)\nlik2 = bru_obs(formula = mpg ~.,\n               data = df)\nfit2 = bru(cmp2, lik2)\nfit2$summary.random$gear_effect$mean\n\n[1] 16.04861 24.42290 21.15058\n\n\nWhat is happening here??\n\nThis is just a re-parametrization problem\n\nc(m1$coef[1], m1$coef[1] + m1$coef[2],m1$coef[1] + m1$coef[3])\n\n(Intercept) (Intercept) (Intercept) \n   16.10667    24.53333    21.38000",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#interaction-between-two-categorical-variables",
-    "href": "slides/slides_4.html#interaction-between-two-categorical-variables",
-    "title": "Lecture 3",
-    "section": "Interaction between two categorical variables",
-    "text": "Interaction between two categorical variables\nSay we want to fit this model\n\ndf = mtcars %&gt;% mutate(gear = factor(gear), vs = factor(vs))\nm2 = lm(mpg ~ gear * vs, data = df)\n\n\n\n(Intercept)       gear4       gear5         vs1   gear4:vs1   gear5:vs1 \n  15.050000    5.950000    4.075000    5.283333   -1.043333    5.991667 \n\n\n\nHere the best solution is to use the model.matrix() again\n\n# create the model matrix\ncov_effect = model.matrix(~ gear * vs, data = df)\ncov_effect[1:1,]\n\n(Intercept)       gear4       gear5         vs1   gear4:vs1   gear5:vs1 \n          1           1           0           0           0           0 \n\ndf = cbind(df, cov_effect[,-1])       # attach this to your data\n\ncmp3 = ~ Intercept(1) + gear_4(gear4, model = \"linear\") +\n  gear_5(gear5, model = \"linear\") + vs_1(vs1, model = \"linear\") +\n  gear4_vs1(`gear4:vs1`, model = \"linear\") + gear5_vs1(`gear5:vs1`, model = \"linear\") \n\nlik3 = bru_obs(formula= mpg ~ ., data = df)\nfit3 = bru(cmp3, lik3)\nfit3$summary.fixed$mean\n\n[1] 15.0434720  5.8987031  4.0890189  5.2876231 -0.9881442  5.8811493",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#interaction-between-categorical-and-continous-variable",
-    "href": "slides/slides_4.html#interaction-between-categorical-and-continous-variable",
-    "title": "Lecture 3",
-    "section": "Interaction between categorical and continous variable",
-    "text": "Interaction between categorical and continous variable",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#interaction-categorical-and-continous-variable",
-    "href": "slides/slides_4.html#interaction-categorical-and-continous-variable",
-    "title": "Lecture 3",
-    "section": "Interaction categorical and continous variable",
-    "text": "Interaction categorical and continous variable\n\ndf = mtcars %&gt;% mutate(gear = factor(gear))\nm2 = lm(mpg ~ gear * disp, data = df)\n\n\n\n(Intercept)       gear4       gear5        disp  gear4:disp  gear5:disp \n24.51556635 15.05196338  7.14538044 -0.02577046 -0.09644222 -0.02500467 \n\n\n\nOption 1: Again we can use the model.matrix() option:\n\n# create the model matrix\ncov_effect = model.matrix(~ gear * disp, data = df)\ncov_effect[1:1,]\n\n(Intercept)       gear4       gear5        disp  gear4:disp  gear5:disp \n          1           1           0         160         160           0 \n\ndf = cbind(df, cov_effect[,-1])       # attach this to your data\n\ncmp4 = ~ Intercept(1) + gear_4(gear4, model = \"linear\") +\n  gear_5(gear5, model = \"linear\") + disp(disp, model = \"linear\") +\n  gear4_disp(`gear4:disp`, model = \"linear\") + gear5_disp(`gear5:disp`, model = \"linear\") \n\nlik4 = bru_obs(formula= mpg ~ ., data = df)\nfit4 = bru(cmp4, lik4)\nfit4$summary.fixed$mean\n\n[1] 24.50106724 14.96914079  7.11472087 -0.02572927 -0.09575874 -0.02486888",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#interaction-categorical-and-continous-variable-1",
-    "href": "slides/slides_4.html#interaction-categorical-and-continous-variable-1",
-    "title": "Lecture 3",
-    "section": "Interaction categorical and continous variable",
-    "text": "Interaction categorical and continous variable\n\ndf = mtcars %&gt;% mutate(gear = factor(gear))\nm2 = lm(mpg ~ gear * disp, data = df)\n\n\n\n(Intercept)       gear4       gear5        disp  gear4:disp  gear5:disp \n24.51556635 15.05196338  7.14538044 -0.02577046 -0.09644222 -0.02500467 \n\n\nOption 2: fixed effects are random effect with fixed precision!\n\ndf$gear_id = as.numeric(df$gear) # inlabru needs values like 1,2,3 for random effects\n\ncmp5 = ~ -1 +  gear_effect_int(gear_id, model = \"iid\", fixed = T,initial = -6) +\n  gear_effect_slope(gear_id, disp, model = \"iid\", fixed = T,initial = -6)\nlik5 = bru_obs(formula = mpg ~.,\n               data = df)\nfit5 = bru(cmp5, lik5)\nfit5$summary.random$gear_effect_int$mean\n\n[1] 24.15667 38.93827 31.16922\n\nfit5$summary.random$gear_effect_slope$mean\n\n[1] -0.02475096 -0.11752709 -0.04884811\n\n\n\nAgain..the differences are a matter of parametrization!",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#interaction-categorical-and-continous-variable-2",
-    "href": "slides/slides_4.html#interaction-categorical-and-continous-variable-2",
-    "title": "Lecture 3",
-    "section": "Interaction categorical and continous variable",
-    "text": "Interaction categorical and continous variable\n\npred_df = data.frame(disp = rep(seq(70:473),3),\n                     gear = factor(rep(3:5, each = length(seq(70:473))))) %&gt;%\n  mutate(gear_id = as.numeric(gear))\n\nlm_pred = cbind(pred_df, pred = predict(m2, newdata = pred_df))\n\ninla_pred = predict(fit5, pred_df, ~ gear_effect_int + gear_effect_slope)",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#some-practical-tips-i",
-    "href": "slides/slides_4.html#some-practical-tips-i",
-    "title": "Lecture 3",
-    "section": "Some practical tips I",
-    "text": "Some practical tips I\nYou might wonder which priors have you used in your model..\n\nfit = bru(cmp, lik)\n\nINLA::inla.priors.used(fit)\n\nNB inla.priors.used is a function of the INLA package, so you need to load it explicitly.",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#some-practical-tips-ii",
-    "href": "slides/slides_4.html#some-practical-tips-ii",
-    "title": "Lecture 3",
-    "section": "Some practical tips II",
-    "text": "Some practical tips II\nGetting help!\n\ninla.doc(\"ar1\")\ninla.doc(\"pc.prior\")\ninla.doc(\"gaussian\")",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#some-practical-tips-ii-1",
-    "href": "slides/slides_4.html#some-practical-tips-ii-1",
-    "title": "Lecture 3",
-    "section": "Some practical tips II",
-    "text": "Some practical tips II\nWhich models are implemented?\nLikelihoods\n\n# which likelihoods?\ninla.list.models(\"likelihood\")\n\nSection [likelihood]\n     0binomial                     New 0-inflated Binomial                 \n     0binomialS                    New 0-inflated Binomial Swap            \n     0poisson                      New 0-inflated Poisson                  \n     0poissonS                     New 0-inflated Poisson Swap             \n     agaussian                     The aggregated Gaussian likelihoood     \n     bcgaussian                    The Box-Cox Gaussian likelihoood        \n     bell                          The Bell likelihood                     \n     beta                          The Beta likelihood                     \n     betabinomial                  The Beta-Binomial likelihood            \n     betabinomialna                The Beta-Binomial Normal approximation likelihood\n     bgev                          The blended Generalized Extreme Value likelihood\n     binomial                      The Binomial likelihood                 \n     binomialmix                   Binomial mixture                        \n     cbinomial                     The clustered Binomial likelihood       \n     cennbinomial2                 The CenNegBinomial2 likelihood (similar to cenpoisson2)\n     cenpoisson                    Then censored Poisson likelihood        \n     cenpoisson2                   Then censored Poisson likelihood (version 2)\n     circularnormal                The circular Gaussian likelihoood       \n     cloglike                      User-defined likelihood                 \n     coxph                         Cox-proportional hazard likelihood      \n     dgompertzsurv                 destructive gompertz (survival) distribution\n     dgp                           Discrete generalized Pareto likelihood  \n     egp                           Exteneded Generalized Pareto likelihood \n     exponential                   The Exponential likelihood              \n     exponentialsurv               The Exponential likelihood (survival)   \n     exppower                      The exponential power likelihoood       \n     fl                            The fl likelihood                       \n     fmri                          fmri distribution (special nc-chi)      \n     fmrisurv                      fmri distribution (special nc-chi)      \n     gamma                         The Gamma likelihood                    \n     gammacount                    A Gamma generalisation of the Poisson likelihood\n     gammajw                       A special case of the Gamma likelihood  \n     gammajwsurv                   A special case of the Gamma likelihood (survival)\n     gammasurv                     The Gamma likelihood (survival)         \n     gaussian                      The Gaussian likelihoood                \n     gaussianjw                    The GaussianJW likelihoood              \n     gev                           The Generalized Extreme Value likelihood\n     ggaussian                     Generalized Gaussian                    \n     ggaussianS                    Generalized GaussianS                   \n     gompertz                      gompertz distribution                   \n     gompertzsurv                  gompertz distribution                   \n     gp                            Generalized Pareto likelihood           \n     gpoisson                      The generalized Poisson likelihood      \n     iidgamma                      (experimental)                          \n     iidlogitbeta                  (experimental)                          \n     loggammafrailty               (experimental)                          \n     logistic                      The Logistic likelihoood                \n     loglogistic                   The loglogistic likelihood              \n     loglogisticsurv               The loglogistic likelihood (survival)   \n     lognormal                     The log-Normal likelihood               \n     lognormalsurv                 The log-Normal likelihood (survival)    \n     logperiodogram                Likelihood for the log-periodogram      \n     mgamma                        The modal Gamma likelihood              \n     mgammasurv                    The modal Gamma likelihood (survival)   \n     nbinomial                     The negBinomial likelihood              \n     nbinomial2                    The negBinomial2 likelihood             \n     nmix                          Binomial-Poisson mixture                \n     nmixnb                        NegBinomial-Poisson mixture             \n     npoisson                      The Normal approximation to the Poisson likelihood\n     nzpoisson                     The nzPoisson likelihood                \n     obeta                         The ordered Beta likelihood             \n     occupancy                     Occupancy likelihood                    \n     poisson                       The Poisson likelihood                  \n     poisson.special1              The Poisson.special1 likelihood         \n     pom                           Likelihood for the proportional odds model\n     qkumar                        A quantile version of the Kumar likelihood\n     qloglogistic                  A quantile loglogistic likelihood       \n     qloglogisticsurv              A quantile loglogistic likelihood (survival)\n     rcpoisson                     Randomly censored Poisson               \n     sem                           The SEM likelihoood                     \n     simplex                       The simplex likelihood                  \n     sn                            The Skew-Normal likelihoood             \n     stdgaussian                   The stdGaussian likelihoood             \n     stochvol                      The Gaussian stochvol likelihood        \n     stochvolln                    The Log-Normal stochvol likelihood      \n     stochvolnig                   The Normal inverse Gaussian stochvol likelihood\n     stochvolsn                    The SkewNormal stochvol likelihood      \n     stochvolt                     The Student-t stochvol likelihood       \n     t                             Student-t likelihood                    \n     tpoisson                      Thinned Poisson                         \n     tstrata                       A stratified version of the Student-t likelihood\n     tweedie                       Tweedie distribution                    \n     vm                            von Mises circular distribution         \n     weibull                       The Weibull likelihood                  \n     weibullsurv                   The Weibull likelihood (survival)       \n     wrappedcauchy                 The wrapped Cauchy likelihoood          \n     xbinomial                     The Binomial likelihood (experimental version)\n     xpoisson                      The Poisson likelihood (expert version) \n     zeroinflatedbetabinomial0     Zero-inflated Beta-Binomial, type 0     \n     zeroinflatedbetabinomial1     Zero-inflated Beta-Binomial, type 1     \n     zeroinflatedbetabinomial2     Zero inflated Beta-Binomial, type 2     \n     zeroinflatedbinomial0         Zero-inflated Binomial, type 0          \n     zeroinflatedbinomial1         Zero-inflated Binomial, type 1          \n     zeroinflatedbinomial2         Zero-inflated Binomial, type 2          \n     zeroinflatedcenpoisson0       Zero-inflated censored Poisson, type 0  \n     zeroinflatedcenpoisson1       Zero-inflated censored Poisson, type 1  \n     zeroinflatednbinomial0        Zero inflated negBinomial, type 0       \n     zeroinflatednbinomial1        Zero inflated negBinomial, type 1       \n     zeroinflatednbinomial1strata2 Zero inflated negBinomial, type 1, strata 2\n     zeroinflatednbinomial1strata3 Zero inflated negBinomial, type 1, strata 3\n     zeroinflatednbinomial2        Zero inflated negBinomial, type 2       \n     zeroinflatedpoisson0          Zero-inflated Poisson, type 0           \n     zeroinflatedpoisson1          Zero-inflated Poisson, type 1           \n     zeroinflatedpoisson2          Zero-inflated Poisson, type 2           \n     zeroninflatedbinomial2        Zero and N inflated binomial, type 2    \n     zeroninflatedbinomial3        Zero and N inflated binomial, type 3",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#some-practical-tips-ii-2",
-    "href": "slides/slides_4.html#some-practical-tips-ii-2",
-    "title": "Lecture 3",
-    "section": "Some practical tips II",
-    "text": "Some practical tips II\nWhich models are implemented?\nComponents\n\n# which latent models? (components)\ninla.list.models(\"latent\")\n\nSection [latent]\n     2diid                         (This model is obsolute)                \n     ar                            Auto-regressive model of order p (AR(p))\n     ar1                           Auto-regressive model of order 1 (AR(1))\n     ar1c                          Auto-regressive model of order 1 w/covariates\n     besag                         The Besag area model (CAR-model)        \n     besag2                        The shared Besag model                  \n     besagproper                   A proper version of the Besag model     \n     besagproper2                  An alternative proper version of the Besag model\n     bym                           The BYM-model (Besag-York-Mollier model)\n     bym2                          The BYM-model with the PC priors        \n     cgeneric                      Generic latent model specified using C  \n     clinear                       Constrained linear effect               \n     copy                          Create a copy of a model component      \n     crw2                          Exact solution to the random walk of order 2\n     dmatern                       Dense Matern field                      \n     fgn                           Fractional Gaussian noise model         \n     fgn2                          Fractional Gaussian noise model (alt 2) \n     generic                       A generic model                         \n     generic0                      A generic model (type 0)                \n     generic1                      A generic model (type 1)                \n     generic2                      A generic model (type 2)                \n     generic3                      A generic model (type 3)                \n     iid                           Gaussian random effects in dim=1        \n     iid1d                         Gaussian random effect in dim=1 with Wishart prior\n     iid2d                         Gaussian random effect in dim=2 with Wishart prior\n     iid3d                         Gaussian random effect in dim=3 with Wishart prior\n     iid4d                         Gaussian random effect in dim=4 with Wishart prior\n     iid5d                         Gaussian random effect in dim=5 with Wishart prior\n     iidkd                         Gaussian random effect in dim=k with Wishart prior\n     intslope                      Intecept-slope model with Wishart-prior \n     linear                        Alternative interface to an fixed effect\n     log1exp                       A nonlinear model of a covariate        \n     logdist                       A nonlinear model of a covariate        \n     matern2d                      Matern covariance function on a regular grid\n     meb                           Berkson measurement error model         \n     mec                           Classical measurement error model       \n     ou                            The Ornstein-Uhlenbeck process          \n     revsigm                       Reverse sigmoidal effect of a covariate \n     rgeneric                      Generic latent model specified using R  \n     rw1                           Random walk of order 1                  \n     rw2                           Random walk of order 2                  \n     rw2d                          Thin-plate spline model                 \n     rw2diid                       Thin-plate spline with iid noise        \n     scopy                         Create a scopy of a model component     \n     seasonal                      Seasonal model for time series          \n     sigm                          Sigmoidal effect of a covariate         \n     slm                           Spatial lag model                       \n     spde                          A SPDE model                            \n     spde2                         A SPDE2 model                           \n     spde3                         A SPDE3 model                           \n     z                             The z-model in a classical mixed model formulation",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
-    ]
-  },
-  {
-    "objectID": "slides/slides_4.html#some-practical-tips-ii-3",
-    "href": "slides/slides_4.html#some-practical-tips-ii-3",
-    "title": "Lecture 3",
-    "section": "Some practical tips II",
-    "text": "Some practical tips II\nWhich models are implemented?\nPriors\n\n# which priors?\ninla.list.models(\"prior\")\n\nSection [prior]\n     betacorrelation               Beta prior for the correlation          \n     dirichlet                     Dirichlet prior                         \n     expression:                   A generic prior defined using expressions\n     flat                          A constant prior                        \n     gamma                         Gamma prior                             \n     gaussian                      Gaussian prior                          \n     invalid                       Void prior                              \n     jeffreystdf                   Jeffreys prior for the doc              \n     laplace                       Laplace prior                           \n     linksnintercept               Skew-normal-link intercept-prior        \n     logflat                       A constant prior for log(theta)         \n     loggamma                      Log-Gamma prior                         \n     logiflat                      A constant prior for log(1/theta)       \n     logitbeta                     Logit prior for a probability           \n     logtgaussian                  Truncated Gaussian prior                \n     logtnormal                    Truncated Normal prior                  \n     minuslogsqrtruncnormal        (obsolete)                              \n     mvnorm                        A multivariate Normal prior             \n     none                          No prior                                \n     normal                        Normal prior                            \n     pc                            Generic PC prior                        \n     pc.alphaw                     PC prior for alpha in Weibull           \n     pc.ar                         PC prior for the AR(p) model            \n     pc.cor0                       PC prior correlation, basemodel cor=0   \n     pc.cor1                       PC prior correlation, basemodel cor=1   \n     pc.dof                        PC prior for log(dof-2)                 \n     pc.egptail                    PC prior for the tail in the EGP likelihood\n     pc.fgnh                       PC prior for the Hurst parameter in FGN \n     pc.gamma                      PC prior for a Gamma parameter          \n     pc.gammacount                 PC prior for the GammaCount likelihood  \n     pc.gevtail                    PC prior for the tail in the GEV likelihood\n     pc.matern                     PC prior for the Matern SPDE            \n     pc.mgamma                     PC prior for a Gamma parameter          \n     pc.prec                       PC prior for log(precision)             \n     pc.range                      PC prior for the range in the Matern SPDE\n     pc.sn                         PC prior for the skew-normal            \n     pc.spde.GA                    (experimental)                          \n     pom                           #classes-dependent prior for the POM model\n     ref.ar                        Reference prior for the AR(p) model, p&lt;=3\n     rprior:                       A R-function defining the prior         \n     table:                        A generic tabulated prior               \n     wishart1d                     Wishart prior dim=1                     \n     wishart2d                     Wishart prior dim=2                     \n     wishart3d                     Wishart prior dim=3                     \n     wishart4d                     Wishart prior dim=4                     \n     wishart5d                     Wishart prior dim=5                     \n     wishartkd                     Wishart prior                           \n\n\n```",
-    "crumbs": [
-      "Home",
-      "Slides",
-      "Lecture 3"
+      "Lecture 12"
     ]
   }
 ]

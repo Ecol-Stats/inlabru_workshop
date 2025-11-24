@@ -185,7 +185,7 @@ ggplot() + gg(mesh) + geom_sf(data= pcod_sf, aes(color = factor(present)), size 
 
 **create time index and the grouped variable**
 
-To use the RW2 model the covariate has to be groupes:
+To use the RW2 model the covariate has to be grouped:
 
 ```{r}
 depth_r$depth_group = inla.group(values(depth_r$depth_scaled))
@@ -219,7 +219,9 @@ Implement the model in `inlabru`
 
 # Model components
 cmp_spat = ~ Intercept(1) + 
-  covariate(depth_r$depth_group, model = "rw2", scale.model = TRUE)+
+  covariate(depth_r$depth_group, model = "rw2", scale.model = TRUE, 
+           values = sort(unique(values(depth_r$depth_group)))
+            )+
   trend(time_idx, model = "iid")+
   space(geometry, model = spde_model)
 

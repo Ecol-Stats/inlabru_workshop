@@ -66,9 +66,9 @@ In this practical we consider the data `clmfires` in the `spatstat`
 library.
 
 This dataset is a record of forest fires in the Castilla-La Mancha
-region of Spain between 1998 and 2007. This region covers approximately 400
-by 400 kilometres. The coordinates are recorded in kilometres. For more
-info about the data you can type:
+region of Spain between 1998 and 2007. This region covers approximately
+400 by 400 kilometres. The coordinates are recorded in kilometres. For
+more info about the data you can type:
 
 ```{r}
 #| echo: true
@@ -145,9 +145,13 @@ domain with weight equal to the area of the domain.
 ```{r}
 # define integration scheme
 
-ips = st_sf(
-geometry = st_sample(region, 1)) # some random location inside the domain
-ips$weight = st_area(region) # integration weight is the area of the domain
+
+ips <- fm_int_object(
+  st_sample(region, 1), # some random location inside the domain
+  weight = st_area(region), # integration weight is the area of the domain
+  name = "geometry"
+)
+
 
 cmp = ~ 0 + beta_0(1)
 
@@ -247,11 +251,13 @@ $N_k = 1000$ points and the weights are all equal to $|\Omega|/N_k$.
 #|fig-cap: "Integration scheme."
 
 n.int = 1000
-ips = st_sf(geometry = st_sample(region,
-            size = n.int,
-            type = "regular"))
+ips <- st_sample(region, size = n.int, type = "regular") # May not be exactly n.int points
+ips <- fm_int_object(
+  ips,
+  weight = st_area(region) / length(ips),
+  name = "geometry"
+)
 
-ips$weight = st_area(region) / n.int
 ggplot() + geom_sf(data = ips, aes(color = weight)) + geom_sf(data= region, alpha = 0)
 
 ```
@@ -307,11 +313,13 @@ integration scheme as follows:
 
 ```{r}
 n.int2 = 50
+ips2 <- st_sample(region, size = n.int2, type = "regular") # May not be exactly n.int points
+ips2 <- fm_int_object(
+  ips2,
+  weight = st_area(region) / length(ips2),
+  name = "geometry"
+)
 
-ips2 = st_sf(geometry = st_sample(region,
-            size = n.int2,
-            type = "regular"))
-ips2$weight = st_area(region) / n.int2
 ```
 
 What happens to the effect of the covariate?

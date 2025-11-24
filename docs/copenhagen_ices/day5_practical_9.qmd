@@ -1,5 +1,5 @@
 ---
-title: "Practical 8 - Zero Inflated"
+title: "Practical 9 - Zero Inflated"
 execute: 
   freeze: auto
 format: 
