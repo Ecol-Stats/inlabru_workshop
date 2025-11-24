@@ -15,6 +15,8 @@ format:
 -   Welcome to the `inlabru` workshop!
 -   The goal of this workshop is to introduce new users to the `inlabru` software for Bayesian spatial modelling using the integrated nested Laplace approximation (INLA).
 
+![](4XN7it.png){fig-align="center" width="261"}
+
 # Learning Objectives for the workshop
 
 At the end of the workshop, participants will have an understanding of:
