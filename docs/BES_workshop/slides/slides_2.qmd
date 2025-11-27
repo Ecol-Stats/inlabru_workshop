@@ -796,25 +796,23 @@ labs(y=expression(E[i]~exp(lambda[i]))) + plot_layout(ncol=1)
 
 ## Geostatistical Data
 
--   Geostatistical data are the most common form of spatial data found in environmental setting.
+-   Measurements of an a spatial continuous variable of interest at a set of fixed locations.
 
--   We regularly take measurements of an environmental variable of interest at a set of fixed locations.
+-   This could be data from samples taken in locations across a region of interest (e.g., water depth in a lake) or from monitoring stations as part of a network (e.g., air pollution).
 
--   This could be data from samples taken across a region (e.g., water depth in a lake) or from monitoring stations as part of a network (e.g., air pollution).
-
--   In each of these cases,our goal is to estimate the value of our variable across the entire space
+-   In each of these cases, our goal is to estimate the value of our variable across the entire space and/or to model the relationship with covariates.
 
 ## Understanding our region
 
 -   Let $D$ be our two-dimensional region of interest.
--   In principle, there are infinite locations within $D$, each of which can be represented by mathematical coordinates (eg latitude and longitude).
+-   In principle, there are infinitely many locations within $D$, each of which can be represented by mathematical coordinates (e.g.\ latitude and longitude).
 -   We can identify any individual location as $\mathbf{s}_i = (x_i, y_i)$, where $x_i$ and $y_i$ are their coordinates.
 -   We can treat our variable of interest as a random variable, $Z$ which can be observed at any location as $Z(\mathbf{s}_i)$.
 
 ## Geostatistical process
 
--   Our geostatistical process can therefore be written as: $$\{Z(\mathbf{s}); \mathbf{s} \in D\}$$
--   In practice, our data are observed at a finite number of locations, $m$, and can be denoted as: $$z = \{z(\mathbf{s}_1), \ldots z(\mathbf{s}_m) \}$$
+-   A geostatistical process can therefore be written as: $$\{Z(\mathbf{s}); \mathbf{s} \in D\}$$
+-   In practice,  data are observed at a finite number of locations, $m$, and can be denoted as: $$z = \{z(\mathbf{s}_1), \ldots z(\mathbf{s}_m) \}$$
 -   We have observed our data at $m$ locations, but often want to predict this process at a set of unknown locations.
 -   For example, what is the value of $z(\mathbf{s}_0)$, where $\mathbf{s}_0$ is an unobserved site?
 
