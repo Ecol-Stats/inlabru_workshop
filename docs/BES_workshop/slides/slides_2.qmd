@@ -61,18 +61,16 @@ library(inlabru)
 
 -   Many natural processes take place in space
 
--   Large amounts of data collected in space;
+-   increased resolution 
+$\leadsto$ large, complex datasets
+$\leadsto$ complex spatial models required
 
--   Recent technologies facilitate access to complex spatial data sets.
-
+challenges:
 ::: incremental
--   Spatial statistical analysis is often not complex enough
-
--   Inaccessible to practitioners
-
--   Literature written for statisticians development of methodology often not linked to applications (unrealistic assumptions)
-
--   Difficult to apply (unless you are an expert statistician and programmer)
+  - often inaccessible to practitioners (literature aimed at statisticians)
+  - methodology not always linked to applications
+  - models too simple to reflect real-life data
+  - difficult to apply without expertise in spatial stats and computational statistics
 
 -   we shall see that `inlabru` can help with this...
 :::
@@ -95,9 +93,9 @@ We can distinguish three types of spatial data structures
 :::
 
 ::: {.column width="33.33%"}
-**Point-referenced data**
+**Point pattern data**
 
-![Occurrence records of four ungulate species in the Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
+![Occurrence records of four ungulate species in Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
 :::
 ::::::
 
@@ -121,9 +119,9 @@ In areal data our measurements are summarised across a set of **discrete**, non-
 :::
 
 ::: {.column width="20%"}
-**Point-referenced data**
+**Point process data**
 
-![Occurrence records of four ungulate species in the Tibet](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
+![Occurrence records of four ungulate species in Tibet](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
 :::
 ::::::
 
@@ -141,15 +139,15 @@ We can distinguish three types of spatial data structures
 ::: {.column width="60%"}
 **Geostatistical data**
 
-In geostatistical data, measurements a **continuous** process are taken at a set of fixed locations.
+In geostatistical data, measurements of a **continuous** process are taken at a set of fixed locations.
 
 ![Scotland river temperature monitoring network](figures/srtmn-png.png){fig-align="center" width="605"}
 :::
 
 ::: {.column width="20%"}
-**Point-referenced data**
+**Point process data**
 
-![Occurrence records of four ungulate species in the Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
+![Occurrence records of four ungulate species in  Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
 :::
 ::::::
 
@@ -171,11 +169,11 @@ We can distinguish three types of spatial data structures
 :::
 
 ::: {.column width="60%"}
-**Point-referenced data**
+**Point pattern data**
 
-In point-referenced data we measure the locations where events occur (e.g. trees in a forest, earthquakes) and the coordinates of such occurrences are our data.
+In point pattern data we record the locations where events occur (e.g.\ trees in a forest, earthquakes) and the coordinates of such occurrences are our data.
 
-![Occurrence records of four ungulate species in the Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
+![Occurrence records of four ungulate species in Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
 :::
 ::::::
 
@@ -196,7 +194,7 @@ $$
  \eta_i = \beta_0 + \mathbf{x}'\beta + u_i ~~~ u_i \overset{iid}{\sim} N(0,\sigma^2_i)
 $$
 
--   where regional differences are accounted through a *random effect*
+-   regional differences are accounted for through a *random effect*
 :::
 
 ## How do we model this? {auto-animate= "true"}
@@ -208,8 +206,9 @@ y_i \sim \mathrm{Poisson}(e^{\eta_i})
 $$ How do we model the linear predictor $\eta_i$?
 
 ::: {.fragment .fade-in}
--   But... what if the distribution is *inhomogeneous*?
--   If there’s an area where the animal is rare, we’ll get lots of zero counts
+-   But... what if the distribution is *inhomogeneous*, i.e.\ structured in space?
+-  Do the covariates account for those structures?  
+-  If there’s an area where the animal is rare, we’ll get lots of zero counts
 :::
 
 ## How do we model this? {auto-animate="true"}
