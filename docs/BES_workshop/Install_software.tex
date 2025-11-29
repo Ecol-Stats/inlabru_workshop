@@ -263,7 +263,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, breakable, boxrule=0pt, frame hidden, enhanced, colback={codebgcolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, enhanced, colback={codebgcolor}, breakable, frame hidden, sharp corners]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -385,18 +385,18 @@ You can check that \texttt{INLA} is correctly installed by running
 
 \begin{verbatim}
 Time used:
-    Pre = 0.426, Running = 0.233, Post = 0.0557, Total = 0.714 
+    Pre = 0.504, Running = 0.311, Post = 0.0665, Total = 0.882 
 Fixed effects:
              mean    sd 0.025quant 0.5quant 0.975quant  mode kld
-(Intercept) 9.902 0.098      9.709    9.902     10.094 9.902   0
+(Intercept) 9.949 0.094      9.765    9.949     10.133 9.949   0
 
 Model hyperparameters:
                                         mean    sd 0.025quant 0.5quant
-Precision for the Gaussian observations 1.06 0.149      0.785     1.05
+Precision for the Gaussian observations 1.16 0.163       0.86     1.15
                                         0.975quant mode
-Precision for the Gaussian observations       1.37 1.03
+Precision for the Gaussian observations       1.50 1.13
 
-Marginal log-Likelihood:  -151.97 
+Marginal log-Likelihood:  -147.39 
  is computed 
 Posterior summaries for the linear predictor and the fitted values are computed
 (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')
@@ -434,18 +434,18 @@ Observation models:
     Additive/Linear: TRUE/TRUE
     Used components: effects[Intercept], latent[] 
 Time used:
-    Pre = 0.276, Running = 0.24, Post = 0.062, Total = 0.579 
+    Pre = 0.388, Running = 0.313, Post = 0.0812, Total = 0.783 
 Fixed effects:
            mean    sd 0.025quant 0.5quant 0.975quant  mode kld
-Intercept 9.901 0.098      9.709    9.901     10.094 9.901   0
+Intercept 9.949 0.094      9.765    9.949     10.133 9.949   0
 
 Model hyperparameters:
                                         mean    sd 0.025quant 0.5quant
-Precision for the Gaussian observations 1.06 0.149      0.785     1.05
+Precision for the Gaussian observations 1.16 0.163       0.86     1.15
                                         0.975quant mode
-Precision for the Gaussian observations       1.37 1.03
+Precision for the Gaussian observations       1.50 1.13
 
-Marginal log-Likelihood:  -156.43 
+Marginal log-Likelihood:  -151.85 
  is computed 
 Posterior summaries for the linear predictor and the fitted values are computed
 (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')

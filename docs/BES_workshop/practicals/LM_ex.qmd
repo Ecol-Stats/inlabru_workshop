@@ -19,9 +19,8 @@ editor_options:
 
 In this practical we will:
 
-
-- Fit a [simple linear regression](#SLR) with `inlabru`
-- Fit a [linear regression with discrete covariates and interactions](#LM_int)
+-   Fit a [simple linear regression](#SLR) with `inlabru`
+-   Fit a [linear regression with discrete covariates and interactions](#LM_int)
 
 Start by loading useful libraries:
 
@@ -39,7 +38,7 @@ library(inlabru)
 library(scico)
 ```
 
-As our first example we consider a simple linear regression model with Gaussian observations 
+As our first example we consider a simple linear regression model with Gaussian observations
 
 $$
 y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
@@ -118,9 +117,7 @@ df = data.frame(y = y, x = x)
 
 **Step1: Defining model components**
 
-
 The first step is to define the two model components: The intercept and the linear covariate effect.
-
 
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
@@ -217,10 +214,9 @@ fit.lm = bru(cmp, lik)
 
 **Step 4: Extract results**
 
-There are several ways to extract and examine the results of a fitted `inlabru` object. 
+There are several ways to extract and examine the results of a fitted `inlabru` object.
 
-The most natural place to start is to use the 
- `summary()` which gives access to some basic information about model fit and estimates
+The most natural place to start is to use the `summary()` which gives access to some basic information about model fit and estimates
 
 ```{r }
 #| code-summary: "Model summaries"
@@ -230,9 +226,7 @@ summary(fit.lm)
 
 We can see that both the intercept and slope and the error precision are correctly estimated.
 
-Another way, which gives access to more complicated (and useful) output is to use the `predict()` function. 
-Below we  take the fitted `bru` object and use the `predict()` function to produce predictions for $\mu$ given a new set of values for the model covariates or the original values used for the model fit
-
+Another way, which gives access to more complicated (and useful) output is to use the `predict()` function. Below we take the fitted `bru` object and use the `predict()` function to produce predictions for $\mu$ given a new set of values for the model covariates or the original values used for the model fit
 
 ```{r}
 new_data = data.frame(x = c(df$x, runif(10)),
@@ -291,7 +285,6 @@ Generate predictions for the linear predictor $\mu$ when the covariate has value
 
 What is the predicted value for $\mu$? And what is the uncertainty?
 
-
 `r hide("Take hint")`
 
 You can create a new data frame containing the new observation $x_0$ and then use the `predict` function.
@@ -309,12 +302,11 @@ pred = predict(fit.lm, new_data, ~ beta_0 + beta_1,
 pred
 ```
 
-You can see the predicted mean and sd by examining the produced `pred` object. In this case the mean is `r round(pred$mean,2)` with sd ca `r round(pred$sd,2)`. This gives a 95% CI ca [`r round(pred$q0.025,2)`,  `r round(pred$q0.975,2)`].
+You can see the predicted mean and sd by examining the produced `pred` object. In this case the mean is `r round(pred$mean,2)` with sd ca `r round(pred$sd,2)`. This gives a 95% CI ca \[`r round(pred$q0.025,2)`, `r round(pred$q0.975,2)`\].
 :::
 
-::: {.callout-note}
-
-Before we have produced a credible interval for the expected mean $\mu$ if we want to produce a _prediction_ interval for  a new observation $y$ we need to add the uncertainty that comes from the likelihood with precision $\tau_y$. To do this we can again use the `predict()` function to compute  a 95% prediction interval for $y$. 
+::: callout-note
+Before we have produced a credible interval for the expected mean $\mu$ if we want to produce a *prediction* interval for a new observation $y$ we need to add the uncertainty that comes from the likelihood with precision $\tau_y$. To do this we can again use the `predict()` function to compute a 95% prediction interval for $y$.
 
 ```{r}
 
@@ -485,14 +477,11 @@ cbind(post_sigma_summaries)
 ```
 :::
 
-
-
-## Linear model with discrete variables and  interactions{#LM_int}
+## Linear model with discrete variables and interactions {#LM_int}
 
 We consider now the dataset `iris`. Here data are recorded about 150 different iris flowers belonging to 3 different species (50 for each species).
 
-You can get more information about these data by typing `?iris` 
-
+You can get more information about these data by typing `?iris`
 
 We want to model the `Petal.length` as a function of `Sepal.length` and species.
 
@@ -503,8 +492,7 @@ iris %>% ggplot() +
   facet_wrap(.~Species)
 ```
 
-**Model 1 - Only `Species` effect**
-Our first model assumes that the Sepal length only depends on the species, which is a categoriacal variable.
+**Model 1 - Only `Species` effect** Our first model assumes that the Sepal length only depends on the species, which is a categorical variable.
 
 $$
 \begin{aligned}
@@ -538,7 +526,6 @@ Use the component defined above to fit the linear model using `inlabru` and comp
 
 `r hide("Take hint")`
 
-
 Realizing that fixed effects are treated as random effects with fixed precision, the fitted values can then be inspected via `fit1a$summary.random`
 
 `r unhide()`
@@ -555,13 +542,11 @@ fit1a = bru(cmp, lik)
 fit1a$summary.random$spp
 
 ```
-
 :::
 
 **Model 2 - Interaction between `Species` and `Sepal.Length`**
 
-Our second model is defined as
-$$
+Our second model is defined as $$
 \begin{aligned}
 Y_i & \sim\mathcal{N}(\mu_i,\sigma_y),\ &  i = 1,\dots,150 \\
 \mu_{i} & = \eta_{i} = \beta_0 +  \beta_1 x_i\ I(\text{obs }i\text{belongs to species } 1  ) + \beta_2x_i\ I(\text{obs }i\text{belongs to species } 2  ) + \beta_3x_i\ I(\text{obs }i\text{belongs to species } 3  )
@@ -569,12 +554,11 @@ Y_i & \sim\mathcal{N}(\mu_i,\sigma_y),\ &  i = 1,\dots,150 \\
 $$
 
 that is, we have a common intercept $\beta_0$ while the linear effect of the Sepal length depends on the Species. Using `lm()` we have:
+
 ```{r}
 mod2 = lm(Petal.Length ~ Species:Sepal.Length, data = iris)
 mod2
 ```
-
-
 
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
@@ -602,12 +586,10 @@ fit1b$summary.random$spp_sepal
 ```
 :::
 
-
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
 Plot the estimated regression lines for the three species using model `fit1b`
-
 
 ```{r}
 #| webex.hide: "Click here to see the solution"
@@ -627,7 +609,3 @@ pp = preds %>% ggplot() + geom_line(aes(Sepal.Length, mean, group = Species, col
 pp
 ```
 :::
-
-
-
-

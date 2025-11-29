@@ -18,6 +18,7 @@ title-slide-attributes:
 slide-number: true
 date: 12/15/2025
 date-format: long
+toc: false
 execute: 
   eval: true
   echo: true
@@ -539,8 +540,6 @@ $$
 We assume that, given the *linear predictor* $\eta$, the data are independent on each other! Data dependence is expressed through the *components* if the linear predictor.
 :::
 
-
-
 ## Let's formalize this a bit... {auto-animate="true"}
 
 The elements of a `inlabru` friendly statistical model are:
@@ -591,11 +590,9 @@ The elements of a `inlabru` friendly statistical model are:
     \theta = \sigma^2
     $$
 
-
-
 ## Latent Gaussian Models (LGM) {auto-animate="true"}
 
-::::: columns
+:::::: columns
 ::: {.column width="50%"}
 1.  [The observation model: $$
     \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
@@ -608,19 +605,17 @@ The elements of a `inlabru` friendly statistical model are:
 4.  The hyperparameters: $\pi(\theta)$
 :::
 
-::: {.column width="50%"}
-
+:::: {.column width="50%"}
 ::: {style="height: 50px;"}
 :::
 
- [**Stage 1** The data generating process]{style="color: #FF6B6B;"}
-
-:::
-:::::
+[**Stage 1** The data generating process]{style="color: #FF6B6B;"}
+::::
+::::::
 
 ## Latent Gaussian Models (LGM) {auto-animate="true"}
 
-::::: columns
+::::::: columns
 ::: {.column width="50%"}
 1.  The observation model: $$
     \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
@@ -633,8 +628,7 @@ The elements of a `inlabru` friendly statistical model are:
 4.  The hyperparameters: $\pi(\theta)$
 :::
 
-::: {.column width="50%"}
-
+::::: {.column width="50%"}
 ::: {style="height: 50px;"}
 :::
 
@@ -644,15 +638,12 @@ The elements of a `inlabru` friendly statistical model are:
 :::
 
 [**Stage 2** The dependence structure]{style="color: #FF6B6B;"}
-
-:::
 :::::
-
-
+:::::::
 
 ## Latent Gaussian Models (LGM) {auto-animate="true"}
 
-::: columns
+:::::::: columns
 ::: {.column width="50%"}
 1.  The observation model: $$
     \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
@@ -665,8 +656,7 @@ The elements of a `inlabru` friendly statistical model are:
 4.  [The hyperparameters: $\pi(\theta)$]{style="color: #FF6B6B;"}
 :::
 
-::: {.column width="50%"}
-
+:::::: {.column width="50%"}
 ::: {style="height: 50px;"}
 :::
 
@@ -680,16 +670,13 @@ The elements of a `inlabru` friendly statistical model are:
 ::: {style="height: 40px;"}
 :::
 
-
 [**Stage 3** The hyperparameters]{style="color: #FF6B6B;"}
-
-:::
-:::
-
+::::::
+::::::::
 
 ## Latent Gaussian Models (LGM) {auto-animate="true"}
 
-::: columns
+:::::::: columns
 ::: {.column width="50%"}
 1.  The observation model: $$
     \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
@@ -702,8 +689,7 @@ The elements of a `inlabru` friendly statistical model are:
 4.  The hyperparameters: $\pi(\theta)$
 :::
 
-::: {.column width="50%"}
-
+:::::: {.column width="50%"}
 ::: {style="height: 50px;"}
 :::
 
@@ -717,16 +703,13 @@ The elements of a `inlabru` friendly statistical model are:
 ::: {style="height: 40px;"}
 :::
 
-
 **Stage 3** The hyperparameters
-
-:::
-:::
+::::::
+::::::::
 
 ::: {.r-stack .larger style="font-size: 1.5em;"}
 **Q**: What are we interested in?
 :::
-
 
 ## The posterior distribution {.small background-color="#FFFFFF"}
 
@@ -748,9 +731,7 @@ digraph posterior {
 
 $$
 \color{purple}{\pi(\mathbf{u},\theta|\mathbf{y})}\propto \color{#FF6B6B}{\pi(\mathbf{y}|\mathbf{u},\theta)}\color{#0066CC}{\pi(\mathbf{u}|\theta)\pi(\theta)}
-$$
-## 
-
+$$ \##
 
 ## The posterior distribution {.small background-color="#FFFFFF"}
 
@@ -773,13 +754,11 @@ digraph posterior {
 
 ```
 
-
-
 ## `inlabru` for linear regression {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="60%"}
-**The Model** 
+**The Model**
 
 $$
 \begin{aligned}
@@ -788,16 +767,15 @@ y_i|\eta_i, \sigma^2 & \sim \mathcal{N}(\eta_i,\sigma^2)\\
 \end{aligned}
 $$
 :::
-::: {.column width="40%"}
 
+::: {.column width="40%"}
 ```{r}
 #| echo: true
 library(inlabru)
 Pallid[1:3,c("w","tl")]
 ```
-
 :::
-:::
+:::::
 
 **The code**
 
@@ -821,12 +799,11 @@ lik = bru_obs(formula = eta,
 fit = bru(cmp, lik)
 ```
 
-
 ## `inlabru` for linear regression {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="60%"}
-**The Model** 
+**The Model**
 
 $$
 \begin{aligned}
@@ -845,7 +822,7 @@ library(inlabru)
 Pallid[1:3,c("w","tl")]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -871,9 +848,9 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for linear regression {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="60%"}
-**The Model** 
+**The Model**
 
 $$
 \begin{aligned}
@@ -890,7 +867,7 @@ library(inlabru)
 Pallid[1:3,c("w","tl")]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -918,9 +895,9 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for linear regression {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
-**The Model** 
+**The Model**
 
 $$
 \begin{aligned}
@@ -937,7 +914,7 @@ library(inlabru)
 Pallid[1:3,c("w","tl")]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -965,9 +942,9 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for linear regression {auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
-**The Model** 
+**The Model**
 
 $$
 \begin{aligned}
@@ -984,7 +961,7 @@ library(inlabru)
 Pallid[1:3,c("w","tl")]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1090,35 +1067,28 @@ Data can have several dependence structures: temporal, spatial,...
 
 **Using a Bayesian framework**:
 
--   Build (hierarchical) models to account for potentially complicated
-    dependency structures in the data.
+-   Build (hierarchical) models to account for potentially complicated dependency structures in the data.
 
--   Attribute uncertainty to model parameters and latent variables using
-    priors.
+-   Attribute uncertainty to model parameters and latent variables using priors.
 
 **Two main challenges**:
 
--   Need computationally efficient methods to calculate posteriors (this
-    is where INLA helps!).
+-   Need computationally efficient methods to calculate posteriors (this is where INLA helps!).
 -   Select priors in a sensible way (we'll talk about this)
 
 ## The good news!! {.smaller auto-animate="true"}
 
-In many cases complicated spatio-temporal models are *just* special
-cases of the same model structure!! :smiley:
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! :smiley:
 
 -   **Stage 1**: What is the distribution of the responses?
 
--   **Stage 2**: What are the model components? and what is their
-    distribution?
+-   **Stage 2**: What are the model components? and what is their distribution?
 
--   **Stage 3**: What are our prior beliefs about the parameters
-    controlling the components in the model?
+-   **Stage 3**: What are our prior beliefs about the parameters controlling the components in the model?
 
 ## The good news!! {.smaller auto-animate="true"}
 
-In many cases complicated spatio-temporal models are *just* special
-cases of the same model structure!! :smiley:
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! :smiley:
 
 -   **Stage 1**: What is the distribution of the responses?
 
@@ -1129,39 +1099,31 @@ cases of the same model structure!! :smiley:
     -   Survival data? (recovery time, time to death)
     -   ... (many more examples!!)
 
--   **Stage 2**: What are the model components? and what is their
-    distribution?
+-   **Stage 2**: What are the model components? and what is their distribution?
 
--   **Stage 3**: What are our prior beliefs about the parameters
-    controlling the components in the model?
+-   **Stage 3**: What are our prior beliefs about the parameters controlling the components in the model?
 
 ## The good news!! {.smaller auto-animate="true"}
 
-In many cases complicated spatio-temporal models are *just* special
-cases of the same model structure!! :smiley:
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! :smiley:
 
 -   **Stage 1**: What is the distribution of the responses?
 
-    -   We assume data to be *conditionally* independent given the model
-        components and some hyperparameters
+    -   We assume data to be *conditionally* independent given the model components and some hyperparameters
     -   This means that all dependencies in data are explained in Stage
-        2.
+        2.  
 
--   **Stage 2**: What are the model components? and what is their
-    distribution?
+-   **Stage 2**: What are the model components? and what is their distribution?
 
--   **Stage 3**: What are our prior beliefs about the parameters
-    controlling the components in the model?
+-   **Stage 3**: What are our prior beliefs about the parameters controlling the components in the model?
 
 ## The good news!! {.smaller auto-animate="true"}
 
-In many cases complicated spatio-temporal models are *just* special
-cases of the same model structure!! :smiley:
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! :smiley:
 
 -   **Stage 1**: What is the distribution of the responses?
 
--   **Stage 2**: What are the model components? and what is their
-    distribution?
+-   **Stage 2**: What are the model components? and what is their distribution?
 
 Here we can have:
 
@@ -1170,27 +1132,21 @@ Here we can have:
 -   Structured random effects (AR(1), regional effects, )
 -   ...
 
-These are linked to the responses in the likelihood through *linear
-predictors*.
+These are linked to the responses in the likelihood through *linear predictors*.
 
--   **Stage 3**: What are our prior beliefs about the parameters
-    controlling the components in the model?
+-   **Stage 3**: What are our prior beliefs about the parameters controlling the components in the model?
 
 ## The good news!! {.smaller auto-animate="true"}
 
-In many cases complicated spatio-temporal models are *just* special
-cases of the same model structure!! :smiley:
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! :smiley:
 
 -   **Stage 1**: What is the distribution of the responses?
 
--   **Stage 2**: What are the model components? and what is their
-    distribution?
+-   **Stage 2**: What are the model components? and what is their distribution?
 
--   **Stage 3**: What are our prior beliefs about the parameters
-    controlling the components in the model?
+-   **Stage 3**: What are our prior beliefs about the parameters controlling the components in the model?
 
-    The likelihood and the latent model typically have hyperparameters
-    that control their behavior.
+    The likelihood and the latent model typically have hyperparameters that control their behavior.
 
     They can include:
 
@@ -1201,8 +1157,7 @@ cases of the same model structure!! :smiley:
 
 ## The second good news!
 
-No matter how complicated is your model, the `inlabru` workflow is
-*always* the same :smiley:
+No matter how complicated is your model, the `inlabru` workflow is *always* the same :smiley:
 
 ```{r}
 #| echo: true
@@ -1232,8 +1187,7 @@ fit <- bru(comps, lik, ...)
 
 ## The second good news!
 
-No matter how complicated is your model, the `inlabru` workflow is
-*always* the same :smiley:
+No matter how complicated is your model, the `inlabru` workflow is *always* the same :smiley:
 
 ```{r}
 #| echo: true
@@ -1267,8 +1221,7 @@ fit <- bru(comps, lik, ...)
 
 ## The Tokyo rainfall data
 
-One example with time series: Rainfall over 1 mm in the Tokyo area for
-each calendar day during two years (1983-84) are registered.
+One example with time series: Rainfall over 1 mm in the Tokyo area for each calendar day during two years (1983-84) are registered.
 
 ```{r}
 #| echo: false
@@ -1309,7 +1262,7 @@ pTokyo +
 
 $$
 y_t|\eta_t\sim\text{Bin}(n_t, p_t),\qquad \eta_t = \text{logit}(p_t),\qquad i = 1,\dots,366
-$$ 
+$$
 
 $$
 n_t = \left\{
@@ -1317,8 +1270,7 @@ n_t = \left\{
 1, & \text{for}\; 29\; \text{February}\\
 2, & \text{other days}
 \end{array}\right.
-$$ 
-$$
+$$ $$
 y_t =
 \begin{cases}
 \{0,1\}, & \text{for}\; 29\; \text{February}\\
@@ -1346,8 +1298,7 @@ $$
 
 -   $\beta_0$ is an intercept
 
--   $f(\text{time}_t)$ is a RW2 model (this is just a smoother). The
-    smoothness is controlled by a hyperparameter $\tau_f$
+-   $f(\text{time}_t)$ is a RW2 model (this is just a smoother). The smoothness is controlled by a hyperparameter $\tau_f$
 
 ## The model {auto-animate="true"}
 
@@ -1357,7 +1308,7 @@ $$
 y_t|\eta_t\sim\text{Bin}(n_t, p_t),\qquad \eta_t = \text{logit}(p_t),\qquad i = 1,\dots,366
 $$
 
-**Stage 2** The latent field 
+**Stage 2** The latent field
 
 $$
 \eta_t = \beta_0 + f(\text{time}_t)
@@ -1369,9 +1320,9 @@ $$
 
 -   We assign a prior to $\tau_f$ to finalize the model.
 
-## `inlabru` for time series {auto-animate="true" .smaller }
+## `inlabru` for time series {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1389,7 +1340,7 @@ $$
 Tokyo[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1416,9 +1367,9 @@ fit = bru(cmp, lik)
 
 ```
 
-## `inlabru` for time series {auto-animate="true" .smaller }
+## `inlabru` for time series {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1436,7 +1387,7 @@ $$
 Tokyo[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1463,9 +1414,9 @@ fit = bru(cmp, lik)
 
 ```
 
-## `inlabru` for time series {auto-animate="true" .smaller }
+## `inlabru` for time series {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1483,7 +1434,7 @@ $$
 Tokyo[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1510,9 +1461,9 @@ fit = bru(cmp, lik)
 
 ```
 
-## `inlabru` for time series {auto-animate="true" .smaller}
+## `inlabru` for time series {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1530,7 +1481,7 @@ $$
 Tokyo[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1557,14 +1508,11 @@ fit = bru(cmp, lik)
 
 ```
 
-
-
 ## Example: disease mapping
 
-We observed larynx cancer mortality counts for males in 544 district of
-Germany from 1986 to 1990 and want to make a model.
+We observed larynx cancer mortality counts for males in 544 district of Germany from 1986 to 1990 and want to make a model.
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 -   $y_i$: The count at location $i$.
 
@@ -1629,18 +1577,15 @@ g <- system.file("demodata/germany.graph" , package = "INLA")
 my.germany.map(Germany$Y/Germany$E, autoscale = F)
 ```
 :::
-:::
+:::::
 
 ## Bayesian disease mapping {.smaller}
 
-> -   **Stage 1:** We assume the responses are Poisson distributed:
->     $$          
+> -   **Stage 1:** We assume the responses are Poisson distributed: $$          
 >     y_i \mid \eta_i \sim \text{Poisson}(E_i\exp(\eta_i)))
 >     $$
 
-> -   **Stage 2:** $\eta_i$ is a linear function of three components: an
->     intercept, a covariate $c_i$, a spatially structured effect
->     $\omega$ likelihood by $$
+> -   **Stage 2:** $\eta_i$ is a linear function of three components: an intercept, a covariate $c_i$, a spatially structured effect $\omega$ likelihood by $$
 >     \eta_i = \beta_0 + \beta_1\ c_i + \omega_i
 >     $$
 
@@ -1649,14 +1594,11 @@ my.germany.map(Germany$Y/Germany$E, autoscale = F)
 
 . . .
 
-The latent field is
-$\boldsymbol{u} = (\beta_0, \beta_1, \omega_1, \omega_2,\ldots, \omega_n)$,
-the hyperparameters are $\boldsymbol{\theta} = (\tau_{\omega})$, and
-must be given a prior.
+The latent field is $\boldsymbol{u} = (\beta_0, \beta_1, \omega_1, \omega_2,\ldots, \omega_n)$, the hyperparameters are $\boldsymbol{\theta} = (\tau_{\omega})$, and must be given a prior.
 
 ## `inlabru` for disease mapping {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1676,7 +1618,7 @@ g = system.file("demodata/germany.graph",
 Germany[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1707,7 +1649,7 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for disease mapping {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1727,7 +1669,7 @@ g = system.file("demodata/germany.graph",
 Germany[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1758,7 +1700,7 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for disease mapping {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1778,7 +1720,7 @@ g = system.file("demodata/germany.graph",
 Germany[1:3,]
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -1854,8 +1796,7 @@ my.germany.map(fit$summary.random$space$mean, autoscale = F)
 
 ## Bayesian Geostatistics
 
-Encounter probability of Pacific Cod (*Gadus macrocephalus*) from a
-trawl survey.
+Encounter probability of Pacific Cod (*Gadus macrocephalus*) from a trawl survey.
 
 ```{r}
 #| echo: false
@@ -1960,12 +1901,11 @@ $y(s)$ Presence of absence in location $s$
 -   **Stage 3** Hyperparameters
 
     -   Precision for the smooth function $f(\cdot)$
-    -   Range and sd in the Gaussian field
-        $\sigma_{\omega}, \tau_{\omega}$
+    -   Range and sd in the Gaussian field $\sigma_{\omega}, \tau_{\omega}$
 
 ## `inlabru` for geostatistics {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -1975,8 +1915,6 @@ y(s)|\eta(s) & \sim \text{Binom}(1, p(s))\\
 \eta(s) &  = \color{#FF6B6B}{\boxed{\beta_0 }}+  \color{#FF6B6B}{\boxed{f(x(s))}} +  \color{#FF6B6B}{\boxed{\omega(s)}}\\
 \end{aligned}
 $$
-
-
 :::
 
 ::: {.column width="50%"}
@@ -1985,7 +1923,7 @@ $$
 df %>% select(depth, present) %>% print(n = 3)
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -2014,10 +1952,9 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for geostatistics {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
-
 
 $$
 \begin{aligned}
@@ -2025,8 +1962,6 @@ y(s)|\eta(s) & \sim \text{Binom}(1, p(s))\\
 \color{#FF6B6B}{\boxed{\eta(s)}} &  = \color{#FF6B6B}{\boxed{\beta_0 +  f(x(s)) +  \omega(s)}}\\
 \end{aligned}
 $$
-
-
 :::
 
 ::: {.column width="50%"}
@@ -2035,7 +1970,7 @@ $$
 df %>% select(depth, present) %>% print(n = 3)
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -2064,7 +1999,7 @@ fit = bru(cmp, lik)
 
 ## `inlabru` for geostatistics {.smaller auto-animate="true"}
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 **The Model**
 
@@ -2074,7 +2009,6 @@ $$
 \eta(s) &  = \beta_0 +  f(x(s)) +  \omega(s)\\
 \end{aligned}
 $$
-
 :::
 
 ::: {.column width="50%"}
@@ -2083,7 +2017,7 @@ $$
 df %>% select(depth, present) %>% print(n = 3)
 ```
 :::
-:::
+:::::
 
 **The code**
 
@@ -2149,13 +2083,9 @@ ggplot() +
 
 ## Take home message!
 
-
 ::: {style="height: 50px;"}
 :::
--   Many of the model you have used (and some you have never used but
-    will learn about) are *just* special cases of the large class of
-    Latent Gaussian models
 
--   `inlabru` provides an efficient and unified way to fit all these
-    models!
+-   Many of the model you have used (and some you have never used but will learn about) are *just* special cases of the large class of Latent Gaussian models
 
+-   `inlabru` provides an efficient and unified way to fit all these models!
