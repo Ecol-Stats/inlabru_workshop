@@ -31,8 +31,7 @@ library(scico)
 
 In this practical we will:
 
--   Learn how to fit a GAM with `inlabru`
--   Generate predictions from the model
+-   Learn how to fit a [GAM](#fitting_GAM)  with `inlabru`
 
 Generalised Additive Models (GAMs) are very similar to linear models, but with an additional basis set that provides flexibility.
 
@@ -50,13 +49,17 @@ $$
 
 where $b_k$ denote the basis functions and $\beta_K$ are their coefficients.
 
-Increasing the number of basis functions leads to a more *wiggly* line. Too few basis functions might make the line too smooth, too many might lead to overfitting.To avoid this, we place further constraints on the spline coefficients which leads to constrained optimization problem where the objective function to be minimized is given by:
+Increasing the number of basis functions leads to a more *wiggly* line. Too few basis functions might make the line too smooth, too many might lead to overfitting.
+
+To avoid this, we place further constraints on the spline coefficients which leads to constrained optimization problem where the objective function to be minimized is given by:
 
 $$
 \mathrm{min}\sum_i(y_i-f(x_i))^2 + \lambda(\sum_kb^2_k)
-$$ The first term measures how close the function $f()$ is to the data while the second term $\lambda(\sum_kb^2_k)$, penalizes the roughness in the function. Here, $\lambda >0$ is known as the smoothing parameter because it controls the degree of smoothing (i.e. the trade-off between the two terms). In a Bayesian setting,including the penalty term is equivalent to setting a specific prior on the coefficients of the covariates.
+$$ 
 
-In this exercise we will set a random walk prior of order 1 on $f$, i.e. $f(x_i)-f(x_i-1) \sim \mathcal{N}(0,\sigma^2_f)$ where $\sigma_f^2$ is the smoothing parameter such that small values give large smoothing. Notice that we will assume $x_i$'s are equally spaced for now (we will cover a stochastic differential equation approach that relaxes this assumption later on in the course).
+The first term measures how close the function $f()$ is to the data while the second term $\lambda(\sum_kb^2_k)$, penalizes the roughness in the function. Here, $\lambda >0$ is known as the smoothing parameter because it controls the degree of smoothing (i.e. the trade-off between the two terms). In a Bayesian setting,including the penalty term is equivalent to setting a specific prior on the coefficients of the covariates.
+
+In this exercise we will set a random walk prior of order 1 on $f$, i.e. $f(x_i)-f(x_i-1) \sim \mathcal{N}(0,\sigma^2_f)$ where $\sigma_f^2$ is the smoothing parameter such that small values give large smoothing. Notice that we will assume $x_i$'s are equally spaced.
 
 ### Simulate Data
 
@@ -78,7 +81,7 @@ df = data.frame(y = y,
 
 ```
 
-### Fitting a GAM in `inlabru`
+### Fitting a GAM in `inlabru`{#sec-fitting_GAM} 
 
 Now lets fit a flexible model by setting a random walk of order 1 prior on the coefficients. This can be done bye specifying `model = "rw1"` in the model component (similarly,a random walk of order 2 can be placed by setting `model = "rw2"` )
 

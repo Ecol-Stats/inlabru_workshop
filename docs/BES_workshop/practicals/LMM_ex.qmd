@@ -17,11 +17,20 @@ editor_options:
 
 In this practical we will:
 
+-   Fit a [linear mixed model.](#fitting_LMM)
+
+<!-- -->
+
 -   Understand the basic structure of a Linear Mixed Model (LLM)
 -   Simulate data from a LMM
 -   Learn how to fit a LMM with `inlabru` and predict from the model.
 
-Consider the a simple linear regression model except with the addition that the data that comes in groups. Suppose that we want to include a random effect for each group $j$ (equivalent to adding a group random intercept). The model is then: $$
+In this example we are going to consider a simple linear mixed model, that is 
+ a simple linear regression model except with the addition that the data that comes in groups. 
+ 
+Suppose that we want to include a random effect for each group $j$ (equivalent to adding a group random intercept). The model is then: 
+
+$$
  y_{ij}  = \beta_0 + \beta_1 x_i + u_j + \epsilon_{ij} ~~~  \text{for}~i = 1,\ldots,N~ \text{and}~ j = 1,\ldots,m.
 $$
 
@@ -67,7 +76,7 @@ where $f_k(u_j) = u_j$ since there’s only one random effect per group (i.e., a
     -   $\tau_\epsilon \sim \mathrm{Gamma}(c,d)$
 :::
 
-### **Simulate example data**
+### Simulate example data
 
 ```{r}
 #| message: false
@@ -114,7 +123,7 @@ ggplot(df) +
 
 ```
 
-### Fitting a LMM in `inlabru`
+### Fitting a LMM in `inlabru`{#sec-fitting_LMM} 
 
 ------------------------------------------------------------------------
 

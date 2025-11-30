@@ -17,9 +17,8 @@ editor_options:
 
 In this practical we will:
 
--   Simulate non-Gaussian data
--   Learn how to fit a generalised linear model with `inlabru`
--   Generate predictions from the model
+-   Learn how to fit a [generalised linear model](#fitting_GLM) with `inlabru`
+
 
 ```{r}
 #| warning: false
@@ -41,7 +40,7 @@ $$ with rate parameter $\lambda_i$ which, using a log link, has associated predi
 \eta_i = \log \lambda_i = \beta_0 + \beta_1 x_i 
 $$ with parameters $\beta_0$ and $\beta_1$, and covariate $x$.
 
-### **Simulate example data**
+### Simulate example data
 
 This code generates 100 samples of covariate `x` and data `y`.
 
@@ -56,7 +55,7 @@ y = rpois(n, lambda  = lambda)
 df = data.frame(y = y, x = x)  
 ```
 
-### Fitting a GLM in `inlabru`
+### Fitting a GLM in `inlabru` {#sec-fitting_GLM} 
 
 ------------------------------------------------------------------------
 
@@ -64,12 +63,10 @@ df = data.frame(y = y, x = x)
 
 The predictor here only contains only 2 components (Intercept and Slope).
 
-
-:::: {.callout-warning icon="false"}
+::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}}Task
 
 Define an object called `cmp` that includes and (i) intercept `beta_0` and (ii) a covariate `x` linear effect `beta_1`.
-
 
 ```{r}
 #| webex.hide: "Click here to see the solution"
@@ -79,15 +76,14 @@ Define an object called `cmp` that includes and (i) intercept `beta_0` and (ii) 
 cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
 
 ```
-::::
+:::
 
 **Define linear predictor**
 
-:::: {.callout-warning icon="false"}
+::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}}Task
 
 Define a linear predictor `eta` using the component labels you have defined on the previous task.
-
 
 ```{r}
 #| webex.hide: "Click here to see the solution"
@@ -97,12 +93,9 @@ Define a linear predictor `eta` using the component labels you have defined on t
 eta = y ~ beta_0 + beta_1
 
 ```
-::::
-
-
+:::
 
 **Build observational model**
-
 
 When building the observation model likelihood we must now specify the Poisson likelihood using the `family` argument (the default link function for this family is the $\log$ link).
 
