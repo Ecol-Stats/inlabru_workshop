@@ -37,13 +37,18 @@ library(inlabru)
 library(scico)
 ```
 
-As our first example we consider a simple linear regression model with Gaussian observations $$
+As our first example we consider a simple linear regression model with Gaussian observations 
+
+$$
 y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
 $$
 
-where $\sigma^2$ is the observation error, and the mean parameter $\mu_i$ is linked to the **linear predictor** ($\eta_i$) through an identity function: $$
+where $\sigma^2$ is the observation error, and the mean parameter $\mu_i$ is linked to the **linear predictor** ($\eta_i$) through an identity function: 
+$$
 \eta_i = \mu_i = \beta_0 + \beta_1 x_i
-$$ where $x_i$ is a covariate and $\beta_0, \beta_1$ are parameters to be estimated. We assign $\beta_0$ and $\beta_1$ a vague Gaussian prior.
+$$ 
+
+where $x_i$ is a covariate and $\beta_0, \beta_1$ are parameters to be estimated. We assign $\beta_0$ and $\beta_1$ a vague Gaussian prior.
 
 To finalize the Bayesian model we assign a $\text{Gamma}(a,b)$ prior to the precision parameter $\tau = 1/\sigma^2$ and two independent Gaussian priors with mean $0$ and precision $\tau_{\beta}$ to the regression parameters $\beta_0$ and $\beta_1$ (we will use the default prior settings in INLA for now).
 
