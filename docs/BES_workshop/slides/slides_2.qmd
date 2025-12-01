@@ -8,6 +8,7 @@ author:
   - name: Janine Illian
 format:
   revealjs:
+    footer-logo-link: "https://quarto.org"
     margin: 0
     logo:  UofG.png
     theme: uofg_theme.scss

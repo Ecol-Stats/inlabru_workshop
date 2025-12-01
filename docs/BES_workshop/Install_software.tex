@@ -263,7 +263,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, boxrule=0pt, colback={codebgcolor}, enhanced, breakable, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, enhanced, frame hidden, sharp corners, boxrule=0pt, colback={codebgcolor}]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -385,18 +385,18 @@ You can check that \texttt{INLA} is correctly installed by running
 
 \begin{verbatim}
 Time used:
-    Pre = 0.419, Running = 0.227, Post = 0.0516, Total = 0.697 
+    Pre = 0.628, Running = 0.341, Post = 0.0869, Total = 1.06 
 Fixed effects:
-            mean    sd 0.025quant 0.5quant 0.975quant mode kld
-(Intercept)   10 0.097      9.809       10     10.191   10   0
+             mean    sd 0.025quant 0.5quant 0.975quant  mode kld
+(Intercept) 9.899 0.103      9.697    9.899     10.102 9.899   0
 
 Model hyperparameters:
                                         mean    sd 0.025quant 0.5quant
-Precision for the Gaussian observations 1.08 0.152      0.803     1.07
-                                        0.975quant mode
-Precision for the Gaussian observations       1.40 1.06
+Precision for the Gaussian observations 0.96 0.135      0.714    0.953
+                                        0.975quant  mode
+Precision for the Gaussian observations       1.24 0.941
 
-Marginal log-Likelihood:  -150.84 
+Marginal log-Likelihood:  -156.80 
  is computed 
 Posterior summaries for the linear predictor and the fitted values are computed
 (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')
@@ -434,18 +434,18 @@ Observation models:
     Additive/Linear: TRUE/TRUE
     Used components: effects[Intercept], latent[] 
 Time used:
-    Pre = 0.279, Running = 0.23, Post = 0.069, Total = 0.578 
+    Pre = 0.424, Running = 0.333, Post = 0.138, Total = 0.894 
 Fixed effects:
-          mean    sd 0.025quant 0.5quant 0.975quant mode kld
-Intercept   10 0.097      9.809       10      10.19   10   0
+           mean    sd 0.025quant 0.5quant 0.975quant  mode kld
+Intercept 9.899 0.103      9.697    9.899     10.102 9.899   0
 
 Model hyperparameters:
                                         mean    sd 0.025quant 0.5quant
-Precision for the Gaussian observations 1.08 0.152      0.803     1.07
-                                        0.975quant mode
-Precision for the Gaussian observations       1.40 1.06
+Precision for the Gaussian observations 0.96 0.135      0.714    0.953
+                                        0.975quant  mode
+Precision for the Gaussian observations       1.24 0.941
 
-Marginal log-Likelihood:  -155.31 
+Marginal log-Likelihood:  -161.27 
  is computed 
 Posterior summaries for the linear predictor and the fitted values are computed
 (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')
