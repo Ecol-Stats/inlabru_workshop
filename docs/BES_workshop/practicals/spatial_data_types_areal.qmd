@@ -211,8 +211,8 @@ The hyperparameters of the model are $\tau_u$ and $\tau_z$
 
 **NOTE** In this case the linear predictor $\eta$ consists of three components!!
 
-::: {.callout-tip icon="false"}
-## {{< bi question-octagon color=#6dc83c >}} Question
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
 
 Fit the above model in using `inlabru` by completing the following code:
 
@@ -257,20 +257,12 @@ fit = bru(cmp, lik)
 
 After fitting the model we want to extract results.
 
-::: {.callout-tip icon="false"}
+:::{.callout-tip icon="false"}
 ## {{< bi question-octagon color=#6dc83c >}} Question
 
-1.  What is the estimated value for $\beta_0$?
+1.  What is the estimated value for $\beta_0$? `r fitb(fit$summary.fixed[1], num = TRUE, tol = .001)`
 
-2.  Look at the estimated values of the hyperparameters using
-
-```{r}
-#| echo: true
-#| eval: false
-fit$summary.hyperpar
-```
-
-Which of the two spatial components (structured or unstructured) explains more of the variability in the counts?
+2.  Look at the estimated values of the hyperparameters using `fit$summary.hyperpar` , which of the two spatial components (structured or unstructured) explains more of the variability in the counts? `r mcq(c("structured", answer = "unstructured"))` 
 :::
 
 ### Areal model predictions
@@ -280,20 +272,11 @@ We now look at the predictions over space.
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
-Complete the code below to produce:
-
-1.  prediction of the linear predictor $\eta_i$
-
-2.  The risk rate $\lambda_i$
-
-3.  The expected cases $E_i\exp(\lambda_i)$ over the whole space of interest.
-
-Plot the mean and sd of the resulting surfaces.
+Complete the code below to produce prediction of the linear predictor $\eta_i$ and of the risk $\lambda_i$ and of the expected cases $E_i\exp(\lambda_i)$ over the whole space of interest. Then plot the mean and sd of the resulting surfaces.
 
 ```{r}
 #| echo: true
 #| eval: false
-#| purl: false
 
 pred = predict(fit, resp_cases, ~data.frame(log_risk = ...,
                                              risk = exp(...),
@@ -306,6 +289,7 @@ pred = predict(fit, resp_cases, ~data.frame(log_risk = ...,
 `r hide("See Solution")`
 
 ```{r}
+#| purl: false
 # produce predictions
 pred = predict(fit, 
                resp_cases,
@@ -378,6 +362,7 @@ $$ where, in our case, $\pi(y_i|E_i\lambda_i)$ is Poisson with mean $E_i\lambda_
 #| fig-height: 4
 #| code-fold: true
 #| code-summary: "Click here to see the code"
+#| purl: false
 
 # simulate 1000 realizations of E_i\lambda_i
 expected_counts = generate(fit, resp_cases, 

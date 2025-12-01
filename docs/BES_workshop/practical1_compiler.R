@@ -29,24 +29,12 @@ df = data.frame(y = y, x = x)
 
 
 
-## -----------------------------------------------------------------------------
-#| code-summary: "Define LM components"
-cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
 
 
 
 
-## -----------------------------------------------------------------------------
-#| eval: false
-#| code-summary: "Define LM formula"
-# formula = y ~ beta_0 + beta_1
 
 
-## -----------------------------------------------------------------------------
-#| code-summary: "Define Observational model"
-lik =  bru_obs(formula = y ~.,
-            family = "gaussian",
-            data = df)
 
 
 ## -----------------------------------------------------------------------------
@@ -171,7 +159,7 @@ cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear") +
 
 ## ----define_likelihood_lmm----------------------------------------------------
 # Construct likelihood
-lik =  like(formula = y ~.,
+lik =  bru_obs(formula = y ~.,
             family = "gaussian",
             data = df)
 
@@ -220,16 +208,14 @@ y = rpois(n, lambda  = lambda)
 df = data.frame(y = y, x = x)  
 
 
-## -----------------------------------------------------------------------------
-#| code-summary: "GLM components"
 
-cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
+
 
 
 ## -----------------------------------------------------------------------------
 #| code-summary: "GLM likelihood"
 
-lik =  bru_obs(formula = y ~.,
+lik =  bru_obs(formula = eta,
             family = "poisson",
             data = df)
 

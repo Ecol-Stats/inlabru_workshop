@@ -1,5 +1,7 @@
 ---
-title: "Practical"
+title: "Practical - `inlabru` workflow"
+execute: 
+  freeze: auto
 format: 
   html:
     theme:
@@ -17,9 +19,8 @@ editor_options:
 
 In this practical we will:
 
--   Simulate Gaussian data
--   Learn how to fit a linear model with `inlabru`
--   Generate predictions from the model
+-   Fit a [simple linear regression](#SLR) with `inlabru`
+-   Fit a [linear regression with discrete covariates and interactions](#LM_int)
 
 Start by loading useful libraries:
 
@@ -37,7 +38,9 @@ library(inlabru)
 library(scico)
 ```
 
-As our first example we consider a simple linear regression model with Gaussian observations $$
+As our first example we consider a simple linear regression model with Gaussian observations
+
+$$
 y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
 $$
 
@@ -88,23 +91,14 @@ Our linear predictor consists then of two components: an intercept and a slope.
 
 ### Simulate example data
 
-First, we simulate data from the model
-
-$$
-y_i\sim\mathcal{N}(\eta_i,0.1^2), \ i = 1,\dots,100
-$$
-
-with
-
-$$
-\eta_i = \beta_0 + \beta_1 x_i
-$$
-
-where $\beta_0 = 2$, $\beta_1 = 0.5$ and the values of the covariate $x$ are generated from an Uniform(0,1) distribution. The simulated response and covariate data are then saved in a `data.frame` object.
+We fix the model parameters $\beta_0$, $\beta_1$ and the hyperparameter $\tau_y$ to a given value and simulate the data accordingly using the code below. The simulated response and covariate data are then saved in a `data.frame` object.
 
 ```{r}
 #| code-fold: show
 #| code-summary: "Simulate Data from a LM"
+
+# set seed for reproducibility
+set.seed(1234) 
 
 beta = c(2,0.5)
 sd_error = 0.1
@@ -121,19 +115,32 @@ df = data.frame(y = y, x = x)
 
 ------------------------------------------------------------------------
 
-**Defining model components**
+**Step1: Defining model components**
 
-The model has two parameters to be estimated $\beta_1$ and $\beta_2$. We need to define the two corresponding model components:
+The first step is to define the two model components: The intercept and the linear covariate effect.
 
-```{r }
-#| code-summary: "Define LM components"
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Define an object called `cmp` that includes and (i) intercept `beta_0` and (ii) a covariate `x` linear effect `beta_1`.
+
+`r hide("Take hint")`
+
+The `cmp` object is here used to define model components. We can give them any useful names we like, in this case, `beta_0` and `beta_1`. You can remove the automatic intercept construction by adding a `-1` in the components
+
+`r unhide()`
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
 cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear")
-```
 
-The `cmp` object is here used to define model components. We can give them any useful names we like, in this case, `beta_0` and `beta_1`.
+```
+:::
 
 ::: callout-note
-Note that we have excluded the default Intercept term in the model by typing `-1` in the model components. However, `inlabru` has automatic intercept that can be called by typing `Intercept()` , which is one of `inlabru` special names and it is used to define a global intercept, e.g.
+`inlabru` has automatic intercept that can be called by typing `Intercept()` , which is one of `inlabru` special names and it is used to define a global intercept, e.g.
 
 ```{r}
 #| eval: false
@@ -144,32 +151,59 @@ cmp =  ~  Intercept(1) + beta_1(x, model = "linear")
 ```
 :::
 
-**Observation model construction**
+**Step 2: Build the observation model**
 
 The next step is to construct the observation model by defining the model likelihood. The most important inputs here are the `formula`, the `family` and the `data`.
 
-The `formula` defines how the components should be combined in order to define the model predictor.
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Define a linear predictor `eta` using the component labels you have defined on the previous task.
+
+`r hide("Take hint")`
+
+The `eta` object defines how the components should be combined in order to define the model predictor.
+
+`r unhide()`
 
 ```{r}
-#| eval: false
-#| code-summary: "Define LM formula"
-formula = y ~ beta_0 + beta_1
-```
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+eta = y ~ beta_0 + beta_1
 
-::: callout-note
-In this case we can also use the shortcut `formula = y ~ .`. This will tell `inlabru` that the model is linear and that it is not necessary to linearize the model and assess convergence.
+```
 :::
 
-The likelihood is defined using the `bru_obs()` function as follows:
+The likelihood for the observational model is defined using the `bru_obs()` function.
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Define the observational model likelihood in an object called `lik` using the `bru_obs()` function.
+
+`r hide("Take hint")`
+
+The `bru_obs` is expecting three arguments:
+
+-   The linear predictor `eta` we defined in the previous task
+-   The data likelihood (this can be specified by setting `family = "gaussian"`)
+-   The data set `df`
+
+`r unhide()`
 
 ```{r}
-#| code-summary: "Define Observational model"
-lik =  bru_obs(formula = y ~.,
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+lik =  bru_obs(formula = eta,
             family = "gaussian",
             data = df)
-```
 
-**Fit the model**
+```
+:::
+
+**Step 3: Fit the model**
 
 We fit the model using the `bru()` functions which takes as input the components and the observation model:
 
@@ -178,9 +212,11 @@ We fit the model using the `bru()` functions which takes as input the components
 fit.lm = bru(cmp, lik)
 ```
 
-**Extract results**
+**Step 4: Extract results**
 
-The `summary()` function will give access to some basic information about model fit and estimates
+There are several ways to extract and examine the results of a fitted `inlabru` object.
+
+The most natural place to start is to use the `summary()` which gives access to some basic information about model fit and estimates
 
 ```{r }
 #| code-summary: "Model summaries"
@@ -190,11 +226,7 @@ summary(fit.lm)
 
 We can see that both the intercept and slope and the error precision are correctly estimated.
 
-### Generate model predictions
-
-------------------------------------------------------------------------
-
-Now we can take the fitted `bru` object and use the `predict` function to produce predictions for $\mu$ given a new set of values for the model covariates or the original values used for the model fit
+Another way, which gives access to more complicated (and useful) output is to use the `predict()` function. Below we take the fitted `bru` object and use the `predict()` function to produce predictions for $\mu$ given a new set of values for the model covariates or the original values used for the model fit
 
 ```{r}
 new_data = data.frame(x = c(df$x, runif(10)),
@@ -249,7 +281,9 @@ pred %>% ggplot() +
 ::: {.callout-warning icon="false"}
 ## {{< bi pencil-square color=#c8793c >}} Task
 
-Generate predictions for a new observation with $x_0 = 0.45$
+Generate predictions for the linear predictor $\mu$ when the covariate has value $x_0 = 0.45$.
+
+What is the predicted value for $\mu$? And what is the uncertainty?
 
 `r hide("Take hint")`
 
@@ -265,10 +299,31 @@ You can create a new data frame containing the new observation $x_0$ and then us
 new_data = data.frame(x = 0.45)
 pred = predict(fit.lm, new_data, ~ beta_0 + beta_1,
                n.samples = 1000)
-
+pred
 ```
+
+You can see the predicted mean and sd by examining the produced `pred` object. In this case the mean is `r round(pred$mean,2)` with sd ca `r round(pred$sd,2)`. This gives a 95% CI ca \[`r round(pred$q0.025,2)`, `r round(pred$q0.975,2)`\].
 :::
 
+::: callout-note
+Before we have produced a credible interval for the expected mean $\mu$ if we want to produce a *prediction* interval for a new observation $y$ we need to add the uncertainty that comes from the likelihood with precision $\tau_y$. To do this we can again use the `predict()` function to compute a 95% prediction interval for $y$.
+
+```{r}
+
+pred2 = predict(fit.lm, new_data, 
+               formula = ~ {
+                 mu = beta_0 + beta_1
+                 sigma = sqrt(1/Precision_for_the_Gaussian_observations)
+                 list(q1 = qnorm(0.025, mean = mu, sd = sigma),
+                      q2 =  qnorm(0.975, mean = mu, sd = sigma))},
+               n.samples = 1000)
+round(c(pred2$q1$mean, pred2$q2$mean),2)
+```
+
+Notice that now the interval we obtain is larger.
+:::
+
+### Setting Priors
 
 In `R-INLA`, the default choice of priors for each $\beta$ is
 
@@ -281,7 +336,7 @@ and the prior for the variance parameter in terms of the log precision is
 $$ \log(\tau) \sim \mathrm{logGamma}(1,5 \times 10^{-5}) $$
 
 ::: callout-note
-If your model uses the default intercept construction (i.e., `Intercept(1)` in the linear predictor) INLA will assign a default $\mathcal{N} (0,0)$ prior to it.
+If your model uses the default intercept construction (i.e., `Intercept(1)` in the linear predictor) `inlabru` will assign a default $\mathcal{N} (0,0)$ prior to it.
 :::
 
 To check which priors are used in a fitted model one can use the function `inla.prior.used()`
@@ -295,9 +350,9 @@ inla.priors.used(fit.lm)
 
 From the output we see that the precision for the observation $\tau\sim\text{Gamma}(1e+00,5e-05)$ while $\beta_0$ and $\beta_1$ have precision 0.001, that is variance $1/0.001$.
 
-**Change the precision for the linear effects**
+**Changing the precision for the linear effects**
 
-The precision for linear effects is set in the component definition. For example, if we want to increase the precision to 0.01 for $\beta_0$ we define the relative components as:
+The precision for linear effects is set in the component definition. For example, if we want to increase the precision to 0.01 for $\beta_0$ we define the respective components as:
 
 ```{r }
 #| eval: false 
@@ -330,7 +385,7 @@ lm.fit2 = bru(cmp2, lik)
 Note that we can use the same observation model as before since both the formula and the dataset are unchanged.
 :::
 
-**Change the prior for the precision of the observation error** $\tau$
+**Changing the prior for the precision of the observation error** $\tau$
 
 Priors on the hyperparameters of the observation model must be passed by defining argument `hyper` within `control.family` in the call to the `bru_obs()` function.
 
@@ -350,7 +405,7 @@ fit.lm2 = bru(cmp2, lik2)
 
 ```
 
-The names of the priors available in **R-INLA** can be seen with `names(inla.models()$prior)`
+The names of the priors available in `inlabru` can be seen with `names(inla.models()$prior)`
 
 ### Visualizing the posterior marginals
 
@@ -372,7 +427,7 @@ Plot the posterior marginals for $\beta_1$ and for the precision of the observat
 
 `r hide("Take hint")`
 
-See the `summary()` output to check the names for the different model components.
+You can use the `bru_names(fit.lm)` function to check the names for the different model components.
 
 `r unhide()`
 
@@ -383,8 +438,174 @@ See the `summary()` output to check the names for the different model components
 #| webex.hide: "Click here to see the solution"
 #| code-fold: show
 #| purl: false
+
 plot(fit.lm, "beta_1") +
 plot(fit.lm, "Precision for the Gaussian observations")
 ```
 :::
 
+::: callout-note
+## Supplementary Material
+
+The marginal densities for the hyper parameters can be also found by calling`inlabru_model$marginals.hyperpar`.
+
+```{r}
+#| purl: false
+#| code-fold: false
+#| 
+tau_e <- fit.lm$marginals.hyperpar$`Precision for the Gaussian observations` 
+
+```
+
+We can then apply a transformation using the `inla.tmarginal` function to transform the precision posterior distributions to a SD scale.
+
+```{r}
+#| purl: false
+#| code-fold: false
+
+sigma_e <- tau_e %>%
+  inla.tmarginal(function(x) 1/x,.) 
+
+```
+
+Then, we can compute posterior summaries using `inla.zmarginal` function as follows:
+
+```{r}
+#| purl: false
+post_sigma_summaries <- inla.zmarginal(sigma_e,silent = T)
+cbind(post_sigma_summaries)
+```
+:::
+
+## Linear model with discrete variables and interactions {#LM_int}
+
+We consider now the dataset `iris`. Here data are recorded about 150 different iris flowers belonging to 3 different species (50 for each species).
+
+You can get more information about these data by typing `?iris`
+
+We want to model the `Petal.length` as a function of `Sepal.length` and species.
+
+```{r}
+data("iris")
+iris %>% ggplot() +
+  geom_point(aes(Sepal.Length, Petal.Length, color= Species)) +
+  facet_wrap(.~Species)
+```
+
+**Model 1 - Only `Species` effect** Our first model assumes that the Sepal length only depends on the species, which is a categorical variable.
+
+$$
+\begin{aligned}
+Y_i & \sim\mathcal{N}(\mu_i,\sigma_y),\ &  i = 1,\dots,150 \\
+\mu_{i} & = \eta_{i} = \beta_1\ I(\text{obs }i\text{belongs to species } 1  ) + \beta_2\ I(\text{obs }i\text{belongs to species } 2  ) + \beta_3\ I(\text{obs }i\text{belongs to species } 3  )
+\end{aligned}
+$$
+
+Using `lm()` we can fit the model as:
+
+```{r}
+mod1 = lm(Petal.Length ~ Species, data  = iris)
+summary(mod1)
+```
+
+Notice that `lm()` uses `setosa` as reference category, the parameter `Speciesversicolor` is then interpreted as the difference between the effect of the reference species and effect of `versicolor` species.
+
+`inlabru` features a `model = 'fixed'` component type that allows users to specify linear fixed effects using a formula as input. The basic component input is a model matrix. Alternatively, one can supply a formula specification, which is then used to generate a model matrix automatically
+
+```{r}
+cmp = ~   spp(
+  main = ~ Species,
+  model = "fixed"
+)
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Use the component defined above to fit the linear model using `inlabru` and compare the output with that form the `lm` function.
+
+`r hide("Take hint")`
+
+Realizing that fixed effects are treated as random effects with fixed precision, the fitted values can then be inspected via `fit1a$summary.random`
+
+`r unhide()`
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+lik = bru_obs(formula =Petal.Length ~ spp,
+              data = iris)
+fit1a = bru(cmp, lik)
+
+fit1a$summary.random$spp
+
+```
+:::
+
+**Model 2 - Interaction between `Species` and `Sepal.Length`**
+
+Our second model is defined as $$
+\begin{aligned}
+Y_i & \sim\mathcal{N}(\mu_i,\sigma_y),\ &  i = 1,\dots,150 \\
+\mu_{i} & = \eta_{i} = \beta_0 +  \beta_1 x_i\ I(\text{obs }i\text{belongs to species } 1  ) + \beta_2x_i\ I(\text{obs }i\text{belongs to species } 2  ) + \beta_3x_i\ I(\text{obs }i\text{belongs to species } 3  )
+\end{aligned}
+$$
+
+that is, we have a common intercept $\beta_0$ while the linear effect of the Sepal length depends on the Species. Using `lm()` we have:
+
+```{r}
+mod2 = lm(Petal.Length ~ Species:Sepal.Length, data = iris)
+mod2
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Fit the same model in `inlabru`.
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+cmp = ~   spp_sepal(
+  main = ~ Species:Sepal.Length,
+  model = "fixed"
+)
+
+lik = bru_obs(formula =Petal.Length ~ spp_sepal,
+              data = iris)
+
+fit1b = bru(cmp, lik)
+
+fit1b$summary.random$spp_sepal
+
+
+```
+:::
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Plot the estimated regression lines for the three species using model `fit1b`
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+#| fig-align: center
+#| fig-width: 5
+#| fig-height: 5
+
+preds = predict(fit1b, iris, ~ spp_sepal)
+
+pp = preds %>% ggplot() + geom_line(aes(Sepal.Length, mean, group = Species, color = Species)) +
+  geom_ribbon(aes(Sepal.Length, ymin = q0.025, ymax = q0.975, 
+                  group = Species, fill = Species), alpha = 0.5) +
+  geom_point(aes(Sepal.Length, Petal.Length,color = Species))
+
+pp
+```
+:::

@@ -3,6 +3,7 @@ title: "Practical 2"
 format: 
   html:
     number-sections: true
+    mainfont: "12"
   PrettyPDF-pdf:
     keep-tex:  true
     number-sections: true

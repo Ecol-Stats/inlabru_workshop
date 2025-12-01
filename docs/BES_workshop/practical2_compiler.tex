@@ -286,7 +286,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, sharp corners, boxrule=0pt, colback={codebgcolor}, breakable, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, colback={codebgcolor}, enhanced, boxrule=0pt, breakable, sharp corners]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -537,7 +537,7 @@ Average number of links: 5.254613
 \pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-8-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, breakable, bottomtitle=1mm, colback=white, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, rightrule=.15mm, bottomrule=.15mm, toptitle=1mm, coltitle=black, toprule=.15mm, opacityback=0, titlerule=0mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-note-color!10!white, arc=.35mm, left=2mm, colframe=quarto-callout-note-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, toprule=.15mm]
 
 You could use the \texttt{snap} argument within \texttt{poly2nb} to set
 a distance at which the different regions centroids are consider
@@ -634,7 +634,7 @@ The hyperparameters of the model are \(\tau_u\) and \(\tau_z\)
 \textbf{NOTE} In this case the linear predictor \(\eta\) consists of
 three components!!
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, breakable, bottomtitle=1mm, colback=white, title={Question}, rightrule=.15mm, bottomrule=.15mm, toptitle=1mm, coltitle=black, toprule=.15mm, opacityback=0, titlerule=0mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-tip-color!10!white, arc=.35mm, left=2mm, colframe=quarto-callout-tip-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
 
 Fit the above model in using \texttt{inlabru} by completing the
 following code:
@@ -676,24 +676,38 @@ Answer
 
 After fitting the model we want to extract results.
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, breakable, bottomtitle=1mm, colback=white, title={Question}, rightrule=.15mm, bottomrule=.15mm, toptitle=1mm, coltitle=black, toprule=.15mm, opacityback=0, titlerule=0mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-tip-color!10!white, arc=.35mm, left=2mm, colframe=quarto-callout-tip-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Question}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-tip-color-frame, opacitybacktitle=0.6, toprule=.15mm]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
   What is the estimated value for \(\beta_0\)?
+  \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 \item
   Look at the estimated values of the hyperparameters using
+  \texttt{fit\$summary.hyperpar} , which of the two spatial components
+  (structured or unstructured) explains more of the variability in the
+  counts?
 \end{enumerate}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{fit}\SpecialCharTok{$}\NormalTok{summary.hyperpar}
-\end{Highlighting}
-\end{Shaded}
-
-Which of the two spatial components (structured or unstructured)
-explains more of the variability in the counts?
+\begin{itemize}
+\tightlist
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\Alph{enumi})}
+  \tightlist
+  \item
+    structured\\
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\Alph{enumi})}
+  \setcounter{enumi}{1}
+  \tightlist
+  \item
+    unstructured
+  \end{enumerate}
+\end{itemize}
 
 \end{tcolorbox}
 
@@ -701,22 +715,12 @@ explains more of the variability in the counts?
 
 We now look at the predictions over space.
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, breakable, bottomtitle=1mm, colback=white, title={Task}, rightrule=.15mm, bottomrule=.15mm, toptitle=1mm, coltitle=black, toprule=.15mm, opacityback=0, titlerule=0mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, arc=.35mm, left=2mm, colframe=quarto-callout-warning-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
 
-Complete the code below to produce:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  prediction of the linear predictor \(\eta_i\)
-\item
-  The risk rate \(\lambda_i\)
-\item
-  The expected cases \(E_i\exp(\lambda_i)\) over the whole space of
-  interest.
-\end{enumerate}
-
-Plot the mean and sd of the resulting surfaces.
+Complete the code below to produce prediction of the linear predictor
+\(\eta_i\) and of the risk \(\lambda_i\) and of the expected cases
+\(E_i\exp(\lambda_i)\) over the whole space of interest. Then plot the
+mean and sd of the resulting surfaces.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -767,7 +771,7 @@ See Solution
 \end{Highlighting}
 \end{Shaded}
 
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-14-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-13-1.pdf}}
 
 \end{tcolorbox}
 
@@ -783,14 +787,14 @@ means of the Poisson distribution \(E_i\exp(\lambda_i)\)
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-15-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-14-1.pdf}}
 \end{center}
 
 Here we are predicting the \emph{mean} of counts, not the counts.
 Predicting the counts is beyond the scope of this short course but you
 can check the supplementary material below.
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, toprule=.15mm, breakable, opacityback=0, colback=white, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, left=2mm, colframe=quarto-callout-note-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, breakable, colback=white, rightrule=.15mm, leftrule=.75mm, arc=.35mm, bottomrule=.15mm, opacityback=0, left=2mm, colframe=quarto-callout-note-color-frame, toprule=.15mm]
 
 \vspace{-3mm}\textbf{Supplementary Material}\vspace{3mm}
 
@@ -853,7 +857,7 @@ The predictive distribution is then: \[
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-16-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-15-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
@@ -964,7 +968,7 @@ load also the \texttt{tidyterra} library.
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-40-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-38-1.pdf}}
 \end{center}
 
 \subsubsection{Fitting a spatial geostatistical species distribution
@@ -1042,10 +1046,10 @@ observations, these are contained in the dataset \texttt{pcod\_sf}
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-41-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-39-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, breakable, bottomtitle=1mm, colback=white, title={Task}, rightrule=.15mm, bottomrule=.15mm, toptitle=1mm, coltitle=black, toprule=.15mm, opacityback=0, titlerule=0mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, arc=.35mm, left=2mm, colframe=quarto-callout-warning-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
 
 Look at the documentation for the \texttt{fm\_mesh\_2d} function typing
 
@@ -1117,7 +1121,7 @@ P(\sigma>\sigma_0)=p_{\sigma}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, breakable, bottomtitle=1mm, colback=white, title={Question}, rightrule=.15mm, bottomrule=.15mm, toptitle=1mm, coltitle=black, toprule=.15mm, opacityback=0, titlerule=0mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-tip-color!10!white, arc=.35mm, left=2mm, colframe=quarto-callout-tip-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Question}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-tip-color-frame, opacitybacktitle=0.6, toprule=.15mm]
 
 Considering the \texttt{pcod\_sf} spatial extension and type of the
 data, which of the previous choices is more reasonable?
@@ -1205,7 +1209,7 @@ Finally we are ready to run the model
 
 \paragraph{Hyperparameters}\label{hyperparameters}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, breakable, bottomtitle=1mm, colback=white, title={Task}, rightrule=.15mm, bottomrule=.15mm, toptitle=1mm, coltitle=black, toprule=.15mm, opacityback=0, titlerule=0mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, arc=.35mm, left=2mm, colframe=quarto-callout-warning-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
 
 What are the posterior for the range \(\rho\) and the standard deviation
 \(\sigma\)? Plot the posterior together with the prior for both
@@ -1268,7 +1272,7 @@ Finally, we can plot the maps
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-50-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-48-1.pdf}}
 \end{center}
 
 \textbf{Note} The posterior sd is lowest at the observation points. Note
@@ -1307,7 +1311,7 @@ the probability of presence. We do this in two different models
 \] where \(f(.)\) is a smooth function. We will use a RW2 model for
 this.
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, breakable, bottomtitle=1mm, colback=white, title={Task}, rightrule=.15mm, bottomrule=.15mm, toptitle=1mm, coltitle=black, toprule=.15mm, opacityback=0, titlerule=0mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, arc=.35mm, left=2mm, colframe=quarto-callout-warning-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
 
 Fit model 1. Define components, observation model and use the
 \texttt{bru()} function to estimate the parameters.
@@ -1382,7 +1386,7 @@ fit the model as usual
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-52-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-50-1.pdf}}
 \end{center}
 
 Instead of predicting over a grid covering the whole mesh, we can limit
@@ -1399,7 +1403,7 @@ this by defining a \texttt{sf} object using coordinates in the object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, breakable, bottomtitle=1mm, colback=white, title={Task}, rightrule=.15mm, bottomrule=.15mm, toptitle=1mm, coltitle=black, toprule=.15mm, opacityback=0, titlerule=0mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, arc=.35mm, left=2mm, colframe=quarto-callout-warning-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
 
 Create a map of predicted \emph{probability} from Model 3 by predicting
 prediction over \texttt{pxl1}. You can use a inverse logit function
@@ -1430,7 +1434,7 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-55-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-53-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
@@ -1522,7 +1526,7 @@ caused by lightning.
 
 \begin{figure}[H]
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-80-1.pdf}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-78-1.pdf}}
 
 }
 
@@ -1542,7 +1546,7 @@ values of elevation using the following code:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, breakable, bottomtitle=1mm, colback=white, title={Task}, rightrule=.15mm, bottomrule=.15mm, toptitle=1mm, coltitle=black, toprule=.15mm, opacityback=0, titlerule=0mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-warning-color!10!white, arc=.35mm, left=2mm, colframe=quarto-callout-warning-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
 
 Using \texttt{tidyterra} and \texttt{ggplot}, produce a map of the
 elevation profile in La Mancha region and overlay the spatial point
@@ -1572,7 +1576,7 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-82-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-80-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
@@ -1615,7 +1619,7 @@ maximum triangle edge lengths, \texttt{offset} for inner and outer
 extensions (to prevent edge effects), and cutoff to avoid overly small
 triangles in clustered areas.
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, breakable, bottomtitle=1mm, colback=white, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, rightrule=.15mm, bottomrule=.15mm, toptitle=1mm, coltitle=black, toprule=.15mm, opacityback=0, titlerule=0mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-note-color!10!white, arc=.35mm, left=2mm, colframe=quarto-callout-note-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, toprule=.15mm]
 
 \textbf{General guidelines for creating the mesh}
 
@@ -1655,7 +1659,7 @@ triangles in clustered areas.
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-83-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-81-1.pdf}}
 \end{center}
 
 \paragraph{Step 2. Defining the SPDE
@@ -1689,13 +1693,58 @@ We can use PC-priors for the range \(\rho\) and the standard deviation
   \(\text{Prob}(\sigma>\sigma_0) = p_{\sigma}\)
 \end{itemize}
 
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Question}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-tip-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+
+Take a look at the code below and select which of the following
+statements about the specified Matérn PC priors are true.
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{spde\_model }\OtherTok{=}  \FunctionTok{inla.spde2.pcmatern}\NormalTok{(mesh,}
-                       \AttributeTok{prior.sigma =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FloatTok{0.5}\NormalTok{), }\CommentTok{\# P(sigma \textgreater{} 1) = 0.5}
-                       \AttributeTok{prior.range =} \FunctionTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\FloatTok{0.5}\NormalTok{)) }\CommentTok{\# P(range \textless{} 100) = 0.5}
+                       \AttributeTok{prior.sigma =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\FloatTok{0.5}\NormalTok{), }
+                       \AttributeTok{prior.range =} \FunctionTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\FloatTok{0.5}\NormalTok{)) }
 \end{Highlighting}
 \end{Shaded}
+
+\begin{itemize}
+\tightlist
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\Alph{enumi})}
+  \tightlist
+  \item
+    there is probability of 0.5 that the spatial range is greater or
+    equal than 100\\
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\Alph{enumi})}
+  \setcounter{enumi}{1}
+  \tightlist
+  \item
+    the probability that the spatial range is smaller than 50 is 0.5\\
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\Alph{enumi})}
+  \setcounter{enumi}{2}
+  \tightlist
+  \item
+    the probability that the marginal standard deviation is smaller than
+    1 is 0.5\\
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{(\Alph{enumi})}
+  \setcounter{enumi}{3}
+  \tightlist
+  \item
+    there is probability of 0.5 that the marginal standard deviation is
+    at least equal or greater 1
+  \end{enumerate}
+\end{itemize}
+
+\end{tcolorbox}
 
 \paragraph{Step 3. Defining model
 components}\label{step-3.-defining-model-components}
@@ -1790,7 +1839,7 @@ code:
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-89-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-88-1.pdf}}
 \end{center}
 
 \textbf{Stage 2} Latent field model
@@ -1869,7 +1918,7 @@ the \texttt{cp} likelihood family. We just need to supply the
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, breakable, bottomtitle=1mm, colback=white, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, rightrule=.15mm, bottomrule=.15mm, toptitle=1mm, coltitle=black, toprule=.15mm, opacityback=0, titlerule=0mm, opacitybacktitle=0.6, colbacktitle=quarto-callout-note-color!10!white, arc=.35mm, left=2mm, colframe=quarto-callout-note-color-frame]
+\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, toprule=.15mm]
 
 \texttt{inlabru} supports a shortcut for defining the integration points
 using the \texttt{domain} and \texttt{samplers} argument of
@@ -1958,7 +2007,7 @@ Support for plotting \texttt{sf} data objects is available in the
 
 \section{Model predictions}
 
-\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-98-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-97-1.pdf}}
 
 \section{R Code}
 

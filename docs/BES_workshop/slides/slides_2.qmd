@@ -8,6 +8,7 @@ author:
   - name: Janine Illian
 format:
   revealjs:
+    footer-logo-link: "https://quarto.org"
     margin: 0
     logo:  UofG.png
     theme: uofg_theme.scss
@@ -57,24 +58,22 @@ library(inlabru)
 > Space is inherent to all ecological processes, influencing dynamics such as migration, dispersal, and species interactions. A primary goal in ecology is to understand how these processes shape species distributions and dynamics across space.
 :::
 
-## Statistics in space
+## Statistics in space {.smaller}
 
 -   Many natural processes take place in space
 
--   Large amounts of data collected in space;
-
--   Recent technologies facilitate access to complex spatial data sets.
+-   increased resolution $\leadsto$ large, complex datasets $\leadsto$ complex spatial models required
 
 ::: incremental
--   Spatial statistical analysis is often not complex enough
+-   often inaccessible to practitioners (literature aimed at statisticians)
 
--   Inaccessible to practitioners
+-    methodology not always linked to applications
 
--   Literature written for statisticians development of methodology often not linked to applications (unrealistic assumptions)
+-    models too simple to reflect real-life data
 
--   Difficult to apply (unless you are an expert statistician and programmer)
+-    difficult to apply without expertise in spatial stats and computational statistics
 
--   we shall see that `inlabru` can help with this...
+-   we shall see that `inlabru` can help with this.
 :::
 
 ## Spatial data structures {.smaller auto-animate="true" background-color="#FFFFFF"}
@@ -95,9 +94,9 @@ We can distinguish three types of spatial data structures
 :::
 
 ::: {.column width="33.33%"}
-**Point-referenced data**
+**Point pattern data**
 
-![Occurrence records of four ungulate species in the Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
+![Occurrence records of four ungulate species in Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
 :::
 ::::::
 
@@ -121,9 +120,9 @@ In areal data our measurements are summarised across a set of **discrete**, non-
 :::
 
 ::: {.column width="20%"}
-**Point-referenced data**
+**Point process data**
 
-![Occurrence records of four ungulate species in the Tibet](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
+![Occurrence records of four ungulate species in Tibet](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
 :::
 ::::::
 
@@ -141,15 +140,15 @@ We can distinguish three types of spatial data structures
 ::: {.column width="60%"}
 **Geostatistical data**
 
-In geostatistical data, measurements a **continuous** process are taken at a set of fixed locations.
+In geostatistical data, measurements of a **continuous** process are taken at a set of fixed locations.
 
 ![Scotland river temperature monitoring network](figures/srtmn-png.png){fig-align="center" width="605"}
 :::
 
 ::: {.column width="20%"}
-**Point-referenced data**
+**Point process data**
 
-![Occurrence records of four ungulate species in the Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
+![Occurrence records of four ungulate species in Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
 :::
 ::::::
 
@@ -171,11 +170,11 @@ We can distinguish three types of spatial data structures
 :::
 
 ::: {.column width="60%"}
-**Point-referenced data**
+**Point pattern data**
 
-In point-referenced data we measure the locations where events occur (e.g. trees in a forest, earthquakes) and the coordinates of such occurrences are our data.
+In point pattern data we record the locations where events occur (e.g. trees in a forest, earthquakes) and the coordinates of such occurrences are our data.
 
-![Occurrence records of four ungulate species in the Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
+![Occurrence records of four ungulate species in Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
 :::
 ::::::
 
@@ -196,7 +195,7 @@ $$
  \eta_i = \beta_0 + \mathbf{x}'\beta + u_i ~~~ u_i \overset{iid}{\sim} N(0,\sigma^2_i)
 $$
 
--   where regional differences are accounted through a *random effect*
+-   regional differences are accounted for through a *random effect*
 :::
 
 ## How do we model this? {auto-animate= "true"}
@@ -208,7 +207,8 @@ y_i \sim \mathrm{Poisson}(e^{\eta_i})
 $$ How do we model the linear predictor $\eta_i$?
 
 ::: {.fragment .fade-in}
--   But... what if the distribution is *inhomogeneous*?
+-   But... what if the distribution is *inhomogeneous*, i.e. structured in space?
+-   Do the covariates account for those structures?\
 -   If there’s an area where the animal is rare, we’ll get lots of zero counts
 :::
 
@@ -797,25 +797,23 @@ labs(y=expression(E[i]~exp(lambda[i]))) + plot_layout(ncol=1)
 
 ## Geostatistical Data
 
--   Geostatistical data are the most common form of spatial data found in environmental setting.
+-   Measurements of an a spatial continuous variable of interest at a set of fixed locations.
 
--   We regularly take measurements of an environmental variable of interest at a set of fixed locations.
+-   This could be data from samples taken in locations across a region of interest (e.g., water depth in a lake) or from monitoring stations as part of a network (e.g., air pollution).
 
--   This could be data from samples taken across a region (e.g., water depth in a lake) or from monitoring stations as part of a network (e.g., air pollution).
-
--   In each of these cases,our goal is to estimate the value of our variable across the entire space
+-   In each of these cases, our goal is to estimate the value of our variable across the entire space and/or to model the relationship with covariates.
 
 ## Understanding our region
 
 -   Let $D$ be our two-dimensional region of interest.
--   In principle, there are infinite locations within $D$, each of which can be represented by mathematical coordinates (eg latitude and longitude).
+-   In principle, there are infinitely many locations within $D$, each of which can be represented by mathematical coordinates (e.g. latitude and longitude).
 -   We can identify any individual location as $\mathbf{s}_i = (x_i, y_i)$, where $x_i$ and $y_i$ are their coordinates.
 -   We can treat our variable of interest as a random variable, $Z$ which can be observed at any location as $Z(\mathbf{s}_i)$.
 
 ## Geostatistical process
 
--   Our geostatistical process can therefore be written as: $$\{Z(\mathbf{s}); \mathbf{s} \in D\}$$
--   In practice, our data are observed at a finite number of locations, $m$, and can be denoted as: $$z = \{z(\mathbf{s}_1), \ldots z(\mathbf{s}_m) \}$$
+-   A geostatistical process can therefore be written as: $$\{Z(\mathbf{s}); \mathbf{s} \in D\}$$
+-   In practice, data are observed at a finite number of locations, $m$, and can be denoted as: $$z = \{z(\mathbf{s}_1), \ldots z(\mathbf{s}_m) \}$$
 -   We have observed our data at $m$ locations, but often want to predict this process at a set of unknown locations.
 -   For example, what is the value of $z(\mathbf{s}_0)$, where $\mathbf{s}_0$ is an unobserved site?
 
@@ -1357,7 +1355,7 @@ $$
 ::: incremental
 -   IPP models assume that data points are conditionally independent given the covariates, meaning that any spatial variation is fully explained by environmental and sampling factors.
 -   Unmeasured endogenous and exogenous factors can create spatial
--    Ignoring them can lead to bias in our conclusions.
+-   Ignoring them can lead to bias in our conclusions.
 :::
 
 ## The Log-Gaussian Cox Process {.smaller}
@@ -1424,7 +1422,7 @@ ggplot() + geom_spatraster(data = elev_raster) +  geom_sf(data = region, col = "
 
 ## Example: Forest fires in Castilla-La Mancha {.smaller background-color="#FFFFFF"}
 
-::::: columns
+:::::: columns
 ::: {.column width="50%"}
 **The IPP Model** $$
 \begin{aligned}
@@ -1457,11 +1455,8 @@ fit = bru(cmp, lik)
 ```
 :::
 
-::: {.column width="50%"}
-
-
-::: {.panel-tabset}
-
+:::: {.column width="50%"}
+::: panel-tabset
 ## Regular Grid
 
 ```{r}
@@ -1482,9 +1477,7 @@ ips$weight = st_area(region) / n.int
 ggplot() + geom_sf(data = ips, aes(color = weight)) + geom_sf(data= region, alpha = 0)
 ```
 
-
-## `fm_int` 
-
+## `fm_int`
 
 ```{r}
 #| echo: true
@@ -1511,26 +1504,22 @@ ggplot() + geom_sf(data = ips, aes(color = weight),size=0.5) +
 
 
 ```
-
 :::
-
-:::
-:::::
-
-
+::::
+::::::
 
 ## Example: Forest fires in Castilla-La Mancha {.smaller background-color="#FFFFFF"}
 
 ::::: columns
 ::: {.column width="50%"}
-**The LGCP Model** 
+**The LGCP Model**
 
 $$
 \begin{aligned}
 p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 \eta(s) &  = \log(\lambda(s)) = \color{#FF6B6B}{\boxed{\beta_0}} + \color{#FF6B6B}{\boxed{ x(s)}} + \color{#FF6B6B}{\boxed{ \omega(s)}}\\
 \end{aligned}
-$$ 
+$$
 
 **The code**
 
@@ -1601,14 +1590,14 @@ ggplot() + geom_sf(data = ips, aes(color = weight),size=0.5) +
 
 ::::: columns
 ::: {.column width="50%"}
-**The LGCP Model** 
+**The LGCP Model**
 
 $$
 \begin{aligned}
 p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 \color{#FF6B6B}{\boxed{\eta(s)}} &  = \log(\lambda(s)) = \color{#FF6B6B}{\boxed{\beta_0 +  x(s) + \omega(s)}}\\
 \end{aligned}
-$$ 
+$$
 
 **The code**
 
@@ -1675,22 +1664,18 @@ ggplot() + geom_sf(data = ips, aes(color = weight),size=0.5) +
 :::
 :::::
 
-
-
-
-
 ## Example: Forest fires in Castilla-La Mancha {.smaller background-color="#FFFFFF"}
 
 ::::: columns
 ::: {.column width="50%"}
-**The LGCP Model** 
+**The LGCP Model**
 
 $$
 \begin{aligned}
 \color{#FF6B6B}{\boxed{p(\mathbf{y} | \lambda)}}  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 \eta(s) &  = \log(\lambda(s)) = \beta_0 +  x(s) + \omega(s)\\
 \end{aligned}
-$$ 
+$$
 
 **The code**
 
@@ -1757,19 +1742,18 @@ ggplot() + geom_sf(data = ips, aes(color = weight),size=0.5) +
 :::
 :::::
 
-
 ## Example: Forest fires in Castilla-La Mancha {.smaller background-color="#FFFFFF"}
 
 ::::: columns
 ::: {.column width="50%"}
-**The LGCP Model** 
+**The LGCP Model**
 
 $$
 \begin{aligned}
 p(\mathbf{y} | \lambda)  & \propto \exp \left( -\int_\Omega \lambda(\mathbf{s}) \mathrm{d}\mathbf{s} \right) \prod_{i=1}^n \lambda(\mathbf{s}_i) \\
 \eta(s) &  = \log(\lambda(s)) = \beta_0 +  x(s) + \omega(s)\\
 \end{aligned}
-$$ 
+$$
 
 **The code**
 
@@ -1839,7 +1823,6 @@ ggplot() + geom_sf(data = ips, aes(color = weight),size=0.5) +
 ## Example: Forest fires in Castilla-La Mancha {.smaller background-color="#FFFFFF"}
 
 **Model Predictions**
-
 
 ```{r}
 #| echo: false

@@ -94,44 +94,14 @@ diag(Q) = diag
 ## -----------------------------------------------------------------------------
 #| echo: true
 #| eval: false
-# fit$summary.hyperpar
 
+# pred = predict(fit, resp_cases, ~data.frame(log_risk = ...,
+#                                              risk = exp(...),
+#                                              cases = ...
+#                                              ),
+#                n.samples = 1000)
+# 
 
-
-
-## -----------------------------------------------------------------------------
-# produce predictions
-pred = predict(fit, 
-               resp_cases,
-               ~data.frame(log_risk = Intercept + space,
-                           risk = exp(Intercept + space),
-                           cases = expected * exp(Intercept + space)),
-               n.samples = 1000)
-
-# plot the predictions
-
-p1 = ggplot() + 
-  geom_sf(data = pred$log_risk, aes(fill = mean)) + scale_fill_scico(direction = -1) +
-  ggtitle("mean log risk")
-p2 = ggplot() + 
-  geom_sf(data = pred$log_risk, aes(fill = sd)) + scale_fill_scico(direction = -1) +
-  ggtitle("sd log risk")
-
-p3 = ggplot() +
-  geom_sf(data = pred$risk, aes(fill = mean)) + scale_fill_scico(direction = -1) +
-  ggtitle("mean  risk")
-
-p4 = ggplot() + 
-  geom_sf(data = pred$risk, aes(fill = sd)) +
-  scale_fill_scico(direction = -1) +
-  ggtitle("sd  risk")
-
-p5 = ggplot() + geom_sf(data = pred$cases, aes(fill = mean)) + scale_fill_scico(direction = -1)+ 
-  ggtitle("mean  expected counts")
-p6 = ggplot() + geom_sf(data = pred$cases, aes(fill = sd)) + scale_fill_scico(direction = -1)+
-  ggtitle("sd  expected counts")
-
-p1 + p2 + p3 + p4 +p5 + p6 + plot_layout(ncol=2)
 
 
 
@@ -142,42 +112,6 @@ p1 + p2 + p3 + p4 +p5 + p6 + plot_layout(ncol=2)
 pred$cases %>% ggplot() + geom_point(aes(observed, mean)) + 
   geom_errorbar(aes(observed, ymin = q0.025, ymax = q0.975)) +
   geom_abline(intercept = 0, slope = 1)
-
-
-
-## -----------------------------------------------------------------------------
-#| fig-align: center
-#| fig-width: 4
-#| fig-height: 4
-#| code-fold: true
-#| code-summary: "Click here to see the code"
-
-# simulate 1000 realizations of E_i\lambda_i
-expected_counts = generate(fit, resp_cases, 
-                           ~ expected * exp(Intercept + space),
-                           n.samples = 1000)
-
-
-# simulate poisson data
-aa = rpois(271*1000, lambda = as.vector(expected_counts))
-sim_counts = matrix(aa, 271, 1000)
-
-# summarise the samples with posterior means and quantiles
-pred_counts = data.frame(observed = resp_cases$observed,
-                         m = apply(sim_counts,1,mean),
-                         q1 = apply(sim_counts,1,quantile, 0.025),
-                         q2 = apply(sim_counts,1,quantile, 0.975),
-                         vv = apply(sim_counts,1,var)
-                         )
-# Plot the observations against the predicted new counts and the predicted expected counts
-
-ggplot() + 
-  geom_point(data = pred_counts, aes(observed, m, color = "Pred_obs")) + 
-  geom_errorbar(data = pred_counts, aes(observed, ymin = q1, ymax = q2, color = "Pred_obs")) +
-  geom_point(data = pred$cases, aes(observed, mean, color = "Pred_means")) + 
-  geom_errorbar(data = pred$cases, aes(observed, ymin = q0.025, ymax = q0.975, color = "Pred_means")) +
-  
-  geom_abline(intercept = 0, slope =1)
 
 
 
@@ -420,8 +354,10 @@ st_area(region)
 
 ## -----------------------------------------------------------------------------
 spde_model =  inla.spde2.pcmatern(mesh,
-                       prior.sigma = c(1, 0.5), # P(sigma > 1) = 0.5
-                       prior.range = c(100, 0.5)) # P(range < 100) = 0.5
+                       prior.sigma = c(1, 0.5), 
+                       prior.range = c(100, 0.5)) 
+
+
 
 
 

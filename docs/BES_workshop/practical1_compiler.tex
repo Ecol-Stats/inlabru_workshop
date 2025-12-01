@@ -279,7 +279,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[colback={codebgcolor}, sharp corners, frame hidden, boxrule=0pt, enhanced, breakable]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, sharp corners, frame hidden, colback={codebgcolor}, enhanced, boxrule=0pt]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -338,11 +338,10 @@ In this practical we will:
 \begin{itemize}
 \tightlist
 \item
-  Simulate Gaussian data
+  Fit a \hyperref[SLR]{simple linear regression} with \texttt{inlabru}
 \item
-  Learn how to fit a linear model with \texttt{inlabru}
-\item
-  Generate predictions from the model
+  Fit a \hyperref[LM_int]{linear regression with discrete covariates and
+  interactions}
 \end{itemize}
 
 Start by loading useful libraries:
@@ -360,7 +359,9 @@ Start by loading useful libraries:
 \end{Shaded}
 
 As our first example we consider a simple linear regression model with
-Gaussian observations \[
+Gaussian observations
+
+\[
 y_i\sim\mathcal{N}(\mu_i, \sigma^2), \qquad i = 1,\dots,N
 \]
 
@@ -378,7 +379,7 @@ Gaussian priors with mean \(0\) and precision \(\tau_{\beta}\) to the
 regression parameters \(\beta_0\) and \(\beta_1\) (we will use the
 default prior settings in INLA for now).
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-tip-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title={Question}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-tip-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Question}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-tip-color!10!white]
 
 What is the dimension of the hyperparameter vector and latent Gaussian
 field?
@@ -400,7 +401,7 @@ fixed.
 
 \end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white]
 
 We can write the linear predictor vector
 \(\pmb{\eta} = (\eta_1,\dots,\eta_N)\) as
@@ -426,25 +427,16 @@ slope.
 
 \subsubsection{Simulate example data}\label{simulate-example-data}
 
-First, we simulate data from the model
-
-\[
-y_i\sim\mathcal{N}(\eta_i,0.1^2), \ i = 1,\dots,100
-\]
-
-with
-
-\[
-\eta_i = \beta_0 + \beta_1 x_i
-\]
-
-where \(\beta_0 = 2\), \(\beta_1 = 0.5\) and the values of the covariate
-\(x\) are generated from an Uniform(0,1) distribution. The simulated
-response and covariate data are then saved in a \texttt{data.frame}
-object.
+We fix the model parameters \(\beta_0\), \(\beta_1\) and the
+hyperparameter \(\tau_y\) to a given value and simulate the data
+accordingly using the code below. The simulated response and covariate
+data are then saved in a \texttt{data.frame} object.
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\CommentTok{\# set seed for reproducibility}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1234}\NormalTok{) }
+
 \NormalTok{beta }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\FloatTok{0.5}\NormalTok{)}
 \NormalTok{sd\_error }\OtherTok{=} \FloatTok{0.1}
 
@@ -461,10 +453,25 @@ object.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\textbf{Defining model components}
+\textbf{Step1: Defining model components}
 
-The model has two parameters to be estimated \(\beta_1\) and
-\(\beta_2\). We need to define the two corresponding model components:
+The first step is to define the two model components: The intercept and
+the linear covariate effect.
+
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
+
+Define an object called \texttt{cmp} that includes and (i) intercept
+\texttt{beta\_0} and (ii) a covariate \texttt{x} linear effect
+\texttt{beta\_1}.
+
+Take hint
+
+The \texttt{cmp} object is here used to define model components. We can
+give them any useful names we like, in this case, \texttt{beta\_0} and
+\texttt{beta\_1}. You can remove the automatic intercept construction by
+adding a \texttt{-1} in the components
+
+Click here to see the solution
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -472,15 +479,11 @@ The model has two parameters to be estimated \(\beta_1\) and
 \end{Highlighting}
 \end{Shaded}
 
-The \texttt{cmp} object is here used to define model components. We can
-give them any useful names we like, in this case, \texttt{beta\_0} and
-\texttt{beta\_1}.
+\end{tcolorbox}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white]
 
-Note that we have excluded the default Intercept term in the model by
-typing \texttt{-1} in the model components. However, \texttt{inlabru}
-has automatic intercept that can be called by typing
+\texttt{inlabru} has automatic intercept that can be called by typing
 \texttt{Intercept()} , which is one of \texttt{inlabru} special names
 and it is used to define a global intercept, e.g.
 
@@ -492,42 +495,68 @@ and it is used to define a global intercept, e.g.
 
 \end{tcolorbox}
 
-\textbf{Observation model construction}
+\textbf{Step 2: Build the observation model}
 
 The next step is to construct the observation model by defining the
 model likelihood. The most important inputs here are the
 \texttt{formula}, the \texttt{family} and the \texttt{data}.
 
-The \texttt{formula} defines how the components should be combined in
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
+
+Define a linear predictor \texttt{eta} using the component labels you
+have defined on the previous task.
+
+Take hint
+
+The \texttt{eta} object defines how the components should be combined in
 order to define the model predictor.
+
+Click here to see the solution
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{formula }\OtherTok{=}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ beta\_0 }\SpecialCharTok{+}\NormalTok{ beta\_1}
+\NormalTok{eta }\OtherTok{=}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ beta\_0 }\SpecialCharTok{+}\NormalTok{ beta\_1}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
-
-In this case we can also use the shortcut
-\texttt{formula\ =\ y\ \textasciitilde{}\ .}. This will tell
-\texttt{inlabru} that the model is linear and that it is not necessary
-to linearize the model and assess convergence.
-
 \end{tcolorbox}
 
-The likelihood is defined using the \texttt{bru\_obs()} function as
-follows:
+The likelihood for the observational model is defined using the
+\texttt{bru\_obs()} function.
+
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
+
+Define the observational model likelihood in an object called
+\texttt{lik} using the \texttt{bru\_obs()} function.
+
+Take hint
+
+The \texttt{bru\_obs} is expecting three arguments:
+
+\begin{itemize}
+\tightlist
+\item
+  The linear predictor \texttt{eta} we defined in the previous task
+\item
+  The data likelihood (this can be specified by setting
+  \texttt{family\ =\ "gaussian"})
+\item
+  The data set \texttt{df}
+\end{itemize}
+
+Click here to see the solution
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{lik }\OtherTok{=}  \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{.,}
+\NormalTok{lik }\OtherTok{=}  \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ eta,}
             \AttributeTok{family =} \StringTok{"gaussian"}\NormalTok{,}
             \AttributeTok{data =}\NormalTok{ df)}
 \end{Highlighting}
 \end{Shaded}
 
-\textbf{Fit the model}
+\end{tcolorbox}
+
+\textbf{Step 3: Fit the model}
 
 We fit the model using the \texttt{bru()} functions which takes as input
 the components and the observation model:
@@ -538,10 +567,13 @@ the components and the observation model:
 \end{Highlighting}
 \end{Shaded}
 
-\textbf{Extract results}
+\textbf{Step 4: Extract results}
 
-The \texttt{summary()} function will give access to some basic
-information about model fit and estimates
+There are several ways to extract and examine the results of a fitted
+\texttt{inlabru} object.
+
+The most natural place to start is to use the \texttt{summary()} which
+gives access to some basic information about model fit and estimates
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -557,23 +589,23 @@ information about model fit and estimates
 \DocumentationTok{\#\#     Tag: \textless{}No tag\textgreater{}}
 \DocumentationTok{\#\#     Data class: \textquotesingle{}data.frame\textquotesingle{}}
 \DocumentationTok{\#\#     Response class: \textquotesingle{}numeric\textquotesingle{}}
-\DocumentationTok{\#\#     Predictor: y \textasciitilde{} .}
+\DocumentationTok{\#\#     Predictor: y \textasciitilde{} beta\_0 + beta\_1}
 \DocumentationTok{\#\#     Additive/Linear: TRUE/TRUE}
 \DocumentationTok{\#\#     Used components: effects[beta\_0, beta\_1], latent[] }
 \DocumentationTok{\#\# Time used:}
-\DocumentationTok{\#\#     Pre = 0.483, Running = 0.235, Post = 0.224, Total = 0.941 }
+\DocumentationTok{\#\#     Pre = 0.505, Running = 0.273, Post = 0.225, Total = 1 }
 \DocumentationTok{\#\# Fixed effects:}
-\DocumentationTok{\#\#         mean    sd 0.025quant 0.5quant 0.975quant  mode kld}
-\DocumentationTok{\#\# beta\_0 2.021 0.012      1.997    2.021      2.044 2.021   0}
-\DocumentationTok{\#\# beta\_1 0.511 0.013      0.486    0.511      0.536 0.511   0}
+\DocumentationTok{\#\#         mean   sd 0.025quant 0.5quant 0.975quant  mode kld}
+\DocumentationTok{\#\# beta\_0 2.004 0.01      1.983    2.004      2.024 2.004   0}
+\DocumentationTok{\#\# beta\_1 0.497 0.01      0.477    0.497      0.518 0.497   0}
 \DocumentationTok{\#\# }
 \DocumentationTok{\#\# Model hyperparameters:}
 \DocumentationTok{\#\#                                          mean    sd 0.025quant 0.5quant}
-\DocumentationTok{\#\# Precision for the Gaussian observations 72.70 10.28      53.98    72.22}
+\DocumentationTok{\#\# Precision for the Gaussian observations 94.85 13.41      70.43    94.22}
 \DocumentationTok{\#\#                                         0.975quant  mode}
-\DocumentationTok{\#\# Precision for the Gaussian observations      94.20 71.25}
+\DocumentationTok{\#\# Precision for the Gaussian observations     122.92 92.96}
 \DocumentationTok{\#\# }
-\DocumentationTok{\#\# Marginal log{-}Likelihood:  50.03 }
+\DocumentationTok{\#\# Marginal log{-}Likelihood:  63.27 }
 \DocumentationTok{\#\#  is computed }
 \DocumentationTok{\#\# Posterior summaries for the linear predictor and the fitted values are computed}
 \DocumentationTok{\#\# (Posterior marginals needs also \textquotesingle{}control.compute=list(return.marginals.predictor=TRUE)\textquotesingle{})}
@@ -583,15 +615,11 @@ information about model fit and estimates
 We can see that both the intercept and slope and the error precision are
 correctly estimated.
 
-\subsubsection{Generate model
-predictions}\label{generate-model-predictions}
-
-\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
-
-Now we can take the fitted \texttt{bru} object and use the
-\texttt{predict} function to produce predictions for \(\mu\) given a new
-set of values for the model covariates or the original values used for
-the model fit
+Another way, which gives access to more complicated (and useful) output
+is to use the \texttt{predict()} function. Below we take the fitted
+\texttt{bru} object and use the \texttt{predict()} function to produce
+predictions for \(\mu\) given a new set of values for the model
+covariates or the original values used for the model fit
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -630,9 +658,12 @@ this case we set the number of samples to 1000.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title={Task}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
 
-Generate predictions for a new observation with \(x_0 = 0.45\)
+Generate predictions for the linear predictor \(\mu\) when the covariate
+has value \(x_0 = 0.45\).
+
+What is the predicted value for \(\mu\)? And what is the uncertainty?
 
 Take hint
 
@@ -646,10 +677,54 @@ Click here to see the solution
 \NormalTok{new\_data }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{x =} \FloatTok{0.45}\NormalTok{)}
 \NormalTok{pred }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit.lm, new\_data, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ beta\_0 }\SpecialCharTok{+}\NormalTok{ beta\_1,}
                \AttributeTok{n.samples =} \DecValTok{1000}\NormalTok{)}
+\NormalTok{pred}
 \end{Highlighting}
 \end{Shaded}
 
+\begin{verbatim}
+     x     mean        sd   q0.025     q0.5   q0.975   median sd.mc_std_err
+1 0.45 2.227139 0.0116912 2.205258 2.226908 2.250046 2.226908  0.0002655118
+  mean.mc_std_err
+1    0.0003865006
+\end{verbatim}
+
+You can see the predicted mean and sd by examining the produced
+\texttt{pred} object. In this case the mean is 2.23 with sd ca 0.01.
+This gives a 95\% CI ca {[}2.21, 2.25{]}.
+
 \end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white]
+
+Before we have produced a credible interval for the expected mean
+\(\mu\) if we want to produce a \emph{prediction} interval for a new
+observation \(y\) we need to add the uncertainty that comes from the
+likelihood with precision \(\tau_y\). To do this we can again use the
+\texttt{predict()} function to compute a 95\% prediction interval for
+\(y\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pred2 }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit.lm, new\_data, }
+               \AttributeTok{formula =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ \{}
+\NormalTok{                 mu }\OtherTok{=}\NormalTok{ beta\_0 }\SpecialCharTok{+}\NormalTok{ beta\_1}
+\NormalTok{                 sigma }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{Precision\_for\_the\_Gaussian\_observations)}
+                 \FunctionTok{list}\NormalTok{(}\AttributeTok{q1 =} \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.025}\NormalTok{, }\AttributeTok{mean =}\NormalTok{ mu, }\AttributeTok{sd =}\NormalTok{ sigma),}
+                      \AttributeTok{q2 =}  \FunctionTok{qnorm}\NormalTok{(}\FloatTok{0.975}\NormalTok{, }\AttributeTok{mean =}\NormalTok{ mu, }\AttributeTok{sd =}\NormalTok{ sigma))\},}
+               \AttributeTok{n.samples =} \DecValTok{1000}\NormalTok{)}
+\FunctionTok{round}\NormalTok{(}\FunctionTok{c}\NormalTok{(pred2}\SpecialCharTok{$}\NormalTok{q1}\SpecialCharTok{$}\NormalTok{mean, pred2}\SpecialCharTok{$}\NormalTok{q2}\SpecialCharTok{$}\NormalTok{mean),}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 2.03 2.43
+\end{verbatim}
+
+Notice that now the interval we obtain is larger.
+
+\end{tcolorbox}
+
+\subsubsection{Setting Priors}\label{setting-priors}
 
 In \texttt{R-INLA}, the default choice of priors for each \(\beta\) is
 
@@ -662,11 +737,11 @@ is
 
 \[ \log(\tau) \sim \mathrm{logGamma}(1,5 \times 10^{-5}) \]
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white]
 
 If your model uses the default intercept construction (i.e.,
-\texttt{Intercept(1)} in the linear predictor) INLA will assign a
-default \(\mathcal{N} (0,0)\) prior to it.
+\texttt{Intercept(1)} in the linear predictor) \texttt{inlabru} will
+assign a default \(\mathcal{N} (0,0)\) prior to it.
 
 \end{tcolorbox}
 
@@ -703,11 +778,11 @@ From the output we see that the precision for the observation
 \(\tau\sim\text{Gamma}(1e+00,5e-05)\) while \(\beta_0\) and \(\beta_1\)
 have precision 0.001, that is variance \(1/0.001\).
 
-\textbf{Change the precision for the linear effects}
+\textbf{Changing the precision for the linear effects}
 
 The precision for linear effects is set in the component definition. For
 example, if we want to increase the precision to 0.01 for \(\beta_0\) we
-define the relative components as:
+define the respective components as:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -715,7 +790,7 @@ define the relative components as:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title={Task}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
 
 Run the model again using 0.1 as default precision for both the
 intercept and the slope parameter.
@@ -737,7 +812,7 @@ formula and the dataset are unchanged.
 
 \end{tcolorbox}
 
-\textbf{Change the prior for the precision of the observation error}
+\textbf{Changing the prior for the precision of the observation error}
 \(\tau\)
 
 Priors on the hyperparameters of the observation model must be passed by
@@ -760,7 +835,7 @@ call to the \texttt{bru\_obs()} function.
 \end{Highlighting}
 \end{Shaded}
 
-The names of the priors available in~\textbf{R-INLA}~can be seen with
+The names of the priors available in \texttt{inlabru} can be seen with
 \texttt{names(inla.models()\$prior)}
 
 \subsubsection{Visualizing the posterior
@@ -778,18 +853,18 @@ posterior density of the intercept \(\beta_0\) we can type:
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-18-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-19-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title={Task}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
 
 Plot the posterior marginals for \(\beta_1\) and for the precision of
 the observation error \(\pi(\tau|y)\)
 
 Take hint
 
-See the \texttt{summary()} output to check the names for the different
-model components.
+You can use the \texttt{bru\_names(fit.lm)} function to check the names
+for the different model components.
 
 Click here to see the solution
 
@@ -801,7 +876,270 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-19-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-20-1.pdf}}
+\end{center}
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Supplementary Material}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white]
+
+The marginal densities for the hyper parameters can be also found by
+calling\texttt{inlabru\_model\$marginals.hyperpar}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tau\_e }\OtherTok{\textless{}{-}}\NormalTok{ fit.lm}\SpecialCharTok{$}\NormalTok{marginals.hyperpar}\SpecialCharTok{$}\StringTok{\textasciigrave{}}\AttributeTok{Precision for the Gaussian observations}\StringTok{\textasciigrave{}} 
+\end{Highlighting}
+\end{Shaded}
+
+We can then apply a transformation using the \texttt{inla.tmarginal}
+function to transform the precision posterior distributions to a SD
+scale.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sigma\_e }\OtherTok{\textless{}{-}}\NormalTok{ tau\_e }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{inla.tmarginal}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(x) }\DecValTok{1}\SpecialCharTok{/}\NormalTok{x,.) }
+\end{Highlighting}
+\end{Shaded}
+
+Then, we can compute posterior summaries using \texttt{inla.zmarginal}
+function as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{post\_sigma\_summaries }\OtherTok{\textless{}{-}} \FunctionTok{inla.zmarginal}\NormalTok{(sigma\_e,}\AttributeTok{silent =}\NormalTok{ T)}
+\FunctionTok{cbind}\NormalTok{(post\_sigma\_summaries)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+           post_sigma_summaries
+mean       0.01075447          
+sd         0.001538937         
+quant0.025 0.008142315         
+quant0.25  0.009657471         
+quant0.5   0.01060981          
+quant0.75  0.01169141          
+quant0.975 0.01417676          
+\end{verbatim}
+
+\end{tcolorbox}
+
+\subsection{Linear model with discrete variables and
+interactions}\label{LM_int}
+
+We consider now the dataset \texttt{iris}. Here data are recorded about
+150 different iris flowers belonging to 3 different species (50 for each
+species).
+
+You can get more information about these data by typing \texttt{?iris}
+
+We want to model the \texttt{Petal.length} as a function of
+\texttt{Sepal.length} and species.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{data}\NormalTok{(}\StringTok{"iris"}\NormalTok{)}
+\NormalTok{iris }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(Sepal.Length, Petal.Length, }\AttributeTok{color=}\NormalTok{ Species)) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(.}\SpecialCharTok{\textasciitilde{}}\NormalTok{Species)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-24-1.pdf}}
+
+\textbf{Model 1 - Only \texttt{Species} effect} Our first model assumes
+that the Sepal length only depends on the species, which is a
+categorical variable.
+
+\[
+\begin{aligned}
+Y_i & \sim\mathcal{N}(\mu_i,\sigma_y),\ &  i = 1,\dots,150 \\
+\mu_{i} & = \eta_{i} = \beta_1\ I(\text{obs }i\text{belongs to species } 1  ) + \beta_2\ I(\text{obs }i\text{belongs to species } 2  ) + \beta_3\ I(\text{obs }i\text{belongs to species } 3  )
+\end{aligned}
+\]
+
+Using \texttt{lm()} we can fit the model as:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod1 }\OtherTok{=} \FunctionTok{lm}\NormalTok{(Petal.Length }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Species, }\AttributeTok{data  =}\NormalTok{ iris)}
+\FunctionTok{summary}\NormalTok{(mod1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = Petal.Length ~ Species, data = iris)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-1.260 -0.258  0.038  0.240  1.348 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(>|t|)    
+(Intercept)        1.46200    0.06086   24.02   <2e-16 ***
+Speciesversicolor  2.79800    0.08607   32.51   <2e-16 ***
+Speciesvirginica   4.09000    0.08607   47.52   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.4303 on 147 degrees of freedom
+Multiple R-squared:  0.9414,    Adjusted R-squared:  0.9406 
+F-statistic:  1180 on 2 and 147 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+Notice that \texttt{lm()} uses \texttt{setosa} as reference category,
+the parameter \texttt{Speciesversicolor} is then interpreted as the
+difference between the effect of the reference species and effect of
+\texttt{versicolor} species.
+
+\texttt{inlabru} features a
+\texttt{model\ =\ \textquotesingle{}fixed\textquotesingle{}} component
+type that allows users to specify linear fixed effects using a formula
+as input. The basic component input is a model matrix. Alternatively,
+one can supply a formula specification, which is then used to generate a
+model matrix automatically
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cmp }\OtherTok{=} \ErrorTok{\textasciitilde{}}   \FunctionTok{spp}\NormalTok{(}
+  \AttributeTok{main =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ Species,}
+  \AttributeTok{model =} \StringTok{"fixed"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
+
+Use the component defined above to fit the linear model using
+\texttt{inlabru} and compare the output with that form the \texttt{lm}
+function.
+
+Take hint
+
+Realizing that fixed effects are treated as random effects with fixed
+precision, the fitted values can then be inspected via
+\texttt{fit1a\$summary.random}
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lik }\OtherTok{=} \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{Petal.Length }\SpecialCharTok{\textasciitilde{}}\NormalTok{ spp,}
+              \AttributeTok{data =}\NormalTok{ iris)}
+\NormalTok{fit1a }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp, lik)}
+
+\NormalTok{fit1a}\SpecialCharTok{$}\NormalTok{summary.random}\SpecialCharTok{$}\NormalTok{spp}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                 ID     mean         sd 0.025quant 0.5quant 0.975quant     mode
+1       (Intercept) 1.462020 0.06076850   1.342693 1.462020   1.581348 1.462020
+2 Speciesversicolor 2.797970 0.08593964   2.629215 2.797970   2.966723 2.797970
+3  Speciesvirginica 4.089965 0.08593964   3.921210 4.089965   4.258718 4.089965
+          kld
+1 3.69301e-09
+2 3.69304e-09
+3 3.69286e-09
+\end{verbatim}
+
+\end{tcolorbox}
+
+\textbf{Model 2 - Interaction between \texttt{Species} and
+\texttt{Sepal.Length}}
+
+Our second model is defined as \[
+\begin{aligned}
+Y_i & \sim\mathcal{N}(\mu_i,\sigma_y),\ &  i = 1,\dots,150 \\
+\mu_{i} & = \eta_{i} = \beta_0 +  \beta_1 x_i\ I(\text{obs }i\text{belongs to species } 1  ) + \beta_2x_i\ I(\text{obs }i\text{belongs to species } 2  ) + \beta_3x_i\ I(\text{obs }i\text{belongs to species } 3  )
+\end{aligned}
+\]
+
+that is, we have a common intercept \(\beta_0\) while the linear effect
+of the Sepal length depends on the Species. Using \texttt{lm()} we have:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mod2 }\OtherTok{=} \FunctionTok{lm}\NormalTok{(Petal.Length }\SpecialCharTok{\textasciitilde{}}\NormalTok{ Species}\SpecialCharTok{:}\NormalTok{Sepal.Length, }\AttributeTok{data =}\NormalTok{ iris)}
+\NormalTok{mod2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = Petal.Length ~ Species:Sepal.Length, data = iris)
+
+Coefficients:
+                   (Intercept)      Speciessetosa:Sepal.Length  
+                        0.5070                          0.1905  
+Speciesversicolor:Sepal.Length   Speciesvirginica:Sepal.Length  
+                        0.6326                          0.7656  
+\end{verbatim}
+
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
+
+Fit the same model in \texttt{inlabru}.
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cmp }\OtherTok{=} \ErrorTok{\textasciitilde{}}   \FunctionTok{spp\_sepal}\NormalTok{(}
+  \AttributeTok{main =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ Species}\SpecialCharTok{:}\NormalTok{Sepal.Length,}
+  \AttributeTok{model =} \StringTok{"fixed"}
+\NormalTok{)}
+
+\NormalTok{lik }\OtherTok{=} \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{Petal.Length }\SpecialCharTok{\textasciitilde{}}\NormalTok{ spp\_sepal,}
+              \AttributeTok{data =}\NormalTok{ iris)}
+
+\NormalTok{fit1b }\OtherTok{=} \FunctionTok{bru}\NormalTok{(cmp, lik)}
+
+\NormalTok{fit1b}\SpecialCharTok{$}\NormalTok{summary.random}\SpecialCharTok{$}\NormalTok{spp\_sepal}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                              ID      mean         sd 0.025quant  0.5quant
+1                    (Intercept) 0.5069832 0.25212278 0.01190139 0.5069833
+2     Speciessetosa:Sepal.Length 0.1904884 0.05065262 0.09102434 0.1904884
+3 Speciesversicolor:Sepal.Length 0.6326456 0.04260977 0.54897485 0.6326456
+4  Speciesvirginica:Sepal.Length 0.7656467 0.03832803 0.69038380 0.7656467
+  0.975quant      mode          kld
+1  1.0020644 0.5069833 3.742158e-09
+2  0.2899527 0.1904884 3.742180e-09
+3  0.7163164 0.6326456 3.742194e-09
+4  0.8409097 0.7656467 3.742223e-09
+\end{verbatim}
+
+\end{tcolorbox}
+
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
+
+Plot the estimated regression lines for the three species using model
+\texttt{fit1b}
+
+Click here to see the solution
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{preds }\OtherTok{=} \FunctionTok{predict}\NormalTok{(fit1b, iris, }\SpecialCharTok{\textasciitilde{}}\NormalTok{ spp\_sepal)}
+
+\NormalTok{pp }\OtherTok{=}\NormalTok{ preds }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_line}\NormalTok{(}\FunctionTok{aes}\NormalTok{(Sepal.Length, mean, }\AttributeTok{group =}\NormalTok{ Species, }\AttributeTok{color =}\NormalTok{ Species)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_ribbon}\NormalTok{(}\FunctionTok{aes}\NormalTok{(Sepal.Length, }\AttributeTok{ymin =}\NormalTok{ q0}\FloatTok{.025}\NormalTok{, }\AttributeTok{ymax =}\NormalTok{ q0}\FloatTok{.975}\NormalTok{, }
+                  \AttributeTok{group =}\NormalTok{ Species, }\AttributeTok{fill =}\NormalTok{ Species), }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(Sepal.Length, Petal.Length,}\AttributeTok{color =}\NormalTok{ Species))}
+
+\NormalTok{pp}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}
+\pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-30-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
@@ -809,6 +1147,12 @@ Click here to see the solution
 \subsection{Linear Mixed Model}\label{linear-mixed-model}
 
 In this practical we will:
+
+\begin{itemize}
+\tightlist
+\item
+  Fit a \hyperref[fitting_LMM]{linear mixed model.}
+\end{itemize}
 
 \begin{itemize}
 \tightlist
@@ -821,10 +1165,14 @@ In this practical we will:
   model.
 \end{itemize}
 
-Consider the a simple linear regression model except with the addition
-that the data that comes in groups. Suppose that we want to include a
-random effect for each group \(j\) (equivalent to adding a group random
-intercept). The model is then: \[
+In this example we are going to consider a simple linear mixed model,
+that is a simple linear regression model except with the addition that
+the data that comes in groups.
+
+Suppose that we want to include a random effect for each group \(j\)
+(equivalent to adding a group random intercept). The model is then:
+
+\[
  y_{ij}  = \beta_0 + \beta_1 x_i + u_j + \epsilon_{ij} ~~~  \text{for}~i = 1,\ldots,N~ \text{and}~ j = 1,\ldots,m.
 \]
 
@@ -846,7 +1194,7 @@ zeros except for the element associated with \(u_j\), which has a one.
 \pmb{\eta} = \pmb{A}\pmb{u} = \pmb{A}_1\pmb{u}_1 + \pmb{A}_2\pmb{u}_2 + \pmb{A}_3\pmb{u}_3
 \]
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title={Supplementary material: LMM as a LGM}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Supplementary material: LMM as a LGM}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white]
 
 In matrix form, the linear mixed model for the \emph{j}-th group can be
 written as:
@@ -897,8 +1245,7 @@ random intercepts. Then, the components for the LGM are the following:
 
 \end{tcolorbox}
 
-\subsubsection{\texorpdfstring{\textbf{Simulate example
-data}}{Simulate example data}}\label{simulate-example-data-1}
+\subsubsection{Simulate example data}\label{simulate-example-data-1}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -998,7 +1345,7 @@ The model can be fitted exactly as in the previous examples by using the
 \DocumentationTok{\#\#     Additive/Linear: TRUE/TRUE}
 \DocumentationTok{\#\#     Used components: effects[beta\_0, beta\_1, u], latent[] }
 \DocumentationTok{\#\# Time used:}
-\DocumentationTok{\#\#     Pre = 0.31, Running = 0.31, Post = 0.171, Total = 0.791 }
+\DocumentationTok{\#\#     Pre = 0.439, Running = 0.385, Post = 0.221, Total = 1.05 }
 \DocumentationTok{\#\# Fixed effects:}
 \DocumentationTok{\#\#         mean    sd 0.025quant 0.5quant 0.975quant  mode kld}
 \DocumentationTok{\#\# beta\_0 2.108 0.438      1.229    2.108      2.986 2.108   0}
@@ -1049,10 +1396,10 @@ while spe
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-43-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-65-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-tip-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title={Question}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-tip-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Question}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-tip-color!10!white]
 
 Suppose that we are also interested in including random slopes into our
 model. Assuming intercept and slopes are independent, can your write
@@ -1122,11 +1469,8 @@ In this practical we will:
 \begin{itemize}
 \tightlist
 \item
-  Simulate non-Gaussian data
-\item
-  Learn how to fit a generalised linear model with \texttt{inlabru}
-\item
-  Generate predictions from the model
+  Learn how to fit a \hyperref[fitting_GLM]{generalised linear model}
+  with \texttt{inlabru}
 \end{itemize}
 
 A generalised linear model allows for the data likelihood to be
@@ -1137,12 +1481,8 @@ y_i \sim \text{Poisson}(\lambda_i)
 associated predictor \[
 \eta_i = \log \lambda_i = \beta_0 + \beta_1 x_i 
 \] with parameters \(\beta_0\) and \(\beta_1\), and covariate \(x\).
-This is identical in form to the predictor in
-Section~\ref{sec-linmodel}. The only difference is now we must specify a
-different data likelihood.
 
-\subsubsection{\texorpdfstring{\textbf{Simulate example
-data}}{Simulate example data}}\label{simulate-example-data-2}
+\subsubsection{Simulate example data}\label{simulate-example-data-2}
 
 This code generates 100 samples of covariate \texttt{x} and data
 \texttt{y}.
@@ -1160,14 +1500,22 @@ This code generates 100 samples of covariate \texttt{x} and data
 \end{Shaded}
 
 \subsubsection{\texorpdfstring{Fitting a GLM in
-\texttt{inlabru}}{Fitting a GLM in inlabru}}\label{fitting-a-glm-in-inlabru}
+\texttt{inlabru}}{Fitting a GLM in inlabru}}\label{sec-fitting_GLM}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
-\textbf{Define model components and likelihood}
+\textbf{Define model components}
 
-Since the predictor is the same as Section~\ref{sec-linmodel}, we can
-use the same component definition:
+The predictor here only contains only 2 components (Intercept and
+Slope).
+
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
+
+Define an object called \texttt{cmp} that includes and (i) intercept
+\texttt{beta\_0} and (ii) a covariate \texttt{x} linear effect
+\texttt{beta\_1}.
+
+Click here to see the solution
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1175,13 +1523,34 @@ use the same component definition:
 \end{Highlighting}
 \end{Shaded}
 
-However, when building the observation model likelihood we must now
-specify the Poisson likelihood using the \texttt{family} argument (the
-default link function for this family is the \(\log\) link).
+\end{tcolorbox}
+
+\textbf{Define linear predictor}
+
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
+
+Define a linear predictor \texttt{eta} using the component labels you
+have defined on the previous task.
+
+Click here to see the solution
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{lik }\OtherTok{=}  \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{.,}
+\NormalTok{eta }\OtherTok{=}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ beta\_0 }\SpecialCharTok{+}\NormalTok{ beta\_1}
+\end{Highlighting}
+\end{Shaded}
+
+\end{tcolorbox}
+
+\textbf{Build observational model}
+
+When building the observation model likelihood we must now specify the
+Poisson likelihood using the \texttt{family} argument (the default link
+function for this family is the \(\log\) link).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lik }\OtherTok{=}  \FunctionTok{bru\_obs}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ eta,}
             \AttributeTok{family =} \StringTok{"poisson"}\NormalTok{,}
             \AttributeTok{data =}\NormalTok{ df)}
 \end{Highlighting}
@@ -1190,7 +1559,8 @@ default link function for this family is the \(\log\) link).
 \textbf{Fit the model}
 
 Once the likelihood object is constructed, fitting the model is exactly
-the same process as in Section~\ref{sec-linmodel}.
+the same process, we just need to specify the model components and the
+observational model, and pass this on to the \texttt{bru} function:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1218,11 +1588,11 @@ Observation models:
     Tag: <No tag>
     Data class: 'data.frame'
     Response class: 'integer'
-    Predictor: y ~ .
+    Predictor: y ~ beta_0 + beta_1
     Additive/Linear: TRUE/TRUE
     Used components: effects[beta_0, beta_1], latent[] 
 Time used:
-    Pre = 0.275, Running = 0.204, Post = 0.0434, Total = 0.522 
+    Pre = 0.277, Running = 0.231, Post = 0.0426, Total = 0.55 
 Fixed effects:
         mean    sd 0.025quant 0.5quant 0.975quant  mode kld
 beta_0 0.915 0.071      0.775    0.915      1.054 0.915   0
@@ -1235,7 +1605,7 @@ Posterior summaries for the linear predictor and the fitted values are computed
 \end{verbatim}
 
 \subsubsection{Generate model
-predictions}\label{generate-model-predictions-1}
+predictions}\label{generate-model-predictions}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -1266,7 +1636,7 @@ Since we used a log link (which is the default for
 the predictor. We specify this using a general \texttt{R} expression
 using the formula syntax.
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white]
 
 Note that the \texttt{predict} function will call the component names
 (i.e.~the ``labels'') that were decided when defining the model.
@@ -1281,7 +1651,7 @@ software does the rest.
 
 \begin{figure}[H]
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-61-1.pdf}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-84-1.pdf}}
 
 }
 
@@ -1301,7 +1671,7 @@ software does the rest.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title={Task}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
 
 Suppose a binary response such that
 
@@ -1336,7 +1706,7 @@ Take hint
 You can set \texttt{family\ =\ "binomial"} for binary responses and the
 \texttt{plogis()} function for computing the predicted values.
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-note-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-note-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-note-color!10!white]
 
 The Bernoulli distribution is equivalent to a
 \(\mathrm{Binomial}(1, \psi)\) pmf. If you have proportional data
@@ -1379,7 +1749,7 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-64-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-87-1.pdf}}
 \end{center}
 
 \end{tcolorbox}
@@ -1391,9 +1761,7 @@ In this practical we will:
 \begin{itemize}
 \tightlist
 \item
-  Learn how to fit a GAM with \texttt{inlabru}
-\item
-  Generate predictions from the model
+  Learn how to fit a \hyperref[fitting_GAM]{GAM} with \texttt{inlabru}
 \end{itemize}
 
 Generalised Additive Models (GAMs) are very similar to linear models,
@@ -1423,13 +1791,17 @@ coefficients.
 
 Increasing the number of basis functions leads to a more \emph{wiggly}
 line. Too few basis functions might make the line too smooth, too many
-might lead to overfitting.To avoid this, we place further constraints on
-the spline coefficients which leads to constrained optimization problem
-where the objective function to be minimized is given by:
+might lead to overfitting.
+
+To avoid this, we place further constraints on the spline coefficients
+which leads to constrained optimization problem where the objective
+function to be minimized is given by:
 
 \[
 \mathrm{min}\sum_i(y_i-f(x_i))^2 + \lambda(\sum_kb^2_k)
-\] The first term measures how close the function \(f()\) is to the data
+\]
+
+The first term measures how close the function \(f()\) is to the data
 while the second term \(\lambda(\sum_kb^2_k)\), penalizes the roughness
 in the function. Here, \(\lambda >0\) is known as the smoothing
 parameter because it controls the degree of smoothing (i.e.~the
@@ -1440,9 +1812,8 @@ coefficients of the covariates.
 In this exercise we will set a random walk prior of order 1 on \(f\),
 i.e.~\(f(x_i)-f(x_i-1) \sim \mathcal{N}(0,\sigma^2_f)\) where
 \(\sigma_f^2\) is the smoothing parameter such that small values give
-large smoothing. Notice that we will assume \(x_i\)'s are equally spaced
-for now (we will cover a stochastic differential equation approach that
-relaxes this assumption later on in the course).
+large smoothing. Notice that we will assume \(x_i\)'s are equally
+spaced.
 
 \subsubsection{Simulate Data}\label{simulate-data}
 
@@ -1501,10 +1872,10 @@ We then can fit the model:
 \end{Shaded}
 
 \begin{verbatim}
-              mean         sd 0.025quant 0.5quant 0.975quant     mode
-Intercept 1.370604 0.05953714   1.254405 1.370335   1.488349 1.370339
+              mean         sd 0.025quant 0.5quant 0.975quant    mode
+Intercept 1.370605 0.05953681   1.254407 1.370335   1.488348 1.37034
                    kld
-Intercept 1.207209e-08
+Intercept 1.207228e-08
 \end{verbatim}
 
 The posterior summary regarding the estimated function using RW1 can be
@@ -1518,7 +1889,7 @@ credible intervals.
 
 \begin{figure}[H]
 
-{\centering \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-80-1.pdf}}
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-104-1.pdf}}
 
 }
 
@@ -1572,7 +1943,7 @@ The we can plot them together with the true curve and data points:
 
 \end{figure}%
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-warning-color-frame, opacityback=0, toprule=.15mm, rightrule=.15mm, opacitybacktitle=0.6, titlerule=0mm, title={Task}, arc=.35mm, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, toptitle=1mm, left=2mm, coltitle=black, breakable]
+\begin{tcolorbox}[enhanced jigsaw, colframe=quarto-callout-warning-color-frame, left=2mm, breakable, rightrule=.15mm, coltitle=black, toptitle=1mm, arc=.35mm, toprule=.15mm, bottomrule=.15mm, title={Task}, opacitybacktitle=0.6, leftrule=.75mm, opacityback=0, colback=white, bottomtitle=1mm, titlerule=0mm, colbacktitle=quarto-callout-warning-color!10!white]
 
 Fit a flexible model using a random walk of order 2 (RW2) and compare
 the results with the ones above.
@@ -1602,7 +1973,7 @@ Click here to see the solution
 \end{Shaded}
 
 \begin{center}
-\pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-82-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{practical1_compiler_files/figure-pdf/unnamed-chunk-106-1.pdf}}
 \end{center}
 
 We see that the RW1 fit is too wiggly while the RW2 is smoother and
