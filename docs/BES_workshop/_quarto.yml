@@ -9,7 +9,7 @@ project:
   - slides/slides_1.qmd
   - slides/slides_2.qmd
 website:
-  title: BES Annual meeting inlabru workshop 2025
+  title: "INLA and beyond"
   page-footer:
     center: '<a href="https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/" style="color:#ccc;">Home</a>'
   navbar:
@@ -42,6 +42,4 @@ format:
       - include/webex.css
     toc: true
     include-after-body: include/webex.js
-  revealjs:
-    footer: '<a href="https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/" style="color:#ccc;">Home</a>'
 editor: visual

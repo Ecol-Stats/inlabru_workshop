@@ -1,5 +1,5 @@
 ---
-title: "BES workshop"
+title: "INLA and beyond: Bayesian hierarchical modelling with inlabru"
 author: "Jafet Belmont, Sara Martino and Janine Illian"
 subtitle: "British Ecological Society Meeting 2025, Edinburgh"
 format: 

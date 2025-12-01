@@ -286,7 +286,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, colback={codebgcolor}, enhanced, boxrule=0pt, breakable, sharp corners]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, breakable, colback={codebgcolor}, sharp corners, enhanced, boxrule=0pt]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -537,7 +537,7 @@ Average number of links: 5.254613
 \pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-8-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, rightrule=.15mm]
 
 You could use the \texttt{snap} argument within \texttt{poly2nb} to set
 a distance at which the different regions centroids are consider
@@ -634,7 +634,7 @@ The hyperparameters of the model are \(\tau_u\) and \(\tau_z\)
 \textbf{NOTE} In this case the linear predictor \(\eta\) consists of
 three components!!
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title={Task}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm]
 
 Fit the above model in using \texttt{inlabru} by completing the
 following code:
@@ -676,7 +676,7 @@ Answer
 
 After fitting the model we want to extract results.
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Question}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-tip-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title={Question}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-tip-color-frame, rightrule=.15mm]
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -715,7 +715,7 @@ After fitting the model we want to extract results.
 
 We now look at the predictions over space.
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title={Task}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm]
 
 Complete the code below to produce prediction of the linear predictor
 \(\eta_i\) and of the risk \(\lambda_i\) and of the expected cases
@@ -794,7 +794,7 @@ Here we are predicting the \emph{mean} of counts, not the counts.
 Predicting the counts is beyond the scope of this short course but you
 can check the supplementary material below.
 
-\begin{tcolorbox}[enhanced jigsaw, breakable, colback=white, rightrule=.15mm, leftrule=.75mm, arc=.35mm, bottomrule=.15mm, opacityback=0, left=2mm, colframe=quarto-callout-note-color-frame, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, leftrule=.75mm, colback=white, opacityback=0, bottomrule=.15mm, arc=.35mm, breakable, left=2mm, rightrule=.15mm, colframe=quarto-callout-note-color-frame, toprule=.15mm]
 
 \vspace{-3mm}\textbf{Supplementary Material}\vspace{3mm}
 
@@ -1049,7 +1049,7 @@ observations, these are contained in the dataset \texttt{pcod\_sf}
 \pandocbounded{\includegraphics[keepaspectratio]{practical2_compiler_files/figure-pdf/unnamed-chunk-39-1.pdf}}
 \end{center}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title={Task}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm]
 
 Look at the documentation for the \texttt{fm\_mesh\_2d} function typing
 
@@ -1121,7 +1121,7 @@ P(\sigma>\sigma_0)=p_{\sigma}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Question}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-tip-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title={Question}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-tip-color-frame, rightrule=.15mm]
 
 Considering the \texttt{pcod\_sf} spatial extension and type of the
 data, which of the previous choices is more reasonable?
@@ -1209,7 +1209,7 @@ Finally we are ready to run the model
 
 \paragraph{Hyperparameters}\label{hyperparameters}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title={Task}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm]
 
 What are the posterior for the range \(\rho\) and the standard deviation
 \(\sigma\)? Plot the posterior together with the prior for both
@@ -1311,7 +1311,7 @@ the probability of presence. We do this in two different models
 \] where \(f(.)\) is a smooth function. We will use a RW2 model for
 this.
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title={Task}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm]
 
 Fit model 1. Define components, observation model and use the
 \texttt{bru()} function to estimate the parameters.
@@ -1403,7 +1403,7 @@ this by defining a \texttt{sf} object using coordinates in the object
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title={Task}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm]
 
 Create a map of predicted \emph{probability} from Model 3 by predicting
 prediction over \texttt{pxl1}. You can use a inverse logit function
@@ -1546,7 +1546,7 @@ values of elevation using the following code:
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-warning-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Task}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-warning-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-warning-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title={Task}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-warning-color-frame, rightrule=.15mm]
 
 Using \texttt{tidyterra} and \texttt{ggplot}, produce a map of the
 elevation profile in La Mancha region and overlay the spatial point
@@ -1619,7 +1619,7 @@ maximum triangle edge lengths, \texttt{offset} for inner and outer
 extensions (to prevent edge effects), and cutoff to avoid overly small
 triangles in clustered areas.
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, rightrule=.15mm]
 
 \textbf{General guidelines for creating the mesh}
 
@@ -1693,7 +1693,7 @@ We can use PC-priors for the range \(\rho\) and the standard deviation
   \(\text{Prob}(\sigma>\sigma_0) = p_{\sigma}\)
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-tip-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title={Question}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-tip-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-tip-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title={Question}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-tip-color-frame, rightrule=.15mm]
 
 Take a look at the code below and select which of the following
 statements about the specified Matérn PC priors are true.
@@ -1918,7 +1918,7 @@ the \texttt{cp} likelihood family. We just need to supply the
 \end{Highlighting}
 \end{Shaded}
 
-\begin{tcolorbox}[enhanced jigsaw, colbacktitle=quarto-callout-note-color!10!white, leftrule=.75mm, toptitle=1mm, bottomrule=.15mm, left=2mm, coltitle=black, bottomtitle=1mm, breakable, colback=white, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, opacityback=0, titlerule=0mm, colframe=quarto-callout-note-color-frame, opacitybacktitle=0.6, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomrule=.15mm, colbacktitle=quarto-callout-note-color!10!white, titlerule=0mm, bottomtitle=1mm, breakable, left=2mm, leftrule=.75mm, coltitle=black, colback=white, opacitybacktitle=0.6, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Note}, arc=.35mm, toprule=.15mm, toptitle=1mm, colframe=quarto-callout-note-color-frame, rightrule=.15mm]
 
 \texttt{inlabru} supports a shortcut for defining the integration points
 using the \texttt{domain} and \texttt{samplers} argument of
