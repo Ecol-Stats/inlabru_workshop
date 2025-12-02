@@ -13,30 +13,30 @@ format:
 # Welcome to the course!
 
 -   Welcome to the `inlabru` workshop!
--   The goal of this workshop is to introduce new users to the `inlabru` software for Bayesian spatial modelling using the integrated nested Laplace approximation (INLA).
+-   The goal of this workshop is to introduce new users to the `inlabru` software for Bayesian spatial modelling using integrated nested Laplace approximation (INLA).
 
 ::: callout-important
 ## important⚠️
 
-Please use the instructions provided [here](Install_software.qmd) to install and check your installation *before* the course start.
+Please use the instructions provided [here](Install_software.qmd) to install and check your installation *before* the course starts.
 :::
 
 # Learning Objectives for the workshop
 
-At the end of the workshop, participants will have an understanding of:
+By the end of the workshop, participants will have an understanding of:
 
 -   The `inlabru` workflow and software principles.
 -   The motivation for and the challenges of analysing and modelling spatial data.
--   Statistical models used to analyse spatial data.
+-   Different types of statistical models used to analyse different spatial data structures.
 -   The implementation of these models in the `inlabru` package
 
 # Intended audience
 
-The workshop aims to cater for participants with a range of different backgrounds, who is interested in analysing data with modern spatial statistical modelling approaches.
+The workshop aims to cater for participants with a range of different backgrounds, who are interested in analysing data with modern spatial statistical modelling approaches using flexible and computationally efficient software.
 
 # Prerequisites
 
-Participants should be familiar with the R environment, and general statistical approaches for modelling such as regression, analysis of (co)variance, and generalized linear models.
+Participants should be familiar with the R environment, and general statistical approaches to statistical modelling, such as regression, analysis of (co)variance, and generalized linear models.
 
 No knowledge of `R-INLA` or `inlabru` is required.
 
