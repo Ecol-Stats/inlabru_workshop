@@ -239,7 +239,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, sharp corners, enhanced, breakable, colback={codebgcolor}, frame hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[enhanced, colback={codebgcolor}, frame hidden, boxrule=0pt, breakable, sharp corners]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -257,8 +257,8 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{INLA and Beyond: Practical Spatial Modelling with inlabru for
-Ecological Research}
+\title{INLA and Beyond: Practical Spatial Modelling with
+\texttt{inlabru} for Ecological Research}
 \usepackage{etoolbox}
 \makeatletter
 \providecommand{\subtitle}[1]{% add subtitle to \maketitle
@@ -283,21 +283,21 @@ Ecological Research}
   Welcome to the \texttt{inlabru} workshop!
 \item
   The goal of this workshop is to introduce new users to the
-  \texttt{inlabru} software for Bayesian spatial modelling using the
+  \texttt{inlabru} software for Bayesian spatial modelling using
   integrated nested Laplace approximation (INLA).
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, bottomtitle=1mm, opacitybacktitle=0.6, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{important⚠️}, left=2mm, breakable, coltitle=black, rightrule=.15mm, colback=white, toptitle=1mm, titlerule=0mm, bottomrule=.15mm, arc=.35mm, colframe=quarto-callout-important-color-frame, leftrule=.75mm, toprule=.15mm, colbacktitle=quarto-callout-important-color!10!white, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, left=2mm, bottomrule=.15mm, toprule=.15mm, colbacktitle=quarto-callout-important-color!10!white, opacitybacktitle=0.6, colback=white, arc=.35mm, rightrule=.15mm, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{important⚠️}, coltitle=black, leftrule=.75mm, bottomtitle=1mm, colframe=quarto-callout-important-color-frame, toptitle=1mm, titlerule=0mm, opacityback=0, breakable]
 
 Please use the instructions provided \href{Install_software.qmd}{here}
-to install and check your installation \emph{before} the course start.
+to install and check your installation \emph{before} the course starts.
 
 \end{tcolorbox}
 
 \section{Learning Objectives for the
 workshop}\label{learning-objectives-for-the-workshop}
 
-At the end of the workshop, participants will have an understanding of:
+By the end of the workshop, participants will have an understanding of:
 
 \begin{itemize}
 \tightlist
@@ -307,7 +307,8 @@ At the end of the workshop, participants will have an understanding of:
   The motivation for and the challenges of analysing and modelling
   spatial data.
 \item
-  Statistical models used to analyse spatial data.
+  Different types of statistical models used to analyse different
+  spatial data structures.
 \item
   The implementation of these models in the \texttt{inlabru} package
 \end{itemize}
@@ -315,14 +316,15 @@ At the end of the workshop, participants will have an understanding of:
 \section{Intended audience}\label{intended-audience}
 
 The workshop aims to cater for participants with a range of different
-backgrounds, who is interested in analysing data with modern spatial
-statistical modelling approaches.
+backgrounds, who are interested in analysing data with modern spatial
+statistical modelling approaches using flexible and computationally
+efficient software.
 
 \section{Prerequisites}\label{prerequisites}
 
 Participants should be familiar with the R environment, and general
-statistical approaches for modelling such as regression, analysis of
-(co)variance, and generalized linear models.
+statistical approaches to statistical modelling, such as regression,
+analysis of (co)variance, and generalized linear models.
 
 No knowledge of \texttt{R-INLA} or \texttt{inlabru} is required.
 

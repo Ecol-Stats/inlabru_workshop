@@ -4,8 +4,9 @@ from: markdown+emoji
 subtitle: "Final remarks and things we did not discuss..." 
 format:
   revealjs:
+    footer: '<a href="https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/" style="color:#ccc; padding:20px 30px; display:inline-block; margin:-20px -30px;">Home</a>'
     margin: 0
-    logo:  NTNU_UofG.png
+    logo:  INLA_logo.png
     theme: uofg_theme.scss
     header-includes: |
       <script src="custom.js" type="application/javascript"></script>
