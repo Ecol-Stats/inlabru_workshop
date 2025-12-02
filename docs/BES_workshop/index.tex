@@ -239,7 +239,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, boxrule=0pt, breakable, frame hidden, colback={codebgcolor}, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, boxrule=0pt, breakable, sharp corners, enhanced, colback={codebgcolor}]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -286,11 +286,7 @@
   integrated nested Laplace approximation (INLA).
 \end{itemize}
 
-\begin{center}
-\includegraphics[width=2.71875in,height=\textheight,keepaspectratio]{4XN7it.png}
-\end{center}
-
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, arc=.35mm, opacitybacktitle=0.6, bottomtitle=1mm, breakable, rightrule=.15mm, colback=white, left=2mm, toptitle=1mm, titlerule=0mm, colframe=quarto-callout-important-color-frame, opacityback=0, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{important⚠️}, bottomrule=.15mm, toprule=.15mm, colbacktitle=quarto-callout-important-color!10!white, leftrule=.75mm]
+\begin{tcolorbox}[enhanced jigsaw, left=2mm, leftrule=.75mm, breakable, colframe=quarto-callout-important-color-frame, bottomtitle=1mm, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{important⚠️}, rightrule=.15mm, opacitybacktitle=0.6, toprule=.15mm, bottomrule=.15mm, arc=.35mm, colback=white, colbacktitle=quarto-callout-important-color!10!white, toptitle=1mm, titlerule=0mm, coltitle=black, opacityback=0]
 
 Please use the instructions provided \href{Install_software.qmd}{here}
 to install and check your installation \emph{before} the course start.
@@ -354,7 +350,9 @@ Topic
 \href{https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_2}{\textbf{Session
 2}:} Spatial Modelling with \texttt{inlabru} \\
 16:45 - 17:45 & \href{practical2_compiler.qmd}{Practical Session 2} \\
-17:45 - 18:00 & Wrap-up and outlook \\
+17:45 - 18:00 &
+\href{https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_3}{Wrap-up
+and outlook} \\
 \end{longtable}
 
 
