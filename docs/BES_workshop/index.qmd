@@ -1,5 +1,5 @@
 ---
-title: "INLA and beyond: Bayesian hierarchical modelling with inlabru"
+title: "INLA and Beyond: Practical Spatial Modelling with inlabru for Ecological Research"
 author: "Jafet Belmont, Sara Martino and Janine Illian"
 subtitle: "British Ecological Society Meeting 2025, Edinburgh"
 format: 
