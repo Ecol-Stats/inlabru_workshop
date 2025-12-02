@@ -2,12 +2,21 @@
 title: "Lecture 1"
 subtitle: Introduction to `inlabru`
 author:
-  - name: Jafet Belmont 
-    email: Jafet.BelmontOsuna@glasgow.ac.uk
-    affiliations: School of Mathematics and Statistics, University of Glasgow
+  - name: Sara Martino
+    #orcid: 0000-0002-6879-4412
+    email: sara.martino@ntnu.no
+    affiliations: Dept. of Mathematical Science, NTNU
   - name: Janine Illian
+    #orcid: 0000-0002-6879-4412
+    email: Janine.Illian@glasgow.ac.uk
+    affiliations: University of Glasgow 
+  - name: Jafet Belmont
+    #orcid: 0000-0002-6879-4412
+    email: Jafet.Belmont@glasgow.ac.uk
+    affiliations: University of Glasgow
 format:
   revealjs:
+    footer: '<a href="https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/" style="color:#ccc; padding:20px 30px; display:inline-block; margin:-20px -30px;">Home</a>'
     margin: 0
     logo:  UofG.png
     theme: uofg_theme.scss
@@ -22,6 +31,8 @@ toc: false
 execute: 
   eval: true
   echo: true
+  allow-html: true
+  freeze: auto
 embed-resources: true
 editor_options: 
   chunk_output_type: console

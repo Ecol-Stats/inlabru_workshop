@@ -1,0 +1,165 @@
+---
+title: "Wrap-up and outlook"
+from: markdown+emoji
+subtitle: "Final remarks and things we did not discuss..." 
+format:
+  revealjs:
+    margin: 0
+    logo:  NTNU_UofG.png
+    theme: uofg_theme.scss
+    header-includes: |
+      <script src="custom.js" type="application/javascript"></script>
+slide-number: "c/t"
+title-slide-attributes:
+#    data-background-image: images/trondheim3.png
+    data-background-size: cover
+    data-background-opacity: "0.55"
+author:
+  - name: Sara Martino
+    #orcid: 0000-0002-6879-4412
+    email: sara.martino@ntnu.no
+    affiliations: Dept. of Mathematical Science, NTNU
+  - name: Janine Illian
+    #orcid: 0000-0002-6879-4412
+    email: Janine.Illian@glasgow.ac.uk
+    affiliations: University of Glasgow 
+  - name: Jafet Belmont
+    #orcid: 0000-0002-6879-4412
+    email: Jafet.Belmont@glasgow.ac.uk
+    affiliations: University of Glasgow   
+        
+# date: May 22, 2025
+# bibliography: references.bib
+embed-resources: true
+execute:
+  allow-html: true
+  freeze: auto
+editor: 
+  mode: source
+---
+
+```{r setup}
+#| include: false
+#| eval: false
+
+
+knitr::opts_chunk$set(echo = FALSE,  
+                      message=FALSE, 
+                      warning=FALSE, 
+                      strip.white=TRUE, 
+                      prompt=FALSE,
+                      fig.align="center",
+                       out.width = "60%")
+
+library(knitr)    # For knitting document and include_graphics function
+library(ggplot2)  # For plotting
+library(png) 
+library(tidyverse)
+library(INLA)
+library(BAS)
+library(patchwork)
+library(inlabru)
+
+```
+
+## Modelling movement data
+
+-   models can also be fitted to movement data in `inlabru`
+
+-   sometimes locations treated as a point pattern, ignoring sequential nature of the data
+
+-   model development is an area of active research
+
+-   approaches include:
+
+    -   discrete time step-selection processes and
+
+    -   continuous time Langevin diffusion models
+
+![](figures/movement.png){fig-align="center"}
+
+## Metric Graph
+
+-   Not all phenomena leave on $\mathcal{R}^2$
+
+-   Example: Traffic on roads, fishes in a river, etc...
+
+::::: columns
+::: {.column width="50%"}
+![](figures/metric_graph1.png)
+:::
+
+::: {.column width="50%"}
+![](figures/metric_graph2.png)
+:::
+:::::
+
+. . .
+
+-   What is different from $\mathcal{R}^2$?
+
+## Metric Graph
+
+-   What is different from $\mathcal{R}^2$?
+
+    -   Think about distances on the road network...they often do not correspond to the euclidian distance in $\mathcal{R}^2$
+
+-   The random walk has to account for the shape of the graph
+
+-   ..this is what the [MetricGraph library](https://davidbolin.github.io/MetricGraph/index.html) does
+
+## Non linear predictor
+
+-   Sometimes one is interested in models whose parameters interact in a non-linear way
+
+. . .
+
+**Example** Growth model
+
+$$
+\begin{aligned}
+y_t&\sim\mathcal{N}(\mu_t, \sigma^2)\\
+\eta_t &= \mu_t = L(1-\exp(-k\ (t-t_0)))
+\end{aligned}
+$$ where $t$ is the age and $y_t$ the lenght of the fish
+
+with parameters $(L,k,t)$
+
+. . .
+
+This model cannot be implemented in the original INLA framework. `inlabru` linearizes the problem and by an iterative prodedure is (*often*) able to estimate the parameters. You can read more [here](https://arxiv.org/abs/2407.00791)
+
+## Space/time varying covariate effects
+
+![](figures/varying_covariates.png){fig-align="center"}
+
+## Space/time varying covariate effects
+
+The model
+
+$$
+\eta(s) = \beta_0 + \beta_1(s)\ x(s)
+$$
+
+Implementation
+
+```{r}
+#| echo: true
+#| eval: false
+
+cmp = ~ Intercept(0) + space_beta(geometry, weights = covariate, model = spde)
+
+# OR
+
+cmp = ~ Intercept(0) + space_beta(idx_region, weights = covariate, model = "besag")
+
+```
+
+## Getting help with `INLA`/`inlabru` related topics
+
+-   Discussion forum
+
+    -   INLA [forum](https://groups.google.com/g/r-inla-discussion-group)
+    -   inlabru [forum](https://github.com/inlabru-org/inlabru/discussions)
+
+-   Please take contact if you have questions/problems to discuss :grinning:
