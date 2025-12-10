@@ -130,7 +130,7 @@ In areal data our measurements are summarised across a set of **discrete**, non-
 :::
 
 ::: {.column width="20%"}
-**Point process data**
+**Point pattern data**
 
 ![Occurrence records of four ungulate species in Tibet](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
 :::
@@ -156,7 +156,7 @@ In geostatistical data, measurements of a **continuous** process are taken at a 
 :::
 
 ::: {.column width="20%"}
-**Point process data**
+**Point pattern data**
 
 ![Occurrence records of four ungulate species in Tibet,](figures/10980_2021_1202_Fig1_HTML.png){fig-align="center" width="421"}
 :::
