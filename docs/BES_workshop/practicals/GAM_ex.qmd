@@ -71,6 +71,8 @@ $$ where $\sigma_\epsilon^2 = 0.25$
 
 ```{r}
 #| code-summary: "Simulate GAM Data"
+
+set.seed(123)
 n = 100
 x = rnorm(n)
 eta = (1 + cos(x))

@@ -33,6 +33,8 @@ In this practical we are going to look at commonly used spatial models
 
 3.  A Point process model for point-referenced data
 
+{{< downloadthis practical2_compiler.R dname="session_2.R" label = "Download Practical 2 R script" icon="database-fill-down" type="success" >}}
+
 ```{r child="practicals\\spatial_data_types_areal.qmd"}
 ```
 

@@ -77,11 +77,11 @@ library(inlabru)
 ::: incremental
 -   often inaccessible to practitioners (literature aimed at statisticians)
 
--    methodology not always linked to applications
+-   methodology not always linked to applications
 
--    models too simple to reflect real-life data
+-   models too simple to reflect real-life data
 
--    difficult to apply without expertise in spatial stats and computational statistics
+-   difficult to apply without expertise in spatial stats and computational statistics
 
 -   we shall see that `inlabru` can help with this.
 :::
@@ -190,7 +190,7 @@ In point pattern data we record the locations where events occur (e.g. trees in
 
 # Areal Data
 
-## How do we model this? {auto-animate="\"true"}
+## How do we model this? {auto-animate=true}
 
 Imagine we have animal counts in each region. We can model them as Poisson
 
@@ -208,7 +208,7 @@ $$
 -   regional differences are accounted for through a *random effect*
 :::
 
-## How do we model this? {auto-animate= "true"}
+## How do we model this? {auto-animate= true}
 
 Imagine we have animal counts in each region. We can model them as Poisson
 
@@ -222,7 +222,7 @@ $$ How do we model the linear predictor $\eta_i$?
 -   If there’s an area where the animal is rare, we’ll get lots of zero counts
 :::
 
-## How do we model this? {auto-animate="true"}
+## How do we model this? {auto-animate=true}
 
 Imagine we have animal counts in each region. We can model them as Poisson
 
@@ -910,7 +910,7 @@ SPDE models have 3 parts
 
 3.  A precision parameter $\tau$
 
-Lets see hoe this is done in practice!
+Lets see how this is done in practice!
 
 ## Example: Species Distribution Model {background-color="#FFFFFF"}
 
@@ -1261,7 +1261,7 @@ p1 +p2
 ::: {style="height: 50px;"}
 :::
 
-Many of the ecological and environmental processes of interest can be represented by a spatial point process or can be view as an aggregation of one.
+Many of the ecological and environmental processes of interest can be represented by a spatial point process or can be viewed as an aggregation of one.
 
 ![](figures/frompontsto.png){fig-align="center" width="600"}
 
@@ -1364,7 +1364,7 @@ $$
 
 ::: incremental
 -   IPP models assume that data points are conditionally independent given the covariates, meaning that any spatial variation is fully explained by environmental and sampling factors.
--   Unmeasured endogenous and exogenous factors can create spatial
+-   Unmeasured endogenous and exogenous factors can create spatial dependence.
 -   Ignoring them can lead to bias in our conclusions.
 :::
 

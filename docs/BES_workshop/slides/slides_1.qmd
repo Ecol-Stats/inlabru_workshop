@@ -140,8 +140,6 @@ library(inlabru)
 #| warning: false
 #| message: false
 #| echo: false
-#| fig-height: 4
-#| fig-width: 4
 #| fig-align: center
 
 library(cowplot) # needs install.packages("magick") to draw images
@@ -151,7 +149,7 @@ sturgeon <- readPNG("figures/pallid-sturgeon.png", native = TRUE)
 
 
 Pallid = Pallid %>% mutate(w = w/1000,tl=tl/10) %>% select(w,tl)
-p1 = Pallid %>% ggplot() + geom_point(aes(x=tl,y=w)) + labs(y="Weight (Kg)",x="Total Length (cm)") + ggtitle("Lengths and weights for Pallid Sturgeon in the Missouri River")
+p1 = Pallid %>% ggplot() + geom_point(aes(x=tl,y=w)) + labs(y="Weight (Kg)",x="Total Length (cm)") + ggtitle("Relationship between wieght and length of Pallid Sturgeon in the Missouri River")
   
 ggdraw() +  draw_plot(p1) + draw_image(sturgeon, scale = .7,y=0.25) 
 
@@ -163,8 +161,6 @@ ggdraw() +  draw_plot(p1) + draw_image(sturgeon, scale = .7,y=0.25)
 -   We have questions.
 
 ```{r}
-#| fig-height: 4
-#| fig-width: 4
 #| fig-align: center
 #| echo: false
 my_image <- readPNG("figures/question.png", native = TRUE)
@@ -1099,7 +1095,7 @@ In many cases complicated spatio-temporal models are *just* special cases of the
 
 ## The good news!! {.smaller auto-animate="true"}
 
-In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! :smiley:
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! 😃
 
 -   **Stage 1**: What is the distribution of the responses?
 
