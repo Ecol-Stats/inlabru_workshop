@@ -1085,7 +1085,7 @@ Data can have several dependence structures: temporal, spatial,...
 
 ## The good news!! {.smaller auto-animate="true"}
 
-In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! :smiley:
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! 😃
 
 -   **Stage 1**: What is the distribution of the responses?
 
@@ -1112,7 +1112,7 @@ In many cases complicated spatio-temporal models are *just* special cases of the
 
 ## The good news!! {.smaller auto-animate="true"}
 
-In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! :smiley:
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! 😃
 
 -   **Stage 1**: What is the distribution of the responses?
 
@@ -1126,7 +1126,7 @@ In many cases complicated spatio-temporal models are *just* special cases of the
 
 ## The good news!! {.smaller auto-animate="true"}
 
-In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! :smiley:
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! 😃
 
 -   **Stage 1**: What is the distribution of the responses?
 
@@ -1145,7 +1145,7 @@ These are linked to the responses in the likelihood through *linear predictors*.
 
 ## The good news!! {.smaller auto-animate="true"}
 
-In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! :smiley:
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! 😃
 
 -   **Stage 1**: What is the distribution of the responses?
 
@@ -1164,7 +1164,7 @@ In many cases complicated spatio-temporal models are *just* special cases of the
 
 ## The second good news!
 
-No matter how complicated is your model, the `inlabru` workflow is *always* the same :smiley:
+No matter how complicated is your model, the `inlabru` workflow is *always* the same 😃
 
 ```{r}
 #| echo: true
@@ -1194,7 +1194,7 @@ fit <- bru(comps, lik, ...)
 
 ## The second good news!
 
-No matter how complicated is your model, the `inlabru` workflow is *always* the same :smiley:
+No matter how complicated is your model, the `inlabru` workflow is *always* the same 😃
 
 ```{r}
 #| echo: true
