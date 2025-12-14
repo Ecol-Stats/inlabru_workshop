@@ -188,7 +188,20 @@ In point pattern data we record the locations where events occur (e.g. trees in
 :::
 ::::::
 
+## Types of spatial data
+
+**Discrete space:**
+- Data on a spatial grid (areal data)
+
+**Continuous space:**
+- Geostatistical (geo-referenced) data
+- Spatial point pattern data
+
+Model components are used to reflect spatial dependence structures in discrete and continuous space.
+
+
 # Areal Data
+
 
 ## How do we model this? {auto-animate=true}
 
@@ -217,7 +230,7 @@ y_i \sim \mathrm{Poisson}(e^{\eta_i})
 $$ How do we model the linear predictor $\eta_i$?
 
 ::: {.fragment .fade-in}
--   But... what if the distribution is *inhomogeneous*, i.e. structured in space?
+-   But... what if the distribution varies across space, i.e.  is structured in space?
 -   Do the covariates account for those structures?\
 -   If there’s an area where the animal is rare, we’ll get lots of zero counts
 :::
@@ -340,12 +353,27 @@ $$
 :::
 :::::
 
+## (Informal) definition of a GMRF
+Gauss Markov random field (GMRF) is
+::: incremental
+ - a Gaussian distribution where the non-zero
+elements of the precision matrix are defined by a neighbourhood matrix (or graph
+structure)
+-  each region conditionally has a Gaussian distribution with 
+  - mean equal to the average of the neighbours and
+  - precision proportional to the number of neighbours
+
+GMRFs are key to the INLA approach -- and inlabru:
+::: incremental
+ - computationally efficient
+ - other data structures can be approximated by a GMRF in a clever way 
+
 ## Modelling spatial similarity {.smaller}
 
 ::: {style="height: 50px;"}
 :::
 
-One of the most popular CAR approaches to model spatial correlation is the Besag model a.k.a. Intrinsic Conditional Autoregressive (ICAR) model. The conditional distribution for $u_i$ is
+An example of a GMRF is the the Besag model a.k.a. Intrinsic Conditional Autoregressive (ICAR) model. The conditional distribution for $u_i$ is
 
 $$
 u_i|\mathbf{u}_{-i} \sim N\left(\frac{1}{d_i}\sum_{j\sim i}u_j,\frac{1}{d_i\tau_u}\right)
@@ -834,12 +862,12 @@ If we have a process that is occurring everywhere in space, it is natural to try
 -   If $z$ is a vector of observations of $z(\mathbf{s})$ at different locations, we want this to be normally distributed:
 
 $$
-\mathbf{z} = (z(\mathbf{s}_1),\ldots,z(\mathbf{s}_m)) \sim \mathcal{N}(0,\Sigma)
+\mathbf{z} = (z(\mathbf{s}_1),\ldots,z(\mathbf{s}_m)) \sim \mathcal{N}(0,\Sigma),
 $$ where $\Sigma_{ij} = \mathrm{Cov}(z(\mathbf{s}_i),z(\mathbf{s}_j))$ is a dense $m \times m$ matrix.
 
 ## Gaussian Random Fields {auto-animate="true"}
 
--   A Gaussian random field (GRF) is a collection of random variables where observations occur in a continuous domain, and where every finite collection of random variables has a multivariate normal distribution
+-   A Gaussian random field (GRF) is a collection of random variables, where observations occur in a continuous domain, and where every finite collection of random variables has a multivariate normal distribution
 
 ::: {.callout-note icon="false"}
 ## Stationary random fields
@@ -857,9 +885,9 @@ It is **isotropic** if the covariance only depends on the distance between the p
 
 **The goal**: approximate the GRF using a triangulated mesh via the so-called SPDE approach.
 
-The SPDE approach represents the continuous spatial process as a discretely indexed Gaussian Markov Random Field (GMRF)
+The SPDE approach represents the continuous spatial process as a continuously indexed Gaussian Markov Random Field (GMRF)
 
--   We construct an appropriate lower-resolution approximation of the surface by sampling it in a set of well designed points and constructing a piecewise linear interpolant.
+-   We construct an appropriate lower-resolution approximation of the surface by sampling it in a set of well designed points and constructing a piece-wise linear interpolant.
 
 ![](figures/spde.png){fig-align="center" width="520"}
 
@@ -871,7 +899,7 @@ $$
 c_{\nu}(d;\sigma,\rho) = \sigma^2\frac{2^{1-\nu}}{\Gamma(\nu)}\left(\sqrt{8\nu}\frac{d}{\rho}\right)^{\nu}K_{\nu}\left(\sqrt{8\nu}\frac{d}{\rho}\right)
 $$
 
--   This solution is then approximated using a finite combination of piecewise linear basis functions defined on a triangulation .
+-   This solution is then approximated using a finite combination of piece-wise linear basis functions defined on a triangulation .
 -   The solution is completely defined by a Gaussian vector of weights (defined on the triangulation vertices) with zero mean and a sparse precision matrix.
 -   How do we choose sensible priors for $\sigma,\rho$?
 
@@ -1026,9 +1054,9 @@ ggplot() + gg(mesh) +
 
 ## Step 1: Define the SPDE representation: The mesh
 
--   Too fine meshes $\rightarrow$ heavy computation
+-  If the mesh is too fine $\rightarrow$ heavy computation
 
--   Too coarse mesh $\rightarrow$ not accurate enough
+-  If the mesh is to coarse $\rightarrow$ not accurate enough
 
 ![](figures/mesh_res.png){fig-align="center"}
 
@@ -1274,7 +1302,7 @@ Many of the ecological and environmental processes of interest can be represente
 
 -   The set of locations at which events occur are denoted by $\mathbf{s} = (\mathbf{s}_1, \ldots, \mathbf{s}_n)$.
 
--   We let $N(A)$ be the random variable which represents the total number of events in region $A$.
+-   We let $N(A)$ be a random variable which represents the total number of events in every subset of region $A$.
 
 -   Our primary interest is in measuring where events occur, so the **locations are our data**.
 
@@ -1283,7 +1311,7 @@ Many of the ecological and environmental processes of interest can be represente
 ::: {style="height: 50px;"}
 :::
 
--   The simplest version of a point process model is the homogeneous Poisson process (HPP).
+-   A simplestpoint process model is the homogeneous Poisson process (HPP).
 
 -   The likelihood of a point pattern $\mathbf{y} = \left[ \mathbf{s}_1, \ldots, \mathbf{s}_n \right]^\intercal$ distributed as a HPP with intensity $\lambda$ and observation window $\Omega$ is
 
@@ -1300,7 +1328,7 @@ Many of the ecological and environmental processes of interest can be represente
 ::: {style="height: 50px;"}
 :::
 
--   A key property of a Poisson process is that the number of points within a region $A$ is Poisson distributed with constant rate $|A|\lambda$.
+-   A key property of a Poisson process is that the number of points within any subset$B$ of region $A$ is Poisson distributed with constant rate $|B|\lambda$.
 
 ## Inhomogeneous Poisson process
 
@@ -1318,7 +1346,7 @@ $$
 
 ## Inhomogeneous Poisson process
 
-The integral in is approximated as $\sum_{j=1}^J w_j \lambda(\mathbf{s}_j)$
+This integral is approximated as $\sum_{j=1}^J w_j \lambda(\mathbf{s}_j)$
 
 -   $w_j$ are the integration weights
 
@@ -1326,9 +1354,9 @@ The integral in is approximated as $\sum_{j=1}^J w_j \lambda(\mathbf{s}_j)$
 
 This serves two purposes:
 
-1.  Approximates the integral
+1.  Approximating the integral
 
-2.  re-write the inhomogeneous Poisson process likelihood as a regular Poisson likelihood.
+2.  re-writing the inhomogeneous Poisson process likelihood as a regular Poisson likelihood.
 
 ## Inhomogeneous Poisson process {.smaller}
 
@@ -1373,13 +1401,13 @@ $$
 ::: {style="height: 50px;"}
 :::
 
--   Log-Gaussian Cox processes (LGCP) extends the IPP by allowing the intensity function to vary spatially according to a structured spatial random effect.
+-   Log-Gaussian Cox processes (LGCP) extend the IPP by allowing the intensity function to vary spatially according to a structured spatial random effect, i.e.\ the intensity is random
 
 $$
 \log~\lambda(s)= \mathbf{x}(s)'\beta + \xi(s)
 $$
 
--   The events are then assumed to be independent given $\xi(s)$ - a GMRF with Matérn covariance.
+-   The events are then assumed to be independent given the covariates and $\xi(s)$ - a GMRF with Matérn covariance.
 
 -   `inlabru` has implemented some integration schemes that are especially well suited to integrating the intensity in models with an SPDE effect.
 
