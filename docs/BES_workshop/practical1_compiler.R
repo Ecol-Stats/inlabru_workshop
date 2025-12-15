@@ -18,6 +18,9 @@ library(scico)
 #| code-fold: show
 #| code-summary: "Simulate Data from a LM"
 
+# set seed for reproducibility
+set.seed(1234) 
+
 beta = c(2,0.5)
 sd_error = 0.1
 
@@ -81,6 +84,18 @@ pred %>% ggplot() +
 
 
 ## -----------------------------------------------------------------------------
+
+pred2 = predict(fit.lm, new_data, 
+               formula = ~ {
+                 mu = beta_0 + beta_1
+                 sigma = sqrt(1/Precision_for_the_Gaussian_observations)
+                 list(q1 = qnorm(0.025, mean = mu, sd = sigma),
+                      q2 =  qnorm(0.975, mean = mu, sd = sigma))},
+               n.samples = 1000)
+round(c(pred2$q1$mean, pred2$q2$mean),2)
+
+
+## -----------------------------------------------------------------------------
 #| eval: true
 #| purl: true 
 
@@ -114,6 +129,40 @@ fit.lm2 = bru(cmp2, lik2)
 #| code-fold: show
 
 plot(fit.lm, "beta_0")
+
+
+
+
+
+
+
+
+
+
+## -----------------------------------------------------------------------------
+data("iris")
+iris %>% ggplot() +
+  geom_point(aes(Sepal.Length, Petal.Length, color= Species)) +
+  facet_wrap(.~Species)
+
+
+## -----------------------------------------------------------------------------
+mod1 = lm(Petal.Length ~ Species, data  = iris)
+summary(mod1)
+
+
+## -----------------------------------------------------------------------------
+cmp = ~   spp(
+  main = ~ Species,
+  model = "fixed"
+)
+
+
+
+
+## -----------------------------------------------------------------------------
+mod2 = lm(Petal.Length ~ Species:Sepal.Length, data = iris)
+mod2
 
 
 
@@ -295,6 +344,8 @@ library(scico)
 
 ## -----------------------------------------------------------------------------
 #| code-summary: "Simulate GAM Data"
+
+set.seed(123)
 n = 100
 x = rnorm(n)
 eta = (1 + cos(x))

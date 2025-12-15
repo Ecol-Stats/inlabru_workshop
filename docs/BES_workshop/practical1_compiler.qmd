@@ -31,7 +31,7 @@ In this first practical we are going to look at some simple models
 
 2.  A Linear mixed model
 
-3.  A GLM model with random effects
+3.  A GLM and GAM
 
 We are going to learn:
 
