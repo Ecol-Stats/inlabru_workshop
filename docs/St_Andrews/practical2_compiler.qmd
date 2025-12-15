@@ -1,0 +1,45 @@
+---
+title: "Practical 2"
+format: 
+  html:
+    number-sections: true
+    mainfont: "12"
+  PrettyPDF-pdf:
+    keep-tex:  true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+#| results: hide
+
+library(webexercises)
+knitr::purl("practical2_compiler.qmd")
+```
+
+<font size="5"> **Aim of this practical:** </font>
+
+In this practical we are going to look at commonly used spatial models
+
+1.  CAR model for areal data
+
+2.  A geostatistical model for binary presence-absence species distribution data
+
+3.  A Point process model for point-referenced data
+
+{{< downloadthis practical2_compiler.R dname="session_2.R" label = "Download Practical 2 R script" icon="database-fill-down" type="success" >}}
+
+```{r child="practicals\\spatial_data_types_areal.qmd"}
+```
+
+```{r child="practicals\\spatial_data_types_geostats.qmd"}
+```
+
+```{r child="practicals\\spatial_data_types_PP.qmd"}
+```

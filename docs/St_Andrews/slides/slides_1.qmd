@@ -1,0 +1,2098 @@
+---
+title: "Lecture 1"
+subtitle: Introduction to `inlabru`
+author:
+  - name: Sara Martino
+    #orcid: 0000-0002-6879-4412
+    email: sara.martino@ntnu.no
+    affiliations: Dept. of Mathematical Science, NTNU
+  - name: Janine Illian
+    #orcid: 0000-0002-6879-4412
+    email: Janine.Illian@glasgow.ac.uk
+    affiliations: University of Glasgow 
+  - name: Jafet Belmont
+    #orcid: 0000-0002-6879-4412
+    email: Jafet.Belmont@glasgow.ac.uk
+    affiliations: University of Glasgow
+format:
+  revealjs:
+    footer: '<a href="https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/" style="color:#ccc; padding:20px 30px; display:inline-block; margin:-20px -30px;">Home</a>'
+    margin: 0
+    logo:  INLA_logo.png
+    theme: uofg_theme.scss
+    header-includes: |
+      <script src="custom.js" type="application/javascript"></script>
+title-slide-attributes: 
+  data-background-color: "#f1f1f1"
+slide-number: true
+date: 12/15/2025
+date-format: long
+toc: false
+execute: 
+  eval: true
+  echo: true
+  allow-html: true
+  freeze: auto
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup}
+#| include: false
+
+knitr::opts_chunk$set(echo = FALSE,  
+                      message=FALSE, 
+                      warning=FALSE, 
+                      strip.white=TRUE, 
+                      prompt=FALSE,
+                      fig.align="center",
+                       out.width = "60%")
+
+library(knitr)    # For knitting document and include_graphics function
+library(ggplot2)  # For plotting
+library(png) 
+library(tidyverse)
+library(INLA)
+library(BAS)
+library(patchwork)
+library(inlabru)
+
+```
+
+## Outline
+
+::: {style="height: 50px;"}
+:::
+
+-   What are INLA and `inlabru`?
+-   Why the Bayesian framework?
+-   Which model are `inlabru`-friendly?
+-   What are Latent Gaussian Models?
+-   How are they implemented in `inlabru`?
+
+## What is INLA? What is `inlabru`? {.smaller}
+
+**The short answer:**
+
+> INLA is a fast method to do Bayesian inference with latent Gaussian models and `inlabru` is an `R`-package that implements this method with a flexible and simple interface.
+
+::: {.fragment .fade-in}
+**The (much) longer answer:**
+
+-   Rue, H., Martino, S. and Chopin, N. (2009), Approximate Bayesian inference for latent Gaussian models by using integrated nested Laplace approximations. *Journal of the Royal Statistical Society: Series B (Statistical Methodology)*, 71: 319-392.
+-   Van Niekerk, J., Krainski, E., Rustand, D., & Rue, H. (2023). A new avenue for Bayesian inference with INLA. *Computational Statistics & Data Analysis*, 181, 107692.
+-   Lindgren, F., Bachl, F., Illian, J., Suen, M. H., Rue, H., & Seaton, A. E. (2024). inlabru: software for fitting latent Gaussian models with non-linear predictors. *arXiv preprint* arXiv:2407.00791.
+-   Lindgren, F., Bolin, D., & Rue, H. (2022). The SPDE approach for Gaussian and non-Gaussian fields: 10 years and still running. *Spatial Statistics*, 50, 100599.
+:::
+
+## Where? {.smaller}
+
+::: {.callout-warning icon="false"}
+## {{< bi globe2 color=#ff7226 >}} Website-tutorials
+
+`inlabru` <https://inlabru-org.github.io/inlabru/>
+
+`R-INLA` <https://www.r-inla.org/home>
+:::
+
+::: {.callout-tip icon="false"}
+## {{< bi chat-left-quote color=#0c7c0c >}} Discussion forums
+
+`inlabru` <https://github.com/inlabru-org/inlabru/discussions>
+
+`R-INLA` <https://groups.google.com/g/r-inla-discussion-group>
+:::
+
+::: {.callout-note icon="false"}
+## {{< bi book color=#4f11eb >}} Books
+
+-   Blangiardo, M., & Cameletti, M. (2015). Spatial and spatio-temporal Bayesian models with R-INLA. John Wiley & Sons.
+
+-   Gómez-Rubio, V. (2020). Bayesian inference with INLA. Chapman and Hall/CRC.
+
+-   Krainski, E., Gómez-Rubio, V., Bakka, H., Lenzi, A., Castro-Camilo, D., Simpson, D., ... & Rue, H. (2018). Advanced spatial modeling with stochastic partial differential equations using R and INLA. Chapman and Hall/CRC.
+
+-   Wang, X., Yue, Y. R., & Faraway, J. J. (2018). Bayesian regression modeling with INLA. Chapman and Hall/CRC.
+:::
+
+## So... Why should you use `inlabru`? {auto-animate="true"}
+
+::: incremental
+-   What type of problems can we solve?
+-   What type of models can we use?
+-   When can we use it?
+:::
+
+## So... Why should you use `inlabru`? {auto-animate="true"}
+
+-   What type of problems can we solve?
+-   What type of models can we use?
+-   When can we use it?
+
+> To give proper answers to these questions, we need to start at the very beginning ..
+
+## The core {auto-animate="true" background-color="#FFFFFF"}
+
+-   We have observed something.
+
+```{r}
+#| warning: false
+#| message: false
+#| echo: false
+#| fig-align: center
+
+library(cowplot) # needs install.packages("magick") to draw images
+library(FSAdata)
+
+sturgeon <- readPNG("figures/pallid-sturgeon.png", native = TRUE)
+
+
+Pallid = Pallid %>% mutate(w = w/1000,tl=tl/10) %>% select(w,tl)
+p1 = Pallid %>% ggplot() + geom_point(aes(x=tl,y=w)) + labs(y="Weight (Kg)",x="Total Length (cm)") + ggtitle("Relationship between wieght and length of Pallid Sturgeon in the Missouri River")
+  
+ggdraw() +  draw_plot(p1) + draw_image(sturgeon, scale = .7,y=0.25) 
+
+```
+
+## The core {auto-animate="true" background-color="#FFFFFF"}
+
+-   We have observed something.
+-   We have questions.
+
+```{r}
+#| fig-align: center
+#| echo: false
+my_image <- readPNG("figures/question.png", native = TRUE)
+
+ggdraw() +  draw_plot(p1  +
+  annotate("text", x=120, y=10, label="Does the weight of pallid sturgeon vary\n with body length?", size = 6,
+              color="#003366")) +
+  draw_image(my_image, scale = .5,y=0.25)
+  
+# inset_element(p = my_image,
+#                 left = 0.95,
+#                 bottom = 0.55,
+#                 right = 0.55,
+#                 top = 0.95)
+```
+
+## The core {auto-animate="true" background-color="#FFFFFF"}
+
+-   We have observed something.
+-   We have questions.
+-   We want answers!
+
+## How do we find answers? {auto-animate="true"}
+
+We need to make choices:
+
+> -   Bayesian or frequentist?
+> -   How do we model the data?
+> -   How do we compute the answer?
+
+## How do we find answers? {auto-animate="true"}
+
+We need to make choices:
+
+-   Bayesian or frequentist?
+-   How do we model the data?
+-   How do we compute the answer?
+
+These questions are **not** independent.
+
+## Bayesian or frequentist? {auto-animate="true" background-color="#FFFFFF"}
+
+In this course we embrace the Bayesian perspective
+
+-   There are no "*true but unknown*" parameters !
+
+```{r}
+temp <-expression(y == paste(beta[0], " + ", beta[1], "x"))
+p2 = p1 +  annotate(geom="text", x=120, y=20, parse = T, label = as.character(temp),
+              size=12) 
+
+p2
+```
+
+## Bayesian or frequentist? {auto-animate="true" background-color="#FFFFFF"}
+
+In this course we embrace the Bayesian perspective
+
+-   There are no "*true but unknown*" parameters !
+-   Every parameter is described by a probability distribution!
+
+```{r}
+set.seed(100)
+b0 = rnorm(100, -22, 0.05)
+b1 = rnorm(100, 0.25, 0.01)
+
+
+temp <-expression(y == paste(alpha, " + ", beta, "x"))
+p3 = p2  +  geom_abline( slope = b1, intercept = b0, color = "grey", alpha = 0.5) + geom_point(aes(tl,w)) 
+p3
+
+```
+
+## Bayesian or frequentist? {auto-animate="true" background-color="#FFFFFF"}
+
+In this course we embrace the Bayesian perspective
+
+-   There are no "*true but unknown*" parameters !
+-   Every parameter is described by a probability distribution!
+-   Evidence from the data is used to update the belief we had before observing the data!
+
+```{r}
+#| message: false
+
+
+temp <-expression(y == paste(alpha, " + ", beta, "x"))
+
+p3 + geom_smooth(aes(tl, w), method = "lm", fill = "red")
+
+```
+
+## Some more details I {.smaller auto-animate="true" background-color="#FFFFFF"}
+
+We define `linear predictor` the mean (or a function of the mean) of our observations `given` the model components.
+
+```{r}
+# | fig-width: 7
+# | fig-height: 4
+
+# Simulated model (you can skip actual data)
+intercept <- 0
+slope <- 1
+sigma <- 0.6
+
+# Choose some x-values to place the distributions
+x_vals <- c(1, 2, 3)
+x_labels <- c("x[1]", "x[2]", "x[k]")
+
+# Build the distributions
+dist_data <- lapply(seq_along(x_vals), function(i) {
+  x0 <- x_vals[i]
+  y_hat <- intercept + slope * x0
+  y_seq <- seq(y_hat - 3 * sigma, y_hat + 3 * sigma, length.out = 100)
+  dens <- dnorm(y_seq, mean = y_hat, sd = sigma)
+  scaled_dens <- dens / max(dens) * 0.4  # Controls width of the curves
+  
+  data.frame(
+    x = x0 + scaled_dens,
+    x_mirror = x0 - scaled_dens,
+    y = y_seq,
+    group = i,
+    x_label = x_labels[i],
+    y_hat = y_hat
+  )
+}) %>% bind_rows()
+
+# Extract points for mean markers
+means_df <- dist_data %>%
+  group_by(group) %>%
+  summarize(
+    x = mean(x),
+    x0 = mean((x + x_mirror) / 2),
+    y = mean(y),
+    x_label = first(x_label)
+  ) %>%
+  mutate(labels =  c(
+  "eta[1] == beta[0] + beta[1]*x[1]",
+  "eta[2] == beta[0] + beta[1]*x[2]",
+  "eta[k] == beta[0] + beta[1]*x[k]"
+))
+
+# Plot
+p1 = ggplot() +
+  # Left and right sides of the Gaussian "violins"
+  #geom_path(data = dist_data, aes(x = x, y = y, group = group), color = "steelblue", linewidth = 0.6) +
+  geom_path(data = dist_data, aes(x = x_mirror, y = y, group = group), color = "steelblue", linewidth = 0.6) +
+  
+  # Dashed regression line
+  geom_abline(intercept = intercept, slope = slope, linetype = "dashed") +
+  
+  geom_vline(xintercept = x_vals) + 
+  
+  geom_point(data = data.frame(x = runif(50,0,4)) %>%
+               mutate(y = intercept + slope * x + rnorm(50)),
+             aes(x,y), alpha = 0.3) + 
+  
+  # Red points at mean
+  geom_point(data = means_df, aes(x = x0, y = y), color = "darkred", size = 3) +
+  
+  # Red horizontal segments from point to left tail of density
+  geom_segment(data = means_df, aes(x = x0 - 0.4, xend = x0, y = y, yend = y),
+               color = "darkred", linewidth = 0.7) +
+  
+  # X-axis labels
+  scale_x_continuous(breaks = x_vals, labels = parse(text = x_labels), expand = expansion(mult = c(0.1, 0.1))) +
+  labs(x = "x", y = "y") +
+  coord_cartesian(ylim = c(-1, 6),
+                  xlim = c(0.5, 3.5)) +
+  theme(
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 13),
+    panel.grid = element_blank()
+  ) +
+  geom_segment(data = means_df,
+               aes(x = x0 + 0.6, xend = x0 + 0.05, 
+                   y = y - 0.8, yend = y + 0.05),
+               arrow = arrow(length = unit(0.2, "cm")),
+               color = "black",
+               linewidth = 0.5) +
+  geom_text(data = means_df,
+            aes(x = x0 + 0.2, y = y - 1.1, label = labels),
+            parse = TRUE,
+            hjust = 0,
+            size = 6)
+
+p1
+
+```
+
+In this case $E(y_i|\beta_0, \beta_i) = \eta_i = \beta_0 + \beta_1 x_i$
+
+## Some more details I {.smaller auto-animate="true" background-color="#FFFFFF"}
+
+We define **linear predictor** the mean (or a function of the mean) of our observations **given** the model components.
+
+```{r}
+# | fig-width: 8
+# | fig-height: 5
+
+# Simulated model (you can skip actual data)
+intercept <- 0
+slope <- 1
+sigma <- 0.6
+
+# Choose some x-values to place the distributions
+x_vals <- c(1, 2, 3)
+x_labels <- c("x[1]", "x[2]", "x[k]")
+
+# Build the distributions
+dist_data <- lapply(seq_along(x_vals), function(i) {
+  x0 <- x_vals[i]
+  y_hat <- intercept + slope * x0
+  y_seq <- seq(y_hat - 3 * sigma, y_hat + 3 * sigma, length.out = 100)
+  dens <- dnorm(y_seq, mean = y_hat, sd = sigma)
+  scaled_dens <- dens / max(dens) * 0.4  # Controls width of the curves
+  
+  data.frame(
+    x = x0 + scaled_dens,
+    x_mirror = x0 - scaled_dens,
+    y = y_seq,
+    group = i,
+    x_label = x_labels[i],
+    y_hat = y_hat
+  )
+}) %>% bind_rows()
+
+# Extract points for mean markers
+means_df <- dist_data %>%
+  group_by(group) %>%
+  summarize(
+    x = mean(x),
+    x0 = mean((x + x_mirror) / 2),
+    y = mean(y),
+    x_label = first(x_label)
+  ) %>%
+  mutate(labels =  c(
+  "eta[1] == beta[0] + beta[1]*x[1]",
+  "eta[2] == beta[0] + beta[1]*x[2]",
+  "eta[k] == beta[0] + beta[1]*x[k]"
+))
+
+# Plot
+p1 = ggplot() +
+  # Left and right sides of the Gaussian "violins"
+  #geom_path(data = dist_data, aes(x = x, y = y, group = group), color = "steelblue", linewidth = 0.6) +
+  geom_path(data = dist_data, aes(x = x_mirror, y = y, group = group), color = "steelblue", linewidth = 0.6) +
+  
+  # Dashed regression line
+  geom_abline(intercept = intercept, slope = slope, linetype = "dashed") +
+  
+  geom_vline(xintercept = x_vals) + 
+  
+  geom_point(data = data.frame(x = runif(50,0,4)) %>%
+               mutate(y = intercept + slope * x + rnorm(50)),
+             aes(x,y), alpha = 0.3) + 
+  
+  # Red points at mean
+  geom_point(data = means_df, aes(x = x0, y = y), color = "darkred", size = 3) +
+  
+  # Red horizontal segments from point to left tail of density
+  geom_segment(data = means_df, aes(x = x0 - 0.4, xend = x0, y = y, yend = y),
+               color = "darkred", linewidth = 0.7) +
+  
+  # X-axis labels
+  scale_x_continuous(breaks = x_vals, labels = parse(text = x_labels), expand = expansion(mult = c(0.1, 0.1))) +
+  labs(x = "x", y = "y") +
+  coord_cartesian(ylim = c(-1, 6),
+                  xlim = c(0.5, 3.5)) +
+  theme(
+    axis.title = element_text(size = 14),
+    axis.text = element_text(size = 13),
+    panel.grid = element_blank()
+  ) +
+  geom_segment(data = means_df,
+               aes(x = x0 + 0.6, xend = x0 + 0.05, 
+                   y = y - 0.8, yend = y + 0.05),
+               arrow = arrow(length = unit(0.2, "cm")),
+               color = "black",
+               linewidth = 0.5) +
+  geom_text(data = means_df,
+            aes(x = x0 + 0.2, y = y - 1.1, label = labels),
+            parse = TRUE,
+            hjust = 0,
+            size = 6)
+
+p1
+
+```
+
+In this case $E(y_i|\beta_0, \beta_i) =\eta_i =  \color{red}{\boxed{\beta_0}} +  \color{red}{\boxed{\beta_1 x_i}}$
+
+This model as two components !
+
+## Some more details II {.smaller background-color="#FFFFFF"}
+
+Given the **linear predictor** $\eta$ the observations a independent on each other!
+
+```{r}
+# Calculate inflection y positions
+inflection_points <- means_df %>%
+  mutate(y_inflect = x0 + sigma) %>%
+  mutate(x_inflect = x0 - dnorm( y_inflect, x0, sigma))
+
+arrow_tip_labels <- c(
+  "y[1]~'|'~eta[1]~`~`~N(eta[1],sigma^2)",
+  "y[2]~'|'~eta[2]~`~`~N(eta[2],sigma^2)",
+  "y[k]~'|'~eta[k]~`~`~N(eta[k],sigma^2)"
+)
+
+inflection_points = inflection_points %>%
+  mutate(arrow_tips = arrow_tip_labels)
+
+p1 + geom_segment(data = inflection_points,
+                  aes(x = x0 - 0.6, xend = x_inflect, 
+                      y = y + 1.5, yend = y_inflect),
+                  arrow = arrow(length = unit(0.2, "cm")),
+                  color = "steelblue",
+                  linewidth = 0.5) +
+  geom_text(data = inflection_points,
+            aes(x = x0 - 0.7, y = y + 1.7, label = arrow_tips),
+            parse = TRUE,
+            hjust = 0,
+            nudge_x = -0.05,
+            color = "steelblue",
+            size = 6)
+
+
+```
+
+This means that **all dependencies** in the observations are accounted for by the components!
+
+## Some more details II {.smaller background-color="#FFFFFF"}
+
+Given the **linear predictor** $\eta$ the observations a independent on each other!
+
+```{r}
+# Calculate inflection y positions
+inflection_points <- means_df %>%
+  mutate(y_inflect = x0 + sigma) %>%
+  mutate(x_inflect = x0 - dnorm( y_inflect, x0, sigma))
+
+arrow_tip_labels <- c(
+  "y[1]~'|'~eta[1]~`~`~N(eta[1],sigma^2)",
+  "y[2]~'|'~eta[2]~`~`~N(eta[2],sigma^2)",
+  "y[k]~'|'~eta[k]~`~`~N(eta[k],sigma^2)"
+)
+
+inflection_points = inflection_points %>%
+  mutate(arrow_tips = arrow_tip_labels)
+
+p1 + geom_segment(data = inflection_points,
+                  aes(x = x0 - 0.6, xend = x_inflect, 
+                      y = y + 1.5, yend = y_inflect),
+                  arrow = arrow(length = unit(0.2, "cm")),
+                  color = "steelblue",
+                  linewidth = 0.5) +
+  geom_text(data = inflection_points,
+            aes(x = x0 - 0.7, y = y + 1.7, label = arrow_tips),
+            parse = TRUE,
+            hjust = 0,
+            nudge_x = -0.05,
+            color = "steelblue",
+            size = 6)
+
+
+```
+
+The observation model (likelihood) can be written as: $$
+\pi(\mathbf{y}|\eta,\sigma^2) = \prod_{i = 1}^n\pi(y_i|\eta_i,\sigma^2)
+$$
+
+## Let's formalize this a bit... {auto-animate="true"}
+
+The elements of a `inlabru` friendly statistical model are:
+
+The observational model $$
+\begin{aligned}
+y_i|\eta_i, \sigma^2 & \sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n\\
+E(y_i|\eta_i, \sigma^2) & = \eta_i
+\end{aligned}
+$$
+
+::: callout-note
+We assume that, given the *linear predictor* $\eta$, the data are independent on each other! Data dependence is expressed through the *components* if the linear predictor.
+:::
+
+## Let's formalize this a bit... {auto-animate="true"}
+
+The elements of a `inlabru` friendly statistical model are:
+
+1.  The observational model $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
+
+2.  A model for the *linear predictor* $$
+    E(y_i|\eta_i,\sigma^2) = \eta_i = \beta_0 + \beta_1x_i 
+    $$
+
+## Let's formalize this a bit... {auto-animate="true"}
+
+The elements of a `inlabru` friendly statistical model are:
+
+1.  The observational model $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
+
+2.  A model for the *linear predictor*
+
+$$
+E(y_i|\eta_i,\sigma^2) = \eta_i = \color{red}{\boxed{\beta_0}} + \color{red}{\boxed{\beta_1x_i} }
+$$
+
+**Note 1:** These are the *components* of our model! These explain the *dependence structure* of the data.
+
+## Let's formalize this a bit... {auto-animate="true"}
+
+The elements of a `inlabru` friendly statistical model are:
+
+1.  The observational model $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
+
+2.  A model for the *linear predictor* $\eta_i = \color{red}{\boxed{\beta_0}} + \color{red}{\boxed{\beta_1x_i} }$
+
+3.  A prior for the model components $\textbf{u}$ $$
+    \mathbf{u} = \{\beta_0, \beta_1\}\sim\mathcal{N}(0,\mathbf{Q}^{-1})
+    $$ **Note:** These have always a Gaussian prior and are use to explain the dependencies among data!
+
+## Let's formalize this a bit... {auto-animate="true"}
+
+The elements of a `inlabru` friendly statistical model are:
+
+1.  The observational model $y_i|\eta_i,\sigma^2\sim\mathcal{N}(\eta_i,\sigma^2),\qquad i = 1,\dots,n$
+
+2.  A model for the *linear predictor* $\eta_i = \color{red}{\boxed{\beta_0}} + \color{red}{\boxed{\beta_1x_i} }$
+
+3.  A prior for the model components $\mathbf{u} = \{\beta_0, \beta_1\}\sim\mathcal{N}(0,\mathbf{Q}^{-1})$
+
+4.  A prior for the non-gaussian parameters $\theta$ $$
+    \theta = \sigma^2
+    $$
+
+## Latent Gaussian Models (LGM) {auto-animate="true"}
+
+:::::: columns
+::: {.column width="50%"}
+1.  [The observation model: $$
+    \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
+    $$]{style="color: #FF6B6B;"}
+
+2.  Linear predictor $\eta_i = \beta_0 + \beta_1 x_i$
+
+3.  Latent Gaussian field $\pi(\mathbf{u}|\theta)$
+
+4.  The hyperparameters: $\pi(\theta)$
+:::
+
+:::: {.column width="50%"}
+::: {style="height: 50px;"}
+:::
+
+[**Stage 1** The data generating process]{style="color: #FF6B6B;"}
+::::
+::::::
+
+## Latent Gaussian Models (LGM) {auto-animate="true"}
+
+::::::: columns
+::: {.column width="50%"}
+1.  The observation model: $$
+    \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
+    $$
+
+2.  [Linear predictor $\eta_i = \beta_0 + \beta_1 x_i$]{style="color: #FF6B6B;"}
+
+3.  [Latent Gaussian field $\pi(\mathbf{u}|\theta)$]{style="color: #FF6B6B;"}
+
+4.  The hyperparameters: $\pi(\theta)$
+:::
+
+::::: {.column width="50%"}
+::: {style="height: 50px;"}
+:::
+
+**Stage 1** The data generating process
+
+::: {style="height: 70px;"}
+:::
+
+[**Stage 2** The dependence structure]{style="color: #FF6B6B;"}
+:::::
+:::::::
+
+## Latent Gaussian Models (LGM) {auto-animate="true"}
+
+:::::::: columns
+::: {.column width="50%"}
+1.  The observation model: $$
+    \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
+    $$
+
+2.  Linear predictor $\eta_i = \beta_0 + \beta_1 x_i$
+
+3.  Latent Gaussian field $\pi(\mathbf{u}|\theta)$
+
+4.  [The hyperparameters: $\pi(\theta)$]{style="color: #FF6B6B;"}
+:::
+
+:::::: {.column width="50%"}
+::: {style="height: 50px;"}
+:::
+
+**Stage 1** The data generating process
+
+::: {style="height: 70px;"}
+:::
+
+**Stage 2** The dependence structure
+
+::: {style="height: 40px;"}
+:::
+
+[**Stage 3** The hyperparameters]{style="color: #FF6B6B;"}
+::::::
+::::::::
+
+## Latent Gaussian Models (LGM) {auto-animate="true"}
+
+:::::::: columns
+::: {.column width="50%"}
+1.  The observation model: $$
+    \pi(\mathbf{y}|\eta,\theta) = \prod_{i=1}^{n}\pi(y_i|\eta_i,\theta)
+    $$
+
+2.  Linear predictor $\eta_i = \beta_0 + \beta_1 x_i$
+
+3.  Latent Gaussian field $\pi(\mathbf{u}|\theta)$
+
+4.  The hyperparameters: $\pi(\theta)$
+:::
+
+:::::: {.column width="50%"}
+::: {style="height: 50px;"}
+:::
+
+**Stage 1** The data generating process
+
+::: {style="height: 70px;"}
+:::
+
+**Stage 2** The dependence structure
+
+::: {style="height: 40px;"}
+:::
+
+**Stage 3** The hyperparameters
+::::::
+::::::::
+
+::: {.r-stack .larger style="font-size: 1.5em;"}
+**Q**: What are we interested in?
+:::
+
+## The posterior distribution {.small background-color="#FFFFFF"}
+
+```{dot}
+//| fig-width: 4
+//| echo: false
+digraph posterior {
+    
+    node[style = filled]
+    
+    A[label="Prior\l belief\l" fillcolor = "#0066CC" fontcolor = white]
+    B[label="Observation\l model\l" fillcolor = "#FF6B6B" fontcolor = white]
+    C[label="Bayes Theorem\n &\n Bayesian Computations\n" ]
+    D[label="Posterior\n distribution\n" fillcolor = purple fontcolor = white]
+
+    {A,B} -> {C} -> {D}
+}
+```
+
+$$
+\color{purple}{\pi(\mathbf{u},\theta|\mathbf{y})}\propto \color{#FF6B6B}{\pi(\mathbf{y}|\mathbf{u},\theta)}\color{#0066CC}{\pi(\mathbf{u}|\theta)\pi(\theta)}
+$$ \##
+
+## The posterior distribution {.small background-color="#FFFFFF"}
+
+```{dot}
+//| echo: false
+
+digraph posterior {
+    
+    node[style = filled]
+     { rank=same C E }
+    A[label="Prior\l belief\l" fillcolor = "#0066CC" fontcolor = white]
+    B[label="Observation\l model\l" fillcolor = "#FF6B6B" fontcolor = white]
+    C[label="Bayes Theorem\n &\n Bayesian Computations\n" ]
+    D[label="Posterior\n distribution\n" fillcolor = purple fontcolor = white]
+    E[label="Bayesian Computation are hard!!\n Here is where\n INLA\n comes in!!!\n" fontcolor = red]
+
+    {A,B} -> {C} -> {D}
+    E -> C
+}
+
+```
+
+## `inlabru` for linear regression {auto-animate="true"}
+
+::::: columns
+::: {.column width="60%"}
+**The Model**
+
+$$
+\begin{aligned}
+y_i|\eta_i, \sigma^2 & \sim \mathcal{N}(\eta_i,\sigma^2)\\
+\eta_i & = \beta_0 + \beta_i x_i
+\end{aligned}
+$$
+:::
+
+::: {.column width="40%"}
+```{r}
+#| echo: true
+library(inlabru)
+Pallid[1:3,c("w","tl")]
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+
+# define model components
+cmp =  ~ -1 + beta0(1) + beta1(tl, model = "linear")
+
+# define model predictor
+eta = w ~ beta0 + beta1
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "gaussian",
+              data = Pallid)
+# fit the model
+fit = bru(cmp, lik)
+```
+
+## `inlabru` for linear regression {auto-animate="true"}
+
+::::: columns
+::: {.column width="60%"}
+**The Model**
+
+$$
+\begin{aligned}
+y_i|\eta_i, \sigma^2 & \sim \mathcal{N}(\eta_i,\sigma^2)\\
+\eta_i & = \color{#FF6B6B}{\boxed{\beta_0}} + \color{#FF6B6B}{\boxed{\beta_i x_i}}
+\end{aligned}
+$$
+:::
+
+::: {.column width="40%"}
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+library(inlabru)
+Pallid[1:3,c("w","tl")]
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "1-3"
+# define model components
+cmp =  ~ -1 + beta0(1) + beta1(tl, model = "linear")
+
+# define model predictor
+eta = w ~ beta0 + beta1
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "gaussian",
+              data = Pallid)
+# fit the model
+fit = bru(cmp, lik)
+```
+
+## `inlabru` for linear regression {auto-animate="true"}
+
+::::: columns
+::: {.column width="60%"}
+**The Model**
+
+$$
+\begin{aligned}
+y_i|\eta_i, \sigma^2 & \sim \mathcal{N}(\eta_i,\sigma^2)\\
+\eta_i & = \color{#FF6B6B}{\boxed{\beta_0 + \beta_i x_i}}
+\end{aligned}
+$$
+:::
+
+::: {.column width="40%"}
+```{r}
+#| echo: true
+library(inlabru)
+Pallid[1:3,c("w","tl")]
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "4-6"
+
+# define model components
+cmp =  ~ -1 + beta0(1) + beta1(tl, model = "linear")
+
+# define model predictor
+eta = w ~ beta0 + beta1
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "gaussian",
+              data = Pallid)
+# fit the model
+fit = bru(cmp, lik)
+
+```
+
+## `inlabru` for linear regression {auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+\color{#FF6B6B}{\boxed{y_i|\eta_i, \sigma^2}} & \color{#FF6B6B}{\boxed{\sim \mathcal{N}(\eta_i,\sigma^2)}}\\
+\eta_i & = \beta_0 + \beta_i x_i
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+library(inlabru)
+Pallid[1:3,c("w","tl")]
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "7-10"
+
+# define model components
+cmp =  ~ -1 + beta0(1) + beta1(tl, model = "linear")
+
+# define model predictor
+eta = w ~ beta0 + beta1
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "gaussian",
+              data = Pallid)
+# fit the model
+fit = bru(cmp, lik)
+
+```
+
+## `inlabru` for linear regression {auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+y_i|\eta_i, \sigma^2 & \sim \mathcal{N}(\eta_i,\sigma^2)\\
+\eta_i & = \beta_0 + \beta_i x_i
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+library(inlabru)
+Pallid[1:3,c("w","tl")]
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "12-13"
+
+# define model components
+cmp =  ~ -1 + beta0(1) + beta1(tl, model = "linear")
+
+# define model predictor
+eta = w ~ beta0 + beta1
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "gaussian",
+              data = Pallid)
+# fit the model
+fit = bru(cmp, lik)
+
+```
+
+## `inlabru` for linear regression
+
+```{r}
+#| echo: false
+#| eval: true
+#| cache: true
+
+# define model components
+library(inlabru)
+library(ggplot2)
+library(tidyverse)
+library(patchwork)
+
+cmp =  ~ -1 + beta0(1) + beta1(tl, model = "linear")
+
+# define model predictor
+eta = w ~ beta0 + beta1
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "gaussian",
+              data = Pallid)
+
+# fit the model
+fit = bru(cmp, lik)
+
+
+prior = data.frame(x = seq(-50,50)) %>%
+  mutate(y = dnorm(x,0,sqrt(1/0.001)))
+
+
+p_int = fit$marginals.fixed$beta0 %>% ggplot() + geom_line(aes(x,y)) +
+  geom_line(data = prior, aes(x,y), linetype= "dashed") + xlab("") + ylab("") +
+  ggtitle("Intercept")
+
+
+p_cov = fit$marginals.fixed$beta1 %>% ggplot() + geom_line(aes(x,y)) +
+  geom_line(data = prior, aes(x,y), linetype= "dashed") + xlab("") + ylab("") +
+  ggtitle("Covariate") + coord_cartesian(xlim = c(0.1,0.4))
+
+
+preds = predict(fit, data.frame(tl = seq(90,165)), ~ beta0 + beta1)
+
+
+p_pred = preds %>% ggplot() + 
+  geom_point(data = Pallid, aes(tl, w)) + 
+  geom_line(aes(tl, mean), color = "blue") +
+  geom_ribbon(aes(tl, ymin = q0.025, ymax = q0.975), alpha = 0.5, fill = "blue")
+
+
+ff = generate(fit, 
+        data.frame(tl = seq(90,165)), 
+        ~ data.frame(mean = beta0 + beta1,
+                     sd = sqrt(1/Precision_for_the_Gaussian_observations)),
+        n.samples = 5000)
+
+ff1 = sapply(ff, function(xx) rnorm(76, mean = xx[,1], sd = xx[,2]))
+
+
+pred_int = data.frame(tl = seq(90,165),
+                      mean = apply(ff1,1,mean),
+                      q1 = apply(ff1, 1, quantile,probs =  0.025),
+                      q2 = apply(ff1, 1, quantile, 0.975)
+                      )
+p3 = p_pred + 
+   geom_ribbon(data = pred_int, aes(tl, ymin = q1, ymax = q2), alpha = 0.5, fill = "red") + ggtitle("Credible and Prediction Interval") + labs(y="Weight (Kg)",x="Total Length (cm)")
+```
+
+```{r}
+#| echo: false
+#| eval: true
+(p_int | p_cov) / p3
+```
+
+## Real datasets are more complicated! {.smaller}
+
+Data can have several dependence structures: temporal, spatial,...
+
+**Using a Bayesian framework**:
+
+-   Build (hierarchical) models to account for potentially complicated dependency structures in the data.
+
+-   Attribute uncertainty to model parameters and latent variables using priors.
+
+**Two main challenges**:
+
+-   Need computationally efficient methods to calculate posteriors (this is where INLA helps!).
+-   Select priors in a sensible way (we'll talk about this)
+
+## The good news!! {.smaller auto-animate="true"}
+
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! 😃
+
+-   **Stage 1**: What is the distribution of the responses?
+
+-   **Stage 2**: What are the model components? and what is their distribution?
+
+-   **Stage 3**: What are our prior beliefs about the parameters controlling the components in the model?
+
+## The good news!! {.smaller auto-animate="true"}
+
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! 😃
+
+-   **Stage 1**: What is the distribution of the responses?
+
+    -   Gaussian response? (temperature, rainfall, fish weight …)
+    -   Count data? (people infected with a disease in each area)
+    -   Point pattern? (locations of trees in a forest)
+    -   Binary data? (yes/no response, binary image)
+    -   Survival data? (recovery time, time to death)
+    -   ... (many more examples!!)
+
+-   **Stage 2**: What are the model components? and what is their distribution?
+
+-   **Stage 3**: What are our prior beliefs about the parameters controlling the components in the model?
+
+## The good news!! {.smaller auto-animate="true"}
+
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! 😃
+
+-   **Stage 1**: What is the distribution of the responses?
+
+    -   We assume data to be *conditionally* independent given the model components and some hyperparameters
+    -   This means that all dependencies in data are explained in Stage
+        2.  
+
+-   **Stage 2**: What are the model components? and what is their distribution?
+
+-   **Stage 3**: What are our prior beliefs about the parameters controlling the components in the model?
+
+## The good news!! {.smaller auto-animate="true"}
+
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! 😃
+
+-   **Stage 1**: What is the distribution of the responses?
+
+-   **Stage 2**: What are the model components? and what is their distribution?
+
+Here we can have:
+
+-   Fixed effects for covariates
+-   Unstructured random effects (individual effects, group effects)
+-   Structured random effects (AR(1), regional effects, )
+-   ...
+
+These are linked to the responses in the likelihood through *linear predictors*.
+
+-   **Stage 3**: What are our prior beliefs about the parameters controlling the components in the model?
+
+## The good news!! {.smaller auto-animate="true"}
+
+In many cases complicated spatio-temporal models are *just* special cases of the same model structure!! 😃
+
+-   **Stage 1**: What is the distribution of the responses?
+
+-   **Stage 2**: What are the model components? and what is their distribution?
+
+-   **Stage 3**: What are our prior beliefs about the parameters controlling the components in the model?
+
+    The likelihood and the latent model typically have hyperparameters that control their behavior.
+
+    They can include:
+
+    -   Variance of observation noise
+    -   Dispersion parameter in the negative binomial model
+    -   Variance of unstructured effects
+    -   ...
+
+## The second good news!
+
+No matter how complicated is your model, the `inlabru` workflow is *always* the same 😃
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "1-3|5-7|9-13|15-16"
+
+
+# Define model components
+comps <- component_1(...) + 
+  component_2(...) + ...
+
+# Define the model predictor
+pred <- linear_function(component_1, 
+                            component_2, ...)
+
+# Build the observation model
+lik <- bru_obs(formula = pred,
+               family = ... ,
+               data = ... ,
+                ...)
+
+# Fit the model
+fit <- bru(comps, lik, ...)
+```
+
+## The second good news!
+
+No matter how complicated is your model, the `inlabru` workflow is *always* the same 😃
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "5-7"
+
+
+# Define model components
+comps <- component_1(...) + 
+  component_2(...) + ...
+
+# Define the model predictor
+pred <- linear_function(component_1, 
+                            component_2, ...)
+
+# Build the observation model
+lik <- bru_obs(formula = pred,
+               family = ... ,
+               data = ... ,
+                ...)
+
+# Fit the model
+fit <- bru(comps, lik, ...)
+```
+
+**NOTE** `inlabru` allows non-linear functions to be specified
+
+# Examples
+
+## The Tokyo rainfall data
+
+One example with time series: Rainfall over 1 mm in the Tokyo area for each calendar day during two years (1983-84) are registered.
+
+```{r}
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+
+data("Tokyo")
+pTokyo = ggplot() + geom_point(data = Tokyo, aes(time, y)) +
+  ylab("") + xlab("")
+
+cmp= ~ -1 + Intercept(1) + time(time, model ="rw2")
+formula = y ~ Intercept + time
+lik = bru_obs(formula = formula,
+              data = Tokyo,
+              Ntrials = n,
+              family = "binomial")
+fit = bru(cmp, lik)
+
+
+dd = data.frame(ii = 1:366,fit$summary.fitted.values[1:366,c(1,3,5)])
+pTokyo +
+   # Custom the Y scales:
+  scale_y_continuous(
+    # Features of the first axis
+    name = "",
+    # Add a second axis and specify its features
+    sec.axis = sec_axis( transform=~./2, name="Probability")
+  )  + geom_line(data = dd, aes(ii, mean*2)) +
+  geom_ribbon(data = dd, aes(ii, ymin = X0.025quant*2, 
+                             ymax = 2 *X0.975quant), alpha = 0.5)
+
+```
+
+## The model {auto-animate="true"}
+
+**Stage 1** The observation model
+
+$$
+y_t|\eta_t\sim\text{Bin}(n_t, p_t),\qquad \eta_t = \text{logit}(p_t),\qquad i = 1,\dots,366
+$$
+
+$$
+n_t = \left\{
+ \begin{array}{lr}
+1, & \text{for}\; 29\; \text{February}\\
+2, & \text{other days}
+\end{array}\right.
+$$ $$
+y_t =
+\begin{cases}
+\{0,1\}, & \text{for}\; 29\; \text{February}\\
+\{0,1,2\}, & \text{other days}
+ \end{cases}
+$$
+
+-   the likelihood has no hyperparameters
+
+## The model {auto-animate="true"}
+
+**Stage 1** The observation model
+
+$$
+y_t|\eta_t\sim\text{Bin}(n_t, p_t),\qquad \eta_t = \text{logit}(p_t),\qquad i = 1,\dots,366
+$$
+
+**Stage 2** The latent field
+
+$$
+\eta_t = \beta_0 + f(\text{time}_t)
+$$
+
+-   probability of rain depends on on the day of the year $t$
+
+-   $\beta_0$ is an intercept
+
+-   $f(\text{time}_t)$ is a RW2 model (this is just a smoother). The smoothness is controlled by a hyperparameter $\tau_f$
+
+## The model {auto-animate="true"}
+
+**Stage 1** The observation model
+
+$$
+y_t|\eta_t\sim\text{Bin}(n_t, p_t),\qquad \eta_t = \text{logit}(p_t),\qquad i = 1,\dots,366
+$$
+
+**Stage 2** The latent field
+
+$$
+\eta_t = \beta_0 + f(\text{time}_t)
+$$
+
+**Stage 3** The hyperparameters
+
+-   The structured time effect is controlled by one parameter $\tau_f$.
+
+-   We assign a prior to $\tau_f$ to finalize the model.
+
+## `inlabru` for time series {.smaller auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+y_t|\eta_t & \sim \text{Binomial}(n_t,p_t)\\
+\text{logit}(p_t) = \eta_i & = \color{#FF6B6B}{\boxed{\beta_0}} + \color{#FF6B6B}{\boxed{f(\text{time}_t)}}
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+Tokyo[1:3,]
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "1-2"
+
+# define model component
+cmp =  ~ -1 + beta0(1) + time_effect(time, model = "rw2", cyclic = TRUE)
+
+# define model predictor
+eta = y ~ beta0 + time_effect
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "binomial",
+              Ntrials = n,
+              data = Tokyo)
+# fit the model
+fit = bru(cmp, lik)
+
+```
+
+## `inlabru` for time series {.smaller auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+y_t|\eta_t & \sim \text{Binomial}(n_t,p_t)\\
+\text{logit}(p_t) = \color{#FF6B6B}{\boxed{\eta_i}} & = \color{#FF6B6B}{\boxed{\beta_0 + f(\text{time}_t)}}
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+Tokyo[1:3,]
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "4-5"
+
+# define model component
+cmp =  ~ -1 + beta0(1) + time_effect(time, model = "rw2", cyclic = TRUE)
+
+# define model predictor
+eta = y ~ beta0 + time_effect
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "binomial",
+              Ntrials = n,
+              data = Tokyo)
+# fit the model
+fit = bru(cmp, lik)
+
+```
+
+## `inlabru` for time series {.smaller auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+\color{#FF6B6B}{\boxed{y_t|\eta_t}} & \color{#FF6B6B}{\boxed{\sim \text{Binomial}(n_t,p_t)}}\\
+\text{logit}(p_t) = \eta_i & = \beta_0 + f(\text{time}_t)
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+Tokyo[1:3,]
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "7-11"
+
+# define model component
+cmp =  ~ -1 + beta0(1) + time_effect(time, model = "rw2", cyclic = TRUE)
+
+# define model predictor
+eta = y ~ beta0 + time_effect
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "binomial",
+              Ntrials = n,
+              data = Tokyo)
+# fit the model
+fit = bru(cmp, lik)
+
+```
+
+## `inlabru` for time series {.smaller auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+y_t|\eta_t & \sim \text{Binomial}(n_t,p_t)\\
+\text{logit}(p_t) = \eta_i & = \beta_0 + f(\text{time}_t)
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+Tokyo[1:3,]
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "13-14"
+
+# define model component
+cmp =  ~ -1 + beta0(1) + time_effect(time, model = "rw2", cyclic = TRUE)
+
+# define model predictor
+eta = y ~ beta0 + time_effect
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "binomial",
+              Ntrials = n,
+              data = Tokyo)
+# fit the model
+fit = bru(cmp, lik)
+
+```
+
+## Example: disease mapping
+
+We observed larynx cancer mortality counts for males in 544 district of Germany from 1986 to 1990 and want to make a model.
+
+::::: columns
+::: {.column width="50%"}
+-   $y_i$: The count at location $i$.
+
+-   $E_i$: An offset; expected number of cases in district $i$.
+
+-   $c_i$: A covariate (level of smoking consumption) at $i$
+
+-   $\boldsymbol{s}_i$: spatial location $i$ .
+:::
+
+::: {.column width="50%"}
+```{r, out.width = "110%"}
+
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#|
+my.germany.map = function(data, cutpoints=seq(min(data),max(data),length=256), autoscale=FALSE, legend=TRUE, append=FALSE)
+{
+  if (autoscale)
+  {
+    data = (data-min(data))/(max(data)-min(data)+1e-8)
+  }
+  #cutpoints = c(-1e9,cutpoints, 1e9)
+  
+  # farben <- rainbow(as.numeric(cut(data,cutpoints,include.lowest=T))/length(cutpoints))
+  cols =  hcl.colors(256)
+  farben <- cols[as.numeric(cut(data,cutpoints,include.lowest=T))]
+  
+  xmin <- 1:length(germany)
+  xmax <- 1:length(germany)
+  ymin <- 1:length(germany)
+  ymax <- 1:length(germany)
+  
+  for(i in 1:length(germany))
+  {
+    xmin[i] <- min(germany[[i]][,2],na.rm=T)
+    xmax[i] <- max(germany[[i]][,2],na.rm=T)
+    ymin[i] <- min(germany[[i]][,3],na.rm=T)
+    ymax[i] <- max(germany[[i]][,3],na.rm=T)
+  }
+  
+  breite <- c(min(xmin),max(xmax))
+  hoehe <- c(min(ymin),max(ymax))
+  
+  if (!append) plot(breite,hoehe,type="n",axes=F, xlab=" ", ylab=" ", asp = 1)
+  
+  
+  for(k in length(germany):1)
+  {
+    polygon(germany[[k]][,2],germany[[k]][,3],col=farben[k])
+  }
+  
+  
+}
+source(system.file("demodata/Bym-map.R", package="INLA"))
+data(Germany)
+# Load data
+Germany$region.struct = Germany$region
+g <- system.file("demodata/germany.graph" , package = "INLA")
+my.germany.map(Germany$Y/Germany$E, autoscale = F)
+```
+:::
+:::::
+
+## Bayesian disease mapping {.smaller}
+
+> -   **Stage 1:** We assume the responses are Poisson distributed: $$          
+>     y_i \mid \eta_i \sim \text{Poisson}(E_i\exp(\eta_i)))
+>     $$
+
+> -   **Stage 2:** $\eta_i$ is a linear function of three components: an intercept, a covariate $c_i$, a spatially structured effect $\omega$ likelihood by $$
+>     \eta_i = \beta_0 + \beta_1\ c_i + \omega_i
+>     $$
+
+> -   **Stage 3:**
+>     -   $\tau_{\omega}$: Precisions parameter for the random effects
+
+. . .
+
+The latent field is $\boldsymbol{u} = (\beta_0, \beta_1, \omega_1, \omega_2,\ldots, \omega_n)$, the hyperparameters are $\boldsymbol{\theta} = (\tau_{\omega})$, and must be given a prior.
+
+## `inlabru` for disease mapping {.smaller auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+y_i|\eta_t & \sim \text{Poisson}(E_i\lambda_i)\\
+\text{log}(\lambda_i) = \eta_i & = \color{#FF6B6B}{\boxed{\beta_0}} + \color{#FF6B6B}{\boxed{\beta_1\ c_i}} + \color{#FF6B6B}{\boxed{\omega_i}}
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+g = system.file("demodata/germany.graph",
+                package="INLA")
+Germany[1:3,]
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "1-3"
+
+# define model component
+cmp =  ~ -1 + beta0(1) + beta1(x, model = "linear") +
+  space(region, model = "besag", graph = g)
+
+# define model predictor
+eta = Y ~ beta0 + beta1 + space
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "poisson",
+              E = E,
+              data = Germany)
+
+# fit the model
+fit = bru(cmp, lik)
+
+```
+
+## `inlabru` for disease mapping {.smaller auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+y_i|\eta_t & \sim \text{Poisson}(E_i\lambda_i)\\
+\text{log}(\lambda_i) = \color{#FF6B6B}{\boxed{\eta_i}} & = \color{#FF6B6B}{\boxed{\beta_0 + \beta_1\ c_i + \omega_i}}
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+g = system.file("demodata/germany.graph",
+                package="INLA")
+Germany[1:3,]
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "5-6"
+
+# define model component
+cmp =  ~ -1 + beta0(1) + beta1(x, model = "linear") +
+  space(region, model = "bym2", graph = g)
+
+# define model predictor
+eta = Y ~ beta0 + beta1 + space
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "poisson",
+              E = E,
+              data = Germany)
+
+# fit the model
+fit = bru(cmp, lik)
+
+```
+
+## `inlabru` for disease mapping {.smaller auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+\color{#FF6B6B}{\boxed{y_i|\eta_t}} & \color{#FF6B6B}{\boxed{\sim \text{Poisson}(E_i\lambda_i)}}\\
+\text{log}(\lambda_i) = \eta_i & = \beta_0 + \beta_1\ c_i + \omega_i
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+g = system.file("demodata/germany.graph",
+                package="INLA")
+Germany[1:3,]
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "8-12|14-15"
+
+# define model component
+cmp =  ~ -1 + beta0(1) + beta1(x, model = "linear") +
+  space(region, model = "bym2", graph = g)
+
+# define model predictor
+eta = Y ~ beta0 + beta1 + space
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "poisson",
+              E = E,
+              data = Germany)
+
+# fit the model
+fit = bru(cmp, lik)
+
+```
+
+## `inlabru` for disease mapping {.smaller auto-animate="true"}
+
+::: {style="height: 50px;"}
+:::
+
+```{r}
+#| echo: false
+#| layout: [[100], [100]]
+
+g = system.file("demodata/germany.graph",
+                package="INLA")
+
+
+
+# define model component
+cmp =  ~ -1 + beta0(1) + beta1(x, model = "linear") +
+  space(region, model = "besag", graph = g)
+
+# define model predictor
+eta = Y ~ beta0 + beta1 + space
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              family = "poisson",
+              E = E,
+              data = Germany)
+
+# fit the model
+fit = bru(cmp, lik)
+
+
+p1 = fit$marginals.fixed$beta0 %>% ggplot() +
+  geom_line(aes(x,y)) + xlab("") + ylab("") +
+  ggtitle("Intercept (posterior distribution)")
+
+p2= fit$marginals.fixed$beta1 %>% ggplot() +
+  geom_line(aes(x,y)) + xlab("") + ylab("") +
+  ggtitle("Covariate Effect (posterior distribution)")
+
+p1 + p2
+
+my.germany.map(fit$summary.random$space$mean, autoscale = F)
+
+```
+
+## Bayesian Geostatistics
+
+Encounter probability of Pacific Cod (*Gadus macrocephalus*) from a trawl survey.
+
+```{r}
+#| echo: false
+library(sf)
+library(tidyverse)
+library(inlabru)
+library(INLA)
+library(patchwork)
+library(mapview)
+
+```
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+
+
+df = sdmTMB::pcod 
+qcs_grid = sdmTMB::qcs_grid
+df =   st_as_sf(df, coords = c("lon","lat"), crs = 4326)
+df = st_transform(df, crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
+
+
+depth_sf = st_as_sf(qcs_grid %>% select(X,Y,depth), coords = c("X","Y"), crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
+
+
+mapview(df, zcol = "present")
+```
+
+```{r}
+#| echo: false
+
+mesh = fm_mesh_2d(df, 
+                  cutoff = 2,
+                  max.edge = c(7,20),
+                  offset = c(5,50))
+ggplot() + gg(mesh) + geom_sf(data= df, aes(color = factor(present)))
+
+
+spde_model =  inla.spde2.pcmatern(mesh,
+                                  prior.sigma = c(1, 0.01),
+                                  prior.range = c(30, 0.01)
+)
+
+depth_mapper <- bru_mapper(inla.mesh.1d(sort(unique(inla.group(log(depth_sf$depth),
+                                                                   method = "quantile", n=25)))), 
+                           indexed = FALSE)
+cmp = ~ -1 + Intercept(1) + 
+  depth_smooth(log(depth), model='rw2', 
+               mapper = depth_mapper, 
+               scale.model=TRUE,
+               hyper = list(prec = list(prior='pc.prec', param=c(1, 0.01))) ) + 
+  space(geometry, model = spde_model)
+
+formula = present ~ Intercept + depth_smooth + space
+
+lik = bru_obs(formula = formula, 
+              data = df, 
+              family = "binomial")
+
+fit = bru(cmp, lik)
+```
+
+$y(s)$ Presence of absence in location $s$
+
+## Bayesian Geostatistics {auto-animate="true"}
+
+-   **Stage 1** Model for the response $$
+    y(s)|\eta(s)\sim\text{Binom}(1, p(s))
+    $$
+
+-   **Stage 2** Latent field model $$
+    \eta(s) = \text{logit}(p(s)) = \beta_0 + f( x(s)) + \omega(s)
+    $$
+
+-   **Stage 3** Hyperparameters
+
+## Bayesian Geostatistics {auto-animate="true"}
+
+-   **Stage 1** Model for the response $$
+    y(s)|\eta(s)\sim\text{Binom}(1, p(s))
+    $$
+-   **Stage 2** Latent field model $$
+    \eta(s) = \text{logit}(p(s)) = \beta_0 + f( x(s)) + \omega(s)
+    $$
+    -   A global intercept $\beta_0$
+    -   A smooth effect of covariate $x(s)$ (depth)
+    -   A Gaussian field $\omega(s)$ (will discuss this later..)
+-   **Stage 3** Hyperparameters
+
+## Bayesian Geostatistics {auto-animate="true"}
+
+-   **Stage 1** Model for the response $$
+    y(s)|\eta(s)\sim\text{Binom}(1, p(s))
+    $$
+
+-   **Stage 2** Latent field model $$
+    \eta(s) = \text{logit}(p(s)) = \beta_0 + \beta_1 x(s) + \omega(s)
+    $$
+
+-   **Stage 3** Hyperparameters
+
+    -   Precision for the smooth function $f(\cdot)$
+    -   Range and sd in the Gaussian field $\sigma_{\omega}, \tau_{\omega}$
+
+## `inlabru` for geostatistics {.smaller auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+y(s)|\eta(s) & \sim \text{Binom}(1, p(s))\\
+\eta(s) &  = \color{#FF6B6B}{\boxed{\beta_0 }}+  \color{#FF6B6B}{\boxed{f(x(s))}} +  \color{#FF6B6B}{\boxed{\omega(s)}}\\
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+df %>% select(depth, present) %>% print(n = 3)
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "1-3"
+
+# define model component
+cmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + 
+  space(geometry, model = spde_model)
+
+# define model predictor
+eta = present ~ Intercept + depth_smooth + space
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              data = df,
+              family = "binomial")
+
+# fit the model
+fit = bru(cmp, lik)
+```
+
+## `inlabru` for geostatistics {.smaller auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+y(s)|\eta(s) & \sim \text{Binom}(1, p(s))\\
+\color{#FF6B6B}{\boxed{\eta(s)}} &  = \color{#FF6B6B}{\boxed{\beta_0 +  f(x(s)) +  \omega(s)}}\\
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+df %>% select(depth, present) %>% print(n = 3)
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "5-6"
+
+# define model component
+cmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + 
+  space(geometry, model = spde_model)
+
+# define model predictor
+eta = present ~ Intercept + depth_smooth + space
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              data = df,
+              family = "binomial")
+
+# fit the model
+fit = bru(cmp, lik)
+```
+
+## `inlabru` for geostatistics {.smaller auto-animate="true"}
+
+::::: columns
+::: {.column width="50%"}
+**The Model**
+
+$$
+\begin{aligned}
+\color{#FF6B6B}{\boxed{y(s)|\eta(s)}} & \sim \color{#FF6B6B}{\boxed{\text{Binom}(1, p(s))}}\\
+\eta(s) &  = \beta_0 +  f(x(s)) +  \omega(s)\\
+\end{aligned}
+$$
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: true
+df %>% select(depth, present) %>% print(n = 3)
+```
+:::
+:::::
+
+**The code**
+
+```{r}
+#| echo: true
+#| eval: false
+#| warning: false
+#| message: false
+#| code-line-numbers: "8-11|13-14"
+
+# define model component
+cmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + 
+  space(geometry, model = spde_model)
+
+# define model predictor
+eta = present ~ Intercept + depth_smooth + space
+
+# build the observation model
+lik = bru_obs(formula = eta,
+              data = df,
+              family = "binomial")
+
+# fit the model
+fit = bru(cmp, lik)
+```
+
+## `inlabru` for geostatistics
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| 
+library(scico)
+library(patchwork)
+
+
+
+preds = predict(fit, depth_sf, ~ data.frame(cov = depth_smooth,
+                                            space = space,
+                                            lp = Intercept + space + depth_smooth,
+                                            prob = inla.link.logit(Intercept + space + depth_smooth,
+                                                                   inverse = T)))
+
+fit$summary.random$depth_smooth %>%
+  ggplot() + geom_line(aes(ID, mean)) +
+  geom_ribbon(aes(ID, ymin = `0.025quant`,
+                  ymax = `0.975quant`), alpha = 0.5) +
+  geom_point(data = df, aes(x = log(depth), y =-12), shape  = "|") +
+  xlab("Depth") + ylab("") + ggtitle("Smooth effect of depth")+
+
+
+ggplot() + 
+  geom_tile(data = preds$prob, aes(x = st_coordinates(depth_sf)[,1],
+                            y = st_coordinates(depth_sf)[,2],
+                            fill = mean))+ scale_fill_scico(direction = -1)+
+  geom_sf(data = df, pch = ".") +
+  xlab("") + ylab("") + ggtitle("Predicted probability")+plot_layout(ncol=2)
+
+
+
+```
+
+## Take home message!
+
+::: {style="height: 50px;"}
+:::
+
+-   Many of the model you have used (and some you have never used but will learn about) are *just* special cases of the large class of Latent Gaussian models
+
+-   `inlabru` provides an efficient and unified way to fit all these models!

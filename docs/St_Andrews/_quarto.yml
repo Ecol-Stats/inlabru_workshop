@@ -1,0 +1,48 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+  - Install_software.qmd
+  - index.qmd
+  - practical1_compiler.qmd
+  - practical2_compiler.qmd
+  - slides/slides_1.qmd
+  - slides/slides_2.qmd
+  - slides/slides_3.qmd
+website:
+  title: "INLA and beyond"
+  page-footer:
+    center: '<a href="https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/" style="color:#ccc;">Home</a>'
+  navbar:
+    logo: INLA_logo.png
+    right:
+      - text: "Home"
+        href: index.qmd
+    left:
+      - text: "Installation"
+        href: Install_software.qmd
+      - text: "Slides"
+        menu:
+          - text: "Slides 1 - Introduction"
+            href: slides/slides_1.qmd
+          - text: "Slides 2 - Spatial modelling"
+            href: slides/slides_2.qmd
+          - text: "Wrap-up and outlook"
+            href: slides/slides_3.qmd
+      - text: "Practicals"
+        menu:
+          - text: "Practical 1 - inlabru workflow"
+            href: practical1_compiler.qmd
+          - text: "Practical 2 - spatial modelling"
+            href: practical2_compiler.qmd
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    css:
+      - styles.css
+      - include/webex.css
+    toc: true
+    include-after-body: include/webex.js
+editor: visual

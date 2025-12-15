@@ -1,0 +1,202 @@
+---
+title: "Practical"
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+## Generalised Additive Model {#sec-gam_ex}
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(webexercises)
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)     
+# load some libraries to generate nice map plots
+library(scico)
+```
+
+In this practical we will:
+
+-   Learn how to fit a [GAM](#fitting_GAM)  with `inlabru`
+
+Generalised Additive Models (GAMs) are very similar to linear models, but with an additional basis set that provides flexibility.
+
+Additive models are a general form of statistical model which allows us to incorporate smooth functions alongside linear terms. A general expression for the linear predictor of a GAM is given by
+
+$$
+\eta_i = g(\mu_i) = \beta_0 + \sum_{j=1}^L f_j(x_{ij}) 
+$$
+
+where the mean $\pmb{\mu} = E(\mathbf{y}|\mathbf{x}_1,\ldots,\mathbf{x}_L)$ and $g()$ is a link function (notice that the distribution of the response and the link between the predictors and this distribution can be quite general). The term $f_j()$ is a smooth function for the *j*-th explanatory variable that can be represented as
+
+$$
+f(x_i) = \sum_{k=0}^q\beta_k b_k(x_i)
+$$
+
+where $b_k$ denote the basis functions and $\beta_K$ are their coefficients.
+
+Increasing the number of basis functions leads to a more *wiggly* line. Too few basis functions might make the line too smooth, too many might lead to overfitting.
+
+To avoid this, we place further constraints on the spline coefficients which leads to constrained optimization problem where the objective function to be minimized is given by:
+
+$$
+\mathrm{min}\sum_i(y_i-f(x_i))^2 + \lambda(\sum_kb^2_k)
+$$ 
+
+The first term measures how close the function $f()$ is to the data while the second term $\lambda(\sum_kb^2_k)$, penalizes the roughness in the function. Here, $\lambda >0$ is known as the smoothing parameter because it controls the degree of smoothing (i.e. the trade-off between the two terms). In a Bayesian setting,including the penalty term is equivalent to setting a specific prior on the coefficients of the covariates.
+
+In this exercise we will set a random walk prior of order 1 on $f$, i.e. $f(x_i)-f(x_i-1) \sim \mathcal{N}(0,\sigma^2_f)$ where $\sigma_f^2$ is the smoothing parameter such that small values give large smoothing. Notice that we will assume $x_i$'s are equally spaced.
+
+### Simulate Data
+
+Lets generate some data so evaluate how RW models perform when estimating a smooth curve. The data are simulated from the following model:
+
+$$
+y_i = 1 + \mathrm{cos}(x) + \epsilon_i, ~ \epsilon_i \sim \mathcal{N}(0,\sigma^2_\epsilon)
+$$ where $\sigma_\epsilon^2 = 0.25$
+
+```{r}
+#| code-summary: "Simulate GAM Data"
+
+set.seed(123)
+n = 100
+x = rnorm(n)
+eta = (1 + cos(x))
+y = rnorm(n, mean =  eta, sd = 0.5)
+
+df = data.frame(y = y, 
+                x_smooth = inla.group(x)) # equidistant x's 
+
+```
+
+### Fitting a GAM in `inlabru`{#sec-fitting_GAM} 
+
+Now lets fit a flexible model by setting a random walk of order 1 prior on the coefficients. This can be done bye specifying `model = "rw1"` in the model component (similarly,a random walk of order 2 can be placed by setting `model = "rw2"` )
+
+```{r define_components_gam}
+cmp =  ~ Intercept(1) + 
+  smooth(x_smooth, model = "rw1")
+```
+
+Now we define the observational model:
+
+```{r define_likelihood_gam}
+lik =  bru_obs(formula = y ~.,
+            family = "gaussian",
+            data = df)
+```
+
+We then can fit the model:
+
+```{r run_model_gam}
+fit = bru(cmp, lik)
+fit$summary.fixed
+```
+
+The posterior summary regarding the estimated function using RW1 can be accessed through `fit$summary.random$smooth`, the output includes the value of $x_i$ (`ID`) as well as the posterior mean, standard deviation, quantiles and mode of each $f(x_i)$. We can use this information to plot the posterior mean and associated 95% credible intervals.
+
+::: panel-tabset
+# R plot
+
+```{r}
+#| fig-cap: Smooth effect of the covariate
+#| echo: false
+#| fig-width: 4
+#| fig-align: center
+#| fig-height: 4
+#| purl: false
+
+data.frame(fit$summary.random$smooth) %>% 
+  ggplot() + 
+  geom_ribbon(aes(ID,ymin = X0.025quant, ymax= X0.975quant), alpha = 0.5) + 
+  geom_line(aes(ID,mean)) + 
+  xlab("covariate") + ylab("")
+```
+
+# R Code
+
+```{r}
+#| eval: false
+#| 
+data.frame(fit$summary.random$smooth) %>% 
+  ggplot() + 
+  geom_ribbon(aes(ID,ymin = X0.025quant, ymax= X0.975quant), alpha = 0.5) + 
+  geom_line(aes(ID,mean)) + 
+  xlab("covariate") + ylab("")
+```
+:::
+
+### Model Predictions
+
+We can obtain the model predictions using the `predict` function.
+
+```{r get_predictions_gam}
+pred = predict(fit, df, ~ (Intercept + smooth))
+```
+
+The we can plot them together with the true curve and data points:
+
+```{r plot_gam}
+#| code-fold: true
+#| fig-cap: Data and 95% credible intervals
+pred %>% ggplot() + 
+  geom_point(aes(x_smooth,y), alpha = 0.3) +
+  geom_line(aes(x_smooth,1+cos(x_smooth)),col=2)+
+  geom_line(aes(x_smooth,mean)) +
+  geom_line(aes(x_smooth, q0.025), linetype = "dashed")+
+  geom_line(aes(x_smooth, q0.975), linetype = "dashed")+
+  xlab("Covariate") + ylab("Observations")
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}}Task
+
+Fit a flexible model using a random walk of order 2 (RW2) and compare the results with the ones above.
+
+`r hide("Take hint")`
+
+You can set `model = "rw2"` for assigning a random walk 2 prior.
+
+`r unhide()`
+
+```{r}
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+#| warning: false
+#| message: false
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+
+cmp_rw2 =  ~ Intercept(1) + 
+  smooth(x_smooth, model = "rw2")
+lik_rw2 =  bru_obs(formula = y ~.,
+            family = "gaussian",
+            data = df)
+fit_rw2 = bru(cmp_rw2, lik_rw2)
+
+# Plot the fitted functions
+ggplot() + 
+  geom_line(data= fit$summary.random$smooth,aes(ID,mean,colour="RW1"),lty=2) + 
+  geom_line(data= fit_rw2$summary.random$smooth,aes(ID,mean,colour="RW2")) + 
+  xlab("covariate") + ylab("") + scale_color_discrete(name="Model")
+
+```
+
+We see that the RW1 fit is too wiggly while the RW2 is smoother and seems to have better fit.
+:::

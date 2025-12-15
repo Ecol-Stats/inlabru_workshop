@@ -128,7 +128,7 @@ cmp =  ~ -1 + beta_0(1) + beta_1(x, model = "linear") +
   u(j, model = "iid")
 ```
 
-The group variable is indexed by column `j` in the dataset. We have chosen to name this component `v()` to connect with the mathematical notation that we used above.
+The group variable is indexed by column `j` in the dataset. We have chosen to name this component `u()` to connect with the mathematical notation that we used above.
 
 ```{r define_likelihood_lmm}
 # Construct likelihood

@@ -1,0 +1,1066 @@
+[
+  {
+    "objectID": "slides/slides_3.html#modelling-movement-data",
+    "href": "slides/slides_3.html#modelling-movement-data",
+    "title": "Wrap-up and outlook",
+    "section": "Modelling movement data",
+    "text": "Modelling movement data\n\nmodels can also be fitted to movement data in inlabru\nsometimes locations treated as a point pattern, ignoring sequential nature of the data\nmodel development is an area of active research\napproaches include:\n\ndiscrete time step-selection processes and\ncontinuous time Langevin diffusion models"
+  },
+  {
+    "objectID": "slides/slides_3.html#metric-graph",
+    "href": "slides/slides_3.html#metric-graph",
+    "title": "Wrap-up and outlook",
+    "section": "Metric Graph",
+    "text": "Metric Graph\n\nNot all phenomena leave on \\(\\mathcal{R}^2\\)\nExample: Traffic on roads, fishes in a river, etc…\n\n\n\n\n\n\n\n\n\nWhat is different from \\(\\mathcal{R}^2\\)?"
+  },
+  {
+    "objectID": "slides/slides_3.html#metric-graph-1",
+    "href": "slides/slides_3.html#metric-graph-1",
+    "title": "Wrap-up and outlook",
+    "section": "Metric Graph",
+    "text": "Metric Graph\n\nWhat is different from \\(\\mathcal{R}^2\\)?\n\nThink about distances on the road network…they often do not correspond to the euclidian distance in \\(\\mathcal{R}^2\\)\n\nThe random walk has to account for the shape of the graph\n..this is what the MetricGraph library does"
+  },
+  {
+    "objectID": "slides/slides_3.html#non-linear-predictor",
+    "href": "slides/slides_3.html#non-linear-predictor",
+    "title": "Wrap-up and outlook",
+    "section": "Non linear predictor",
+    "text": "Non linear predictor\n\nSometimes one is interested in models whose parameters interact in a non-linear way\n\n\nExample Growth model\n\\[\n\\begin{aligned}\ny_t&\\sim\\mathcal{N}(\\mu_t, \\sigma^2)\\\\\n\\eta_t &= \\mu_t = L(1-\\exp(-k\\ (t-t_0)))\n\\end{aligned}\n\\] where \\(t\\) is the age and \\(y_t\\) the length of the fish\nwith parameters \\((L,k,t)\\)\n\n\nThis model cannot be implemented in the original INLA framework. inlabru linearizes the problem and by an iterative procedure is (often) able to estimate the parameters. You can read more here"
+  },
+  {
+    "objectID": "slides/slides_3.html#spacetime-varying-covariate-effects",
+    "href": "slides/slides_3.html#spacetime-varying-covariate-effects",
+    "title": "Wrap-up and outlook",
+    "section": "Space/time varying covariate effects",
+    "text": "Space/time varying covariate effects"
+  },
+  {
+    "objectID": "slides/slides_3.html#spacetime-varying-covariate-effects-1",
+    "href": "slides/slides_3.html#spacetime-varying-covariate-effects-1",
+    "title": "Wrap-up and outlook",
+    "section": "Space/time varying covariate effects",
+    "text": "Space/time varying covariate effects\nThe model\n\\[\n\\eta(s) = \\beta_0 + \\beta_1(s)\\ x(s)\n\\]\nImplementation\n\ncmp = ~ Intercept(0) + space_beta(geometry, weights = covariate, model = spde)\n\n# OR\n\ncmp = ~ Intercept(0) + space_beta(idx_region, weights = covariate, model = \"besag\")"
+  },
+  {
+    "objectID": "slides/slides_3.html#getting-help-with-inlainlabru-related-topics",
+    "href": "slides/slides_3.html#getting-help-with-inlainlabru-related-topics",
+    "title": "Wrap-up and outlook",
+    "section": "Getting help with INLA/inlabru related topics",
+    "text": "Getting help with INLA/inlabru related topics\n\nDiscussion forum\n\nINLA forum\ninlabru forum\n\nPlease take contact if you have questions/problems to discuss 😀\nWe are offering longer courses (3-5 days) covering more specific topics (e.,g spatio-temporal models, distance sampling, occupancy modelling, joint modelling)"
+  },
+  {
+    "objectID": "slides/slides_3.html#feedback",
+    "href": "slides/slides_3.html#feedback",
+    "title": "Wrap-up and outlook",
+    "section": "Feedback",
+    "text": "Feedback\nWe would be very glad if you could fill in this form and share your feedback about the course."
+  },
+  {
+    "objectID": "slides/slides_1.html#outline",
+    "href": "slides/slides_1.html#outline",
+    "title": "Lecture 1",
+    "section": "Outline",
+    "text": "Outline\n\n\n\n\nWhat are INLA and inlabru?\nWhy the Bayesian framework?\nWhich model are inlabru-friendly?\nWhat are Latent Gaussian Models?\nHow are they implemented in inlabru?"
+  },
+  {
+    "objectID": "slides/slides_1.html#what-is-inla-what-is-inlabru",
+    "href": "slides/slides_1.html#what-is-inla-what-is-inlabru",
+    "title": "Lecture 1",
+    "section": "What is INLA? What is inlabru?",
+    "text": "What is INLA? What is inlabru?\nThe short answer:\n\nINLA is a fast method to do Bayesian inference with latent Gaussian models and inlabru is an R-package that implements this method with a flexible and simple interface.\n\n\nThe (much) longer answer:\n\nRue, H., Martino, S. and Chopin, N. (2009), Approximate Bayesian inference for latent Gaussian models by using integrated nested Laplace approximations. Journal of the Royal Statistical Society: Series B (Statistical Methodology), 71: 319-392.\nVan Niekerk, J., Krainski, E., Rustand, D., & Rue, H. (2023). A new avenue for Bayesian inference with INLA. Computational Statistics & Data Analysis, 181, 107692.\nLindgren, F., Bachl, F., Illian, J., Suen, M. H., Rue, H., & Seaton, A. E. (2024). inlabru: software for fitting latent Gaussian models with non-linear predictors. arXiv preprint arXiv:2407.00791.\nLindgren, F., Bolin, D., & Rue, H. (2022). The SPDE approach for Gaussian and non-Gaussian fields: 10 years and still running. Spatial Statistics, 50, 100599."
+  },
+  {
+    "objectID": "slides/slides_1.html#where",
+    "href": "slides/slides_1.html#where",
+    "title": "Lecture 1",
+    "section": "Where?",
+    "text": "Where?\n\n\n\n Website-tutorials\n\n\ninlabru https://inlabru-org.github.io/inlabru/\nR-INLA https://www.r-inla.org/home\n\n\n\n\n\n\n Discussion forums\n\n\ninlabru https://github.com/inlabru-org/inlabru/discussions\nR-INLA https://groups.google.com/g/r-inla-discussion-group\n\n\n\n\n\n\n Books\n\n\n\nBlangiardo, M., & Cameletti, M. (2015). Spatial and spatio-temporal Bayesian models with R-INLA. John Wiley & Sons.\nGómez-Rubio, V. (2020). Bayesian inference with INLA. Chapman and Hall/CRC.\nKrainski, E., Gómez-Rubio, V., Bakka, H., Lenzi, A., Castro-Camilo, D., Simpson, D., … & Rue, H. (2018). Advanced spatial modeling with stochastic partial differential equations using R and INLA. Chapman and Hall/CRC.\nWang, X., Yue, Y. R., & Faraway, J. J. (2018). Bayesian regression modeling with INLA. Chapman and Hall/CRC."
+  },
+  {
+    "objectID": "slides/slides_1.html#so-why-should-you-use-inlabru",
+    "href": "slides/slides_1.html#so-why-should-you-use-inlabru",
+    "title": "Lecture 1",
+    "section": "So… Why should you use inlabru?",
+    "text": "So… Why should you use inlabru?\n\n\nWhat type of problems can we solve?\nWhat type of models can we use?\nWhen can we use it?"
+  },
+  {
+    "objectID": "slides/slides_1.html#so-why-should-you-use-inlabru-1",
+    "href": "slides/slides_1.html#so-why-should-you-use-inlabru-1",
+    "title": "Lecture 1",
+    "section": "So… Why should you use inlabru?",
+    "text": "So… Why should you use inlabru?\n\nWhat type of problems can we solve?\nWhat type of models can we use?\nWhen can we use it?\n\n\nTo give proper answers to these questions, we need to start at the very beginning .."
+  },
+  {
+    "objectID": "slides/slides_1.html#the-core",
+    "href": "slides/slides_1.html#the-core",
+    "title": "Lecture 1",
+    "section": "The core",
+    "text": "The core\n\nWe have observed something."
+  },
+  {
+    "objectID": "slides/slides_1.html#the-core-1",
+    "href": "slides/slides_1.html#the-core-1",
+    "title": "Lecture 1",
+    "section": "The core",
+    "text": "The core\n\nWe have observed something.\nWe have questions."
+  },
+  {
+    "objectID": "slides/slides_1.html#the-core-2",
+    "href": "slides/slides_1.html#the-core-2",
+    "title": "Lecture 1",
+    "section": "The core",
+    "text": "The core\n\nWe have observed something.\nWe have questions.\nWe want answers!"
+  },
+  {
+    "objectID": "slides/slides_1.html#how-do-we-find-answers",
+    "href": "slides/slides_1.html#how-do-we-find-answers",
+    "title": "Lecture 1",
+    "section": "How do we find answers?",
+    "text": "How do we find answers?\nWe need to make choices:\n\n\n\nBayesian or frequentist?\nHow do we model the data?\nHow do we compute the answer?"
+  },
+  {
+    "objectID": "slides/slides_1.html#how-do-we-find-answers-1",
+    "href": "slides/slides_1.html#how-do-we-find-answers-1",
+    "title": "Lecture 1",
+    "section": "How do we find answers?",
+    "text": "How do we find answers?\nWe need to make choices:\n\nBayesian or frequentist?\nHow do we model the data?\nHow do we compute the answer?\n\nThese questions are not independent."
+  },
+  {
+    "objectID": "slides/slides_1.html#bayesian-or-frequentist",
+    "href": "slides/slides_1.html#bayesian-or-frequentist",
+    "title": "Lecture 1",
+    "section": "Bayesian or frequentist?",
+    "text": "Bayesian or frequentist?\nIn this course we embrace the Bayesian perspective\n\nThere are no “true but unknown” parameters !"
+  },
+  {
+    "objectID": "slides/slides_1.html#bayesian-or-frequentist-1",
+    "href": "slides/slides_1.html#bayesian-or-frequentist-1",
+    "title": "Lecture 1",
+    "section": "Bayesian or frequentist?",
+    "text": "Bayesian or frequentist?\nIn this course we embrace the Bayesian perspective\n\nThere are no “true but unknown” parameters !\nEvery parameter is described by a probability distribution!"
+  },
+  {
+    "objectID": "slides/slides_1.html#bayesian-or-frequentist-2",
+    "href": "slides/slides_1.html#bayesian-or-frequentist-2",
+    "title": "Lecture 1",
+    "section": "Bayesian or frequentist?",
+    "text": "Bayesian or frequentist?\nIn this course we embrace the Bayesian perspective\n\nThere are no “true but unknown” parameters !\nEvery parameter is described by a probability distribution!\nEvidence from the data is used to update the belief we had before observing the data!"
+  },
+  {
+    "objectID": "slides/slides_1.html#some-more-details-i",
+    "href": "slides/slides_1.html#some-more-details-i",
+    "title": "Lecture 1",
+    "section": "Some more details I",
+    "text": "Some more details I\nWe define linear predictor the mean (or a function of the mean) of our observations given the model components.\n\nIn this case \\(E(y_i|\\beta_0, \\beta_i) = \\eta_i = \\beta_0 + \\beta_1 x_i\\)"
+  },
+  {
+    "objectID": "slides/slides_1.html#some-more-details-i-1",
+    "href": "slides/slides_1.html#some-more-details-i-1",
+    "title": "Lecture 1",
+    "section": "Some more details I",
+    "text": "Some more details I\nWe define linear predictor the mean (or a function of the mean) of our observations given the model components.\n\nIn this case \\(E(y_i|\\beta_0, \\beta_i) =\\eta_i =  \\color{red}{\\boxed{\\beta_0}} +  \\color{red}{\\boxed{\\beta_1 x_i}}\\)\nThis model as two components !"
+  },
+  {
+    "objectID": "slides/slides_1.html#some-more-details-ii",
+    "href": "slides/slides_1.html#some-more-details-ii",
+    "title": "Lecture 1",
+    "section": "Some more details II",
+    "text": "Some more details II\nGiven the linear predictor \\(\\eta\\) the observations a independent on each other!\n\nThis means that all dependencies in the observations are accounted for by the components!"
+  },
+  {
+    "objectID": "slides/slides_1.html#some-more-details-ii-1",
+    "href": "slides/slides_1.html#some-more-details-ii-1",
+    "title": "Lecture 1",
+    "section": "Some more details II",
+    "text": "Some more details II\nGiven the linear predictor \\(\\eta\\) the observations a independent on each other!\n\nThe observation model (likelihood) can be written as: \\[\n\\pi(\\mathbf{y}|\\eta,\\sigma^2) = \\prod_{i = 1}^n\\pi(y_i|\\eta_i,\\sigma^2)\n\\]"
+  },
+  {
+    "objectID": "slides/slides_1.html#lets-formalize-this-a-bit",
+    "href": "slides/slides_1.html#lets-formalize-this-a-bit",
+    "title": "Lecture 1",
+    "section": "Let’s formalize this a bit…",
+    "text": "Let’s formalize this a bit…\nThe elements of a inlabru friendly statistical model are:\nThe observational model \\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim\\mathcal{N}(\\eta_i,\\sigma^2),\\qquad i = 1,\\dots,n\\\\\nE(y_i|\\eta_i, \\sigma^2) & = \\eta_i\n\\end{aligned}\n\\]\n\n\n\n\n\n\nNote\n\n\nWe assume that, given the linear predictor \\(\\eta\\), the data are independent on each other! Data dependence is expressed through the components if the linear predictor."
+  },
+  {
+    "objectID": "slides/slides_1.html#lets-formalize-this-a-bit-1",
+    "href": "slides/slides_1.html#lets-formalize-this-a-bit-1",
+    "title": "Lecture 1",
+    "section": "Let’s formalize this a bit…",
+    "text": "Let’s formalize this a bit…\nThe elements of a inlabru friendly statistical model are:\n\nThe observational model \\(y_i|\\eta_i,\\sigma^2\\sim\\mathcal{N}(\\eta_i,\\sigma^2),\\qquad i = 1,\\dots,n\\)\nA model for the linear predictor \\[\nE(y_i|\\eta_i,\\sigma^2) = \\eta_i = \\beta_0 + \\beta_1x_i\n\\]"
+  },
+  {
+    "objectID": "slides/slides_1.html#lets-formalize-this-a-bit-2",
+    "href": "slides/slides_1.html#lets-formalize-this-a-bit-2",
+    "title": "Lecture 1",
+    "section": "Let’s formalize this a bit…",
+    "text": "Let’s formalize this a bit…\nThe elements of a inlabru friendly statistical model are:\n\nThe observational model \\(y_i|\\eta_i,\\sigma^2\\sim\\mathcal{N}(\\eta_i,\\sigma^2),\\qquad i = 1,\\dots,n\\)\nA model for the linear predictor\n\n\\[\nE(y_i|\\eta_i,\\sigma^2) = \\eta_i = \\color{red}{\\boxed{\\beta_0}} + \\color{red}{\\boxed{\\beta_1x_i} }\n\\]\nNote 1: These are the components of our model! These explain the dependence structure of the data."
+  },
+  {
+    "objectID": "slides/slides_1.html#lets-formalize-this-a-bit-3",
+    "href": "slides/slides_1.html#lets-formalize-this-a-bit-3",
+    "title": "Lecture 1",
+    "section": "Let’s formalize this a bit…",
+    "text": "Let’s formalize this a bit…\nThe elements of a inlabru friendly statistical model are:\n\nThe observational model \\(y_i|\\eta_i,\\sigma^2\\sim\\mathcal{N}(\\eta_i,\\sigma^2),\\qquad i = 1,\\dots,n\\)\nA model for the linear predictor \\(\\eta_i = \\color{red}{\\boxed{\\beta_0}} + \\color{red}{\\boxed{\\beta_1x_i} }\\)\nA prior for the model components \\(\\textbf{u}\\) \\[\n\\mathbf{u} = \\{\\beta_0, \\beta_1\\}\\sim\\mathcal{N}(0,\\mathbf{Q}^{-1})\n\\] Note: These have always a Gaussian prior and are use to explain the dependencies among data!"
+  },
+  {
+    "objectID": "slides/slides_1.html#lets-formalize-this-a-bit-4",
+    "href": "slides/slides_1.html#lets-formalize-this-a-bit-4",
+    "title": "Lecture 1",
+    "section": "Let’s formalize this a bit…",
+    "text": "Let’s formalize this a bit…\nThe elements of a inlabru friendly statistical model are:\n\nThe observational model \\(y_i|\\eta_i,\\sigma^2\\sim\\mathcal{N}(\\eta_i,\\sigma^2),\\qquad i = 1,\\dots,n\\)\nA model for the linear predictor \\(\\eta_i = \\color{red}{\\boxed{\\beta_0}} + \\color{red}{\\boxed{\\beta_1x_i} }\\)\nA prior for the model components \\(\\mathbf{u} = \\{\\beta_0, \\beta_1\\}\\sim\\mathcal{N}(0,\\mathbf{Q}^{-1})\\)\nA prior for the non-gaussian parameters \\(\\theta\\) \\[\n\\theta = \\sigma^2\n\\]"
+  },
+  {
+    "objectID": "slides/slides_1.html#latent-gaussian-models-lgm",
+    "href": "slides/slides_1.html#latent-gaussian-models-lgm",
+    "title": "Lecture 1",
+    "section": "Latent Gaussian Models (LGM)",
+    "text": "Latent Gaussian Models (LGM)\n\n\n\nThe observation model: \\[\n\\pi(\\mathbf{y}|\\eta,\\theta) = \\prod_{i=1}^{n}\\pi(y_i|\\eta_i,\\theta)\n\\]\nLinear predictor \\(\\eta_i = \\beta_0 + \\beta_1 x_i\\)\nLatent Gaussian field \\(\\pi(\\mathbf{u}|\\theta)\\)\nThe hyperparameters: \\(\\pi(\\theta)\\)\n\n\n\n\n\nStage 1 The data generating process"
+  },
+  {
+    "objectID": "slides/slides_1.html#latent-gaussian-models-lgm-1",
+    "href": "slides/slides_1.html#latent-gaussian-models-lgm-1",
+    "title": "Lecture 1",
+    "section": "Latent Gaussian Models (LGM)",
+    "text": "Latent Gaussian Models (LGM)\n\n\n\nThe observation model: \\[\n\\pi(\\mathbf{y}|\\eta,\\theta) = \\prod_{i=1}^{n}\\pi(y_i|\\eta_i,\\theta)\n\\]\nLinear predictor \\(\\eta_i = \\beta_0 + \\beta_1 x_i\\)\nLatent Gaussian field \\(\\pi(\\mathbf{u}|\\theta)\\)\nThe hyperparameters: \\(\\pi(\\theta)\\)\n\n\n\n\n\nStage 1 The data generating process\n\n\n\nStage 2 The dependence structure"
+  },
+  {
+    "objectID": "slides/slides_1.html#latent-gaussian-models-lgm-2",
+    "href": "slides/slides_1.html#latent-gaussian-models-lgm-2",
+    "title": "Lecture 1",
+    "section": "Latent Gaussian Models (LGM)",
+    "text": "Latent Gaussian Models (LGM)\n\n\n\nThe observation model: \\[\n\\pi(\\mathbf{y}|\\eta,\\theta) = \\prod_{i=1}^{n}\\pi(y_i|\\eta_i,\\theta)\n\\]\nLinear predictor \\(\\eta_i = \\beta_0 + \\beta_1 x_i\\)\nLatent Gaussian field \\(\\pi(\\mathbf{u}|\\theta)\\)\nThe hyperparameters: \\(\\pi(\\theta)\\)\n\n\n\n\n\nStage 1 The data generating process\n\n\n\nStage 2 The dependence structure\n\n\n\nStage 3 The hyperparameters"
+  },
+  {
+    "objectID": "slides/slides_1.html#latent-gaussian-models-lgm-3",
+    "href": "slides/slides_1.html#latent-gaussian-models-lgm-3",
+    "title": "Lecture 1",
+    "section": "Latent Gaussian Models (LGM)",
+    "text": "Latent Gaussian Models (LGM)\n\n\n\nThe observation model: \\[\n\\pi(\\mathbf{y}|\\eta,\\theta) = \\prod_{i=1}^{n}\\pi(y_i|\\eta_i,\\theta)\n\\]\nLinear predictor \\(\\eta_i = \\beta_0 + \\beta_1 x_i\\)\nLatent Gaussian field \\(\\pi(\\mathbf{u}|\\theta)\\)\nThe hyperparameters: \\(\\pi(\\theta)\\)\n\n\n\n\n\nStage 1 The data generating process\n\n\n\nStage 2 The dependence structure\n\n\n\nStage 3 The hyperparameters\n\n\nQ: What are we interested in?"
+  },
+  {
+    "objectID": "slides/slides_1.html#the-posterior-distribution",
+    "href": "slides/slides_1.html#the-posterior-distribution",
+    "title": "Lecture 1",
+    "section": "The posterior distribution",
+    "text": "The posterior distribution\n\n\n\n\n\n\n\nposterior\n\n\n\nA\n\nPrior\n belief\n\n\n\nC\n\nBayes Theorem\n &\n Bayesian Computations\n\n\n\nA-&gt;C\n\n\n\n\n\nB\n\nObservation\n model\n\n\n\nB-&gt;C\n\n\n\n\n\nD\n\nPosterior\n distribution\n\n\n\nC-&gt;D\n\n\n\n\n\n\n\n\n\n\n\\[\n\\color{purple}{\\pi(\\mathbf{u},\\theta|\\mathbf{y})}\\propto \\color{#FF6B6B}{\\pi(\\mathbf{y}|\\mathbf{u},\\theta)}\\color{#0066CC}{\\pi(\\mathbf{u}|\\theta)\\pi(\\theta)}\n\\] ##"
+  },
+  {
+    "objectID": "slides/slides_1.html#the-posterior-distribution-1",
+    "href": "slides/slides_1.html#the-posterior-distribution-1",
+    "title": "Lecture 1",
+    "section": "The posterior distribution",
+    "text": "The posterior distribution\n\n\n\n\n\n\n\nposterior\n\n\n\nC\n\nBayes Theorem\n &\n Bayesian Computations\n\n\n\nD\n\nPosterior\n distribution\n\n\n\nC-&gt;D\n\n\n\n\n\nE\n\nBayesian Computation are hard!!\n Here is where\n INLA\n comes in!!!\n\n\n\nE-&gt;C\n\n\n\n\n\nA\n\nPrior\n belief\n\n\n\nA-&gt;C\n\n\n\n\n\nB\n\nObservation\n model\n\n\n\nB-&gt;C"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-linear-regression",
+    "href": "slides/slides_1.html#inlabru-for-linear-regression",
+    "title": "Lecture 1",
+    "section": "inlabru for linear regression",
+    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\beta_i x_i\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-linear-regression-1",
+    "href": "slides/slides_1.html#inlabru-for-linear-regression-1",
+    "title": "Lecture 1",
+    "section": "inlabru for linear regression",
+    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{\\beta_i x_i}}\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-linear-regression-2",
+    "href": "slides/slides_1.html#inlabru-for-linear-regression-2",
+    "title": "Lecture 1",
+    "section": "inlabru for linear regression",
+    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0 + \\beta_i x_i}}\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-linear-regression-3",
+    "href": "slides/slides_1.html#inlabru-for-linear-regression-3",
+    "title": "Lecture 1",
+    "section": "inlabru for linear regression",
+    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y_i|\\eta_i, \\sigma^2}} & \\color{#FF6B6B}{\\boxed{\\sim \\mathcal{N}(\\eta_i,\\sigma^2)}}\\\\\n\\eta_i & = \\beta_0 + \\beta_i x_i\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-linear-regression-4",
+    "href": "slides/slides_1.html#inlabru-for-linear-regression-4",
+    "title": "Lecture 1",
+    "section": "inlabru for linear regression",
+    "text": "inlabru for linear regression\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_i, \\sigma^2 & \\sim \\mathcal{N}(\\eta_i,\\sigma^2)\\\\\n\\eta_i & = \\beta_0 + \\beta_i x_i\n\\end{aligned}\n\\]\n\n\nlibrary(inlabru)\nPallid[1:3,c(\"w\",\"tl\")]\n\n      w    tl\n1 2.239  95.9\n2 2.948  95.0\n3 3.402 108.0\n\n\n\nThe code\n\n# define model components\ncmp =  ~ -1 + beta0(1) + beta1(tl, model = \"linear\")\n\n# define model predictor\neta = w ~ beta0 + beta1\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"gaussian\",\n              data = Pallid)\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-linear-regression-5",
+    "href": "slides/slides_1.html#inlabru-for-linear-regression-5",
+    "title": "Lecture 1",
+    "section": "inlabru for linear regression",
+    "text": "inlabru for linear regression"
+  },
+  {
+    "objectID": "slides/slides_1.html#real-datasets-are-more-complicated",
+    "href": "slides/slides_1.html#real-datasets-are-more-complicated",
+    "title": "Lecture 1",
+    "section": "Real datasets are more complicated!",
+    "text": "Real datasets are more complicated!\nData can have several dependence structures: temporal, spatial,…\nUsing a Bayesian framework:\n\nBuild (hierarchical) models to account for potentially complicated dependency structures in the data.\nAttribute uncertainty to model parameters and latent variables using priors.\n\nTwo main challenges:\n\nNeed computationally efficient methods to calculate posteriors (this is where INLA helps!).\nSelect priors in a sensible way (we’ll talk about this)"
+  },
+  {
+    "objectID": "slides/slides_1.html#the-good-news",
+    "href": "slides/slides_1.html#the-good-news",
+    "title": "Lecture 1",
+    "section": "The good news!!",
+    "text": "The good news!!\nIn many cases complicated spatio-temporal models are just special cases of the same model structure!! 😃\n\nStage 1: What is the distribution of the responses?\nStage 2: What are the model components? and what is their distribution?\nStage 3: What are our prior beliefs about the parameters controlling the components in the model?"
+  },
+  {
+    "objectID": "slides/slides_1.html#the-good-news-1",
+    "href": "slides/slides_1.html#the-good-news-1",
+    "title": "Lecture 1",
+    "section": "The good news!!",
+    "text": "The good news!!\nIn many cases complicated spatio-temporal models are just special cases of the same model structure!! 😃\n\nStage 1: What is the distribution of the responses?\n\nGaussian response? (temperature, rainfall, fish weight …)\nCount data? (people infected with a disease in each area)\nPoint pattern? (locations of trees in a forest)\nBinary data? (yes/no response, binary image)\nSurvival data? (recovery time, time to death)\n… (many more examples!!)\n\nStage 2: What are the model components? and what is their distribution?\nStage 3: What are our prior beliefs about the parameters controlling the components in the model?"
+  },
+  {
+    "objectID": "slides/slides_1.html#the-good-news-2",
+    "href": "slides/slides_1.html#the-good-news-2",
+    "title": "Lecture 1",
+    "section": "The good news!!",
+    "text": "The good news!!\nIn many cases complicated spatio-temporal models are just special cases of the same model structure!! 😃\n\nStage 1: What is the distribution of the responses?\n\nWe assume data to be conditionally independent given the model components and some hyperparameters\nThis means that all dependencies in data are explained in Stage\n\n\n\n\nStage 2: What are the model components? and what is their distribution?\nStage 3: What are our prior beliefs about the parameters controlling the components in the model?"
+  },
+  {
+    "objectID": "slides/slides_1.html#the-good-news-3",
+    "href": "slides/slides_1.html#the-good-news-3",
+    "title": "Lecture 1",
+    "section": "The good news!!",
+    "text": "The good news!!\nIn many cases complicated spatio-temporal models are just special cases of the same model structure!! 😃\n\nStage 1: What is the distribution of the responses?\nStage 2: What are the model components? and what is their distribution?\n\nHere we can have:\n\nFixed effects for covariates\nUnstructured random effects (individual effects, group effects)\nStructured random effects (AR(1), regional effects, )\n…\n\nThese are linked to the responses in the likelihood through linear predictors.\n\nStage 3: What are our prior beliefs about the parameters controlling the components in the model?"
+  },
+  {
+    "objectID": "slides/slides_1.html#the-good-news-4",
+    "href": "slides/slides_1.html#the-good-news-4",
+    "title": "Lecture 1",
+    "section": "The good news!!",
+    "text": "The good news!!\nIn many cases complicated spatio-temporal models are just special cases of the same model structure!! 😃\n\nStage 1: What is the distribution of the responses?\nStage 2: What are the model components? and what is their distribution?\nStage 3: What are our prior beliefs about the parameters controlling the components in the model?\nThe likelihood and the latent model typically have hyperparameters that control their behavior.\nThey can include:\n\nVariance of observation noise\nDispersion parameter in the negative binomial model\nVariance of unstructured effects\n…"
+  },
+  {
+    "objectID": "slides/slides_1.html#the-second-good-news",
+    "href": "slides/slides_1.html#the-second-good-news",
+    "title": "Lecture 1",
+    "section": "The second good news!",
+    "text": "The second good news!\nNo matter how complicated is your model, the inlabru workflow is always the same 😃\n\n# Define model components\ncomps &lt;- component_1(...) + \n  component_2(...) + ...\n\n# Define the model predictor\npred &lt;- linear_function(component_1, \n                            component_2, ...)\n\n# Build the observation model\nlik &lt;- bru_obs(formula = pred,\n               family = ... ,\n               data = ... ,\n                ...)\n\n# Fit the model\nfit &lt;- bru(comps, lik, ...)"
+  },
+  {
+    "objectID": "slides/slides_1.html#the-second-good-news-1",
+    "href": "slides/slides_1.html#the-second-good-news-1",
+    "title": "Lecture 1",
+    "section": "The second good news!",
+    "text": "The second good news!\nNo matter how complicated is your model, the inlabru workflow is always the same 😃\n\n# Define model components\ncomps &lt;- component_1(...) + \n  component_2(...) + ...\n\n# Define the model predictor\npred &lt;- linear_function(component_1, \n                            component_2, ...)\n\n# Build the observation model\nlik &lt;- bru_obs(formula = pred,\n               family = ... ,\n               data = ... ,\n                ...)\n\n# Fit the model\nfit &lt;- bru(comps, lik, ...)\n\nNOTE inlabru allows non-linear functions to be specified"
+  },
+  {
+    "objectID": "slides/slides_1.html#the-tokyo-rainfall-data",
+    "href": "slides/slides_1.html#the-tokyo-rainfall-data",
+    "title": "Lecture 1",
+    "section": "The Tokyo rainfall data",
+    "text": "The Tokyo rainfall data\nOne example with time series: Rainfall over 1 mm in the Tokyo area for each calendar day during two years (1983-84) are registered."
+  },
+  {
+    "objectID": "slides/slides_1.html#the-model",
+    "href": "slides/slides_1.html#the-model",
+    "title": "Lecture 1",
+    "section": "The model",
+    "text": "The model\nStage 1 The observation model\n\\[\ny_t|\\eta_t\\sim\\text{Bin}(n_t, p_t),\\qquad \\eta_t = \\text{logit}(p_t),\\qquad i = 1,\\dots,366\n\\]\n\\[\nn_t = \\left\\{\n\\begin{array}{lr}\n1, & \\text{for}\\; 29\\; \\text{February}\\\\\n2, & \\text{other days}\n\\end{array}\\right.\n\\] \\[\ny_t =\n\\begin{cases}\n\\{0,1\\}, & \\text{for}\\; 29\\; \\text{February}\\\\\n\\{0,1,2\\}, & \\text{other days}\n\\end{cases}\n\\]\n\nthe likelihood has no hyperparameters"
+  },
+  {
+    "objectID": "slides/slides_1.html#the-model-1",
+    "href": "slides/slides_1.html#the-model-1",
+    "title": "Lecture 1",
+    "section": "The model",
+    "text": "The model\nStage 1 The observation model\n\\[\ny_t|\\eta_t\\sim\\text{Bin}(n_t, p_t),\\qquad \\eta_t = \\text{logit}(p_t),\\qquad i = 1,\\dots,366\n\\]\nStage 2 The latent field\n\\[\n\\eta_t = \\beta_0 + f(\\text{time}_t)\n\\]\n\nprobability of rain depends on on the day of the year \\(t\\)\n\\(\\beta_0\\) is an intercept\n\\(f(\\text{time}_t)\\) is a RW2 model (this is just a smoother). The smoothness is controlled by a hyperparameter \\(\\tau_f\\)"
+  },
+  {
+    "objectID": "slides/slides_1.html#the-model-2",
+    "href": "slides/slides_1.html#the-model-2",
+    "title": "Lecture 1",
+    "section": "The model",
+    "text": "The model\nStage 1 The observation model\n\\[\ny_t|\\eta_t\\sim\\text{Bin}(n_t, p_t),\\qquad \\eta_t = \\text{logit}(p_t),\\qquad i = 1,\\dots,366\n\\]\nStage 2 The latent field\n\\[\n\\eta_t = \\beta_0 + f(\\text{time}_t)\n\\]\nStage 3 The hyperparameters\n\nThe structured time effect is controlled by one parameter \\(\\tau_f\\).\nWe assign a prior to \\(\\tau_f\\) to finalize the model."
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-time-series",
+    "href": "slides/slides_1.html#inlabru-for-time-series",
+    "title": "Lecture 1",
+    "section": "inlabru for time series",
+    "text": "inlabru for time series\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_t|\\eta_t & \\sim \\text{Binomial}(n_t,p_t)\\\\\n\\text{logit}(p_t) = \\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{f(\\text{time}_t)}}\n\\end{aligned}\n\\]\n\n\nTokyo[1:3,]\n\n  y n time\n1 0 2    1\n2 0 2    2\n3 1 2    3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + time_effect(time, model = \"rw2\", cyclic = TRUE)\n\n# define model predictor\neta = y ~ beta0 + time_effect\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"binomial\",\n              Ntrials = n,\n              data = Tokyo)\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-time-series-1",
+    "href": "slides/slides_1.html#inlabru-for-time-series-1",
+    "title": "Lecture 1",
+    "section": "inlabru for time series",
+    "text": "inlabru for time series\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_t|\\eta_t & \\sim \\text{Binomial}(n_t,p_t)\\\\\n\\text{logit}(p_t) = \\color{#FF6B6B}{\\boxed{\\eta_i}} & = \\color{#FF6B6B}{\\boxed{\\beta_0 + f(\\text{time}_t)}}\n\\end{aligned}\n\\]\n\n\nTokyo[1:3,]\n\n  y n time\n1 0 2    1\n2 0 2    2\n3 1 2    3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + time_effect(time, model = \"rw2\", cyclic = TRUE)\n\n# define model predictor\neta = y ~ beta0 + time_effect\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"binomial\",\n              Ntrials = n,\n              data = Tokyo)\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-time-series-2",
+    "href": "slides/slides_1.html#inlabru-for-time-series-2",
+    "title": "Lecture 1",
+    "section": "inlabru for time series",
+    "text": "inlabru for time series\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y_t|\\eta_t}} & \\color{#FF6B6B}{\\boxed{\\sim \\text{Binomial}(n_t,p_t)}}\\\\\n\\text{logit}(p_t) = \\eta_i & = \\beta_0 + f(\\text{time}_t)\n\\end{aligned}\n\\]\n\n\nTokyo[1:3,]\n\n  y n time\n1 0 2    1\n2 0 2    2\n3 1 2    3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + time_effect(time, model = \"rw2\", cyclic = TRUE)\n\n# define model predictor\neta = y ~ beta0 + time_effect\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"binomial\",\n              Ntrials = n,\n              data = Tokyo)\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-time-series-3",
+    "href": "slides/slides_1.html#inlabru-for-time-series-3",
+    "title": "Lecture 1",
+    "section": "inlabru for time series",
+    "text": "inlabru for time series\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_t|\\eta_t & \\sim \\text{Binomial}(n_t,p_t)\\\\\n\\text{logit}(p_t) = \\eta_i & = \\beta_0 + f(\\text{time}_t)\n\\end{aligned}\n\\]\n\n\nTokyo[1:3,]\n\n  y n time\n1 0 2    1\n2 0 2    2\n3 1 2    3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + time_effect(time, model = \"rw2\", cyclic = TRUE)\n\n# define model predictor\neta = y ~ beta0 + time_effect\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"binomial\",\n              Ntrials = n,\n              data = Tokyo)\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#example-disease-mapping",
+    "href": "slides/slides_1.html#example-disease-mapping",
+    "title": "Lecture 1",
+    "section": "Example: disease mapping",
+    "text": "Example: disease mapping\nWe observed larynx cancer mortality counts for males in 544 district of Germany from 1986 to 1990 and want to make a model.\n\n\n\n\\(y_i\\): The count at location \\(i\\).\n\\(E_i\\): An offset; expected number of cases in district \\(i\\).\n\\(c_i\\): A covariate (level of smoking consumption) at \\(i\\)\n\\(\\boldsymbol{s}_i\\): spatial location \\(i\\) ."
+  },
+  {
+    "objectID": "slides/slides_1.html#bayesian-disease-mapping",
+    "href": "slides/slides_1.html#bayesian-disease-mapping",
+    "title": "Lecture 1",
+    "section": "Bayesian disease mapping",
+    "text": "Bayesian disease mapping\n\n\n\nStage 1: We assume the responses are Poisson distributed: \\[          \ny_i \\mid \\eta_i \\sim \\text{Poisson}(E_i\\exp(\\eta_i)))\n\\]\n\n\n\n\n\n\nStage 2: \\(\\eta_i\\) is a linear function of three components: an intercept, a covariate \\(c_i\\), a spatially structured effect \\(\\omega\\) likelihood by \\[\n\\eta_i = \\beta_0 + \\beta_1\\ c_i + \\omega_i\n\\]\n\n\n\n\n\n\nStage 3:\n\n\\(\\tau_{\\omega}\\): Precisions parameter for the random effects\n\n\n\n\n\nThe latent field is \\(\\boldsymbol{u} = (\\beta_0, \\beta_1, \\omega_1, \\omega_2,\\ldots, \\omega_n)\\), the hyperparameters are \\(\\boldsymbol{\\theta} = (\\tau_{\\omega})\\), and must be given a prior."
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-disease-mapping",
+    "href": "slides/slides_1.html#inlabru-for-disease-mapping",
+    "title": "Lecture 1",
+    "section": "inlabru for disease mapping",
+    "text": "inlabru for disease mapping\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_t & \\sim \\text{Poisson}(E_i\\lambda_i)\\\\\n\\text{log}(\\lambda_i) = \\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{\\beta_1\\ c_i}} + \\color{#FF6B6B}{\\boxed{\\omega_i}}\n\\end{aligned}\n\\]\n\n\ng = system.file(\"demodata/germany.graph\",\n                package=\"INLA\")\nGermany[1:3,]\n\n  region         E  Y  x region.struct\n1      1  7.965008  8 56             1\n2      2 22.836219 22 65             2\n3      3 22.094716 19 50             3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + beta1(x, model = \"linear\") +\n  space(region, model = \"besag\", graph = g)\n\n# define model predictor\neta = Y ~ beta0 + beta1 + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"poisson\",\n              E = E,\n              data = Germany)\n\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-disease-mapping-1",
+    "href": "slides/slides_1.html#inlabru-for-disease-mapping-1",
+    "title": "Lecture 1",
+    "section": "inlabru for disease mapping",
+    "text": "inlabru for disease mapping\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_t & \\sim \\text{Poisson}(E_i\\lambda_i)\\\\\n\\text{log}(\\lambda_i) = \\color{#FF6B6B}{\\boxed{\\eta_i}} & = \\color{#FF6B6B}{\\boxed{\\beta_0 + \\beta_1\\ c_i + \\omega_i}}\n\\end{aligned}\n\\]\n\n\ng = system.file(\"demodata/germany.graph\",\n                package=\"INLA\")\nGermany[1:3,]\n\n  region         E  Y  x region.struct\n1      1  7.965008  8 56             1\n2      2 22.836219 22 65             2\n3      3 22.094716 19 50             3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + beta1(x, model = \"linear\") +\n  space(region, model = \"bym2\", graph = g)\n\n# define model predictor\neta = Y ~ beta0 + beta1 + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"poisson\",\n              E = E,\n              data = Germany)\n\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-disease-mapping-2",
+    "href": "slides/slides_1.html#inlabru-for-disease-mapping-2",
+    "title": "Lecture 1",
+    "section": "inlabru for disease mapping",
+    "text": "inlabru for disease mapping\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y_i|\\eta_t}} & \\color{#FF6B6B}{\\boxed{\\sim \\text{Poisson}(E_i\\lambda_i)}}\\\\\n\\text{log}(\\lambda_i) = \\eta_i & = \\beta_0 + \\beta_1\\ c_i + \\omega_i\n\\end{aligned}\n\\]\n\n\ng = system.file(\"demodata/germany.graph\",\n                package=\"INLA\")\nGermany[1:3,]\n\n  region         E  Y  x region.struct\n1      1  7.965008  8 56             1\n2      2 22.836219 22 65             2\n3      3 22.094716 19 50             3\n\n\n\nThe code\n\n# define model component\ncmp =  ~ -1 + beta0(1) + beta1(x, model = \"linear\") +\n  space(region, model = \"bym2\", graph = g)\n\n# define model predictor\neta = Y ~ beta0 + beta1 + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              family = \"poisson\",\n              E = E,\n              data = Germany)\n\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-disease-mapping-3",
+    "href": "slides/slides_1.html#inlabru-for-disease-mapping-3",
+    "title": "Lecture 1",
+    "section": "inlabru for disease mapping",
+    "text": "inlabru for disease mapping"
+  },
+  {
+    "objectID": "slides/slides_1.html#bayesian-geostatistics",
+    "href": "slides/slides_1.html#bayesian-geostatistics",
+    "title": "Lecture 1",
+    "section": "Bayesian Geostatistics",
+    "text": "Bayesian Geostatistics\nEncounter probability of Pacific Cod (Gadus macrocephalus) from a trawl survey.\n\n\n\n\n\n\n\n\\(y(s)\\) Presence of absence in location \\(s\\)"
+  },
+  {
+    "objectID": "slides/slides_1.html#bayesian-geostatistics-1",
+    "href": "slides/slides_1.html#bayesian-geostatistics-1",
+    "title": "Lecture 1",
+    "section": "Bayesian Geostatistics",
+    "text": "Bayesian Geostatistics\n\nStage 1 Model for the response \\[\ny(s)|\\eta(s)\\sim\\text{Binom}(1, p(s))\n\\]\nStage 2 Latent field model \\[\n\\eta(s) = \\text{logit}(p(s)) = \\beta_0 + f( x(s)) + \\omega(s)\n\\]\nStage 3 Hyperparameters"
+  },
+  {
+    "objectID": "slides/slides_1.html#bayesian-geostatistics-2",
+    "href": "slides/slides_1.html#bayesian-geostatistics-2",
+    "title": "Lecture 1",
+    "section": "Bayesian Geostatistics",
+    "text": "Bayesian Geostatistics\n\nStage 1 Model for the response \\[\ny(s)|\\eta(s)\\sim\\text{Binom}(1, p(s))\n\\]\nStage 2 Latent field model \\[\n\\eta(s) = \\text{logit}(p(s)) = \\beta_0 + f( x(s)) + \\omega(s)\n\\]\n\nA global intercept \\(\\beta_0\\)\nA smooth effect of covariate \\(x(s)\\) (depth)\nA Gaussian field \\(\\omega(s)\\) (will discuss this later..)\n\nStage 3 Hyperparameters"
+  },
+  {
+    "objectID": "slides/slides_1.html#bayesian-geostatistics-3",
+    "href": "slides/slides_1.html#bayesian-geostatistics-3",
+    "title": "Lecture 1",
+    "section": "Bayesian Geostatistics",
+    "text": "Bayesian Geostatistics\n\nStage 1 Model for the response \\[\ny(s)|\\eta(s)\\sim\\text{Binom}(1, p(s))\n\\]\nStage 2 Latent field model \\[\n\\eta(s) = \\text{logit}(p(s)) = \\beta_0 + \\beta_1 x(s) + \\omega(s)\n\\]\nStage 3 Hyperparameters\n\nPrecision for the smooth function \\(f(\\cdot)\\)\nRange and sd in the Gaussian field \\(\\sigma_{\\omega}, \\tau_{\\omega}\\)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-geostatistics",
+    "href": "slides/slides_1.html#inlabru-for-geostatistics",
+    "title": "Lecture 1",
+    "section": "inlabru for geostatistics",
+    "text": "inlabru for geostatistics\n\n\nThe Model\n\\[\n\\begin{aligned}\ny(s)|\\eta(s) & \\sim \\text{Binom}(1, p(s))\\\\\n\\eta(s) &  = \\color{#FF6B6B}{\\boxed{\\beta_0 }}+  \\color{#FF6B6B}{\\boxed{f(x(s))}} +  \\color{#FF6B6B}{\\boxed{\\omega(s)}}\\\\\n\\end{aligned}\n\\]\n\n\ndf %&gt;% select(depth, present) %&gt;% print(n = 3)\n\nSimple feature collection with 2143 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 343.0617 ymin: 5635.893 xmax: 579.3681 ymax: 5839.019\nProjected CRS: +proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\n# A tibble: 2,143 × 3\n  depth present            geometry\n  &lt;dbl&gt;   &lt;dbl&gt;        &lt;POINT [km]&gt;\n1   201       1 (446.4752 5793.426)\n2   212       1 (446.4594 5800.136)\n3   220       0 (448.5987 5801.687)\n# ℹ 2,140 more rows\n\n\n\nThe code\n\n# define model component\ncmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + \n  space(geometry, model = spde_model)\n\n# define model predictor\neta = present ~ Intercept + depth_smooth + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              data = df,\n              family = \"binomial\")\n\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-geostatistics-1",
+    "href": "slides/slides_1.html#inlabru-for-geostatistics-1",
+    "title": "Lecture 1",
+    "section": "inlabru for geostatistics",
+    "text": "inlabru for geostatistics\n\n\nThe Model\n\\[\n\\begin{aligned}\ny(s)|\\eta(s) & \\sim \\text{Binom}(1, p(s))\\\\\n\\color{#FF6B6B}{\\boxed{\\eta(s)}} &  = \\color{#FF6B6B}{\\boxed{\\beta_0 +  f(x(s)) +  \\omega(s)}}\\\\\n\\end{aligned}\n\\]\n\n\ndf %&gt;% select(depth, present) %&gt;% print(n = 3)\n\nSimple feature collection with 2143 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 343.0617 ymin: 5635.893 xmax: 579.3681 ymax: 5839.019\nProjected CRS: +proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\n# A tibble: 2,143 × 3\n  depth present            geometry\n  &lt;dbl&gt;   &lt;dbl&gt;        &lt;POINT [km]&gt;\n1   201       1 (446.4752 5793.426)\n2   212       1 (446.4594 5800.136)\n3   220       0 (448.5987 5801.687)\n# ℹ 2,140 more rows\n\n\n\nThe code\n\n# define model component\ncmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + \n  space(geometry, model = spde_model)\n\n# define model predictor\neta = present ~ Intercept + depth_smooth + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              data = df,\n              family = \"binomial\")\n\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-geostatistics-2",
+    "href": "slides/slides_1.html#inlabru-for-geostatistics-2",
+    "title": "Lecture 1",
+    "section": "inlabru for geostatistics",
+    "text": "inlabru for geostatistics\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y(s)|\\eta(s)}} & \\sim \\color{#FF6B6B}{\\boxed{\\text{Binom}(1, p(s))}}\\\\\n\\eta(s) &  = \\beta_0 +  f(x(s)) +  \\omega(s)\\\\\n\\end{aligned}\n\\]\n\n\ndf %&gt;% select(depth, present) %&gt;% print(n = 3)\n\nSimple feature collection with 2143 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 343.0617 ymin: 5635.893 xmax: 579.3681 ymax: 5839.019\nProjected CRS: +proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\n# A tibble: 2,143 × 3\n  depth present            geometry\n  &lt;dbl&gt;   &lt;dbl&gt;        &lt;POINT [km]&gt;\n1   201       1 (446.4752 5793.426)\n2   212       1 (446.4594 5800.136)\n3   220       0 (448.5987 5801.687)\n# ℹ 2,140 more rows\n\n\n\nThe code\n\n# define model component\ncmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + \n  space(geometry, model = spde_model)\n\n# define model predictor\neta = present ~ Intercept + depth_smooth + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              data = df,\n              family = \"binomial\")\n\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_1.html#inlabru-for-geostatistics-3",
+    "href": "slides/slides_1.html#inlabru-for-geostatistics-3",
+    "title": "Lecture 1",
+    "section": "inlabru for geostatistics",
+    "text": "inlabru for geostatistics"
+  },
+  {
+    "objectID": "slides/slides_1.html#take-home-message",
+    "href": "slides/slides_1.html#take-home-message",
+    "title": "Lecture 1",
+    "section": "Take home message!",
+    "text": "Take home message!\n\n\n\n\nMany of the model you have used (and some you have never used but will learn about) are just special cases of the large class of Latent Gaussian models\ninlabru provides an efficient and unified way to fit all these models!"
+  },
+  {
+    "objectID": "practical1_compiler.html",
+    "href": "practical1_compiler.html",
+    "title": "Practical 1",
+    "section": "",
+    "text": "Aim of this practical:\nIn this first practical we are going to look at some simple models\nWe are going to learn:\nDownload Practical 1 R script"
+  },
+  {
+    "objectID": "practical1_compiler.html#sec-linmodel",
+    "href": "practical1_compiler.html#sec-linmodel",
+    "title": "Practical 1",
+    "section": "1 Linear Model",
+    "text": "1 Linear Model\nIn this practical we will:\n\nFit a simple linear regression with inlabru\nFit a linear regression with discrete covariates and interactions\n\nStart by loading useful libraries:\n\nlibrary(dplyr)\nlibrary(INLA)\nlibrary(ggplot2)\nlibrary(patchwork)\nlibrary(inlabru)     \n# load some libraries to generate nice plots\nlibrary(scico)\n\nAs our first example we consider a simple linear regression model with Gaussian observations\n\\[\ny_i\\sim\\mathcal{N}(\\mu_i, \\sigma^2), \\qquad i = 1,\\dots,N\n\\]\nwhere \\(\\sigma^2\\) is the observation error, and the mean parameter \\(\\mu_i\\) is linked to the linear predictor (\\(\\eta_i\\)) through an identity function: \\[\n\\eta_i = \\mu_i = \\beta_0 + \\beta_1 x_i\n\\] where \\(x_i\\) is a covariate and \\(\\beta_0, \\beta_1\\) are parameters to be estimated. We assign \\(\\beta_0\\) and \\(\\beta_1\\) a vague Gaussian prior.\nTo finalize the Bayesian model we assign a \\(\\text{Gamma}(a,b)\\) prior to the precision parameter \\(\\tau = 1/\\sigma^2\\) and two independent Gaussian priors with mean \\(0\\) and precision \\(\\tau_{\\beta}\\) to the regression parameters \\(\\beta_0\\) and \\(\\beta_1\\) (we will use the default prior settings in INLA for now).\n\n\n\n\n\n\n Question\n\n\n\nWhat is the dimension of the hyperparameter vector and latent Gaussian field?\n\n\nAnswer\n\nThe hyperparameter vector has dimension 1, \\(\\pmb{\\theta} = (\\tau)\\) while the latent Gaussian field \\(\\pmb{u} = (\\beta_0, \\beta_1)\\) has dimension 2, \\(0\\) mean, and sparse precision matrix:\n\\[\n\\pmb{Q} = \\begin{bmatrix}\n\\tau_{\\beta_0} & 0\\\\\n0 & \\tau_{\\beta_1}\n\\end{bmatrix}\n\\] Note that, since \\(\\beta_0\\) and \\(\\beta_1\\) are fixed effects, the precision parameters \\(\\tau_{\\beta_0}\\) and \\(\\tau_{\\beta_1}\\) are fixed.\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nWe can write the linear predictor vector \\(\\pmb{\\eta} = (\\eta_1,\\dots,\\eta_N)\\) as\n\\[\n\\pmb{\\eta} = \\pmb{A}\\pmb{u} = \\pmb{A}_1\\pmb{u}_1 + \\pmb{A}_2\\pmb{u}_2 = \\begin{bmatrix}\n1 \\\\\n1\\\\\n\\vdots\\\\\n1\n\\end{bmatrix} \\beta_0 + \\begin{bmatrix}\nx_1 \\\\\nx_2\\\\\n\\vdots\\\\\nx_N\n\\end{bmatrix} \\beta_1\n\\]\nOur linear predictor consists then of two components: an intercept and a slope.\n\n\n\n1.1 Simulate example data\nWe fix the model parameters \\(\\beta_0\\), \\(\\beta_1\\) and the hyperparameter \\(\\tau_y\\) to a given value and simulate the data accordingly using the code below. The simulated response and covariate data are then saved in a data.frame object.\n\n\nSimulate Data from a LM\n# set seed for reproducibility\nset.seed(1234) \n\nbeta = c(2,0.5)\nsd_error = 0.1\n\nn = 100\nx = rnorm(n)\ny = beta[1] + beta[2] * x + rnorm(n, sd = sd_error)\n\ndf = data.frame(y = y, x = x)  \n\n\n\n\n1.2 Fitting a linear regression model with inlabru\n\nStep1: Defining model components\nThe first step is to define the two model components: The intercept and the linear covariate effect.\n\n\n\n\n\n\n Task\n\n\n\nDefine an object called cmp that includes and (i) intercept beta_0 and (ii) a covariate x linear effect beta_1.\n\n\nTake hint\n\nThe cmp object is here used to define model components. We can give them any useful names we like, in this case, beta_0 and beta_1. You can remove the automatic intercept construction by adding a -1 in the components\n\n\n\n\nClick here to see the solution\n\n\nCode\ncmp =  ~ -1 + beta_0(1) + beta_1(x, model = \"linear\")\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\ninlabru has automatic intercept that can be called by typing Intercept() , which is one of inlabru special names and it is used to define a global intercept, e.g.\n\ncmp =  ~  Intercept(1) + beta_1(x, model = \"linear\")\n\n\n\nStep 2: Build the observation model\nThe next step is to construct the observation model by defining the model likelihood. The most important inputs here are the formula, the family and the data.\n\n\n\n\n\n\n Task\n\n\n\nDefine a linear predictor eta using the component labels you have defined on the previous task.\n\n\nTake hint\n\nThe eta object defines how the components should be combined in order to define the model predictor.\n\n\n\n\nClick here to see the solution\n\n\nCode\neta = y ~ beta_0 + beta_1\n\n\n\n\n\nThe likelihood for the observational model is defined using the bru_obs() function.\n\n\n\n\n\n\n Task\n\n\n\nDefine the observational model likelihood in an object called lik using the bru_obs() function.\n\n\nTake hint\n\nThe bru_obs is expecting three arguments:\n\nThe linear predictor eta we defined in the previous task\nThe data likelihood (this can be specified by setting family = \"gaussian\")\nThe data set df\n\n\n\n\n\nClick here to see the solution\n\n\nCode\nlik =  bru_obs(formula = eta,\n            family = \"gaussian\",\n            data = df)\n\n\n\n\n\nStep 3: Fit the model\nWe fit the model using the bru() functions which takes as input the components and the observation model:\n\nfit.lm = bru(cmp, lik)\n\nStep 4: Extract results\nThere are several ways to extract and examine the results of a fitted inlabru object.\nThe most natural place to start is to use the summary() which gives access to some basic information about model fit and estimates\n\nsummary(fit.lm)\n## inlabru version: 2.13.0.9016 \n## INLA version: 25.08.21-1 \n## Components: \n## Latent components:\n## beta_0: main = linear(1)\n## beta_1: main = linear(x)\n## Observation models: \n##   Family: 'gaussian'\n##     Tag: &lt;No tag&gt;\n##     Data class: 'data.frame'\n##     Response class: 'numeric'\n##     Predictor: y ~ beta_0 + beta_1\n##     Additive/Linear: TRUE/TRUE\n##     Used components: effects[beta_0, beta_1], latent[] \n## Time used:\n##     Pre = 1.24, Running = 0.541, Post = 0.383, Total = 2.17 \n## Fixed effects:\n##         mean   sd 0.025quant 0.5quant 0.975quant  mode kld\n## beta_0 2.004 0.01      1.983    2.004      2.024 2.004   0\n## beta_1 0.497 0.01      0.477    0.497      0.518 0.497   0\n## \n## Model hyperparameters:\n##                                          mean    sd 0.025quant 0.5quant\n## Precision for the Gaussian observations 94.85 13.41      70.43    94.22\n##                                         0.975quant  mode\n## Precision for the Gaussian observations     122.92 92.96\n## \n## Marginal log-Likelihood:  63.27 \n##  is computed \n## Posterior summaries for the linear predictor and the fitted values are computed\n## (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')\n\nWe can see that both the intercept and slope and the error precision are correctly estimated.\nAnother way, which gives access to more complicated (and useful) output is to use the predict() function. Below we take the fitted bru object and use the predict() function to produce predictions for \\(\\mu\\) given a new set of values for the model covariates or the original values used for the model fit\n\nnew_data = data.frame(x = c(df$x, runif(10)),\n                      y = c(df$y, rep(NA,10)))\npred = predict(fit.lm, new_data, ~ beta_0 + beta_1,\n               n.samples = 1000)\n\nThe predict function generate samples from the fitted model. In this case we set the number of samples to 1000.\n\nPlotR Code\n\n\n\n\n\n\n\nData and 95% credible intervals\n\n\n\n\n\n\n\n\nCode\npred %&gt;% ggplot() + \n  geom_point(aes(x,y), alpha = 0.3) +\n  geom_line(aes(x,mean)) +\n  geom_line(aes(x, q0.025), linetype = \"dashed\")+\n  geom_line(aes(x, q0.975), linetype = \"dashed\")+\n  xlab(\"Covariate\") + ylab(\"Observations\")\n\n\n\n\n\n\n\n\n\n\n\n Task\n\n\n\nGenerate predictions for the linear predictor \\(\\mu\\) when the covariate has value \\(x_0 = 0.45\\).\nWhat is the predicted value for \\(\\mu\\)? And what is the uncertainty?\n\n\nTake hint\n\nYou can create a new data frame containing the new observation \\(x_0\\) and then use the predict function.\n\n\n\n\nClick here to see the solution\n\n\nCode\nnew_data = data.frame(x = 0.45)\npred = predict(fit.lm, new_data, ~ beta_0 + beta_1,\n               n.samples = 1000)\npred\n\n\n     x     mean         sd   q0.025     q0.5   q0.975   median sd.mc_std_err\n1 0.45 2.227515 0.01174219 2.204336 2.227804 2.250434 2.227804  0.0002759384\n  mean.mc_std_err\n1    0.0003887724\n\n\n\nYou can see the predicted mean and sd by examining the produced pred object. In this case the mean is 2.23 with sd ca 0.01. This gives a 95% CI ca [2.2, 2.25].\n\n\n\n\n\n\n\n\nNote\n\n\n\nBefore we have produced a credible interval for the expected mean \\(\\mu\\) if we want to produce a prediction interval for a new observation \\(y\\) we need to add the uncertainty that comes from the likelihood with precision \\(\\tau_y\\). To do this we can again use the predict() function to compute a 95% prediction interval for \\(y\\).\n\npred2 = predict(fit.lm, new_data, \n               formula = ~ {\n                 mu = beta_0 + beta_1\n                 sigma = sqrt(1/Precision_for_the_Gaussian_observations)\n                 list(q1 = qnorm(0.025, mean = mu, sd = sigma),\n                      q2 =  qnorm(0.975, mean = mu, sd = sigma))},\n               n.samples = 1000)\nround(c(pred2$q1$mean, pred2$q2$mean),2)\n\n[1] 2.03 2.43\n\n\nNotice that now the interval we obtain is larger.\n\n\n\n\n1.3 Setting Priors\nIn R-INLA, the default choice of priors for each \\(\\beta\\) is\n\\[\n\\beta \\sim \\mathcal{N}(0,10^3).\n\\]\nand the prior for the variance parameter in terms of the log precision is\n\\[ \\log(\\tau) \\sim \\mathrm{logGamma}(1,5 \\times 10^{-5}) \\]\n\n\n\n\n\n\nNote\n\n\n\nIf your model uses the default intercept construction (i.e., Intercept(1) in the linear predictor) inlabru will assign a default \\(\\mathcal{N} (0,0)\\) prior to it.\n\n\nTo check which priors are used in a fitted model one can use the function inla.prior.used()\n\ninla.priors.used(fit.lm)\n\nsection=[family]\n    tag=[INLA.Data1] component=[gaussian]\n        theta1:\n            parameter=[log precision]\n            prior=[loggamma]\n            param=[1e+00, 5e-05]\nsection=[linear]\n    tag=[beta_0] component=[beta_0]\n        beta:\n            parameter=[beta_0]\n            prior=[normal]\n            param=[0.000, 0.001]\n    tag=[beta_1] component=[beta_1]\n        beta:\n            parameter=[beta_1]\n            prior=[normal]\n            param=[0.000, 0.001]\n\n\nFrom the output we see that the precision for the observation \\(\\tau\\sim\\text{Gamma}(1e+00,5e-05)\\) while \\(\\beta_0\\) and \\(\\beta_1\\) have precision 0.001, that is variance \\(1/0.001\\).\nChanging the precision for the linear effects\nThe precision for linear effects is set in the component definition. For example, if we want to increase the precision to 0.01 for \\(\\beta_0\\) we define the respective components as:\n\ncmp1 =  ~-1 +  beta_0(1, prec.linear = 0.01) + beta_1(x, model = \"linear\")\n\n\n\n\n\n\n\n Task\n\n\n\nRun the model again using 0.1 as default precision for both the intercept and the slope parameter.\n\n\n\nClick here to see the solution\n\ncmp2 =  ~ -1 + \n          beta_0(1, prec.linear = 0.1) + \n          beta_1(x, model = \"linear\", prec.linear = 0.1)\n\nlm.fit2 = bru(cmp2, lik) \n\n\nNote that we can use the same observation model as before since both the formula and the dataset are unchanged.\n\n\nChanging the prior for the precision of the observation error \\(\\tau\\)\nPriors on the hyperparameters of the observation model must be passed by defining argument hyper within control.family in the call to the bru_obs() function.\n\n# First we define the logGamma (0.01,0.01) prior \n\nprec.tau &lt;- list(prec = list(prior = \"loggamma\",   # prior name\n                             param = c(0.01, 0.01))) # prior values\n\nlik2 =  bru_obs(formula = y ~.,\n                family = \"gaussian\",\n                data = df,\n                control.family = list(hyper = prec.tau))\n\nfit.lm2 = bru(cmp2, lik2) \n\nThe names of the priors available in inlabru can be seen with names(inla.models()$prior)\n\n\n1.4 Visualizing the posterior marginals\nPosterior marginal distributions of the ﬁxed effects parameters and the hyperparameters can be visualized using the plot() function by calling the name of the component. For example, if want to visualize the posterior density of the intercept \\(\\beta_0\\) we can type:\n\n\nCode\nplot(fit.lm, \"beta_0\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Task\n\n\n\nPlot the posterior marginals for \\(\\beta_1\\) and for the precision of the observation error \\(\\pi(\\tau|y)\\)\n\n\nTake hint\n\nYou can use the bru_names(fit.lm) function to check the names for the different model components.\n\n\n\n\nClick here to see the solution\n\n\nCode\nplot(fit.lm, \"beta_1\") +\nplot(fit.lm, \"Precision for the Gaussian observations\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSupplementary Material\n\n\n\nThe marginal densities for the hyper parameters can be also found by callinginlabru_model$marginals.hyperpar.\n\ntau_e &lt;- fit.lm$marginals.hyperpar$`Precision for the Gaussian observations` \n\nWe can then apply a transformation using the inla.tmarginal function to transform the precision posterior distributions to a SD scale.\n\nsigma_e &lt;- tau_e %&gt;%\n  inla.tmarginal(function(x) 1/x,.) \n\nThen, we can compute posterior summaries using inla.zmarginal function as follows:\n\npost_sigma_summaries &lt;- inla.zmarginal(sigma_e,silent = T)\ncbind(post_sigma_summaries)\n\n           post_sigma_summaries\nmean       0.01075447          \nsd         0.001538938         \nquant0.025 0.008142315         \nquant0.25  0.009657471         \nquant0.5   0.01060981          \nquant0.75  0.01169141          \nquant0.975 0.01417676"
+  },
+  {
+    "objectID": "practical1_compiler.html#LM_int",
+    "href": "practical1_compiler.html#LM_int",
+    "title": "Practical 1",
+    "section": "2 Linear model with discrete variables and interactions",
+    "text": "2 Linear model with discrete variables and interactions\nWe consider now the dataset iris. Here data are recorded about 150 different iris flowers belonging to 3 different species (50 for each species).\nYou can get more information about these data by typing ?iris\nWe want to model the Petal.length as a function of Sepal.length and species.\n\ndata(\"iris\")\niris %&gt;% ggplot() +\n  geom_point(aes(Sepal.Length, Petal.Length, color= Species)) +\n  facet_wrap(.~Species)\n\n\n\n\n\n\n\n\nModel 1 - Only Species effect Our first model assumes that the Sepal length only depends on the species, which is a categorical variable.\n\\[\n\\begin{aligned}\nY_i & \\sim\\mathcal{N}(\\mu_i,\\sigma_y),\\ &  i = 1,\\dots,150 \\\\\n\\mu_{i} & = \\eta_{i} = \\beta_1\\ I(\\text{obs }i\\text{belongs to species } 1  ) + \\beta_2\\ I(\\text{obs }i\\text{belongs to species } 2  ) + \\beta_3\\ I(\\text{obs }i\\text{belongs to species } 3  )\n\\end{aligned}\n\\]\nUsing lm() we can fit the model as:\n\nmod1 = lm(Petal.Length ~ Species, data  = iris)\nsummary(mod1)\n\n\nCall:\nlm(formula = Petal.Length ~ Species, data = iris)\n\nResiduals:\n   Min     1Q Median     3Q    Max \n-1.260 -0.258  0.038  0.240  1.348 \n\nCoefficients:\n                  Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)        1.46200    0.06086   24.02   &lt;2e-16 ***\nSpeciesversicolor  2.79800    0.08607   32.51   &lt;2e-16 ***\nSpeciesvirginica   4.09000    0.08607   47.52   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.4303 on 147 degrees of freedom\nMultiple R-squared:  0.9414,    Adjusted R-squared:  0.9406 \nF-statistic:  1180 on 2 and 147 DF,  p-value: &lt; 2.2e-16\n\n\nNotice that lm() uses setosa as reference category, the parameter Speciesversicolor is then interpreted as the difference between the effect of the reference species and effect of versicolor species.\ninlabru features a model = 'fixed' component type that allows users to specify linear fixed effects using a formula as input. The basic component input is a model matrix. Alternatively, one can supply a formula specification, which is then used to generate a model matrix automatically\n\ncmp = ~   spp(\n  main = ~ Species,\n  model = \"fixed\"\n)\n\n\n\n\n\n\n\n Task\n\n\n\nUse the component defined above to fit the linear model using inlabru and compare the output with that form the lm function.\n\n\nTake hint\n\nRealizing that fixed effects are treated as random effects with fixed precision, the fitted values can then be inspected via fit1a$summary.random\n\n\n\n\nClick here to see the solution\n\n\nCode\nlik = bru_obs(formula =Petal.Length ~ spp,\n              data = iris)\nfit1a = bru(cmp, lik)\n\nfit1a$summary.random$spp\n\n\n                 ID     mean         sd 0.025quant 0.5quant 0.975quant     mode\n1       (Intercept) 1.462020 0.06077721   1.342676 1.462020   1.581365 1.462020\n2 Speciesversicolor 2.797970 0.08595195   2.629191 2.797970   2.966747 2.797970\n3  Speciesvirginica 4.089965 0.08595195   3.921186 4.089965   4.258742 4.089965\n           kld\n1 3.690479e-09\n2 3.690509e-09\n3 3.690479e-09\n\n\n\n\n\nModel 2 - Interaction between Species and Sepal.Length\nOur second model is defined as \\[\n\\begin{aligned}\nY_i & \\sim\\mathcal{N}(\\mu_i,\\sigma_y),\\ &  i = 1,\\dots,150 \\\\\n\\mu_{i} & = \\eta_{i} = \\beta_0 +  \\beta_1 x_i\\ I(\\text{obs }i\\text{belongs to species } 1  ) + \\beta_2x_i\\ I(\\text{obs }i\\text{belongs to species } 2  ) + \\beta_3x_i\\ I(\\text{obs }i\\text{belongs to species } 3  )\n\\end{aligned}\n\\]\nthat is, we have a common intercept \\(\\beta_0\\) while the linear effect of the Sepal length depends on the Species. Using lm() we have:\n\nmod2 = lm(Petal.Length ~ Species:Sepal.Length, data = iris)\nmod2\n\n\nCall:\nlm(formula = Petal.Length ~ Species:Sepal.Length, data = iris)\n\nCoefficients:\n                   (Intercept)      Speciessetosa:Sepal.Length  \n                        0.5070                          0.1905  \nSpeciesversicolor:Sepal.Length   Speciesvirginica:Sepal.Length  \n                        0.6326                          0.7656  \n\n\n\n\n\n\n\n\n Task\n\n\n\nFit the same model in inlabru.\n\n\n\nClick here to see the solution\n\n\nCode\ncmp = ~   spp_sepal(\n  main = ~ Species:Sepal.Length,\n  model = \"fixed\"\n)\n\nlik = bru_obs(formula =Petal.Length ~ spp_sepal,\n              data = iris)\n\nfit1b = bru(cmp, lik)\n\nfit1b$summary.random$spp_sepal\n\n\n                              ID      mean         sd 0.025quant  0.5quant\n1                    (Intercept) 0.5069832 0.25212178 0.01190334 0.5069833\n2     Speciessetosa:Sepal.Length 0.1904884 0.05065243 0.09102473 0.1904884\n3 Speciesversicolor:Sepal.Length 0.6326456 0.04260960 0.54897518 0.6326456\n4  Speciesvirginica:Sepal.Length 0.7656467 0.03832788 0.69038409 0.7656467\n  0.975quant      mode          kld\n1  1.0020625 0.5069833 3.742232e-09\n2  0.2899523 0.1904884 3.742252e-09\n3  0.7163161 0.6326456 3.742270e-09\n4  0.8409094 0.7656467 3.742252e-09\n\n\n\n\n\n\n\n\n\n\n\n Task\n\n\n\nPlot the estimated regression lines for the three species using model fit1b\n\n\n\nClick here to see the solution\n\n\nCode\npreds = predict(fit1b, iris, ~ spp_sepal)\n\npp = preds %&gt;% ggplot() + geom_line(aes(Sepal.Length, mean, group = Species, color = Species)) +\n  geom_ribbon(aes(Sepal.Length, ymin = q0.025, ymax = q0.975, \n                  group = Species, fill = Species), alpha = 0.5) +\n  geom_point(aes(Sepal.Length, Petal.Length,color = Species))\n\npp"
+  },
+  {
+    "objectID": "practical1_compiler.html#linear-mixed-model",
+    "href": "practical1_compiler.html#linear-mixed-model",
+    "title": "Practical 1",
+    "section": "3 Linear Mixed Model",
+    "text": "3 Linear Mixed Model\nIn this practical we will:\n\nFit a linear mixed model.\n\n\n\nUnderstand the basic structure of a Linear Mixed Model (LLM)\nSimulate data from a LMM\nLearn how to fit a LMM with inlabru and predict from the model.\n\nIn this example we are going to consider a simple linear mixed model, that is a simple linear regression model except with the addition that the data that comes in groups.\nSuppose that we want to include a random effect for each group \\(j\\) (equivalent to adding a group random intercept). The model is then:\n\\[\ny_{ij}  = \\beta_0 + \\beta_1 x_i + u_j + \\epsilon_{ij} ~~~  \\text{for}~i = 1,\\ldots,N~ \\text{and}~ j = 1,\\ldots,m.\n\\]\nHere the random group effect is given by the variable \\(u_j \\sim \\mathcal{N}(0, \\tau^{-1}_u)\\) with \\(\\tau_u = 1/\\sigma^2_u\\) describing the variability between groups (i.e., how much the group means differ from the overall mean). Then, \\(\\epsilon_j \\sim \\mathcal{N}(0, \\tau^{-1}_\\epsilon)\\) denotes the residuals of the model and \\(\\tau_\\epsilon = 1/\\sigma^2_\\epsilon\\) captures how much individual observations deviate from their group mean (i.e., variability within group).\nThe model design matrix for the random effect has one row for each observation (this is equivalent to a random intercept model). The row of the design matrix associated with the \\(ij\\)-th observation consists of zeros except for the element associated with \\(u_j\\), which has a one.\n\\[\n\\pmb{\\eta} = \\pmb{A}\\pmb{u} = \\pmb{A}_1\\pmb{u}_1 + \\pmb{A}_2\\pmb{u}_2 + \\pmb{A}_3\\pmb{u}_3\n\\]\n\n\n\n\n\n\nSupplementary material: LMM as a LGM\n\n\n\nIn matrix form, the linear mixed model for the j-th group can be written as:\n\\[ \\overbrace{\\mathbf{y}_j}^{ N \\times 1} = \\overbrace{X_j}^{ N \\times 2} \\underbrace{\\beta}_{1\\times 1} + \\overbrace{Z_j}^{n_j \\times 1} \\underbrace{u_j}_{1\\times1} + \\overbrace{\\epsilon_j}^{n_j \\times 1}, \\]\nIn a latent Gaussian model (LGM) formulation the mixed model predictor for the i-th observation can be written as :\n\\[\n\\eta_i = \\beta_0 + \\beta_1 x_i + \\sum_k^K f_k(u_j)\n\\]\nwhere \\(f_k(u_j) = u_j\\) since there’s only one random effect per group (i.e., a random intercept for group \\(j\\)). The fixed effects \\((\\beta_0,\\beta_1)\\) are assigned Gaussian priors (e.g., \\(\\beta \\sim \\mathcal{N}(0,\\tau_\\beta^{-1})\\)). The random effects \\(\\mathbf{u} = (u_1,\\ldots,u_m)^T\\) follow a Gaussian density \\(\\mathcal{N}(0,\\mathbf{Q}_u^{-1})\\) where \\(\\mathbf{Q}_u = \\tau_u\\mathbf{I}_m\\) is the precision matrix for the random intercepts. Then, the components for the LGM are the following:\n\nLatent field given by\n\\[\n\\begin{bmatrix} \\beta \\\\\\mathbf{u}\n\\end{bmatrix} \\sim \\mathcal{N}\\left(\\mathbf{0},\\begin{bmatrix}\\tau_\\beta^{-1}\\mathbf{I}_2&\\mathbf{0}\\\\\\mathbf{0} &\\tau_u^{-1}\\mathbf{I}_m\\end{bmatrix}\\right)\n\\]\nLikelihood:\n\\[\ny_i \\sim \\mathcal{N}(\\eta_i,\\tau_{\\epsilon}^{-1})\n\\]\nHyperparameters:\n\n\\(\\tau_u\\sim\\mathrm{Gamma}(a,b)\\)\n\\(\\tau_\\epsilon \\sim \\mathrm{Gamma}(c,d)\\)\n\n\n\n\n\n3.1 Simulate example data\n\nset.seed(12)\nbeta = c(1.5,1)\nsd_error = 1\ntau_group = 1\n\nn = 100\nn.groups = 5\nx = rnorm(n)\nv = rnorm(n.groups, sd = tau_group^{-1/2})\ny = beta[1] + beta[2] * x + rnorm(n, sd = sd_error) +\n  rep(v, each = 20)\n\ndf = data.frame(y = y, x = x, j = rep(1:5, each = 20))  \n\nNote that inlabru expects an integer indexing variable to label the groups.\n\n\nCode\nggplot(df) +\n  geom_point(aes(x = x, colour = factor(j), y = y)) +\n  theme_classic() +\n  scale_colour_discrete(\"Group\")\n\n\n\n\n\nData for the linear mixed model example with 5 groups\n\n\n\n\n\n\n3.2 Fitting a LMM in inlabru\n\nDefining model components and observational model\nIn order to specify this model we must use the group argument to tell inlabru which variable indexes the groups. The model = \"iid\" tells INLA that the groups are independent from one another.\n\n# Define model components\ncmp =  ~ -1 + beta_0(1) + beta_1(x, model = \"linear\") +\n  u(j, model = \"iid\")\n\nThe group variable is indexed by column j in the dataset. We have chosen to name this component v() to connect with the mathematical notation that we used above.\n\n# Construct likelihood\nlik =  bru_obs(formula = y ~.,\n            family = \"gaussian\",\n            data = df)\n\nFitting the model\nThe model can be fitted exactly as in the previous examples by using the bru function with the components and likelihood objects.\n\nfit = bru(cmp, lik)\nsummary(fit)\n## inlabru version: 2.13.0.9016 \n## INLA version: 25.08.21-1 \n## Components: \n## Latent components:\n## beta_0: main = linear(1)\n## beta_1: main = linear(x)\n## u: main = iid(j)\n## Observation models: \n##   Family: 'gaussian'\n##     Tag: &lt;No tag&gt;\n##     Data class: 'data.frame'\n##     Response class: 'numeric'\n##     Predictor: y ~ .\n##     Additive/Linear: TRUE/TRUE\n##     Used components: effects[beta_0, beta_1, u], latent[] \n## Time used:\n##     Pre = 0.816, Running = 0.615, Post = 0.345, Total = 1.78 \n## Fixed effects:\n##         mean    sd 0.025quant 0.5quant 0.975quant  mode kld\n## beta_0 2.108 0.438      1.229    2.108      2.986 2.108   0\n## beta_1 1.172 0.120      0.936    1.172      1.407 1.172   0\n## \n## Random effects:\n##   Name     Model\n##     u IID model\n## \n## Model hyperparameters:\n##                                          mean    sd 0.025quant 0.5quant\n## Precision for the Gaussian observations 0.995 0.144      0.738    0.986\n## Precision for u                         1.613 1.060      0.369    1.356\n##                                         0.975quant  mode\n## Precision for the Gaussian observations       1.30 0.971\n## Precision for u                               4.35 0.918\n## \n## Marginal log-Likelihood:  -179.93 \n##  is computed \n## Posterior summaries for the linear predictor and the fitted values are computed\n## (Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')\n\n\n\n3.3 Model predictions\nTo compute model predictions we can create a data.frame containing a range of values of covariate where we want the response to be predicted for each group. Then we simply call the predict function while spe\n\n\nLMM fitted values\n# New data\nxpred = seq(range(x)[1], range(x)[2], length.out = 100)\nj = 1:n.groups\npred_data = expand.grid(x = xpred, j = j)\npred = predict(fit, pred_data, formula = ~ beta_0 + beta_1 + u) \n\n\npred %&gt;%\n  ggplot(aes(x=x,y=mean,color=factor(j)))+\n  geom_line()+\n  geom_ribbon(aes(x,ymin = q0.025, ymax= q0.975,fill=factor(j)), alpha = 0.5) + \n  geom_point(data=df,aes(x=x,y=y,colour=factor(j)))+\n  facet_wrap(~j)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Question\n\n\n\nSuppose that we are also interested in including random slopes into our model. Assuming intercept and slopes are independent, can your write down the linear predictor and the components of this model as a LGM?\n\n\nGive me a hint\n\nIn general, the mixed model predictor can decomposed as:\n\\[ \\pmb{\\eta} = X\\beta + Z\\mathbf{u} \\]\nWhere \\(X\\) is a \\(n \\times p\\) design matrix and \\(\\beta\\) the corresponding p-dimensional vector of fixed effects. Then \\(Z\\) is a \\(n\\times q_J\\) design matrix for the \\(q_J\\) random effects and \\(J\\) groups; \\(\\mathbf{v}\\) is then a \\(q_J \\times 1\\) vector of \\(q\\) random effects for the \\(J\\) groups. In a latent Gaussian model (LGM) formulation this can be written as:\n\\[ \\eta_i = \\beta_0 + \\sum\\beta_j x_{ij} + \\sum_k f(k) (u_{ij}) \\]\n\n\n\nSee Solution\n\n\nThe linear predictor is given by\n\\[\n\\eta_i = \\beta_0 + \\beta_1x_i + u_{0j} + u_{1j}x_i\n\\]\nLatent field defined by:\n\n\\(\\beta \\sim \\mathcal{N}(0,\\tau_\\beta^{-1})\\)\n\\(\\mathbf{u}_j = \\begin{bmatrix}u_{0j} \\\\ u_{1j}\\end{bmatrix}, \\mathbf{u}_j \\sim \\mathcal{N}(\\mathbf{0},\\mathbf{Q}_u^{-1})\\) where the precision matrix is a block-diagonal matrix with entries \\(\\mathbf{Q}_u= \\begin{bmatrix}\\tau_{u_0} & {0} \\\\{0} & \\tau_{u_1}\\end{bmatrix}\\)\n\nThe hyperparameters are then:\n\n\\(\\tau_{u_0},\\tau_{u_1} \\text{and}~\\tau_\\epsilon\\)\n\n\nTo fit this model in inlabru we can simply modify the model components as follows:\n\ncmp =  ~ -1 + beta_0(1) + beta_1(x, model = \"linear\") +\n  u0(j, model = \"iid\") + u1(j,x, model = \"iid\")"
+  },
+  {
+    "objectID": "practical1_compiler.html#sec-genlinmodel",
+    "href": "practical1_compiler.html#sec-genlinmodel",
+    "title": "Practical 1",
+    "section": "4 Generalized Linear Model",
+    "text": "4 Generalized Linear Model\nIn this practical we will:\n\nLearn how to fit a generalised linear model with inlabru\n\nA generalised linear model allows for the data likelihood to be non-Gaussian. In this example we have a discrete response variable which we model using a Poisson distribution. Thus, we assume that our data \\[\ny_i \\sim \\text{Poisson}(\\lambda_i)\n\\] with rate parameter \\(\\lambda_i\\) which, using a log link, has associated predictor \\[\n\\eta_i = \\log \\lambda_i = \\beta_0 + \\beta_1 x_i\n\\] with parameters \\(\\beta_0\\) and \\(\\beta_1\\), and covariate \\(x\\).\n\n4.1 Simulate example data\nThis code generates 100 samples of covariate x and data y.\n\nset.seed(123)\nn = 100\nbeta = c(1,1)\nx = rnorm(n)\nlambda = exp(beta[1] + beta[2] * x)\ny = rpois(n, lambda  = lambda)\ndf = data.frame(y = y, x = x)  \n\n\n\n4.2 Fitting a GLM in inlabru\n\nDefine model components\nThe predictor here only contains only 2 components (Intercept and Slope).\n\n\n\n\n\n\nTask\n\n\n\nDefine an object called cmp that includes and (i) intercept beta_0 and (ii) a covariate x linear effect beta_1.\n\n\n\nClick here to see the solution\n\n\nCode\ncmp =  ~ -1 + beta_0(1) + beta_1(x, model = \"linear\")\n\n\n\n\n\nDefine linear predictor\n\n\n\n\n\n\nTask\n\n\n\nDefine a linear predictor eta using the component labels you have defined on the previous task.\n\n\n\nClick here to see the solution\n\n\nCode\neta = y ~ beta_0 + beta_1\n\n\n\n\n\nBuild observational model\nWhen building the observation model likelihood we must now specify the Poisson likelihood using the family argument (the default link function for this family is the \\(\\log\\) link).\n\nlik =  bru_obs(formula = eta,\n            family = \"poisson\",\n            data = df)\n\nFit the model\nOnce the likelihood object is constructed, fitting the model is exactly the same process, we just need to specify the model components and the observational model, and pass this on to the bru function:\n\nfit_glm = bru(cmp, lik)\n\nAnd model summaries can be viewed using\n\nsummary(fit_glm)\n\ninlabru version: 2.13.0.9016 \nINLA version: 25.08.21-1 \nComponents: \nLatent components:\nbeta_0: main = linear(1)\nbeta_1: main = linear(x)\nObservation models: \n  Family: 'poisson'\n    Tag: &lt;No tag&gt;\n    Data class: 'data.frame'\n    Response class: 'integer'\n    Predictor: y ~ beta_0 + beta_1\n    Additive/Linear: TRUE/TRUE\n    Used components: effects[beta_0, beta_1], latent[] \nTime used:\n    Pre = 0.796, Running = 0.501, Post = 0.0965, Total = 1.39 \nFixed effects:\n        mean    sd 0.025quant 0.5quant 0.975quant  mode kld\nbeta_0 0.915 0.071      0.775    0.915      1.054 0.915   0\nbeta_1 1.048 0.056      0.938    1.048      1.157 1.048   0\n\nMarginal log-Likelihood:  -204.02 \n is computed \nPosterior summaries for the linear predictor and the fitted values are computed\n(Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')\n\n\n\n\n4.3 Generate model predictions\n\nTo generate new predictions we must provide a data frame that contains the covariate values for \\(x\\) at which we want to predict.\nThis code block generates predictions for the data we used to fit the model (contained in df$x) as well as 10 new covariate values sampled from a uniform distribution runif(10).\n\n# Define new data, set to NA the values for prediction\n\nnew_data = data.frame(x = c(df$x, runif(10)),\n                      y = c(df$y, rep(NA,10)))\n\n# Define predictor formula\npred_fml &lt;- ~ exp(beta_0 + beta_1)\n\n# Generate predictions\npred_glm &lt;- predict(fit_glm, new_data, pred_fml)\n\nSince we used a log link (which is the default for family = \"poisson\"), we want to predict the exponential of the predictor. We specify this using a general R expression using the formula syntax.\n\n\n\n\n\n\nNote\n\n\n\nNote that the predict function will call the component names (i.e. the “labels”) that were decided when defining the model.\n\n\nSince the component definition is looking for a covariate named \\(x\\), all we need to provide is a data frame that contains one, and the software does the rest.\n\nPlotR Code\n\n\n\n\n\n\n\nData and 95% credible intervals\n\n\n\n\n\n\n\npred_glm %&gt;% ggplot() + \n  geom_point(aes(x,y), alpha = 0.3) +\n  geom_line(aes(x,mean)) +\n    geom_ribbon(aes(x = x, ymax = q0.975, ymin = q0.025),fill = \"tomato\", alpha = 0.3)+\n  xlab(\"Covariate\") + ylab(\"Observations (counts)\")\n\n\n\n\n\n\n\n\n\n\nTask\n\n\n\nSuppose a binary response such that\n\\[\n    \\begin{aligned}\ny_i &\\sim \\mathrm{Bernoulli}(\\psi_i)\\\\\n\\eta_i &= \\mathrm{logit}(\\psi_i) = \\alpha_0 +\\alpha_1 \\times w_i\n\\end{aligned}\n\\] Using the following simulated data, use inlabru to fit the logistic regression above. Then, plot the predictions for the data used to fit the model along with 10 new covariate values\n\nset.seed(123)\nn = 100\nalpha = c(0.5,1.5)\nw = rnorm(n)\npsi = plogis(alpha[1] + alpha[2] * w)\ny = rbinom(n = n, size = 1, prob =  psi) # set size = 1 to draw binary observations\ndf_logis = data.frame(y = y, w = w)  \n\nHere we use the logit link function \\(\\mathrm{logit}(x) = \\log\\left(\\frac{x}{1-x}\\right)\\) (plogis() function in R) to link the linear predictor to the probabilities \\(\\psi\\).\n\n\nTake hint\n\nYou can set family = \"binomial\" for binary responses and the plogis() function for computing the predicted values.\n\n\n\n\n\n\nNote\n\n\n\nThe Bernoulli distribution is equivalent to a \\(\\mathrm{Binomial}(1, \\psi)\\) pmf. If you have proportional data (e.g. no. successes/no. trials) you can specify the number of events as your response and then the number of trials via the Ntrials = n argument of the bru_obs function (where n is the known vector of trials in your data set).\n\n\n\n\n\n\nClick here to see the solution\n\n\nCode\n# Model components\ncmp_logis =  ~ -1 + alpha_0(1) + alpha_1(w, model = \"linear\")\n# Model likelihood\nlik_logis =  bru_obs(formula = y ~.,\n            family = \"binomial\",\n            data = df_logis)\n# fit the model\nfit_logis &lt;- bru(cmp_logis,lik_logis)\n\n# Define data for prediction\nnew_data = data.frame(w = c(df_logis$w, runif(10)),\n                      y = c(df_logis$y, rep(NA,10)))\n# Define predictor formula\npred_fml &lt;- ~ plogis(alpha_0 + alpha_1)\n\n# Generate predictions\npred_logis &lt;- predict(fit_logis, new_data, pred_fml)\n\n# Plot predictions\npred_logis %&gt;% ggplot() + \n  geom_point(aes(w,y), alpha = 0.3) +\n  geom_line(aes(w,mean)) +\n    geom_ribbon(aes(x = w, ymax = q0.975, ymin = q0.025),fill = \"tomato\", alpha = 0.3)+\n  xlab(\"Covariate\") + ylab(\"Observations\")"
+  },
+  {
+    "objectID": "practical1_compiler.html#sec-gam_ex",
+    "href": "practical1_compiler.html#sec-gam_ex",
+    "title": "Practical 1",
+    "section": "5 Generalised Additive Model",
+    "text": "5 Generalised Additive Model\nIn this practical we will:\n\nLearn how to fit a GAM with inlabru\n\nGeneralised Additive Models (GAMs) are very similar to linear models, but with an additional basis set that provides flexibility.\nAdditive models are a general form of statistical model which allows us to incorporate smooth functions alongside linear terms. A general expression for the linear predictor of a GAM is given by\n\\[\n\\eta_i = g(\\mu_i) = \\beta_0 + \\sum_{j=1}^L f_j(x_{ij})\n\\]\nwhere the mean \\(\\pmb{\\mu} = E(\\mathbf{y}|\\mathbf{x}_1,\\ldots,\\mathbf{x}_L)\\) and \\(g()\\) is a link function (notice that the distribution of the response and the link between the predictors and this distribution can be quite general). The term \\(f_j()\\) is a smooth function for the j-th explanatory variable that can be represented as\n\\[\nf(x_i) = \\sum_{k=0}^q\\beta_k b_k(x_i)\n\\]\nwhere \\(b_k\\) denote the basis functions and \\(\\beta_K\\) are their coefficients.\nIncreasing the number of basis functions leads to a more wiggly line. Too few basis functions might make the line too smooth, too many might lead to overfitting.\nTo avoid this, we place further constraints on the spline coefficients which leads to constrained optimization problem where the objective function to be minimized is given by:\n\\[\n\\mathrm{min}\\sum_i(y_i-f(x_i))^2 + \\lambda(\\sum_kb^2_k)\n\\]\nThe first term measures how close the function \\(f()\\) is to the data while the second term \\(\\lambda(\\sum_kb^2_k)\\), penalizes the roughness in the function. Here, \\(\\lambda &gt;0\\) is known as the smoothing parameter because it controls the degree of smoothing (i.e. the trade-off between the two terms). In a Bayesian setting,including the penalty term is equivalent to setting a specific prior on the coefficients of the covariates.\nIn this exercise we will set a random walk prior of order 1 on \\(f\\), i.e. \\(f(x_i)-f(x_i-1) \\sim \\mathcal{N}(0,\\sigma^2_f)\\) where \\(\\sigma_f^2\\) is the smoothing parameter such that small values give large smoothing. Notice that we will assume \\(x_i\\)’s are equally spaced.\n\n5.1 Simulate Data\nLets generate some data so evaluate how RW models perform when estimating a smooth curve. The data are simulated from the following model:\n\\[\ny_i = 1 + \\mathrm{cos}(x) + \\epsilon_i, ~ \\epsilon_i \\sim \\mathcal{N}(0,\\sigma^2_\\epsilon)\n\\] where \\(\\sigma_\\epsilon^2 = 0.25\\)\n\nset.seed(123)\nn = 100\nx = rnorm(n)\neta = (1 + cos(x))\ny = rnorm(n, mean =  eta, sd = 0.5)\n\ndf = data.frame(y = y, \n                x_smooth = inla.group(x)) # equidistant x's \n\n\n\n5.2 Fitting a GAM in inlabru\nNow lets fit a flexible model by setting a random walk of order 1 prior on the coefficients. This can be done bye specifying model = \"rw1\" in the model component (similarly,a random walk of order 2 can be placed by setting model = \"rw2\" )\n\ncmp =  ~ Intercept(1) + \n  smooth(x_smooth, model = \"rw1\")\n\nNow we define the observational model:\n\nlik =  bru_obs(formula = y ~.,\n            family = \"gaussian\",\n            data = df)\n\nWe then can fit the model:\n\nfit = bru(cmp, lik)\nfit$summary.fixed\n\n              mean         sd 0.025quant 0.5quant 0.975quant   mode\nIntercept 1.338924 0.06007887   1.221818 1.338595   1.457907 1.3386\n                   kld\nIntercept 1.449244e-08\n\n\nThe posterior summary regarding the estimated function using RW1 can be accessed through fit$summary.random$smooth, the output includes the value of \\(x_i\\) (ID) as well as the posterior mean, standard deviation, quantiles and mode of each \\(f(x_i)\\). We can use this information to plot the posterior mean and associated 95% credible intervals.\n\nR plotR Code\n\n\n\n\n\n\n\nSmooth effect of the covariate\n\n\n\n\n\n\n\ndata.frame(fit$summary.random$smooth) %&gt;% \n  ggplot() + \n  geom_ribbon(aes(ID,ymin = X0.025quant, ymax= X0.975quant), alpha = 0.5) + \n  geom_line(aes(ID,mean)) + \n  xlab(\"covariate\") + ylab(\"\")\n\n\n\n\n\n\n5.3 Model Predictions\nWe can obtain the model predictions using the predict function.\n\npred = predict(fit, df, ~ (Intercept + smooth))\n\nThe we can plot them together with the true curve and data points:\n\n\nCode\npred %&gt;% ggplot() + \n  geom_point(aes(x_smooth,y), alpha = 0.3) +\n  geom_line(aes(x_smooth,1+cos(x_smooth)),col=2)+\n  geom_line(aes(x_smooth,mean)) +\n  geom_line(aes(x_smooth, q0.025), linetype = \"dashed\")+\n  geom_line(aes(x_smooth, q0.975), linetype = \"dashed\")+\n  xlab(\"Covariate\") + ylab(\"Observations\")\n\n\n\n\n\nData and 95% credible intervals\n\n\n\n\n\n\n\n\n\n\nTask\n\n\n\nFit a flexible model using a random walk of order 2 (RW2) and compare the results with the ones above.\n\n\nTake hint\n\nYou can set model = \"rw2\" for assigning a random walk 2 prior.\n\n\n\n\nClick here to see the solution\n\n\nCode\ncmp_rw2 =  ~ Intercept(1) + \n  smooth(x_smooth, model = \"rw2\")\nlik_rw2 =  bru_obs(formula = y ~.,\n            family = \"gaussian\",\n            data = df)\nfit_rw2 = bru(cmp_rw2, lik_rw2)\n\n# Plot the fitted functions\nggplot() + \n  geom_line(data= fit$summary.random$smooth,aes(ID,mean,colour=\"RW1\"),lty=2) + \n  geom_line(data= fit_rw2$summary.random$smooth,aes(ID,mean,colour=\"RW2\")) + \n  xlab(\"covariate\") + ylab(\"\") + scale_color_discrete(name=\"Model\")\n\n\n\n\n\n\n\n\n\n\nWe see that the RW1 fit is too wiggly while the RW2 is smoother and seems to have better fit."
+  },
+  {
+    "objectID": "Install_software.html",
+    "href": "Install_software.html",
+    "title": "Software Installation",
+    "section": "",
+    "text": "Please use the instructions below to install and check your installation.\nSince 29 April 2025, the latest INLA package is built for R 4.5, so if you’re able to upgrade your R installation, please do so to avoid unnecessary issues. The package will in many cases also work with older R versions, but compatibility is sometimes difficult."
+  },
+  {
+    "objectID": "Install_software.html#installing-inla-and-inlabru",
+    "href": "Install_software.html#installing-inla-and-inlabru",
+    "title": "Software Installation",
+    "section": "Installing INLA and inlabru",
+    "text": "Installing INLA and inlabru\nDue to the work involved in building the binaries for the INLA package C software for different architectures, the INLA package is not on CRAN, but it can be installed from its own distribution repository.\n\nCheck your R version.\nInstall R-INLA, instructions can be found here\nInstall inlabru (available from CRAN)\n\n\n# Enable universe(s) by inlabru-org\noptions(repos = c(\n  inlabruorg = \"https://inlabru-org.r-universe.dev\",\n  INLA = \"https://inla.r-inla-download.org/R/testing\",\n  CRAN = \"https://cloud.r-project.org\"\n))\n\n# Install some packages\ninstall.packages(\"inlabru\")\n\n\nMake sure you have the latest R-INLA, inlabru and R versions installed.\nInstall the following libraries:\n\n\n\ninstall.packages(c(\n  \"CARBayesdata\",\n  \"dplyr\",\n  \"fmesher\",\n  \"ggplot2\",\n  \"lubridate\",\n  \"mapview\",\n  \"patchwork\",\n  \"scico\",\n  \"sdmTMB\",\n  \"sf\",\n  \"spatstat\",\n  \"spdep\",\n  \"terra\",\n  \"tidyr\",\n  \"tidyterra\",\n  \"viridis\"\n))"
+  },
+  {
+    "objectID": "Install_software.html#installation-check",
+    "href": "Install_software.html#installation-check",
+    "title": "Software Installation",
+    "section": "Installation check",
+    "text": "Installation check\nPlease check your installation using the basic model runs below.\nIf you run into issues, you can post a question with information about what you tried and what didn’t work, on the course github discussion page.\nYou can check that INLA is correctly installed by running\n\ndf &lt;- data.frame(y = rnorm(100) + 10)\nfit &lt;- INLA::inla(\n  y ~ 1,\n  data = df\n)\nsummary(fit)\n\nTime used:\n    Pre = 0.519, Running = 0.289, Post = 0.0686, Total = 0.877 \nFixed effects:\n              mean    sd 0.025quant 0.5quant 0.975quant   mode kld\n(Intercept) 10.006 0.091      9.827   10.006     10.186 10.006   0\n\nModel hyperparameters:\n                                        mean    sd 0.025quant 0.5quant\nPrecision for the Gaussian observations 1.22 0.171      0.905     1.21\n                                        0.975quant mode\nPrecision for the Gaussian observations       1.57 1.19\n\nMarginal log-Likelihood:  -144.81 \n is computed \nPosterior summaries for the linear predictor and the fitted values are computed\n(Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')\n\n\nIf the simple inla() call fails with a crash, you may need to install different inla binaries for your hardware/software combination, with INLA::inla.binary.install().\nWhen inla() works, you can check that inlabru is installed correctly by running the same model in inlabru:\n\nfit &lt;- inlabru::bru(\n  y ~ Intercept(1, prec.linear = exp(-7)),\n  data = df\n)\nsummary(fit)\n\ninlabru version: 2.13.0.9016 \nINLA version: 25.08.21-1 \nComponents: \nLatent components:\nIntercept: main = linear(1)\nObservation models: \n  Family: 'gaussian'\n    Tag: &lt;No tag&gt;\n    Data class: 'data.frame'\n    Response class: 'numeric'\n    Predictor: y ~ .\n    Additive/Linear: TRUE/TRUE\n    Used components: effects[Intercept], latent[] \nTime used:\n    Pre = 0.344, Running = 0.291, Post = 0.0935, Total = 0.728 \nFixed effects:\n            mean    sd 0.025quant 0.5quant 0.975quant   mode kld\nIntercept 10.006 0.091      9.827   10.006     10.186 10.006   0\n\nModel hyperparameters:\n                                        mean    sd 0.025quant 0.5quant\nPrecision for the Gaussian observations 1.22 0.171      0.905     1.21\n                                        0.975quant mode\nPrecision for the Gaussian observations       1.57 1.19\n\nMarginal log-Likelihood:  -149.28 \n is computed \nPosterior summaries for the linear predictor and the fitted values are computed\n(Posterior marginals needs also 'control.compute=list(return.marginals.predictor=TRUE)')"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "INLA and Beyond: Practical Spatial Modelling with inlabru for Ecological Research",
+    "section": "",
+    "text": "Welcome to the course!\n\nWelcome to the inlabru workshop!\nThe goal of this workshop is to introduce new users to the inlabru software for Bayesian spatial modelling using integrated nested Laplace approximation (INLA).\n\n\n\n\n\n\n\nimportant⚠️\n\n\n\nPlease use the instructions provided here to install and check your installation before the course starts.\n\n\n\n\nLearning Objectives for the workshop\nBy the end of the workshop, participants will have an understanding of:\n\nThe inlabru workflow and software principles.\nThe motivation for and the challenges of analysing and modelling spatial data.\nDifferent types of statistical models used to analyse different spatial data structures.\nThe implementation of these models in the inlabru package\n\n\n\nIntended audience\nThe workshop aims to cater for participants with a range of different backgrounds, who are interested in analysing data with modern spatial statistical modelling approaches using flexible and computationally efficient software.\n\n\nPrerequisites\nParticipants should be familiar with the R environment, and general statistical approaches to statistical modelling, such as regression, analysis of (co)variance, and generalized linear models.\nNo knowledge of R-INLA or inlabru is required.\n\n\nSchedule Program\n\n\n\nTime\nTopic\n\n\n\n\n13:00 - 14:00\nWorkshop registration\n\n\n14:00 - 14:45\nSession 1: Introduction to inlabru\n\n\n14:45 - 15:30\nPractical Session 1\n\n\n15:30 - 16:00\nRefreshment break\n\n\n16:00 - 16:45\nSession 2: Spatial Modelling with inlabru\n\n\n16:45 - 17:45\nPractical Session 2\n\n\n17:45 - 18:00\nWrap-up and outlook"
+  },
+  {
+    "objectID": "practical2_compiler.html",
+    "href": "practical2_compiler.html",
+    "title": "Practical 2",
+    "section": "",
+    "text": "Aim of this practical:\nIn this practical we are going to look at commonly used spatial models\nDownload Practical 2 R script"
+  },
+  {
+    "objectID": "practical2_compiler.html#sec-areal_data",
+    "href": "practical2_compiler.html#sec-areal_data",
+    "title": "Practical 2",
+    "section": "1 Areal (lattice) data",
+    "text": "1 Areal (lattice) data\nIn this practical we will:\n\nExplore tools for areal spatial data wrangling and visualization.\nLearn how to fit an areal model in inlabru\n\nIn areal data our measurements are summarised across a set of discrete, non-overlapping spatial units such as postcode areas, health board or pixels on a satellite image. In consequence, the spatial domain is a countable collection of (regular or irregular) areal units at which variables are observed. Many public health studies use data aggregated over groups rather than data on individuals - often this is for privacy reasons, but it may also be for convenience.\nIn the next example we are going to explore data on respiratory hospitalisations for Greater Glasgow and Clyde between 2007 and 2011. The data are available from the CARBayesdata R Package:\n\nlibrary(CARBayesdata)\n\ndata(pollutionhealthdata)\ndata(GGHB.IZ)\n\nThe pollutionhealthdata contains the spatiotemporal data on respiratory hospitalisations, air pollution concentrations and socio-economic deprivation covariates for the 271 Intermediate Zones (IZ) that make up the Greater Glasgow and Clyde health board in Scotland. Data are provided by the Scottish Government and the available variables are:\n\nIZ: unique identifier for each IZ.\nyear: the year were the measruments were taken\nobserved: observed numbers of hospitalisations due to respiratory disease.\nexpected: expected numbers of hospitalisations due to respiratory disease computed using indirect standardisation from Scotland-wide respiratory hospitalisation rates.\npm10: Average particulate matter (less than 10 microns) concentrations.\njsa: The percentage of working age people who are in receipt of Job Seekers Allowance\nprice: Average property price (divided by 100,000).\n\nThe GGHB.IZ data is a Simple Features (sf) object containing the spatial polygon information for the set of 271 Intermediate Zones (IZ), that make up of the Greater Glasgow and Clyde health board in Scotland ( Figure 1 ).\n\n\n\n\n\n\n\n\nFigure 1: Greater Glasgow and Clyde health board represented by 271 Intermediate Zones\n\n\n\n\n\n1.1 Maipulating and visualizing areal data\nLet’s start by loading useful libraries:\n\nlibrary(dplyr)\nlibrary(INLA)\nlibrary(ggplot2)\nlibrary(patchwork)\nlibrary(inlabru)   \nlibrary(mapview)\nlibrary(sf)\n\n# load some libraries to generate nice map plots\nlibrary(scico)\n\nThe sf package allows us to work with vector data which is used to represent points, lines, and polygons. It can also be used to read vector data stored as a shapefiles.\nFirst, lets combine both data sets based on the Intermediate Zones (IZ) variable using the merge function from base R, and select only one year of data\n\nresp_cases &lt;- merge(GGHB.IZ %&gt;%\n                      mutate(space = 1:dim(GGHB.IZ)[1]),\n                             pollutionhealthdata, by = \"IZ\")%&gt;%\n  dplyr::filter(year == 2007) \n\nIn epidemiology, disease risk is usually estimated using Standardized Mortality Ratios (SMR). The SMR for a given spatial areal unit \\(i\\) is defined as the ratio between the observed ( \\(Y_i\\) ) and expected ( \\(E_i\\) ) number of cases:\n\\[\nSMR_i = \\dfrac{Y_i}{E_i}\n\\]\nA value \\(SMR &gt; 1\\) indicates that there are more observed cases than expected which corresponds to a high risk area. On the other hand, if \\(SMR&lt;1\\) then there are fewer observed cases than expected, suggesting a low risk area.\nWe can manipulate sf objects the same way we manipulate standard data frame objects via the dplyr package. Lets use the pipeline command %&gt;% and the mutate function to calculate the yearly SMR values for each IZ:\n\nresp_cases &lt;- resp_cases %&gt;% \n  mutate(SMR = observed/expected )\n\nNow we use ggplot to visualize our data by adding a geom_sf layer and coloring it according to our variable of interest (i.e., SMR).\n\n\nCode\nggplot()+\n  geom_sf(data=resp_cases,aes(fill=SMR))+\n  scale_fill_scico(palette = \"roma\")\n\n\n\n\n\n\n\n\n\nAs with the other types of spatial modelling, our goal is to observe and explain spatial variation in our data. Generally, we are aiming to produce a smoothed map which summarises the spatial patterns we observe in our data.\n\n\n1.2 Spatial neighbourhood structures\nA key aspect of any spatial analysis is that observations closer together in space are likely to have more in common than those further apart. This can lead us towards approaches similar to those used in time series, where we consider the spatial closeness of our regions in terms of a neighbourhood structure.\nThe function poly2nb() of the spdep package can be used to construct a list of neighbors based on areas with contiguous boundaries (e.g., using Queen contiguity).\n\nlibrary(spdep)\n\nW.nb &lt;- poly2nb(GGHB.IZ,queen = TRUE)\nW.nb\n\nNeighbour list object:\nNumber of regions: 271 \nNumber of nonzero links: 1424 \nPercentage nonzero weights: 1.938971 \nAverage number of links: 5.254613 \n2 disjoint connected subgraphs\n\n\n\nplot(st_geometry(GGHB.IZ), border = \"lightgray\")\nplot.nb(W.nb, st_geometry(GGHB.IZ), add = TRUE)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nYou could use the snap argument within poly2nb to set a distance at which the different regions centroids are consider neighbours.\n\n\nWith this neighborhood matrix, we can then fit a conditional autoregressive (CAR) model. One of the most popular CAR approaches to model spatial correlation is the Besag model a.k.a. Intrinsic Conditional Autoregressive (ICAR) model.\nThe conditional distribution for \\(u_i\\) given \\(\\mathbf{u}_{-i} = (u_i,\\ldots,u_{i-1},u_{i+1},\\ldots,u_n)^T\\) is\n\\[\nu_i|\\mathbf{u}_{-i} \\sim N\\left(\\frac{1}{d_i}\\sum_{j\\sim i}u_j,\\frac{1}{d_i\\tau_u}\\right)\n\\]\nwhere \\(\\tau_u\\) is the precision parameter, \\(j\\sim i\\) denotes that \\(i\\) and \\(j\\) are neighbors, and \\(d_i\\) is the number of neighbors. Thus, the mean of \\(u_i\\) is equivalent to the the mean of the effects over all neighbours, and the precision is proportional to the number of neighbors. The joint distribution is given by:\n\\[\n\\mathbf{u}|\\tau_u \\sim N\\left(0,\\frac{1}{\\tau_u}Q^{-1}\\right),\n\\]\nWhere \\(Q\\) denotes the structure matrix defined as\n\\[\nQ_{i,j} = \\begin{cases}\nd_i, & i = j \\\\\n-1, & i \\sim j \\\\\n0, &\\text{otherwise}\n\\end{cases}\n\\]\nThis structure matrix directly defines the neighbourhood structure and is sparse. We can compute the adjacency matrix using the function nb2mat() in the spdep library. Then convert the adjacency matrix into the precision matrix \\(\\mathbf{Q}\\) of the CAR model as follows:\n\nlibrary(spdep)\nR &lt;- nb2mat(W.nb, style = \"B\", zero.policy = TRUE)\ndiag = apply(R,1,sum)\nQ = -R\ndiag(Q) = diag\n\nThe ICAR model accounts only for spatially structured variability and does not include a limiting case where no spatial structure is present. Therefore, it is typically combined with an additional unstructured random effect \\(z_i|\\tau_z \\sim N(0,\\tau_{z}^{-1})\\) . The resulting model \\(v_i = u_i + z_i\\) is known as the Besag-York-Mollié model (BYM) which is an extension to the intrinsic CAR model that contains an i.i.d. model component.\n\n\n1.3 Fitting an ICAR model in inlabru\nWe fit a first model to the data where we consider a Poisson model for the observed cases.\nStage 1 Model for the response \\[\ny_i|\\eta_i\\sim\\text{Poisson}(E_i\\lambda_i)\n\\] where \\(E_i\\) are the expected cases for area \\(i\\).\nStage 2 Latent field model \\[\n\\eta_i = \\text{log}(\\lambda_i) = \\beta_0 + u_i + z_i\n\\] where\n\n\\(\\beta_0\\) is a common intercept\n\\(\\mathbf{u} = (u_1, \\dots, u_k)\\) is a conditional Autoregressive model (CAR) with precision matrix \\(\\tau_u\\mathbf{Q}\\)\n\\(\\mathbf{z} = (z_1, \\dots, z_k)\\) is an unstructured random effect with precision \\(\\tau_z\\)\n\nStage 3 Hyperparameters\nThe hyperparameters of the model are \\(\\tau_u\\) and \\(\\tau_z\\)\nNOTE In this case the linear predictor \\(\\eta\\) consists of three components!!\n\n\n\n\n\n\n Task\n\n\n\nFit the above model in using inlabru by completing the following code:\n\ncmp = ~ Intercept(1) + space(...) + iid(...)\n\nformula = ...\n\n\nlik = bru_obs(formula = formula, \n              family = ...,\n              E = ...,\n              data = ...)\n\nfit = bru(cmp, lik)\n\n\n\nAnswer\n\n\ncmp = ~ Intercept(1) + space(space, model = \"besag\", graph = Q) + iid(space, model = \"iid\")\n\nformula = observed ~ Intercept + space + iid\n\nlik = bru_obs(formula = formula, \n              family = \"poisson\",\n              E = expected,\n              data = resp_cases)\n\nfit = bru(cmp, lik)\n\n\n\n\nAfter fitting the model we want to extract results.\n\n\n\n\n\n\n Question\n\n\n\n\nWhat is the estimated value for \\(\\beta_0\\)? \nLook at the estimated values of the hyperparameters using fit$summary.hyperpar , which of the two spatial components (structured or unstructured) explains more of the variability in the counts? structuredunstructured\n\n\n\n\n\n1.4 Areal model predictions\nWe now look at the predictions over space.\n\n\n\n\n\n\n Task\n\n\n\nComplete the code below to produce prediction of the linear predictor \\(\\eta_i\\) and of the risk \\(\\lambda_i\\) and of the expected cases \\(E_i\\exp(\\lambda_i)\\) over the whole space of interest. Then plot the mean and sd of the resulting surfaces.\n\npred = predict(fit, resp_cases, ~data.frame(log_risk = ...,\n                                             risk = exp(...),\n                                             cases = ...\n                                             ),\n               n.samples = 1000)\n\n\n\nSee Solution\n\n\n# produce predictions\npred = predict(fit, \n               resp_cases,\n               ~data.frame(log_risk = Intercept + space,\n                           risk = exp(Intercept + space),\n                           cases = expected * exp(Intercept + space)),\n               n.samples = 1000)\n\n# plot the predictions\n\np1 = ggplot() + \n  geom_sf(data = pred$log_risk, aes(fill = mean)) + scale_fill_scico(direction = -1) +\n  ggtitle(\"mean log risk\")\np2 = ggplot() + \n  geom_sf(data = pred$log_risk, aes(fill = sd)) + scale_fill_scico(direction = -1) +\n  ggtitle(\"sd log risk\")\n\np3 = ggplot() +\n  geom_sf(data = pred$risk, aes(fill = mean)) + scale_fill_scico(direction = -1) +\n  ggtitle(\"mean  risk\")\n\np4 = ggplot() + \n  geom_sf(data = pred$risk, aes(fill = sd)) +\n  scale_fill_scico(direction = -1) +\n  ggtitle(\"sd  risk\")\n\np5 = ggplot() + geom_sf(data = pred$cases, aes(fill = mean)) + scale_fill_scico(direction = -1)+ \n  ggtitle(\"mean  expected counts\")\np6 = ggplot() + geom_sf(data = pred$cases, aes(fill = sd)) + scale_fill_scico(direction = -1)+\n  ggtitle(\"sd  expected counts\")\n\np1 + p2 + p3 + p4 +p5 + p6 + plot_layout(ncol=2)\n\n\n\n\n\n\n\n\n\n\n\nFinally we want to compare our observations \\(y_i\\) with the predicted means of the Poisson distribution \\(E_i\\exp(\\lambda_i)\\)\n\npred$cases %&gt;% ggplot() + geom_point(aes(observed, mean)) + \n  geom_errorbar(aes(observed, ymin = q0.025, ymax = q0.975)) +\n  geom_abline(intercept = 0, slope = 1)\n\n\n\n\n\n\n\n\nHere we are predicting the mean of counts, not the counts. Predicting the counts is beyond the scope of this short course but you can check the supplementary material below.\n\n\n\n\n\n\n Supplementary Material\n\n\n\nPosterior predictive distributions, i.e., \\(\\pi(y_i^{\\text{new}}|\\mathbf{y})\\) are of interest in many applied problems. The bru() function does not return predictive densities. In the previous step we have computed predictions for the expected counts \\(\\pi(E_i\\lambda_i|\\mathbf{y})\\).\nThe predictive distribution is then: \\[\n\\pi(y_i^{\\text{new}}|\\mathbf{y}) = \\int \\pi(y_i|E_i\\lambda_i)\\pi(E_i\\lambda_i|\\mathbf{y})\\ dE_i\\lambda_i\n\\] where, in our case, \\(\\pi(y_i|E_i\\lambda_i)\\) is Poisson with mean \\(E_i\\lambda_i\\). We can achieve this using the following algorithm:\n\nSimulate \\(n\\) replicates of \\(g^k = E_i\\lambda_i\\) for \\(k = 1,\\dots,n\\) using the function generate() which takes the same input as predict()\nFor each of the \\(k\\) replicates simulate a new value \\(y_i^{new}\\) using the function rpois()\nSummarise the \\(n\\) samples of \\(y_i^{new}\\) using, for example the mean and the 0.025 and 0.975 quantiles.\n\n\n\n\nClick here to see the code\n# simulate 1000 realizations of E_i\\lambda_i\nexpected_counts = generate(fit, resp_cases, \n                           ~ expected * exp(Intercept + space),\n                           n.samples = 1000)\n\n\n# simulate poisson data\naa = rpois(271*1000, lambda = as.vector(expected_counts))\nsim_counts = matrix(aa, 271, 1000)\n\n# summarise the samples with posterior means and quantiles\npred_counts = data.frame(observed = resp_cases$observed,\n                         m = apply(sim_counts,1,mean),\n                         q1 = apply(sim_counts,1,quantile, 0.025),\n                         q2 = apply(sim_counts,1,quantile, 0.975),\n                         vv = apply(sim_counts,1,var)\n                         )\n# Plot the observations against the predicted new counts and the predicted expected counts\n\nggplot() + \n  geom_point(data = pred_counts, aes(observed, m, color = \"Pred_obs\")) + \n  geom_errorbar(data = pred_counts, aes(observed, ymin = q1, ymax = q2, color = \"Pred_obs\")) +\n  geom_point(data = pred$cases, aes(observed, mean, color = \"Pred_means\")) + \n  geom_errorbar(data = pred$cases, aes(observed, ymin = q0.025, ymax = q0.975, color = \"Pred_means\")) +\n  \n  geom_abline(intercept = 0, slope =1)"
+  },
+  {
+    "objectID": "practical2_compiler.html#geostatistical-data",
+    "href": "practical2_compiler.html#geostatistical-data",
+    "title": "Practical 2",
+    "section": "2 Geostatistical data",
+    "text": "2 Geostatistical data\nIn this practical we are going to fit a geostatistical model. We will:\n\nExplore tools for geostatistical spatial data wrangling and visualization.\nLearn how to fit a geostatistical model in inlabru\nLearn how to add spatial covariates to the model\nLearn how to do predictions\n\nGeostatistical data are the most common form of spatial data found in environmental setting. In these data we regularly take measurements of a spatial ecological or environmental process at a set of fixed locations. This could be data from transects (e.g, where the height of trees is recorded), samples taken across a region (e.g., water depth in a lake) or from monitoring stations as part of a network (e.g., air pollution). In each of these cases, our goal is to estimate the value of our variable across the entire space.\nLet \\(D\\) be our two-dimensional region of interest. In principle, there are infinite locations within \\(D\\), each of which can be represented by mathematical coordinates (e.g., latitude and longitude). We then can identify any individual location as \\(s_i = (x_i, y_i)\\), where \\(x_i\\) and \\(y_i\\) are their coordinates.\nWe can treat our variable of interest as a random variable, \\(Z\\) which can be observed at any location as \\(Z(\\mathbf{s}_i)\\).\nOur geostatistical process can therefore be written as: \\[\\{Z(\\mathbf{s}); \\mathbf{s} \\in D\\}\\]\nIn practice, our data are observed at a finite number of locations, \\(m\\), and can be denoted as:\n\\[z = \\{z(\\mathbf{s}_1), \\ldots z(\\mathbf{s}_m) \\}\\]\nIn the next example, we will explore data on the Pacific Cod (Gadus macrocephalus) from a trawl survey in Queen Charlotte Sound. The pcod dataset is available from the sdmTMB package and contains the presence/absence records of the Pacific Cod during each survey. The qcs_grid data contain the depth values stored as \\(2\\times 2\\) km grid for Queen Charlotte Sound.\n\n2.1 Exploring and visualizing species distribution data\nThe dataset contains presence/absence data from 2003 to 2017. In this practical we only consider year 2003. We first load the dataset and select the year of interest:\n\nlibrary(sdmTMB)\n\npcod_df = sdmTMB::pcod %&gt;% filter(year==2003)\nqcs_grid = sdmTMB::qcs_grid\n\nThen, we create an sf object and assign the rough coordinate reference to it:\n\npcod_sf =   st_as_sf(pcod_df, coords = c(\"lon\",\"lat\"), crs = 4326)\npcod_sf = st_transform(pcod_sf,\n                       crs = \"+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\" )\n\nWe convert the covariate into a raster and assign the same coordinate reference:\n\nlibrary(terra)\ndepth_r &lt;- rast(qcs_grid, type = \"xyz\")\ncrs(depth_r) &lt;- crs(pcod_sf)\n\nFinally we can plot our dataset. Note that to plot the raster we need to load also the tidyterra library.\n\n\nCode\nlibrary(tidyterra)\nggplot()+ \n  geom_spatraster(data=depth_r$depth)+\n  geom_sf(data=pcod_sf,aes(color=factor(present))) +\n    scale_color_manual(name=\"Occupancy status for the Pacific Cod\",\n                     values = c(\"black\",\"orange\"),\n                     labels= c(\"Absence\",\"Presence\"))+\n  scale_fill_scico(name = \"Depth\",\n                   palette = \"nuuk\",\n                   na.value = \"transparent\" ) + xlab(\"\") + ylab(\"\")\n\n\n\n\n\n\n\n\n\n\n\n2.2 Fitting a spatial geostatistical species distribution model\nWe first fit a simple model where we consider the observation as Bernoulli and where the linear predictor contains only one intercept and the GR field defined through the SPDE approach. The model is defined as:\nStage 1 Model for the response\n\\[\ny(s)|\\eta(s)\\sim\\text{Binom}(1, p(s))\n\\] Stage 2 Latent field model\n\\[\n\\eta(s) = \\text{logit}(p(s)) = \\beta_0 + \\omega(s)\n\\]\nwith\n\\[\n\\omega(s)\\sim \\text{  GF with range } \\rho\\  \\text{ and maginal variance }\\ \\sigma^2\n\\]\nStage 3 Hyperparameters\nThe hyperparameters of the model are \\(\\rho\\) and \\(\\sigma\\)\nNOTE In this case the linear predictor \\(\\eta\\) consists of two components!!\n\n\n2.3 The workflow\nWhen fitting a geostatistical model we need to fulfill the following tasks:\n\nBuild the mesh\nDefine the SPDE representation of the spatial GF. This includes defining the priors for the range and sd of the spatial GF\nDefine the components of the linear predictor. This includes the spatial GF and all eventual covariates\nDefine the observation model using the bru_obs() function\nRun the model using the bru() function\n\n\n2.3.1 Step 1. Building the mesh\nThe first task, when dealing with geostatistical models in inlabru is to build the mesh that covers the area of interest. For this purpose we use the function fm_mesh_2d.\nOne way to build the mesh is to start from the locations where we have observations, these are contained in the dataset pcod_sf\n\nmesh = fm_mesh_2d(loc = pcod_sf,           # Build the mesh\n                  cutoff = 2,\n                  max.edge = c(7,20),     # The largest allowed triangle edge length.\n                  offset = c(5,50))       # The automatic extension distance\n\nggplot() + gg(mesh) +\n  geom_sf(data= pcod_sf, aes(color = factor(present))) + \n  xlab(\"\") + ylab(\"\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Task\n\n\n\nLook at the documentation for the fm_mesh_2d function typing\n\n?fm_mesh_2d\n\nExperiment with the different options and create different meshes (see here for further details on mesh construction).\nThe rule of thumb is that your mesh should be:\n\nfine enough to well represent the spatial variability of your process, but not too fine in order to avoid computation burden\nthe triangles should be regular, avoid long and thin triangles.\nThe mesh should contain a buffer around your area of interest (this is what is defined in the offset option) in order to avoid boundary artifact in the estimated variance.\n\n\n\n\n\n2.3.2 Step 2. Define the SPDE representation of the spatial GF\nTo define the SPDE representation of the spatial GF we use the function inla.spde2.pcmatern.\nThis takes as input the mesh we have defined and the PC-priors definition for \\(\\rho\\) and \\(\\sigma\\) (the range and the marginal standard deviation of the field).\nPC priors Gaussian Random field are defined in (Fuglstad et al. 2018). From a practical perspective for the range \\(\\rho\\) you need to define two parameters \\(\\rho_0\\) and \\(p_{\\rho}\\) such that you believe it is reasonable that\n\\[\nP(\\rho&lt;\\rho_0)=p_{\\rho}\n\\]\nwhile for the marginal variance \\(\\sigma\\) you need to define two parameters \\(\\sigma_0\\) and \\(p_{\\sigma}\\) such that you believe it is reasonable that\n\\[\nP(\\sigma&gt;\\sigma_0)=p_{\\sigma}\n\\] Here are some alternatives for defining priors for our model\n\nspde_model1 =  inla.spde2.pcmatern(mesh,\n                                  prior.sigma = c(.1, 0.5),\n                                  prior.range = c(30, 0.5))\nspde_model2 =  inla.spde2.pcmatern(mesh,\n                                  prior.sigma = c(10, 0.5),\n                                  prior.range = c(1000, 0.5))\nspde_model3 =  inla.spde2.pcmatern(mesh,\n                                  prior.sigma = c(1, 0.5),\n                                  prior.range = c(100, 0.5))\n\n\n\n\n\n\n\n Question\n\n\n\nConsidering the pcod_sf spatial extension and type of the data, which of the previous choices is more reasonable?\nRemember that a prior should be reasonable..but the model should not totally depend on it.\n\n\nTake hint\n\nYou can use the summary() function to check the coordinate range of an sf object.\n\nspde_model1spde_model2spde_model3\n\n\n\n\n2.3.3 Step 3. Define the components of the linear predictor\nWe have now defined a mesh and a SPDE representation of the spatial GF. We now need to define the model components:\n\ncmp = ~ Intercept(1) + space(geometry, model = spde_model3)\n\nNOTE since the data frame we use (pcod_sf) is an sf object the input in the space() component is the geometry of the dataset.\n\n\n2.3.4 Step 4. Define the observation model\nOur data are Bernoulli distributed so we can define the observation model as:\n\nformula = present ~ Intercept  + space\n\nlik = bru_obs(formula = formula, \n              data = pcod_sf, \n              family = \"binomial\")\n\n\n\n2.3.5 Step 5. Run the model\nFinally we are ready to run the model\n\nfit1 = bru(cmp,lik)\n\n\n\n\n2.4 Model results\n\n2.4.1 Hyperparameters\n\n\n\n\n\n\n Task\n\n\n\nWhat are the posterior for the range \\(\\rho\\) and the standard deviation \\(\\sigma\\)? Plot the posterior together with the prior for both parameters.\n\n\nTake hint\n\nThe spde.posterior() can be used to calculate the posterior distribution of the range and variance of a model’s SPDE component. (type ?spde.posterior for further detials)\n\n\n\n\nClick here to see the solution\n\n\nCode\n# Extract marginal for the range\n\nlibrary(patchwork)\nspde.posterior(fit1, \"space\", what = \"range\") %&gt;% plot() +\nspde.posterior(fit1, \"space\", what = \"log.variance\") %&gt;% plot()  \n\n\n\n\n\n\n\n\n2.5 Spatial prediction\nWe now want to extract the estimated posterior mean and sd of spatial GF. To do this we first need to define a grid of points where we want to predict. We do this using the function fm_pixel() which creates a regular grid of points covering the mesh\n\npxl = fm_pixels(mesh)\n\nthen compute the prediction for both the spatial GF and the linear predictor (spatial GF + intercept)\n\npreds = predict(fit1, pxl, ~data.frame(spatial = space,\n                                      total = Intercept + space))\n\nFinally, we can plot the maps\n\n\nCode\nggplot() + geom_sf(data = preds$spatial,aes(color = mean)) + \n  scale_color_scico() +\n  ggtitle(\"Posterior mean\") +\nggplot() + geom_sf(data = preds$spatial,aes(color = sd)) + \n  scale_color_scico() +\n  ggtitle(\"Posterior sd\")\n\n\n\n\n\n\n\n\n\nNote The posterior sd is lowest at the observation points. Note how the posterior sd is inflated around the border, this is the “border effect” due to the SPDE representation.\n\n\n2.6 An alternative model (including spatial covariates)\nWe now want to check if the depth covariate has an influence on the probability of presence. We do this in two different models\n\nModel 1 The depth enters the model in a linear way. The linear predictor is then defined as:\n\n\\[\n  \\eta(s) = \\text{logit}(p(s)) = \\beta_0 + \\omega(s) + \\beta_1\\ \\text{depth}(s)\n\\]\n\nModel 1 The depth enters the model in a non linear way. The linear predictor is then defined as:\n\n\\[\n  \\eta(s) = \\text{logit}(p(s)) = \\beta_0 + \\omega(s) +  f(\\text{depth}(s))\n\\] where \\(f(.)\\) is a smooth function. We will use a RW2 model for this.\n\n\n\n\n\n\n Task\n\n\n\nFit model 1. Define components, observation model and use the bru() function to estimate the parameters.\nNote Use the scaled version of the covariate stored in depth_r$depth_scaled.\nWhat is the liner effect of depth on the logit probability?\n\n\nTake hint\n\nThe pcod_sf object already contains the depth_scaled containing the squared depth values at each location. However, inlabru also allows to specify a raster object directly in the model components. If your raster contains multiple layers, then de desired layer can be called using the $ symbol (e.g., my_raster$layer_1).\n\n\n\n\nClick here to see the solution\n\n\nCode\ncmp = ~ Intercept(1) + space(geometry, model = spde_model3) +\n        covariate(depth_r$depth_scaled, model = \"linear\")\n\nformula = present ~ Intercept  + space + covariate\n\nlik = bru_obs(formula = formula, \n              data = pcod_sf, \n              family = \"binomial\")\n\n\nfit2 = bru(cmp, lik)\n\n\n\n\n\nWe now want to fit Model 2 where we allow the effect of depth to be non-linear. To use the RW2 model we need to group the values of depth into distinct classes. To do this we use the function inla.group() which, by default, creates 20 groups. The we can fit the model as usual\n\n# create the grouped variable\ndepth_r$depth_group = inla.group(values(depth_r$depth_scaled))\n\n# run the model\ncmp = ~ Intercept(1) + space(geometry, model = spde_model3) +\n        covariate(depth_r$depth_group, model = \"rw2\")\n\nformula = present ~ Intercept  + space + covariate\n\nlik = bru_obs(formula = formula, \n              data = pcod_sf, \n              family = \"binomial\")\n\n\nfit3 = bru(cmp, lik)\n\n# plot the estimated effect of depth\n\nfit3$summary.random$covariate %&gt;% \n  ggplot() + geom_line(aes(ID,mean)) + \n             geom_ribbon(aes(ID,\n                             ymin = `0.025quant`, \n                             ymax = `0.975quant`),\n                         alpha = 0.5)\n\n\n\n\n\n\n\n\nInstead of predicting over a grid covering the whole mesh, we can limit our predictions to the points where the covariate is defined. We can do this by defining a sf object using coordinates in the object depth_r.\n\npxl1 = data.frame(crds(depth_r), \n                  as.data.frame(depth_r$depth)) %&gt;% \n       filter(!is.na(depth)) %&gt;%\nst_as_sf(coords = c(\"x\",\"y\")) %&gt;% dplyr::select(-depth)\n\n\n\n\n\n\n\n Task\n\n\n\nCreate a map of predicted probability from Model 3 by predicting prediction over pxl1. You can use a inverse logit function defined as\n\ninv_logit = function(x) (1+exp(-x))^(-1)\n\n\n\nTake hint\n\nThe predict() function can take as input also functions of elements of the components you want to consider\n\n\n\n\nClick here to see the solution\n\n\nCode\npred3  = predict(fit3, pxl1, ~inv_logit(Intercept + space + covariate) )\n\npred3 %&gt;% ggplot() + \n      geom_sf(aes(color = mean)) +\n        scale_color_scico(direction = -1) +\n        ggtitle(\"Sample from the fitted model\")"
+  },
+  {
+    "objectID": "practical2_compiler.html#point-process-data",
+    "href": "practical2_compiler.html#point-process-data",
+    "title": "Practical 2",
+    "section": "3 Point process data",
+    "text": "3 Point process data\nIn this practical we are going to fit a log Gaussian Cox Proces (LGCP) model to point-referenced data. We will:\n\nLearn how to fit a LGCP model in inlabru\nLearn how to add spatial covariates to the model\nLearn how to do predictions\n\nIn point processes we measure the locations where events occur (e.g. trees in a forest, earthquakes) and the coordinates of such occurrences are our data. A spatial point process is a random variable operating in continuous space, and we observe realisations of this variable as point patterns across space.\nConsider a fixed geographical region \\(A\\). The set of locations at which events occur are denoted \\(\\mathbf{s} = s_1,\\ldots,s_n\\). We let \\(N(A)\\) be the random variable which represents the number of events in region \\(A\\).\nWe typically assume that a spatial point pattern is generated by an unique point process over the whole study area. This means that the delimitation of the study area will affect the observed point patters.\nWe can define the intensity of a point process as the expected number of events per unit area. This can also be thought of as a measure of the density of our points. In some cases, the intensity will be constant over space (homogeneous), while in other cases it can vary by location (inhomogeneous or heterogenous).\nIn the next example we will be looking at the location where forest fires occurred in the Castilla-La Mancha region of Spain between 1998 and 2007.\n\n3.1 Point-referenced data visualization\nIn this practical we consider the data clmfires in the spatstat library.\nThis dataset is a record of forest fires in the Castilla-La Mancha region of Spain between 1998 and 2007. This region is approximately 400 by 400 kilometres. The coordinates are recorded in kilometres. For more info about the data you can type:\n\n?clmfires\n\nWe first read the data and transform them into an sf object. We also create a polygon that represents the border of the Castilla-La Mancha region. We select the data for year 2004 and only those fires caused by lightning.\n\ndata(\"clmfires\")\npp = st_as_sf(as.data.frame(clmfires) %&gt;%\n                dplyr::mutate(x = x, \n                       y = y),\n              coords = c(\"x\",\"y\"),\n              crs = NA) %&gt;%\n  dplyr::filter(cause == \"lightning\",\n         year(date) == 2004)\n\npoly = as.data.frame(clmfires$window$bdry[[1]]) %&gt;%\n  mutate(ID = 1)\n\nregion = poly %&gt;% \n  st_as_sf(coords = c(\"x\", \"y\"), crs = NA) %&gt;% \n  dplyr::group_by(ID) %&gt;% \n  summarise(geometry = st_combine(geometry)) %&gt;%\n  st_cast(\"POLYGON\") \n  \nggplot() + geom_sf(data = region, alpha = 0) + geom_sf(data = pp)  \n\n\n\n\nDistribution of the observed forest fires caused by lightning in Castilla-La Mancha in 2004\n\n\n\n\nThe library spatstat contains also some covariates that can help explain the fires distribution. We can a raster for the scaled values of elevation using the following code:\n\nelev_raster = rast(clmfires.extra[[2]]$elevation)\nelev_raster = scale(elev_raster)\n\n\n\n\n\n\n\n Task\n\n\n\nUsing tidyterra and ggplot, produce a map of the elevation profile in La Mancha region and overlay the spatial point pattern of the fire locations. Use an appropriate colouring scheme for the elevation values. Do you see any pattern?\n\n\nTake hint\n\nYou can use the geom_spatraster() to add a raster layer to a ggplot object. Furthermore the scico library contains a nice range of coloring palettes you can choose, type scico_palette_show() to see the color palettes that are available.\n\n\n\n\nClick here to see the solution\n\n\nCode\nlibrary(ggplot2)\nlibrary(tidyterra)\nlibrary(scico)\n\nggplot() + \n  geom_spatraster(data = elev_raster) + \n  geom_sf(data = pp) + scale_fill_scico()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n3.2 Workflow for Fitting a LGCP model\nThe procedure for fitting a point process model in inlabru, specifically a log-Gaussian Cox process, follows a similar workflow to that of a geostatistical model, these are:\n\nBuild the mesh\nDefine the SPDE representation of the spatial GF. This includes defining the priors for the range and sd of the spatial GF\nDefine the components of the linear predictor. This includes the spatial GF and all eventual covariates.\nDefine the observational model\nRun the Model\n\n\n3.2.1 Step 1. Building the mesh for a LGCP\nFirst, we need to create the mesh used to approximate the random field. When analyzing point patterns, mesh nodes (integration points) are not typically placed at point locations. Instead, a mesh is created using the fm_mesh_2d()function from the fmesher library with boundary being our study area.\nKey parameters in mesh construction include: max.edge for maximum triangle edge lengths, offset for inner and outer extensions (to prevent edge effects), and cutoff to avoid overly small triangles in clustered areas.\n\n\n\n\n\n\nNote\n\n\n\nGeneral guidelines for creating the mesh\n\nCreate triangulation meshes with fm_mesh_2d()\nMove undesired boundary effects away from the domain of interest by extending to a smooth external boundary\nUse a coarser resolution in the extension to reduce computational cost (max.edge=c(inner, outer))\nUse a fine resolution (subject to available computational resources) for the domain of interest (inner correlation range) and filter out small input point clusters (0 &lt; cutoff &lt; inner)\nCoastlines and similar can be added to the domain specification in fm_mesh_2d() through the boundary argument.\n\n\n\n\n# mesh options\n\nmesh &lt;-  fm_mesh_2d(boundary = region,\n                  max.edge = c(5, 10),\n                  cutoff = 4, crs = NA)\n\nggplot() + gg(mesh) + geom_sf(data=pp)\n\n\n\n\n\n\n\n\n\n\n3.2.2 Step 2. Defining the SPDE model\nWe can now define our SPDE model using the inla.spde2.pcmatern function. To help us chose some sensible model parameters it is often useful to consider the spatial extension of our study.\n\nst_area(region)\n\n[1] 79354.67\n\n\nWe can use PC-priors for the range \\(\\rho\\) and the standard deviation \\(\\sigma\\) of the Matérn process\n\nDefine the prior for the range prior.range  = (range0,Prange) \\(\\text{Prob}(\\rho&lt;\\rho_0) = p_{\\rho}\\)\nDefine the prior for the range prior.sigma  = (sigma0,Psigma) \\(\\text{Prob}(\\sigma&gt;\\sigma_0) = p_{\\sigma}\\)\n\n\n\n\n\n\n\n Question\n\n\n\nTake a look at the code below and select which of the following statements about the specified Matérn PC priors are true.\n\nspde_model =  inla.spde2.pcmatern(mesh,\n                       prior.sigma = c(1, 0.5), \n                       prior.range = c(100, 0.5)) \n\n\n there is probability of 0.5 that the spatial range is greater or equal than 100 the probability that the spatial range is smaller than 50 is 0.5 the probability that the marginal standard deviation is smaller than 1 is 0.5 there is probability of 0.5 that the marginal standard deviation is at least equal or greater 1\n\n\n\n\n\n3.2.3 Step 3. Defining model components\nStage 1 Model for the response\nThe total number of points in the study region is a Poisson random variable with a spatially varying intensity and log-likelihood given by :\n\\[\nl(\\beta;s) = \\sum_{i=1}^m \\log [\\lambda(s_i)] - \\int_A \\lambda(s)ds.\n\\]\nThe integral in this expression can be interpreted as the expected number of points in the whole study region. However, the integral of the intensity function has no close form solution and thus we need to approximate it using numerical integration. inlabru has implemented the fm_int function to create integration schemes that are especially well suited to integrating the intensity in models with an SPDE effect. We strongly recommend that users use these integration schemes in this context. See ?fm_int for more information.\n\n# build integration scheme\nips = fm_int(mesh,\n             samplers = region)\n\nNow, for a point process models, the spatial covariates (i.e., the elevation raster) have to be also available at both data-points and quadrature locations. We can check this using the eval_spatial function from inlabru :\n\neval_spatial(elev_raster,pp) %&gt;% is.na() %&gt;% any()\n\n[1] FALSE\n\neval_spatial(elev_raster,ips) %&gt;% is.na() %&gt;% any()\n\n[1] TRUE\n\n\nHere, we notice that there is a single point that for which elevation values are missing (see Figure 2 the red point that lies outside the raster extension ).\n\n\n\n\n\n\n\n\nFigure 2: Integration scheme for numerical approximation of the stochastic integral in La Mancha Region\n\n\n\n\n\nTo solve this, we can increase the raster extension so it covers all both data-points and quadrature locations as well. Then, we can use the bru_fill_missing() function to input the missing values with the nearest-available-value/ We can achieve this using the following code:\n\n# Extend raster ext by 5 % of the original raster\nre &lt;- extend(elev_raster, ext(elev_raster)*1.05)\n# Convert to an sf spatial object\nre_df &lt;- re %&gt;% stars::st_as_stars() %&gt;%  st_as_sf(na.rm=F)\n# fill in missing values using the original raster \nre_df$lyr.1 &lt;- bru_fill_missing(elev_raster,re_df,re_df$lyr.1)\n# rasterize\nelev_rast_p &lt;- stars::st_rasterize(re_df) %&gt;% rast()\n\n\n\n\n\n\n\n\n\n\nStage 2 Latent field model\nWe will model the fire locations as a point process whose intensity function \\(\\lambda(s)\\) is additive on the log-scale:\n\\[\n\\eta(s) = \\log ~ \\lambda(s)= \\beta_0 +  \\beta_1 ~ \\text{elevation}(s) + \\omega(s),\n\\]\nHere, \\(\\omega(s)\\) is the Matérn Gaussian field capturing the spatial structure of all the locations where fires have occurred (these locations are assumed to be independent given the Gaussian field).\nStage 3 Hyperparameters\nThe hyperparameters of the model are \\(\\rho\\) and \\(\\sigma\\) corresponding to\n\\[\n\\omega(s)\\sim \\text{  GF with range } \\rho\\  \\text{ and maginal variance }\\ \\sigma^2\n\\]\nNOTE In this case the linear predictor \\(\\eta(s)\\) consists of three components.\nAfter the mesh and a SPDE representation of the spatial GF have been defined, the model components can be specified using the formula syntax (recall that this allows users to choose meaningful names for model components).\n\ncmp_lgcp &lt;-  geometry ~  Intercept(1)  + \n  elev(elev_rast_p, model = \"linear\") +\n  space(geometry, model = spde_model)\n\nRecall that the labels Intercept, elev (elevation effect) and space are used to name the components of the model but they equally well could be something else.\nNow, notice that we have called the elev_rast_p raster data within the elevation component. Recall that inlabruprovides support for sf and terra data structures, allowing it to extract information from spatial data objects. This is particularly relevant for LGCP, as spatial covariates (e.g., the elevation raster) must be available across the whole study area.\n\nformula = geometry ~ Intercept  + elev + space\n\nRecall that in an sf object, the geo-referenced information of our points is stored in the geometry column, and hence we specify this as our response\n\n\n3.2.4 Step 4. Defining th observational model\ninlabru has support for latent Gaussian Cox processes through the cp likelihood family. We just need to supply the sf object as our data and the integration scheme ips:\n\nlik = bru_obs(formula = formula, \n              data = pp, \n              family = \"cp\",\n              ips = ips)\n\n\n\n\n\n\n\nNote\n\n\n\ninlabru supports a shortcut for defining the integration points using the domain and samplers argument of like(). This domain argument expects a list of named domains with inputs that are then internally passed to fm_int() to build the integration scheme. The samplers argument is used to define subsets of the domain over which the integral should be computed. An equivalent way to define the same model as above is:\n\nlik = bru_obs(formula = formula, \n              data = pp, \n              family = \"cp\",\n              domain = list(geometry = mesh),\n              samplers = region)\n\n\n\n\n\n\n3.3 Step 5. Run the model\nFinally, we can fit the model as usual\n\nfit_lgcp = bru(cmp_lgcp,lik)\n\nPosterior summaries of fixed effects and hyper parameters can be obtained using the summary() function.\n\nsummary(fit_lgcp)\n\n\n\n\n\n\n\n\n\nmean\nsd\n0.025quant\n0.5quant\n0.975quant\nmode\n\n\n\n\n−7.49\n0.85\n−9.25\n−7.48\n−5.83\n−7.48\n\n\n−0.07\n0.17\n−0.41\n−0.07\n0.26\n−0.07\n\n\n132.90\n37.50\n76.98\n127.05\n223.21\n115.20\n\n\n1.76\n0.35\n1.19\n1.72\n2.56\n1.63\n\n\n\n\n\n\n\n\n\n3.4 Model predictions\nModel predictions can be computed using the predict function by supplying the coordinates where the covariate is defined. We can do this by defining a sf object using coordinates in our original raster data (we will crop the extension to that of La Mancha Region).\n\nelev_crop &lt;- terra::crop(x = elev_raster,y = region,mask=TRUE)\n\n\npxl1 = data.frame(crds(elev_crop), \n                  as.data.frame(elev_crop$lyr.1)) %&gt;% \n       filter(!is.na(lyr.1)) %&gt;%\nst_as_sf(coords = c(\"x\",\"y\")) %&gt;%\n  dplyr::select(-lyr.1)\n\nThe formula object for the prediction can be a generic R expression that references model components using the user-defined names.\nThe predict() method returns an object in the same data format as was used in the predict call which, in this case, is an sf points object.\nSupport for plotting sf data objects is available in the ggplot2 package.\n\nModel predictionsR Code\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nlgcp_pred &lt;- predict(\n  fit_lgcp,\n  pxl1,\n  ~ data.frame(\n    lambda = exp(Intercept + elev + space), # intensity\n    loglambda = Intercept + elev +space,  #log-intensity\n    GF = space # matern field\n  )\n)\n\n# predicted log intensity\nggplot() + gg(lgcp_pred$loglambda, geom = \"tile\") \n# standard deviation of the predicted log intensity\nggplot() + gg(lgcp_pred$loglambda, geom = \"tile\",aes(fill=sd)) \n# predicted intensity\nggplot() +  gg(lgcp_pred$lambda, geom = \"tile\") \n# spatial field\nggplot() +  gg(lgcp_pred$GF, geom = \"tile\")"
+  },
+  {
+    "objectID": "slides/slides_2.html#section",
+    "href": "slides/slides_2.html#section",
+    "title": "Lecture 2",
+    "section": "",
+    "text": "Space is inherent to all ecological processes, influencing dynamics such as migration, dispersal, and species interactions. A primary goal in ecology is to understand how these processes shape species distributions and dynamics across space."
+  },
+  {
+    "objectID": "slides/slides_2.html#statistics-in-space",
+    "href": "slides/slides_2.html#statistics-in-space",
+    "title": "Lecture 2",
+    "section": "Statistics in space",
+    "text": "Statistics in space\n\nMany natural processes take place in space\nincreased resolution \\(\\leadsto\\) large, complex datasets \\(\\leadsto\\) complex spatial models required\n\n\n\noften inaccessible to practitioners (literature aimed at statisticians)\nmethodology not always linked to applications\nmodels too simple to reflect real-life data\ndifficult to apply without expertise in spatial stats and computational statistics\nwe shall see that inlabru can help with this."
+  },
+  {
+    "objectID": "slides/slides_2.html#spatial-data-structures",
+    "href": "slides/slides_2.html#spatial-data-structures",
+    "title": "Lecture 2",
+    "section": "Spatial data structures",
+    "text": "Spatial data structures\nWe can distinguish three types of spatial data structures\n\n\nAreal data\n\n\n\nMap of bird conservation regions (BCRs) showing the proportion of bird species within each region showing a declining trend\n\n\n\nGeostatistical data\n\n\n\nScotland river temperature monitoring network\n\n\n\nPoint pattern data\n\n\n\nOccurrence records of four ungulate species in Tibet,"
+  },
+  {
+    "objectID": "slides/slides_2.html#spatial-data-structures-1",
+    "href": "slides/slides_2.html#spatial-data-structures-1",
+    "title": "Lecture 2",
+    "section": "Spatial data structures",
+    "text": "Spatial data structures\nWe can distinguish three types of spatial data structures\n\n\nAreal data\nIn areal data our measurements are summarised across a set of discrete, non-overlapping spatial units.\n\n\n\nMap of bird conservation regions (BCRs) showing the proportion of bird species within each region showing a declining trend\n\n\n\nGeostatistical data\n\n\n\nScotland river temperature monitoring network\n\n\n\nPoint pattern data\n\n\n\nOccurrence records of four ungulate species in Tibet"
+  },
+  {
+    "objectID": "slides/slides_2.html#spatial-data-structures-2",
+    "href": "slides/slides_2.html#spatial-data-structures-2",
+    "title": "Lecture 2",
+    "section": "Spatial data structures",
+    "text": "Spatial data structures\nWe can distinguish three types of spatial data structures\n\n\nAreal data\n\n\n\nMap of bird conservation regions (BCRs) showing the proportion of bird species within each region showing a declining trend\n\n\n\nGeostatistical data\nIn geostatistical data, measurements of a continuous process are taken at a set of fixed locations.\n\n\n\nScotland river temperature monitoring network\n\n\n\nPoint pattern data\n\n\n\nOccurrence records of four ungulate species in Tibet,"
+  },
+  {
+    "objectID": "slides/slides_2.html#spatial-data-structures-3",
+    "href": "slides/slides_2.html#spatial-data-structures-3",
+    "title": "Lecture 2",
+    "section": "Spatial data structures",
+    "text": "Spatial data structures\nWe can distinguish three types of spatial data structures\n\n\nAreal data\n\n\n\nMap of bird conservation regions (BCRs) showing the proportion of bird species within each region showing a declining trend\n\n\n\nGeostatistical data\n\n\n\nScotland river temperature monitoring network\n\n\n\nPoint pattern data\nIn point pattern data we record the locations where events occur (e.g. trees in a forest, earthquakes) and the coordinates of such occurrences are our data.\n\n\n\nOccurrence records of four ungulate species in Tibet,"
+  },
+  {
+    "objectID": "slides/slides_2.html#types-of-spatial-data",
+    "href": "slides/slides_2.html#types-of-spatial-data",
+    "title": "Lecture 2",
+    "section": "Types of spatial data",
+    "text": "Types of spatial data\nDiscrete space: - Data on a spatial grid (areal data)\nContinuous space: - Geostatistical (geo-referenced) data - Spatial point pattern data\nModel components are used to reflect spatial dependence structures in discrete and continuous space."
+  },
+  {
+    "objectID": "slides/slides_2.html#how-do-we-model-this",
+    "href": "slides/slides_2.html#how-do-we-model-this",
+    "title": "Lecture 2",
+    "section": "How do we model this?",
+    "text": "How do we model this?\nImagine we have animal counts in each region. We can model them as Poisson\n\\[\ny_i \\sim \\mathrm{Poisson}(e^{\\eta_i})\n\\] How do we model the linear predictor \\(\\eta_i\\)?\n\n\nWe could model the number of animals in each region independently\n\n\\[\n\\eta_i = \\beta_0 + \\mathbf{x}'\\beta + u_i ~~~ u_i \\overset{iid}{\\sim} N(0,\\sigma^2_i)\n\\]\n\nregional differences are accounted for through a random effect"
+  },
+  {
+    "objectID": "slides/slides_2.html#how-do-we-model-this-auto-animate-true",
+    "href": "slides/slides_2.html#how-do-we-model-this-auto-animate-true",
+    "title": "Lecture 2",
+    "section": "How do we model this? {auto-animate= true}",
+    "text": "How do we model this? {auto-animate= true}\nImagine we have animal counts in each region. We can model them as Poisson\n\\[\ny_i \\sim \\mathrm{Poisson}(e^{\\eta_i})\n\\] How do we model the linear predictor \\(\\eta_i\\)?\n\n\nBut… what if the distribution varies across space, i.e.  is structured in space?\nDo the covariates account for those structures?\n\nIf there’s an area where the animal is rare, we’ll get lots of zero counts"
+  },
+  {
+    "objectID": "slides/slides_2.html#how-do-we-model-this-1",
+    "href": "slides/slides_2.html#how-do-we-model-this-1",
+    "title": "Lecture 2",
+    "section": "How do we model this?",
+    "text": "How do we model this?\nImagine we have animal counts in each region. We can model them as Poisson\n\\[\ny_i \\sim \\mathrm{Poisson}(e^{\\eta_i})\n\\] How do we model the linear predictor \\(\\eta_i\\)?\n\n\nWe could model some dependence across regions:\n\nNearby regions should have similar counts\n\n\n\\[\n\\eta_i = \\beta_0 + \\mathbf{x}'\\beta + u_i ~~~ u_i \\overset{iid}{\\sim} N(0,Q^{-1})\n\\]\n\nNow the random effect \\(u_i \\sim N(0, Q^{-1})\\) is correlated."
+  },
+  {
+    "objectID": "slides/slides_2.html#overview-of-areal-processes",
+    "href": "slides/slides_2.html#overview-of-areal-processes",
+    "title": "Lecture 2",
+    "section": "Overview of Areal processes",
+    "text": "Overview of Areal processes\n\nAn areal process (or lattice process) is a stochastic process defined on a set of regions that form a partition of our region of interest \\(D\\).\n\nLet \\(B_1, \\ldots B_m\\) be our set of \\(m\\) distinct regions such that: \\[\\bigcup\\limits_{i=1}^m \\hspace{1mm}B_i = D.\\]\nHere we require that our regions are non-overlapping, with \\[B_i \\cap B_j = \\emptyset.\\]\nThen our areal process is simply the stochastic process \\[\\{Z(B_i); i=1,\\ldots,m\\}.\\]"
+  },
+  {
+    "objectID": "slides/slides_2.html#neighbourhood-structures",
+    "href": "slides/slides_2.html#neighbourhood-structures",
+    "title": "Lecture 2",
+    "section": "Neighbourhood structures",
+    "text": "Neighbourhood structures\n\n\nEach of our regions \\(B_i\\) has a set of other nearby which can be considered neighbours\nWe might expect that areas have more in common with their neighbours.\nTherefore, we can construct dependence structures based on the principle that neighbours are correlated and non-neighbours are uncorrelated.\nHowever, we need to come up with a sensible way of defining what a neighbour is in this context."
+  },
+  {
+    "objectID": "slides/slides_2.html#defining-a-neighbourhood",
+    "href": "slides/slides_2.html#defining-a-neighbourhood",
+    "title": "Lecture 2",
+    "section": "Defining a Neighbourhood",
+    "text": "Defining a Neighbourhood\n\nThere are many different ways to define a region’s neighbours.\nThe most common ones fall into two main categories - those based on borders, and those based on distance.\n\n\n\nCommon borders\n\nAssume that regions which share a border on a map are neighbours.\n\nSimple and easy to implement\nTreats all borders the same, regardless of length, which can be unrealistic.\nAreas very close together are not neighbours if there is even a small gap between them.\n\n\n\n\n\n\n\n\nDistance-based\n\nAssume that regions which are a within a certain distance of each other area neighbours.\n\nWhat distance do you choose? How do you decide that?\nWhere do you measure from? (e.g., nearest border or a central point)."
+  },
+  {
+    "objectID": "slides/slides_2.html#neighbourhood-matrix",
+    "href": "slides/slides_2.html#neighbourhood-matrix",
+    "title": "Lecture 2",
+    "section": "Neighbourhood matrix",
+    "text": "Neighbourhood matrix\n\n\nOnce we have identified a set of neighbours using our chosen method, we can use this to account for spatial correlation.\nWe construct a neighbourhood matrix (or proximity matrix), which defines how each of our \\(m\\) regions relate to each other.\nLet \\(W\\) denote an \\(m \\times m\\) matrix where the \\((i,j)\\)th entry, \\(w_{ij}\\) denotes the proximity between regions \\(B_i\\) and \\(B_j\\).\n\n\n\n\n\n\nNote\n\n\nThe values of this matrix can be discrete (which regions are neighbours) or continuous (how far apart are the regions)."
+  },
+  {
+    "objectID": "slides/slides_2.html#binary-neighbourhood-matrix",
+    "href": "slides/slides_2.html#binary-neighbourhood-matrix",
+    "title": "Lecture 2",
+    "section": "Binary Neighbourhood matrix",
+    "text": "Binary Neighbourhood matrix\nBy far the most common approach is to use a binary neighbourhood matrix, \\(W\\), denoted by\n\\[\n\\begin{aligned}\nw_{ij} &= 1 \\hspace{2mm} \\mbox{ if areas} (B_i, B_j) \\mbox{ are neighbours.}\\\\\nw_{ij} &= 0 \\hspace{2mm} \\mbox{ otherwise.}\n\\end{aligned}\n\\]\n\n\n\nDependencies structures are described through this spatial weights matrix\nBinary matrices are used for their simplicity"
+  },
+  {
+    "objectID": "slides/slides_2.html#informal-definition-of-a-gmrf",
+    "href": "slides/slides_2.html#informal-definition-of-a-gmrf",
+    "title": "Lecture 2",
+    "section": "(Informal) definition of a GMRF",
+    "text": "(Informal) definition of a GMRF\nGauss Markov random field (GMRF) is\n\n\na Gaussian distribution where the non-zero elements of the precision matrix are defined by a neighbourhood matrix (or graph structure)\neach region conditionally has a Gaussian distribution with\nmean equal to the average of the neighbours and\nprecision proportional to the number of neighbours\n\n\nGMRFs are key to the INLA approach – and inlabru:\n\n\ncomputationally efficient\nother data structures can be approximated by a GMRF in a clever way"
+  },
+  {
+    "objectID": "slides/slides_2.html#modelling-spatial-similarity",
+    "href": "slides/slides_2.html#modelling-spatial-similarity",
+    "title": "Lecture 2",
+    "section": "Modelling spatial similarity",
+    "text": "Modelling spatial similarity\n\n\n\nAn example of a GMRF is the the Besag model a.k.a. Intrinsic Conditional Autoregressive (ICAR) model. The conditional distribution for \\(u_i\\) is\n\\[\nu_i|\\mathbf{u}_{-i} \\sim N\\left(\\frac{1}{d_i}\\sum_{j\\sim i}u_j,\\frac{1}{d_i\\tau_u}\\right)\n\\]\n\n\\(\\mathbf{u}_{-i} = (u_i,\\ldots,u_{i-1},u_{i+1},\\ldots,u_n)^T\\)\n\\(\\tau_u\\) is the precision parameter (inverse variance).\n\\(d_i\\) is the number of neighbours\nThe mean of \\(u_i\\) is equivalent to the the mean of the effects over all neighbours, and the precision is proportional to the number of neighbours."
+  },
+  {
+    "objectID": "slides/slides_2.html#modelling-spatial-similarity-1",
+    "href": "slides/slides_2.html#modelling-spatial-similarity-1",
+    "title": "Lecture 2",
+    "section": "Modelling spatial similarity",
+    "text": "Modelling spatial similarity\n\n\n\nThe joint distribution is given by:\n\\[\n\\mathbf{u}|\\tau_u \\sim N\\left(0,\\frac{1}{\\tau_u}Q^{-1}\\right),\n\\]\nWhere \\(Q\\) denotes the precision matrix defined as\n\\[\nQ_{i,j} = \\begin{cases}\nd_i, & i = j \\\\\n-1, & i \\sim j \\\\\n0, &\\text{otherwise}\n\\end{cases}\n\\]\nThis structure matrix directly defines the neighbourhood structure and is sparse."
+  },
+  {
+    "objectID": "slides/slides_2.html#modelling-spatial-similarity-2",
+    "href": "slides/slides_2.html#modelling-spatial-similarity-2",
+    "title": "Lecture 2",
+    "section": "Modelling spatial similarity",
+    "text": "Modelling spatial similarity\n\n\n\nThe ICAR model accounts only for spatially structured variability and does not include a limiting case where no spatial structure is present.\n\n\nWe typically add an unstructured random effect \\(z_i|\\tau_v \\sim N(0,\\tau_{z}^{-1})\\)\nThe resulting model \\(v_i = u_i + z_i\\) is known as the Besag-York-Mollié model (BYM)\nThe structured spatial effect is controlled by \\(\\tau_u\\) which control the degree of smoothing:\n\nHigher \\(\\tau_u\\) values lead to stronger smoothing (less spatial variability).\nLower \\(\\tau_u\\) values allow for greater local variation.\n\nIn the next example we will illustrate how to fit this model using inlabru."
+  },
+  {
+    "objectID": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow",
+    "href": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow",
+    "title": "Lecture 2",
+    "section": "Example: Respiratory hospitalisation in Glasgow",
+    "text": "Example: Respiratory hospitalisation in Glasgow\n\nIn this example we model the number of respiratory hospitalisations across Intermediate Zones (IZ) that make up the Greater Glasgow and Clyde health board in Scotland.\n\n\n\n\nIn epidemiology, disease risk is assessed using Standardized Mortality Ratios (SMR):\n\\[ SMR_i = \\dfrac{Y_i}{E_i} \\]\n\nA value \\(SMR &gt; 1\\) indicates a high risk area.\nA value \\(SMR&lt;1\\) suggests a low risk area."
+  },
+  {
+    "objectID": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow-1",
+    "href": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow-1",
+    "title": "Lecture 2",
+    "section": "Example: Respiratory hospitalisation in Glasgow",
+    "text": "Example: Respiratory hospitalisation in Glasgow\n\n\n\nStage 1: We assume the responses are Poisson distributed: \\[          \n\\begin{aligned}y_i|\\eta_i & \\sim \\text{Poisson}(E_i\\lambda_i)\\\\\\text{log}(\\lambda_i) = \\color{#FF6B6B}{\\boxed{\\eta_i}} & = \\color{#FF6B6B}{\\boxed{\\beta_0 + \\beta_1 \\mathrm{pm10} + u_i + z_i} }\\end{aligned}\n\\]\n\n\n\n\n\n\nStage 2: \\(\\eta_i\\) is a linear function of four components: an intercept, pm10 effect , a spatially structured effect \\(u\\) and an unstructured iid random effect \\(z\\):\n\\[\n\\eta_i = \\beta_0 + u_i + z_i\n\\]\n\n\n\n\n\n\nStage 3: \\(\\{\\tau_{z},\\tau_u\\}\\): Precision parameters for the random effects\n\n\n\nThe latent field is \\(\\mathbf{x}= (\\beta_0, \\beta_1, u_1, u_2,\\ldots, u_n,z_1,...)\\), the hyperparameters are \\(\\boldsymbol{\\theta} = (\\tau_u,\\tau_z)\\), and must be given a prior."
+  },
+  {
+    "objectID": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow-2",
+    "href": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow-2",
+    "title": "Lecture 2",
+    "section": "Example: Respiratory hospitalisation in Glasgow",
+    "text": "Example: Respiratory hospitalisation in Glasgow\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_t & \\sim \\text{Poisson}(E_i\\lambda_i)\\\\\n\\text{log}(\\lambda_i) = \\eta_i & = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{\\beta_1 \\mathrm{pm10}}} + \\color{#FF6B6B}{\\boxed{u_i}} + \\color{#FF6B6B}{\\boxed{z_i}}\n\\end{aligned}\n\\]\nThe code\n\n# define model component\ncmp = ~ Intercept(1) +  pm10(pm10, model = \"linear\") +\n  space(space, model = \"besag\", graph = Q) + \n  iid(space, model = \"iid\") \n\n# define model predictor\neta =  observed ~ Intercept + space + iid\n\n# build the observation model\nlik = bru_obs(formula = formula, \n              family = \"poisson\",\n              E = expected,\n              data = resp_cases)\n\n# fit the model\nfit = bru(cmp, lik)\n\n\nneighbourhood structure\n\nlibrary(spdep)\nW.nb &lt;- poly2nb(GGHB.IZ,queen = TRUE)"
+  },
+  {
+    "objectID": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow-3",
+    "href": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow-3",
+    "title": "Lecture 2",
+    "section": "Example: Respiratory hospitalisation in Glasgow",
+    "text": "Example: Respiratory hospitalisation in Glasgow\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_t & \\sim \\text{Poisson}(E_i\\lambda_i)\\\\\n\\text{log}(\\lambda_i) =  \\color{#FF6B6B}{\\boxed{\\eta_i}} & = \\color{#FF6B6B}{\\boxed{\\beta_0 + \\beta_1 \\mathrm{pm10} + u_i + z_i}}\n\\end{aligned}\n\\]\nThe code\n\n# define model component\ncmp = ~ Intercept(1) + pm10(pm10, model = \"linear\") \n  space(space, model = \"besag\", graph = Q) + \n  iid(space, model = \"iid\") \n\n# define model predictor\neta =  observed ~ Intercept + space + iid\n\n# build the observation model\nlik = bru_obs(formula = formula, \n              family = \"poisson\",\n              E = expected,\n              data = resp_cases)\n\n# fit the model\nfit = bru(cmp, lik)\n\n\nneighbourhood structure\n\nlibrary(spdep)\nW.nb &lt;- poly2nb(GGHB.IZ,queen = TRUE)"
+  },
+  {
+    "objectID": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow-4",
+    "href": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow-4",
+    "title": "Lecture 2",
+    "section": "Example: Respiratory hospitalisation in Glasgow",
+    "text": "Example: Respiratory hospitalisation in Glasgow\n\n\nThe Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y_i|\\eta_t}} & \\sim \\color{#FF6B6B}{\\boxed{\\text{Poisson}(E_i\\lambda_i)}}\\\\\n\\text{log}(\\lambda_i) =  \\eta_i & = \\beta_0 + \\beta_1 \\mathrm{pm10} + u_i + z_i\n\\end{aligned}\n\\]\nThe code\n\n# define model component\ncmp = ~ Intercept(1) + pm10(pm10, model = \"linear\")\n  space(space, model = \"besag\", graph = Q) + \n  iid(space, model = \"iid\") \n\n# define model predictor\neta =  observed ~ Intercept + space + iid\n\n# build the observation model\nlik = bru_obs(formula = formula, \n              family = \"poisson\",\n              E = expected,\n              data = resp_cases)\n\n# fit the model\nfit = bru(cmp, lik)\n\n\nneighbourhood structure\n\nlibrary(spdep)\nW.nb &lt;- poly2nb(GGHB.IZ,queen = TRUE)"
+  },
+  {
+    "objectID": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow-5",
+    "href": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow-5",
+    "title": "Lecture 2",
+    "section": "Example: Respiratory hospitalisation in Glasgow",
+    "text": "Example: Respiratory hospitalisation in Glasgow\n\n\nThe Model\n\\[\n\\begin{aligned}\ny_i|\\eta_t & \\sim \\text{Poisson}(E_i\\lambda_i)\\\\\n\\text{log}(\\lambda_i) =  \\eta_i & = \\beta_0 + \\beta_1 \\mathrm{pm10} + u_i + z_i\n\\end{aligned}\n\\]\nThe code\n\n# define model component\ncmp = ~ Intercept(1) + pm10(pm10, model = \"linear\")\n  space(space, model = \"besag\", graph = Q) + \n  iid(space, model = \"iid\") \n\n# define model predictor\neta =  observed ~ Intercept + space + iid\n\n# build the observation model\nlik = bru_obs(formula = formula, \n              family = \"poisson\",\n              E = expected,\n              data = resp_cases)\n\n# fit the model\nfit = bru(cmp, lik)\n\n\nneighbourhood structure\n\nlibrary(spdep)\nW.nb &lt;- poly2nb(GGHB.IZ,queen = TRUE)"
+  },
+  {
+    "objectID": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow-6",
+    "href": "slides/slides_2.html#example-respiratory-hospitalisation-in-glasgow-6",
+    "title": "Lecture 2",
+    "section": "Example: Respiratory hospitalisation in Glasgow",
+    "text": "Example: Respiratory hospitalisation in Glasgow\n\n\n\n\n\nPosterior summaries\n\n\n\n\n\n\n\n\n\nmean\n0.025quant\n0.975quant\n\n\n\n\nIntercept\n−1.52\n−1.91\n−1.12\n\n\npm10\n0.09\n0.07\n0.12\n\n\nPrecision for space\n2.82\n2.28\n3.45\n\n\nPrecision for iid\n21,825.05\n1,421.20\n85,671.61\n\n\n\n\n\n\n\n\nEstimated relative risks"
+  },
+  {
+    "objectID": "slides/slides_2.html#geostatistical-data",
+    "href": "slides/slides_2.html#geostatistical-data",
+    "title": "Lecture 2",
+    "section": "Geostatistical Data",
+    "text": "Geostatistical Data\n\nMeasurements of an a spatial continuous variable of interest at a set of fixed locations.\nThis could be data from samples taken in locations across a region of interest (e.g., water depth in a lake) or from monitoring stations as part of a network (e.g., air pollution).\nIn each of these cases, our goal is to estimate the value of our variable across the entire space and/or to model the relationship with covariates."
+  },
+  {
+    "objectID": "slides/slides_2.html#understanding-our-region",
+    "href": "slides/slides_2.html#understanding-our-region",
+    "title": "Lecture 2",
+    "section": "Understanding our region",
+    "text": "Understanding our region\n\nLet \\(D\\) be our two-dimensional region of interest.\nIn principle, there are infinitely many locations within \\(D\\), each of which can be represented by mathematical coordinates (e.g. latitude and longitude).\nWe can identify any individual location as \\(\\mathbf{s}_i = (x_i, y_i)\\), where \\(x_i\\) and \\(y_i\\) are their coordinates.\nWe can treat our variable of interest as a random variable, \\(Z\\) which can be observed at any location as \\(Z(\\mathbf{s}_i)\\)."
+  },
+  {
+    "objectID": "slides/slides_2.html#geostatistical-process",
+    "href": "slides/slides_2.html#geostatistical-process",
+    "title": "Lecture 2",
+    "section": "Geostatistical process",
+    "text": "Geostatistical process\n\nA geostatistical process can therefore be written as: \\[\\{Z(\\mathbf{s}); \\mathbf{s} \\in D\\}\\]\nIn practice, data are observed at a finite number of locations, \\(m\\), and can be denoted as: \\[z = \\{z(\\mathbf{s}_1), \\ldots z(\\mathbf{s}_m) \\}\\]\nWe have observed our data at \\(m\\) locations, but often want to predict this process at a set of unknown locations.\nFor example, what is the value of \\(z(\\mathbf{s}_0)\\), where \\(\\mathbf{s}_0\\) is an unobserved site?"
+  },
+  {
+    "objectID": "slides/slides_2.html#gaussian-random-fields",
+    "href": "slides/slides_2.html#gaussian-random-fields",
+    "title": "Lecture 2",
+    "section": "Gaussian Random Fields",
+    "text": "Gaussian Random Fields\nIf we have a process that is occurring everywhere in space, it is natural to try to model it using some sort of function.\n\nIf \\(z\\) is a vector of observations of \\(z(\\mathbf{s})\\) at different locations, we want this to be normally distributed:\n\n\\[\n\\mathbf{z} = (z(\\mathbf{s}_1),\\ldots,z(\\mathbf{s}_m)) \\sim \\mathcal{N}(0,\\Sigma),\n\\] where \\(\\Sigma_{ij} = \\mathrm{Cov}(z(\\mathbf{s}_i),z(\\mathbf{s}_j))\\) is a dense \\(m \\times m\\) matrix."
+  },
+  {
+    "objectID": "slides/slides_2.html#gaussian-random-fields-1",
+    "href": "slides/slides_2.html#gaussian-random-fields-1",
+    "title": "Lecture 2",
+    "section": "Gaussian Random Fields",
+    "text": "Gaussian Random Fields\n\nA Gaussian random field (GRF) is a collection of random variables, where observations occur in a continuous domain, and where every finite collection of random variables has a multivariate normal distribution\n\n\n\n\nStationary random fields\n\n\nA GRF is stationary if:\n\nhas mean zero.\nthe covariance between two points depends only on the distance and direction between those points.\n\nIt is isotropic if the covariance only depends on the distance between the points."
+  },
+  {
+    "objectID": "slides/slides_2.html#the-spde-approach",
+    "href": "slides/slides_2.html#the-spde-approach",
+    "title": "Lecture 2",
+    "section": "The SPDE approach",
+    "text": "The SPDE approach\nThe goal: approximate the GRF using a triangulated mesh via the so-called SPDE approach.\nThe SPDE approach represents the continuous spatial process as a continuously indexed Gaussian Markov Random Field (GMRF)\n\nWe construct an appropriate lower-resolution approximation of the surface by sampling it in a set of well designed points and constructing a piece-wise linear interpolant."
+  },
+  {
+    "objectID": "slides/slides_2.html#the-spde-approach-1",
+    "href": "slides/slides_2.html#the-spde-approach-1",
+    "title": "Lecture 2",
+    "section": "The SPDE approach",
+    "text": "The SPDE approach\n\nA GF with Matérn covariance \\(c_{\\nu}(d;\\sigma,\\rho)\\) is a solution to a particular PDE.\n\n\\[\nc_{\\nu}(d;\\sigma,\\rho) = \\sigma^2\\frac{2^{1-\\nu}}{\\Gamma(\\nu)}\\left(\\sqrt{8\\nu}\\frac{d}{\\rho}\\right)^{\\nu}K_{\\nu}\\left(\\sqrt{8\\nu}\\frac{d}{\\rho}\\right)\n\\]\n\nThis solution is then approximated using a finite combination of piece-wise linear basis functions defined on a triangulation .\nThe solution is completely defined by a Gaussian vector of weights (defined on the triangulation vertices) with zero mean and a sparse precision matrix.\nHow do we choose sensible priors for \\(\\sigma,\\rho\\)?"
+  },
+  {
+    "objectID": "slides/slides_2.html#penalized-complexity-pc-priors",
+    "href": "slides/slides_2.html#penalized-complexity-pc-priors",
+    "title": "Lecture 2",
+    "section": "Penalized Complexity (PC) priors",
+    "text": "Penalized Complexity (PC) priors\nPenalized Complexity (PC) priors proposed by Simpson et al. (2017) allow us to control the amount of spatial smoothing and avoid overfitting.\n\nPC priors shrink the model towards a simpler baseline unless the data provide strong evidence for a more complex structure.\nTo define the prior for the marginal precision \\(\\sigma^{-2}\\) and the range parameter \\(\\rho\\), we use the probability statements:\n\nDefine the prior for the range \\(\\text{Prob}(\\rho&lt;\\rho_0) = p_{\\rho}\\)\nDefine the prior for the range \\(\\text{Prob}(\\sigma&gt;\\sigma_0) = p_{\\sigma}\\)"
+  },
+  {
+    "objectID": "slides/slides_2.html#learning-about-the-spde-approach",
+    "href": "slides/slides_2.html#learning-about-the-spde-approach",
+    "title": "Lecture 2",
+    "section": "Learning about the SPDE approach",
+    "text": "Learning about the SPDE approach\n\n\n\n\nF. Lindgren, H. Rue, and J. Lindström. An explicit link between Gaussian fields and Gaussian Markov random fields: The SPDE approach (with discussion). In: Journal of the Royal Statistical Society, Series B 73.4 (2011), pp. 423–498.\nH. Bakka, H. Rue, G. A. Fuglstad, A. Riebler, D. Bolin, J. Illian, E. Krainski, D. Simpson, and F. Lindgren. Spatial modelling with R-INLA: A review. In: WIREs Computational Statistics 10:e1443.6 (2018). (Invited extended review). DOI: 10.1002/wics.1443.\nE. T. Krainski, V. Gómez-Rubio, H. Bakka, A. Lenzi, D. Castro-Camilio, D. Simpson, F. Lindgren, and H. Rue. Advanced Spatial Modeling with Stochastic Partial Differential Equations using R and INLA. Github version . CRC press, Dec. 20"
+  },
+  {
+    "objectID": "slides/slides_2.html#spde-models",
+    "href": "slides/slides_2.html#spde-models",
+    "title": "Lecture 2",
+    "section": "SPDE models",
+    "text": "SPDE models\n\n\n\nWe call spatial Markov models defined on a mesh SPDE models.\nSPDE models have 3 parts\n\nA mesh\nA range parameter \\(\\kappa\\)\nA precision parameter \\(\\tau\\)\n\nLets see how this is done in practice!"
+  },
+  {
+    "objectID": "slides/slides_2.html#example-species-distribution-model",
+    "href": "slides/slides_2.html#example-species-distribution-model",
+    "title": "Lecture 2",
+    "section": "Example: Species Distribution Model",
+    "text": "Example: Species Distribution Model\nIn the next example, we will explore data on the Pacific Cod (Gadus macrocephalus) from a trawl survey in Queen Charlotte Sound. The\n\nThe dataset contains presence/absence data in 2003 as well as depth covariate infromation."
+  },
+  {
+    "objectID": "slides/slides_2.html#example-species-distribution-model-1",
+    "href": "slides/slides_2.html#example-species-distribution-model-1",
+    "title": "Lecture 2",
+    "section": "Example: Species Distribution Model",
+    "text": "Example: Species Distribution Model\n\nStage 1 Model for the response \\[\ny(s)|\\eta(s)\\sim\\text{Binom}(1, p(s))\n\\]\nStage 2 Latent field model \\[\n\\eta(s) = \\text{logit}(p(s)) = \\beta_0 + f( x(s)) + \\omega(s)\n\\]\nStage 3 Hyperparameters"
+  },
+  {
+    "objectID": "slides/slides_2.html#bayesian-geostatistics",
+    "href": "slides/slides_2.html#bayesian-geostatistics",
+    "title": "Lecture 2",
+    "section": "Bayesian Geostatistics",
+    "text": "Bayesian Geostatistics\n\nStage 1 Model for the response \\[\ny(s)|\\eta(s)\\sim\\text{Binom}(1, p(s))\n\\]\nStage 2 Latent field model \\[\n\\eta(s) = \\text{logit}(p(s)) = \\beta_0 + f( x(s)) + \\omega(s)\n\\]\n\nA global intercept \\(\\beta_0\\)\nA smooth effect of covariate \\(x(s)\\) (depth)\nA Gaussian field \\(\\omega(s)\\) (will discuss this later..)\n\nStage 3 Hyperparameters"
+  },
+  {
+    "objectID": "slides/slides_2.html#example-species-distribution-model-2",
+    "href": "slides/slides_2.html#example-species-distribution-model-2",
+    "title": "Lecture 2",
+    "section": "Example: Species Distribution Model",
+    "text": "Example: Species Distribution Model\n\nStage 1 Model for the response \\[\ny(s)|\\eta(s)\\sim\\text{Binom}(1, p(s))\n\\]\nStage 2 Latent field model \\[\n\\eta(s) = \\text{logit}(p(s)) = \\beta_0 + \\beta_1 x(s) + \\omega(s)\n\\]\nStage 3 Hyperparameters\n\nPrecision for the smooth function \\(f(\\cdot)\\)\nRange and sd in the Gaussian field \\(\\sigma_{\\omega}, \\tau_{\\omega}\\)"
+  },
+  {
+    "objectID": "slides/slides_2.html#step-1-define-the-spde-representation-the-mesh",
+    "href": "slides/slides_2.html#step-1-define-the-spde-representation-the-mesh",
+    "title": "Lecture 2",
+    "section": "Step 1: Define the SPDE representation: The mesh",
+    "text": "Step 1: Define the SPDE representation: The mesh\nFirst, we need to create the mesh used to approximate the random field.\n\n\nmax.edge for maximum triangle edge lengths\noffset for inner and outer extensions (to prevent edge effects)\ncutoff to avoid overly small triangles in clustered areas"
+  },
+  {
+    "objectID": "slides/slides_2.html#step-1-define-the-spde-representation-the-mesh-1",
+    "href": "slides/slides_2.html#step-1-define-the-spde-representation-the-mesh-1",
+    "title": "Lecture 2",
+    "section": "Step 1: Define the SPDE representation: The mesh",
+    "text": "Step 1: Define the SPDE representation: The mesh\n\n\nAll random field models need to be discretised for practical calculations.\nThe SPDE models were developed to provide a consistent model definition across a range of discretisations.\nWe use finite element methods with local, piecewise linear basis functions defined on a triangulation of a region of space containing the domain of interest.\nDeviation from stationarity is generated near the boundary of the region.\nThe choice of region and choice of triangulation affects the numerical accuracy."
+  },
+  {
+    "objectID": "slides/slides_2.html#step-1-define-the-spde-representation-the-mesh-2",
+    "href": "slides/slides_2.html#step-1-define-the-spde-representation-the-mesh-2",
+    "title": "Lecture 2",
+    "section": "Step 1: Define the SPDE representation: The mesh",
+    "text": "Step 1: Define the SPDE representation: The mesh\n\nIf the mesh is too fine \\(\\rightarrow\\) heavy computation\nIf the mesh is to coarse \\(\\rightarrow\\) not accurate enough"
+  },
+  {
+    "objectID": "slides/slides_2.html#step-1-define-the-spde-representation-the-mesh-3",
+    "href": "slides/slides_2.html#step-1-define-the-spde-representation-the-mesh-3",
+    "title": "Lecture 2",
+    "section": "Step 1: Define the SPDE representation: The mesh",
+    "text": "Step 1: Define the SPDE representation: The mesh\nSome guidelines\n\nCreate triangulation meshes with fm_mesh_2d():\nedge length should be around a third to a tenth of the spatial range\nMove undesired boundary effects away from the domain of interest by extending to a smooth external boundary:\nUse a coarser resolution in the extension to reduce computational cost (max.edge=c(inner, outer)), i.e., add extra, larger triangles around the border"
+  },
+  {
+    "objectID": "slides/slides_2.html#step-1-define-the-spde-representation-the-mesh-4",
+    "href": "slides/slides_2.html#step-1-define-the-spde-representation-the-mesh-4",
+    "title": "Lecture 2",
+    "section": "Step 1: Define the SPDE representation: The mesh",
+    "text": "Step 1: Define the SPDE representation: The mesh\n\nUse a fine resolution (subject to available computational resources) for the domain of interest (inner correlation range) and avoid small edges ,i.e., filter out small input point clusters (0 \\(&lt;\\) `cutoff \\(&lt;\\) inner)\nCoastlines and similar can be added to the domain specification in fm_mesh_2d() through the boundary argument.\nsimplify the border"
+  },
+  {
+    "objectID": "slides/slides_2.html#step-1-define-the-spde-representation-the-spde",
+    "href": "slides/slides_2.html#step-1-define-the-spde-representation-the-spde",
+    "title": "Lecture 2",
+    "section": "Step 1: Define the SPDE representation: The SPDE",
+    "text": "Step 1: Define the SPDE representation: The SPDE\nWe use the inla.spde2.pcmatern to define the SPDE model using PC priors through the following probability statements\n\n\\(P(\\rho &lt; 100) = 0.5\\)\n\\(P(\\sigma &gt; 1) = 0.5\\)"
+  },
+  {
+    "objectID": "slides/slides_2.html#step-2-define-the-model-components",
+    "href": "slides/slides_2.html#step-2-define-the-model-components",
+    "title": "Lecture 2",
+    "section": "Step 2: Define the model components",
+    "text": "Step 2: Define the model components\n\n\nThe Model\n\\[\\begin{aligned}\ny(s)|\\eta(s) & \\sim\\text{Binom}(1, p(s))\\\\\n\\eta(s) &  = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{ f(x(s))}} + \\color{#FF6B6B}{\\boxed{ \\omega(s)}}\\\\\n\n\\end{aligned}\\]\n\n\npcod_sf %&gt;% select(depth, present) %&gt;% print(n = 3)\n\nSimple feature collection with 232 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 343.0617 ymin: 5639.857 xmax: 576.9152 ymax: 5837.211\nProjected CRS: +proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\n# A tibble: 232 × 3\n  depth present            geometry\n  &lt;dbl&gt;   &lt;dbl&gt;        &lt;POINT [km]&gt;\n1   201       1 (446.4752 5793.426)\n2   212       1 (446.4594 5800.136)\n3   220       0 (448.5987 5801.687)\n# ℹ 229 more rows\n\n\n\nThe code\n\n# define model component\ncmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + \n  space(geometry, model = spde_model)\n\n# define model predictor\neta = present ~ Intercept + depth_smooth + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              data = pcod_sf,\n              family = \"binomial\")\n\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_2.html#step-3-define-the-linear-predictor",
+    "href": "slides/slides_2.html#step-3-define-the-linear-predictor",
+    "title": "Lecture 2",
+    "section": "Step 3: Define the linear predictor",
+    "text": "Step 3: Define the linear predictor\n\n\nThe Model\n\\[\\begin{aligned}\ny(s)|\\eta(s) & \\sim\\text{Binom}(1, p(s))\\\\\n\\color{#FF6B6B}{\\boxed{\\eta(s)}} &  = \\color{#FF6B6B}{\\boxed{\\beta_0 +  f(x(s)) +  \\omega(s)}}\\\\\n\n\\end{aligned}\\]\n\n\npcod_sf %&gt;% select(depth, present) %&gt;% print(n = 3)\n\nSimple feature collection with 232 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 343.0617 ymin: 5639.857 xmax: 576.9152 ymax: 5837.211\nProjected CRS: +proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\n# A tibble: 232 × 3\n  depth present            geometry\n  &lt;dbl&gt;   &lt;dbl&gt;        &lt;POINT [km]&gt;\n1   201       1 (446.4752 5793.426)\n2   212       1 (446.4594 5800.136)\n3   220       0 (448.5987 5801.687)\n# ℹ 229 more rows\n\n\n\nThe code\n\n# define model component\ncmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + \n  space(geometry, model = spde_model)\n\n# define model predictor\neta = present ~ Intercept + depth_smooth + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              data = pcod_sf,\n              family = \"binomial\")\n\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_2.html#step-4-define-the-observational-model",
+    "href": "slides/slides_2.html#step-4-define-the-observational-model",
+    "title": "Lecture 2",
+    "section": "Step 4: Define the observational model",
+    "text": "Step 4: Define the observational model\n\n\nThe Model\n\\[\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{y(s)|\\eta(s)}} & \\sim \\color{#FF6B6B}{\\boxed{\\text{Binom}(1, p(s))}}\\\\\n\\eta(s) &  = \\beta_0 +  f(x(s)) +  \\omega(s)\\\\\n\n\\end{aligned}\\]\n\n\npcod_sf %&gt;% select(depth, present) %&gt;% print(n = 3)\n\nSimple feature collection with 232 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 343.0617 ymin: 5639.857 xmax: 576.9152 ymax: 5837.211\nProjected CRS: +proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km\n# A tibble: 232 × 3\n  depth present            geometry\n  &lt;dbl&gt;   &lt;dbl&gt;        &lt;POINT [km]&gt;\n1   201       1 (446.4752 5793.426)\n2   212       1 (446.4594 5800.136)\n3   220       0 (448.5987 5801.687)\n# ℹ 229 more rows\n\n\n\nThe code\n\n# define model component\ncmp = ~ -1 + Intercept(1) +  depth_smooth(log(depth), model='rw2') + \n  space(geometry, model = spde_model)\n\n# define model predictor\neta = present ~ Intercept + depth_smooth + space\n\n# build the observation model\nlik = bru_obs(formula = eta,\n              data = pcod_sf,\n              family = \"binomial\")\n\n# fit the model\nfit = bru(cmp, lik)"
+  },
+  {
+    "objectID": "slides/slides_2.html#model-results",
+    "href": "slides/slides_2.html#model-results",
+    "title": "Lecture 2",
+    "section": "Model Results",
+    "text": "Model Results"
+  },
+  {
+    "objectID": "slides/slides_2.html#point-process-data",
+    "href": "slides/slides_2.html#point-process-data",
+    "title": "Lecture 2",
+    "section": "Point process data",
+    "text": "Point process data\n\n\n\nMany of the ecological and environmental processes of interest can be represented by a spatial point process or can be viewed as an aggregation of one.\n\n\nMany contemporary data sources collect georeferenced information about the location where an event has occur (e.g., species occurrence, wildfire, flood events).\nThis point-based information provides valuable insights into ecosystem dynamics."
+  },
+  {
+    "objectID": "slides/slides_2.html#defining-a-point-process",
+    "href": "slides/slides_2.html#defining-a-point-process",
+    "title": "Lecture 2",
+    "section": "Defining a Point Process",
+    "text": "Defining a Point Process\n\nConsider a fixed geographical region \\(A\\).\nThe set of locations at which events occur are denoted by \\(\\mathbf{s} = (\\mathbf{s}_1, \\ldots, \\mathbf{s}_n)\\).\nWe let \\(N(A)\\) be a random variable which represents the total number of events in every subset of region \\(A\\).\nOur primary interest is in measuring where events occur, so the locations are our data."
+  },
+  {
+    "objectID": "slides/slides_2.html#homogeneous-poisson-process",
+    "href": "slides/slides_2.html#homogeneous-poisson-process",
+    "title": "Lecture 2",
+    "section": "Homogeneous Poisson Process",
+    "text": "Homogeneous Poisson Process\n\n\n\n\nA simplestpoint process model is the homogeneous Poisson process (HPP).\nThe likelihood of a point pattern \\(\\mathbf{y} = \\left[ \\mathbf{s}_1, \\ldots, \\mathbf{s}_n \\right]^\\intercal\\) distributed as a HPP with intensity \\(\\lambda\\) and observation window \\(\\Omega\\) is\n\\[\np(\\mathbf{y} | \\lambda) \\propto \\lambda^n e^{ \\left( - |\\Omega| \\lambda \\right)} ,\n\\]\n\n\\(|\\Omega|\\) is the size of the observation window.\n\\(\\lambda\\) is the expected number of points per unit area.\n\\(|\\Omega|\\lambda\\) the total expected number of points in the observation window.\n\n\n\n\n\n\nA key property of a Poisson process is that the number of points within any subset\\(B\\) of region \\(A\\) is Poisson distributed with constant rate \\(|B|\\lambda\\)."
+  },
+  {
+    "objectID": "slides/slides_2.html#inhomogeneous-poisson-process",
+    "href": "slides/slides_2.html#inhomogeneous-poisson-process",
+    "title": "Lecture 2",
+    "section": "Inhomogeneous Poisson process",
+    "text": "Inhomogeneous Poisson process\nThe inhomogeneous Poisson process has a spatially varying intensity \\(\\lambda(\\mathbf{s})\\).\nThe likelihood in this case is\n\\[\np(\\mathbf{y} | \\lambda) \\propto \\exp \\left( -\\int_\\Omega \\lambda(\\mathbf{s}) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i).\n\\]\n\nIf the case of an HPP the integral in the likelihood can easily be computed as \\(\\int_\\Omega \\lambda(\\mathbf{s}) \\mathrm{d}\\mathbf{s} =|\\Omega|\\lambda\\)\nFor IPP, integral in the likelihood has to be approximated numerically as a weighted sum."
+  },
+  {
+    "objectID": "slides/slides_2.html#inhomogeneous-poisson-process-1",
+    "href": "slides/slides_2.html#inhomogeneous-poisson-process-1",
+    "title": "Lecture 2",
+    "section": "Inhomogeneous Poisson process",
+    "text": "Inhomogeneous Poisson process\nThis integral is approximated as \\(\\sum_{j=1}^J w_j \\lambda(\\mathbf{s}_j)\\)\n\n\\(w_j\\) are the integration weights\n\\(\\mathbf{s}_j\\) are the quadrature locations.\n\nThis serves two purposes:\n\nApproximating the integral\nre-writing the inhomogeneous Poisson process likelihood as a regular Poisson likelihood."
+  },
+  {
+    "objectID": "slides/slides_2.html#inhomogeneous-poisson-process-2",
+    "href": "slides/slides_2.html#inhomogeneous-poisson-process-2",
+    "title": "Lecture 2",
+    "section": "Inhomogeneous Poisson process",
+    "text": "Inhomogeneous Poisson process\nThe idea behind the trick to rewrite the approximate likelihood is to introduce a dummy vector \\(\\mathbf{z}\\) and an integration weights vector \\(\\mathbf{w}\\) of length \\(J + n\\)\n\n\n\\[\\mathbf{z} = \\left[\\underbrace{0_1, \\ldots,0_J}_\\text{quadrature locations}, \\underbrace{1_1, \\ldots ,1_n}_{\\text{data points}} \\right]^\\intercal\\]\n\n\\[\\mathbf{w} = \\left[ \\underbrace{w_1, \\ldots, w_J}_\\text{quadrature locations}, \\underbrace{0_1, \\ldots, 0_n}_\\text{data points} \\right]^\\intercal\\]\n\nThen the approximate likelihood can be written as\n\\[\n\\begin{aligned}\np(\\mathbf{z} | \\lambda) &\\propto \\prod_{i=1}^{J + n} \\eta_i^{z_i} \\exp\\left(-w_i \\eta_i \\right) \\\\\n\\eta_i &= \\log\\lambda(\\mathbf{s}_i) = \\mathbf{x}(s)'\\beta\n\\end{aligned}\n\\]\n\nThis is similar to a product of Poisson distributions with means \\(\\eta_i\\), exposures \\(w_i\\) and observations \\(z_i\\).\nThis is the basis for the implementation of Cox process models in inlabru, which can be specified using family = \"cp\"."
+  },
+  {
+    "objectID": "slides/slides_2.html#limitations-with-ipp",
+    "href": "slides/slides_2.html#limitations-with-ipp",
+    "title": "Lecture 2",
+    "section": "Limitations with IPP",
+    "text": "Limitations with IPP\n\n\n\n\n\nIPP models assume that data points are conditionally independent given the covariates, meaning that any spatial variation is fully explained by environmental and sampling factors.\nUnmeasured endogenous and exogenous factors can create spatial dependence.\nIgnoring them can lead to bias in our conclusions."
+  },
+  {
+    "objectID": "slides/slides_2.html#the-log-gaussian-cox-process",
+    "href": "slides/slides_2.html#the-log-gaussian-cox-process",
+    "title": "Lecture 2",
+    "section": "The Log-Gaussian Cox Process",
+    "text": "The Log-Gaussian Cox Process\n\n\n\n\nLog-Gaussian Cox processes (LGCP) extend the IPP by allowing the intensity function to vary spatially according to a structured spatial random effect, i.e. the intensity is random\n\n\\[\n\\log~\\lambda(s)= \\mathbf{x}(s)'\\beta + \\xi(s)\n\\]\n\nThe events are then assumed to be independent given the covariates and \\(\\xi(s)\\) - a GMRF with Matérn covariance.\ninlabru has implemented some integration schemes that are especially well suited to integrating the intensity in models with an SPDE effect.\n\n\n\nSee for further reference: Simpson, Daniel, Janine B. Illian, Finn Lindgren, Sigrunn H. Sørbye, and Håvard Rue. 2016. “Going off grid: computationally efficient inference for log-Gaussian Cox processes.” Biometrika 103 (1): 49–70."
+  },
+  {
+    "objectID": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha",
+    "href": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha",
+    "title": "Lecture 2",
+    "section": "Example: Forest fires in Castilla-La Mancha",
+    "text": "Example: Forest fires in Castilla-La Mancha\n\nIn this example we model the location of forest fires in the Castilla-La Mancha region of Spain between 1998 and 2007.\nWe are now going to use the elevation as a covariate to explain the variability of the intensity \\(\\lambda(s)\\) over the domain of interest and a spatially structured SPDE model.\n\n\\[\n\\log\\lambda(s) = \\beta_0 + \\beta_1 \\text{elevation}(s) + \\xi(s)\n\\]"
+  },
+  {
+    "objectID": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha-1",
+    "href": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha-1",
+    "title": "Lecture 2",
+    "section": "Example: Forest fires in Castilla-La Mancha",
+    "text": "Example: Forest fires in Castilla-La Mancha\n\n\nThe IPP Model \\[\n\\begin{aligned}\np(\\mathbf{y} | \\lambda)  & \\propto \\exp \\left( -\\int_\\Omega \\lambda(\\mathbf{s}) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n\\eta(s) &  = \\log ~\\lambda(s) = \\beta_0 +  x(s)\n\\end{aligned}\n\\] The code\n\n# define model component\ncmp = ~ Intercept(1) + elev(elev_raster, model = \"linear\") \n\n# define model predictor\neta  = geometry ~ Intercept +  elev \n\n# build the observation model\nlik = bru_obs(\"cp\",\n              formula = eta,\n              data = pp,\n              ips = ips)\n\n# fit the model\nfit = bru(cmp, lik)\n\n\n\nRegular Gridfm_int\n\n\n\nn.int = 1000\nips = st_sf(geometry = st_sample(region,\n            size = n.int,\n            type = \"regular\"))\n\nips$weight = st_area(region) / n.int\n\n\n\n\n\n\n\n\n\n\n\n\n\n# The mesh\nmesh = fm_mesh_2d(boundary = region,\n                  max.edge = c(5, 10),\n                  cutoff = 4, crs = NA)\n\n# build integration scheme\nips = fm_int(mesh,\n             samplers = region)"
+  },
+  {
+    "objectID": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha-2",
+    "href": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha-2",
+    "title": "Lecture 2",
+    "section": "Example: Forest fires in Castilla-La Mancha",
+    "text": "Example: Forest fires in Castilla-La Mancha\n\n\nThe LGCP Model\n\\[\n\\begin{aligned}\np(\\mathbf{y} | \\lambda)  & \\propto \\exp \\left( -\\int_\\Omega \\lambda(\\mathbf{s}) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n\\eta(s) &  = \\log(\\lambda(s)) = \\color{#FF6B6B}{\\boxed{\\beta_0}} + \\color{#FF6B6B}{\\boxed{ x(s)}} + \\color{#FF6B6B}{\\boxed{ \\omega(s)}}\\\\\n\\end{aligned}\n\\]\nThe code\n\n# define model component\ncmp = ~ Intercept(1) + elev(elev_raster, model = \"linear\") +\n  space(geometry, model = spde_model) \n\n\n# define model predictor\neta  = geometry ~ Intercept +  elev + space\n\n\n# build the observation model\nlik = bru_obs(\"cp\",\n              formula = eta,\n              data = pp,\n              ips = ips)\n\n\n# fit the model\nfit = bru(cmp, lik)\n\n\n\n# The mesh\nmesh = fm_mesh_2d(boundary = region,\n                  max.edge = c(5, 10),\n                  cutoff = 4, crs = NA)\n\n# The SPDE model\nspde_model =  inla.spde2.pcmatern(mesh,\n                                  prior.sigma = c(1, 0.5),\n                                  prior.range = c(100, 0.5))\n\n# build integration scheme\nips = fm_int(mesh,\n             samplers = region)"
+  },
+  {
+    "objectID": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha-3",
+    "href": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha-3",
+    "title": "Lecture 2",
+    "section": "Example: Forest fires in Castilla-La Mancha",
+    "text": "Example: Forest fires in Castilla-La Mancha\n\n\nThe LGCP Model\n\\[\n\\begin{aligned}\np(\\mathbf{y} | \\lambda)  & \\propto \\exp \\left( -\\int_\\Omega \\lambda(\\mathbf{s}) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n\\color{#FF6B6B}{\\boxed{\\eta(s)}} &  = \\log(\\lambda(s)) = \\color{#FF6B6B}{\\boxed{\\beta_0 +  x(s) + \\omega(s)}}\\\\\n\\end{aligned}\n\\]\nThe code\n\n# define model component\ncmp = ~ Intercept(1) + elev(elev_raster, model = \"linear\") +\n  space(geometry, model = spde_model) \n\n\n# define model predictor\neta  = geometry ~ Intercept +  elev + space\n\n\n# build the observation model\nlik = bru_obs(\"cp\",\n              formula = eta,\n              data = pp,\n              ips = ips)\n\n\n# fit the model\nfit = bru(cmp, lik)\n\n\n\n# The mesh\nmesh = fm_mesh_2d(boundary = region,\n                  max.edge = c(5, 10),\n                  cutoff = 4, crs = NA)\n\n# The SPDE model\nspde_model =  inla.spde2.pcmatern(mesh,\n                                  prior.sigma = c(1, 0.5),\n                                  prior.range = c(100, 0.5))\n\n# build integration scheme\nips = fm_int(mesh,\n             samplers = region)"
+  },
+  {
+    "objectID": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha-4",
+    "href": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha-4",
+    "title": "Lecture 2",
+    "section": "Example: Forest fires in Castilla-La Mancha",
+    "text": "Example: Forest fires in Castilla-La Mancha\n\n\nThe LGCP Model\n\\[\n\\begin{aligned}\n\\color{#FF6B6B}{\\boxed{p(\\mathbf{y} | \\lambda)}}  & \\propto \\exp \\left( -\\int_\\Omega \\lambda(\\mathbf{s}) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n\\eta(s) &  = \\log(\\lambda(s)) = \\beta_0 +  x(s) + \\omega(s)\\\\\n\\end{aligned}\n\\]\nThe code\n\n# define model component\ncmp = ~ Intercept(1) + elev(elev_raster, model = \"linear\") +\n  space(geometry, model = spde_model) \n\n\n# define model predictor\neta  = geometry ~ Intercept +  elev + space\n\n\n# build the observation model\nlik = bru_obs(\"cp\",\n              formula = eta,\n              data = pp,\n              ips = ips)\n\n\n# fit the model\nfit = bru(cmp, lik)\n\n\n\n# The mesh\nmesh = fm_mesh_2d(boundary = region,\n                  max.edge = c(5, 10),\n                  cutoff = 4, crs = NA)\n\n# The SPDE model\nspde_model =  inla.spde2.pcmatern(mesh,\n                                  prior.sigma = c(1, 0.5),\n                                  prior.range = c(100, 0.5))\n\n# build integration scheme\nips = fm_int(mesh,\n             samplers = region)"
+  },
+  {
+    "objectID": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha-5",
+    "href": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha-5",
+    "title": "Lecture 2",
+    "section": "Example: Forest fires in Castilla-La Mancha",
+    "text": "Example: Forest fires in Castilla-La Mancha\n\n\nThe LGCP Model\n\\[\n\\begin{aligned}\np(\\mathbf{y} | \\lambda)  & \\propto \\exp \\left( -\\int_\\Omega \\lambda(\\mathbf{s}) \\mathrm{d}\\mathbf{s} \\right) \\prod_{i=1}^n \\lambda(\\mathbf{s}_i) \\\\\n\\eta(s) &  = \\log(\\lambda(s)) = \\beta_0 +  x(s) + \\omega(s)\\\\\n\\end{aligned}\n\\]\nThe code\n\n# define model component\ncmp = ~ Intercept(1) + elev(elev_raster, model = \"linear\") +\n  space(geometry, model = spde_model) \n\n\n# define model predictor\neta  = geometry ~ Intercept +  elev + space\n\n\n# build the observation model\nlik = bru_obs(\"cp\",\n              formula = eta,\n              data = pp,\n              ips = ips)\n\n\n# fit the model\nfit = bru(cmp, lik)\n\n\n\n# The mesh\nmesh = fm_mesh_2d(boundary = region,\n                  max.edge = c(5, 10),\n                  cutoff = 4, crs = NA)\n\n# The SPDE model\nspde_model =  inla.spde2.pcmatern(mesh,\n                                  prior.sigma = c(1, 0.5),\n                                  prior.range = c(100, 0.5))\n\n# build integration scheme\nips = fm_int(mesh,\n             samplers = region)"
+  },
+  {
+    "objectID": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha-6",
+    "href": "slides/slides_2.html#example-forest-fires-in-castilla-la-mancha-6",
+    "title": "Lecture 2",
+    "section": "Example: Forest fires in Castilla-La Mancha",
+    "text": "Example: Forest fires in Castilla-La Mancha\nModel Predictions"
+  }
+]

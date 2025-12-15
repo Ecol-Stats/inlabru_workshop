@@ -198,7 +198,7 @@ Model components are used to reflect spatial dependence structures in discrete a
 
 # Areal Data
 
-## How do we model this? {auto-animate="true"}
+## How do we model this? {auto-animate=true}
 
 Imagine we have animal counts in each region. We can model them as Poisson
 
@@ -416,7 +416,7 @@ This structure matrix directly defines the neighbourhood structure and is sparse
 The ICAR model accounts only for spatially structured variability and does not include a limiting case where no spatial structure is present.
 
 ::: incremental
--   We typically add an unstructured random effect $z_i|\tau_v \sim N(0,\tau_{z}^{-1})$
+-   We typically add an unstructured random effect $z_i|\tau_z \sim N(0,\tau_{z}^{-1})$
 
 -   The resulting model $v_i = u_i + z_i$ is known as the Besag-York-Mollié model (BYM)
 
@@ -502,7 +502,7 @@ mapview(resp_cases,zcol = "SMR")
 
 > -   **Stage 3:** $\{\tau_{z},\tau_u\}$: Precision parameters for the random effects
 
-The latent field is $\mathbf{x}= (\beta_0, \beta_1, u_1, u_2,\ldots, u_n,z_1,...)$, the hyperparameters are $\boldsymbol{\theta} = (\tau_u,\tau_z)$, and must be given a prior.
+The latent field is $\mathbf{u}= (\beta_0, \beta_1, u_1, u_2,\ldots, u_n,z_1,...)$, the hyperparameters are $\boldsymbol{\theta} = (\tau_u,\tau_z)$, and must be given a prior.
 
 ## Example: Respiratory hospitalisation in Glasgow {.smaller auto-animate="true" background-color="#FFFFFF"}
 
@@ -532,10 +532,10 @@ cmp = ~ Intercept(1) +  pm10(pm10, model = "linear") +
   iid(space, model = "iid") 
 
 # define model predictor
-eta =  observed ~ Intercept + space + iid
+eta =  observed ~ Intercept + space + iid + pm10
 
 # build the observation model
-lik = bru_obs(formula = formula, 
+lik = bru_obs(formula = eta, 
               family = "poisson",
               E = expected,
               data = resp_cases)
@@ -597,10 +597,10 @@ cmp = ~ Intercept(1) + pm10(pm10, model = "linear")
   iid(space, model = "iid") 
 
 # define model predictor
-eta =  observed ~ Intercept + space + iid
+eta =  observed ~ Intercept + space + iid + pm10
 
 # build the observation model
-lik = bru_obs(formula = formula, 
+lik = bru_obs(formula = eta, 
               family = "poisson",
               E = expected,
               data = resp_cases)
@@ -662,10 +662,10 @@ cmp = ~ Intercept(1) + pm10(pm10, model = "linear")
   iid(space, model = "iid") 
 
 # define model predictor
-eta =  observed ~ Intercept + space + iid
+eta =  observed ~ Intercept + space + iid + pm10
 
 # build the observation model
-lik = bru_obs(formula = formula, 
+lik = bru_obs(formula = eta, 
               family = "poisson",
               E = expected,
               data = resp_cases)
@@ -727,10 +727,10 @@ cmp = ~ Intercept(1) + pm10(pm10, model = "linear")
   iid(space, model = "iid") 
 
 # define model predictor
-eta =  observed ~ Intercept + space + iid
+eta =  observed ~ Intercept + space + iid + pm10
 
 # build the observation model
-lik = bru_obs(formula = formula, 
+lik = bru_obs(formula = eta,  
               family = "poisson",
               E = expected,
               data = resp_cases)
@@ -823,7 +823,7 @@ ggplot() +
 pred$cases %>% ggplot() + geom_point(aes(observed, mean)) + 
   geom_errorbar(aes(observed, ymin = q0.025, ymax = q0.975)) +
   geom_abline(intercept = 0, slope = 1)+
-labs(y=expression(E[i]~exp(lambda[i]))) + plot_layout(ncol=1)
+labs(y=expression(E[i]~exp(lambda[i]))) + plot_layout(ncol=2)
 
 ```
 :::
@@ -1078,13 +1078,14 @@ ggplot() + gg(mesh) +
 
 -   simplify the border
 
-## Step 1: Define the SPDE representation: The SPDE
+## Step 1: Define the SPDE representation: The SPDE {.smaller}
 
 We use the `inla.spde2.pcmatern` to define the SPDE model using PC priors through the following probability statements
 
--   $P(\rho < 100) = 0.5$
 
--   $P(\sigma > 1) = 0.5$
+:::: {.columns}
+
+::: {.column width="40%"}
 
 ```{r}
 spde_model =  inla.spde2.pcmatern(mesh,
@@ -1092,7 +1093,22 @@ spde_model =  inla.spde2.pcmatern(mesh,
                                   prior.range = c(100, 0.5))
 ```
 
+:::
+
+::: {.column width="60%"}
+
+-   $P(\rho < 100) = 0.5$
+
+-   $P(\sigma > 1) = 0.5$
+
+:::
+
+::::
+
 ![](figures/priors.png){fig-align="center" width="425"}
+
+
+
 
 ## Step 2: Define the model components {.smaller auto-animate="true"}
 

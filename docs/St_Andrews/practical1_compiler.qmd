@@ -1,0 +1,56 @@
+---
+title: "Practical 1"
+format: 
+  html:
+    number-sections: true
+    mainfont: "12"
+  PrettyPDF-pdf:
+    keep-tex:  true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| purl: false
+#| results: hide
+
+library(webexercises)
+knitr::purl("practical1_compiler.qmd")
+```
+
+<font size="5"> **Aim of this practical:** </font>
+
+In this first practical we are going to look at some simple models
+
+1.  A Gaussian model with simulated data
+
+2.  A Linear mixed model
+
+3.  A GLM and GAM
+
+We are going to learn:
+
+-   How to fit some commonly used models with `inlabru`
+
+-   How to explore the results
+
+-   How to get predictions for missing data points
+
+{{< downloadthis practical1_compiler.R dname="session_1.R" label = "Download Practical 1 R script" icon="database-fill-down" type="success" >}}
+
+```{r child="practicals\\LM_ex.qmd"}
+```
+
+```{r child="practicals\\LMM_ex.qmd"}
+```
+
+```{r child="practicals\\GLM_ex.qmd"}
+```
+
+```{r child="practicals\\GAM_ex.qmd"}
+```

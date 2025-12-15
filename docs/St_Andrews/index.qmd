@@ -1,0 +1,57 @@
+---
+title: "INLA and Beyond: Practical Spatial Modelling with `inlabru` for Ecological Research"
+author: "Jafet Belmont, Sara Martino and Janine Illian"
+subtitle: "British Ecological Society Meeting 2025, Edinburgh"
+format: 
+  html: 
+    mainfont: "12"
+  PrettyPDF-pdf:
+    keep-tex:  true
+    number-sections: true
+---
+
+# Welcome to the course!
+
+-   Welcome to the `inlabru` workshop!
+-   The goal of this workshop is to introduce new users to the `inlabru` software for Bayesian spatial modelling using integrated nested Laplace approximation (INLA).
+
+::: callout-important
+## important⚠️
+
+Please use the instructions provided [here](Install_software.qmd) to install and check your installation *before* the course starts.
+:::
+
+# Learning Objectives for the workshop
+
+By the end of the workshop, participants will have an understanding of:
+
+-   The `inlabru` workflow and software principles.
+-   The motivation for and the challenges of analysing and modelling spatial data.
+-   Different types of statistical models used to analyse different spatial data structures.
+-   The implementation of these models in the `inlabru` package
+
+# Intended audience
+
+The workshop aims to cater for participants with a range of different backgrounds, who are interested in analysing data with modern spatial statistical modelling approaches using flexible and computationally efficient software.
+
+# Prerequisites
+
+Participants should be familiar with the R environment, and general statistical approaches to statistical modelling, such as regression, analysis of (co)variance, and generalized linear models.
+
+No knowledge of `R-INLA` or `inlabru` is required.
+
+# Schedule Program
+
+| Time | Topic |
+|:----------------------------------:|:----------------------------------:|
+| 13:00 - 14:00 | Workshop registration |
+| 14:00 - 14:45 | [**Session 1**](https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_1): Introduction to `inlabru` |
+| 14:45 - 15:30 | [Practical Session 1](practical1_compiler.qmd) |
+| 15:30 - 16:00 | Refreshment break |
+| 16:00 - 16:45 | [**Session 2**:](https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_2) Spatial Modelling with `inlabru` |
+| 16:45 - 17:45 | [Practical Session 2](practical2_compiler.qmd) |
+| 17:45 - 18:00 | [Wrap-up and outlook](https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_3) |
+
+: {.striped .hover}
+
+
