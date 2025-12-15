@@ -155,7 +155,7 @@ You could use the `snap` argument within `poly2nb` to set a distance at which th
 
 With this neighborhood matrix, we can then fit a conditional autoregressive (CAR) model. One of the most popular CAR approaches to model spatial correlation is the Besag model a.k.a. Intrinsic Conditional Autoregressive (ICAR) model.
 
-The conditional distribution for $u_i$ given $\mathbf{u}_{-i} = (u_i,\ldots,u_{i-1},u_{i+1},\ldots,u_n)^T$ is
+The conditional distribution for $u_i$ given $\mathbf{u}_{-i} = (u_1,\ldots,u_{i-1},u_{i+1},\ldots,u_n)^T$ is
 
 $$
 u_i|\mathbf{u}_{-i} \sim N\left(\frac{1}{d_i}\sum_{j\sim i}u_j,\frac{1}{d_i\tau_u}\right)
