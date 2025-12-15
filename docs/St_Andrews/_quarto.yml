@@ -12,7 +12,7 @@ project:
 website:
   title: "INLA and beyond"
   page-footer:
-    center: '<a href="https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/" style="color:#ccc;">Home</a>'
+    center: '<a href="https://ecol-stats.github.io/inlabru_workshop/St_Andrews/docs/" style="color:#ccc;">Home</a>'
   navbar:
     logo: INLA_logo.png
     right:
