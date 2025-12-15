@@ -190,20 +190,15 @@ In point pattern data we record the locations where events occur (e.g. trees in
 
 ## Types of spatial data
 
-**Discrete space:**
-- Data on a spatial grid (areal data)
+**Discrete space:** - Data on a spatial grid (areal data)
 
-**Continuous space:**
-- Geostatistical (geo-referenced) data
-- Spatial point pattern data
+**Continuous space:** - Geostatistical (geo-referenced) data - Spatial point pattern data
 
 Model components are used to reflect spatial dependence structures in discrete and continuous space.
 
-
 # Areal Data
 
-
-## How do we model this? {auto-animate=true}
+## How do we model this? {auto-animate="true"}
 
 Imagine we have animal counts in each region. We can model them as Poisson
 
@@ -235,7 +230,7 @@ $$ How do we model the linear predictor $\eta_i$?
 -   If there’s an area where the animal is rare, we’ll get lots of zero counts
 :::
 
-## How do we model this? {auto-animate=true}
+## How do we model this? {auto-animate="true"}
 
 Imagine we have animal counts in each region. We can model them as Poisson
 
@@ -354,19 +349,22 @@ $$
 :::::
 
 ## (Informal) definition of a GMRF
+
 Gauss Markov random field (GMRF) is
+
 ::: incremental
- - a Gaussian distribution where the non-zero
-elements of the precision matrix are defined by a neighbourhood matrix (or graph
-structure)
--  each region conditionally has a Gaussian distribution with 
-  - mean equal to the average of the neighbours and
-  - precision proportional to the number of neighbours
+-   a Gaussian distribution where the non-zero elements of the precision matrix are defined by a neighbourhood matrix (or graph structure)
+-   each region conditionally has a Gaussian distribution with
+-   mean equal to the average of the neighbours and
+-   precision proportional to the number of neighbours
+:::
 
 GMRFs are key to the INLA approach -- and inlabru:
+
 ::: incremental
- - computationally efficient
- - other data structures can be approximated by a GMRF in a clever way 
+-   computationally efficient
+-   other data structures can be approximated by a GMRF in a clever way
+:::
 
 ## Modelling spatial similarity {.smaller}
 
@@ -1054,9 +1052,9 @@ ggplot() + gg(mesh) +
 
 ## Step 1: Define the SPDE representation: The mesh {background-color="#FFFFFF"}
 
--  If the mesh is too fine $\rightarrow$ heavy computation
+-   If the mesh is too fine $\rightarrow$ heavy computation
 
--  If the mesh is to coarse $\rightarrow$ not accurate enough
+-   If the mesh is to coarse $\rightarrow$ not accurate enough
 
 ![](figures/3meshes.png){fig-align="center"}
 
@@ -1401,7 +1399,7 @@ $$
 ::: {style="height: 50px;"}
 :::
 
--   Log-Gaussian Cox processes (LGCP) extend the IPP by allowing the intensity function to vary spatially according to a structured spatial random effect, i.e.\ the intensity is random
+-   Log-Gaussian Cox processes (LGCP) extend the IPP by allowing the intensity function to vary spatially according to a structured spatial random effect, i.e. the intensity is random
 
 $$
 \log~\lambda(s)= \mathbf{x}(s)'\beta + \xi(s)

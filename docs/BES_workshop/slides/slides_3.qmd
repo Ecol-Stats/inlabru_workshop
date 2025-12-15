@@ -165,6 +165,8 @@ cmp = ~ Intercept(0) + space_beta(idx_region, weights = covariate, model = "besa
 
 -   Please take contact if you have questions/problems to discuss :grinning:
 
+-   We are offering longer courses (3-5 days) covering more specific topics (e.,g spatio-temporal models, distance sampling, occupancy modelling, joint modelling)
+
 ## Feedback
 
 We would be very glad if you could fill in this form and share your [feedback](https://uofg.qualtrics.com/jfe/form/SV_6nGrFQ3ploBp2dw) about the course.
