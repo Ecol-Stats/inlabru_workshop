@@ -1,7 +1,7 @@
 ---
 title: "Practical Spatial Modelling with `inlabru`"
 author: "Jafet Belmont, Sara Martino and Janine Illian"
-subtitle: "British Ecological Society Meeting 2025, Edinburgh"
+subtitle: "NCSE meeting 2025, St Andrews"
 format: 
   html: 
     mainfont: "12"
