@@ -45,13 +45,11 @@ No knowledge of `R-INLA` or `inlabru` is required.
 | Time | Topic |
 |:----------------------------------:|:----------------------------------:|
 | 13:00 - 14:00 | Workshop registration |
-| 14:00 - 14:45 | [**Session 1**](https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_1): Introduction to `inlabru` |
+| 14:00 - 14:45 | [**Session 1**](https://ecol-stats.github.io/inlabru_workshop/St_Andrews/docs/slides/slides_1): Introduction to `inlabru` |
 | 14:45 - 15:30 | [Practical Session 1](practical1_compiler.qmd) |
 | 15:30 - 16:00 | Refreshment break |
-| 16:00 - 16:45 | [**Session 2**:](https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_2) Spatial Modelling with `inlabru` |
+| 16:00 - 16:45 | [**Session 2**:](https://ecol-stats.github.io/inlabru_workshop/St_Andrews/docs/slides/slides_2) Spatial Modelling with `inlabru` |
 | 16:45 - 17:45 | [Practical Session 2](practical2_compiler.qmd) |
-| 17:45 - 18:00 | [Wrap-up and outlook](https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_3) |
+| 17:45 - 18:00 | [Wrap-up and outlook](https://ecol-stats.github.io/inlabru_workshop/St_Andrews/docs/slides/slides_3) |
 
 : {.striped .hover}
-
-
