@@ -239,7 +239,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, breakable, colback={codebgcolor}, frame hidden, boxrule=0pt, enhanced]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[breakable, colback={codebgcolor}, enhanced, frame hidden, boxrule=0pt, sharp corners]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -287,7 +287,7 @@
   integrated nested Laplace approximation (INLA).
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, coltitle=black, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{important⚠️}, arc=.35mm, toprule=.15mm, colframe=quarto-callout-important-color-frame, toptitle=1mm, colback=white, rightrule=.15mm, leftrule=.75mm, bottomrule=.15mm, opacityback=0, colbacktitle=quarto-callout-important-color!10!white, breakable, bottomtitle=1mm, titlerule=0mm, left=2mm, opacitybacktitle=0.6]
+\begin{tcolorbox}[enhanced jigsaw, coltitle=black, rightrule=.15mm, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{important⚠️}, toprule=.15mm, breakable, opacityback=0, opacitybacktitle=0.6, arc=.35mm, titlerule=0mm, colbacktitle=quarto-callout-important-color!10!white, left=2mm, leftrule=.75mm, bottomtitle=1mm, toptitle=1mm, colframe=quarto-callout-important-color-frame, bottomrule=.15mm, colback=white]
 
 Please use the instructions provided \href{Install_software.qmd}{here}
 to install and check your installation \emph{before} the course starts.
@@ -347,7 +347,7 @@ Topic
 14:00 - 14:45 &
 \href{https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_1}{\textbf{Session
 1}}: Introduction to \texttt{inlabru} \\
-14:45 - 15:30 & \href{day1_practical.qmd}{Practical Session 1} \\
+14:45 - 15:30 & \href{practical1_compiler.qmd}{Practical Session 1} \\
 15:30 - 16:00 & Refreshment break \\
 16:00 - 16:45 &
 \href{https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_2}{\textbf{Session

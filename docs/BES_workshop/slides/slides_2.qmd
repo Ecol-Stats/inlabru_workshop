@@ -1052,13 +1052,13 @@ ggplot() + gg(mesh) +
 -   The choice of region and choice of triangulation affects the numerical accuracy.
 :::
 
-## Step 1: Define the SPDE representation: The mesh
+## Step 1: Define the SPDE representation: The mesh {background-color="#FFFFFF"}
 
 -  If the mesh is too fine $\rightarrow$ heavy computation
 
 -  If the mesh is to coarse $\rightarrow$ not accurate enough
 
-![](figures/mesh_res.png){fig-align="center"}
+![](figures/3meshes.png){fig-align="center"}
 
 ## Step 1: Define the SPDE representation: The mesh
 
