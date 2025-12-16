@@ -1233,7 +1233,8 @@ fit <- bru(comps, lik, ...)
 
 ## The Tokyo rainfall data
 
-One example with time series: Rainfall over 1 mm in the Tokyo area for each calendar day during two years (1983-84) are registered.
+One example with temporal datas: \
+Rainfall over 1 mm in the Tokyo area for each calendar day in the years 1983-84
 
 ```{r}
 #| echo: false
@@ -1300,17 +1301,19 @@ $$
 y_t|\eta_t\sim\text{Bin}(n_t, p_t),\qquad \eta_t = \text{logit}(p_t),\qquad i = 1,\dots,366
 $$
 
-**Stage 2** The latent field
+**Stage 2** The linear predictor
 
 $$
 \eta_t = \beta_0 + f(\text{time}_t)
 $$
 
--   probability of rain depends on on the day of the year $t$
+-   probability of rain depends on the day of the year $t$
 
 -   $\beta_0$ is an intercept
 
--   $f(\text{time}_t)$ is a RW2 model (this is just a smoother). The smoothness is controlled by a hyperparameter $\tau_f$
+-   $f(\text{time}_t)$ is a RW2 model (this is just a smoother)
+
+-   The smoothness is controlled by a hyperparameter $\tau_f$
 
 ## The model {auto-animate="true"}
 
@@ -1320,7 +1323,7 @@ $$
 y_t|\eta_t\sim\text{Bin}(n_t, p_t),\qquad \eta_t = \text{logit}(p_t),\qquad i = 1,\dots,366
 $$
 
-**Stage 2** The latent field
+**Stage 2** The linear predictor
 
 $$
 \eta_t = \beta_0 + f(\text{time}_t)
@@ -1379,7 +1382,7 @@ fit = bru(cmp, lik)
 
 ```
 
-## `inlabru` for time series {.smaller auto-animate="true"}
+## `inlabru` for temporal data {.smaller auto-animate="true"}
 
 ::::: columns
 ::: {.column width="50%"}
@@ -1426,7 +1429,7 @@ fit = bru(cmp, lik)
 
 ```
 
-## `inlabru` for time series {.smaller auto-animate="true"}
+## `inlabru` for temporal data {.smaller auto-animate="true"}
 
 ::::: columns
 ::: {.column width="50%"}
@@ -1473,7 +1476,7 @@ fit = bru(cmp, lik)
 
 ```
 
-## `inlabru` for time series {.smaller auto-animate="true"}
+## `inlabru` for temporal data {.smaller auto-animate="true"}
 
 ::::: columns
 ::: {.column width="50%"}
@@ -1520,9 +1523,9 @@ fit = bru(cmp, lik)
 
 ```
 
-## Example: disease mapping
+## Example: spatial data – disease mapping
 
-We observed larynx cancer mortality counts for males in 544 district of Germany from 1986 to 1990 and want to make a model.
+We observed larynx cancer mortality counts for males in 544 districts of Germany from 1986 to 1990 and want to construct a model.
 
 ::::: columns
 ::: {.column width="50%"}
@@ -1897,7 +1900,7 @@ $y(s)$ Presence of absence in location $s$
     $$
     -   A global intercept $\beta_0$
     -   A smooth effect of covariate $x(s)$ (depth)
-    -   A Gaussian field $\omega(s)$ (will discuss this later..)
+    -   A Gaussian random field $\omega(s)$ (we will discuss this later..)
 -   **Stage 3** Hyperparameters
 
 ## Bayesian Geostatistics {auto-animate="true"}
