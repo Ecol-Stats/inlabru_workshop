@@ -246,7 +246,7 @@ In this course we embrace the Bayesian perspective
 
 -   There are no "*true but unknown*" parameters !
 -   Every parameter is described by a probability distribution!
--   Evidence from the data is used to update the belief we had before observing the data!
+-   Evidence from the data is used to update the belief we had before we observed the data!
 
 ```{r}
 #| message: false
@@ -260,7 +260,7 @@ p3 + geom_smooth(aes(tl, w), method = "lm", fill = "red")
 
 ## Some more details I {.smaller auto-animate="true" background-color="#FFFFFF"}
 
-We define `linear predictor` of the mean (or a function of the mean) of our observations `given` the model components.
+We construct a `linear predictor` of the mean (or a function of the mean) of our observations, which consists of the `model components`.
 
 ```{r}
 # | fig-width: 7
@@ -360,7 +360,7 @@ In this case $E(y_i|\beta_0, \beta_i) = \eta_i = \beta_0 + \beta_1 x_i$
 
 ## Some more details I {.smaller auto-animate="true" background-color="#FFFFFF"}
 
-We define **linear predictor** of the mean (or a function of the mean) of our observations **given** the model components.
+We construct a `linear predictor` of the mean (or a function of the mean) of our observations, which consists of the `model components`.
 
 ```{r}
 # | fig-width: 8
@@ -458,7 +458,7 @@ p1
 
 In this case $E(y_i|\beta_0, \beta_i) =\eta_i =  \color{red}{\boxed{\beta_0}} +  \color{red}{\boxed{\beta_1 x_i}}$
 
-This model as two components !
+This model has two components.
 
 ## Some more details II {.smaller background-color="#FFFFFF"}
 
@@ -496,11 +496,11 @@ p1 + geom_segment(data = inflection_points,
 
 ```
 
-This means that **all dependencies** in the observations are accounted for by the components!
+This means that **all dependencies** in the observations are accounted for by the linear predictor -- and its components
 
 ## Some more details II {.smaller background-color="#FFFFFF"}
 
-Given the **linear predictor** $\eta$ the observations are independent of each other!
+Given the **linear predictor** $\eta$, the observations are independent of each other!
 
 ```{r}
 # Calculate inflection y positions
@@ -540,7 +540,7 @@ $$
 
 ## Let's formalize this a bit... {auto-animate="true"}
 
-The elements of a `inlabru` friendly statistical model are:
+The elements of an `inlabru` friendly statistical model are:
 
 The observational model $$
 \begin{aligned}
@@ -550,7 +550,7 @@ E(y_i|\eta_i, \sigma^2) & = \eta_i
 $$
 
 ::: callout-note
-We assume that, given the *linear predictor* $\eta$, the observations are independent of each other! Data dependence is expressed through the *components* of the linear predictor.
+We assume that, given the *linear predictor* $\eta$, the observations are independent of each other! Data dependence is expressed through the *components* in the linear predictor.
 :::
 
 ## Let's formalize this a bit... {auto-animate="true"}
