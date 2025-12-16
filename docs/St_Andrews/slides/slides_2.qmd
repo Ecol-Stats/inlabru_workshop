@@ -396,7 +396,7 @@ $$
 \mathbf{u}|\tau_u \sim N\left(0,\frac{1}{\tau_u}Q^{-1}\right),
 $$
 
-Where $Q$ denotes the precision matrix defined as
+where $Q$ denotes the precision matrix defined as
 
 $$
 Q_{i,j} = \begin{cases}
@@ -420,7 +420,7 @@ The ICAR model accounts only for spatially structured variability and does not i
 
 -   The resulting model $v_i = u_i + z_i$ is known as the Besag-York-Mollié model (BYM)
 
--   The structured spatial effect is controlled by $\tau_u$ which control the degree of smoothing:
+-   The structured spatial effect is controlled by $\tau_u$, which controls the degree of smoothing:
 
     -   Higher $\tau_u$ values lead to stronger smoothing (less spatial variability).
 
@@ -883,7 +883,7 @@ It is **isotropic** if the covariance only depends on the distance between the p
 
 **The goal**: approximate the GRF using a triangulated mesh via the so-called SPDE approach.
 
-The SPDE approach represents the continuous spatial process as a continuously indexed Gaussian Markov Random Field (GMRF)
+The SPDE approach represents the continuous Gaussian random field by a continuously indexed Gauss Markov Random Field (GMRF)
 
 -   We construct an appropriate lower-resolution approximation of the surface by sampling it in a set of well designed points and constructing a piece-wise linear interpolant.
 
@@ -926,7 +926,7 @@ Penalized Complexity (PC) priors proposed by Simpson et al. ([2017](https://proj
 ::: {style="height: 50px;"}
 :::
 
-We call spatial Markov models defined on a mesh SPDE models.
+We call spatial Gauss Markov Random models defined on a mesh, SPDE models.
 
 SPDE models have 3 parts
 
