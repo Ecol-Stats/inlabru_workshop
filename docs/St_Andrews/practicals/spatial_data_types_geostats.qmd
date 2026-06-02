@@ -1,0 +1,472 @@
+---
+title: ""
+format: 
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+  PrettyPDF-pdf:
+    keep-tex: true
+    number-sections: true
+embed-resources: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| purl: false
+
+library(webexercises)
+
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+
+library(dplyr)
+library(INLA)
+library(ggplot2)
+library(patchwork)
+library(inlabru)   
+library(mapview)
+library(sf)
+
+# load some libraries to generate nice map plots
+library(scico)
+
+```
+
+## Geostatistical data
+
+In this practical we are going to fit a geostatistical model. We will:
+
+-   Explore tools for geostatistical spatial data wrangling and visualization.
+
+-   Learn how to fit a geostatistical model in `inlabru`
+
+-   Learn how to add spatial covariates to the model
+
+-   Learn how to do predictions
+
+**Geostatistical** data are the most common form of spatial data found in environmental setting. In these data we regularly take measurements of a spatial ecological or environmental process at a set of fixed locations. This could be data from transects (e.g, where the height of trees is recorded), samples taken across a region (e.g., water depth in a lake) or from monitoring stations as part of a network (e.g., air pollution). In each of these cases, our goal is to estimate the value of our variable across the entire space.
+
+Let $D$ be our two-dimensional region of interest. In principle, there are infinite locations within $D$, each of which can be represented by mathematical coordinates (e.g., latitude and longitude). We then can identify any individual location as $s_i = (x_i, y_i)$, where $x_i$ and $y_i$ are their coordinates.
+
+We can treat our variable of interest as a random variable, $Z$ which can be observed at any location as $Z(\mathbf{s}_i)$.
+
+Our geostatistical process can therefore be written as: $$\{Z(\mathbf{s}); \mathbf{s} \in D\}$$
+
+In practice, our data are observed at a finite number of locations, $m$, and can be denoted as:
+
+$$z = \{z(\mathbf{s}_1), \ldots z(\mathbf{s}_m) \}$$
+
+In the next example, we will explore data on the Pacific Cod (*Gadus macrocephalus*) from a trawl survey in Queen Charlotte Sound. The `pcod` dataset is available from the `sdmTMB` package and contains the presence/absence records of the Pacific Cod during each survey. The `qcs_grid` data contain the depth values stored as $2\times 2$ km grid for Queen Charlotte Sound.
+
+### Exploring and visualizing species distribution data
+
+The dataset contains presence/absence data from 2003 to 2017. In this practical we only consider year 2003. We first load the dataset and select the year of interest:
+
+```{r}
+#| message: false
+#| warning: false
+library(sdmTMB)
+
+pcod_df = sdmTMB::pcod %>% filter(year==2003)
+qcs_grid = sdmTMB::qcs_grid
+
+```
+
+Then, we create an `sf` object and assign the rough coordinate reference to it:
+
+```{r}
+#| message: false
+#| warning: false
+#| 
+pcod_sf =   st_as_sf(pcod_df, coords = c("lon","lat"), crs = 4326)
+pcod_sf = st_transform(pcod_sf,
+                       crs = "+proj=utm +zone=9 +datum=WGS84 +no_defs +type=crs +units=km" )
+```
+
+We convert the covariate into a raster and assign the same coordinate reference:
+
+```{r}
+#| message: false
+#| warning: false
+library(terra)
+depth_r <- rast(qcs_grid, type = "xyz")
+crs(depth_r) <- crs(pcod_sf)
+```
+
+Finally we can plot our dataset. Note that to plot the raster we need to load also the `tidyterra` library.
+
+```{r}
+#| message: false
+#| warning: false
+#| code-fold: show
+#| fig-align: center
+
+library(tidyterra)
+ggplot()+ 
+  geom_spatraster(data=depth_r$depth)+
+  geom_sf(data=pcod_sf,aes(color=factor(present))) +
+    scale_color_manual(name="Occupancy status for the Pacific Cod",
+                     values = c("black","orange"),
+                     labels= c("Absence","Presence"))+
+  scale_fill_scico(name = "Depth",
+                   palette = "nuuk",
+                   na.value = "transparent" ) + xlab("") + ylab("")
+
+```
+
+### Fitting a spatial geostatistical species distribution model
+
+We first fit a simple model where we consider the observation as Bernoulli and where the linear predictor contains only one intercept and the GR field defined through the SPDE approach. The model is defined as:
+
+**Stage 1** Model for the response
+
+$$
+y(s)|\eta(s)\sim\text{Binom}(1, p(s))
+$$ **Stage 2** Latent field model
+
+$$
+\eta(s) = \text{logit}(p(s)) = \beta_0 + \omega(s)
+$$
+
+with
+
+$$
+\omega(s)\sim \text{  GF with range } \rho\  \text{ and maginal variance }\ \sigma^2
+$$
+
+**Stage 3** Hyperparameters
+
+The hyperparameters of the model are $\rho$ and $\sigma$
+
+**NOTE** In this case the linear predictor $\eta$ consists of two components!!
+
+### The workflow
+
+When fitting a geostatistical model we need to fulfill the following tasks:
+
+1.  Build the mesh
+2.  Define the SPDE representation of the spatial GF. This includes defining the priors for the range and sd of the spatial GF
+3.  Define the *components* of the linear predictor. This includes the spatial GF and all eventual covariates
+4.  Define the observation model using the `bru_obs()` function
+5.  Run the model using the `bru()` function
+
+#### Step 1. Building the mesh
+
+The first task, when dealing with geostatistical models in `inlabru` is to build the mesh that covers the area of interest. For this purpose we use the function `fm_mesh_2d`.
+
+One way to build the mesh is to start from the locations where we have observations, these are contained in the dataset `pcod_sf`
+
+```{r}
+#| fig-align: center
+#| fig-width: 5
+#| fig-height: 5
+mesh = fm_mesh_2d(loc = pcod_sf,           # Build the mesh
+                  cutoff = 2,
+                  max.edge = c(7,20),     # The largest allowed triangle edge length.
+                  offset = c(5,50))       # The automatic extension distance
+
+ggplot() + gg(mesh) +
+  geom_sf(data= pcod_sf, aes(color = factor(present))) + 
+  xlab("") + ylab("")
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Look at the documentation for the `fm_mesh_2d` function typing
+
+```{r}
+#| eval: false
+
+?fm_mesh_2d
+```
+
+Experiment with the different options and create different meshes (see [here](https://ecol-stats.github.io/Spatial_Data_Analysis/#building-a-mesh-with-fmesher) for further details on mesh construction).
+
+The *rule of thumb* is that your mesh should be:
+
+-   fine enough to well represent the spatial variability of your process, but not too fine in order to avoid computation burden
+-   the triangles should be regular, avoid long and thin triangles.
+-   The mesh should contain a buffer around your area of interest (this is what is defined in the `offset` option) in order to avoid boundary artifact in the estimated variance.
+:::
+
+#### Step 2. Define the SPDE representation of the spatial GF
+
+To define the SPDE representation of the spatial GF we use the function `inla.spde2.pcmatern`.
+
+This takes as input the mesh we have defined and the PC-priors definition for $\rho$ and $\sigma$ (the range and the marginal standard deviation of the field).
+
+PC priors Gaussian Random field are defined in (Fuglstad et al. 2018). From a practical perspective for the range $\rho$ you need to define two parameters $\rho_0$ and $p_{\rho}$ such that you believe it is reasonable that
+
+$$
+P(\rho<\rho_0)=p_{\rho}
+$$
+
+while for the marginal variance $\sigma$ you need to define two parameters $\sigma_0$ and $p_{\sigma}$ such that you believe it is reasonable that
+
+$$
+P(\sigma>\sigma_0)=p_{\sigma}
+$$ Here are some alternatives for defining priors for our model
+
+```{r}
+spde_model1 =  inla.spde2.pcmatern(mesh,
+                                  prior.sigma = c(.1, 0.5),
+                                  prior.range = c(30, 0.5))
+spde_model2 =  inla.spde2.pcmatern(mesh,
+                                  prior.sigma = c(10, 0.5),
+                                  prior.range = c(1000, 0.5))
+spde_model3 =  inla.spde2.pcmatern(mesh,
+                                  prior.sigma = c(1, 0.5),
+                                  prior.range = c(100, 0.5))
+```
+
+::: {.callout-tip icon="false"}
+## {{< bi question-octagon color=#6dc83c >}} Question
+
+Considering the `pcod_sf` spatial extension and type of the data, which of the previous choices is more reasonable?
+
+*Remember that a prior should be reasonable..but the model should not totally depend on it.*
+
+`r hide("Take hint")`
+
+You can use the `summary()` function to check the coordinate range of an `sf` object.
+
+`r unhide()`
+
+`r mcq(c( "spde_model1","spde_model2", answer = "spde_model3" ))`
+:::
+
+#### Step 3. Define the components of the linear predictor
+
+We have now defined a mesh and a SPDE representation of the spatial GF. We now need to define the model components:
+
+```{r}
+cmp = ~ Intercept(1) + space(geometry, model = spde_model3)
+```
+
+**NOTE** since the data frame we use (`pcod_sf`) is an `sf` object the input in the `space()` component is the geometry of the dataset.
+
+#### Step 4. Define the observation model
+
+Our data are Bernoulli distributed so we can define the observation model as:
+
+```{r}
+
+formula = present ~ Intercept  + space
+
+lik = bru_obs(formula = formula, 
+              data = pcod_sf, 
+              family = "binomial")
+
+```
+
+#### Step 5. Run the model
+
+Finally we are ready to run the model
+
+```{r}
+fit1 = bru(cmp,lik)
+```
+
+### Model results
+
+#### Hyperparameters
+
+::: {.callout-warning icon="false"}
+### {{< bi pencil-square color=#c8793c >}} Task
+
+What are the posterior for the range $\rho$ and the standard deviation $\sigma$? Plot the posterior together with the prior for both parameters.
+
+`r hide("Take hint")`
+
+The `spde.posterior()` can be used to calculate the posterior distribution of the range and variance of a model's SPDE component. (type `?spde.posterior` for further detials)
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+#| eval: false
+#| message: false
+#| warning: false
+# Extract marginal for the range
+
+library(patchwork)
+spde.posterior(fit1, "space", what = "range") %>% plot() +
+spde.posterior(fit1, "space", what = "log.variance") %>% plot()  
+
+
+```
+:::
+
+### Spatial prediction
+
+We now want to extract the estimated posterior mean and sd of spatial GF. To do this we first need to define a grid of points where we want to predict. We do this using the function `fm_pixel()` which creates a regular grid of points covering the mesh
+
+```{r}
+pxl = fm_pixels(mesh)
+```
+
+then compute the prediction for both the spatial GF and the linear predictor (spatial GF + intercept)
+
+```{r}
+preds = predict(fit1, pxl, ~data.frame(spatial = space,
+                                      total = Intercept + space))
+```
+
+Finally, we can plot the maps
+
+```{r}
+#| fig-align: center
+#| code-fold: show
+
+ggplot() + geom_sf(data = preds$spatial,aes(color = mean)) + 
+  scale_color_scico() +
+  ggtitle("Posterior mean") +
+ggplot() + geom_sf(data = preds$spatial,aes(color = sd)) + 
+  scale_color_scico() +
+  ggtitle("Posterior sd")
+```
+
+**Note** The posterior sd is lowest at the observation points. Note how the posterior sd is inflated around the border, this is the "border effect" due to the SPDE representation.
+
+### An alternative model (including spatial covariates)
+
+We now want to check if the `depth` covariate has an influence on the probability of presence. We do this in two different models
+
+1.  **Model 1** The depth enters the model in a linear way. The linear predictor is then defined as:
+
+$$
+  \eta(s) = \text{logit}(p(s)) = \beta_0 + \omega(s) + \beta_1\ \text{depth}(s)
+$$
+
+2.  **Model 1** The depth enters the model in a non linear way. The linear predictor is then defined as:
+
+$$
+  \eta(s) = \text{logit}(p(s)) = \beta_0 + \omega(s) +  f(\text{depth}(s))
+$$ where $f(.)$ is a smooth function. We will use a RW2 model for this.
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Fit model 1. Define components, observation model and use the `bru()` function to estimate the parameters.
+
+**Note** Use the scaled version of the covariate stored in `depth_r$depth_scaled`.
+
+What is the liner effect of depth on the logit probability?
+
+`r hide("Take hint")`
+
+The `pcod_sf` object already contains the `depth_scaled` containing the squared depth values at each location. However, `inlabru` also allows to specify a raster object directly in the model components. If your raster contains multiple layers, then de desired layer can be called using the `$` symbol (e.g., `my_raster$layer_1`).
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+cmp = ~ Intercept(1) + space(geometry, model = spde_model3) +
+        covariate(depth_r$depth_scaled, model = "linear")
+
+formula = present ~ Intercept  + space + covariate
+
+lik = bru_obs(formula = formula, 
+              data = pcod_sf, 
+              family = "binomial")
+
+
+fit2 = bru(cmp, lik)
+
+```
+:::
+
+We now want to fit **Model 2** where we allow the effect of depth to be non-linear. To use the RW2 model we need to *group* the values of depth into distinct classes. To do this we use the function `inla.group()` which, by default, creates 20 groups. The we can fit the model as usual
+
+```{r}
+#| fig-align: center
+#| fig-width: 4
+#| fig-height: 4
+# create the grouped variable
+depth_r$depth_group = inla.group(values(depth_r$depth_scaled))
+
+# run the model
+cmp = ~ Intercept(1) + space(geometry, model = spde_model3) +
+        covariate(depth_r$depth_group, model = "rw2")
+
+formula = present ~ Intercept  + space + covariate
+
+lik = bru_obs(formula = formula, 
+              data = pcod_sf, 
+              family = "binomial")
+
+
+fit3 = bru(cmp, lik)
+
+# plot the estimated effect of depth
+
+fit3$summary.random$covariate %>% 
+  ggplot() + geom_line(aes(ID,mean)) + 
+             geom_ribbon(aes(ID,
+                             ymin = `0.025quant`, 
+                             ymax = `0.975quant`),
+                         alpha = 0.5)
+```
+
+Instead of predicting over a grid covering the whole mesh, we can limit our predictions to the points where the covariate is defined. We can do this by defining a `sf` object using coordinates in the object `depth_r`.
+
+```{r}
+pxl1 = data.frame(crds(depth_r), 
+                  as.data.frame(depth_r$depth)) %>% 
+       filter(!is.na(depth)) %>%
+st_as_sf(coords = c("x","y")) %>% dplyr::select(-depth)
+```
+
+::: {.callout-warning icon="false"}
+## {{< bi pencil-square color=#c8793c >}} Task
+
+Create a map of predicted *probability* from Model 3 by predicting prediction over `pxl1`. You can use a inverse logit function defined as
+
+```{r}
+inv_logit = function(x) (1+exp(-x))^(-1)
+
+```
+
+`r hide("Take hint")`
+
+The `predict()` function can take as input also functions of elements of the components you want to consider
+
+`r unhide()`
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+#| fig-align: center
+#| webex.hide: "Click here to see the solution"
+#| code-fold: show
+#| purl: false
+
+pred3  = predict(fit3, pxl1, ~inv_logit(Intercept + space + covariate) )
+
+pred3 %>% ggplot() + 
+      geom_sf(aes(color = mean)) +
+        scale_color_scico(direction = -1) +
+        ggtitle("Sample from the fitted model")
+```
+:::

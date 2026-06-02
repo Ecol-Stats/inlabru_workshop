@@ -1,0 +1,110 @@
+---
+title: "Software Installation"
+author: ""
+subtitle: ""
+format: 
+  html:
+    mainfont: "12"
+  PrettyPDF-pdf:
+    keep-tex:  true
+    number-sections: true
+editor_options: 
+  chunk_output_type: console
+---
+
+Please use the instructions below to install and check your installation.
+
+Since 29 April 2025, the latest INLA package is built for R 4.5, so if you're able to upgrade your R installation, please do so to avoid unnecessary issues. The package will in many cases also work with older R versions, but compatibility is sometimes difficult.
+
+## Installing `INLA` and `inlabru`
+
+Due to the work involved in building the binaries for the INLA package C software for different architectures, the INLA package is not on CRAN, but it can be installed from its own distribution repository.
+
+1.  Check your `R` version.
+
+2.  Install R-INLA, instructions can be found [here](https://www.r-inla.org/download-install)
+
+3.  Install `inlabru` (available from CRAN)
+
+```{r}
+#| eval: false
+# Enable universe(s) by inlabru-org
+options(repos = c(
+  inlabruorg = "https://inlabru-org.r-universe.dev",
+  INLA = "https://inla.r-inla-download.org/R/testing",
+  CRAN = "https://cloud.r-project.org"
+))
+
+# Install some packages
+install.packages("inlabru")
+```
+
+3.  Make sure you have the latest `R-INLA`, `inlabru` and `R` versions installed.
+
+4.  Install the following libraries:
+
+```{r}
+#| results: hide
+#| echo: false
+
+source("extract_practicals_libraries.R")
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+
+    if (file.exists("practicals_libraries.rds")) {
+      libs_data <- readRDS("practicals_libraries.rds")
+      
+      # Libraries to exclude
+      exclude_libs <- c("webexercises", "INLA", "inlabru", "knitr", "gt")
+      
+      # Filter out excluded libraries
+      filtered_libs <- libs_data[!libs_data$Library %in% exclude_libs, ]
+      
+      if (nrow(filtered_libs) > 0) {
+
+        cat("install.packages(c(\n")
+        cat(paste0('  "', filtered_libs$Library, '"', collapse = ",\n"))
+        cat("\n))")
+        
+      } else {
+        cat("No libraries found after filtering.\n")
+      }
+    }
+```
+
+## Installation check
+
+Please check your installation using the basic model runs below.
+
+If you run into issues, you can post a question with information about what you tried and what didn't work, on the [course github discussion page](https://github.com/smar-git/inlabru_newCaledonia/discussions).
+
+You can check that `INLA` is correctly installed by running
+
+```{r}
+#| eval: true
+df <- data.frame(y = rnorm(100) + 10)
+fit <- INLA::inla(
+  y ~ 1,
+  data = df
+)
+summary(fit)
+```
+
+If the simple `inla()` call fails with a crash, you may need to install different `inla` binaries for your hardware/software combination, with `INLA::inla.binary.install()`.
+
+When `inla()` works, you can check that `inlabru` is installed correctly by running the same model in `inlabru`:
+
+```{r}
+#| eval: true
+fit <- inlabru::bru(
+  y ~ Intercept(1, prec.linear = exp(-7)),
+  data = df
+)
+summary(fit)
+```

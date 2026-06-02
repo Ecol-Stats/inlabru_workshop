@@ -239,7 +239,7 @@
 \@ifundefined{codebgcolor}{\definecolor{codebgcolor}{named}{light}}{}
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, boxrule=0pt, breakable, sharp corners, enhanced, colback={codebgcolor}]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, enhanced, breakable, boxrule=0pt, frame hidden, colback={codebgcolor}]}{\end{tcolorbox}}\fi
 \makeatother
 
 \usepackage{bookmark}
@@ -247,7 +247,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={INLA and beyond: Bayesian hierarchical modelling with inlabru},
+  pdftitle={INLA and Beyond: Practical Spatial Modelling with inlabru for Ecological Research},
   pdfauthor={Jafet Belmont, Sara Martino and Janine Illian},
   colorlinks=true,
   linkcolor={highlight},
@@ -257,7 +257,8 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{INLA and beyond: Bayesian hierarchical modelling with inlabru}
+\title{INLA and Beyond: Practical Spatial Modelling with
+\texttt{inlabru} for Ecological Research}
 \usepackage{etoolbox}
 \makeatletter
 \providecommand{\subtitle}[1]{% add subtitle to \maketitle
@@ -282,21 +283,21 @@
   Welcome to the \texttt{inlabru} workshop!
 \item
   The goal of this workshop is to introduce new users to the
-  \texttt{inlabru} software for Bayesian spatial modelling using the
+  \texttt{inlabru} software for Bayesian spatial modelling using
   integrated nested Laplace approximation (INLA).
 \end{itemize}
 
-\begin{tcolorbox}[enhanced jigsaw, left=2mm, leftrule=.75mm, breakable, colframe=quarto-callout-important-color-frame, bottomtitle=1mm, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{important⚠️}, rightrule=.15mm, opacitybacktitle=0.6, toprule=.15mm, bottomrule=.15mm, arc=.35mm, colback=white, colbacktitle=quarto-callout-important-color!10!white, toptitle=1mm, titlerule=0mm, coltitle=black, opacityback=0]
+\begin{tcolorbox}[enhanced jigsaw, title=\textcolor{quarto-callout-important-color}{\faExclamation}\hspace{0.5em}{important⚠️}, colbacktitle=quarto-callout-important-color!10!white, breakable, titlerule=0mm, toptitle=1mm, rightrule=.15mm, coltitle=black, leftrule=.75mm, opacitybacktitle=0.6, colback=white, bottomrule=.15mm, colframe=quarto-callout-important-color-frame, bottomtitle=1mm, opacityback=0, left=2mm, toprule=.15mm, arc=.35mm]
 
 Please use the instructions provided \href{Install_software.qmd}{here}
-to install and check your installation \emph{before} the course start.
+to install and check your installation \emph{before} the course starts.
 
 \end{tcolorbox}
 
 \section{Learning Objectives for the
 workshop}\label{learning-objectives-for-the-workshop}
 
-At the end of the workshop, participants will have an understanding of:
+By the end of the workshop, participants will have an understanding of:
 
 \begin{itemize}
 \tightlist
@@ -306,7 +307,8 @@ At the end of the workshop, participants will have an understanding of:
   The motivation for and the challenges of analysing and modelling
   spatial data.
 \item
-  Statistical models used to analyse spatial data.
+  Different types of statistical models used to analyse different
+  spatial data structures.
 \item
   The implementation of these models in the \texttt{inlabru} package
 \end{itemize}
@@ -314,14 +316,15 @@ At the end of the workshop, participants will have an understanding of:
 \section{Intended audience}\label{intended-audience}
 
 The workshop aims to cater for participants with a range of different
-backgrounds, who is interested in analysing data with modern spatial
-statistical modelling approaches.
+backgrounds, who are interested in analysing data with modern spatial
+statistical modelling approaches using flexible and computationally
+efficient software.
 
 \section{Prerequisites}\label{prerequisites}
 
 Participants should be familiar with the R environment, and general
-statistical approaches for modelling such as regression, analysis of
-(co)variance, and generalized linear models.
+statistical approaches to statistical modelling, such as regression,
+analysis of (co)variance, and generalized linear models.
 
 No knowledge of \texttt{R-INLA} or \texttt{inlabru} is required.
 
@@ -344,7 +347,7 @@ Topic
 14:00 - 14:45 &
 \href{https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_1}{\textbf{Session
 1}}: Introduction to \texttt{inlabru} \\
-14:45 - 15:30 & \href{day1_practical.qmd}{Practical Session 1} \\
+14:45 - 15:30 & \href{practical1_compiler.qmd}{Practical Session 1} \\
 15:30 - 16:00 & Refreshment break \\
 16:00 - 16:45 &
 \href{https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/slides/slides_2}{\textbf{Session

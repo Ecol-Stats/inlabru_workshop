@@ -4,8 +4,9 @@ from: markdown+emoji
 subtitle: "Final remarks and things we did not discuss..." 
 format:
   revealjs:
+    footer: '<a href="https://ecol-stats.github.io/inlabru_workshop/BES_workshop/docs/" style="color:#ccc; padding:20px 30px; display:inline-block; margin:-20px -30px;">Home</a>'
     margin: 0
-    logo:  NTNU_UofG.png
+    logo:  INLA_logo.png
     theme: uofg_theme.scss
     header-includes: |
       <script src="custom.js" type="application/javascript"></script>
@@ -121,13 +122,13 @@ $$
 y_t&\sim\mathcal{N}(\mu_t, \sigma^2)\\
 \eta_t &= \mu_t = L(1-\exp(-k\ (t-t_0)))
 \end{aligned}
-$$ where $t$ is the age and $y_t$ the lenght of the fish
+$$ where $t$ is the age and $y_t$ the length of the fish
 
 with parameters $(L,k,t)$
 
 . . .
 
-This model cannot be implemented in the original INLA framework. `inlabru` linearizes the problem and by an iterative prodedure is (*often*) able to estimate the parameters. You can read more [here](https://arxiv.org/abs/2407.00791)
+This model cannot be implemented in the original INLA framework. `inlabru` linearizes the problem and by an iterative procedure is (*often*) able to estimate the parameters. You can read more [here](https://arxiv.org/abs/2407.00791)
 
 ## Space/time varying covariate effects
 
@@ -163,3 +164,11 @@ cmp = ~ Intercept(0) + space_beta(idx_region, weights = covariate, model = "besa
     -   inlabru [forum](https://github.com/inlabru-org/inlabru/discussions)
 
 -   Please take contact if you have questions/problems to discuss :grinning:
+
+-   We are offering longer courses (3-5 days) covering more specific topics (e.,g spatio-temporal models, distance sampling, occupancy modelling, joint modelling)
+
+## Feedback
+
+We would be very glad if you could fill in this form and share your [feedback](https://uofg.qualtrics.com/jfe/form/SV_6nGrFQ3ploBp2dw) about the course.
+
+![](figures/feedback-qr-code.png){fig-align="center"}
